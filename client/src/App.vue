@@ -1,21 +1,33 @@
 <template>
   <div id="app">
     <NavBar/>
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <div class="container-fluid">
+      <b-row>
+        <b-col><ComposerList/></b-col>
+        <b-col>2 of 3</b-col>
+        <b-col cols="6">3 of 3</b-col>
+      </b-row>
+
+    </div>
   </div>
 </template>
 
 <script>
 import NavBar from './components/NavBar.vue'
-import HelloWorld from './components/HelloWorld.vue'
+import ComposerList from './components/ComposerList.vue'
 
 export default {
   name: 'App',
   components: {
     NavBar,
-    HelloWorld
+    ComposerList
   }
 }
 </script>
 
+<style>
+  body{
+    background: #f1f2f4 !important;
+  }
+</style>
 
