@@ -10,7 +10,7 @@
         <table cellspacing="0">
           <tr v-for="(work, index) in genre" :key="index">
             <td width="17%"><span style="white-space: nowrap; color:darkred;"><span v-if="work.cat">{{ work.cat }}</span><span v-else>{{ work.date }}</span></span></td>
-            <td width="78%" style="white-space: nowrap; text-overflow:ellipsis; overflow: hidden; max-width:1px;"><a @click="greet(work.id)" style="cursor: pointer; color:black;">{{ work.title }}</a><span v-if="work.nickname" style="color:gray;"> · {{ work.nickname }}</span></td>
+            <td width="78%" style="white-space: nowrap; text-overflow:ellipsis; overflow: hidden; max-width:1px;"><a @click="getAlbums(work.id, work.title)" style="cursor: pointer; color:black;">{{ work.title }}</a><span v-if="work.nickname" style="color:gray;"> · {{ work.nickname }}</span></td>
             <td width="5%" style="text-align: right;"><b-badge>{{ work.album_count }}</b-badge></td>
           </tr>
         </table>
@@ -49,8 +49,8 @@ export default {
           console.error(error);
         });
     },
-      greet(work_id) {
-        eventBus.$emit('fireAlbums', work_id);
+      getAlbums(work_id, title) {
+        eventBus.$emit('fireAlbums', work_id, title);
     }
   },
   created() {

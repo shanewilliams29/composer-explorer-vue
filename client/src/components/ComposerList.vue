@@ -15,7 +15,7 @@
                 <img class="composer-img" :src="composer.flag" height="20" width="20">
                 <img class="composer-img" :src="composer.img" height="20" width="20">
              </td>
-            <td width="50%" style="white-space: nowrap; text-overflow:ellipsis; overflow: hidden; max-width:1px;"><a @click="greet(composer.name_short)" :id="composer.name_short" style="cursor: pointer; color:black;">{{ composer.name_full }}</a></td>
+            <td width="50%" style="white-space: nowrap; text-overflow:ellipsis; overflow: hidden; max-width:1px;"><a @click="getWorks(composer.name_short)" :id="composer.name_short" style="cursor: pointer; color:black;">{{ composer.name_full }}</a></td>
            <td width="25%" style="white-space: nowrap; text-overflow:ellipsis; overflow: hidden; max-width:1px; text-align: right;">{{ composer.born }} - {{ composer.died }}</td>
            </tr>
         </table>
@@ -47,7 +47,7 @@ export default {
           console.error(error);
         });
     },
-    greet(composer) {
+    getWorks(composer) {
         eventBus.$emit('fireMethod', composer);
     }
   },

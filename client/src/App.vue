@@ -6,7 +6,7 @@
       <b-row>
         <b-col class="composer-list"><ComposerList/></b-col>
         <b-col class="work-list"><WorkList/></b-col>
-        <b-col class="album-list"><AlbumList/></b-col>
+        <b-col cols="4" class="album-list"><AlbumList/></b-col>
       </b-row>
     </div>
   </div>
@@ -46,6 +46,7 @@ export default {
   .album-list{
     height: calc(100vh - 96px);
     overflow-y: scroll;
+    overflow-x: hidden;
   }
 </style>
 

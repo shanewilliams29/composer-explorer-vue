@@ -9,7 +9,7 @@
         <b-card-text>
         <table cellspacing="0">
           <tr>
-            <td width="100%" style="white-space: nowrap; text-overflow:ellipsis; overflow: hidden; max-width:1px;"><a onclick='' style="cursor: pointer; color:black; font-weight: bold;">{{ album.artists }}</a></td>
+            <td width="100%" style="white-space: nowrap; text-overflow:ellipsis; overflow: hidden; max-width:1px;"><a onclick='' style="cursor: pointer; color:black; font-weight: 600;">{{ album.artists }} ({{ album.release_date }})</a></td>
           </tr>
           <tr>
             <td width="100%" style="white-space: nowrap; text-overflow:ellipsis; overflow: hidden; max-width:1px;"><a onclick='' style="cursor: pointer; color:grey; font-style: italic;">{{ album.minor_artists }}</a></td>
