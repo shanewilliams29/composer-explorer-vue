@@ -3,8 +3,8 @@
     <NavBar/>
     <div class="container-fluid">
       <b-row>
-        <b-col><ComposerList/></b-col>
-        <b-col><WorkList/></b-col>
+        <b-col class="composer-list"><ComposerList/></b-col>
+        <b-col class="work-list"><WorkList/></b-col>
         <b-col cols="5">3 of 3</b-col>
       </b-row>
 
@@ -30,6 +30,14 @@ export default {
 <style>
   body{
     background: #f1f2f4 !important;
+  }
+  .composer-list{
+    height: calc(100vh - 66px);
+    overflow-y: scroll;
+  }
+  .work-list{
+    height: calc(100vh - 66px);
+    overflow-y: scroll;
   }
 </style>
 

@@ -8,8 +8,8 @@
         <b-card-text>
         <table cellspacing="0">
           <tr v-for="(work, index) in genre" :key="index">
-            <td width="15%"><span style="white-space: nowrap; color:darkred;">{{ work.cat }}</span></td>
-            <td width="80%" style="white-space: nowrap; text-overflow:ellipsis; overflow: hidden; max-width:1px;"><a onclick='' style="cursor: pointer; color:black;">{{ work.title }}</a><span v-if="work.nickname" style="color:gray;"> · {{ work.nickname }}</span></td>
+            <td width="17%"><span style="white-space: nowrap; color:darkred;">{{ work.cat }}</span></td>
+            <td width="78%" style="white-space: nowrap; text-overflow:ellipsis; overflow: hidden; max-width:1px;"><a onclick='' style="cursor: pointer; color:black;">{{ work.title }}</a><span v-if="work.nickname" style="color:gray;"> · {{ work.nickname }}</span></td>
             <td width="5%" style="text-align: right;"><b-badge>{{ work.album_count }}</b-badge></td>
           </tr>
         </table>
