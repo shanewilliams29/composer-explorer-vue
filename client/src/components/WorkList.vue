@@ -1,4 +1,5 @@
 <template>
+  <div v-if="works">
   <div class ="row">
     <b-card-group deck>
       <b-card v-for="(genre, index) in works" :key="index" no-body header-tag="header">
@@ -8,7 +9,7 @@
         <b-card-text>
         <table cellspacing="0">
           <tr v-for="(work, index) in genre" :key="index">
-            <td width="17%"><span style="white-space: nowrap; color:darkred;">{{ work.cat }}</span></td>
+            <td width="17%"><span style="white-space: nowrap; color:darkred;"><span v-if="work.cat">{{ work.cat }}</span><span v-else>{{ work.date }}</span></span></td>
             <td width="78%" style="white-space: nowrap; text-overflow:ellipsis; overflow: hidden; max-width:1px;"><a onclick='' style="cursor: pointer; color:black;">{{ work.title }}</a><span v-if="work.nickname" style="color:gray;"> · {{ work.nickname }}</span></td>
             <td width="5%" style="text-align: right;"><b-badge>{{ work.album_count }}</b-badge></td>
           </tr>
@@ -16,6 +17,12 @@
         </b-card-text>
       </b-card>
     </b-card-group>
+  </div>
+  </div>
+  <div v-else>
+    <div class ="row">
+    <span class="no-works-found"><br>Works not yet catalogued for {{ composer }}.</span>
+    </div>
   </div>
 </template>
 
@@ -35,6 +42,7 @@ export default {
       axios.get(path)
         .then((res) => {
           this.works = res.data.works;
+          this.composer = composer;
         })
         .catch((error) => {
           // eslint-disable-next-line
@@ -95,5 +103,10 @@ header.card-header{
   color: #fff;
   background-color: #777777;
   border-radius: 7px;
+}
+.no-works-found{
+  font-size: 14px;
+  color: grey;
+  text-align: center;
 }
 </style>
