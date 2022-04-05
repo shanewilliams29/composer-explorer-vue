@@ -1,7 +1,9 @@
 from app import app, db
-from flask import jsonify
-from app.models import ComposerList, WorkList
+from flask import jsonify, request
+from app.models import ComposerList, WorkList, WorkAlbums, AlbumLike
+from sqlalchemy import func, text
 import json
+import jsonpickle
 
 
 @app.route('/')
@@ -137,10 +139,32 @@ def get_works(name):
     return jsonify(response_object)
 
 
-@app.route('/api/albums/<id>', methods=['GET'])
-def get_albums(id):
+@app.route('/api/albums/<work_id>', methods=['GET'])
+def get_albums(work_id):
+    page = request.args.get('page', 1, type=int)
+
+    albums = db.session.query(WorkAlbums, func.count(AlbumLike.id).label('total')) \
+        .filter(WorkAlbums.workid == work_id, WorkAlbums.hidden != True).outerjoin(AlbumLike).group_by(WorkAlbums) \
+        .order_by(text('total DESC'), WorkAlbums.score.desc()).paginate(page, 25, False)
+
+    album_list = []
+    for tup in albums.items:
+        item = jsonpickle.decode(tup[0].data)
+        item['likes'] = tup[1]
+        item['hidden'] = tup[0].hidden
+        album_list.append(item)
+
+    # split off first 5 tracks for collapsible display
+    for item in album_list:
+        item['firstfive'] = item['tracks'][:5]
+        item['tracks'] = item['tracks'][5:]
+
     response_object = {'status': 'success'}
+    response_object['albums'] = album_list
     return jsonify(response_object)
+
+    #paginate(page, 25, False)
+
     # check if composer has been catalogued or return error if not
 
     # try:

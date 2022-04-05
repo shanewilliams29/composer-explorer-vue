@@ -1,7 +1,25 @@
 <template>
   <div v-if="albums">
   <div class ="row">
-    {{ albums }}
+    <b-card-group deck>
+      <b-card v-for="(album, index) in albums" :key="index" no-body header-tag="header">
+        <div class ="row">
+        <b-col class="album_columns" cols="2"><b-avatar rounded size="48px" :src="album.album_img"></b-avatar></b-col>
+        <b-col class="album_text_columns" >
+        <b-card-text>
+        <table cellspacing="0">
+          <tr>
+            <td width="100%" style="white-space: nowrap; text-overflow:ellipsis; overflow: hidden; max-width:1px;"><a onclick='' style="cursor: pointer; color:black; font-weight: bold;">{{ album.artists }}</a></td>
+          </tr>
+          <tr>
+            <td width="100%" style="white-space: nowrap; text-overflow:ellipsis; overflow: hidden; max-width:1px;"><a onclick='' style="cursor: pointer; color:grey; font-style: italic;">{{ album.minor_artists }}</a></td>
+          </tr>
+        </table>
+        </b-card-text>
+      </b-col>
+    </div>
+      </b-card>
+    </b-card-group>
   </div>
   </div>
   <div v-else>
@@ -13,6 +31,7 @@
 
 <script>
 import axios from 'axios';
+import {eventBus} from "../main.js";
 
 export default {
   data() {
@@ -25,7 +44,7 @@ export default {
       const path = 'http://localhost:5000/api/albums/' + id;
       axios.get(path)
         .then((res) => {
-          this.albums = res.data.status;
+          this.albums = res.data.albums;
         })
         .catch((error) => {
           // eslint-disable-next-line
@@ -34,7 +53,10 @@ export default {
     },
   },
   created() {
-    this.getAlbums('Cake');
+    this.getAlbums('BEETHOVEN00005');
+      eventBus.$on('fireAlbums', (work_id) => {
+            this.getAlbums(work_id);
+    })
   },
 };
 </script>
@@ -44,7 +66,7 @@ export default {
 td{
    padding: 1px;
    vertical-align: bottom;
-   border-top: 1px dotted lightgray;
+/*   border-top: 1px dotted lightgray;*/
 }
 tr{
   border-bottom: 0px;
@@ -67,7 +89,7 @@ header.card-header{
   padding-bottom: 0px;
 }
 .mb-0{
-  font-size: 14px;
+  font-size: 12px;
   font-weight: bold;
 }
 .card{
@@ -88,5 +110,11 @@ header.card-header{
   font-size: 14px;
   color: grey;
   text-align: center;
+}
+.album_columns{
+  padding-right: 0px;
+}
+.album_text_columns{
+  padding-left: 0px;
 }
 </style>
