@@ -4,8 +4,8 @@
     <div class="container-fluid">
       <b-row>
         <b-col><ComposerList/></b-col>
-        <b-col>2 of 3</b-col>
-        <b-col cols="6">3 of 3</b-col>
+        <b-col><WorkList/></b-col>
+        <b-col cols="5">3 of 3</b-col>
       </b-row>
 
     </div>
@@ -15,12 +15,14 @@
 <script>
 import NavBar from './components/NavBar.vue'
 import ComposerList from './components/ComposerList.vue'
+import WorkList from './components/WorkList.vue'
 
 export default {
   name: 'App',
   components: {
     NavBar,
-    ComposerList
+    ComposerList,
+    WorkList
   }
 }
 </script>

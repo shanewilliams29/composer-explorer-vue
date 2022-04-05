@@ -1,6 +1,6 @@
 from app import app, db
 from flask import jsonify
-from app.models import ComposerList
+from app.models import ComposerList, WorkList
 import json
 
 
@@ -34,7 +34,7 @@ def get_composers():
     # create COMPOSERS object for jsonifying
     COMPOSERS = []
     for composer in composer_list:
-        # map era colours, flags, and region names
+
         median_age = (composer.died - composer.born) / 2
         median_year = median_age + composer.born
         for era in eras:
@@ -45,6 +45,7 @@ def get_composers():
 
         info = {
             'id': composer.id,
+            'name_short': composer.name_short,
             'name_full': composer.name_full,
             'born': composer.born,
             'died': composer.died,
@@ -56,49 +57,14 @@ def get_composers():
         }
         COMPOSERS.append(info)
 
-    # COMPOSERS = [
-    #     {
-    #         'id': 3,
-    #         'name_full': 'Johann Sebastian Bach',
-    #         'born': 1685,
-    #         'died': 1750,
-    #         'flag': 'https://storage.googleapis.com/composer-explorer.appspot.com/flags/1x1/de.svg',
-    #         'img': 'https://storage.googleapis.com/composer-explorer.appspot.com/img/Bach.jpg',
-    #         'region': 'A Austria-Germany',
-    #         'color': 'gold',
-    #         'popular': 'true'
-    #     },
-    #     {
-    #         'id': 1,
-    #         'name_full': 'Ludwig van Beethoven',
-    #         'born': 1770,
-    #         'died': 1827,
-    #         'flag': 'https://storage.googleapis.com/composer-explorer.appspot.com/flags/1x1/de.svg',
-    #         'img': 'https://storage.googleapis.com/composer-explorer.appspot.com/img/Beethoven.jpg',
-    #         'region': 'A Austria-Germany',
-    #         'color': 'darkgreen',
-    #         'popular': 'true'
-    #     },
-    #     {
-    #         'id': 14,
-    #         'name_full': 'Claude Debussy',
-    #         'born': 1862,
-    #         'died': 1918,
-    #         'flag': 'https://storage.googleapis.com/composer-explorer.appspot.com/flags/1x1/fr.svg',
-    #         'img': 'https://storage.googleapis.com/composer-explorer.appspot.com/img/Debussy.jpg',
-    #         'region': 'B France-Belgium',
-    #         'color': 'purple',
-    #         'popular': 'true'
-    #     }
-    # ]
-
+    # group onto regions
     composers_by_region = {}
     composers_in_region = []
     i = 0
     prev_region = COMPOSERS[i]['region']
 
     while i < len(COMPOSERS):
-        region = COMPOSERS[i]['region']  # Need to convert to display region
+        region = COMPOSERS[i]['region']
         if region == prev_region:
             composers_in_region.append(COMPOSERS[i])
             i += 1
@@ -111,6 +77,61 @@ def get_composers():
             if i == len(COMPOSERS):
                 composers_by_region[prev_region] = composers_in_region
 
+    # return response
     response_object = {'status': 'success'}
     response_object['composers'] = composers_by_region
+    return jsonify(response_object)
+
+
+@app.route('/api/works/<name>', methods=['GET'])
+def get_works(name):
+    # check if composer has been catalogued or return error if not
+    try:
+        work = WorkList.query.filter_by(composer=name).first_or_404()
+    except:
+        response_object = {
+            'status': 'error',
+            'info': 'composer not found in catalogue'
+        }
+        return jsonify(response_object)
+
+    works_list = WorkList.query.filter_by(composer=name, recommend=True)\
+        .order_by(WorkList.order, WorkList.genre, WorkList.id).all()
+
+    WORKS = []
+    for work in works_list:
+        info = {
+            'id': work.id,
+            'genre': work.genre,
+            'cat': work.cat,
+            'recommend': work.recommend,
+            'title': work.title,
+            'nickname': work.nickname,
+            'date': work.date,
+            'album_count': work.album_count
+        }
+        WORKS.append(info)
+
+    # group onto genres
+    works_by_genre = {}
+    works_in_genre = []
+    i = 0
+    prev_genre = WORKS[i]['genre']
+
+    while i < len(WORKS):
+        genre = WORKS[i]['genre']
+        if genre == prev_genre:
+            works_in_genre.append(WORKS[i])
+            i += 1
+        else:
+            works_by_genre[prev_genre] = works_in_genre
+            works_in_genre = []
+            works_in_genre.append(WORKS[i])
+            prev_genre = genre
+            i += 1
+            if i == len(WORKS):
+                works_by_genre[prev_genre] = works_in_genre
+
+    response_object = {'status': 'success'}
+    response_object['works'] = works_by_genre
     return jsonify(response_object)
