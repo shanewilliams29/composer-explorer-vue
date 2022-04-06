@@ -9,8 +9,8 @@
           <h6 class="mb-0">{{ index }}</h6>
         </template>
         <b-card-text>
-        <table class="table-striped" cellspacing="0">
-           <tr v-for="composer in region" :key="composer.id" @click="selectRow(composer.id)" :class="{'highlight': (composer.id == selectedComposer)}">
+        <table cellspacing="0">
+           <tr v-for="composer in region" :key="composer.id" @click="selectRow(composer.id); getWorks(composer.name_short);" :class="{'highlight': (composer.id == selectedComposer)}">
             <td width="2%" :style="{border: 'solid 0px !important', backgroundColor:composer.color, opacity: 0.66}">
              </td>
                   <td width="2%"></td>
@@ -18,7 +18,7 @@
                 <img class="composer-img" :src="composer.flag" height="20" width="20">
                 <img class="composer-img" :src="composer.img" height="20" width="20">
              </td>
-            <td width="50%" style="white-space: nowrap; text-overflow:ellipsis; overflow: hidden; max-width:1px;"><a @click="getWorks(composer.name_short)" :id="composer.name_short" style="cursor: pointer; color:black;">{{ composer.name_full }}</a></td>
+            <td width="50%" style="white-space: nowrap; text-overflow:ellipsis; overflow: hidden; max-width:1px;">{{ composer.name_full }}</td>
            <td width="25%" style="white-space: nowrap; text-overflow:ellipsis; max-width:1px; text-align: right;">{{ composer.born }} - {{ composer.died }}</td>
            </tr>
         </table>
@@ -92,13 +92,9 @@ table{
   background-color: grey;
   color: white;
 }
-.highlight a{
-  color: white !important;
-}
 tr:hover {
   cursor: pointer;
 }
-
 .highlight td:last-child {
    position: relative;
 }

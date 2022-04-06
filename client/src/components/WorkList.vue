@@ -11,9 +11,9 @@
         </template>
         <b-card-text>
         <table cellspacing="0">
-          <tr v-for="(work, index) in genre" :key="index">
+          <tr v-for="work in genre" :key="work.id" @click="selectRow(work.id); getAlbums(work.id, work.title);" :class="{'highlight': (work.id == selectedWork)}">
             <td width="17%"><span style="white-space: nowrap; color:darkred;"><span v-if="work.cat">{{ work.cat }}</span><span v-else>{{ work.date }}</span></span></td>
-            <td width="78%" style="white-space: nowrap; text-overflow:ellipsis; overflow: hidden; max-width:1px;"><a @click="getAlbums(work.id, work.title)" style="cursor: pointer; color:black;">{{ work.title }}</a><span v-if="work.nickname" style="color:gray;"> · {{ work.nickname }}</span></td>
+            <td width="78%" style="white-space: nowrap; text-overflow:ellipsis; overflow: hidden; max-width:1px;">{{ work.title }}<span v-if="work.nickname" style="color:gray;"> · {{ work.nickname }}</span></td>
             <td width="5%" style="text-align: right;"><b-badge>{{ work.album_count }}</b-badge></td>
           </tr>
         </table>
@@ -40,7 +40,8 @@ export default {
   data() {
     return {
       works: [],
-      loading: false
+      loading: false,
+      selectedWork: null
     };
   },
   methods: {
@@ -61,10 +62,14 @@ export default {
     },
       getAlbums(work_id, title) {
         eventBus.$emit('fireAlbums', work_id, title);
-    }
+    },
+      selectRow(work){
+        this.selectedWork = work;
+    },
   },
   created() {
     this.getWorks('Beethoven');
+    this.selectRow("BEETHOVEN00005");
     eventBus.$on('fireMethod', (composer) => {
             this.getWorks(composer);
     })
@@ -89,9 +94,39 @@ table{
    padding: 6px;
    padding-bottom: 2px;
 }
-.composer-img{
-    border-radius: 50%;
-    object-fit: cover;
+.highlight td {
+  border-top: 0px solid lightgray;
+  background-color: grey;
+  color: white !important;
+}
+.highlight span {
+  color: white !important;
+}
+tr:hover {
+  cursor: pointer;
+}
+
+.highlight td:first-child,
+.highlight td:last-child {
+   position: relative;
+}
+
+.highlight td:first-child:before,
+.highlight td:last-child:after {
+  content: '';
+  position: absolute;
+  top: 0px;
+  bottom: 0px;
+  width: 6px;
+  display: block;
+  background: inherit;
+  border: inherit;
+}
+.highlight td:first-child:before{
+  right: 100%;
+}
+.highlight td:last-child:after{
+  left: 100%;
 }
 header.card-header{
   background-color: #fff;
@@ -114,7 +149,7 @@ header.card-header{
 }
 .badge{
   color: #fff;
-  background-color: #777777;
+  background-color: grey;
   border-radius: 7px;
 }
 .no-works-found{
