@@ -73,7 +73,7 @@ export default {
 <style scoped>
 .container-fluid {
     position: relative;
-    background-image: linear-gradient(to bottom left, rgb(52,58,64, 0.9), rgb(52,58,64, 1));
+    background-color: #343a40;
     padding-bottom: 0px;
     border-radius: 0px;
     border-radius: 6px ;

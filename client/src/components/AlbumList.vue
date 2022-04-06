@@ -120,7 +120,7 @@ header.card-header{
   cursor: pointer;
 }
 .highlight {
-  background-color: grey !important;
+  background-color: rgb(52, 58, 64, 0.7) !important;
   color: white !important;
 }
 .highlight a {

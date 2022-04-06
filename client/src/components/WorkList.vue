@@ -97,7 +97,7 @@ table{
 }
 .highlight td {
   border-top: 0px solid lightgray;
-  background-color: grey;
+  background-color: rgb(52, 58, 64, 0.7);
   color: white !important;
 }
 .highlight span {
@@ -150,7 +150,7 @@ header.card-header{
 }
 .badge{
   color: #fff;
-  background-color: grey;
+  background-color: rgb(52, 58, 64, 0.7);
   border-radius: 7px;
 }
 .no-works-found{

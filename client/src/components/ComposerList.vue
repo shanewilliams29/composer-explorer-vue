@@ -89,7 +89,7 @@ table{
 }
 .highlight td {
   border-top: 0px solid lightgray;
-  background-color: grey;
+  background-color: rgb(52, 58, 64, 0.7);
   color: white;
 }
 tr:hover {
