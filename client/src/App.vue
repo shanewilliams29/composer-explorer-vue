@@ -9,6 +9,7 @@
         <b-col cols="4" class="album-list"><AlbumList/></b-col>
       </b-row>
     </div>
+    <PageFooter/>
   </div>
 </template>
 
@@ -18,6 +19,7 @@ import ColumnHeadings from './components/ColumnHeadings.vue'
 import ComposerList from './components/ComposerList.vue'
 import WorkList from './components/WorkList.vue'
 import AlbumList from './components/AlbumList.vue'
+import PageFooter from './components/PageFooter.vue'
 
 export default {
   name: 'App',
@@ -26,7 +28,8 @@ export default {
     ColumnHeadings,
     ComposerList,
     WorkList,
-    AlbumList
+    AlbumList,
+    PageFooter
   }
 }
 </script>
@@ -36,15 +39,15 @@ export default {
     background: #f1f2f4 !important;
   }
   .composer-list{
-    height: calc(100vh - 96px);
+    height: calc(100vh - 66px - 22px - 100px);
     overflow-y: scroll;
   }
   .work-list{
-    height: calc(100vh - 96px);
+    height: calc(100vh - 66px - 22px - 100px);
     overflow-y: scroll;
   }
   .album-list{
-    height: calc(100vh - 96px);
+    height: calc(100vh - 66px - 22px - 100px);
     overflow-y: scroll;
     overflow-x: hidden;
   }

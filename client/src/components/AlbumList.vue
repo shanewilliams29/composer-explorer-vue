@@ -4,7 +4,7 @@
     <b-card-group deck>
       <b-card v-for="(album, index) in albums" :key="index" no-body header-tag="header">
         <div class ="row">
-        <b-col class="album_columns" cols="2"><b-avatar rounded size="48px" :src="album.album_img"></b-avatar></b-col>
+        <b-col class="album_columns" cols="2"><b-avatar square size="48px" :src="album.album_img"></b-avatar></b-col>
         <b-col class="album_text_columns" >
         <b-card-text>
         <table cellspacing="0">
