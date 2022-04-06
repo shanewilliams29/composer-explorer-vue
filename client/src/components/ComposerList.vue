@@ -9,8 +9,8 @@
           <h6 class="mb-0">{{ index }}</h6>
         </template>
         <b-card-text>
-        <table cellspacing="0">
-           <tr v-for="(composer, index) in region" :key="index">
+        <table class="table-striped" cellspacing="0">
+           <tr v-for="composer in region" :key="composer.id" @click="selectRow(composer.id)" :class="{'highlight': (composer.id == selectedComposer)}">
             <td width="2%" :style="{border: 'solid 0px !important', backgroundColor:composer.color, opacity: 0.66}">
              </td>
                   <td width="2%"></td>
@@ -19,7 +19,7 @@
                 <img class="composer-img" :src="composer.img" height="20" width="20">
              </td>
             <td width="50%" style="white-space: nowrap; text-overflow:ellipsis; overflow: hidden; max-width:1px;"><a @click="getWorks(composer.name_short)" :id="composer.name_short" style="cursor: pointer; color:black;">{{ composer.name_full }}</a></td>
-           <td width="25%" style="white-space: nowrap; text-overflow:ellipsis; overflow: hidden; max-width:1px; text-align: right;">{{ composer.born }} - {{ composer.died }}</td>
+           <td width="25%" style="white-space: nowrap; text-overflow:ellipsis; max-width:1px; text-align: right;">{{ composer.born }} - {{ composer.died }}</td>
            </tr>
         </table>
         </b-card-text>
@@ -36,7 +36,8 @@ export default {
   data() {
     return {
       composers: [],
-      loading: false
+      loading: false,
+      selectedComposer: null
     };
   },
   methods: {
@@ -56,10 +57,15 @@ export default {
     },
     getWorks(composer) {
         eventBus.$emit('fireMethod', composer);
-    }
+        //this.$refs.composer.selectColor = "blue";
+    },
+    selectRow(composer){
+        this.selectedComposer = composer;
+    },
   },
   created() {
     this.getComposers();
+    this.selectRow("1")
   },
 };
 </script>
@@ -80,6 +86,33 @@ table{
    font-size: 12px;
    padding: 6px;
    padding-bottom: 2px;
+}
+.highlight td {
+  border-top: 0px solid lightgray;
+  background-color: grey;
+  color: white;
+}
+.highlight a{
+  color: white !important;
+}
+tr:hover {
+  cursor: pointer;
+}
+
+.highlight td:last-child {
+   position: relative;
+}
+
+.highlight td:last-child:after {
+  content: '';
+  position: absolute;
+  top: 0px;
+  bottom: 0px;
+  width: 6px;
+  display: block;
+  background: inherit;
+  border: inherit;
+  left: 100%
 }
 .composer-img{
     border-radius: 50%;

@@ -27,7 +27,7 @@
     <div class="text-center" v-show="loading" role="status">
       <b-spinner class="m-5"></b-spinner>
     </div>
-    <span class="no-works-found"><br>Works not yet catalogued for {{ composer }}.</span>
+    <span v-show="!loading" class="no-works-found"><br>Works not yet catalogued for {{ composer }}.</span>
     </div>
   </div>
 </template>
