@@ -163,56 +163,12 @@ def get_albums(work_id):
     response_object['albums'] = album_list
     return jsonify(response_object)
 
-    #paginate(page, 25, False)
 
-    # check if composer has been catalogued or return error if not
+@app.route('/api/composerinfo/<composer>', methods=['GET'])
+def get_composerinfo(composer):
+    composer_info = db.session.query(ComposerList)\
+        .filter(ComposerList.name_short == composer).first()
 
-    # try:
-    #     work = WorkList.query.filter_by(composer=name).first_or_404()
-    # except:
-    #     response_object = {
-    #         'status': 'error',
-    #         'info': 'composer not found in catalogue'
-    #     }
-    #     return jsonify(response_object)
-
-    # works_list = WorkList.query.filter_by(composer=name, recommend=True)\
-    #     .order_by(WorkList.order, WorkList.genre, WorkList.id).all()
-
-    # WORKS = []
-    # for work in works_list:
-    #     info = {
-    #         'id': work.id,
-    #         'genre': work.genre,
-    #         'cat': work.cat,
-    #         'recommend': work.recommend,
-    #         'title': work.title,
-    #         'nickname': work.nickname,
-    #         'date': work.date,
-    #         'album_count': work.album_count
-    #     }
-    #     WORKS.append(info)
-
-    # # group onto genres
-    # works_by_genre = {}
-    # works_in_genre = []
-    # i = 0
-    # prev_genre = WORKS[i]['genre']
-
-    # while i < len(WORKS):
-    #     genre = WORKS[i]['genre']
-    #     if genre == prev_genre:
-    #         works_in_genre.append(WORKS[i])
-    #         i += 1
-    #     else:
-    #         works_by_genre[prev_genre] = works_in_genre
-    #         works_in_genre = []
-    #         works_in_genre.append(WORKS[i])
-    #         prev_genre = genre
-    #         i += 1
-    #         if i == len(WORKS):
-    #             works_by_genre[prev_genre] = works_in_genre
-
-    # response_object = {'status': 'success'}
-    # response_object['works'] = works_by_genre
-    # return jsonify(response_object)
+    response_object = {'status': 'success'}
+    response_object['data'] = composer_info
+    return jsonify(response_object)

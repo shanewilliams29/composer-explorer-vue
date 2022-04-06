@@ -5,13 +5,12 @@
   <b-card no-body bg-variant="dark">
     <b-row no-gutters>
       <b-col cols="12" md="auto">
-        <b-card-img src="https://storage.googleapis.com/composer-explorer.appspot.com/img/Beethoven.jpg" alt="Image" class="rounded-0"></b-card-img>
+        <b-card-img :src="composer_img" alt="Image" class="rounded-0"></b-card-img>
       </b-col>
       <b-col>
         <b-card-body>
           <b-card-text>
-            Ludwig van Beethoven was a German composer and pianist. A crucial figure in the transition between the Classical and Romantic eras in classical music, he remains one of the most recognised and influential of all composers. His best-known compositions include 9 symphonies; 5 piano concertos; 1 violin concerto; 32 piano sonatas; 16 string quartets; a mass, the Missa solemnis; and an opera, Fidelio. His career as a composer is conventionally divided into early, middle, and late periods; the "early" period is typically seen to last until 1802, the "middle" period from 1802 to 1812, and the "late" period from 1812 to his death in 1827.
-
+            {{ composer_info }}
           </b-card-text>
         </b-card-body>
       </b-col>
@@ -25,23 +24,34 @@
 </template>
 
 <script>
+import axios from 'axios';
 import {eventBus} from "../main.js";
 
 export default {
   data() {
     return {
-      work_heading: "",
-      album_heading: ""
+      composer_img: "",
+      composer_info: ""
     };
   },
+  methods: {
+    getComposerInfo(composer) {
+        const path = 'http://localhost:5000/api/composerinfo/' + composer;
+        axios.get(path)
+          .then((res) => {
+            this.composer_img = res.data.data.image;
+            this.composer_info = res.data.data.introduction;
+          })
+          .catch((error) => {
+            // eslint-disable-next-line
+            console.error(error);
+          });
+      },
+  },
   created() {
-    this.work_heading = "Works by Beethoven";
-    this.album_heading = "Albums for \"Symphony No. 5 in C minor\"";
+    this.getComposerInfo("Beethoven");
     eventBus.$on('fireMethod', (composer) => {
-        this.work_heading = "Works by " + composer;
-    })
-    eventBus.$on('fireAlbums', (work_id, title) => {
-        this.album_heading = "Albums for \"" + title + "\"";
+        this.getComposerInfo(composer);
     })
   },
 };
