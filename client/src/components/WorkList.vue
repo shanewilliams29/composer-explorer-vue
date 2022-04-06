@@ -1,7 +1,10 @@
 <template>
   <div v-if="works">
   <div class ="row">
-    <b-card-group deck>
+    <div class="text-center" v-show="loading" role="status">
+      <b-spinner class="m-5"></b-spinner>
+    </div>
+    <b-card-group deck v-show="!loading">
       <b-card v-for="(genre, index) in works" :key="index" no-body header-tag="header">
         <template #header>
           <h6 class="mb-0">{{ index }}</h6>
@@ -21,6 +24,9 @@
   </div>
   <div v-else>
     <div class ="row">
+    <div class="text-center" v-show="loading" role="status">
+      <b-spinner class="m-5"></b-spinner>
+    </div>
     <span class="no-works-found"><br>Works not yet catalogued for {{ composer }}.</span>
     </div>
   </div>
@@ -34,19 +40,23 @@ export default {
   data() {
     return {
       works: [],
+      loading: false
     };
   },
   methods: {
     getWorks(composer) {
+      this.loading = true;
       const path = 'http://localhost:5000/api/works/' + composer;
       axios.get(path)
         .then((res) => {
           this.works = res.data.works;
           this.composer = composer;
+          this.loading = false;
         })
         .catch((error) => {
           // eslint-disable-next-line
           console.error(error);
+          this.loading = false;
         });
     },
       getAlbums(work_id, title) {

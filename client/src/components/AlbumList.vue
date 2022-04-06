@@ -1,7 +1,10 @@
 <template>
   <div v-if="albums">
   <div class ="row">
-    <b-card-group deck>
+    <div class="text-center" v-show="loading" role="status">
+      <b-spinner class="m-5"></b-spinner>
+    </div>
+    <b-card-group deck v-show="!loading">
       <b-card v-for="(album, index) in albums" :key="index" no-body header-tag="header">
         <div class ="row">
         <b-col class="album_columns" cols="2"><b-avatar square size="48px" :src="album.album_img"></b-avatar></b-col>
@@ -24,6 +27,9 @@
   </div>
   <div v-else>
     <div class ="row">
+    <div class="text-center" v-show="loading" role="status">
+      <b-spinner class="m-5"></b-spinner>
+    </div>
     <span class="no-albums-found"><br>No albums found.</span>
     </div>
   </div>
@@ -37,18 +43,22 @@ export default {
   data() {
     return {
       albums: [],
+      loading: false
     };
   },
   methods: {
     getAlbums(id) {
+      this.loading = true;
       const path = 'http://localhost:5000/api/albums/' + id;
       axios.get(path)
         .then((res) => {
           this.albums = res.data.albums;
+          this.loading = false;
         })
         .catch((error) => {
           // eslint-disable-next-line
           console.error(error);
+          this.loading = false;
         });
     },
   },

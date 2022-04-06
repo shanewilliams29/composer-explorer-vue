@@ -1,6 +1,9 @@
 <template>
   <div class ="row">
-    <b-card-group deck>
+    <div class="text-center" v-show="loading" role="status">
+      <b-spinner class="m-5"></b-spinner>
+    </div>
+    <b-card-group deck v-show="!loading">
       <b-card v-for="(region, index) in composers" :key="index" no-body header-tag="header">
         <template #header>
           <h6 class="mb-0">{{ index }}</h6>
@@ -33,18 +36,22 @@ export default {
   data() {
     return {
       composers: [],
+      loading: false
     };
   },
   methods: {
     getComposers() {
+      this.loading = true;
       const path = 'http://localhost:5000/api/composers';
       axios.get(path)
         .then((res) => {
           this.composers = res.data.composers;
+          this.loading=false;
         })
         .catch((error) => {
           // eslint-disable-next-line
           console.error(error);
+          this.loading=false;
         });
     },
     getWorks(composer) {
