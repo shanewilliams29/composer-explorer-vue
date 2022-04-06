@@ -51,8 +51,8 @@ def get_composers():
             'name_full': composer.name_full,
             'born': composer.born,
             'died': composer.died,
-            'flag': 'https://storage.googleapis.com/composer-explorer.appspot.com/flags/1x1/' + flag + '.svg',
-            'img': 'https://storage.googleapis.com/composer-explorer.appspot.com/img/' + composer.name_short + '.jpg',
+            'flag': app.config['STATIC'] + 'flags/1x1/' + flag + '.svg',
+            'img': app.config['STATIC'] + 'img/' + composer.name_short + '.jpg',
             'region': region_name,
             'color': era_color,
             'popular': composer.catalogued
@@ -168,7 +168,7 @@ def get_albums(work_id):
 def get_composerinfo(composer):
     composer_info = db.session.query(ComposerList)\
         .filter(ComposerList.name_short == composer).first()
-
+    composer_info.image = app.config['STATIC'] + 'img/' + composer + '.jpg'
     response_object = {'status': 'success'}
     response_object['data'] = composer_info
     return jsonify(response_object)

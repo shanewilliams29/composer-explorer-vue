@@ -39,7 +39,7 @@ export default {
         const path = 'http://localhost:5000/api/composerinfo/' + composer;
         axios.get(path)
           .then((res) => {
-            this.composer_img = res.data.data.image;
+            this.composer_img = res.data.data.image; // Change to local file
             this.composer_info = res.data.data.introduction;
           })
           .catch((error) => {
