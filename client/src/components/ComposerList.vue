@@ -56,7 +56,7 @@ export default {
         });
     },
     getWorks(composer) {
-        eventBus.$emit('fireMethod', composer);
+        eventBus.$emit('fireComposers', composer);
         //this.$refs.composer.selectColor = "blue";
     },
     selectRow(composer){

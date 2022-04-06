@@ -151,13 +151,10 @@ def get_albums(work_id):
     for tup in albums.items:
         item = jsonpickle.decode(tup[0].data)
         item['likes'] = tup[1]
-        item['hidden'] = tup[0].hidden
+        item['id'] = tup[0].id
         album_list.append(item)
 
     # split off first 5 tracks for collapsible display
-    for item in album_list:
-        item['firstfive'] = item['tracks'][:5]
-        item['tracks'] = item['tracks'][5:]
 
     response_object = {'status': 'success'}
     response_object['albums'] = album_list
@@ -171,4 +168,31 @@ def get_composerinfo(composer):
     composer_info.image = app.config['STATIC'] + 'img/' + composer + '.jpg'
     response_object = {'status': 'success'}
     response_object['data'] = composer_info
+    return jsonify(response_object)
+
+
+@app.route('/api/albuminfo/<album_id>', methods=['GET'])
+def get_albuminfo(album_id):
+    album = db.session.query(WorkAlbums)\
+        .filter(WorkAlbums.id == album_id)\
+        .first()
+    # return jsonpickle.encode(album)
+
+    album_details = jsonpickle.decode(album.data)
+
+    ALBUM = {
+        'id': album.id,
+        'album_img': album_details['album_img'],
+        'album_name': album_details['album_name'],
+        'album_uri': album_details['album_uri'],
+        'all_artists': album_details['all_artists'],
+        'artists': album_details['artists'],
+        'minor_artists': album_details['minor_artists'],
+        'release_date': album_details['release_date'],
+        'tracks': album_details['tracks'],
+        'track_count': album_details['track_count']
+    }
+
+    response_object = {'status': 'success'}
+    response_object['album'] = ALBUM
     return jsonify(response_object)

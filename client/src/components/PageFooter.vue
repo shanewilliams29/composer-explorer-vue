@@ -7,13 +7,17 @@
     </div>
   <b-card no-body bg-variant="dark" v-show="!loading">
     <b-row no-gutters>
-      <b-col cols="12" md="auto">
-        <b-card-img :src="composer_img" alt="Image" class="rounded-0"></b-card-img>
+      <b-col cols="12" md="auto" class="album-cover-col">
+        <b-card-img :src="album.album_img" alt="Album Cover" class="rounded-0"></b-card-img>
       </b-col>
       <b-col>
         <b-card-body>
           <b-card-text>
-            {{ composer_info }}
+            <div class="centered">
+            <span style="font-weight: bold;">{{title}}</span>
+            <span style="font-weight: bold; font-style: italic; color:silver;">{{album.artists}} ({{album.release_date}})</span>
+            <span style="font-style: italic; color:silver;">{{album.minor_artists}}</span>
+            </div>
           </b-card-text>
         </b-card-body>
       </b-col>
@@ -21,7 +25,7 @@
   </b-card>
         </b-col>
         <b-col>Player</b-col>
-        <b-col>Tracks</b-col>
+        <b-col></b-col>
       </b-row>
     </div>
 </template>
@@ -33,19 +37,18 @@ import {eventBus} from "../main.js";
 export default {
   data() {
     return {
-      composer_img: "",
-      composer_info: "",
-      loading: false
+      album: [],
+      title: ""
     };
   },
   methods: {
-    getComposerInfo(composer) {
+    getAlbumInfo(album_id) {
         this.loading = true;
-        const path = 'http://localhost:5000/api/composerinfo/' + composer;
+        this.title = eventBus.title;
+        const path = 'http://localhost:5000/api/albuminfo/' + album_id;
         axios.get(path)
           .then((res) => {
-            this.composer_img = res.data.data.image; // Change to local file
-            this.composer_info = res.data.data.introduction;
+            this.album = res.data.album; // Change to local file
             this.loading = false;
           })
           .catch((error) => {
@@ -56,9 +59,10 @@ export default {
       },
   },
   created() {
-    this.getComposerInfo("Beethoven");
-    eventBus.$on('fireMethod', (composer) => {
-        this.getComposerInfo(composer);
+    eventBus.title = "Piano Concerto No. 5 in E♭ major";
+    this.getAlbumInfo("BEETHOVEN000163xjbqYLxvXHuanI63XGwri");
+    eventBus.$on('fireAlbumData', (album_id) => {
+        this.getAlbumInfo(album_id);
     })
   },
 };
@@ -67,43 +71,45 @@ export default {
 <style scoped>
 .info-col{
   height: 100px;
-  overflow-y: scroll;
+  overflow-y: hidden;
+}
+.album-cover-col{
+  padding-right: 10px;
 }
 .card{
   background: none !important;
   border: 0px;
   width: 100%;
   overflow-x: hidden;
+  height: 100px;
 
 }
 .card-img{
-    height: auto;
+    height: 100%;
     width: auto;
     max-width: 100px;
     max-height: 100px;
 }
-.card-title {
-    font-size: 12px;
-}
 .card-body {
     font-size: 12px;
     padding-left: 0px;
-    padding-top: 7px;
+    padding-top: 0px;
+    height: 100px;
 
 
+}
+.centered {
+    display: flex;
+    flex-direction: column;
+    column-gap: 0px;
+    justify-content: center;
+    height: 100px;
 }
 .footer-row{
   height: 100px;
   color: white;
-  background-color: rgb(52, 58, 64, 0.85);
+  background-color: #343a40;
 
-}
-.lead{
-  font-weight: 500;
-  font-size: 14px;
-  margin: 0px;
-  padding-left: 10px;
-  padding-bottom: 1px;
 }
 .col{
   padding:  0px;

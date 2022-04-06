@@ -5,17 +5,17 @@
       <b-spinner class="m-5"></b-spinner>
     </div>
     <b-card-group deck v-show="!loading">
-      <b-card v-for="(album, index) in albums" :key="index" no-body header-tag="header">
+      <b-card v-for="album in albums" :key="album.album_id" no-body header-tag="header" @click="selectRow(album.album_id); getAlbumData(album.id);" :class="{'highlight': (album.album_id == selectedAlbum)}">
         <div class ="row">
         <b-col class="album_columns" cols="2"><b-avatar square size="48px" :src="album.album_img"></b-avatar></b-col>
         <b-col class="album_text_columns" >
         <b-card-text>
         <table cellspacing="0">
           <tr>
-            <td width="100%" style="white-space: nowrap; text-overflow:ellipsis; overflow: hidden; max-width:1px;"><a onclick='' style="cursor: pointer; color:black; font-weight: 600;">{{ album.artists }} ({{ album.release_date }})</a></td>
+            <td width="100%" style="white-space: nowrap; text-overflow:ellipsis; overflow: hidden; max-width:1px;"><a style="color:black; font-weight: 600;">{{ album.artists }} ({{ album.release_date }})</a></td>
           </tr>
           <tr>
-            <td width="100%" style="white-space: nowrap; text-overflow:ellipsis; overflow: hidden; max-width:1px;"><a onclick='' style="cursor: pointer; color:grey; font-style: italic;">{{ album.minor_artists }}</a></td>
+            <td width="100%" style="white-space: nowrap; text-overflow:ellipsis; overflow: hidden; max-width:1px;"><a style="color:grey; font-style: italic;">{{ album.minor_artists }}</a></td>
           </tr>
         </table>
         </b-card-text>
@@ -43,7 +43,8 @@ export default {
   data() {
     return {
       albums: [],
-      loading: false
+      loading: false,
+      selectedAlbum: null
     };
   },
   methods: {
@@ -61,9 +62,17 @@ export default {
           this.loading = false;
         });
     },
+    getAlbumData(album_id) {
+        eventBus.$emit('fireAlbumData', album_id);
+        //this.$refs.composer.selectColor = "blue";
+    },
+      selectRow(album){
+        this.selectedAlbum = album;
+    },
   },
   created() {
-    this.getAlbums('BEETHOVEN00005');
+    this.getAlbums('BEETHOVEN00016');
+    this.selectRow('3xjbqYLxvXHuanI63XGwri');
       eventBus.$on('fireAlbums', (work_id) => {
             this.getAlbums(work_id);
     })
@@ -106,6 +115,16 @@ header.card-header{
   background-color: #fff;
   border: none;
   margin-top: 5px;
+}
+.card:hover {
+  cursor: pointer;
+}
+.highlight {
+  background-color: grey !important;
+  color: white !important;
+}
+.highlight a {
+  color: white !important;
 }
 .card-deck{
   padding-left: 5px;

@@ -20,8 +20,8 @@ export default {
   },
   created() {
     this.work_heading = "Works by Beethoven";
-    this.album_heading = "Albums for \"Symphony No. 5 in C minor\"";
-    eventBus.$on('fireMethod', (composer) => {
+    this.album_heading = "Albums for \"Piano Concerto No. 5 in E♭ major\"";
+    eventBus.$on('fireComposers', (composer) => {
         this.work_heading = "Works by " + composer;
     })
     eventBus.$on('fireAlbums', (work_id, title) => {

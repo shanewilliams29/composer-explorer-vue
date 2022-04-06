@@ -62,6 +62,7 @@ export default {
     },
       getAlbums(work_id, title) {
         eventBus.$emit('fireAlbums', work_id, title);
+        eventBus.title = title;
     },
       selectRow(work){
         this.selectedWork = work;
@@ -69,8 +70,8 @@ export default {
   },
   created() {
     this.getWorks('Beethoven');
-    this.selectRow("BEETHOVEN00005");
-    eventBus.$on('fireMethod', (composer) => {
+    this.selectRow("BEETHOVEN00016");
+    eventBus.$on('fireComposers', (composer) => {
             this.getWorks(composer);
     })
   },
