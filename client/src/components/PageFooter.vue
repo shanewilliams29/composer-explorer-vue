@@ -1,5 +1,7 @@
 <template>
 <div class="container-fluid">
+    <div class="overlay"></div>
+    <div class="inner">
       <b-row class="footer-row">
         <b-col class="info-col">
     <div class="text-center" v-show="loading" role="status">
@@ -16,7 +18,7 @@
             <div class="centered">
             <span style="font-weight: bold;">{{title}}</span>
             <span style="font-weight: bold; font-style: italic; color:silver;">{{album.artists}} ({{album.release_date}})</span>
-            <span style="font-style: italic; color:silver;">{{album.minor_artists}}</span>
+            <span style="font-style: italic; color:darkgray;">{{album.minor_artists}}</span>
             </div>
           </b-card-text>
         </b-card-body>
@@ -24,10 +26,10 @@
     </b-row>
   </b-card>
         </b-col>
-        <b-col>Player</b-col>
+        <b-col></b-col>
         <b-col></b-col>
       </b-row>
-    </div>
+    </div></div>
 </template>
 
 <script>
@@ -69,6 +71,15 @@ export default {
 </script>
 
 <style scoped>
+.container-fluid {
+    position: relative;
+    background-image: linear-gradient(to bottom left, rgb(52,58,64, 0.9), rgb(52,58,64, 1));
+    padding-bottom: 0px;
+    border-radius: 0px;
+    border-radius: 6px ;
+
+}
+
 .info-col{
   height: 100px;
   overflow-y: hidden;
@@ -92,11 +103,11 @@ export default {
 }
 .card-body {
     font-size: 12px;
-    padding-left: 0px;
+    padding-left: 2px;
+    margin-right: 6px;
     padding-top: 0px;
     height: 100px;
-
-
+    overflow-y: hidden;
 }
 .centered {
     display: flex;
@@ -108,7 +119,6 @@ export default {
 .footer-row{
   height: 100px;
   color: white;
-  background-color: #343a40;
 
 }
 .col{
