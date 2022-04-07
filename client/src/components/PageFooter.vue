@@ -2,9 +2,7 @@
   <div class="container-fluid">
       <b-row class="footer-row">
         <b-col class="info-col">
-          <div class="text-center" v-show="loading" role="status">
-            <b-spinner class="m-4"></b-spinner>
-          </div>
+
           <b-card no-body bg-variant="dark" v-show="!loading">
             <b-row no-gutters>
               <b-col cols="12" md="auto" class="album-cover-col">

@@ -8,7 +8,9 @@
     <b-card-group deck v-show="!loading">
       <b-card v-for="album in albums" :key="album.album_id" no-body header-tag="header" @click="selectRow(album.album_id); getAlbumData(album.id);" :class="{'highlight': (album.album_id == selectedAlbum)}">
         <div class ="row">
-        <b-col class="album_columns" cols="2"><b-avatar rounded size="48px" :src="album.album_img"></b-avatar></b-col>
+        <b-col class="album_columns" cols="2">
+          <b-avatar v-show="album.album_id != selectedAlbum" rounded="left" size="48px" :src="album.album_img"></b-avatar>
+          <b-avatar v-show="album.album_id == selectedAlbum" variant="dark" icon="heart" rounded="left" size="48px"></b-avatar></b-col>
         <b-col class="album_text_columns" >
         <b-card-text>
         <table cellspacing="0">
@@ -84,11 +86,11 @@ export default {
 
 
 <style scoped>
-.badge-primary{
-  background-color: white !important;
-}
 .spinner{
   text-align: center;
+}
+.badge-dark{
+  background: none;
 }
 .m-5{
   color: #343a40;
