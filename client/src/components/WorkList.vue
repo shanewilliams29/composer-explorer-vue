@@ -1,9 +1,10 @@
 <template>
-  <div v-if="works">
-  <div class ="row">
-    <div class="text-center" v-show="loading" role="status">
+  <div>
+    <div class="spinner" v-show="loading" role="status">
       <b-spinner class="m-5"></b-spinner>
     </div>
+  <div v-if="works">
+  <div class ="row">
     <b-card-group deck v-show="!loading">
       <b-card v-for="(genre, index) in works" :key="index" no-body header-tag="header">
         <template #header>
@@ -30,6 +31,7 @@
     <span v-show="!loading" class="no-works-found"><br>Works not yet catalogued for {{ composer }}.</span>
     </div>
   </div>
+</div>
 </template>
 
 <script>
@@ -80,6 +82,12 @@ export default {
 
 
 <style scoped>
+.spinner{
+  text-align: center;
+}
+.m-5{
+  color: #343a40;
+}
 .card-deck{
   display: flex;
   flex-direction: column;

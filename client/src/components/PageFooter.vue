@@ -129,6 +129,7 @@ export default {
     overflow-y: hidden;
 }
 .centered {
+  padding-left: 8px;
     display: flex;
     flex-direction: column;
     column-gap: 0px;

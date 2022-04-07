@@ -1,8 +1,9 @@
 <template>
-  <div class ="row">
-    <div class="text-center" v-show="loading" role="status">
+  <div>
+    <div class="spinner" v-show="loading" role="status">
       <b-spinner class="m-5"></b-spinner>
     </div>
+  <div class ="row">
     <b-card-group deck v-show="!loading">
       <b-card v-for="(region, index) in composers" :key="index" no-body header-tag="header">
         <template #header>
@@ -26,6 +27,7 @@
       </b-card>
     </b-card-group>
   </div>
+</div>
 </template>
 
 <script>
@@ -131,6 +133,12 @@ header.card-header{
 .mb-0{
   font-size: 14px;
   font-weight: bold;
+}
+.spinner{
+  text-align: center;
+}
+.m-5{
+  color: #343a40;
 }
 .card{
   background-color: #fff;

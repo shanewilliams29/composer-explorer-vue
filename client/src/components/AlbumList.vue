@@ -1,9 +1,10 @@
 <template>
-  <div v-if="albums">
-  <div class ="row">
-    <div class="text-center" v-show="loading" role="status">
+  <div>
+    <div class="spinner" v-show="loading" role="status">
       <b-spinner class="m-5"></b-spinner>
     </div>
+  <div v-if="albums">
+  <div class ="row">
     <b-card-group deck v-show="!loading">
       <b-card v-for="album in albums" :key="album.album_id" no-body header-tag="header" @click="selectRow(album.album_id); getAlbumData(album.id);" :class="{'highlight': (album.album_id == selectedAlbum)}">
         <div class ="row">
@@ -33,6 +34,7 @@
     <span class="no-albums-found"><br>No albums found.</span>
     </div>
   </div>
+</div>
 </template>
 
 <script>
@@ -82,6 +84,12 @@ export default {
 
 
 <style scoped>
+.spinner{
+  text-align: center;
+}
+.m-5{
+  color: #343a40;
+}
 .card-deck{
   display: flex;
   flex-direction: column;
