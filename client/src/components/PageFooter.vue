@@ -136,9 +136,6 @@ export default {
     justify-content: center;
     height: 100px;
 }
-.centered-tracks{
-
-}
 .footer-row{
   height: 100px;
   color: white;
