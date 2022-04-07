@@ -82,6 +82,14 @@ export default {
 
 
 <style scoped>
+.card-deck{
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+.card{
+  width: 100%;
+}
 td{
    padding: 1px;
    vertical-align: bottom;

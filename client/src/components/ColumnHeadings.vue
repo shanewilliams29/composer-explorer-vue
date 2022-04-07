@@ -1,9 +1,9 @@
 <template>
 <div class="container-fluid">
       <b-row>
-        <b-col><b-jumbotron class="jumbotron-heading" lead="Composers"></b-jumbotron></b-col>
-        <b-col><b-jumbotron class="jumbotron-heading" :lead="work_heading"></b-jumbotron></b-col>
-        <b-col><b-jumbotron class="jumbotron-heading" :lead="album_heading"></b-jumbotron></b-col>
+        <b-col>Composers</b-col>
+        <b-col>{{ work_heading }}</b-col>
+        <b-col>{{ album_heading }}</b-col>
       </b-row>
     </div>
 </template>
@@ -32,6 +32,9 @@ export default {
 </script>
 
 <style scoped>
+.jumbotron{
+  height: 10px;
+  }
 .jumbotron-heading{
   color: white;
   background-color: rgb(52, 58, 64, 0.85);

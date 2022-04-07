@@ -15,8 +15,8 @@
                   <b-card-text>
                     <div class="centered">
                       <span style="font-weight: bold;">{{title}}</span>
-                      <span style="font-weight: bold; font-style: italic; color:silver;">{{album.artists}} ({{album.release_date}})</span>
-                      <span style="font-style: italic; color:darkgray;">{{album.minor_artists}}</span>
+                      <span style="font-style: italic; font-weight: bold; color:#a4a7a9;">{{album.artists}} ({{album.release_date}})</span>
+                      <span style="font-style: italic; color:#a4a7a9;">{{album.minor_artists}}</span>
                     </div>
                   </b-card-text>
                 </b-card-body>
@@ -24,7 +24,7 @@
             </b-row>
           </b-card>
         </b-col>
-        <b-col>Player</b-col>
+        <b-col></b-col>
         <b-col>
 
     <b-card-group deck v-show="!loading">
@@ -33,7 +33,7 @@
           <div class="centered-tracks">
         <table class="track-table" cellspacing="0">
           <tr class="track-row" v-for="track in album.tracks" :key="track[1]" @click="selectTrack(track[1]);" :class="{'highlight-track': (track[1] == selectedTrack)}">
-            <td width="100%" style="white-space: nowrap; text-overflow:ellipsis; overflow: hidden; max-width:1px;">▶ {{ track[0].substring(track[0].indexOf(':') + 1) }}</td>
+            <td width="100%" style="white-space: nowrap; text-overflow:ellipsis; overflow: hidden; max-width:1px;">▶&nbsp; {{ track[0].substring(track[0].indexOf(':') + 1) }}</td>
           </tr>
         </table>
       </div>
