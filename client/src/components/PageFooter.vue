@@ -1,35 +1,50 @@
 <template>
-<div class="container-fluid">
-    <div class="overlay"></div>
-    <div class="inner">
+  <div class="container-fluid">
       <b-row class="footer-row">
         <b-col class="info-col">
-    <div class="text-center" v-show="loading" role="status">
-      <b-spinner class="m-4"></b-spinner>
-    </div>
-  <b-card no-body bg-variant="dark" v-show="!loading">
-    <b-row no-gutters>
-      <b-col cols="12" md="auto" class="album-cover-col">
-        <b-card-img :src="album.album_img" alt="Album Cover" class="rounded-0"></b-card-img>
-      </b-col>
-      <b-col>
-        <b-card-body>
-          <b-card-text>
-            <div class="centered">
-            <span style="font-weight: bold;">{{title}}</span>
-            <span style="font-weight: bold; font-style: italic; color:silver;">{{album.artists}} ({{album.release_date}})</span>
-            <span style="font-style: italic; color:darkgray;">{{album.minor_artists}}</span>
-            </div>
-          </b-card-text>
-        </b-card-body>
-      </b-col>
-    </b-row>
-  </b-card>
+          <div class="text-center" v-show="loading" role="status">
+            <b-spinner class="m-4"></b-spinner>
+          </div>
+          <b-card no-body bg-variant="dark" v-show="!loading">
+            <b-row no-gutters>
+              <b-col cols="12" md="auto" class="album-cover-col">
+                <b-card-img :src="album.album_img" alt="Album Cover" class="rounded-0"></b-card-img>
+              </b-col>
+              <b-col>
+                <b-card-body>
+                  <b-card-text>
+                    <div class="centered">
+                      <span style="font-weight: bold;">{{title}}</span>
+                      <span style="font-weight: bold; font-style: italic; color:silver;">{{album.artists}} ({{album.release_date}})</span>
+                      <span style="font-style: italic; color:darkgray;">{{album.minor_artists}}</span>
+                    </div>
+                  </b-card-text>
+                </b-card-body>
+              </b-col>
+            </b-row>
+          </b-card>
         </b-col>
-        <b-col></b-col>
-        <b-col></b-col>
+        <b-col>Player</b-col>
+        <b-col>
+
+    <b-card-group deck v-show="!loading">
+      <b-card no-body class="track-card">
+        <b-card-text class="track-card-text">
+          <div class="centered-tracks">
+        <table class="track-table" cellspacing="0">
+          <tr class="track-row" v-for="track in album.tracks" :key="track[1]" @click="selectTrack(track[1]);" :class="{'highlight-track': (track[1] == selectedTrack)}">
+            <td width="100%" style="white-space: nowrap; text-overflow:ellipsis; overflow: hidden; max-width:1px;">▶ {{ track[0] }}</td>
+          </tr>
+        </table>
+      </div>
+        </b-card-text>
+      </b-card>
+    </b-card-group>
+
+
+        </b-col>
       </b-row>
-    </div></div>
+  </div>
 </template>
 
 <script>
@@ -40,7 +55,8 @@ export default {
   data() {
     return {
       album: [],
-      title: ""
+      title: "",
+      selectedTrack: ""
     };
   },
   methods: {
@@ -59,6 +75,9 @@ export default {
             this.loading = false;
           });
       },
+    selectTrack(track){
+        this.selectedTrack = track;
+    },
   },
   created() {
     eventBus.title = "Piano Concerto No. 5 in E♭ major";
@@ -116,10 +135,38 @@ export default {
     justify-content: center;
     height: 100px;
 }
+.centered-tracks{
+
+}
 .footer-row{
   height: 100px;
   color: white;
-
+}
+.track-card{
+  background-color: #484e53 !important;
+  border: 0px;
+  width: 100%;
+  overflow-x: hidden;
+  margin-top: 3px;
+  margin-bottom: 3px;
+  padding-left: 10px;
+  right: 3px;
+  height: 94px;
+}
+.track-table{
+  width: 100%;
+  font-size: 12px;
+}
+.track-card-text{
+  padding-top: 6px;
+  padding-bottom: 6px;
+  padding-right: 10px;
+}
+.track-row:hover {
+  cursor: pointer;
+}
+.highlight-track{
+  color: #1DB954;
 }
 .col{
   padding:  0px;
