@@ -33,7 +33,7 @@
           <div class="centered-tracks">
         <table class="track-table" cellspacing="0">
           <tr class="track-row" v-for="track in album.tracks" :key="track[1]" @click="selectTrack(track[1]);" :class="{'highlight-track': (track[1] == selectedTrack)}">
-            <td width="100%" style="white-space: nowrap; text-overflow:ellipsis; overflow: hidden; max-width:1px;">▶ {{ track[0] }}</td>
+            <td width="100%" style="white-space: nowrap; text-overflow:ellipsis; overflow: hidden; max-width:1px;">▶ {{ track[0].substring(track[0].indexOf(':') + 1) }}</td>
           </tr>
         </table>
       </div>
