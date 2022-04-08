@@ -6,7 +6,7 @@
   <div v-if="albums">
   <div class ="row">
     <b-card-group deck v-show="!loading">
-      <b-card v-for="album in albums" :key="album.album_id" no-body header-tag="header" @click="selectRow(album.album_id); getAlbumData(album.id);" :class="{'highlight': (album.album_id == selectedAlbum)}">
+      <b-card v-for="(album, index) in albums" :key="album.album_id" :id="album.album_id" :ref="index" no-body header-tag="header" @click="selectRow(album.album_id); getAlbumData(album.id);" :class="{'highlight': (album.album_id == selectedAlbum)}">
         <div class ="row">
         <b-col class="album_columns" cols="2">
           <b-avatar v-show="album.album_id != selectedAlbum" rounded="left" size="48px" :src="album.album_img"></b-avatar>
@@ -59,6 +59,8 @@ export default {
         .then((res) => {
           this.albums = res.data.albums;
           this.loading = false;
+          this.selectRow(this.albums[0].album_id); // select first row
+          eventBus.$emit('fireAlbumData', this.albums[0].id);
         })
         .catch((error) => {
           // eslint-disable-next-line
@@ -71,15 +73,19 @@ export default {
         //this.$refs.composer.selectColor = "blue";
     },
       selectRow(album){
+        // console.log(this.$refs["1"][0].id);
         this.selectedAlbum = album;
     },
   },
   created() {
     this.getAlbums('BEETHOVEN00016');
-    this.selectRow('3xjbqYLxvXHuanI63XGwri');
       eventBus.$on('fireAlbums', (work_id) => {
             this.getAlbums(work_id);
     })
+  },
+  mounted() {
+    // this.selectRow('3xjbqYLxvXHuanI63XGwri');
+    //this.selectRow(this.$refs["0"][0].id); // selects first album
   },
 };
 </script>
