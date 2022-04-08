@@ -145,19 +145,38 @@ def get_albums(work_id):
 
     albums = db.session.query(WorkAlbums, func.count(AlbumLike.id).label('total')) \
         .filter(WorkAlbums.workid == work_id, WorkAlbums.hidden != True).outerjoin(AlbumLike).group_by(WorkAlbums) \
-        .order_by(text('total DESC'), WorkAlbums.score.desc()).paginate(page, 25, False)
+        .order_by(text('total DESC'), WorkAlbums.score.desc()).paginate(page, 1000, False)
 
     album_list = []
+    duplicates_list = []
+    match_string = ""
+
     for tup in albums.items:
         item = jsonpickle.decode(tup[0].data)
         item['likes'] = tup[1]
         item['id'] = tup[0].id
+
+        # remove duplicates
+        match_string = item['artists'].strip()
+        # match_string = item['artists'].strip() + str(item['release_date'])
+        if match_string in duplicates_list:
+            continue
+        else:
+            duplicates_list.append(match_string)
+
+        # de-rate newer, crappy albums
+        if int(item['release_date']) >= 2020:
+            item['score'] = item['score'] / 4
+
+        # add to album list
         album_list.append(item)
 
-    # split off first 5 tracks for collapsible display
+        # re-sort the album list on popularity and likes
+        sorted_list = sorted(album_list, key=lambda d: d['score'], reverse=True)
+        sorted_list = sorted(sorted_list, key=lambda d: d['likes'], reverse=True)
 
     response_object = {'status': 'success'}
-    response_object['albums'] = album_list
+    response_object['albums'] = sorted_list
     return jsonify(response_object)
 
 

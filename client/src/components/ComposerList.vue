@@ -3,31 +3,73 @@
     <div class="spinner" v-show="loading" role="status">
       <b-spinner class="m-5"></b-spinner>
     </div>
-  <div class ="row">
-    <b-card-group deck v-show="!loading">
-      <b-card v-for="(region, index) in composers" :key="index" no-body header-tag="header">
-        <template #header>
-          <h6 class="mb-0">{{ index }}</h6>
-        </template>
-        <b-card-text>
-        <table cellspacing="0">
-           <tr v-for="composer in region" :key="composer.id" @click="selectRow(composer.id); getWorks(composer.name_short);" :class="{'highlight': (composer.id == selectedComposer)}">
-            <td width="2%" :style="{border: 'solid 0px !important', backgroundColor:composer.color, opacity: 0.66}">
-             </td>
-                  <td width="2%"></td>
-             <td width="12%" style="white-space: nowrap;">
-                <img class="composer-img" :src="composer.flag" height="20" width="20">
-                <img class="composer-img" :src="composer.img" height="20" width="20">
-             </td>
-            <td width="50%" style="white-space: nowrap; text-overflow:ellipsis; overflow: hidden; max-width:1px;">{{ composer.name_full }}</td>
-           <td width="25%" style="white-space: nowrap; text-overflow:ellipsis; max-width:1px; text-align: right;">{{ composer.born }} - {{ composer.died }}</td>
-           </tr>
-        </table>
-        </b-card-text>
-      </b-card>
-    </b-card-group>
+    <div class="row">
+      <b-card-group deck v-show="!loading">
+        <b-card
+          v-for="(region, index) in composers"
+          :key="index"
+          no-body
+          header-tag="header"
+        >
+          <template #header>
+            <h6 class="mb-0">{{ index }}</h6>
+          </template>
+          <b-card-text>
+            <table cellspacing="0">
+              <tr
+                v-for="composer in region"
+                :key="composer.id"
+                @click="selectRow(composer.id); getWorks(composer.name_short);"
+                :class="{'highlight': (composer.id == selectedComposer)}"
+              >
+                <td
+                  width="2%"
+                  :style="{border: 'solid 0px !important', backgroundColor:composer.color, opacity: 0.66}"
+                ></td>
+                <td width="2%"></td>
+                <td width="12%" style="white-space: nowrap">
+                  <img
+                    class="composer-img"
+                    :src="composer.flag"
+                    height="20"
+                    width="20"
+                  />
+                  <img
+                    class="composer-img"
+                    :src="composer.img"
+                    height="20"
+                    width="20"
+                  />
+                </td>
+                <td
+                  width="50%"
+                  style="
+                    white-space: nowrap;
+                    text-overflow: ellipsis;
+                    overflow: hidden;
+                    max-width: 1px;
+                  "
+                >
+                  {{ composer.name_full }}
+                </td>
+                <td
+                  width="25%"
+                  style="
+                    white-space: nowrap;
+                    text-overflow: ellipsis;
+                    max-width: 1px;
+                    text-align: right;
+                  "
+                >
+                  {{ composer.born }} - {{ composer.died }}
+                </td>
+              </tr>
+            </table>
+          </b-card-text>
+        </b-card>
+      </b-card-group>
+    </div>
   </div>
-</div>
 </template>
 
 <script>
@@ -72,30 +114,29 @@ export default {
 };
 </script>
 
-
 <style scoped>
-.card-deck{
+.card-deck {
   display: flex;
   flex-direction: column;
   width: 100%;
 }
-.card{
+.card {
   width: 100%;
 }
-td{
-   padding: 1px;
-   vertical-align: bottom;
-   border-top: 1px dotted lightgray;
+td {
+  padding: 1px;
+  vertical-align: bottom;
+  border-top: 1px dotted lightgray;
 }
-tr{
+tr {
   border-bottom: 0px;
 }
-table{
-   width: 100%;
-   border-collapse: separate;
-   font-size: 12px;
-   padding: 6px;
-   padding-bottom: 2px;
+table {
+  width: 100%;
+  border-collapse: separate;
+  font-size: 12px;
+  padding: 6px;
+  padding-bottom: 2px;
 }
 .highlight td {
   border-top: 0px solid lightgray;
@@ -106,11 +147,11 @@ tr:hover {
   cursor: pointer;
 }
 .highlight td:last-child {
-   position: relative;
+  position: relative;
 }
 
 .highlight td:last-child:after {
-  content: '';
+  content: "";
   position: absolute;
   top: 0px;
   bottom: 0px;
@@ -118,34 +159,34 @@ tr:hover {
   display: block;
   background: inherit;
   border: inherit;
-  left: 100%
+  left: 100%;
 }
-.composer-img{
-    border-radius: 50%;
-    object-fit: cover;
+.composer-img {
+  border-radius: 50%;
+  object-fit: cover;
 }
-header.card-header{
+header.card-header {
   background-color: #fff;
   border: none;
   padding-left: 10px;
   padding-bottom: 0px;
 }
-.mb-0{
+.mb-0 {
   font-size: 14px;
   font-weight: bold;
 }
-.spinner{
+.spinner {
   text-align: center;
 }
-.m-5{
+.m-5 {
   color: #343a40;
 }
-.card{
+.card {
   background-color: #fff;
   border: none;
   margin-top: 5px;
 }
-.card-deck{
+.card-deck {
   padding-left: 5px;
   padding-right: 5px;
 }
