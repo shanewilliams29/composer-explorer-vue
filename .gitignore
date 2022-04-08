@@ -5,6 +5,8 @@ env
 __pycache__
 .gcloudignore
 app.yaml
+.env
+.flaskenv
 
 # local env files
 .env.local
