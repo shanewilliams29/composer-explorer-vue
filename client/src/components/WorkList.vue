@@ -13,7 +13,7 @@
         <b-card-text>
         <table cellspacing="0">
           <tr v-for="work in genre" :key="work.id" @click="selectRow(work.id); getAlbums(work.id, work.title);" :class="{'highlight': (work.id == selectedWork)}">
-            <td width="17%"><span style="white-space: nowrap; color:darkred;"><span v-if="work.cat">{{ work.cat }}</span><span v-else>{{ work.date }}</span></span></td>
+            <td width="17%"><span style="white-space: nowrap; color:darkred;"><span v-if="work.cat">{{ work.cat }}</span><span v-else>{{ work.date }}</span><span v-show="work.id == selectedWork">&nbsp;<b-icon icon="heart"></b-icon>&nbsp;</span></span></td>
             <td width="78%" style="white-space: nowrap; text-overflow:ellipsis; overflow: hidden; max-width:1px;">{{ work.title }}<span v-if="work.nickname" style="color:gray;"> · {{ work.nickname }}</span></td>
             <td width="5%" style="text-align: right;"><b-badge>{{ work.album_count }}</b-badge></td>
           </tr>

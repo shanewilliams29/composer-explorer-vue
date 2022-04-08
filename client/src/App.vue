@@ -40,15 +40,15 @@ export default {
     background: #f1f2f4 !important;
   }
   .composer-list{
-    height: calc(100vh - 66px - 24px - 100px);
+    height: calc(100vh - 66px - 114px - 100px);
     overflow-y: scroll;
   }
   .work-list{
-    height: calc(100vh - 66px - 24px - 100px);
+    height: calc(100vh - 66px - 114px - 100px);
     overflow-y: scroll;
   }
   .album-list{
-    height: calc(100vh - 66px - 24px - 100px);
+    height: calc(100vh - 66px - 114px - 100px);
     overflow-y: scroll;
     overflow-x: hidden;
   }
