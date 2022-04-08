@@ -1,11 +1,14 @@
 import Vue from 'vue'
 import App from './App.vue'
 import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
+import axios from 'axios';
 
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 
 Vue.config.productionTip = false
+
+axios.defaults.baseURL = process.env.VUE_APP_BASE_URL;
 
 Vue.use(BootstrapVue)
 Vue.use(IconsPlugin)

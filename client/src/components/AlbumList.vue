@@ -54,7 +54,7 @@ export default {
   methods: {
     getAlbums(id) {
       this.loading = true;
-      const path = 'http://localhost:5000/api/albums/' + id;
+      const path = 'api/albums/' + id;
       axios.get(path)
         .then((res) => {
           this.albums = res.data.albums;

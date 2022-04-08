@@ -49,7 +49,7 @@ export default {
   methods: {
     getWorks(composer) {
       this.loading = true;
-      const path = 'http://localhost:5000/api/works/' + composer;
+      const path = 'api/works/' + composer;
       axios.get(path)
         .then((res) => {
           this.works = res.data.works;

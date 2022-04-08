@@ -45,7 +45,7 @@ export default {
   methods: {
     getComposers() {
       this.loading = true;
-      const path = 'http://localhost:5000/api/composers';
+      const path = 'api/composers';
       axios.get(path)
         .then((res) => {
           this.composers = res.data.composers;

@@ -61,7 +61,7 @@ export default {
     getAlbumInfo(album_id) {
         this.loading = true;
         this.title = eventBus.title;
-        const path = 'http://localhost:5000/api/albuminfo/' + album_id;
+        const path = 'api/albuminfo/' + album_id;
         axios.get(path)
           .then((res) => {
             this.album = res.data.album; // Change to local file
