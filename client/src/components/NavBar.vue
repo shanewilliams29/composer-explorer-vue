@@ -6,35 +6,53 @@
         <img
           src="../assets/logo.png"
           class="d-inline-block align-top"
-          alt="Logo"
+          alt="Composer Explorer"
           height="40px"
         />
       </b-navbar-brand>
-      <b-navbar-nav>
-        <b-nav-item href="#">Home</b-nav-item>
+      <b-navbar-nav class="ml-auto">
+        <b-nav-item disabled right class="log-in-with">Log in with </b-nav-item>
+        <b-button right
+          variant="success"
+          class="spotify-button"
+          :href="spotifyURL"
+          >
+            <img
+              src="../assets/Spotify_Logo_RGB_White.png"
+              class=""
+              alt="Spotify"
+              height="28px"
+            />
+        </b-button>
 
-        <!-- Navbar dropdowns -->
-        <b-nav-item-dropdown text="User">
-          <b-dropdown-item href="#">Account</b-dropdown-item>
-          <b-dropdown-item href="#">Settings</b-dropdown-item>
-        </b-nav-item-dropdown>
+
       </b-navbar-nav>
     </b-navbar>
   </div>
 </template>
 
 <script>
+import {baseURL} from "../main.js";
 export default {
   name: 'NavBar',
-  props: {
-    msg: String
-  }
+  data() {
+    return {
+      spotifyURL: baseURL + "connect_spotify",
+    };
+  },
 }
 </script>
 
 <style scoped>
+.log-in-with .disabled{
+  color: lightgrey !important;
+}
+.spotify-button{
+  background-color: #1db954;
+  border: none;
+}
 img {
-  margin-left: 20px;
+  margin-left: 0px;
 }
 .navbar.navbar-dark.bg-dark {
   background-color: #343a40 !important;

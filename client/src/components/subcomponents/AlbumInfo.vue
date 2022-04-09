@@ -59,8 +59,7 @@ export default {
       },
   },
   created() {
-    eventBus.title = "Piano Concerto No. 5 in E♭ major";
-    this.getAlbumInfo("BEETHOVEN000163xjbqYLxvXHuanI63XGwri");
+    this.loading = true;
     eventBus.$on('fireAlbumData', (album_id) => {
         this.getAlbumInfo(album_id);
     })

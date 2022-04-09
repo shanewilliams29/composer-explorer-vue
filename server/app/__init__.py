@@ -3,12 +3,16 @@ from config import Config
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
 
+
 # instantiate the app
 app = Flask(__name__, static_folder='../dist', static_url_path='/')
 app.config.from_object(Config)
 db = SQLAlchemy(app)
 
-# enable CORS
-CORS(app, resources={r'/*': {'origins': '*'}})
+from app.classes import SpotifyAPI
+sp = SpotifyAPI(Config.SPOTIFY_CLIENT_ID, Config.SPOTIFY_CLIENT_SECRET, Config.SPOTIFY_REDIRECT_URL)
 
-from app import routes, models
+# enable CORS
+CORS(app, automatic_options=True, support_credentials=True)
+
+from app import routes, models, classes

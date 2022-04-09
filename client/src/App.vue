@@ -20,6 +20,8 @@ import ComposerList from './components/ComposerList.vue'
 import WorkList from './components/WorkList.vue'
 import AlbumList from './components/AlbumList.vue'
 import PageFooter from './components/PageFooter.vue'
+import axios from 'axios';
+import {eventBus} from "./main.js";
 
 export default {
   name: 'App',
@@ -30,7 +32,28 @@ export default {
     WorkList,
     AlbumList,
     PageFooter
-  }
+  },
+  data() {
+    return {
+    };
+  },
+  methods: {
+    getSpotifyToken() {
+      const path = 'api/get_token';
+      axios.get(path)
+        .then((res) => {
+          eventBus.spotifyToken = res.data;
+          console.log(eventBus.spotifyToken);
+        })
+        .catch((error) => {
+          // eslint-disable-next-line
+          console.error(error);
+        });
+    },
+  },
+  created() {
+    this.getSpotifyToken();
+  },
 }
 </script>
 

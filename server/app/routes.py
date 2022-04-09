@@ -1,9 +1,18 @@
-from app import app, db
-from flask import jsonify, request
+from app import app, db, sp
+from flask import jsonify, request, redirect, session
+from config import Config
 from app.models import ComposerList, WorkList, WorkAlbums, AlbumLike
 from sqlalchemy import func, text
+from datetime import datetime, timedelta
 import json
 import jsonpickle
+
+
+@app.before_request
+def before_request():
+    # get spotify token
+    if not session.get('spotify_token'):
+        session['spotify_token'] = None
 
 
 @app.route('/')
@@ -11,9 +20,55 @@ def index():
     return app.send_static_file('index.html')
 
 
-@app.route('/ping', methods=['GET'])
-def ping_pong():
-    return jsonify('pong!')
+@app.route('/connect_spotify')
+def connect_spotify():
+    url = sp.authorize()
+    return redirect(url)
+
+
+@app.route('/spotify')
+def spotify():
+
+    # get access token
+    code = request.args.get('code')
+    response = sp.get_token(code)
+    if response == "INVALID":
+        response_object = {
+            'status': 'error',
+            'info': 'Spotify authorization failed.'
+        }
+        return jsonify(response_object)
+    session['spotify_token'] = response.json()['access_token']
+    session['refresh_token'] = response.json()['refresh_token']
+    session['spotify_token_expire_time'] = datetime.now() + timedelta(hours=1)
+
+    mode = Config.MODE
+
+    if mode == "DEVELOPMENT":
+        return redirect("http://linux-2blt:8080/")
+    else:
+        return redirect("/")
+
+
+@app.route('/api/get_token')
+def get_token():
+    # add check for expiry
+    if session['spotify_token']:
+        token = session['spotify_token']
+        # return response
+        response_object = {'status': 'success'}
+        response_object['token'] = token
+        response = jsonify(response_object)
+        response.headers.add('Access-Control-Allow-Credentials', 'true')
+        return response
+
+    response_object = {
+        'status': 'error',
+        'info': 'Missing token, Spotify not authorized.'
+    }
+    response = jsonify(response_object)
+    response.headers.add('Access-Control-Allow-Credentials', 'true')
+    return response
 
 
 @app.route('/api/composers', methods=['GET'])
@@ -82,7 +137,9 @@ def get_composers():
     # return response
     response_object = {'status': 'success'}
     response_object['composers'] = composers_by_region
-    return jsonify(response_object)
+    response = jsonify(response_object)
+    response.headers.add('Access-Control-Allow-Credentials', 'true')
+    return response
 
 
 @app.route('/api/works/<name>', methods=['GET'])
@@ -136,7 +193,9 @@ def get_works(name):
 
     response_object = {'status': 'success'}
     response_object['works'] = works_by_genre
-    return jsonify(response_object)
+    response = jsonify(response_object)
+    response.headers.add('Access-Control-Allow-Credentials', 'true')
+    return response
 
 
 @app.route('/api/albums/<work_id>', methods=['GET'])
@@ -177,7 +236,9 @@ def get_albums(work_id):
 
     response_object = {'status': 'success'}
     response_object['albums'] = sorted_list
-    return jsonify(response_object)
+    response = jsonify(response_object)
+    response.headers.add('Access-Control-Allow-Credentials', 'true')
+    return response
 
 
 @app.route('/api/composerinfo/<composer>', methods=['GET'])
@@ -187,7 +248,9 @@ def get_composerinfo(composer):
     composer_info.image = app.config['STATIC'] + 'img/' + composer + '.jpg'
     response_object = {'status': 'success'}
     response_object['data'] = composer_info
-    return jsonify(response_object)
+    response = jsonify(response_object)
+    response.headers.add('Access-Control-Allow-Credentials', 'true')
+    return response
 
 
 @app.route('/api/albuminfo/<album_id>', methods=['GET'])
@@ -214,4 +277,6 @@ def get_albuminfo(album_id):
 
     response_object = {'status': 'success'}
     response_object['album'] = ALBUM
-    return jsonify(response_object)
+    response = jsonify(response_object)
+    response.headers.add('Access-Control-Allow-Credentials', 'true')
+    return response
