@@ -42,7 +42,10 @@ export default {
       const path = 'api/get_token';
       axios.get(path)
         .then((res) => {
-          eventBus.spotifyToken = res.data;
+          if (res.data.status == "success") {
+            eventBus.$emit('fireToken');
+            eventBus.spotifyToken = res.data.token;
+          }
           console.log(eventBus.spotifyToken);
         })
         .catch((error) => {

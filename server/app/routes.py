@@ -50,6 +50,12 @@ def spotify():
         return redirect("/")
 
 
+@app.route('/log_out')
+def log_out():
+    session.clear()
+    return redirect("/")
+
+
 @app.route('/api/get_token')
 def get_token():
     # add check for expiry
@@ -216,8 +222,8 @@ def get_albums(work_id):
         item['id'] = tup[0].id
 
         # remove duplicates
-        match_string = item['artists'].strip()
-        # match_string = item['artists'].strip() + str(item['release_date'])
+        # match_string = item['artists'].strip()
+        match_string = item['artists'].strip() + str(item['release_date'])
         if match_string in duplicates_list:
             continue
         else:

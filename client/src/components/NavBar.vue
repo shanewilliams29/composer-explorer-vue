@@ -10,7 +10,7 @@
           height="40px"
         />
       </b-navbar-brand>
-      <b-navbar-nav class="ml-auto">
+      <b-navbar-nav class="ml-auto" v-show="!loggedIn">
         <b-nav-item disabled right class="log-in-with">Log in with </b-nav-item>
         <b-button right
           variant="success"
@@ -24,8 +24,9 @@
               height="28px"
             />
         </b-button>
-
-
+      </b-navbar-nav>
+      <b-navbar-nav class="ml-auto" v-show="loggedIn">
+        <b-nav-item href="/log_out" right>Log out</b-nav-item>
       </b-navbar-nav>
     </b-navbar>
   </div>
@@ -33,12 +34,24 @@
 
 <script>
 import {baseURL} from "../main.js";
+import {eventBus} from "../main.js";
 export default {
   name: 'NavBar',
   data() {
     return {
       spotifyURL: baseURL + "connect_spotify",
+      loggedIn: false
     };
+  },
+  methods: {
+    logIn() {
+        this.loggedIn = true;
+      }
+    },
+  created() {
+      eventBus.$on('fireToken', () => {
+          this.logIn();
+    })
   },
 }
 </script>
