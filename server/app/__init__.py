@@ -12,7 +12,8 @@ db = SQLAlchemy(app)
 from app.classes import SpotifyAPI
 sp = SpotifyAPI(Config.SPOTIFY_CLIENT_ID, Config.SPOTIFY_CLIENT_SECRET, Config.SPOTIFY_REDIRECT_URL)
 
-# enable CORS
-CORS(app, automatic_options=True, support_credentials=True)
+# enable CORS in development mode
+if Config.MODE == "DEVELOPMENT":
+    CORS(app, automatic_options=True, support_credentials=True)
 
 from app import routes, models, classes

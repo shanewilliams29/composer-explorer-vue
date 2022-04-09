@@ -10,6 +10,7 @@
       </b-row>
     </div>
     <PageFooter/>
+    <SpotifyPlayer/>
   </div>
 </template>
 
@@ -20,6 +21,7 @@ import ComposerList from './components/ComposerList.vue'
 import WorkList from './components/WorkList.vue'
 import AlbumList from './components/AlbumList.vue'
 import PageFooter from './components/PageFooter.vue'
+import SpotifyPlayer from './components/SpotifyPlayer.vue'
 import axios from 'axios';
 import {eventBus} from "./main.js";
 
@@ -31,7 +33,8 @@ export default {
     ComposerList,
     WorkList,
     AlbumList,
-    PageFooter
+    PageFooter,
+    SpotifyPlayer
   },
   data() {
     return {

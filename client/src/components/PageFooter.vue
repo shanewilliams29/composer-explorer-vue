@@ -5,7 +5,7 @@
         <AlbumInfo />
       </b-col>
       <b-col>
-        <SpotifyPlayer />
+        <PlayerControls />
       </b-col>
       <b-col>
         <TrackListing />
@@ -18,13 +18,13 @@
 import axios from 'axios';
 import {eventBus} from "../main.js";
 import AlbumInfo from './subcomponents/AlbumInfo.vue'
-import SpotifyPlayer from './subcomponents/SpotifyPlayer.vue'
+import PlayerControls from './subcomponents/PlayerControls.vue'
 import TrackListing from './subcomponents/TrackListing.vue'
 
 export default {
   components: {
     AlbumInfo,
-    SpotifyPlayer,
+    PlayerControls,
     TrackListing
   },
   data() {

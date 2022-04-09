@@ -9,12 +9,13 @@ import 'bootstrap-vue/dist/bootstrap-vue.css'
 Vue.config.productionTip = false
 
 axios.defaults.baseURL = process.env.VUE_APP_BASE_URL;
-axios.defaults.withCredentials = true;
+// axios.defaults.withCredentials = true;
 
 Vue.use(BootstrapVue)
 Vue.use(IconsPlugin)
 
 export const eventBus = new Vue();
+export const spotifyPlayer = new Vue();
 export const baseURL = process.env.VUE_APP_BASE_URL;
 
 new Vue({
