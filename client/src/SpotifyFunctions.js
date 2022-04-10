@@ -3,32 +3,14 @@ import {eventBus} from "./main.js";
 
 var spotify = {
 
+// may need to use flask endpoint for this
 pressPlay(token, device_id) {
-  const path = 'https://api.spotify.com/v1/me/player/play?device_id=' + device_id;
+  const path = 'https://api.spotify.com/v1/me/player/play';
   axios({
       method: 'put',
       url: path,
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + token
-      }
-    })
-    .then((res) => {
-      console.log(res);
-    })
-    .catch((error) => {
-      console.error(error);
-    });
-},
-
-playTrack(token, device_id) {
-  const path = 'https://api.spotify.com/v1/me/player/play?device_id=' + device_id;
-  axios({
-      method: 'put',
-      url: path,
-      data: {
-        "context_uri": "spotify:album:5ht7ItJgpBH7W6vJ5BqpPr"
+      params: {
+        'device_id' : device_id
       },
       headers: {
         'Accept': 'application/json',
@@ -65,6 +47,34 @@ pauseTrack(token) {
         eventBus.$emit('fireNowPaused');
       } else {
         eventBus.$emit('fireNowPlaying');
+      }
+      console.log(res);
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+},
+
+playTracks(token, device_id, tracks) {
+  const path = 'https://api.spotify.com/v1/me/player/play';
+  axios({
+      method: 'put',
+      url: path,
+      data: tracks,
+      params: {
+        'device_id' : device_id
+      },
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + token
+      }
+    })
+    .then((res) => {
+      if (res.status == 204) {
+        eventBus.$emit('fireNowPlaying');
+      } else {
+        eventBus.$emit('fireNowPaused');
       }
       console.log(res);
     })

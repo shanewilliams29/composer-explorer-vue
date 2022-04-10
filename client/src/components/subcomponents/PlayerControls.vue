@@ -25,7 +25,7 @@ export default {
   },
   methods: {
     play() {
-      spotify.playTrack(window.token, window.device_id);
+      spotify.pressPlay(window.token, window.device_id);
     },
     pause() {
       spotify.pauseTrack(window.token);

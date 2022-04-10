@@ -3,7 +3,7 @@
 </template>
 
 <script>
-// import {eventBus} from "../main.js";
+import {eventBus} from "../main.js";
 export default {
   data() {
     return {
@@ -19,12 +19,15 @@ export default {
       document.head.appendChild(spotifyPlayerScript);
 
         window.onSpotifyWebPlaybackSDKReady = () => {
-            this.token = 'BQCMAl1uHbYfngac_C5InuKBiyl0g4enH8ePPSJGqzBtH0SOe1aI6QrsL6eupOYaZZtjw8cQcAg_xy9wzcu_dDxSVXW-h4iMoxwygZAYJDaeAtCw8D7nx4GG_7_bIhaKDcZpR0CBEnduth1SzC1e9yWee3PBrXJZn4By';
-            //this.token = eventBus.spotifyToken;
+            if (process.env.VUE_APP_BASE_URL != "http://localhost:5000/") {
+                this.token = eventBus.spotifyToken; // Improve this?
+            } else {
+                this.token = 'BQBg6NM1y6w9Qycxj7jUjmeeOjiP7mEXbMmMYx7Dw-jz6HpukUJARt7arO6r-0xIj-eTBtX-e1bJF88xlmuJbGAUSDAxzgSNmSUe9PSm9ZiYbKYZ3uyLNtVNLoiCrxUgl4kN7QJ-fgMGIggkaOH8WM4-VOqiwogE3JfQ';
+            }
             window.token = this.token;
             // eslint-disable-next-line
             this.player = new Spotify.Player({
-                name: 'ComposerExplorer',
+                name: 'Composer Explorer',
                 getOAuthToken: cb => { cb(this.token); },
                 volume: 1
             });

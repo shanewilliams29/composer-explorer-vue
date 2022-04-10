@@ -8,7 +8,7 @@
               class="track-row"
               v-for="track in album.tracks"
               :key="track[1]"
-              @click="selectTrack(track[1]);"
+              @click="selectTrack(track[1]); playTracks(track[2]); "
               :class="{'highlight-track': (track[1] == selectedTrack)}"
             >
               <td
@@ -32,6 +32,7 @@
 
 <script>
 import {eventBus} from "../../main.js";
+import spotify from '@/SpotifyFunctions.js'
 
 export default {
   data() {
@@ -45,7 +46,14 @@ export default {
     selectTrack(track){
         this.selectedTrack = track;
     },
-  },
+    playTracks(tracks){
+      let uriList = {}
+      let jsonList = {}
+      uriList['uris'] = tracks.split(' ');
+      jsonList = JSON.stringify(uriList);
+      spotify.playTracks(window.token, window.device_id, jsonList);
+      },
+    },
   created() {
     eventBus.$on('fireSetAlbum', (album) => {
         this.album = album;
