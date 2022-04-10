@@ -1,4 +1,5 @@
 import axios from 'axios';
+import {eventBus} from "./main.js";
 
 var spotify = {
 
@@ -36,6 +37,11 @@ playTrack(token, device_id) {
       }
     })
     .then((res) => {
+      if (res.status == 204) {
+        eventBus.$emit('fireNowPlaying');
+      } else {
+        eventBus.$emit('fireNowPaused');
+      }
       console.log(res);
     })
     .catch((error) => {
@@ -43,7 +49,29 @@ playTrack(token, device_id) {
     });
 },
 
-  baz () { console.log('baz') }
+pauseTrack(token) {
+  const path = 'https://api.spotify.com/v1/me/player/pause';
+  axios({
+      method: 'put',
+      url: path,
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + token
+      }
+    })
+    .then((res) => {
+      if (res.status == 204) {
+        eventBus.$emit('fireNowPaused');
+      } else {
+        eventBus.$emit('fireNowPlaying');
+      }
+      console.log(res);
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+},
 }
 
 export default spotify

@@ -3,6 +3,7 @@
 </template>
 
 <script>
+// import {eventBus} from "../main.js";
 export default {
   data() {
     return {
@@ -18,7 +19,8 @@ export default {
       document.head.appendChild(spotifyPlayerScript);
 
         window.onSpotifyWebPlaybackSDKReady = () => {
-            this.token = 'BQAG-OUH4ILhlzFOd-c-wVBRgRaL5_eTNBLTKvKV9V-Y8LguBglcTDkDxdFhXX7CNDEinUMk4nxUpbggv0bAPMODgRIzr_PKCykm34ywc96k_q7ycYxr5fuNYqe8lWoSlN1ArdyWuGlqoxrrFL_ECwqoQUHnbn5x6ZB_';
+            this.token = 'BQCMAl1uHbYfngac_C5InuKBiyl0g4enH8ePPSJGqzBtH0SOe1aI6QrsL6eupOYaZZtjw8cQcAg_xy9wzcu_dDxSVXW-h4iMoxwygZAYJDaeAtCw8D7nx4GG_7_bIhaKDcZpR0CBEnduth1SzC1e9yWee3PBrXJZn4By';
+            //this.token = eventBus.spotifyToken;
             window.token = this.token;
             // eslint-disable-next-line
             this.player = new Spotify.Player({

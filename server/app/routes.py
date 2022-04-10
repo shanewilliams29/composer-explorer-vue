@@ -45,7 +45,7 @@ def spotify():
     mode = Config.MODE
 
     if mode == "DEVELOPMENT":
-        return redirect("http://linux-2blt:8080/")
+        return redirect("http://localhost:8080/")
     else:
         return redirect("/")
 
