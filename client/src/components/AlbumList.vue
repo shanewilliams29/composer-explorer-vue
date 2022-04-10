@@ -124,7 +124,7 @@ export default {
   },
   created() {
     this.getAlbums('BEETHOVEN00016');
-      eventBus.$on('fireAlbums', (work_id) => {
+    eventBus.$on('fireAlbums', (work_id) => {
             this.getAlbums(work_id);
     })
   },

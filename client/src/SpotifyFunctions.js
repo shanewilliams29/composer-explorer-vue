@@ -55,6 +55,54 @@ pauseTrack(token) {
     });
 },
 
+beginningTrack(token) {
+  const path = 'https://api.spotify.com/v1/me/player/seek?position_ms=0';
+  axios({
+      method: 'put',
+      url: path,
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + token
+      }
+    })
+    .then((res) => {
+      if (res.status == 204) {
+        eventBus.$emit('fireNowPaused');
+      } else {
+        eventBus.$emit('fireNowPlaying');
+      }
+      console.log(res);
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+},
+
+nextTrack(token) {
+  const path = 'https://api.spotify.com/v1/me/player/next';
+  axios({
+      method: 'post',
+      url: path,
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + token
+      }
+    })
+    .then((res) => {
+      if (res.status == 204) {
+        eventBus.$emit('fireNowPaused');
+      } else {
+        eventBus.$emit('fireNowPlaying');
+      }
+      console.log(res);
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+},
+
 playTracks(token, device_id, tracks) {
   const path = 'https://api.spotify.com/v1/me/player/play';
   axios({

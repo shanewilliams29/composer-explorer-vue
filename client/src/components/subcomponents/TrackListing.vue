@@ -39,7 +39,9 @@ export default {
     return {
       album: [],
       title: "",
-      selectedTrack: ""
+      selectedTrack: "",
+      selectedTrackNo : "",
+      numTracks: ""
     };
   },
   methods: {
@@ -52,12 +54,28 @@ export default {
       uriList['uris'] = tracks.split(' ');
       jsonList = JSON.stringify(uriList);
       spotify.playTracks(window.token, window.device_id, jsonList);
+      this.selectedTrackNo = this.numTracks - uriList['uris'].length;
       },
     },
   created() {
     eventBus.$on('fireSetAlbum', (album) => {
         this.album = album;
+        this.playTracks(album.tracks[0][2]);
+        this.selectTrack(album.tracks[0][1]);
+        this.numTracks = album.tracks.length;
+        this.selectedTrackNo = 0;
     })
+    eventBus.$on('fireNextTrack', () => {
+        if (this.selectedTrackNo < this.numTracks - 1) {
+          this.selectedTrackNo = this.selectedTrackNo + 1
+          this.selectTrack(this.album.tracks[this.selectedTrackNo][1]);
+        }
+        else{
+          eventBus.$emit('fireSetAlbum', this.album);
+        }
+
+    })
+
   },
 };
 </script>

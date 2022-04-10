@@ -2,10 +2,10 @@
  <b-row class="playback-row">
   <b-col class="text-center">
 
-  <b-button class="playback-button" id="back-button"><b-icon-skip-start-fill></b-icon-skip-start-fill></b-button>
+  <b-button class="playback-button" id="back-button" @click="back()"><b-icon-skip-start-fill></b-icon-skip-start-fill></b-button>
   <b-button class="playback-button" id="play-button" v-show="!playing" @click="play()"><b-icon-play-fill></b-icon-play-fill></b-button>
   <b-button class="playback-button" id="pause-button" v-show="playing" @click="pause()"><b-icon-pause-fill></b-icon-pause-fill></b-button>
-  <b-button class="playback-button" id="forward-button"><b-icon-skip-end-fill></b-icon-skip-end-fill></b-button>
+  <b-button class="playback-button" id="forward-button" @click="next()"><b-icon-skip-end-fill></b-icon-skip-end-fill></b-button>
 
 </b-col>
 </b-row>
@@ -29,6 +29,13 @@ export default {
     },
     pause() {
       spotify.pauseTrack(window.token);
+    },
+    back() {
+      spotify.beginningTrack(window.token, window.device_id);
+    },
+    next() {
+      spotify.nextTrack(window.token);
+      eventBus.$emit('fireNextTrack');
     },
   },
   created() {
