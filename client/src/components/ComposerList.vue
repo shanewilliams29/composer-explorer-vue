@@ -106,7 +106,7 @@ export default {
     },
     getFilteredComposers(item) {
       this.loading = true;
-      if (item == "all") {
+      if (item == "all" || item == "alphabet" || item == "romantic" || item == "20th" || item == "common") {
         this.visibility=false;
       } else {
         this.visibility=true;
@@ -192,6 +192,7 @@ table {
   border-collapse: separate;
   font-size: 12px;
   padding: 6px;
+  padding-top: 0px;
   padding-bottom: 2px;
 }
 .highlight td {

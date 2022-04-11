@@ -83,6 +83,7 @@ export default {
       axios.get(path)
         .then((res) => {
           this.works = res.data.works;
+          this.visibility=true
           this.composer = composer;
           this.loading = false;
         })
@@ -189,6 +190,7 @@ table {
   border-collapse: separate;
   font-size: 12px;
   padding: 6px;
+  padding-top: 0px;
   padding-bottom: 2px;
 }
 .highlight td {

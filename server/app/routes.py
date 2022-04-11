@@ -2,6 +2,7 @@ from app import app, db, sp
 from flask import jsonify, request, redirect, session
 from config import Config
 from app.models import ComposerList, WorkList, WorkAlbums, AlbumLike, Spotify
+from app.classes import SortFilter
 from sqlalchemy import func, text
 from datetime import datetime, timedelta
 import json
@@ -83,6 +84,8 @@ def get_composers():
     search_item = request.args.get('search')
     composer_filter = request.args.get('filter')
 
+    eras = ['common', 'early', 'baroque', 'classical', 'romantic', '20th']
+
     # retrieve composers from database
     if search_item:
         search = "%{}%".format(search_item)
@@ -108,9 +111,21 @@ def get_composers():
         if composer_filter == "all":
             composer_list = db.session.query(ComposerList)\
                 .order_by(ComposerList.region, ComposerList.born).all()
+        if composer_filter == "alphabet":
+            composer_list = db.session.query(ComposerList)\
+                .order_by(ComposerList.name_short, ComposerList.born).all()
         if composer_filter == "popular":
             composer_list = db.session.query(ComposerList)\
                 .filter(ComposerList.catalogued == True) \
+                .order_by(ComposerList.region, ComposerList.born).all()
+        if composer_filter in eras:
+            sortfilter = SortFilter()
+            date_minmax_sort = sortfilter.get_era_filter(composer_filter)
+            datemin = date_minmax_sort[0]
+            datemax = date_minmax_sort[1]
+            print(datemin, datemax)
+            composer_list = ComposerList.query \
+                .filter(ComposerList.born >= datemin, ComposerList.born < datemax) \
                 .order_by(ComposerList.region, ComposerList.born).all()
 
     else:
@@ -154,27 +169,50 @@ def get_composers():
         }
         COMPOSERS.append(info)
 
-    # group onto regions
-    composers_by_region = {}
-    composers_in_region = []
-    i = 0
-    prev_region = COMPOSERS[i]['region']
+    if composer_filter == "alphabet":
+        # group onto alphabet
+        composers_by_region = {}
+        composers_in_region = []
+        i = 0
+        prev_region = COMPOSERS[i]['name_short'][0].upper()
 
-    while i < len(COMPOSERS):
-        region = COMPOSERS[i]['region']
-        if region == prev_region:
-            composers_in_region.append(COMPOSERS[i])
-            i += 1
-            if i == len(COMPOSERS):
+        while i < len(COMPOSERS):
+            region = COMPOSERS[i]['name_short'][0].upper()
+            if region == prev_region:
+                composers_in_region.append(COMPOSERS[i])
+                i += 1
+                if i == len(COMPOSERS):
+                    composers_by_region[prev_region] = composers_in_region
+            else:
                 composers_by_region[prev_region] = composers_in_region
-        else:
-            composers_by_region[prev_region] = composers_in_region
-            composers_in_region = []
-            composers_in_region.append(COMPOSERS[i])
-            prev_region = region
-            i += 1
-            if i == len(COMPOSERS):
+                composers_in_region = []
+                composers_in_region.append(COMPOSERS[i])
+                prev_region = region
+                i += 1
+                if i == len(COMPOSERS):
+                    composers_by_region[prev_region] = composers_in_region
+    else:
+       # group onto regions
+        composers_by_region = {}
+        composers_in_region = []
+        i = 0
+        prev_region = COMPOSERS[i]['region']
+
+        while i < len(COMPOSERS):
+            region = COMPOSERS[i]['region']
+            if region == prev_region:
+                composers_in_region.append(COMPOSERS[i])
+                i += 1
+                if i == len(COMPOSERS):
+                    composers_by_region[prev_region] = composers_in_region
+            else:
                 composers_by_region[prev_region] = composers_in_region
+                composers_in_region = []
+                composers_in_region.append(COMPOSERS[i])
+                prev_region = region
+                i += 1
+                if i == len(COMPOSERS):
+                    composers_by_region[prev_region] = composers_in_region
 
     # return response
     response_object = {'status': 'success'}
@@ -264,7 +302,9 @@ def get_works(name):
 
     response_object = {'status': 'success'}
     response_object['works'] = works_by_genre
+
     response = jsonify(response_object)
+
     response.headers.add('Access-Control-Allow-Credentials', 'true')
     return response
 

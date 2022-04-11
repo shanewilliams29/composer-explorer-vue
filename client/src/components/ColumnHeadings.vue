@@ -76,11 +76,30 @@ export default {
       composerSearchForm: null,
       composerOptions: [
           { value: null, text: 'Filter composers', disabled: true},
-          { value: 'popular', text: 'Popular composers' },
-          // { value: 'catalogued', text: 'Catalogued' },
-          { value: 'all', text: 'All composers' },
-          { value: 'women', text: 'Women composers'}
+          { label: 'Period',
+            options: [
+              { value: 'common', text: 'Common Practice' },
+              { value: 'early', text: 'Early' },
+              { value: 'all', text: 'All - by region' },
+              { value: 'alphabet', text: 'All - alphabetically' }
+            ]
+          },
+          { label: 'Era',
+            options: [
+              { value: 'baroque', text: 'Baroque' },
+              { value: 'classical', text: 'Classical' },
+              { value: 'romantic', text: 'Romantic' },
+              { value: '20th', text: '20th/21st Century' }
+            ]
+          },
+         { label: 'Misc',
+            options: [
+              { value: 'popular', text: 'Most popular' },
+              { value: 'women', text: 'Women'}
+            ]
+          }
         ],
+
       workFilterField: 'recommended',
       workSearchField: null,
       workSearchPlaceholder: "Search works by Beethoven",
