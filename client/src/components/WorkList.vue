@@ -14,9 +14,10 @@
             no-body
             header-tag="header"
           >
-            <template #header>
-              <h6 class="mb-0">{{ index }}</h6>
-            </template>
+            <div class="#header" v-b-toggle="index.replace(/\s/g, '')">
+              <h6 class="m-2 mb-0">{{ index }}<span class="mb-0 float-right when-opened"><b-icon-chevron-up></b-icon-chevron-up></span><span class="mb-0 float-right when-closed"><b-icon-chevron-down></b-icon-chevron-down></span></h6>
+            </div>
+            <b-collapse :visible="visibility" :id="index.replace(/\s/g, '')">
             <b-card-text>
               <table cellspacing="0">
                 <tr
@@ -54,6 +55,7 @@
                 </tr>
               </table>
             </b-card-text>
+          </b-collapse>
           </b-card>
         </b-card-group>
     </div>
@@ -69,7 +71,8 @@ export default {
     return {
       works: [],
       loading: false,
-      selectedWork: null
+      selectedWork: null,
+      visibility: true
     };
   },
   methods: {
@@ -98,6 +101,11 @@ export default {
     },
     getFilteredWorks(item) {
       this.loading = true;
+      if (item == "all") {
+        this.visibility=false;
+      } else {
+        this.visibility=true;
+      }
       const path = 'api/works/' + this.composer + '?filter=' + item;
       axios.get(path)
         .then((res) => {
@@ -115,6 +123,7 @@ export default {
       axios.get(path)
         .then((res) => {
           this.works = res.data.works;
+          this.visibility=true;
           this.loading=false;
         })
         .catch((error) => {
@@ -141,6 +150,18 @@ export default {
 </script>
 
 <style scoped>
+.collapsed .when-closed{
+  display: show;
+}
+.collapsed .when-opened{
+  display: none;
+}
+.not-collapsed .when-closed{
+  display: none;
+}
+.not-collapsed .when-opened{
+  display: show;
+}
 .spinner {
   text-align: center;
 }
@@ -209,6 +230,10 @@ header.card-header {
   border: none;
   padding-left: 10px;
   padding-bottom: 0px;
+  cursor: pointer;
+}
+header.card-header:hover {
+  cursor: pointer;
 }
 .mb-0 {
   font-size: 14px;

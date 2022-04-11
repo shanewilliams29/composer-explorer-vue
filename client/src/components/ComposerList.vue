@@ -12,9 +12,10 @@
           no-body
           header-tag="header"
         >
-          <template #header>
-            <h6 class="mb-0">{{ index }}</h6>
-          </template>
+          <div class="#header" v-b-toggle="index.replace(/\s/g, '')">
+            <h6 class="m-2 mb-0">{{ index }}<span class="mb-0 float-right when-opened"><b-icon-chevron-up></b-icon-chevron-up></span><span class="mb-0 float-right when-closed"><b-icon-chevron-down></b-icon-chevron-down></span></h6>
+          </div>
+          <b-collapse :visible="visibility" :id="index.replace(/\s/g, '')">
           <b-card-text>
             <table cellspacing="0">
               <tr
@@ -67,6 +68,7 @@
               </tr>
             </table>
           </b-card-text>
+        </b-collapse>
         </b-card>
       </b-card-group>
     </div>
@@ -82,7 +84,8 @@ export default {
     return {
       composers: [],
       loading: false,
-      selectedComposer: null
+      selectedComposer: null,
+      visibility: true
     };
   },
   methods: {
@@ -93,6 +96,7 @@ export default {
         .then((res) => {
           this.composers = res.data.composers;
           this.loading=false;
+          this.visibility=true;
         })
         .catch((error) => {
           // eslint-disable-next-line
@@ -102,6 +106,11 @@ export default {
     },
     getFilteredComposers(item) {
       this.loading = true;
+      if (item == "all") {
+        this.visibility=false;
+      } else {
+        this.visibility=true;
+      }
       const path = 'api/composers?filter=' + item;
       axios.get(path)
         .then((res) => {
@@ -115,6 +124,7 @@ export default {
         });
     },
     getSearchComposers(item) {
+      this.visibility=true
       const path = 'api/composers?search=' + item;
       axios.get(path)
         .then((res) => {
@@ -149,6 +159,18 @@ export default {
 </script>
 
 <style scoped>
+.collapsed .when-closed{
+  display: show;
+}
+.collapsed .when-opened{
+  display: none;
+}
+.not-collapsed .when-closed{
+  display: none;
+}
+.not-collapsed .when-opened{
+  display: show;
+}
 .card-deck {
   display: flex;
   flex-direction: column;
@@ -204,6 +226,9 @@ header.card-header {
   border: none;
   padding-left: 10px;
   padding-bottom: 0px;
+}
+header.card-header:hover {
+  cursor: pointer;
 }
 .mb-0 {
   font-size: 14px;
