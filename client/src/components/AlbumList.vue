@@ -192,7 +192,8 @@ header.card-header {
   cursor: pointer;
 }
 .highlight {
-  background-color: rgb(52, 58, 64, 0.7) !important;
+/*  background-color: rgb(52, 58, 64, 0.7) !important;*/
+  background-color: royalblue !important;
   color: white !important;
 }
 .highlight a {

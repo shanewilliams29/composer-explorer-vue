@@ -3,9 +3,11 @@
     <div class="spinner" v-show="loading" role="status">
       <b-spinner class="m-5"></b-spinner>
     </div>
-    <div v-if="works">
       <div class="row">
-        <b-card-group deck v-show="!loading">
+          <span v-show="!loading && works.length < 1" class="col no-works-found">
+            No works found for {{ composer }}.
+          </span>
+        <b-card-group deck v-show="!loading && works">
           <b-card
             v-for="(genre, index) in works"
             :key="index"
@@ -54,17 +56,6 @@
             </b-card-text>
           </b-card>
         </b-card-group>
-      </div>
-    </div>
-    <div v-else>
-      <div class="row">
-        <div class="text-center" v-show="loading" role="status">
-          <b-spinner class="m-5"></b-spinner>
-        </div>
-        <span v-show="!loading" class="no-works-found"
-          ><br />Works not yet catalogued for {{ composer }}.</span
-        >
-      </div>
     </div>
   </div>
 </template>
@@ -181,7 +172,7 @@ table {
 }
 .highlight td {
   border-top: 0px solid lightgray;
-  background-color: rgb(52, 58, 64, 0.7);
+  background-color: royalblue;
   color: white !important;
 }
 .highlight span {

@@ -189,39 +189,42 @@ def get_works(name):
     filter_method = request.args.get('filter')
     search = request.args.get('search')
 
+    # old ordering: WorkList.order, WorkList.genre, WorkList.date, WorkList.cat, WorkList.id
+
     if search:
         search_term = "%{}%".format(search)
         works_list = WorkList.query.filter_by(composer=name)\
             .filter(WorkList.genre.ilike(search_term)) \
-            .order_by(WorkList.order, WorkList.genre, WorkList.date, WorkList.cat, WorkList.id).all()
+            .order_by(WorkList.order, WorkList.genre, WorkList.id).all()
         if not works_list:
             works_list = WorkList.query.filter_by(composer=name)\
                 .filter(WorkList.title.ilike(search_term)) \
-                .order_by(WorkList.order, WorkList.genre, WorkList.date, WorkList.cat, WorkList.id).all()
+                .order_by(WorkList.order, WorkList.genre, WorkList.id).all()
         if not works_list:
             works_list = WorkList.query.filter_by(composer=name)\
                 .filter(WorkList.cat.ilike(search_term)) \
-                .order_by(WorkList.order, WorkList.genre, WorkList.date, WorkList.cat, WorkList.id).all()
+                .order_by(WorkList.order, WorkList.genre, WorkList.id).all()
         if not works_list:
             works_list = WorkList.query.filter_by(composer=name)\
                 .filter(WorkList.nickname.ilike(search_term)) \
-                .order_by(WorkList.order, WorkList.genre, WorkList.date, WorkList.cat, WorkList.id).all()
-        if not works_list:
-            response_object = {'status': 'success'}
-            response_object['composers'] = works_list
-            response = jsonify(response_object)
-            response.headers.add('Access-Control-Allow-Credentials', 'true')
-            return response
+                .order_by(WorkList.order, WorkList.genre, WorkList.id).all()
 
     elif filter_method:
         if filter_method == "recommended":
-            works_list = WorkList.query.filter_by(composer=name, recommend=True).order_by(WorkList.order, WorkList.genre, WorkList.date, WorkList.cat, WorkList.id).all()
+            works_list = WorkList.query.filter_by(composer=name, recommend=True).order_by(WorkList.order, WorkList.genre, WorkList.id).all()
         else:
             works_list = WorkList.query.filter_by(composer=name)\
-                .order_by(WorkList.order, WorkList.genre, WorkList.date, WorkList.cat, WorkList.id).all()
+                .order_by(WorkList.order, WorkList.genre, WorkList.id).all()
     else:
         works_list = WorkList.query.filter_by(composer=name, recommend=True)\
-            .order_by(WorkList.order, WorkList.genre, WorkList.id).all()  # check if this is better or worse than recommended
+            .order_by(WorkList.order, WorkList.genre, WorkList.id).all()
+
+    if not works_list:
+        response_object = {'status': 'success'}
+        response_object['works'] = works_list
+        response = jsonify(response_object)
+        response.headers.add('Access-Control-Allow-Credentials', 'true')
+        return response
 
     WORKS = []
     for work in works_list:

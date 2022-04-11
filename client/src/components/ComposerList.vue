@@ -4,6 +4,7 @@
       <b-spinner class="m-5"></b-spinner>
     </div>
     <div class="row">
+      <span class="col no-composers-found" v-show="!loading && composers.length < 1">No composers found.</span>
       <b-card-group deck v-show="!loading">
         <b-card
           v-for="(region, index) in composers"
@@ -173,7 +174,7 @@ table {
 }
 .highlight td {
   border-top: 0px solid lightgray;
-  background-color: rgb(52, 58, 64, 0.7);
+  background-color: royalblue;
   color: white;
 }
 tr:hover {
@@ -222,5 +223,10 @@ header.card-header {
 .card-deck {
   padding-left: 5px;
   padding-right: 5px;
+}
+.no-composers-found {
+  font-size: 14px;
+  color: grey;
+  text-align: center;
 }
 </style>

@@ -30,7 +30,7 @@
                 v-model="workSearchField"
                 @input="workSearch()"
                 @focus="onWorkFocus()"
-                placeholder="Search works"
+                :placeholder="workSearchPlaceholder"
                 size="sm"
               ></b-form-input>
               <b-form-select
@@ -75,7 +75,7 @@ export default {
       composerFilterForm: 'popular',
       composerSearchForm: null,
       composerOptions: [
-          { value: null, text: 'Filter composers' },
+          { value: null, text: 'Filter composers', disabled: true},
           { value: 'popular', text: 'Popular composers' },
           // { value: 'catalogued', text: 'Catalogued' },
           { value: 'all', text: 'All composers' },
@@ -83,8 +83,9 @@ export default {
         ],
       workFilterField: 'recommended',
       workSearchField: null,
+      workSearchPlaceholder: "Search works by Beethoven",
       workOptions: [
-          { value: null, text: 'Filter works' },
+          { value: null, text: 'Filter works', disabled: true},
           { value: 'recommended', text: 'Recommended works' },
           // { value: 'catalogued', text: 'Catalogued' },
           { value: 'all', text: 'All works'}
@@ -125,7 +126,7 @@ export default {
     this.work_heading = "Works by Beethoven";
     this.album_heading = "Albums for \"Piano Concerto No. 5 in E♭ major\"";
     eventBus.$on('fireComposers', (composer) => {
-        this.work_heading = "Works by " + composer;
+        this.workSearchPlaceholder = "Search works by " + composer;
         this.workSearchField = '';
         this.workFilterField = 'recommended';
     })
