@@ -1,7 +1,7 @@
 from app import app, db, sp
 from flask import jsonify, request, redirect, session
 from config import Config
-from app.models import ComposerList, WorkList, WorkAlbums, AlbumLike
+from app.models import ComposerList, WorkList, WorkAlbums, AlbumLike, Spotify
 from sqlalchemy import func, text
 from datetime import datetime, timedelta
 import json
@@ -79,10 +79,44 @@ def get_token():
 
 @app.route('/api/composers', methods=['GET'])
 def get_composers():
+    # look for search item
+    search_item = request.args.get('search')
+    composer_filter = request.args.get('filter')
+
     # retrieve composers from database
-    composer_list = db.session.query(ComposerList)\
-        .filter(ComposerList.catalogued == True) \
-        .order_by(ComposerList.region, ComposerList.born).all()
+    if search_item:
+        search = "%{}%".format(search_item)
+        composer_list = ComposerList.query \
+            .filter(ComposerList.name_norm.ilike(search)) \
+            .order_by(ComposerList.region, ComposerList.born).all()
+        if len(composer_list) < 1:
+            response_object = {'status': 'success'}
+            response_object['composers'] = composer_list
+            response = jsonify(response_object)
+            response.headers.add('Access-Control-Allow-Credentials', 'true')
+            return response
+
+    elif composer_filter:
+        if composer_filter == "women":
+            composer_list = ComposerList.query \
+                .filter(ComposerList.female == True) \
+                .order_by(ComposerList.region, ComposerList.born).all()
+        if composer_filter == "catalogued":
+            composer_list = db.session.query(ComposerList)\
+                .join(WorkList, ComposerList.name_short == WorkList.composer)\
+                .order_by(ComposerList.region, ComposerList.born).all()
+        if composer_filter == "all":
+            composer_list = db.session.query(ComposerList)\
+                .order_by(ComposerList.region, ComposerList.born).all()
+        if composer_filter == "popular":
+            composer_list = db.session.query(ComposerList)\
+                .filter(ComposerList.catalogued == True) \
+                .order_by(ComposerList.region, ComposerList.born).all()
+
+    else:
+        composer_list = db.session.query(ComposerList)\
+            .filter(ComposerList.catalogued == True) \
+            .order_by(ComposerList.region, ComposerList.born).all()
 
     # get era colours, flag icons, and proper region names
     with open('app/static/eras.json') as f:
@@ -131,6 +165,8 @@ def get_composers():
         if region == prev_region:
             composers_in_region.append(COMPOSERS[i])
             i += 1
+            if i == len(COMPOSERS):
+                composers_by_region[prev_region] = composers_in_region
         else:
             composers_by_region[prev_region] = composers_in_region
             composers_in_region = []
@@ -150,18 +186,42 @@ def get_composers():
 
 @app.route('/api/works/<name>', methods=['GET'])
 def get_works(name):
-    # check if composer has been catalogued or return error if not
-    try:
-        work = WorkList.query.filter_by(composer=name).first_or_404()
-    except:
-        response_object = {
-            'status': 'error',
-            'info': 'composer not found in catalogue'
-        }
-        return jsonify(response_object)
+    filter_method = request.args.get('filter')
+    search = request.args.get('search')
 
-    works_list = WorkList.query.filter_by(composer=name, recommend=True)\
-        .order_by(WorkList.order, WorkList.genre, WorkList.id).all()
+    if search:
+        search_term = "%{}%".format(search)
+        works_list = WorkList.query.filter_by(composer=name)\
+            .filter(WorkList.genre.ilike(search_term)) \
+            .order_by(WorkList.order, WorkList.genre, WorkList.date, WorkList.cat, WorkList.id).all()
+        if not works_list:
+            works_list = WorkList.query.filter_by(composer=name)\
+                .filter(WorkList.title.ilike(search_term)) \
+                .order_by(WorkList.order, WorkList.genre, WorkList.date, WorkList.cat, WorkList.id).all()
+        if not works_list:
+            works_list = WorkList.query.filter_by(composer=name)\
+                .filter(WorkList.cat.ilike(search_term)) \
+                .order_by(WorkList.order, WorkList.genre, WorkList.date, WorkList.cat, WorkList.id).all()
+        if not works_list:
+            works_list = WorkList.query.filter_by(composer=name)\
+                .filter(WorkList.nickname.ilike(search_term)) \
+                .order_by(WorkList.order, WorkList.genre, WorkList.date, WorkList.cat, WorkList.id).all()
+        if not works_list:
+            response_object = {'status': 'success'}
+            response_object['composers'] = works_list
+            response = jsonify(response_object)
+            response.headers.add('Access-Control-Allow-Credentials', 'true')
+            return response
+
+    elif filter_method:
+        if filter_method == "recommended":
+            works_list = WorkList.query.filter_by(composer=name, recommend=True).order_by(WorkList.order, WorkList.genre, WorkList.date, WorkList.cat, WorkList.id).all()
+        else:
+            works_list = WorkList.query.filter_by(composer=name)\
+                .order_by(WorkList.order, WorkList.genre, WorkList.date, WorkList.cat, WorkList.id).all()
+    else:
+        works_list = WorkList.query.filter_by(composer=name, recommend=True)\
+            .order_by(WorkList.order, WorkList.genre, WorkList.id).all()  # check if this is better or worse than recommended
 
     WORKS = []
     for work in works_list:
@@ -188,6 +248,8 @@ def get_works(name):
         if genre == prev_genre:
             works_in_genre.append(WORKS[i])
             i += 1
+            if i == len(WORKS):
+                works_by_genre[prev_genre] = works_in_genre
         else:
             works_by_genre[prev_genre] = works_in_genre
             works_in_genre = []

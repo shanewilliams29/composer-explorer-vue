@@ -84,6 +84,7 @@ export default {
   methods: {
     getWorks(composer) {
       this.loading = true;
+      this.composer = composer;
       const path = 'api/works/' + composer;
       axios.get(path)
         .then((res) => {
@@ -104,12 +105,45 @@ export default {
       selectRow(work){
         this.selectedWork = work;
     },
+    getFilteredWorks(item) {
+      this.loading = true;
+      const path = 'api/works/' + this.composer + '?filter=' + item;
+      axios.get(path)
+        .then((res) => {
+          this.works = res.data.works;
+          this.loading=false;
+        })
+        .catch((error) => {
+          // eslint-disable-next-line
+          console.error(error);
+          this.loading=false;
+        });
+    },
+    getSearchWorks(item) {
+      const path = 'api/works/' + this.composer + '?search=' + item;
+      axios.get(path)
+        .then((res) => {
+          this.works = res.data.works;
+          this.loading=false;
+        })
+        .catch((error) => {
+          // eslint-disable-next-line
+          console.error(error);
+          this.loading=false;
+        });
+    },
   },
   created() {
     this.getWorks('Beethoven');
     this.selectRow("BEETHOVEN00016");
     eventBus.$on('fireComposers', (composer) => {
             this.getWorks(composer);
+    })
+    eventBus.$on('fireWorkFilter', (item) => {
+        this.getFilteredWorks(item);
+    })
+    eventBus.$on('fireWorkSearch', (item) => {
+        this.getSearchWorks(item);
     })
   },
 };

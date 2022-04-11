@@ -68,9 +68,9 @@ beginningTrack(token) {
     })
     .then((res) => {
       if (res.status == 204) {
-        eventBus.$emit('fireNowPaused');
-      } else {
         eventBus.$emit('fireNowPlaying');
+      } else {
+        eventBus.$emit('fireNowPaused');
       }
       console.log(res);
     })
@@ -92,9 +92,9 @@ nextTrack(token) {
     })
     .then((res) => {
       if (res.status == 204) {
-        eventBus.$emit('fireNowPaused');
-      } else {
         eventBus.$emit('fireNowPlaying');
+      } else {
+        eventBus.$emit('fireNowPaused');
       }
       console.log(res);
     })

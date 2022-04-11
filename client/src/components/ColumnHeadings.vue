@@ -6,13 +6,16 @@
           <b-card class="composer-card">
             <b-form-group>
               <b-form-input
-                id="input-sm"
+                v-model="composerSearchForm"
+                @input="composerSearch()"
+                @focus="onComposerFocus()"
                 placeholder="Search composers"
                 size="sm"
               ></b-form-input>
               <b-form-select
-                v-model="selected"
-                :options="options"
+                v-model="composerFilterForm"
+                :options="composerOptions"
+                @change="composerFilter()"
                 size="sm"
                 class="mt-3"
               ></b-form-select>
@@ -22,19 +25,22 @@
       </b-col>
       <b-col>
         <b-card class="work-card">
-          <b-form-group>
-            <b-form-input
-              id="input-sm"
-              placeholder="Search works"
-              size="sm"
-            ></b-form-input>
-            <b-form-select
-              v-model="selected"
-              :options="options"
-              size="sm"
-              class="mt-3"
-            ></b-form-select>
-          </b-form-group>
+            <b-form-group>
+              <b-form-input
+                v-model="workSearchField"
+                @input="workSearch()"
+                @focus="onWorkFocus()"
+                placeholder="Search works"
+                size="sm"
+              ></b-form-input>
+              <b-form-select
+                v-model="workFilterField"
+                :options="workOptions"
+                @change="workFilter()"
+                size="sm"
+                class="mt-3"
+              ></b-form-select>
+            </b-form-group>
         </b-card>
       </b-col>
       <b-col>
@@ -46,8 +52,8 @@
               size="sm"
             ></b-form-input>
             <b-form-select
-              v-model="selected"
-              :options="options"
+              v-model="composerFilterForm"
+              :options="composerOptions"
               size="sm"
               class="mt-3"
             ></b-form-select>
@@ -66,21 +72,62 @@ export default {
     return {
       work_heading: "",
       album_heading: "",
-        selected: null,
-        options: [
+      composerFilterForm: 'popular',
+      composerSearchForm: null,
+      composerOptions: [
           { value: null, text: 'Filter composers' },
-          { value: 'a', text: 'This is First option' },
-          { value: 'b', text: 'Selected Option' },
-          { value: { C: '3PO' }, text: 'This is an option with object value' },
-          { value: 'd', text: 'This one is disabled', disabled: true }
-        ]
+          { value: 'popular', text: 'Popular composers' },
+          // { value: 'catalogued', text: 'Catalogued' },
+          { value: 'all', text: 'All composers' },
+          { value: 'women', text: 'Women composers'}
+        ],
+      workFilterField: 'recommended',
+      workSearchField: null,
+      workOptions: [
+          { value: null, text: 'Filter works' },
+          { value: 'recommended', text: 'Recommended works' },
+          // { value: 'catalogued', text: 'Catalogued' },
+          { value: 'all', text: 'All works'}
+        ],
     };
+  },
+  methods: {
+    composerFilter() {
+      eventBus.$emit('fireComposerFilter', this.composerFilterForm);
+      this.composerSearchForm = '';
+      console.log(this.composerFilterForm);
+    },
+    composerSearch() {
+      eventBus.$emit('fireComposerSearch', this.composerSearchForm);
+      this.composerFilterForm = null;
+      console.log(this.composerSearchForm);
+    },
+    onComposerFocus() {
+      this.composerSearchForm = '';
+      eventBus.$emit('fireComposerSearch', '');
+    },
+    workFilter() {
+      eventBus.$emit('fireWorkFilter', this.workFilterField);
+      this.workSearchField = '';
+      console.log(this.workFilterField);
+    },
+    workSearch() {
+      eventBus.$emit('fireWorkSearch', this.workSearchField);
+      this.workFilterField = null;
+      console.log(this.workSearchField);
+    },
+    onWorkFocus() {
+      this.workSearchField = '';
+      eventBus.$emit('fireWorkSearch', '');
+    }
   },
   created() {
     this.work_heading = "Works by Beethoven";
     this.album_heading = "Albums for \"Piano Concerto No. 5 in E♭ major\"";
     eventBus.$on('fireComposers', (composer) => {
         this.work_heading = "Works by " + composer;
+        this.workSearchField = '';
+        this.workFilterField = 'recommended';
     })
     eventBus.$on('fireAlbums', (work_id, title) => {
         this.album_heading = "Albums for \"" + title + "\"";

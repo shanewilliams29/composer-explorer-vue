@@ -99,6 +99,33 @@ export default {
           this.loading=false;
         });
     },
+    getFilteredComposers(item) {
+      this.loading = true;
+      const path = 'api/composers?filter=' + item;
+      axios.get(path)
+        .then((res) => {
+          this.composers = res.data.composers;
+          this.loading=false;
+        })
+        .catch((error) => {
+          // eslint-disable-next-line
+          console.error(error);
+          this.loading=false;
+        });
+    },
+    getSearchComposers(item) {
+      const path = 'api/composers?search=' + item;
+      axios.get(path)
+        .then((res) => {
+          this.composers = res.data.composers;
+          this.loading=false;
+        })
+        .catch((error) => {
+          // eslint-disable-next-line
+          console.error(error);
+          this.loading=false;
+        });
+    },
     getWorks(composer) {
         eventBus.$emit('fireComposers', composer);
         //this.$refs.composer.selectColor = "blue";
@@ -110,6 +137,12 @@ export default {
   created() {
     this.getComposers();
     this.selectRow("1")
+    eventBus.$on('fireComposerFilter', (item) => {
+        this.getFilteredComposers(item);
+    })
+    eventBus.$on('fireComposerSearch', (item) => {
+        this.getSearchComposers(item);
+    })
   },
 };
 </script>
