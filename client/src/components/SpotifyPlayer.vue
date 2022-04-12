@@ -60,6 +60,16 @@ export default {
               console.log('Autoplay is not allowed by the browser autoplay rules');
             });
 
+            // this.player.addListener('player_state_changed', ({
+            //   position,
+            //   duration,
+            //   track_window: { current_track }
+            // }) => {
+            //   console.log('Currently Playing', current_track);
+            //   console.log('Position in Song', position);
+            //   console.log('Duration of Song', duration);
+            // });
+
             // document.getElementById('togglePlay').onclick = function() {
             //     console.log(window.token);
             //   this.player.togglePlay().then(() => {

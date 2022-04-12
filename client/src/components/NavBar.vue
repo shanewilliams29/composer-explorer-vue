@@ -15,6 +15,7 @@
         <b-button right
           variant="success"
           class="spotify-button"
+          @click="window.player.activateElement()"
           :href="spotifyURL"
           >
             <img

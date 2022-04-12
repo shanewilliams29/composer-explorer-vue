@@ -42,7 +42,7 @@ export default {
       display_duration: "00:00",
       display_progress: "00:00",
       suspend: true,
-      delay: 0
+      delay: 1000
     };
   },
   methods: {
@@ -85,8 +85,11 @@ export default {
     },
     playbackTimer(){
         if(!this.suspend) { // CHANGE
-            this.setPlayback(this.progress, this.duration);
+
             this.progress = parseInt(this.progress) + 1000; // check ordering
+            this.setPlayback(this.progress, this.duration);
+            console.log(this.progress);
+
             if(this.progress >= this.duration) {
                 this.setPlayback(this.duration, this.duration);
                 this.suspend = true;
@@ -98,6 +101,7 @@ export default {
         }
     },
     startTimer(){
+      console.log("TIMER STARTED: " + this.progress);
         this.suspend = false;
     },
     delayStartTimer(){
