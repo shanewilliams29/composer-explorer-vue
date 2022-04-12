@@ -89,8 +89,9 @@ nextTrack(token) {
     })
     .then((res) => {
       if (res.status == 204) {
-        eventBus.$emit('fireNowPlaying');
-        this.getCurrentPlayerInfo(token);
+        this.pressPlay(token, window.device_id);
+        //eventBus.$emit('fireNowPlaying');
+        //this.getCurrentPlayerInfo(token);
       } else {
         eventBus.$emit('fireNowPaused');
       }
@@ -118,7 +119,7 @@ playTracks(token, device_id, tracks) {
     .then((res) => {
       if (res.status == 204) {
         eventBus.$emit('fireNowPlaying');
-        this.getCurrentPlayerInfo(token);
+        //this.getCurrentPlayerInfo(token);
       } else {
         eventBus.$emit('fireNowPaused');
       }
