@@ -24,7 +24,6 @@ pressPlay(token, device_id) {
       } else {
         eventBus.$emit('fireNowPaused');
       }
-      console.log(res);
     })
     .catch((error) => {
       console.error(error);
@@ -48,7 +47,6 @@ pauseTrack(token) {
       } else {
         eventBus.$emit('fireNowPlaying');
       }
-      console.log(res);
     })
     .catch((error) => {
       console.error(error);
@@ -72,7 +70,6 @@ beginningTrack(token) {
       } else {
         eventBus.$emit('fireNowPaused');
       }
-      console.log(res);
     })
     .catch((error) => {
       console.error(error);
@@ -93,10 +90,10 @@ nextTrack(token) {
     .then((res) => {
       if (res.status == 204) {
         eventBus.$emit('fireNowPlaying');
+        this.getCurrentPlayerInfo(token);
       } else {
         eventBus.$emit('fireNowPaused');
       }
-      console.log(res);
     })
     .catch((error) => {
       console.error(error);
@@ -121,10 +118,55 @@ playTracks(token, device_id, tracks) {
     .then((res) => {
       if (res.status == 204) {
         eventBus.$emit('fireNowPlaying');
+        this.getCurrentPlayerInfo(token);
       } else {
         eventBus.$emit('fireNowPaused');
       }
-      console.log(res);
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+},
+
+getCurrentPlayerInfo(token) {
+  const path = 'https://api.spotify.com/v1/me/player';
+  axios({
+      method: 'get',
+      url: path,
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + token
+      }
+    })
+    .then((res) => {
+      if (res.status == 200) {
+        eventBus.$emit('fireCurrentPlayerInfo', res.data);
+      } else {
+        eventBus.$emit('fireNowPaused');
+      }
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+},
+seekToPosition(token, position) {
+  const path = 'https://api.spotify.com/v1/me/player/seek?position_ms=' + position;
+  axios({
+      method: 'put',
+      url: path,
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + token
+      }
+    })
+    .then((res) => {
+      if (res.status == 204) {
+        eventBus.$emit('fireSeekToPosition');
+      } else {
+        this.getCurrentPlayerInfo(token);
+      }
     })
     .catch((error) => {
       console.error(error);

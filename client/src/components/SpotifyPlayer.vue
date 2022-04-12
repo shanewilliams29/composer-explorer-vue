@@ -22,7 +22,7 @@ export default {
             if (process.env.VUE_APP_BASE_URL != "http://localhost:5000/") {
                 this.token = eventBus.spotifyToken; // Improve this?
             } else {
-                this.token = 'BQDkKYCSEz7UAzL9wgaGkiGSTDAytAijGYLgb4omaHNWd4_TghEJXSccyt_INmDJS3o0VdD0PNGKkzJoNP2qR8CjIb36iG2oG9yEpBUH2YeDlUpQRKxDn6odDt-iCSiE13yNO9wDJfVn54QLplsb-C-Q6D2hEFsO0Wx1';
+                this.token = 'https://api.spotify.com/v1/me/player" -H "Accept: application/json" -H "Content-Type: application/json" -H "Authorization: Bearer BQDbHBhKBFiNo1DlKIYRLpcpwihbSU0itD87CsOk37P_5VCeBVsqqvGFjeT7ycFgOf_7MWTgLjIGD9uZ-OZDXnCjuY5nN2WafuAt_X_eFYCcb852EgVILPu9mRYyGo7EKYzKB4n5dHgy-L9fwcTv4wE50AG1XLZBXCsLa6tLPtxyEQkcNQ';
             }
             window.token = this.token;
             // eslint-disable-next-line
