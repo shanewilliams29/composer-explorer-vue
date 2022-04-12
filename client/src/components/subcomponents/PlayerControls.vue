@@ -54,18 +54,18 @@ export default {
     },
     back() {
       spotify.beginningTrack(window.token, window.device_id);
-      this.setPlayback(0, this.duration);
+      //this.setPlayback(0, this.duration);
     },
     next() {
       spotify.nextTrack(window.token);
-      eventBus.$emit('fireNextTrack');
+      //eventBus.$emit('fireNextTrack');
     },
     suspendTimer() {
       this.suspend = true; //CHANGE
     },
     seek(progress) {
       spotify.seekToPosition(window.token, progress);
-      this.setPlayback(progress, this.duration);
+      //this.setPlayback(progress, this.duration);
     },
     setPlayback(progress, duration) {
       this.progress = progress;
@@ -124,15 +124,15 @@ export default {
                   this.suspend = true;
                 }
     })
-    eventBus.$on('fireCurrentPlayerInfo', (data) => {
-          this.playing = data.is_playing;
-          if (this.playing == true) {
-            this.delayStartTimer();
-          } else {
-            this.suspend = true;
-          }
-          this.setPlayback(data.progress_ms, data.item.duration_ms);
-    })
+    // eventBus.$on('fireCurrentPlayerInfo', (data) => {
+    //       this.playing = data.is_playing;
+    //       if (this.playing == true) {
+    //         this.delayStartTimer();
+    //       } else {
+    //         this.suspend = true;
+    //       }
+    //       this.setPlayback(data.progress_ms, data.item.duration_ms);
+    // })
     eventBus.$on('firePlayerStateChanged', (track_data, position, duration, paused) => {
           this.playing = !paused;
           if (this.playing == true) {

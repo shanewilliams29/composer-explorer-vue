@@ -67,9 +67,9 @@ export default {
               track_window: { current_track }
             }) => {
                 eventBus.$emit('firePlayerStateChanged', current_track, position, duration, paused);
-                console.log('Currently Playing', current_track);
-                console.log('Position in Song', position);
-                console.log('Duration of Song', duration);
+                //console.log('Currently Playing', current_track);
+                // console.log('Position in Song', position);
+                //console.log('Duration of Song', duration);
             });
 
             // document.getElementById('togglePlay').onclick = function() {
