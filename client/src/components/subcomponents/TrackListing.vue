@@ -75,7 +75,10 @@ export default {
         }
 
     })
-
+    // eslint-disable-next-line
+    eventBus.$on('firePlayerStateChanged', (track_data, position, duration, paused) => {
+        this.selectedTrack = track_data['id'];
+    })
   },
 };
 </script>

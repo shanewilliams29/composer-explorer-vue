@@ -86,9 +86,8 @@ export default {
     playbackTimer(){
         if(!this.suspend) { // CHANGE
 
-            this.progress = parseInt(this.progress) + 1000; // check ordering
+            this.progress = parseInt(this.progress) + 1000;
             this.setPlayback(this.progress, this.duration);
-            console.log(this.progress);
 
             if(this.progress >= this.duration) {
                 this.setPlayback(this.duration, this.duration);
@@ -101,9 +100,9 @@ export default {
         }
     },
     startTimer(){
-      console.log("TIMER STARTED: " + this.progress);
         this.suspend = false;
     },
+
     delayStartTimer(){
         this.suspend = true;
         setTimeout(this.startTimer, this.delay);
@@ -133,6 +132,15 @@ export default {
             this.suspend = true;
           }
           this.setPlayback(data.progress_ms, data.item.duration_ms);
+    })
+    eventBus.$on('firePlayerStateChanged', (track_data, position, duration, paused) => {
+          this.playing = !paused;
+          if (this.playing == true) {
+            this.startTimer();
+          } else {
+            this.suspend = true;
+          }
+          this.setPlayback(position, duration);
     })
   },
   mounted() {
