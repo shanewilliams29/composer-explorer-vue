@@ -5,7 +5,7 @@ from flask_sqlalchemy import SQLAlchemy
 
 
 # instantiate the app
-app = Flask(__name__, static_folder='../dist', static_url_path='/')
+app = Flask(__name__, static_folder='../dist', static_url_path='/', template_folder='../dist')
 app.config.from_object(Config)
 db = SQLAlchemy(app)
 

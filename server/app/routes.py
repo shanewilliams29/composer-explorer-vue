@@ -1,5 +1,5 @@
 from app import app, db, sp
-from flask import jsonify, request, redirect, session, send_from_directory
+from flask import jsonify, request, redirect, session, render_template
 from config import Config
 from app.models import ComposerList, WorkList, WorkAlbums, AlbumLike, Spotify
 from app.classes import SortFilter
@@ -16,9 +16,15 @@ def before_request():
         session['spotify_token'] = None
 
 
-@app.route('/')
-def index():
-    return app.send_static_file('index.html')
+# @app.route('/')
+# def index():
+#     return app.send_static_file('index.html')
+
+@app.route('/', defaults={'path': ''})
+@app.route("/<string:path>")
+def index(path):
+    return render_template("index.html")
+    # return app.send_static_file('index.html')
 
 
 # @app.route('/mobile')
