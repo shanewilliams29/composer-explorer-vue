@@ -5,6 +5,7 @@ import axios from 'axios';
 
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
+import router from './router'
 
 Vue.config.productionTip = false
 
@@ -19,5 +20,6 @@ export const spotifyPlayer = new Vue();
 export const baseURL = process.env.VUE_APP_BASE_URL;
 
 new Vue({
-  render: h => h(App),
+  router,
+  render: h => h(App)
 }).$mount('#app')
