@@ -86,6 +86,7 @@ export default {
           this.visibility=true
           this.composer = composer;
           this.loading = false;
+          eventBus.$emit('fireWorksLoaded');
         })
         .catch((error) => {
           // eslint-disable-next-line

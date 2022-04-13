@@ -5,7 +5,7 @@
   <div role="tablist">
     <b-card no-body class="mb-1">
       <b-card-header header-tag="header" class="p-1" role="tab">
-        <b-button class="header-button" :disabled="composerDisabled" @click="composerToggle" block variant="secondary">Composers <span class="mb-0 float-right"><b-icon-chevron-down></b-icon-chevron-down></span></b-button>
+        <b-button class="header-button" :disabled="composerDisabled" @click="composerToggle" block variant="secondary"><span class="heading-text">Composers</span><span class="mb-0 float-right"><b-icon-chevron-down></b-icon-chevron-down></span></b-button>
       </b-card-header>
       <b-collapse :visible="composerDisabled" id="accordion-1" accordion="my-accordion" role="tabpanel">
         <b-card-body>
@@ -16,7 +16,7 @@
 
     <b-card no-body class="mb-1">
       <b-card-header header-tag="header" class="p-1" role="tab">
-        <b-button class="header-button" :disabled="workDisabled" block @click="workToggle" variant="secondary">Works by {{ composer }}<span class="mb-0 float-right"><b-icon-chevron-down></b-icon-chevron-down></span></b-button>
+        <b-button class="header-button" :disabled="workDisabled" block @click="workToggle" variant="secondary"><span class="heading-text">Works by {{ composer }}</span><span class="mb-0 float-right"><b-icon-chevron-down></b-icon-chevron-down></span></b-button>
       </b-card-header>
       <b-collapse :visible="workDisabled" id="accordion-2" accordion="my-accordion" role="tabpanel">
         <b-card-body>
@@ -27,7 +27,7 @@
 
     <b-card no-body class="mb-1">
       <b-card-header header-tag="header" class="p-1" role="tab">
-        <b-button class="header-button" :disabled="albumDisabled" @click="albumToggle" block variant="secondary">{{ title }}<span class="mb-0 float-right"><b-icon-chevron-down></b-icon-chevron-down></span></b-button>
+        <b-button class="header-button" :disabled="albumDisabled" @click="albumToggle" block variant="secondary"><span class="heading-text">{{ title }}</span><span class="mb-0 float-right"><b-icon-chevron-down></b-icon-chevron-down></span></b-button>
       </b-card-header>
       <b-collapse :visible="albumDisabled" id="accordion-3" accordion="my-accordion" role="tabpanel">
         <b-card-body>
@@ -72,7 +72,8 @@ export default {
       title: "Piano Concerto No. 5 in E♭ major",
       composerDisabled: true,
       workDisabled: false,
-      albumDisabled: false
+      albumDisabled: false,
+      initialLoad: true
     };
   },
   methods: {
@@ -97,7 +98,6 @@ export default {
         this.albumDisabled = false;
       },
       workToggle() {
-        console.log("toggled");
         this.composerDisabled = false;
         this.workDisabled = true;
         this.albumDisabled = false;
@@ -113,6 +113,13 @@ export default {
     this.getSpotifyToken();
     eventBus.$on('fireComposers', (composer) => {
         this.composer = composer;
+    })
+    eventBus.$on('fireWorksLoaded', () => {
+      if (this.initialLoad != true){
+        this.workToggle();
+      } else{
+        this.initialLoad = false;
+      }
     })
     // eslint-disable-next-line
     eventBus.$on('fireAlbums', (work_id, title) => {
@@ -135,6 +142,9 @@ export default {
   #app{
     height: 100% !important;
     max-height: -webkit-fill-available !important;
+  }
+  .heading-text{
+    padding-left: 20px;
   }
   .card-body{
     background: #f1f2f4 !important;
@@ -176,7 +186,7 @@ export default {
   }
   .composer-list-mobile{
     /*height: calc(100vh - 314px);*/
-    height: calc(var(--vh, 1vh) * 100 - 314px - 21px);
+    height: calc(var(--vh, 1vh) * 100 - 314px - 11px);
     overflow-y: scroll;
   }
   .composer-list-mobile .card{
@@ -189,7 +199,7 @@ export default {
   }
   .work-list-mobile{
     /*height: calc(100vh - 314px);*/
-    height: calc(var(--vh, 1vh) * 100 - 314px - 21px);
+    height: calc(var(--vh, 1vh) * 100 - 314px - 11px);
     overflow-y: scroll;
   }
   .work-list-mobile .card{
@@ -202,7 +212,7 @@ export default {
   }
   .album-list-mobile{
     /*height: calc(100vh - 314px);*/
-    height: calc(var(--vh, 1vh) * 100 - 314px - 21px);
+    height: calc(var(--vh, 1vh) * 100 - 314px - 11px);
     overflow-y: scroll;
     overflow-x: hidden;
   }
