@@ -7,7 +7,7 @@
       <b-card-header header-tag="header" class="p-1" role="tab">
         <b-button :disabled="composerDisabled" @click="composerToggle" block variant="secondary">Composers <span class="mb-0 float-right"><b-icon-chevron-down></b-icon-chevron-down></span></b-button>
       </b-card-header>
-      <b-collapse v-if='composerDisabled' visible id="accordion-1" accordion="my-accordion" role="tabpanel">
+      <b-collapse :visible="composerDisabled" id="accordion-1" accordion="my-accordion" role="tabpanel">
         <b-card-body>
 <b-col class="composer-list-mobile"><ComposerList/></b-col>
         </b-card-body>
@@ -18,7 +18,7 @@
       <b-card-header header-tag="header" class="p-1" role="tab">
         <b-button :disabled="workDisabled" block @click="workToggle" variant="secondary">Works by {{ composer }}<span class="mb-0 float-right"><b-icon-chevron-down></b-icon-chevron-down></span></b-button>
       </b-card-header>
-      <b-collapse v-if='workDisabled' visible id="accordion-2" accordion="my-accordion" role="tabpanel">
+      <b-collapse :visible="workDisabled" id="accordion-2" accordion="my-accordion" role="tabpanel">
         <b-card-body>
 <b-col class="work-list-mobile"><WorkList/></b-col>
         </b-card-body>
@@ -29,7 +29,7 @@
       <b-card-header header-tag="header" class="p-1" role="tab">
         <b-button :disabled="albumDisabled" @click="albumToggle" block variant="secondary">{{ title }}<span class="mb-0 float-right"><b-icon-chevron-down></b-icon-chevron-down></span></b-button>
       </b-card-header>
-      <b-collapse v-if='albumDisabled' visible id="accordion-3" accordion="my-accordion" role="tabpanel">
+      <b-collapse :visible="albumDisabled" id="accordion-3" accordion="my-accordion" role="tabpanel">
         <b-card-body>
  <b-col class="album-list-mobile"><AlbumList/></b-col>
         </b-card-body>
