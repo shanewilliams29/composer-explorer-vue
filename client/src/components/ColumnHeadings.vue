@@ -3,7 +3,7 @@
     <b-row>
       <b-col>
         <div>
-          <b-card class="composer-card">
+          <b-card class="heading-card composer-card">
             <b-form-group>
               <b-form-input
                 v-model="composerSearchForm"
@@ -24,7 +24,7 @@
         </div>
       </b-col>
       <b-col>
-        <b-card class="work-card">
+        <b-card class="heading-card work-card">
             <b-form-group>
               <b-form-input
                 v-model="workSearchField"
@@ -44,7 +44,7 @@
         </b-card>
       </b-col>
       <b-col>
-        <b-card class="albums-card">
+        <b-card class="heading-card albums-card">
           <b-form-group>
             <b-form-input
               id="input-sm"
@@ -161,7 +161,8 @@ export default {
   background: none;
   border: none;
 }
-.card-body {
+.heading-card {
+  padding-top: 20px;
   padding-bottom: 0px;
   padding-left: 5px;
 }

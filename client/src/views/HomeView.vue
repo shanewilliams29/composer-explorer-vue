@@ -58,6 +58,9 @@ export default {
     },
   },
   created() {
+    if( screen.width <= 760 ) {
+        this.$router.push('mobile');
+    }
     this.getSpotifyToken();
   },
 }

@@ -5,49 +5,52 @@
   <div class="accordion" role="tablist">
     <b-card no-body class="mb-1">
       <b-card-header header-tag="header" class="p-1" role="tab">
-        <b-button block v-b-toggle.accordion-1 variant="secondary">Composers</b-button>
+        <b-button :disabled="composerDisabled" @click="composerToggle" block variant="secondary">Composers <span class="mb-0 float-right"><b-icon-chevron-down></b-icon-chevron-down></span></b-button>
       </b-card-header>
-      <b-collapse id="accordion-1" visible accordion="my-accordion" role="tabpanel">
+      <b-collapse v-if='composerDisabled' visible id="accordion-1" accordion="my-accordion" role="tabpanel">
         <b-card-body>
-<b-col class="composer-list"><ComposerList/></b-col>
+<b-col class="composer-list-mobile"><ComposerList/></b-col>
         </b-card-body>
       </b-collapse>
     </b-card>
 
     <b-card no-body class="mb-1">
       <b-card-header header-tag="header" class="p-1" role="tab">
-        <b-button block v-b-toggle.accordion-2 variant="secondary">Works</b-button>
+        <b-button :disabled="workDisabled" block @click="workToggle" variant="secondary">Works by {{ composer }}<span class="mb-0 float-right"><b-icon-chevron-down></b-icon-chevron-down></span></b-button>
       </b-card-header>
-      <b-collapse id="accordion-2" accordion="my-accordion" role="tabpanel">
+      <b-collapse v-if='workDisabled' visible id="accordion-2" accordion="my-accordion" role="tabpanel">
         <b-card-body>
-<b-col class="work-list"><WorkList/></b-col>
+<b-col class="work-list-mobile"><WorkList/></b-col>
         </b-card-body>
       </b-collapse>
     </b-card>
 
     <b-card no-body class="mb-1">
       <b-card-header header-tag="header" class="p-1" role="tab">
-        <b-button block v-b-toggle.accordion-3 variant="secondary">Recordings</b-button>
+        <b-button :disabled="albumDisabled" @click="albumToggle" block variant="secondary">{{ title }}<span class="mb-0 float-right"><b-icon-chevron-down></b-icon-chevron-down></span></b-button>
       </b-card-header>
-      <b-collapse id="accordion-3" accordion="my-accordion" role="tabpanel">
+      <b-collapse v-if='albumDisabled' visible id="accordion-3" accordion="my-accordion" role="tabpanel">
         <b-card-body>
- <b-col class="album-list"><AlbumList/></b-col>
+ <b-col class="album-list-mobile"><AlbumList/></b-col>
         </b-card-body>
       </b-collapse>
     </b-card>
   </div>
-
+<div id="footer">
+    <MobileTracks/>
     <PageFooter/>
     <SpotifyPlayer/>
+</div>
   </div>
 </template>
 
 <script>
-import NavBar from '@/components/NavBar.vue'
+import NavBar from '@/components/mobile/NavBar.vue'
 import ComposerList from '@/components/ComposerList.vue'
 import WorkList from '@/components/WorkList.vue'
 import AlbumList from '@/components/AlbumList.vue'
-import PageFooter from '@/components/PageFooter.vue'
+import MobileTracks from '@/components/mobile/MobileTracks.vue'
+import PageFooter from '@/components/mobile/PageFooter.vue'
 import SpotifyPlayer from '@/components/SpotifyPlayer.vue'
 import axios from 'axios';
 import {eventBus} from "../main.js";
@@ -59,11 +62,17 @@ export default {
     ComposerList,
     WorkList,
     AlbumList,
+    MobileTracks,
     PageFooter,
-    SpotifyPlayer
+    SpotifyPlayer,
   },
   data() {
     return {
+      composer: "Beethoven",
+      title: "Piano Concerto No. 5 in E♭ major",
+      composerDisabled: true,
+      workDisabled: false,
+      albumDisabled: false
     };
   },
   methods: {
@@ -82,14 +91,51 @@ export default {
           console.error(error);
         });
     },
+      composerToggle() {
+        this.composerDisabled = true;
+        this.workDisabled = false;
+        this.albumDisabled = false;
+      },
+      workToggle() {
+        console.log("toggled");
+        this.composerDisabled = false;
+        this.workDisabled = true;
+        this.albumDisabled = false;
+
+      },
+      albumToggle() {
+        this.composerDisabled = false;
+        this.workDisabled = false;
+        this.albumDisabled = true;
+      },
   },
   created() {
     this.getSpotifyToken();
+    eventBus.$on('fireComposers', (composer) => {
+        this.composer = composer;
+    })
+    // eslint-disable-next-line
+    eventBus.$on('fireAlbums', (work_id, title) => {
+        this.title = title;
+    })
+    let vh = window.innerHeight * 0.01;
+    document.documentElement.style.setProperty('--vh', `${vh}px`);
+
+    window.addEventListener('resize', () => {
+    // We execute the same script as before
+      let vh = window.innerHeight * 0.01;
+      document.documentElement.style.setProperty('--vh', `${vh}px`);
+    });
   },
+
 }
 </script>
 
-<style scoped>
+<style>
+  #app{
+    height: 100% !important;
+    max-height: -webkit-fill-available !important;
+  }
   .card-body{
     background: #f1f2f4 !important;
     padding: 0px !important;
@@ -98,17 +144,61 @@ export default {
     overflow-x: hidden;
     background: #f1f2f4 !important;
   }
-  .composer-list{
-    height: calc(100vh - 66px - 45px - 45px - 45px - 100px);
+  .btn-secondary{
+    background-color: #484e53 !important;
+    text-align: left;
+  }
+  .btn:hover{
+    background-color: #717579 !important;
+  }
+  .btn{
+      border: none !important;
+      outline: none !important;
+      box-shadow: none !important;
+  }
+  .p-1{
+    padding: 0px !important;
+  }
+  .composer-list-mobile{
+    /*height: calc(100vh - 314px);*/
+    height: calc(var(--vh, 1vh) * 100 - 314px);
     overflow-y: scroll;
   }
-  .work-list{
-    height: calc(100vh - 66px - 45px - 45px - 45px - 100px);
+  .composer-list-mobile .card{
+    margin-bottom: 0px !important;
+  }
+  .composer-list-mobile table{
+    font-size: 14px !important;
+  }
+  .work-list-mobile{
+    /*height: calc(100vh - 314px);*/
+    height: calc(var(--vh, 1vh) * 100 - 314px);
     overflow-y: scroll;
   }
-  .album-list{
-    height: calc(100vh - 66px - 45px - 45px - 45px - 100px);
+  .work-list-mobile .card{
+    margin-bottom: 0px !important;
+  }
+  .work-list-mobile table{
+    font-size: 14px !important;
+  }
+  .album-list-mobile{
+    /*height: calc(100vh - 314px);*/
+    height: calc(var(--vh, 1vh) * 100 - 314px);
     overflow-y: scroll;
     overflow-x: hidden;
   }
+  .album-list-mobile .card{
+    margin-bottom: 0px !important;
+  }
+
+  #footer{
+    overflow-x: hidden;
+    overflow-y: hidden;
+  }
+
+  #footer table{
+    font-size: 14px !important;
+    line-height: 130%;
+  }
+
 </style>

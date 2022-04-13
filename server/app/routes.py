@@ -15,6 +15,9 @@ def before_request():
     if not session.get('spotify_token'):
         session['spotify_token'] = None
 
+    if not session.get('mobile'):
+        session['mobile'] = None
+
 
 # @app.route('/')
 # def index():
@@ -23,6 +26,9 @@ def before_request():
 @app.route('/', defaults={'path': ''})
 @app.route("/<string:path>")
 def index(path):
+    if path == 'mobile':
+        session['mobile'] = 'true'
+
     return render_template("index.html")
     # return app.send_static_file('index.html')
 
@@ -355,6 +361,14 @@ def get_albums(work_id):
         # re-sort the album list on popularity and likes
         sorted_list = sorted(album_list, key=lambda d: d['score'], reverse=True)
         sorted_list = sorted(sorted_list, key=lambda d: d['likes'], reverse=True)
+
+        # return paginated items - NEED TO IMPLEMENT INFINITY SCROLL
+        if not session['mobile']:
+            sorted_list = sorted_list[0:50]
+
+        # return less items for mobile
+        if session['mobile']:
+            sorted_list = sorted_list[0:25]
 
     response_object = {'status': 'success'}
     response_object['albums'] = sorted_list
