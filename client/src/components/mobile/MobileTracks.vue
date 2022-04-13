@@ -1,11 +1,32 @@
 <template>
-  <div class="container-fluid">
-    <b-row class="footer-row">
-      <b-col>
-        Test
-      </b-col>
-    </b-row>
+<div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+  <ol class="carousel-indicators">
+    <li data-target="#carouselExampleIndicators" :class="{'active': (track[1] == selectedTrack)}" :data-slide-to="track[1]" v-for="track in album.tracks" :key="track[1]"></li>
+  </ol>
+  <div class="carousel-inner">
+    <div class="carousel-item" :class="{'active': (track[1] == selectedTrack)}" v-for="track in album.tracks" :key="track[1]">
+    <table>
+      <tr>
+        <td width="100%"
+            style="
+              white-space: nowrap;
+              text-overflow: ellipsis;
+              overflow: hidden;
+              max-width: 1px;
+            ">
+            {{ track[0].substring(track[0].indexOf(':') + 1) }}
+        </td>
+      </tr>
+    </table>
+    </div>
+    <div class="carousel-item">
+      Test 2
+    </div>
+    <div class="carousel-item">
+      Test 3
+    </div>
   </div>
+</div>
 </template>
 
 <script>
@@ -19,7 +40,9 @@ export default {
       title: "",
       selectedTrack: "",
       selectedTrackNo : "",
-      numTracks: ""
+      numTracks: "",
+      slide: 0,
+      sliding: null
     };
   },
   methods: {
@@ -39,7 +62,7 @@ export default {
     eventBus.$on('fireSetAlbum', (album) => {
         this.album = album;
         this.playTracks(album.tracks[0][2]);
-        // this.selectTrack(album.tracks[0][1]);
+        this.selectTrack(album.tracks[0][1]);
         // this.numTracks = album.tracks.length;
         // this.selectedTrackNo = 0;
     })
@@ -62,6 +85,25 @@ export default {
 </script>
 
 <style scoped>
+table{
+  width: 100%;
+  margin-top: 6px;
+}
+td{
+  color: white;
+  padding-left: 10px;
+  padding-right: 10px;
+  text-align: center;
+  vertical-align: middle;
+}
+.carousel-inner{
+  width:100%;
+  height: 45px !important;
+  background-color: #484e53;
+}
+.carousel-item{
+  text-align: center;
+}
 .track-card {
   background-color: #484e53 !important;
   border: 0px;
@@ -88,5 +130,11 @@ export default {
 }
 .highlight-track {
   color: #1db954;
+}
+.carousel-indicators{
+  margin-bottom: 0px !important;
+}
+.carousel-caption p{
+  margin:  0px !important;
 }
 </style>

@@ -2,10 +2,10 @@
   <div id="home">
     <NavBar/>
 
-  <div class="accordion" role="tablist">
+  <div role="tablist">
     <b-card no-body class="mb-1">
       <b-card-header header-tag="header" class="p-1" role="tab">
-        <b-button :disabled="composerDisabled" @click="composerToggle" block variant="secondary">Composers <span class="mb-0 float-right"><b-icon-chevron-down></b-icon-chevron-down></span></b-button>
+        <b-button class="header-button" :disabled="composerDisabled" @click="composerToggle" block variant="secondary">Composers <span class="mb-0 float-right"><b-icon-chevron-down></b-icon-chevron-down></span></b-button>
       </b-card-header>
       <b-collapse :visible="composerDisabled" id="accordion-1" accordion="my-accordion" role="tabpanel">
         <b-card-body>
@@ -16,7 +16,7 @@
 
     <b-card no-body class="mb-1">
       <b-card-header header-tag="header" class="p-1" role="tab">
-        <b-button :disabled="workDisabled" block @click="workToggle" variant="secondary">Works by {{ composer }}<span class="mb-0 float-right"><b-icon-chevron-down></b-icon-chevron-down></span></b-button>
+        <b-button class="header-button" :disabled="workDisabled" block @click="workToggle" variant="secondary">Works by {{ composer }}<span class="mb-0 float-right"><b-icon-chevron-down></b-icon-chevron-down></span></b-button>
       </b-card-header>
       <b-collapse :visible="workDisabled" id="accordion-2" accordion="my-accordion" role="tabpanel">
         <b-card-body>
@@ -27,7 +27,7 @@
 
     <b-card no-body class="mb-1">
       <b-card-header header-tag="header" class="p-1" role="tab">
-        <b-button :disabled="albumDisabled" @click="albumToggle" block variant="secondary">{{ title }}<span class="mb-0 float-right"><b-icon-chevron-down></b-icon-chevron-down></span></b-button>
+        <b-button class="header-button" :disabled="albumDisabled" @click="albumToggle" block variant="secondary">{{ title }}<span class="mb-0 float-right"><b-icon-chevron-down></b-icon-chevron-down></span></b-button>
       </b-card-header>
       <b-collapse :visible="albumDisabled" id="accordion-3" accordion="my-accordion" role="tabpanel">
         <b-card-body>
@@ -146,49 +146,73 @@ export default {
   }
   .btn-secondary{
     background-color: #484e53 !important;
-    text-align: left;
+    text-align: middle;
   }
   .btn:hover{
     background-color: #717579 !important;
   }
+  .card{
+    border-radius: 0px !important;
+  }
+  .card-header{
+    border: 0px !important;
+  }
   .btn{
-      border: none !important;
+    border:  0px;
+  }
+  .header-button{
+    border-radius: 0px !important;
+    border-top: solid 2px white !important;
       outline: none !important;
       box-shadow: none !important;
   }
   .p-1{
     padding: 0px !important;
+    border-radius: 0px !important;
+  }
+  .mb-1{
+    border: none;
+    margin: 0px !important;
   }
   .composer-list-mobile{
     /*height: calc(100vh - 314px);*/
-    height: calc(var(--vh, 1vh) * 100 - 314px);
+    height: calc(var(--vh, 1vh) * 100 - 314px - 21px);
     overflow-y: scroll;
   }
   .composer-list-mobile .card{
     margin-bottom: 0px !important;
   }
-  .composer-list-mobile table{
+  .composer-list-mobile table td{
+    padding-top: 5px;
+    padding-bottom: 5px;
     font-size: 14px !important;
   }
   .work-list-mobile{
     /*height: calc(100vh - 314px);*/
-    height: calc(var(--vh, 1vh) * 100 - 314px);
+    height: calc(var(--vh, 1vh) * 100 - 314px - 21px);
     overflow-y: scroll;
   }
   .work-list-mobile .card{
     margin-bottom: 0px !important;
   }
-  .work-list-mobile table{
+  .work-list-mobile table td{
+    padding-top: 5px;
+    padding-bottom: 5px;
     font-size: 14px !important;
   }
   .album-list-mobile{
     /*height: calc(100vh - 314px);*/
-    height: calc(var(--vh, 1vh) * 100 - 314px);
+    height: calc(var(--vh, 1vh) * 100 - 314px - 21px);
     overflow-y: scroll;
     overflow-x: hidden;
   }
   .album-list-mobile .card{
     margin-bottom: 0px !important;
+  }
+
+  .album-list-mobile table{
+    padding-top: 3px;
+    font-size: 14px !important;
   }
 
   #footer{

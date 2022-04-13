@@ -70,7 +70,7 @@ export default {
   background-color: #343a40;
   padding-bottom: 0px;
   border-radius: 0px;
-  border-radius: 6px;
+  border-radius: 0px;
 }
 .info-col {
   height: 100px;

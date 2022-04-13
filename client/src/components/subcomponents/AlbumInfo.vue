@@ -44,6 +44,7 @@ export default {
     getAlbumInfo(album_id) {
         this.loading = true;
         this.title = eventBus.title;
+        console.log(album_id)
         const path = 'api/albuminfo/' + album_id;
         axios.get(path)
           .then((res) => {
