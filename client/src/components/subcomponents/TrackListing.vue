@@ -20,7 +20,7 @@
                   max-width: 1px;
                 "
               >
-                ▶&nbsp; {{ track[0].substring(track[0].indexOf(':') + 1) }}
+                ▶&nbsp; {{ track[0].substring(track[0].lastIndexOf(':') + 1) }}
               </td>
             </tr>
           </table>
@@ -59,8 +59,11 @@ export default {
     },
   created() {
     eventBus.$on('fireSetAlbum', (album) => {
+      console.log(album);
         this.album = album;
+        if(window.token){
         this.playTracks(album.tracks[0][2]);
+        }
         // this.selectTrack(album.tracks[0][1]);
         // this.numTracks = album.tracks.length;
         // this.selectedTrackNo = 0;

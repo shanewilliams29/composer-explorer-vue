@@ -7,7 +7,7 @@
       <b-col>
         <PlayerControls />
       </b-col>
-      <b-col v-show="false">
+      <b-col v-if="false">
         <TrackListing />
       </b-col>
     </b-row>
@@ -15,8 +15,6 @@
 </template>
 
 <script>
-import axios from 'axios';
-import {eventBus} from "@/main.js";
 import AlbumInfo from '@/components/subcomponents/AlbumInfo.vue'
 import PlayerControls from '@/components/mobile/PlayerControls.vue'
 import TrackListing from '@/components/subcomponents/TrackListing.vue'
@@ -26,40 +24,6 @@ export default {
     AlbumInfo,
     PlayerControls,
     TrackListing
-  },
-  data() {
-    return {
-      album: [],
-      title: "",
-      selectedTrack: ""
-    };
-  },
-  methods: {
-    getAlbumInfo(album_id) {
-        this.loading = true;
-        this.title = eventBus.title;
-        const path = 'api/albuminfo/' + album_id;
-        axios.get(path)
-          .then((res) => {
-            this.album = res.data.album; // Change to local file
-            this.loading = false;
-          })
-          .catch((error) => {
-            // eslint-disable-next-line
-            console.error(error);
-            this.loading = false;
-          });
-      },
-    selectTrack(track){
-        this.selectedTrack = track;
-    },
-  },
-  created() {
-    eventBus.title = "Piano Concerto No. 5 in E♭ major";
-    this.getAlbumInfo("BEETHOVEN000163xjbqYLxvXHuanI63XGwri");
-    eventBus.$on('fireAlbumData', (album_id) => {
-        this.getAlbumInfo(album_id);
-    })
   },
 };
 </script>
@@ -80,7 +44,7 @@ export default {
   padding-right: 0px;
 }
 .footer-row {
-  height: 100px;
+  height: 83px;
   color: white;
 }
 .col {

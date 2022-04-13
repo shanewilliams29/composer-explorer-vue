@@ -14,7 +14,7 @@
               overflow: hidden;
               max-width: 1px;
             ">
-            {{ track[0].substring(track[0].indexOf(':') + 1) }}
+            {{ track[0].substring(track[0].lastIndexOf(':') + 1) }}
         </td>
       </tr>
     </table>
@@ -61,8 +61,10 @@ export default {
   created() {
     eventBus.$on('fireSetAlbum', (album) => {
         this.album = album;
-        this.playTracks(album.tracks[0][2]);
         this.selectTrack(album.tracks[0][1]);
+        if(window.token){
+        this.playTracks(album.tracks[0][2]);
+        }
         // this.numTracks = album.tracks.length;
         // this.selectedTrackNo = 0;
     })

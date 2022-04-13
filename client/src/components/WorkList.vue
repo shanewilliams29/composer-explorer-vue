@@ -96,7 +96,6 @@ export default {
     },
       getAlbums(work_id, title) {
         eventBus.$emit('fireAlbums', work_id, title);
-        eventBus.title = title;
     },
       selectRow(work){
         this.selectedWork = work;

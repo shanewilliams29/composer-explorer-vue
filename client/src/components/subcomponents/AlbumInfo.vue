@@ -37,14 +37,13 @@ export default {
   data() {
     return {
       album: [],
-      title: ""
+      title: "",
+      hold_title: "Piano Concerto No. 5 in E♭ major"
     };
   },
   methods: {
     getAlbumInfo(album_id) {
         this.loading = true;
-        this.title = eventBus.title;
-        console.log(album_id)
         const path = 'api/albuminfo/' + album_id;
         axios.get(path)
           .then((res) => {
@@ -63,6 +62,10 @@ export default {
     this.loading = true;
     eventBus.$on('fireAlbumData', (album_id) => {
         this.getAlbumInfo(album_id);
+        this.title = this.hold_title;
+    })
+    eventBus.$on('fireAlbums', (work_id, title) => {
+        this.hold_title = title;
     })
   },
 };

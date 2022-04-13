@@ -22,9 +22,12 @@ export default {
             if (process.env.VUE_APP_BASE_URL != "http://localhost:5000/") {
                 this.token = eventBus.spotifyToken; // Improve this?
             } else {
-                this.token = 'https://api.spotify.com/v1/me/player" -H "Accept: application/json" -H "Content-Type: application/json" -H "Authorization: Bearer BQDbHBhKBFiNo1DlKIYRLpcpwihbSU0itD87CsOk37P_5VCeBVsqqvGFjeT7ycFgOf_7MWTgLjIGD9uZ-OZDXnCjuY5nN2WafuAt_X_eFYCcb852EgVILPu9mRYyGo7EKYzKB4n5dHgy-L9fwcTv4wE50AG1XLZBXCsLa6tLPtxyEQkcNQ';
+                this.token = 'BQA-wfIhhqVFmulPTrFHAhN9UJ-rMUvzhCZolLFu0pWVG9sfs3pSRCChYGzAM9xGJS5ZqEMnBVfrbmj_OrOGytO0dy_cI0Kt3O0EYT00cHCXKLQTBgLycU6T1G_yEyUrSSh146uPAzVcrpavOaPVbRDPH2rweNawM-okZgNxGLG9vgJRi8VYeA7P5pbOmlF1TJUi71F7k14ZZPaoRMmnr9g';
             }
             window.token = this.token;
+            this.token = eventBus.spotifyToken;
+
+        if(this.token){
             // eslint-disable-next-line
             this.player = new Spotify.Player({
                 name: 'Composer Explorer',
@@ -67,8 +70,8 @@ export default {
               track_window: { current_track }
             }) => {
                 eventBus.$emit('firePlayerStateChanged', current_track, position, duration, paused);
-                //console.log('Currently Playing', current_track);
-                // console.log('Position in Song', position);
+                //console.log('Currently Playing', current_track.name);
+                console.log('Position in Song', position);
                 //console.log('Duration of Song', duration);
             });
 
@@ -79,7 +82,9 @@ export default {
             //     });
             // };
             this.player.connect();
+            }
         }
+
   },
 };
 </script>

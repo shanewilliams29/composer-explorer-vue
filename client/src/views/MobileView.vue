@@ -186,7 +186,7 @@ export default {
   }
   .composer-list-mobile{
     /*height: calc(100vh - 314px);*/
-    height: calc(var(--vh, 1vh) * 100 - 314px - 11px);
+    height: calc(var(--vh, 1vh) * 100 - 314px + 6.8px);
     overflow-y: scroll;
   }
   .composer-list-mobile .card{
@@ -199,7 +199,7 @@ export default {
   }
   .work-list-mobile{
     /*height: calc(100vh - 314px);*/
-    height: calc(var(--vh, 1vh) * 100 - 314px - 11px);
+    height: calc(var(--vh, 1vh) * 100 - 314px + 6.8px);
     overflow-y: scroll;
   }
   .work-list-mobile .card{
@@ -212,7 +212,7 @@ export default {
   }
   .album-list-mobile{
     /*height: calc(100vh - 314px);*/
-    height: calc(var(--vh, 1vh) * 100 - 314px - 11px);
+    height: calc(var(--vh, 1vh) * 100 - 314px + 6.8px);
     overflow-y: scroll;
     overflow-x: hidden;
   }
