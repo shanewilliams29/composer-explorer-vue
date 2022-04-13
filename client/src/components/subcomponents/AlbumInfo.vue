@@ -9,7 +9,7 @@
         ></b-card-img>
       </b-col>
       <b-col>
-        <b-card-body>
+        <b-card-body class="info-card-body">
           <b-card-text>
             <div class="centered album-data">
               <span style="font-weight: bold">{{title}}</span>
@@ -71,7 +71,7 @@ export default {
 .album-cover-col {
   padding-right: 0px;
 }
-.card {
+.info-card-body {
   background: none !important;
   border: 0px;
   width: 100%;

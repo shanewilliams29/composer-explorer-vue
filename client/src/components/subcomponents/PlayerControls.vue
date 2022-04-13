@@ -2,10 +2,12 @@
   <b-container class="playback-container">
  <b-row class="buttons-row">
   <b-col class="text-center">
+  <b-button class="playback-button" id="previous-work-button" @click="previousWork()"><b-icon-arrow-left-circle></b-icon-arrow-left-circle></b-button>
   <b-button class="playback-button" id="back-button" @click="back()"><b-icon-skip-start-fill></b-icon-skip-start-fill></b-button>
   <b-button class="playback-button" id="play-button" v-show="!playing" @click="play()"><b-icon-play-fill></b-icon-play-fill></b-button>
   <b-button class="playback-button" id="pause-button" v-show="playing" @click="pause()"><b-icon-pause-fill></b-icon-pause-fill></b-button>
   <b-button class="playback-button" id="forward-button" @click="next()"><b-icon-skip-end-fill></b-icon-skip-end-fill></b-button>
+  <b-button class="playback-button" id="next-work-button" @click="nextWork()"><b-icon-arrow-right-circle></b-icon-arrow-right-circle></b-button>
 </b-col>
 </b-row>
  <b-row class="seekbar-row">

@@ -66,7 +66,7 @@ beginningTrack(token) {
     })
     .then((res) => {
       if (res.status == 204) {
-        eventBus.$emit('fireNowPlaying');
+        this.pressPlay(token, window.device_id);
       } else {
         eventBus.$emit('fireNowPaused');
       }
