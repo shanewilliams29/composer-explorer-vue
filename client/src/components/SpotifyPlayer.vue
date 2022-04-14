@@ -22,10 +22,9 @@ export default {
             if (process.env.VUE_APP_BASE_URL != "http://localhost:5000/") {
                 this.token = eventBus.spotifyToken; // Improve this?
             } else {
-                this.token = 'BQA-wfIhhqVFmulPTrFHAhN9UJ-rMUvzhCZolLFu0pWVG9sfs3pSRCChYGzAM9xGJS5ZqEMnBVfrbmj_OrOGytO0dy_cI0Kt3O0EYT00cHCXKLQTBgLycU6T1G_yEyUrSSh146uPAzVcrpavOaPVbRDPH2rweNawM-okZgNxGLG9vgJRi8VYeA7P5pbOmlF1TJUi71F7k14ZZPaoRMmnr9g';
+                this.token = 'BQCeHM6Bnp-w63GyYIP7D_dVT8xnByf_T_3QC8NDTez5LB2CTJ6r4WJC32od-ipkRSJHoDAO8aqF32LJBCL92XKzlp8ds4Q0YDOsa42tG6SU4K46gwsvRMpZ6N0w3UYBxnjELmzxy6Up4-lkbp8znD7vqyGGXnNr5fSGNUqfY3b48rTswER7GbgRcJjaZn-rSplkzBHup-kuaNhbzCr4L_g';
             }
             window.token = this.token;
-            this.token = eventBus.spotifyToken;
 
         if(this.token){
             // eslint-disable-next-line
@@ -39,6 +38,7 @@ export default {
             this.player.addListener('ready', ({ device_id }) => {
                 this.device_id = device_id;
                 window.device_id = device_id;
+                eventBus.$emit('firePlayerReady');
                 console.log('Ready with Device ID', device_id);
             });
 
@@ -61,6 +61,7 @@ export default {
 
             this.player.addListener('autoplay_failed', () => {
               console.log('Autoplay is not allowed by the browser autoplay rules');
+              eventBus.$emit('fireAutoplayFailed');
             });
 
             this.player.addListener('player_state_changed', ({
@@ -71,7 +72,7 @@ export default {
             }) => {
                 eventBus.$emit('firePlayerStateChanged', current_track, position, duration, paused);
                 //console.log('Currently Playing', current_track.name);
-                console.log('Position in Song', position);
+                //console.log('Position in Song', position);
                 //console.log('Duration of Song', duration);
             });
 

@@ -56,7 +56,7 @@ export default {
     },
     back() {
       spotify.beginningTrack(window.token, window.device_id);
-      //this.setPlayback(0, this.duration);
+      this.setPlayback(0, this.duration);
     },
     next() {
       spotify.nextTrack(window.token);
@@ -112,12 +112,12 @@ export default {
   },
   created() {
     eventBus.$on('fireNowPlaying', () => {
-          this.playing = true;
-          this.delayStartTimer();
+          // this.playing = true;
+          // this.delayStartTimer();
     })
     eventBus.$on('fireNowPaused', () => {
-          this.playing = false;
-          this.suspend = true;
+          // this.playing = false;
+          // this.suspend = true;
     })
     eventBus.$on('fireSeekToPosition', () => {
          if (this.playing === true) {
@@ -135,7 +135,26 @@ export default {
     //       }
     //       this.setPlayback(data.progress_ms, data.item.duration_ms);
     // })
+
+    eventBus.$on('fireAutoplayFailed', () => {
+        this.playing = false;
+        this.suspend = true;
+        this.setPlayback(0, this.duration);
+    })
+
     eventBus.$on('firePlayerStateChanged', (track_data, position, duration, paused) => {
+      // console.log(position);
+      //ignore at beginning of song (glitchy)
+      if (position == 0 && !paused){
+          this.playing = true;
+          this.suspend = true;
+          this.setPlayback(0, duration);
+      }
+      else if (position > 0 && position < 3000 && !paused){
+          this.playing = true;
+          this.startTimer();
+      }
+      else {
           this.playing = !paused;
           if (this.playing == true) {
             this.startTimer();
@@ -143,6 +162,7 @@ export default {
             this.suspend = true;
           }
           this.setPlayback(position, duration);
+      }
     })
   },
   mounted() {

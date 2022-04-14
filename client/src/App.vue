@@ -1,8 +1,19 @@
 <template>
   <div id="app">
     <router-view/>
+    <SpotifyPlayer/>
   </div>
 </template>
+
+<script>
+import SpotifyPlayer from '@/components/SpotifyPlayer.vue'
+export default {
+  components: {
+    SpotifyPlayer
+  },
+}
+</script>
+
 
 <style>
   html, body {

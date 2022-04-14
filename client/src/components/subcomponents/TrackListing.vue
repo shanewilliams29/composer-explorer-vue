@@ -59,15 +59,17 @@ export default {
     },
   created() {
     eventBus.$on('fireSetAlbum', (album) => {
-      console.log(album);
         this.album = album;
-        if(window.token){
-        this.playTracks(album.tracks[0][2]);
+        if(window.token && window.device_id){
+          this.playTracks(album.tracks[0][2]);
         }
         // this.selectTrack(album.tracks[0][1]);
         // this.numTracks = album.tracks.length;
         // this.selectedTrackNo = 0;
     })
+
+
+
     // eventBus.$on('fireNextTrack', () => {
     //     if (this.selectedTrackNo < this.numTracks - 1) {
     //       this.selectedTrackNo = this.selectedTrackNo + 1

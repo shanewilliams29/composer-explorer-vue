@@ -10,7 +10,7 @@
       </b-row>
     </div>
     <PageFooter/>
-    <SpotifyPlayer/>
+
   </div>
 </template>
 
@@ -21,7 +21,7 @@ import ComposerList from '@/components/ComposerList.vue'
 import WorkList from '@/components/WorkList.vue'
 import AlbumList from '@/components/AlbumList.vue'
 import PageFooter from '@/components/PageFooter.vue'
-import SpotifyPlayer from '@/components/SpotifyPlayer.vue'
+
 import axios from 'axios';
 import {eventBus} from "../main.js";
 
@@ -33,8 +33,7 @@ export default {
     ComposerList,
     WorkList,
     AlbumList,
-    PageFooter,
-    SpotifyPlayer
+    PageFooter
   },
   data() {
     return {
@@ -46,7 +45,7 @@ export default {
       axios.get(path)
         .then((res) => {
           if (res.data.status == "success") {
-            eventBus.$emit('fireToken');
+            // eventBus.$emit('fireToken');
             eventBus.spotifyToken = res.data.token;
           }
           console.log(eventBus.spotifyToken);
@@ -57,11 +56,13 @@ export default {
         });
     },
   },
-  created() {
+  beforeCreate(){
     if( screen.width <= 760 ) {
-        this.$router.push('mobile');
+        //this.$router.replace('mobile');
+        window.location.replace('mobile');
+    } else {
+      this.getSpotifyToken();
     }
-    this.getSpotifyToken();
   },
 }
 </script>

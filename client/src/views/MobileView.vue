@@ -39,7 +39,6 @@
 <div id="footer">
     <MobileTracks/>
     <PageFooter/>
-    <SpotifyPlayer/>
 </div>
   </div>
 </template>
@@ -51,7 +50,6 @@ import WorkList from '@/components/WorkList.vue'
 import AlbumList from '@/components/AlbumList.vue'
 import MobileTracks from '@/components/mobile/MobileTracks.vue'
 import PageFooter from '@/components/mobile/PageFooter.vue'
-import SpotifyPlayer from '@/components/SpotifyPlayer.vue'
 import axios from 'axios';
 import {eventBus} from "../main.js";
 
@@ -63,8 +61,7 @@ export default {
     WorkList,
     AlbumList,
     MobileTracks,
-    PageFooter,
-    SpotifyPlayer,
+    PageFooter
   },
   data() {
     return {

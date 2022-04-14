@@ -62,8 +62,8 @@ export default {
     eventBus.$on('fireSetAlbum', (album) => {
         this.album = album;
         this.selectTrack(album.tracks[0][1]);
-        if(window.token){
-        this.playTracks(album.tracks[0][2]);
+        if(window.token && window.device_id){
+          this.playTracks(album.tracks[0][2]);
         }
         // this.numTracks = album.tracks.length;
         // this.selectedTrackNo = 0;
