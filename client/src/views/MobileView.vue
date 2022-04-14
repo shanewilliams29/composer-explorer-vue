@@ -27,7 +27,7 @@
 
     <b-card no-body class="mb-1">
       <b-card-header header-tag="header" class="p-1" role="tab">
-        <b-button class="header-button" :disabled="albumDisabled" @click="albumToggle" block variant="secondary"><span class="heading-text">{{ title }}</span><span class="mb-0 float-right"><b-icon-chevron-down></b-icon-chevron-down></span></b-button>
+        <b-button class="header-button last-button" :disabled="albumDisabled" @click="albumToggle" block variant="secondary"><span class="heading-text">{{ title }}</span><span class="mb-0 float-right"><b-icon-chevron-down></b-icon-chevron-down></span></b-button>
       </b-card-header>
       <b-collapse :visible="albumDisabled" id="accordion-3" accordion="my-accordion" role="tabpanel">
         <b-card-body>
@@ -157,10 +157,10 @@ export default {
     background: #f1f2f4 !important;
   }
   .btn-secondary{
-    background-color: #484e53 !important;
+    background-color: #343a40 !important;
     text-align: middle;
   }
-  .btn:hover{
+  .btn-secondary:hover{
     background-color: #717579 !important;
   }
   .card{
@@ -178,6 +178,9 @@ export default {
       outline: none !important;
       box-shadow: none !important;
   }
+  .last-button{
+    border-bottom: solid 2px white !important;
+  }
   .p-1{
     padding: 0px !important;
     border-radius: 0px !important;
@@ -188,7 +191,7 @@ export default {
   }
   .composer-list-mobile{
     /*height: calc(100vh - 314px);*/
-    height: calc(var(--vh, 1vh) * 100 - 314px + 6.8px);
+    height: calc(var(--vh, 1vh) * 100 - 314px + 8.5px);
     overflow-y: scroll;
   }
   .composer-list-mobile .card{
@@ -201,7 +204,7 @@ export default {
   }
   .work-list-mobile{
     /*height: calc(100vh - 314px);*/
-    height: calc(var(--vh, 1vh) * 100 - 314px + 6.8px);
+    height: calc(var(--vh, 1vh) * 100 - 314px + 8.5px);
     overflow-y: scroll;
   }
   .work-list-mobile .card{
@@ -214,7 +217,7 @@ export default {
   }
   .album-list-mobile{
     /*height: calc(100vh - 314px);*/
-    height: calc(var(--vh, 1vh) * 100 - 314px + 6.8px);
+    height: calc(var(--vh, 1vh) * 100 - 314px + 8.5px);
     overflow-y: scroll;
     overflow-x: hidden;
   }
@@ -228,6 +231,7 @@ export default {
   }
 
   #footer{
+    height: 124px;
     overflow-x: hidden;
     overflow-y: hidden;
   }

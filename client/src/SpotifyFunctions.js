@@ -76,6 +76,31 @@ beginningTrack(token) {
     });
 },
 
+previousTrack(token) {
+  const path = 'https://api.spotify.com/v1/me/player/previous';
+  axios({
+      method: 'post',
+      url: path,
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + token
+      }
+    })
+    .then((res) => {
+      if (res.status == 204) {
+        this.pressPlay(token, window.device_id);
+        //eventBus.$emit('fireNowPlaying');
+        //this.getCurrentPlayerInfo(token);
+      } else {
+        eventBus.$emit('fireNowPaused');
+      }
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+},
+
 nextTrack(token) {
   const path = 'https://api.spotify.com/v1/me/player/next';
   axios({

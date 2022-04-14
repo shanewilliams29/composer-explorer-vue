@@ -1,7 +1,7 @@
 <template>
 <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
   <ol class="carousel-indicators">
-    <li data-target="#carouselExampleIndicators" :class="{'active': (track[1] == selectedTrack)}" :data-slide-to="track[1]" v-for="track in album.tracks" :key="track[1]"></li>
+    <li data-target="carouselExampleIndicators" :class="{'active': (track[1] == selectedTrack)}" :data-slide-to="track[1]" v-for="track in album.tracks" :key="track[1]"></li>
   </ol>
   <div class="carousel-inner">
     <div class="carousel-item" :class="{'active': (track[1] == selectedTrack)}" v-for="track in album.tracks" :key="track[1]">
@@ -26,6 +26,14 @@
       Test 3
     </div>
   </div>
+  <a class="carousel-control-prev" @click="previousTrack()" role="button" data-slide="prev">
+    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+    <span class="sr-only">Previous</span>
+  </a>
+  <a class="carousel-control-next" @click="nextTrack()" role="button" data-slide="next">
+    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+    <span class="sr-only">Next</span>
+  </a>
 </div>
 </template>
 
@@ -48,6 +56,12 @@ export default {
   methods: {
     selectTrack(track){
         this.selectedTrack = track;
+    },
+    previousTrack(){
+        spotify.previousTrack(window.token);
+    },
+    nextTrack(){
+        spotify.nextTrack(window.token);
     },
     playTracks(tracks){
       let uriList = {}
@@ -89,25 +103,36 @@ export default {
 <style scoped>
 table{
   width: 100%;
-  margin-top: 6px;
+  margin-top: 10px;
+  margin-bottom: 5px;
 }
 td{
   color: white;
-  padding-left: 10px;
-  padding-right: 10px;
+  padding-left: 50px;
+  padding-right: 50px;
   text-align: center;
   vertical-align: middle;
 }
 .carousel-inner{
   width:100%;
-  height: 45px !important;
-  background-color: #484e53;
+  height: 50px !important;
+  background-color: #343a40;
 }
 .carousel-item{
   text-align: center;
 }
+  .carousel-item{
+        transition: -webkit-transform .6s ease;
+        transition: transform .6s ease;
+        transition: transform .6s ease,-webkit-transform .6s ease;
+    }
+.carousel-indicators li{
+  border-bottom-width: 7px;
+  opacity: 0.25;
+}
+
 .track-card {
-  background-color: #484e53 !important;
+  background-color: #343a40 !important;
   border: 0px;
   width: 100%;
   overflow-x: hidden;

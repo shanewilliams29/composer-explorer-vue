@@ -17,7 +17,7 @@
 </b-col>
 </b-row>
  <b-row class="buttons-row">
-  <b-col class="text-center">
+  <b-col class="text-center button-font-size">
   <b-button class="playback-button" id="previous-work-button" @click="previousWork()"><b-icon-arrow-left-circle></b-icon-arrow-left-circle></b-button>
   <b-button class="playback-button" id="back-button" @click="back()"><b-icon-skip-start-fill></b-icon-skip-start-fill></b-button>
   <b-button class="playback-button" id="play-button" v-show="!playing" @click="play()"><b-icon-play-fill></b-icon-play-fill></b-button>
@@ -175,6 +175,8 @@ export default {
 .playback-container{
   /*padding: calc((100px - 36px - 27px)/2);*/
   padding: 13px;
+  padding-top: 0px;
+  padding-bottom: 0px;
   font-size: 14px;
 }
 
@@ -242,5 +244,11 @@ export default {
     outline: none !important;
     box-shadow: none !important;
     background-color: none !important;
+}
+.buttons-row{
+  padding-top: 3px;
+}
+.button-font-size .btn{
+  font-size: 20px !important;
 }
 </style>

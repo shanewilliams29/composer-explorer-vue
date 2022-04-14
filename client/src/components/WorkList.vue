@@ -28,10 +28,8 @@
                 >
                   <td width="17%">
                     <span style="white-space: nowrap; color: darkred"
-                      ><span v-if="work.cat">{{ work.cat }}</span
+                      ><span v-if="work.cat">{{ work.cat }}&nbsp;&nbsp;</span
                       ><span v-else>{{ work.date }}</span
-                      ><span v-show="work.id == selectedWork"
-                        >&nbsp;<b-icon icon="heart"></b-icon>&nbsp;</span
                       ></span
                     >
                   </td>

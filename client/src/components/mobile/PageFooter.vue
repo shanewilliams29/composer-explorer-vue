@@ -37,7 +37,7 @@ export default {
   border-radius: 0px;
 }
 .info-col {
-  height: 100px;
+  height: 83px;
   overflow-y: hidden;
 }
 .album-cover-col {
