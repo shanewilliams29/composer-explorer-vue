@@ -143,7 +143,7 @@ export default {
     })
 
     eventBus.$on('firePlayerStateChanged', (track_data, position, duration, paused) => {
-      console.log(position);
+      //console.log(position);
       //ignore at beginning of song (glitchy)
       if (position == 0 && !paused){
           this.playing = true;
