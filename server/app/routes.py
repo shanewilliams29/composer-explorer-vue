@@ -26,8 +26,9 @@ def before_request():
 @app.route('/', defaults={'path': ''})
 @app.route("/<string:path>")
 def index(path):
-    if path == 'mobile':
+    if request.MOBILE and not session['mobile']:
         session['mobile'] = 'true'
+        return redirect('/mobile')
 
     return render_template("index.html")
     # return app.send_static_file('index.html')
@@ -65,7 +66,10 @@ def spotify():
     if mode == "DEVELOPMENT":
         return redirect("http://localhost:8080/")
     else:
-        return redirect("/")
+        if session['mobile']:
+            return redirect("/mobile")
+        else:
+            return redirect("/")
 
 
 @app.route('/log_out')

@@ -66,7 +66,8 @@ export default {
   data() {
     return {
       composer: "Beethoven",
-      title: "Piano Concerto No. 5 in E♭ major",
+      title: "",
+      hold_title: "Piano Concerto No. 5 in E♭ major",
       composerDisabled: true,
       workDisabled: false,
       albumDisabled: false,
@@ -120,7 +121,11 @@ export default {
     })
     // eslint-disable-next-line
     eventBus.$on('fireAlbums', (work_id, title) => {
-        this.title = title;
+        this.hold_title = title;
+    })
+    // eslint-disable-next-line
+    eventBus.$on('fireAlbumData', (work_id, title) => {
+        this.title = this.hold_title;
     })
     let vh = window.innerHeight * 0.01;
     document.documentElement.style.setProperty('--vh', `${vh}px`);
