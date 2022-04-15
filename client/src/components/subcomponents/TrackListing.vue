@@ -8,8 +8,8 @@
               class="track-row"
               v-for="track in album.tracks"
               :key="track[1]"
-              @click="selectTrack(track[1]); playTracks(track[2]); "
-              :class="{'highlight-track': ((track[1]) == selectedTrack)}"
+              @click="selectTrack(track[0]); playTracks(track[2]); "
+              :class="{'highlight-track': ((track[0]) == selectedTrack)}"
             >
               <td
                 width="100%"
@@ -20,7 +20,7 @@
                   max-width: 1px;
                 "
               >
-                  <!--   ▶&nbsp; {{ track[1] }} vs {{ selectedTrack }} -->
+                  <!-- {{ track[0] }} vs {{ selectedTrack }} -->
               ▶&nbsp; {{ track[0].substring(track[0].lastIndexOf(':') + 1) }}
               </td>
             </tr>
@@ -89,7 +89,8 @@ export default {
     // })
     // eslint-disable-next-line
     eventBus.$on('firePlayerStateChanged', (track_data, position, duration, paused) => {
-        this.selectedTrack = track_data['id'];
+        this.selectedTrack = track_data['name'];
+        //match on name because ID may change due to Spotify track redirecting
     })
   },
 };

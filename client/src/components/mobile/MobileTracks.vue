@@ -1,10 +1,10 @@
 <template>
 <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
   <ol class="carousel-indicators">
-    <li data-target="carouselExampleIndicators" :class="{'active': (track[1] == selectedTrack)}" :data-slide-to="track[1]" v-for="track in album.tracks" :key="track[1]" @click="playTracks(track[2])"></li>
+    <li data-target="carouselExampleIndicators" :class="{'active': (track[0] == selectedTrack)}" :data-slide-to="track[0]" v-for="track in album.tracks" :key="track[0]" @click="playTracks(track[2])"></li>
   </ol>
   <div class="carousel-inner">
-    <div class="carousel-item" :class="{'active': (track[1] == selectedTrack)}" v-for="track in album.tracks" :key="track[1]">
+    <div class="carousel-item" :class="{'active': (track[0] == selectedTrack)}" v-for="track in album.tracks" :key="track[0]">
     <table>
       <tr>
         <td width="100%"
@@ -40,6 +40,7 @@
 <script>
 import {eventBus} from "../../main.js";
 import spotify from '@/SpotifyFunctions.js'
+import {currentConfig} from "../../main.js";
 
 export default {
   data() {
@@ -66,6 +67,10 @@ export default {
     playTracks(tracks){
       let uriList = {}
       let jsonList = {}
+
+      currentConfig.playTracks = tracks;
+      localStorage.setItem('currentConfig', JSON.stringify(currentConfig));
+
       uriList['uris'] = tracks.split(' ');
       jsonList = JSON.stringify(uriList);
       spotify.playTracks(window.token, window.device_id, jsonList);
@@ -75,7 +80,7 @@ export default {
   created() {
     eventBus.$on('fireSetAlbum', (album) => {
         this.album = album;
-        this.selectTrack(album.tracks[0][1]);
+        this.selectTrack(album.tracks[0][0]);
         if(window.token && window.device_id){
           this.playTracks(album.tracks[0][2]);
         }
@@ -94,7 +99,7 @@ export default {
     // })
     // eslint-disable-next-line
     eventBus.$on('firePlayerStateChanged', (track_data, position, duration, paused) => {
-        this.selectedTrack = track_data['id'];
+        this.selectedTrack = track_data['name'];
     })
   },
 };
