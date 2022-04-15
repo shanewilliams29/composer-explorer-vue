@@ -1,10 +1,10 @@
 <template>
 <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
   <ol class="carousel-indicators">
-    <li data-target="carouselExampleIndicators" :class="{'active': (track[0] == selectedTrack)}" :data-slide-to="track[0]" v-for="track in album.tracks" :key="track[0]" @click="playTracks(track[2])"></li>
+    <li data-target="carouselExampleIndicators" :class="{'active': (strFix(track[0]) == selectedTrack)}" :data-slide-to="strFix(track[0])" v-for="track in album.tracks" :key="strFix(track[0])" @click="playTracks(track[2])"></li>
   </ol>
   <div class="carousel-inner">
-    <div class="carousel-item" :class="{'active': (track[0] == selectedTrack)}" v-for="track in album.tracks" :key="track[0]">
+    <div class="carousel-item" :class="{'active': (strFix(track[0]) == selectedTrack)}" v-for="track in album.tracks" :key="strFix(track[0])">
     <table>
       <tr>
         <td width="100%"
@@ -55,8 +55,13 @@ export default {
     };
   },
   methods: {
+    strFix(item){
+      let fixed = item.replace(/[^A-Z0-9]+/ig, "");
+      return fixed;
+    },
     selectTrack(track){
-        this.selectedTrack = track;
+        this.selectedTrack = this.strFix(track);
+        //console.log(this.selectedTrack);
     },
     previousTrack(){
         spotify.previousTrack(window.token);
@@ -67,7 +72,6 @@ export default {
     playTracks(tracks){
       let uriList = {}
       let jsonList = {}
-
       currentConfig.playTracks = tracks;
       localStorage.setItem('currentConfig', JSON.stringify(currentConfig));
 
@@ -80,6 +84,7 @@ export default {
   created() {
     eventBus.$on('fireSetAlbum', (album) => {
         this.album = album;
+        // console.log(album.tracks[0][0])
         this.selectTrack(album.tracks[0][0]);
         if(window.token && window.device_id){
           this.playTracks(album.tracks[0][2]);
@@ -99,7 +104,8 @@ export default {
     // })
     // eslint-disable-next-line
     eventBus.$on('firePlayerStateChanged', (track_data, position, duration, paused) => {
-        this.selectedTrack = track_data['name'];
+        this.selectTrack(track_data['name']);
+        //console.log(this.selectedTrack);
     })
   },
 };

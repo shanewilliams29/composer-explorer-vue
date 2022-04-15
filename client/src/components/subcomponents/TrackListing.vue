@@ -9,7 +9,7 @@
               v-for="track in album.tracks"
               :key="track[1]"
               @click="selectTrack(track[0]); playTracks(track[2]); "
-              :class="{'highlight-track': ((track[0]) == selectedTrack)}"
+              :class="{'highlight-track': (strFix(track[0]) == selectedTrack)}"
             >
               <td
                 width="100%"
@@ -47,9 +47,12 @@ export default {
     };
   },
   methods: {
+    strFix(item){
+      let fixed = item.replace(/[^A-Z0-9]+/ig, "");
+      return fixed;
+    },
     selectTrack(track){
-        console.log(track);
-        this.selectedTrack = track;
+        this.selectedTrack = this.strFix(track);
     },
     playTracks(tracks){
       let uriList = {}
@@ -89,7 +92,7 @@ export default {
     // })
     // eslint-disable-next-line
     eventBus.$on('firePlayerStateChanged', (track_data, position, duration, paused) => {
-        this.selectedTrack = track_data['name'];
+        this.selectTrack(track_data['name']);
         //match on name because ID may change due to Spotify track redirecting
     })
   },
