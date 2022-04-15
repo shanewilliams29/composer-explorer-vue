@@ -116,12 +116,12 @@ export default {
     composerFilter() {
       eventBus.$emit('fireComposerFilter', this.composerFilterForm);
       this.composerSearchForm = '';
-      console.log(this.composerFilterForm);
+      //console.log(this.composerFilterForm);
     },
     composerSearch() {
       eventBus.$emit('fireComposerSearch', this.composerSearchForm);
       this.composerFilterForm = null;
-      console.log(this.composerSearchForm);
+      //console.log(this.composerSearchForm);
     },
     onComposerFocus() {
       this.composerSearchForm = '';
@@ -130,12 +130,12 @@ export default {
     workFilter() {
       eventBus.$emit('fireWorkFilter', this.workFilterField);
       this.workSearchField = '';
-      console.log(this.workFilterField);
+      //console.log(this.workFilterField);
     },
     workSearch() {
       eventBus.$emit('fireWorkSearch', this.workSearchField);
       this.workFilterField = null;
-      console.log(this.workSearchField);
+      //console.log(this.workSearchField);
     },
     onWorkFocus() {
       this.workSearchField = '';

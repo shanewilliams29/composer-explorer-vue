@@ -53,6 +53,8 @@ export default {
     },
     selectTrack(track){
         this.selectedTrack = this.strFix(track);
+        //console.log(this.selectedTrack);
+
     },
     playTracks(tracks){
       let uriList = {}
@@ -69,6 +71,7 @@ export default {
     },
   created() {
     eventBus.$on('fireSetAlbum', (album) => {
+      //console.log(album.id);
         this.album = album;
         if(window.token && window.device_id){
           this.playTracks(album.tracks[0][2]);

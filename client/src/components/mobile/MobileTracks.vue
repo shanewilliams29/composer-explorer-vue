@@ -1,10 +1,10 @@
 <template>
 <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
   <ol class="carousel-indicators">
-    <li data-target="carouselExampleIndicators" :class="{'active': (strFix(track[0]) == selectedTrack)}" :data-slide-to="strFix(track[0])" v-for="track in album.tracks" :key="strFix(track[0])" @click="playTracks(track[2])"></li>
+    <li data-target="carouselExampleIndicators" :class="{'active': (strFix(track[0]) == selectedTrack)}" :data-slide-to="track[1]" v-for="track in album.tracks" :key="track[1]" @click="playTracks(track[2])"></li>
   </ol>
   <div class="carousel-inner">
-    <div class="carousel-item" :class="{'active': (strFix(track[0]) == selectedTrack)}" v-for="track in album.tracks" :key="strFix(track[0])">
+    <div class="carousel-item" :class="{'active': (strFix(track[0]) == selectedTrack)}" v-for="track in album.tracks" :key="track[1]">
     <table>
       <tr>
         <td width="100%"

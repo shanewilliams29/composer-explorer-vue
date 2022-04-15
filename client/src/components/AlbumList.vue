@@ -108,7 +108,7 @@ export default {
         .then((res) => {
           this.albums = res.data.albums;
           this.loading = false;
-          console.log(this.albums[0].id);
+          //console.log(this.albums[0].id);
           this.selectRow(this.albums[0].id); // select first row
           currentConfig.album = this.albums[0].id;
           localStorage.setItem('currentConfig', JSON.stringify(currentConfig));
