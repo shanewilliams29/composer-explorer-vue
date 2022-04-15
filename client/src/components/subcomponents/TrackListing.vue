@@ -9,7 +9,7 @@
               v-for="track in album.tracks"
               :key="track[1]"
               @click="selectTrack(track[1]); playTracks(track[2]); "
-              :class="{'highlight-track': (track[1] == selectedTrack)}"
+              :class="{'highlight-track': ((track[1]) == selectedTrack)}"
             >
               <td
                 width="100%"
@@ -20,7 +20,8 @@
                   max-width: 1px;
                 "
               >
-                ▶&nbsp; {{ track[0].substring(track[0].lastIndexOf(':') + 1) }}
+                  <!--   ▶&nbsp; {{ track[1] }} vs {{ selectedTrack }} -->
+              ▶&nbsp; {{ track[0].substring(track[0].lastIndexOf(':') + 1) }}
               </td>
             </tr>
           </table>
@@ -47,6 +48,7 @@ export default {
   },
   methods: {
     selectTrack(track){
+        console.log(track);
         this.selectedTrack = track;
     },
     playTracks(tracks){

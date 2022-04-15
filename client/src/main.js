@@ -22,8 +22,8 @@ export const defaultConfig = {
                                   composer: "Beethoven",
                                   composerId: "1",
                                   work: "BEETHOVEN00005",
-                                  workTitle: "Symphony No. 5 in C minor", //need to fix playTracks
-                                  playTracks: "spotify:track:2MyGUtp0uXf3wYRBDWdFAi spotify:track:2a6EP73QVZxj0NSVEta4Ad spotify:track:4cSPAcd8wWludhQ4RzVO5Y",
+                                  workTitle: "Symphony No. 5 in C minor",
+                                  playTracks: "spotify:track:6cUCckpdlqHJ5Ascf2uH2A spotify:track:1L0a0dpHaMWgAoEEvFfycT spotify:track:7ojkji0OYCOpl3UMy92gEf spotify:track:4IHaNEgvWUD63pMTWrclb2",
                                   album: "BEETHOVEN000056eOuqhCfrTPp1H0YbQ9PmL"
                                 };
 
