@@ -1,10 +1,10 @@
 <template>
 <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
   <ol class="carousel-indicators">
-    <li data-target="carouselExampleIndicators" :class="{'active': (strFix(track[0]) == selectedTrack)}" :data-slide-to="track[1]" v-for="track in album.tracks" :key="track[1]" @click="playTracks(track[2])"></li>
+    <li data-target="carouselExampleIndicators" :class="{'active': trackMatch(track)}" :data-slide-to="track[1]" v-for="track in album.tracks" :key="track[1]" @click="playTracks(track[2])"></li>
   </ol>
   <div class="carousel-inner">
-    <div class="carousel-item" :class="{'active': (strFix(track[0]) == selectedTrack)}" v-for="track in album.tracks" :key="track[1]">
+    <div class="carousel-item" :class="{'active': trackMatch(track)}" v-for="track in album.tracks" :key="track[1]">
     <table>
       <tr>
         <td width="100%"
@@ -47,11 +47,12 @@ export default {
     return {
       album: [],
       title: "",
-      selectedTrack: "",
+      selectedTrack: "Track",
       selectedTrackNo : "",
       numTracks: "",
       slide: 0,
-      sliding: null
+      sliding: null,
+      stopMatch: false // necessary in case album has multiple tracks with the same name (would select them all)
     };
   },
   methods: {
@@ -60,8 +61,22 @@ export default {
       return fixed;
     },
     selectTrack(track){
-        this.selectedTrack = this.strFix(track);
-        //console.log(this.selectedTrack);
+        this.selectedTrack = track;
+    },
+    trackMatch(track){
+
+        // match on IDs
+        if (this.selectedTrack[1] == track[1]){
+            this.stopMatch = true;
+            return true;
+
+        //match on name
+        } else if (this.strFix(this.selectedTrack[0]) == this.strFix(track[0]) && this.stopMatch == false){
+            this.stopMatch = false;
+            return true;
+        } else {
+            return false;
+        }
     },
     previousTrack(){
         spotify.previousTrack(window.token);
@@ -104,8 +119,11 @@ export default {
     // })
     // eslint-disable-next-line
     eventBus.$on('firePlayerStateChanged', (track_data, position, duration, paused) => {
-        this.selectTrack(track_data['name']);
-        //console.log(this.selectedTrack);
+        let track = []
+        track[1] = track_data['id'];
+        track[0] = track_data['name'];
+        this.selectTrack(track);
+        this.stopMatch = false;
     })
   },
 };
