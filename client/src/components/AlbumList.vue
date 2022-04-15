@@ -8,23 +8,23 @@
         <b-card-group deck v-show="!loading">
           <b-card
             v-for="album in albums"
-            :key="album.album_id"
-            :id="album.album_id"
+            :key="album.id"
+            :id="album.id"
             no-body
             header-tag="header"
-            @click="selectRow(album.album_id); getAlbumData(album.id);"
-            :class="{'highlight': (album.album_id == selectedAlbum)}"
+            @click="selectRow(album.id); getAlbumData(album.id);"
+            :class="{'highlight': (album.id == selectedAlbum)}"
           >
             <div class="row">
               <b-col class="album_columns" cols="2">
                 <b-avatar
-                  v-show="album.album_id != selectedAlbum"
+                  v-show="album.id != selectedAlbum"
                   rounded="left"
                   size="48px"
                   :src="album.album_img"
                 ></b-avatar>
                 <b-avatar
-                  v-show="album.album_id == selectedAlbum"
+                  v-show="album.id == selectedAlbum"
                   variant="dark"
                   icon="heart"
                   rounded="left"
@@ -100,6 +100,7 @@ export default {
     };
   },
   methods: {
+    // loads from selected work
     getAlbums(id) {
       this.loading = true;
       const path = 'api/albums/' + id;
@@ -107,7 +108,10 @@ export default {
         .then((res) => {
           this.albums = res.data.albums;
           this.loading = false;
-          this.selectRow(this.albums[0].album_id); // select first row
+          console.log(this.albums[0].id);
+          this.selectRow(this.albums[0].id); // select first row
+          currentConfig.album = this.albums[0].id;
+          localStorage.setItem('currentConfig', JSON.stringify(currentConfig));
           eventBus.$emit('fireAlbumData', this.albums[0].id);
         })
         .catch((error) => {
@@ -116,17 +120,38 @@ export default {
           this.loading = false;
         });
     },
-    getAlbumData(album_id) {
-        eventBus.$emit('fireAlbumData', album_id);
+    // loads from localstorage
+    initialGetAlbums(id) {
+      this.loading = true;
+      const path = 'api/albums/' + id;
+      axios.get(path)
+        .then((res) => {
+          this.albums = res.data.albums;
+          this.loading = false;
+
+          this.selectRow(currentConfig.album);
+          eventBus.$emit('fireAlbumData', currentConfig.album);
+          //this.selectRow(this.albums[0].album_id); // select first row
+          //eventBus.$emit('fireAlbumData', this.albums[0].id);
+        })
+        .catch((error) => {
+          // eslint-disable-next-line
+          console.error(error);
+          this.loading = false;
+        });
+    },
+    getAlbumData(albumId) {
+        eventBus.$emit('fireAlbumData', albumId);
+        currentConfig.album = albumId;
+        localStorage.setItem('currentConfig', JSON.stringify(currentConfig));
         //this.$refs.composer.selectColor = "blue";
     },
       selectRow(album){
-        // console.log(this.$refs["1"][0].id);
         this.selectedAlbum = album;
     },
   },
   created() {
-    this.getAlbums(currentConfig.work);
+    this.initialGetAlbums(currentConfig.work);
     eventBus.$on('fireAlbums', (work_id) => {
             this.getAlbums(work_id);
     })

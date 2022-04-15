@@ -1,9 +1,9 @@
 import axios from 'axios';
 import {eventBus} from "./main.js";
+import {currentConfig} from "./main.js";
 
 var spotify = {
 
-// may need to use flask endpoint for this
 pressPlay(token, device_id) {
   const path = 'https://api.spotify.com/v1/me/player/play';
   axios({
@@ -27,11 +27,11 @@ pressPlay(token, device_id) {
     })
     // eslint-disable-next-line
     .catch((error) => {
-      // initial startup
+      // fails on first play of new startup, play from localstorage
       let uriList = {}
       let jsonList = {}
 
-      let tracks = "spotify:track:2MyGUtp0uXf3wYRBDWdFAi spotify:track:2a6EP73QVZxj0NSVEta4Ad spotify:track:4cSPAcd8wWludhQ4RzVO5Y";
+      let tracks = currentConfig.playTracks;
       uriList['uris'] = tracks.split(' ');
       jsonList = JSON.stringify(uriList);
       this.playTracks(token, device_id, jsonList);

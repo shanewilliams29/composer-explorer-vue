@@ -78,6 +78,7 @@
 <script>
 import axios from 'axios';
 import {eventBus} from "../main.js";
+import {currentConfig} from "../main.js";
 
 export default {
   data() {
@@ -141,13 +142,15 @@ export default {
         eventBus.$emit('fireComposers', composer);
         //this.$refs.composer.selectColor = "blue";
     },
-    selectRow(composer){
-        this.selectedComposer = composer;
+    selectRow(composerId){
+        this.selectedComposer = composerId;
+        currentConfig.composerId = composerId;
+        localStorage.setItem('currentConfig', JSON.stringify(currentConfig));
     },
   },
   created() {
     this.getComposers();
-    this.selectRow("1")
+    this.selectRow(currentConfig.composerId);
     eventBus.$on('fireComposerFilter', (item) => {
         this.getFilteredComposers(item);
     })

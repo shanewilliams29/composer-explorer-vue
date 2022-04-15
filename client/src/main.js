@@ -18,15 +18,24 @@ Vue.use(IconsPlugin)
 export const eventBus = new Vue();
 export const spotifyPlayer = new Vue();
 export const baseURL = process.env.VUE_APP_BASE_URL;
-export const currentConfig = {
+export const defaultConfig = {
                                   composer: "Beethoven",
+                                  composerId: "1",
                                   work: "BEETHOVEN00005",
-                                  workTitle: "Symphony No. 5 in C minor",
-                                  album: "",
-                                  progress: 0
+                                  workTitle: "Symphony No. 5 in C minor", //need to fix playTracks
+                                  playTracks: "spotify:track:2MyGUtp0uXf3wYRBDWdFAi spotify:track:2a6EP73QVZxj0NSVEta4Ad spotify:track:4cSPAcd8wWludhQ4RzVO5Y",
+                                  album: "BEETHOVEN000056eOuqhCfrTPp1H0YbQ9PmL"
                                 };
 
+let config = {}
 
+if (localStorage.getItem("currentConfig") !== null) {
+    config = JSON.parse(localStorage.getItem('currentConfig'));
+} else {
+    config = defaultConfig;
+}
+
+export const currentConfig = config;
 
 new Vue({
   router,

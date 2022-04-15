@@ -33,6 +33,7 @@
 <script>
 import {eventBus} from "../../main.js";
 import spotify from '@/SpotifyFunctions.js'
+import {currentConfig} from "../../main.js";
 
 export default {
   data() {
@@ -51,6 +52,10 @@ export default {
     playTracks(tracks){
       let uriList = {}
       let jsonList = {}
+
+      currentConfig.playTracks = tracks;
+      localStorage.setItem('currentConfig', JSON.stringify(currentConfig));
+
       uriList['uris'] = tracks.split(' ');
       jsonList = JSON.stringify(uriList);
       spotify.playTracks(window.token, window.device_id, jsonList);

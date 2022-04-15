@@ -4,6 +4,7 @@
 
 <script>
 import {eventBus} from "../main.js";
+
 export default {
   data() {
     return {
@@ -22,7 +23,7 @@ export default {
             if (process.env.VUE_APP_BASE_URL != "http://localhost:5000/") {
                 this.token = eventBus.spotifyToken; // Improve this?
             } else {
-                this.token = 'BQD4thx33xmoXbsICctNYDkDZDGurQyr0emXCfh1mY7YwpaTnNWWqCsHTPSuw2TygV94tLOnJhV2LXylqx3XYBsHnSaG4AXxMvBlqd0OYotQrvpRNBw5NCXv-DZhl6e7QEJ2ujVSFsLoW5d23tNtVCKCNdUCmxTRZA8UOiMf4c_RQ5nkuxUfOgK29cNJcsLYkfxyg2k10WvcrlEIdwkNf7s';
+                this.token = 'BQCfPxlKZ9K78Ps0TVRcxxPXfQh3jZMJ5XPXNTcjKiGLazrirtqpUNdi7TBSjRqedsURkFvUEPM4Uio9zUH3tRO-cU97lpgQkbNtcu-Uc29djclrvTd79cvX9zktZzWqOPb0nVcezBPXUx0daJYiqZzAa6zNJH-1XGFwcPs6pMJ8DSbd_CqE4t-9ys4fMhnzNS2_jXGIkmBDfB_VL8HJwnA';
             }
             window.token = this.token;
 

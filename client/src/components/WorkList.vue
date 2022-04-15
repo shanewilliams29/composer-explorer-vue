@@ -93,11 +93,15 @@ export default {
           this.loading = false;
         });
     },
-      getAlbums(work_id, title) {
-        eventBus.$emit('fireAlbums', work_id, title);
+      getAlbums(workId, title) {
+        eventBus.$emit('fireAlbums', workId, title);
+        currentConfig.work = workId;
+        currentConfig.workTitle = title;
+        localStorage.setItem('currentConfig', JSON.stringify(currentConfig));
     },
       selectRow(work){
         this.selectedWork = work;
+
     },
     getFilteredWorks(item) {
       this.loading = true;
@@ -138,6 +142,8 @@ export default {
     this.selectRow(currentConfig.work);
     eventBus.$on('fireComposers', (composer) => {
             this.getWorks(composer);
+            currentConfig.composer = composer;
+            localStorage.setItem('currentConfig', JSON.stringify(currentConfig));
     })
     eventBus.$on('fireWorkFilter', (item) => {
         this.getFilteredWorks(item);
