@@ -52,6 +52,7 @@ import MobileTracks from '@/components/mobile/MobileTracks.vue'
 import PageFooter from '@/components/mobile/PageFooter.vue'
 import axios from 'axios';
 import {eventBus} from "../main.js";
+import {currentConfig} from "../main.js";
 
 export default {
   name: 'MobileView',
@@ -65,9 +66,9 @@ export default {
   },
   data() {
     return {
-      composer: "Beethoven",
-      title: "",
-      hold_title: "Piano Concerto No. 5 in E♭ major",
+      composer: currentConfig.composer,
+      title: currentConfig.workTitle,
+      // hold_title: "Piano Concerto No. 5 in E♭ major",
       composerDisabled: true,
       workDisabled: false,
       albumDisabled: false,
@@ -122,12 +123,13 @@ export default {
     })
     // eslint-disable-next-line
     eventBus.$on('fireAlbums', (work_id, title) => {
+          this.title = title;
           this.albumToggle();
     })
     // eslint-disable-next-line
-    eventBus.$on('fireAlbumData', (work_id, title) => {
-        this.title = this.hold_title;
-    })
+    // eventBus.$on('fireAlbumData', (work_id, title) => {
+    //     this.title = this.hold_title;
+    // })
     let vh = window.innerHeight * 0.01;
     document.documentElement.style.setProperty('--vh', `${vh}px`);
 
@@ -195,13 +197,19 @@ export default {
     height: calc(var(--vh, 1vh) * 100 - 314px + 8.5px);
     overflow-y: scroll;
   }
+  .composer-list-mobile .composer-img{
+    /*height: calc(100vh - 314px);*/
+      height:  25px;
+      width: 25px;
+  }
   .composer-list-mobile .card{
     margin-bottom: 0px !important;
   }
   .composer-list-mobile table td{
-    padding-top: 5px;
-    padding-bottom: 5px;
+    padding-top: 2px;
+    padding-bottom: 2px;
     font-size: 14px !important;
+    vertical-align: middle;
   }
   .work-list-mobile{
     /*height: calc(100vh - 314px);*/

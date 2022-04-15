@@ -18,6 +18,15 @@ Vue.use(IconsPlugin)
 export const eventBus = new Vue();
 export const spotifyPlayer = new Vue();
 export const baseURL = process.env.VUE_APP_BASE_URL;
+export const currentConfig = {
+                                  composer: "Beethoven",
+                                  work: "BEETHOVEN00005",
+                                  workTitle: "Symphony No. 5 in C minor",
+                                  album: "",
+                                  progress: 0
+                                };
+
+
 
 new Vue({
   router,

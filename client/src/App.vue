@@ -19,6 +19,7 @@ export default {
   html, body {
     height: 100% !important;
     max-height: -webkit-fill-available !important;
+    /*font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Open Sans", Roboto, Ubuntu, "Helvetica Neue", Helvetica !important;*/
   }
   #app{
     height: 100% !important;

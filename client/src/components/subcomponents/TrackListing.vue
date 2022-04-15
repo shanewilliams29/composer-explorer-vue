@@ -99,6 +99,7 @@ export default {
   padding-left: 10px;
   right: 3px;
   height: 94px;
+  border-radius: 3px !important;
 }
 .track-table {
   width: 100%;

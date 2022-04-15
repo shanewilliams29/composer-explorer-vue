@@ -44,8 +44,8 @@
                           max-width: 1px;
                         "
                       >
-                        <a style="color: black; font-weight: 600"
-                          >{{ album.artists }} ({{ album.release_date }})</a
+                        <span style="color: black; font-weight: 600"
+                          >{{ album.artists }} ({{ album.release_date }})</span
                         >
                       </td>
                     </tr>
@@ -59,10 +59,12 @@
                           max-width: 1px;
                         "
                       >
-                        <a
-                          style="color: grey; font-style: italic"
-                          >{{ album.minor_artists }}</a
-                        >
+
+                      <span v-if="album.likes">
+                      <b-badge v-if="parseInt(album.likes) == 1 ">{{ album.likes }} Like</b-badge>
+                      <b-badge v-if="parseInt(album.likes) > 1 ">{{ album.likes }} Likes</b-badge>
+                      &nbsp;</span>
+                      <span style="color: grey; font-style: italic">{{ album.minor_artists }}</span>
                       </td>
                     </tr>
                   </table>
@@ -87,6 +89,7 @@
 <script>
 import axios from 'axios';
 import {eventBus} from "../main.js";
+import {currentConfig} from "../main.js";
 
 export default {
   data() {
@@ -123,7 +126,7 @@ export default {
     },
   },
   created() {
-    this.getAlbums('BEETHOVEN00016');
+    this.getAlbums(currentConfig.work);
     eventBus.$on('fireAlbums', (work_id) => {
             this.getAlbums(work_id);
     })
@@ -164,9 +167,10 @@ tr {
 table {
   width: 100%;
   border-collapse: separate;
-  font-size: 12px;
+  font-size: 13px;
   padding: 0px;
-  padding-top: 7px;
+  padding-top: 4px;
+  padding-left: 3px;
   padding-bottom: 2px;
 }
 .composer-img {
@@ -196,7 +200,7 @@ header.card-header {
   background-color: royalblue !important;
   color: white !important;
 }
-.highlight a {
+.highlight span {
   color: white !important;
 }
 .card-deck {
@@ -218,5 +222,10 @@ header.card-header {
 }
 .album_text_columns {
   padding-left: 0px;
+}
+.badge {
+  color: #fff;
+  background-color: darkgoldenrod;
+  border-radius: 7px;
 }
 </style>

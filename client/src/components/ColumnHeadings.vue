@@ -66,6 +66,7 @@
 
 <script>
 import {eventBus} from "../main.js";
+import {currentConfig} from "../main.js";
 
 export default {
   data() {
@@ -102,7 +103,7 @@ export default {
 
       workFilterField: 'recommended',
       workSearchField: null,
-      workSearchPlaceholder: "Search works by Beethoven",
+      workSearchPlaceholder: "Search works by " + currentConfig.composer,
       workOptions: [
           { value: null, text: 'Filter works', disabled: true},
           { value: 'recommended', text: 'Recommended works' },

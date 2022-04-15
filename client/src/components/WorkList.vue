@@ -63,6 +63,7 @@
 <script>
 import axios from 'axios';
 import {eventBus} from "../main.js";
+import {currentConfig} from "../main.js";
 
 export default {
   data() {
@@ -133,8 +134,8 @@ export default {
     },
   },
   created() {
-    this.getWorks('Beethoven');
-    this.selectRow("BEETHOVEN00016");
+    this.getWorks(currentConfig.composer);
+    this.selectRow(currentConfig.work);
     eventBus.$on('fireComposers', (composer) => {
             this.getWorks(composer);
     })
@@ -177,7 +178,7 @@ export default {
 }
 td {
   padding: 1px;
-  vertical-align: bottom;
+  vertical-align: middle;
   border-top: 1px dotted lightgray;
 }
 tr {
@@ -186,7 +187,7 @@ tr {
 table {
   width: 100%;
   border-collapse: separate;
-  font-size: 12px;
+  font-size: 13px;
   padding: 6px;
   padding-top: 0px;
   padding-bottom: 2px;

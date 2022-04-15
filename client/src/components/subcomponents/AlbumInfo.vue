@@ -32,13 +32,14 @@
 <script>
 import axios from 'axios';
 import {eventBus} from "../../main.js";
+import {currentConfig} from "../../main.js";
 
 export default {
   data() {
     return {
       album: [],
       title: "",
-      hold_title: "Piano Concerto No. 5 in E♭ major"
+      hold_title: currentConfig.workTitle
     };
   },
   methods: {
@@ -81,6 +82,9 @@ export default {
   width: 100%;
   overflow-x: hidden;
   height: 100px;
+}
+.card{
+  border: none !important;
 }
 .card-img {
   height: 100%;

@@ -32,6 +32,7 @@
 <script>
 import spotify from '@/SpotifyFunctions.js'
 import {eventBus} from "../../main.js";
+import {currentConfig} from "../../main.js";
 
 export default {
   data() {
@@ -39,7 +40,7 @@ export default {
       token: "",
       player: "",
       playing: false,
-      progress: 0,
+      progress: currentConfig.progress,
       duration: 0,  //CHANGE
       display_duration: "00:00",
       display_progress: "00:00",
