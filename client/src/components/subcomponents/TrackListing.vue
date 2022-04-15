@@ -64,7 +64,6 @@ export default {
 
         //match on name
         } else if (this.strFix(this.selectedTrack[0]) == this.strFix(track[0]) && this.stopMatch == false){
-            this.stopMatch = false;
             return true;
         } else {
             return false;
