@@ -45,13 +45,13 @@ export default {
       axios.get(path)
         .then((res) => {
           if (res.data.status == "success") {
-            // eventBus.$emit('fireToken');
+            eventBus.$emit('fireToken');
             eventBus.spotifyToken = res.data.token;
           }
           console.log(eventBus.spotifyToken);
         })
         .catch((error) => {
-          // eslint-disable-next-line
+          eventBus.spotifyToken = null;
           console.error(error);
         });
     },
@@ -60,9 +60,10 @@ export default {
     if( screen.width <= 760 ) {
         //this.$router.replace('mobile');
         window.location.replace('mobile');
-    } else {
-      this.getSpotifyToken();
     }
+  },
+  created() {
+    this.getSpotifyToken();
   },
 }
 </script>

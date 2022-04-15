@@ -55,8 +55,12 @@ export default {
       spotify.pauseTrack(window.token);
     },
     back() {
-      spotify.beginningTrack(window.token, window.device_id);
-      this.setPlayback(0, this.duration);
+      if (this.progress > 2000){
+            spotify.beginningTrack(window.token, window.device_id);
+            this.setPlayback(0, this.duration);
+          } else {
+            spotify.previousTrack(window.token);
+          }
     },
     next() {
       spotify.nextTrack(window.token);

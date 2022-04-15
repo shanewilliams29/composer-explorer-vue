@@ -71,7 +71,8 @@ export default {
       composerDisabled: true,
       workDisabled: false,
       albumDisabled: false,
-      initialLoad: true
+      initialWorksLoad: true,
+      initialAlbumsLoad: true
     };
   },
   methods: {
@@ -113,15 +114,15 @@ export default {
         this.composer = composer;
     })
     eventBus.$on('fireWorksLoaded', () => {
-      if (this.initialLoad != true){
+      if (this.initialWorksLoad != true){
         this.workToggle();
       } else{
-        this.initialLoad = false;
+        this.initialWorksLoad = false;
       }
     })
     // eslint-disable-next-line
     eventBus.$on('fireAlbums', (work_id, title) => {
-        this.hold_title = title;
+          this.albumToggle();
     })
     // eslint-disable-next-line
     eventBus.$on('fireAlbumData', (work_id, title) => {

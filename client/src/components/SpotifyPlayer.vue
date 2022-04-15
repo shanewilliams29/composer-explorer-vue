@@ -22,7 +22,7 @@ export default {
             if (process.env.VUE_APP_BASE_URL != "http://localhost:5000/") {
                 this.token = eventBus.spotifyToken; // Improve this?
             } else {
-                this.token = 'BQBKOZ76dgjG7tpLgiuP_WnAQ4AZq1OHKygGeTs9Cx0HUl2tZP9NmQO8Lq1kgjbgv-K1JHLNm6c26r860jq3sdNqgJOjpB_4QSyuwflQVY5xQZ4Bew4-cYMF_jhp92ATkYLZcZqbhh0LZWbvTzx0qM4Vj-TjigORjqp4sU4u4NUm8fvGdarM8cUvkGGuogdEQt83r6BxXGV_e3WNkswFrj0';
+                this.token = 'BQCVgIZOus_O_etOgM06Zpdn33Zfjs2_QQY_BMX5Bn4DirJL7r-vzL9oAJblo5LcMXjXalpHkUtVPQWNzw71kKt717l2sxmeSU0RTI0Uq0kmPMaSj80PzSHcxPSebyE4im5LGwgK1h-DXQW50CBra9hI5n1gL2gxveM8f-fOJ1Rzd8JSaKuZ0SFnU8A34hzMm0HUl5sT76eL8I2Q3CUNyIw';
             }
             window.token = this.token;
 
