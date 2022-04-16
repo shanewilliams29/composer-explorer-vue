@@ -204,6 +204,7 @@ export default {
 .playback-container{
   /*padding: calc((100px - 36px - 27px)/2);*/
   padding: 13px;
+  padding-top: 18px;
   font-size: 14px;
 }
 

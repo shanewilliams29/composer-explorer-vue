@@ -4,10 +4,10 @@
       <b-col class="info-col">
         Composer Info
       </b-col>
-      <b-col>
+      <b-col class="info-col">
         Work Info
       </b-col>
-      <b-col>
+      <b-col class="info-col">
         Album Info
       </b-col>
     </b-row>
@@ -29,22 +29,15 @@ export default {
 
 .container-fluid {
   position: relative;
-  background-color: #484e53;
+  background-color: #f1f2f4;
   padding-bottom: 0px;
   border-radius: 0px;
 }
-.info-col {
-  height: 300px;
-  overflow-y: hidden;
-}
-.album-cover-col {
-  padding-right: 0px;
-}
 .footer-row {
   height: 300px;
-  color: white;
+  color: black;
 }
 .col {
-  padding: 0px;
+  padding: 5px;
 }
 </style>

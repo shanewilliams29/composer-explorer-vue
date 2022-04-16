@@ -3,7 +3,7 @@
     <NavBar/>
 
   <div role="tablist">
-    <b-card no-body class="mb-1">
+    <b-card no-body class="mb-1 mobile-card">
       <b-card-header header-tag="header" class="p-1" role="tab">
         <b-button class="header-button" :disabled="composerDisabled" @click="composerToggle" block variant="secondary"><span class="heading-text">Composers</span><span class="mb-0 float-right"><b-icon-chevron-down></b-icon-chevron-down></span></b-button>
       </b-card-header>
@@ -14,7 +14,7 @@
       </b-collapse>
     </b-card>
 
-    <b-card no-body class="mb-1">
+    <b-card no-body class="mb-1 mobile-card">
       <b-card-header header-tag="header" class="p-1" role="tab">
         <b-button class="header-button" :disabled="workDisabled" block @click="workToggle" variant="secondary"><span class="heading-text">Works by {{ composer }}</span><span class="mb-0 float-right"><b-icon-chevron-down></b-icon-chevron-down></span></b-button>
       </b-card-header>
@@ -25,7 +25,7 @@
       </b-collapse>
     </b-card>
 
-    <b-card no-body class="mb-1">
+    <b-card no-body class="mb-1 mobile-card">
       <b-card-header header-tag="header" class="p-1" role="tab">
         <b-button class="header-button last-button" :disabled="albumDisabled" @click="albumToggle" block variant="secondary"><span class="heading-text">{{ title }}</span><span class="mb-0 float-right"><b-icon-chevron-down></b-icon-chevron-down></span></b-button>
       </b-card-header>
@@ -166,9 +166,7 @@ export default {
   .btn-secondary:hover{
     background-color: #717579 !important;
   }
-  .card{
-    border-radius: 0px !important;
-  }
+
   .card-header{
     border: 0px !important;
   }
