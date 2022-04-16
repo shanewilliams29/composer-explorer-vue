@@ -72,6 +72,21 @@ export default {
     playTracks(tracks){
       let uriList = {}
       let jsonList = {}
+      let selectedTrack = tracks.split(' ')[0];
+      let allTracks = currentConfig.allTracks.split(' ');
+
+      let index = allTracks.indexOf(selectedTrack);
+      let previousTracks = "";
+
+      if (index == 0) {
+          previousTracks = currentConfig.allTracks;
+      } else {
+        for (var i = index - 1; i < allTracks.length; i++) {
+          previousTracks = previousTracks + " " + allTracks[i];
+        }
+      }
+
+      currentConfig.previousTracks = previousTracks.trim();
 
       currentConfig.playTracks = tracks;
       localStorage.setItem('currentConfig', JSON.stringify(currentConfig));
@@ -84,7 +99,10 @@ export default {
     },
   created() {
     eventBus.$on('fireSetAlbum', (album) => {
-      //console.log(album.id);
+        currentConfig.allTracks = album.tracks[0][2];
+        currentConfig.playTracks = album.tracks[0][2];
+        localStorage.setItem('currentConfig', JSON.stringify(currentConfig));
+
         this.album = album;
         if(window.token && window.device_id){
           this.playTracks(album.tracks[0][2]);

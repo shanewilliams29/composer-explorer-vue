@@ -97,8 +97,10 @@ export default {
     },
   created() {
     eventBus.$on('fireSetAlbum', (album) => {
+        currentConfig.playTracks = album.tracks[0][2];
+        localStorage.setItem('currentConfig', JSON.stringify(currentConfig));
+
         this.album = album;
-        // console.log(album.tracks[0][0])
         this.selectTrack(album.tracks[0][0]);
         if(window.token && window.device_id){
           this.playTracks(album.tracks[0][2]);

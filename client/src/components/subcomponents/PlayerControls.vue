@@ -56,8 +56,16 @@ export default {
       spotify.pauseTrack(window.token);
     },
     back() {
-      spotify.beginningTrack(window.token, window.device_id);
-      this.setPlayback(0, this.duration);
+      if(this.progress > 2000){
+          spotify.beginningTrack(window.token, window.device_id);
+          this.setPlayback(0, this.duration);
+      } else {
+      let uriList = {}
+      let jsonList = {}
+      uriList['uris'] = currentConfig.previousTracks.split(' ');
+      jsonList = JSON.stringify(uriList);
+      spotify.playTracks(window.token, window.device_id, jsonList);
+      }
     },
     next() {
       spotify.nextTrack(window.token);
@@ -164,6 +172,24 @@ export default {
           }
           this.setPlayback(position, duration);
       }
+      // update previousTracks
+      let selectedTrack = track_data.uri;
+      let allTracks = currentConfig.allTracks.split(' ');
+
+      let index = allTracks.indexOf(selectedTrack);
+      let previousTracks = "";
+
+      if (index == 0) {
+          previousTracks = currentConfig.allTracks;
+      } else {
+        for (var i = index - 1; i < allTracks.length; i++) {
+          previousTracks = previousTracks + " " + allTracks[i];
+        }
+      }
+
+      currentConfig.previousTracks = previousTracks.trim();
+      // localStorage.setItem('currentConfig', JSON.stringify(currentConfig));
+
     })
   },
   mounted() {
