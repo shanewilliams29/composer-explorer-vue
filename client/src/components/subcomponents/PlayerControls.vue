@@ -40,7 +40,7 @@ export default {
       token: "",
       player: "",
       playing: false,
-      progress: currentConfig.progress,
+      progress: 0,
       duration: 0,  //CHANGE
       display_duration: "00:00",
       display_progress: "00:00",
@@ -178,7 +178,7 @@ export default {
 
       let index = allTracks.indexOf(selectedTrack);
       let previousTracks = "";
-      console.log(index);
+
       if (index == 0) {
           previousTracks = currentConfig.allTracks;
       } else if (index < 0 ){ // occurs when spotify redirects, track not found in list

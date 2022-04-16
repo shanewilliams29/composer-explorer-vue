@@ -26,14 +26,14 @@
       Test 3
     </div>
   </div>
-  <a class="carousel-control-prev" @click="previousTrack()" role="button" data-slide="prev">
+<!--   <a class="carousel-control-prev" @click="previousTrack()" role="button" data-slide="prev">
     <span class="carousel-control-prev-icon" aria-hidden="true"></span>
     <span class="sr-only">Previous</span>
   </a>
   <a class="carousel-control-next" @click="nextTrack()" role="button" data-slide="next">
     <span class="carousel-control-next-icon" aria-hidden="true"></span>
     <span class="sr-only">Next</span>
-  </a>
+  </a> -->
 </div>
 </template>
 
@@ -77,15 +77,31 @@ export default {
             return false;
         }
     },
-    previousTrack(){
-        spotify.previousTrack(window.token);
-    },
-    nextTrack(){
-        spotify.nextTrack(window.token);
-    },
+    // previousTrack(){
+    //     spotify.previousTrack(window.token);
+    // },
+    // nextTrack(){
+    //     spotify.nextTrack(window.token);
+    // },
     playTracks(tracks){
       let uriList = {}
       let jsonList = {}
+      let selectedTrack = tracks.split(' ')[0];
+      let allTracks = currentConfig.allTracks.split(' ');
+
+      let index = allTracks.indexOf(selectedTrack);
+      let previousTracks = "";
+
+      if (index == 0) {
+          previousTracks = currentConfig.allTracks;
+      } else {
+        for (var i = index - 1; i < allTracks.length; i++) {
+          previousTracks = previousTracks + " " + allTracks[i];
+        }
+      }
+
+      currentConfig.previousTracks = previousTracks.trim();
+
       currentConfig.playTracks = tracks;
       localStorage.setItem('currentConfig', JSON.stringify(currentConfig));
 
@@ -97,14 +113,16 @@ export default {
     },
   created() {
     eventBus.$on('fireSetAlbum', (album) => {
+        currentConfig.allTracks = album.tracks[0][2];
         currentConfig.playTracks = album.tracks[0][2];
         localStorage.setItem('currentConfig', JSON.stringify(currentConfig));
 
         this.album = album;
-        this.selectTrack(album.tracks[0][0]);
         if(window.token && window.device_id){
           this.playTracks(album.tracks[0][2]);
+          this.stopMatch = false;
         }
+        // this.selectTrack(album.tracks[0][1]);
         // this.numTracks = album.tracks.length;
         // this.selectedTrackNo = 0;
     })

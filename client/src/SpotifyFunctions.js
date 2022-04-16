@@ -135,7 +135,6 @@ nextTrack(token) {
 },
 
 playTracks(token, device_id, tracks) {
-  console.log(tracks);
   const path = 'https://api.spotify.com/v1/me/player/play';
   axios({
       method: 'put',

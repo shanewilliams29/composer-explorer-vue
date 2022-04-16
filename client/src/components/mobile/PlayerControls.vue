@@ -32,6 +32,7 @@
 <script>
 import spotify from '@/SpotifyFunctions.js'
 import {eventBus} from "../../main.js";
+import {currentConfig} from "../../main.js";
 
 export default {
   data() {
@@ -59,7 +60,11 @@ export default {
           spotify.beginningTrack(window.token, window.device_id);
           this.setPlayback(0, this.duration);
       } else {
-      spotify.previousTrack(window.token);
+      let uriList = {}
+      let jsonList = {}
+      uriList['uris'] = currentConfig.previousTracks.split(' ');
+      jsonList = JSON.stringify(uriList);
+      spotify.playTracks(window.token, window.device_id, jsonList);
       }
     },
     next() {
@@ -147,7 +152,7 @@ export default {
     })
 
     eventBus.$on('firePlayerStateChanged', (track_data, position, duration, paused) => {
-      //console.log(position);
+      // console.log(position);
       //ignore at beginning of song (glitchy)
       if (position == 0 && !paused){
           this.playing = true;
@@ -167,6 +172,26 @@ export default {
           }
           this.setPlayback(position, duration);
       }
+      // update previousTracks
+      let selectedTrack = track_data.uri;
+      let allTracks = currentConfig.allTracks.split(' ');
+
+      let index = allTracks.indexOf(selectedTrack);
+      let previousTracks = "";
+
+      if (index == 0) {
+          previousTracks = currentConfig.allTracks;
+      } else if (index < 0 ){ // occurs when spotify redirects, track not found in list
+          previousTracks = currentConfig.allTracks;
+      } else {
+        for (var i = index - 1; i < allTracks.length; i++) {
+          previousTracks = previousTracks + " " + allTracks[i];
+        }
+      }
+
+      currentConfig.previousTracks = previousTracks.trim();
+      // localStorage.setItem('currentConfig', JSON.stringify(currentConfig));
+
     })
   },
   mounted() {
