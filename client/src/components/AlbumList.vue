@@ -112,12 +112,12 @@ export default {
       axios.get(path)
         .then((res) => {
           this.albums = res.data.albums;
-          eventBus.artists = res.data.artists;
           this.loading = false;
           //console.log(this.albums[0].id);
           this.selectRow(this.albums[0].id); // select first row
           currentConfig.album = this.albums[0].id;
           localStorage.setItem('currentConfig', JSON.stringify(currentConfig));
+          eventBus.$emit('fireArtistList', res.data.artists);
           eventBus.$emit('fireAlbumData', this.albums[0].id);
         })
         .catch((error) => {
@@ -138,7 +138,7 @@ export default {
 
           this.selectRow(currentConfig.album);
           eventBus.$emit('fireAlbumData', currentConfig.album);
-          eventBus.$emit('fireInitialGetAlbums', id, currentConfig.workTitle);
+          eventBus.$emit('fireArtistList', res.data.artists);
         })
         .catch((error) => {
           // eslint-disable-next-line

@@ -177,24 +177,16 @@ export default {
         this.workSearchField = '';
         this.workFilterField = 'recommended';
     })
-    eventBus.$on('fireAlbums', (work_id, title) => {
+    eventBus.$on('fireAlbums', (work_id, title) => { // is this used?
         this.album_heading = "Albums for \"" + title + "\"";
-        this.albumOptions = [
-          { value: null, text: 'Filter performers', disabled: true},
-          { value: 'allartists', text: 'All performers' }
-        ];
-        for (var key in eventBus.artists) {
-          this.albumOptions.push({ value: key, text: key + ' (' + eventBus.artists[key] + ')'});
-        }
     })
-    eventBus.$on('fireInitialGetAlbums', (work_id, title) => {
-        this.album_heading = "Albums for \"" + title + "\"";
+    eventBus.$on('fireArtistList', (artistList) => {
         this.albumOptions = [
           { value: null, text: 'Filter performers', disabled: true},
           { value: 'allartists', text: 'All performers' }
         ];
-        for (var key in eventBus.artists) {
-          this.albumOptions.push({ value: key, text: key + ' (' + eventBus.artists[key] + ')'});
+        for (var key in artistList) {
+          this.albumOptions.push({ value: key, text: key + ' (' + artistList[key] + ')'});
         }
     })
   },
