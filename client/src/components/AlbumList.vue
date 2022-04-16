@@ -3,6 +3,11 @@
     <div class="spinner" v-show="loading" role="status">
       <b-spinner class="m-5"></b-spinner>
     </div>
+      <div class="row">
+          <span v-show="!loading && albums.length < 1" class="col no-albums-found">
+            No albums found.
+          </span>
+      </div>
     <div v-if="albums">
       <div class="row">
         <b-card-group deck v-show="!loading">
@@ -107,6 +112,7 @@ export default {
       axios.get(path)
         .then((res) => {
           this.albums = res.data.albums;
+          eventBus.artists = res.data.artists;
           this.loading = false;
           //console.log(this.albums[0].id);
           this.selectRow(this.albums[0].id); // select first row
@@ -127,6 +133,7 @@ export default {
       axios.get(path)
         .then((res) => {
           this.albums = res.data.albums;
+          eventBus.artists = res.data.artists;
           this.loading = false;
 
           this.selectRow(currentConfig.album);
@@ -149,11 +156,55 @@ export default {
       selectRow(album){
         this.selectedAlbum = album;
     },
+    getFilteredAlbums(id, item) {
+      this.loading = true;
+      const path = 'api/albums/' + id + '?artist=' + item;
+      axios.get(path)
+        .then((res) => {
+          this.albums = res.data.albums;
+          this.loading = false;
+
+          this.selectRow(currentConfig.album);
+          eventBus.$emit('fireAlbumData', currentConfig.album);
+          //this.selectRow(this.albums[0].album_id); // select first row
+          //eventBus.$emit('fireAlbumData', this.albums[0].id);
+        })
+        .catch((error) => {
+          // eslint-disable-next-line
+          console.error(error);
+          this.loading = false;
+        });
+    },
+    getSearchAlbums(id, item) {
+      this.loading = true;
+      const path = 'api/albums/' + id + '?search=' + item;
+      axios.get(path)
+        .then((res) => {
+          this.albums = res.data.albums;
+          this.loading = false;
+
+          this.selectRow(currentConfig.album);
+          eventBus.$emit('fireAlbumData', currentConfig.album);
+          //this.selectRow(this.albums[0].album_id); // select first row
+          //eventBus.$emit('fireAlbumData', this.albums[0].id);
+        })
+        .catch((error) => {
+          // eslint-disable-next-line
+          console.error(error);
+          this.loading = false;
+        });
+    },
   },
   created() {
     this.initialGetAlbums(currentConfig.work);
     eventBus.$on('fireAlbums', (work_id) => {
             this.getAlbums(work_id);
+    })
+    eventBus.$on('fireAlbumFilter', (id, item) => {
+        this.getFilteredAlbums(id, item);
+    })
+    eventBus.$on('fireAlbumSearch', (id, item) => {
+        this.getSearchAlbums(id, item);
     })
   },
   mounted() {

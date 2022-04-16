@@ -1,7 +1,7 @@
 from app import app, db, sp
-from flask import jsonify, request, redirect, session, render_template
+from flask import jsonify, request, redirect, session, render_template, abort
 from config import Config
-from app.models import ComposerList, WorkList, WorkAlbums, AlbumLike, Spotify
+from app.models import ComposerList, WorkList, WorkAlbums, AlbumLike, Spotify, Artists
 from app.classes import SortFilter
 from sqlalchemy import func, text
 from datetime import datetime, timedelta
@@ -334,9 +334,44 @@ def get_works(name):
 def get_albums(work_id):
     page = request.args.get('page', 1, type=int)
 
-    albums = db.session.query(WorkAlbums, func.count(AlbumLike.id).label('total')) \
-        .filter(WorkAlbums.workid == work_id, WorkAlbums.hidden != True).outerjoin(AlbumLike).group_by(WorkAlbums) \
-        .order_by(text('total DESC'), WorkAlbums.score.desc()).paginate(page, 1000, False)
+    # get filter and search arguments
+    artistselect = request.args.get('artist')
+    searchselect = request.args.get('search')
+    search = None
+
+    if artistselect:
+        search = "%{}%".format(artistselect)
+    elif searchselect:
+        search = "%{}%".format(searchselect)
+
+    if search:
+        albums = db.session.query(WorkAlbums, func.count(AlbumLike.id).label('total')) \
+            .filter(WorkAlbums.workid == work_id, WorkAlbums.hidden != True, WorkAlbums.artists.ilike(search)) \
+            .outerjoin(AlbumLike).group_by(WorkAlbums) \
+            .order_by(text('total DESC'), WorkAlbums.score.desc()).paginate(page, 1000, False)
+
+    else:
+        albums = db.session.query(WorkAlbums, func.count(AlbumLike.id).label('total')) \
+            .filter(WorkAlbums.workid == work_id, WorkAlbums.hidden != True)\
+            .outerjoin(AlbumLike).group_by(WorkAlbums) \
+            .order_by(text('total DESC'), WorkAlbums.score.desc()).paginate(page, 1000, False)
+
+    if not albums.items:
+        response_object = {'status': 'success'}
+        response_object['albums'] = []
+        response = jsonify(response_object)
+        response.headers.add('Access-Control-Allow-Credentials', 'true')
+        return response
+
+    # artist list
+    work_artists = db.session.query(Artists, func.count(Artists.count).label('total')) \
+        .filter(Artists.workid == work_id).group_by(Artists.name) \
+        .order_by(text('total DESC'), Artists.name).all()
+
+    artist_list = {}
+
+    for artist in work_artists:
+        artist_list[artist[0].name] = artist[1]
 
     album_list = []
     duplicates_list = []
@@ -376,6 +411,7 @@ def get_albums(work_id):
 
     response_object = {'status': 'success'}
     response_object['albums'] = sorted_list
+    response_object['artists'] = artist_list
     response = jsonify(response_object)
     response.headers.add('Access-Control-Allow-Credentials', 'true')
     return response

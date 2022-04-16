@@ -46,14 +46,17 @@
       <b-col>
         <b-card class="heading-card albums-card">
           <b-form-group>
-            <b-form-input
-              id="input-sm"
-              placeholder="Search performers"
-              size="sm"
-            ></b-form-input>
+              <b-form-input
+                v-model="albumSearchField"
+                @change="albumSearch()"
+                @focus="onAlbumFocus()"
+                :placeholder="albumSearchPlaceholder"
+                size="sm"
+              ></b-form-input>
             <b-form-select
-              v-model="composerFilterForm"
-              :options="composerOptions"
+              v-model="albumFilterField"
+              :options="albumOptions"
+              @change="albumFilter()"
               size="sm"
               class="mt-3"
             ></b-form-select>
@@ -73,6 +76,7 @@ export default {
     return {
       work_heading: "",
       album_heading: "",
+
       composerFilterForm: 'popular',
       composerSearchForm: null,
       composerOptions: [
@@ -110,6 +114,11 @@ export default {
           // { value: 'catalogued', text: 'Catalogued' },
           { value: 'all', text: 'All works'}
         ],
+
+      albumFilterField: 'allartists',
+      albumSearchField: null,
+      albumSearchPlaceholder: "Search performers of " + currentConfig.workTitle,
+      albumOptions: []
     };
   },
   methods: {
@@ -140,6 +149,24 @@ export default {
     onWorkFocus() {
       this.workSearchField = '';
       eventBus.$emit('fireWorkSearch', '');
+    },
+    albumFilter() {
+      if (this.albumFilterField == "allartists") {
+          eventBus.$emit('fireAlbums', currentConfig.work);
+      } else {
+          eventBus.$emit('fireAlbumFilter', currentConfig.work, this.albumFilterField);
+          this.albumSearchField = '';
+    }
+      //console.log(this.workFilterField);
+    },
+    albumSearch() {
+      eventBus.$emit('fireAlbumSearch', currentConfig.work, this.albumSearchField);
+      this.albumFilterField = null;
+      //console.log(this.workSearchField);
+    },
+    onAlbumFocus() {
+      this.albumSearchField = '';
+      eventBus.$emit('fireAlbums', currentConfig.work);
     }
   },
   created() {
@@ -152,6 +179,13 @@ export default {
     })
     eventBus.$on('fireAlbums', (work_id, title) => {
         this.album_heading = "Albums for \"" + title + "\"";
+        this.albumOptions = [
+          { value: null, text: 'Filter performers', disabled: true},
+          { value: 'allartists', text: 'All performers' }
+        ];
+        for (var key in eventBus.artists) {
+          this.albumOptions.push({ value: key, text: key + ' (' + eventBus.artists[key] + ')'});
+        }
     })
   },
 };
