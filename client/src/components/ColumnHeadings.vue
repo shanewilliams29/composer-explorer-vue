@@ -187,6 +187,16 @@ export default {
           this.albumOptions.push({ value: key, text: key + ' (' + eventBus.artists[key] + ')'});
         }
     })
+    eventBus.$on('fireInitialGetAlbums', (work_id, title) => {
+        this.album_heading = "Albums for \"" + title + "\"";
+        this.albumOptions = [
+          { value: null, text: 'Filter performers', disabled: true},
+          { value: 'allartists', text: 'All performers' }
+        ];
+        for (var key in eventBus.artists) {
+          this.albumOptions.push({ value: key, text: key + ' (' + eventBus.artists[key] + ')'});
+        }
+    })
   },
 };
 </script>

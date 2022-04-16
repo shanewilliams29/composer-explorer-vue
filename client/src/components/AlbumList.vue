@@ -138,8 +138,7 @@ export default {
 
           this.selectRow(currentConfig.album);
           eventBus.$emit('fireAlbumData', currentConfig.album);
-          //this.selectRow(this.albums[0].album_id); // select first row
-          //eventBus.$emit('fireAlbumData', this.albums[0].id);
+          eventBus.$emit('fireInitialGetAlbums', id, currentConfig.workTitle);
         })
         .catch((error) => {
           // eslint-disable-next-line
