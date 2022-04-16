@@ -166,7 +166,7 @@ export default {
     },
     onAlbumFocus() {
       this.albumSearchField = '';
-      eventBus.$emit('fireAlbums', currentConfig.work);
+      eventBus.$emit('fireAlbumSearch', currentConfig.work, '');
     }
   },
   created() {
