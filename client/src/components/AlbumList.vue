@@ -23,19 +23,18 @@
             <div class="row">
               <b-col class="album_columns" cols="2">
                 <b-avatar
-                  v-show="album.id != selectedAlbum"
                   rounded="left"
                   size="48px"
                   :src="album.album_img"
                 ></b-avatar>
-                <b-avatar
+ <!--                <b-avatar
                   v-show="album.id == selectedAlbum"
                   variant="dark"
                   icon="heart"
                   rounded="left"
                   size="48px"
-                ></b-avatar
-              ></b-col>
+                ></b-avatar> -->
+              </b-col>
               <b-col class="album_text_columns">
                 <b-card-text>
                   <table cellspacing="0">
