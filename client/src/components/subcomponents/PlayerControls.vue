@@ -178,8 +178,10 @@ export default {
 
       let index = allTracks.indexOf(selectedTrack);
       let previousTracks = "";
-
+      console.log(index);
       if (index == 0) {
+          previousTracks = currentConfig.allTracks;
+      } else if (index < 0 ){ // occurs when spotify redirects, track not found in list
           previousTracks = currentConfig.allTracks;
       } else {
         for (var i = index - 1; i < allTracks.length; i++) {
