@@ -163,8 +163,8 @@ export default {
           this.albums = res.data.albums;
           this.loading = false;
 
-          this.selectRow(currentConfig.album);
-          eventBus.$emit('fireAlbumData', currentConfig.album);
+          //this.selectRow(currentConfig.album);
+          //eventBus.$emit('fireAlbumData', currentConfig.album);
           //this.selectRow(this.albums[0].album_id); // select first row
           //eventBus.$emit('fireAlbumData', this.albums[0].id);
         })
@@ -182,8 +182,8 @@ export default {
           this.albums = res.data.albums;
           this.loading = false;
 
-          this.selectRow(currentConfig.album);
-          eventBus.$emit('fireAlbumData', currentConfig.album);
+          //this.selectRow(currentConfig.album);
+          //eventBus.$emit('fireAlbumData', currentConfig.album);
           //this.selectRow(this.albums[0].album_id); // select first row
           //eventBus.$emit('fireAlbumData', this.albums[0].id);
         })
