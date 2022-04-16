@@ -382,9 +382,10 @@ def get_albums(work_id):
         item['likes'] = tup[1]
         item['id'] = tup[0].id
 
-        # remove duplicates
-        # match_string = item['artists'].strip()
-        match_string = item['artists'].strip() + str(item['release_date'])
+        artists_string = ''.join(sorted(item['all_artists'].strip()))  # put alphabetically
+        match_string = artists_string + str(item['release_date'])
+        # match_string = item['artists'].strip() + str(item['release_date'])
+
         if match_string in duplicates_list:
             continue
         else:

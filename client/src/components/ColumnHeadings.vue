@@ -117,7 +117,7 @@ export default {
 
       albumFilterField: 'allartists',
       albumSearchField: null,
-      albumSearchPlaceholder: "Search performers of " + currentConfig.workTitle,
+      albumSearchPlaceholder: "Search performers",
       albumOptions: []
     };
   },
@@ -179,6 +179,7 @@ export default {
     })
     eventBus.$on('fireAlbums', (work_id, title) => { // is this used?
         this.album_heading = "Albums for \"" + title + "\"";
+        this.albumFilterField = null;
     })
     eventBus.$on('fireArtistList', (artistList) => {
         this.albumOptions = [
