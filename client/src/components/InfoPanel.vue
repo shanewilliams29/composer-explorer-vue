@@ -2,28 +2,22 @@
   <div class="container-fluid">
     <b-row class="footer-row">
       <b-col class="info-col">
-        <AlbumInfo />
+        Composer Info
       </b-col>
       <b-col>
-        <PlayerControls />
+        Work Info
       </b-col>
       <b-col>
-        <TrackListing />
+        Album Info
       </b-col>
     </b-row>
   </div>
 </template>
 
 <script>
-import AlbumInfo from './subcomponents/AlbumInfo.vue'
-import PlayerControls from './subcomponents/PlayerControls.vue'
-import TrackListing from './subcomponents/TrackListing.vue'
 
 export default {
   components: {
-    AlbumInfo,
-    PlayerControls,
-    TrackListing
   },
 };
 </script>
@@ -35,19 +29,19 @@ export default {
 
 .container-fluid {
   position: relative;
-  background-color: #343a40;
+  background-color: #484e53;
   padding-bottom: 0px;
   border-radius: 0px;
 }
 .info-col {
-  height: 100px;
+  height: 300px;
   overflow-y: hidden;
 }
 .album-cover-col {
   padding-right: 0px;
 }
 .footer-row {
-  height: 100px;
+  height: 300px;
   color: white;
 }
 .col {
