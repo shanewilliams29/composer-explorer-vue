@@ -152,7 +152,7 @@ export default {
     },
     albumFilter() {
       if (this.albumFilterField == "allartists") {
-          eventBus.$emit('fireAlbums', currentConfig.work);
+          eventBus.$emit('fireAlbumFilter', currentConfig.work, '');
       } else {
           eventBus.$emit('fireAlbumFilter', currentConfig.work, this.albumFilterField);
           this.albumSearchField = '';
