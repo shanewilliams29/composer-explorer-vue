@@ -64,7 +64,7 @@ export default {
       this.showPanel = !this.showPanel;
       if (this.showPanel){
         document.documentElement.style.setProperty('--panelheight', `300px`);
-        eventBus.$emit('expandInfoPanel', currentConfig.composer);
+        eventBus.$emit('expandInfoPanel', currentConfig.composer, currentConfig.work);
       } else{
         document.documentElement.style.setProperty('--panelheight', `0px`);
       }

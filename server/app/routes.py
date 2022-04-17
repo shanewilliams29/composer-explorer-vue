@@ -430,6 +430,22 @@ def get_composerinfo(composer):
     return response
 
 
+@app.route('/api/workinfo/<work_id>', methods=['GET'])
+def get_workinfo(work_id):
+    work = db.session.query(WorkList)\
+        .filter(WorkList.id == work_id).first()
+
+    if work.genre == "Opera" or "Stage Work" or "Ballet":
+        work.search = app.config['STATIC'] + 'headers/' + work.title + '.jpg'  # use for image
+    else:
+        work.search = app.config['STATIC'] + 'headers/' + work.genre + '.jpg'  # use for image
+    response_object = {'status': 'success'}
+    response_object['info'] = work
+    response = jsonify(response_object)
+    response.headers.add('Access-Control-Allow-Credentials', 'true')
+    return response
+
+
 @app.route('/api/albuminfo/<album_id>', methods=['GET'])
 def get_albuminfo(album_id):
     album = db.session.query(WorkAlbums)\

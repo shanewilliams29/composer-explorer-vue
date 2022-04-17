@@ -5,7 +5,7 @@
         <ComposerInfo/>
       </b-col>
       <b-col class="info-col">
-        Work Info
+        <WorkInfo/>
       </b-col>
       <b-col class="info-col">
         Album Info
@@ -16,10 +16,12 @@
 
 <script>
 import ComposerInfo from '@/components/subcomponents/ComposerInfo.vue';
+import WorkInfo from '@/components/subcomponents/WorkInfo.vue';
 
 export default {
   components: {
-    ComposerInfo
+    ComposerInfo,
+    WorkInfo
   },
 };
 </script>
