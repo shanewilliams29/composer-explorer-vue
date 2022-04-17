@@ -247,10 +247,6 @@ table {
   padding-left: 3px;
   padding-bottom: 2px;
 }
-.composer-img {
-  border-radius: 50%;
-  object-fit: cover;
-}
 header.card-header {
   background-color: #fff;
   border: none;

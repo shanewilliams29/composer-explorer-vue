@@ -9,7 +9,7 @@
         <b-col cols="4" class="album-list"><AlbumList/></b-col>
       </b-row>
     </div>
-    <div class="info-panel" v-if='showPanel'><InfoPanel/></div>
+    <div class="info-panel" v-show='showPanel'><InfoPanel/></div>
     <PageFooter/>
     <b-button class="info-panel-button float" @click="togglePanel()" variant="warning"><span v-if="!showPanel"><b-icon-chevron-up></b-icon-chevron-up></span><span v-else><b-icon-chevron-down></b-icon-chevron-down></span> INFO PANEL</b-button>
   </div>
@@ -26,6 +26,7 @@ import InfoPanel from '@/components/InfoPanel.vue'
 
 import axios from 'axios';
 import {eventBus} from "../main.js";
+import {currentConfig} from "../main.js";
 
 export default {
   name: 'HomeView',
@@ -63,6 +64,7 @@ export default {
       this.showPanel = !this.showPanel;
       if (this.showPanel){
         document.documentElement.style.setProperty('--panelheight', `300px`);
+        eventBus.$emit('expandInfoPanel', currentConfig.composer);
       } else{
         document.documentElement.style.setProperty('--panelheight', `0px`);
       }

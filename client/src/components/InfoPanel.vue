@@ -2,7 +2,7 @@
   <div class="container-fluid">
     <b-row class="footer-row">
       <b-col class="info-col">
-        Composer Info
+        <ComposerInfo/>
       </b-col>
       <b-col class="info-col">
         Work Info
@@ -15,20 +15,18 @@
 </template>
 
 <script>
+import ComposerInfo from '@/components/subcomponents/ComposerInfo.vue';
 
 export default {
   components: {
+    ComposerInfo
   },
 };
 </script>
 
 <style scoped>
-.float{
-  position:fixed;
-}
 
 .container-fluid {
-  position: relative;
   background-color: #f1f2f4;
   padding-bottom: 0px;
   border-radius: 0px;
@@ -39,5 +37,6 @@ export default {
 }
 .col {
   padding: 5px;
+  padding-right: 0px;
 }
 </style>

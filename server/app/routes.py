@@ -424,7 +424,7 @@ def get_composerinfo(composer):
         .filter(ComposerList.name_short == composer).first()
     composer_info.image = app.config['STATIC'] + 'img/' + composer + '.jpg'
     response_object = {'status': 'success'}
-    response_object['data'] = composer_info
+    response_object['info'] = composer_info
     response = jsonify(response_object)
     response.headers.add('Access-Control-Allow-Credentials', 'true')
     return response
@@ -457,3 +457,11 @@ def get_albuminfo(album_id):
     response = jsonify(response_object)
     response.headers.add('Access-Control-Allow-Credentials', 'true')
     return response
+
+
+# @app.route('/api/composerinfo/<composer>', methods=['GET'])
+# def get_composerinfo():
+
+#     composer = ComposerList.query.filter_by(name_short=composer).first_or_404()
+
+#     return jsonpickle.encode(composer)
