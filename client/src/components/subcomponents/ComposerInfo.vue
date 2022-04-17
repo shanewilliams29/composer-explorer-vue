@@ -6,10 +6,24 @@
         <b-card class="composer-info-card" v-show="!loading">
           <b-card-body class="card-body">
             <b-card-title class="card-title">
-                <b-avatar size="60px" :src="composerImage"></b-avatar>&nbsp; {{ composerNameFull }}</b-card-title>
+              <table>
+                <tr>
+                  <td>
+                    <b-avatar-group size="60px">
+                <b-avatar  :src="composer.region"></b-avatar>
+                <b-avatar  :src="composer.image"></b-avatar>
+              </b-avatar-group>
+                  </td>
+                  <td class = "info-td">
+                    {{ composer.name_full }}<br>
+                    <span class="born-died">{{ composer.born }} - {{ composer.died }}</span>
+                  </td>
+                </tr>
+              </table>
+              </b-card-title>
             <b-card-text class="info-card-text">
-            {{ composerBlurb }}
-            <a :href="wikiLink" target="_blank" class="wiki-link"><br>Read more on Wikipedia</a>
+            {{ composer.introduction }}<br>
+            <a :href="composer.pageurl" target="_blank" class="wiki-link"><br>Read more on Wikipedia</a>
             </b-card-text>
           </b-card-body>
         </b-card>
@@ -32,10 +46,7 @@ export default {
   data() {
     return {
       loading: true,
-      composerNameFull: "",
-      composerImage: "",
-      composerBlurb: "",
-      wikiLink: ""
+      composer: {}
     };
   },
   methods: {
@@ -44,10 +55,7 @@ export default {
         const path = 'api/composerinfo/' + composer;
         axios.get(path)
           .then((res) => {
-            this.composerNameFull = res.data.info.name_full;
-            this.composerImage = res.data.info.image;
-            this.composerBlurb = res.data.info.introduction;
-            this.wikiLink = res.data.info.pageurl;
+            this.composer = res.data.info;
             this.loading = false;
           })
           .catch((error) => {
@@ -78,6 +86,10 @@ export default {
 .m-5 {
   color: #343a40;
 }
+.born-died{
+  font-size: 16px !important;
+  color: grey !important;
+}
 .composer-info-card{
   padding: 15px;
   padding-bottom: 10px;
@@ -86,7 +98,10 @@ export default {
 
 }
 .card-title{
-  font-size: 20px;
+  font-size: 18px;
+}
+.info-td{
+  padding-left: 10px;
 }
 .card-body{
 

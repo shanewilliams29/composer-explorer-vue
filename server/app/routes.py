@@ -423,6 +423,13 @@ def get_composerinfo(composer):
     composer_info = db.session.query(ComposerList)\
         .filter(ComposerList.name_short == composer).first()
     composer_info.image = app.config['STATIC'] + 'img/' + composer + '.jpg'
+
+    with open('app/static/countries.json') as f:
+        flags = json.load(f)
+        flag = flags[composer_info.nationality].lower()
+
+    composer_info.region = app.config['STATIC'] + 'flags/1x1/' + flag + '.svg',
+
     response_object = {'status': 'success'}
     response_object['info'] = composer_info
     response = jsonify(response_object)

@@ -5,10 +5,23 @@
     </div>
         <b-card class="composer-info-card" v-show="!loading">
           <b-card-body class="card-body">
-            <b-card-title class="card-title">
-                <b-avatar size="60px" :src="workImg"></b-avatar>&nbsp; {{ workTitle }}</b-card-title>
+ <b-card-title class="card-title">
+              <table>
+                <tr>
+                  <td>
+
+                <b-avatar size="60px" :src="workImg"></b-avatar>
+
+                  </td>
+                  <td class="info-td">
+                    {{ workTitle }}<br>
+                    <span v-if="catNo" class="born-died">{{ catNo }}</span><span v-else class="born-died">{{date}}</span>
+                  </td>
+                </tr>
+              </table>
+              </b-card-title>
             <b-card-text class="info-card-text">
-            {{ workBLurb }}
+            {{ workBLurb }}<br>
             <a :href="wikiLink" target="_blank" class="wiki-link"><br>Read more on Wikipedia</a>
             </b-card-text>
           </b-card-body>
@@ -48,7 +61,9 @@ export default {
             this.composer = res.data.info.composer;
             this.workTitle = res.data.info.title;
             this.workImg = res.data.info.search;
-            this.wikiWork(this.composer + " " + this.workTitle);
+            this.catNo = res.data.info.cat;
+            this.date = res.data.info.date;
+            this.wikiWork(this.composer + " " + this.workTitle + " " + this.catNo);
           })
           .catch((error) => {
             // eslint-disable-next-line
@@ -130,11 +145,18 @@ export default {
 </script>
 
 <style scoped>
+.info-td{
+  padding-left: 10px;
+}
 .spinner {
   text-align: center;
 }
 .m-5 {
   color: #343a40;
+}
+.born-died{
+  font-size: 16px !important;
+  color: grey !important;
 }
 .composer-info-card{
   padding: 15px;
@@ -144,7 +166,7 @@ export default {
 
 }
 .card-title{
-  font-size: 20px;
+  font-size: 18px;
 }
 .card-body{
 

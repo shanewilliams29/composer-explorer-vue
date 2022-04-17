@@ -23,7 +23,7 @@ export default {
             if (process.env.VUE_APP_BASE_URL != "http://localhost:5000/") {
                 this.token = eventBus.spotifyToken; // Improve this?
             } else {
-                this.token = 'BQAoq93p8JTHdxegT5r6isa9pC-FAq9oxVtujcoX2tW38deLY1_Xpgh9cMqhpiZUjEkdmHRnW2QTyY4yUN01JDGtYZ_XErku8Ij0PJVl0OWAORu8wd_wkeYEDnFpC0hZXp5zqXvr41kW944hTVGne7wW_4WOi4gomyeh0CYd6VCOF8-uQODm-1DiBr21ZQCBU3qcW_OYXsXkV9MpZF4aMxc';
+                this.token = 'BQCXV7sTRTMNnBa7T79QIykjB8Dc65ZQ8UvFE0LEnAG6Hxj8vLQbZL_LcHUqqPiEB_xIffX3lsKBbgQZllHJLUxvKPJEjS-ZWTcuGq6RZVswx7OQpT47MetLVoyeaiDlXSLOUB9xX_G7LbfadY5ybuypVFwKpUT_n38yL1YJ6XtR23nuHhLHtEqvHZOhIOiSnfFiwZ8UEYljjVCQNdssfhg';
             }
             window.token = this.token;
 
@@ -72,7 +72,6 @@ export default {
               track_window: { current_track }
             }) => {
                 eventBus.$emit('firePlayerStateChanged', current_track, position, duration, paused);
-                //console.log('Currently Playing', current_track.name);
                 //console.log('Position in Song', position);
                 //console.log('Duration of Song', duration);
             });
