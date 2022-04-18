@@ -11,7 +11,7 @@
         />
       </b-navbar-brand>
       <b-navbar-nav class="ml-auto" v-if="!loggedIn">
-        <b-nav-item disabled right class="log-in-with">Log in with </b-nav-item>
+        <b-nav-item disabled right class="log-in-with">Log in </b-nav-item>
         <b-button right
           variant="success"
           class="spotify-button"

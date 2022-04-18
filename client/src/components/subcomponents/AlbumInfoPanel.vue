@@ -66,7 +66,7 @@ export default {
     };
   },
   methods: {
-  getPersonInfo(person) {
+  getPersonInfo(person) { // ADD FUNCTIONALITY TO SHOW ARTIST IF NOT FOUND
 
   this.loading = true;
   const path = 'https://kgsearch.googleapis.com/v1/entities:search?indent=true&types=Person&types=MusicGroup&query=' + person + ' Music&limit=50&key=AIzaSyA91Endg_KkrNGhkqcrW5evkG1p7y6CA08';
@@ -82,7 +82,7 @@ export default {
       if (res.data.itemListElement[0] != null) {
 
         for (var i = 0; i < res.data.itemListElement.length; i++) {
-          if (res.data.itemListElement[i].result.name.includes(person.slice(-5))) {
+          if (res.data.itemListElement[i].result.name.slice(-8).includes(person.slice(-8))) {
               //console.log(res.data.itemListElement[i].result.name + " vs " + person)
     let rank = 0
 
@@ -99,13 +99,21 @@ export default {
               description = '';
            }
 
-      this.results.push([person, description, imageUrl, rank]);
-      this.results.sort(function(a,b){return b[3] - a[3]});
+        this.results.push([person, description, imageUrl, rank]);
+        this.results.sort(function(a,b){return b[3] - a[3]});
 
-      break;
+        break;
 
           }
+          if (i == res.data.itemListElement.length - 1) {
+            this.results.push([person, '', '', -1]);
+            this.results.sort(function(a,b){return b[3] - a[3]});
+          }
         }
+      } else {
+        //console.log(person);
+        this.results.push([person, '', '', -1]);
+        this.results.sort(function(a,b){return b[3] - a[3]});
       }
 
 

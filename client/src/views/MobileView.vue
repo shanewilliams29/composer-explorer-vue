@@ -44,7 +44,7 @@
 </template>
 
 <script>
-import NavBar from '@/components/mobile/NavBar.vue'
+import NavBar from '@/components/NavBar.vue'
 import ComposerList from '@/components/ComposerList.vue'
 import WorkList from '@/components/WorkList.vue'
 import AlbumList from '@/components/AlbumList.vue'
