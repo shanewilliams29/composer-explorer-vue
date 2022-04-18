@@ -15,8 +15,7 @@
                   </td>
                   <td class="info-td">
                     {{ album.name }}<br>
-                    <span class="born-died">{{album.release_date}} · {{ album.label }}</span><br>
-                    <span class="open-in-spotify"><a :href="album.uri">Open in Spotify</a></span>
+                    <span class="born-died"><a :href="album.external_urls.spotify" target="_blank"><img class="spotify-logo" src="@/assets/small-spotify-logo-black.png"></a> {{ album.label }}</span>
                   </td>
                 </tr>
               </table>
@@ -115,7 +114,6 @@ export default {
       this.results = [];
       this.artists = album.all_artists.split(", ");
       let album_id = album.album_uri.substring(album.album_uri.lastIndexOf(':') + 1);
-      console.log(album_id);
       spotify.getSpotifyAlbum(window.token, album_id);
       this.artists.forEach(element => this.getPersonInfo(element));
     })
@@ -125,7 +123,6 @@ export default {
       // this.getWorkInfo(workId);
     })
     eventBus.$on('fireSpotifyAlbumData', (album) => {
-      console.log(album);
       this.album = album;
       // this.getWorkInfo(workId);
     })
@@ -192,5 +189,9 @@ table{
 }
 .open-in-spotify{
   font-size: 12px;
+}
+.spotify-logo{
+  width: 14px;
+  height: 14px;
 }
 </style>
