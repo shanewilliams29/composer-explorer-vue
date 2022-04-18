@@ -1,6 +1,7 @@
 from app import app, db, sp
 from flask import jsonify, request, redirect, session, render_template, abort
 from config import Config
+from app.functions import prepare_composers, group_composers_by_region, prepare_works
 from app.models import ComposerList, WorkList, WorkAlbums, AlbumLike, Spotify, Artists
 from app.classes import SortFilter
 from sqlalchemy import func, text
@@ -154,41 +155,8 @@ def get_composers():
             .filter(ComposerList.catalogued == True) \
             .order_by(ComposerList.region, ComposerList.born).all()
 
-    # get era colours, flag icons, and proper region names
-    with open('app/static/eras.json') as f:
-        eras = json.load(f)
-
-    with open('app/static/countries.json') as f:
-        flags = json.load(f)
-
-    with open('app/static/regions.json') as f:
-        region_names = json.load(f)
-
-    # create COMPOSERS object for jsonifying
-    COMPOSERS = []
-    for composer in composer_list:
-
-        median_age = (composer.died - composer.born) / 2
-        median_year = median_age + composer.born
-        for era in eras:
-            if median_year > era[1]:
-                era_color = era[3]
-        region_name = region_names[composer.region]
-        flag = flags[composer.nationality].lower()
-
-        info = {
-            'id': composer.id,
-            'name_short': composer.name_short,
-            'name_full': composer.name_full,
-            'born': composer.born,
-            'died': composer.died,
-            'flag': app.config['STATIC'] + 'flags/1x1/' + flag + '.svg',
-            'img': app.config['STATIC'] + 'img/' + composer.name_short + '.jpg',
-            'region': region_name,
-            'color': era_color,
-            'popular': composer.catalogued
-        }
-        COMPOSERS.append(info)
+    # prepare list for display
+    COMPOSERS = prepare_composers(composer_list)
 
     if composer_filter == "alphabet":
         # group onto alphabet
@@ -212,28 +180,10 @@ def get_composers():
                 i += 1
                 if i == len(COMPOSERS):
                     composers_by_region[prev_region] = composers_in_region
-    else:
-       # group onto regions
-        composers_by_region = {}
-        composers_in_region = []
-        i = 0
-        prev_region = COMPOSERS[i]['region']
 
-        while i < len(COMPOSERS):
-            region = COMPOSERS[i]['region']
-            if region == prev_region:
-                composers_in_region.append(COMPOSERS[i])
-                i += 1
-                if i == len(COMPOSERS):
-                    composers_by_region[prev_region] = composers_in_region
-            else:
-                composers_by_region[prev_region] = composers_in_region
-                composers_in_region = []
-                composers_in_region.append(COMPOSERS[i])
-                prev_region = region
-                i += 1
-                if i == len(COMPOSERS):
-                    composers_by_region[prev_region] = composers_in_region
+    else:
+        # group onto regions
+        composers_by_region = group_composers_by_region(COMPOSERS)
 
     # return response
     response_object = {'status': 'success'}
@@ -285,41 +235,7 @@ def get_works(name):
         response.headers.add('Access-Control-Allow-Credentials', 'true')
         return response
 
-    WORKS = []
-    for work in works_list:
-        info = {
-            'id': work.id,
-            'genre': work.genre,
-            'cat': work.cat,
-            'recommend': work.recommend,
-            'title': work.title,
-            'nickname': work.nickname,
-            'date': work.date,
-            'album_count': work.album_count
-        }
-        WORKS.append(info)
-
-    # group onto genres
-    works_by_genre = {}
-    works_in_genre = []
-    i = 0
-    prev_genre = WORKS[i]['genre']
-
-    while i < len(WORKS):
-        genre = WORKS[i]['genre']
-        if genre == prev_genre:
-            works_in_genre.append(WORKS[i])
-            i += 1
-            if i == len(WORKS):
-                works_by_genre[prev_genre] = works_in_genre
-        else:
-            works_by_genre[prev_genre] = works_in_genre
-            works_in_genre = []
-            works_in_genre.append(WORKS[i])
-            prev_genre = genre
-            i += 1
-            if i == len(WORKS):
-                works_by_genre[prev_genre] = works_in_genre
+    works_by_genre = prepare_works(works_list)
 
     response_object = {'status': 'success'}
     response_object['works'] = works_by_genre
@@ -483,9 +399,46 @@ def get_albuminfo(album_id):
     return response
 
 
-# @app.route('/api/composerinfo/<composer>', methods=['GET'])
-# def get_composerinfo():
+@app.route('/api/artistcomposers/<artist_name>', methods=['GET'])
+def get_artistcomposers(artist_name):
 
-#     composer = ComposerList.query.filter_by(name_short=composer).first_or_404()
+    composers = db.session.query(ComposerList).join(Artists, ComposerList.name_short == Artists.composer)\
+        .filter(Artists.name == artist_name)\
+        .order_by(ComposerList.region, ComposerList.born).all()
 
-#     return jsonpickle.encode(composer)
+    # prepare list for display
+    COMPOSERS = prepare_composers(composers)
+
+   # group onto regions
+    composers_by_region = group_composers_by_region(COMPOSERS)
+
+    response_object = {'status': 'success'}
+    response_object['composers'] = composers_by_region
+    response = jsonify(response_object)
+    response.headers.add('Access-Control-Allow-Credentials', 'true')
+    return response
+
+
+@app.route('/api/artistworks', methods=['GET'])
+def get_artistworks():
+    artist_name = request.args.get('artist')
+    composer_name = request.args.get('composer')
+
+    works_list = db.session.query(WorkList).join(Artists)\
+        .filter(Artists.name == artist_name, WorkList.composer == composer_name)\
+        .order_by(WorkList.order, WorkList.genre, WorkList.id).all()
+
+    if not works_list:
+        response_object = {'status': 'success'}
+        response_object['works'] = works_list
+        response = jsonify(response_object)
+        response.headers.add('Access-Control-Allow-Credentials', 'true')
+        return response
+
+    works_by_genre = prepare_works(works_list)
+
+    response_object = {'status': 'success'}
+    response_object['works'] = works_by_genre
+    response = jsonify(response_object)
+    response.headers.add('Access-Control-Allow-Credentials', 'true')
+    return response

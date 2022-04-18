@@ -18,6 +18,7 @@
           <b-collapse :visible="visibility" :id="index.replace(/\s/g, '')">
           <b-card-text>
             <table cellspacing="0">
+
               <tr
                 v-for="composer in region"
                 :key="composer.id"
@@ -86,7 +87,9 @@ export default {
       composers: [],
       loading: false,
       selectedComposer: null,
-      visibility: true
+      visibility: true,
+      artist: "",
+      artistMode: false
     };
   },
   methods: {
@@ -138,9 +141,29 @@ export default {
           this.loading=false;
         });
     },
+    getArtistComposers(artist) {
+      this.artist = artist
+      this.artistMode = true;
+      this.loading = true;
+      this.visibility=true
+      const path = 'api/artistcomposers/' + artist;
+      axios.get(path)
+        .then((res) => {
+          this.composers = res.data.composers;
+          this.loading=false;
+        })
+        .catch((error) => {
+          // eslint-disable-next-line
+          console.error(error);
+          this.loading=false;
+        });
+    },
     getWorks(composer) {
+      if (!this.artistMode){
         eventBus.$emit('fireComposers', composer);
-        //this.$refs.composer.selectColor = "blue";
+      } else {
+        eventBus.$emit('fireArtistWorks', this.artist, composer);
+      }
     },
     selectRow(composerId){
         this.selectedComposer = composerId;
@@ -156,6 +179,9 @@ export default {
     })
     eventBus.$on('fireComposerSearch', (item) => {
         this.getSearchComposers(item);
+    })
+    eventBus.$on('fireArtistComposers', (artist) => {
+        this.getArtistComposers(artist);
     })
   },
 };

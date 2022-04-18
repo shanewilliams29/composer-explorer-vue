@@ -108,7 +108,6 @@ export default {
                           this.pageTitle = res.data.query.pages[id].title;
                           let wikiurl = "https://en.wikipedia.org/wiki/" + this.pageTitle;
                           this.wikiLink = wikiurl;
-                          console.log(this.pageTitle, this.workBLurb, this.wikiLink);
                           this.loading = false;
                           break;
                       }

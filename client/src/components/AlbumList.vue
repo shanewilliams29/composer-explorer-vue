@@ -204,6 +204,9 @@ export default {
     eventBus.$on('fireAlbumSearch', (id, item) => {
         this.getSearchAlbums(id, item);
     })
+    eventBus.$on('fireArtistAlbums', (id, item) => {
+        this.getFilteredAlbums(id, item);
+    })
   },
   mounted() {
     // this.selectRow('3xjbqYLxvXHuanI63XGwri');

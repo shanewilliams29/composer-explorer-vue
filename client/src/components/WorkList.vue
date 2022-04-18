@@ -71,7 +71,9 @@ export default {
       works: [],
       loading: false,
       selectedWork: null,
-      visibility: true
+      visibility: true,
+      artist: "",
+      artistMode: false
     };
   },
   methods: {
@@ -93,11 +95,35 @@ export default {
           this.loading = false;
         });
     },
+    getArtistWorks(artist, composer) {
+      this.loading = true;
+      this.artist = artist;
+      this.artistMode = true;
+      this.composer = composer;
+      const path = 'api/artistworks?artist=' + artist + '&composer=' + composer;
+      axios.get(path)
+        .then((res) => {
+          this.works = res.data.works;
+          this.visibility=true
+          this.composer = composer;
+          this.loading = false;
+          // eventBus.$emit('fireArtistWorksLoaded');
+        })
+        .catch((error) => {
+          // eslint-disable-next-line
+          console.error(error);
+          this.loading = false;
+        });
+    },
       getAlbums(workId, title) {
-        eventBus.$emit('fireAlbums', workId, title);
-        currentConfig.work = workId;
-        currentConfig.workTitle = title;
-        localStorage.setItem('currentConfig', JSON.stringify(currentConfig));
+        if(!this.artistMode){
+          eventBus.$emit('fireAlbums', workId, title);
+          currentConfig.work = workId;
+          currentConfig.workTitle = title;
+          localStorage.setItem('currentConfig', JSON.stringify(currentConfig));
+        } else {
+          eventBus.$emit('fireArtistAlbums', workId, this.artist);
+        }
     },
       selectRow(work){
         this.selectedWork = work;
@@ -145,6 +171,10 @@ export default {
             currentConfig.composer = composer;
             localStorage.setItem('currentConfig', JSON.stringify(currentConfig));
     })
+    eventBus.$on('fireArtistWorks', (artist, composer) => {
+            this.getArtistWorks(artist, composer);
+    })
+
     eventBus.$on('fireWorkFilter', (item) => {
         this.getFilteredWorks(item);
     })
