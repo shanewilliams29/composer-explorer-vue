@@ -69,7 +69,7 @@ export default {
   getPersonInfo(person) {
 
   this.loading = true;
-  const path = 'https://kgsearch.googleapis.com/v1/entities:search?indent=true&types=Person&types=MusicGroup&query=' + person + ' Music&limit=1&key=AIzaSyA91Endg_KkrNGhkqcrW5evkG1p7y6CA08';
+  const path = 'https://kgsearch.googleapis.com/v1/entities:search?indent=true&types=Person&types=MusicGroup&query=' + person + ' Music&limit=50&key=AIzaSyA91Endg_KkrNGhkqcrW5evkG1p7y6CA08';
   axios({
       method: 'get',
       url: path,
@@ -79,9 +79,13 @@ export default {
       let description = '';
       this.loading = false;
 
-
-    let rank = 0
       if (res.data.itemListElement[0] != null) {
+
+        for (var i = 0; i < res.data.itemListElement.length; i++) {
+          if (res.data.itemListElement[i].result.name.includes(person.slice(-5))) {
+              //console.log(res.data.itemListElement[i].result.name + " vs " + person)
+    let rank = 0
+
           if ('image' in res.data.itemListElement[0].result) {
              imageUrl = res.data.itemListElement[0].result.image.contentUrl;
              rank = rank + 1;
@@ -94,9 +98,17 @@ export default {
            }else {
               description = '';
            }
-       }
+
       this.results.push([person, description, imageUrl, rank]);
       this.results.sort(function(a,b){return b[3] - a[3]});
+
+      break;
+
+          }
+        }
+      }
+
+
     })
     .catch((error) => {
       console.error(error);
