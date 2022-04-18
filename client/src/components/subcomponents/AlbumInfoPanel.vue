@@ -5,7 +5,23 @@
     </div>
         <b-card class="album-info-card" v-show="!loading">
           <b-card-body class="card-body">
- <b-card-title v-for="(result, index) in results" :key="index" class="card-title">
+   <b-card-title class="card-title">
+              <table>
+                <tr>
+                  <td>
+
+                <b-avatar size="60px" src="https://storage.googleapis.com/composer-explorer.appspot.com/misc/record.jpg"></b-avatar>
+
+                  </td>
+                  <td class="info-td">
+                    {{ album.name }}<br>
+                    <span class="born-died">{{ album.label }}<br><a :href="album.uri">Open in Spotify</a></span>
+                  </td>
+                </tr>
+              </table>
+              </b-card-title>
+<b-card-text class="info-card-text">
+  <div v-for="(result, index) in results" :key="index" >
               <table>
                 <tr>
                   <td>
@@ -19,7 +35,8 @@
                   </td>
                 </tr>
               </table>
-              </b-card-title>
+            </div>
+              </b-card-text>
 
           </b-card-body>
         </b-card>
@@ -37,6 +54,7 @@
 <script>
 import axios from 'axios';
 import {eventBus} from "../../main.js";
+import spotify from '@/SpotifyFunctions.js'
 
 export default {
   data() {
@@ -44,6 +62,7 @@ export default {
       loading: true,
       artists: [],
       results: [],
+      album: {}
     };
   },
   methods: {
@@ -94,17 +113,22 @@ export default {
       this.loading = true;
       this.results = [];
       this.artists = album.all_artists.split(", ");
-      //console.log(this.artists);
+      let album_id = album.album_uri.substring(album.album_uri.lastIndexOf(':') + 1);
+      console.log(album_id);
+      spotify.getSpotifyAlbum(window.token, album_id);
       this.artists.forEach(element => this.getPersonInfo(element));
-
-      //this.results = this.results.reverse();
-      //console.log(this.results);
     })
     // eslint-disable-next-line
     eventBus.$on('expandInfoPanel', (composer, workId) => {
       this.loading = false;
       // this.getWorkInfo(workId);
     })
+    eventBus.$on('fireSpotifyAlbumData', (album) => {
+      console.log(album);
+      this.album = album;
+      // this.getWorkInfo(workId);
+    })
+
   },
 };
 </script>
@@ -112,6 +136,7 @@ export default {
 <style scoped>
 a{
   color: black !important;
+  font-weight: 600;
 }
 a:hover{
   color: black !important;
@@ -142,16 +167,23 @@ a:hover{
   font-size: 16px;
 }
 .card-body{
-  height: 263px;
-  overflow-y: scroll;
   background-color: white !important;
 }
-.card-body {
-    -ms-overflow-style: none;  /* Internet Explorer 10+ */
-    scrollbar-width: none;  /* Firefox */
+.info-card-text{
+  font-size: 13px;
+  line-height: 130%;
+  overflow-y: scroll;
+  height: 190px;
 }
-.card-body::-webkit-scrollbar {
-    display: none;  /* Safari and Chrome */
+table{
+  margin-bottom: 6px;
+}
+.info-card-text {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+.info-card-text::-webkit-scrollbar {
+    display: none;
 }
 .wiki-link{
   font-style: italic;

@@ -145,7 +145,8 @@ export default {
       this.artist = artist
       this.artistMode = true;
       this.loading = true;
-      this.visibility=true
+      this.visibility=true;
+      this.selectedComposer = null;
       const path = 'api/artistcomposers/' + artist;
       axios.get(path)
         .then((res) => {
@@ -182,6 +183,8 @@ export default {
     })
     eventBus.$on('fireArtistComposers', (artist) => {
         this.getArtistComposers(artist);
+        eventBus.$emit('fireClearWorks', artist);
+
     })
   },
 };

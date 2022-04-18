@@ -27,6 +27,7 @@
             </b-card-text>
           </b-card-body>
         </b-card>
+
 </div>
 
 <!--   <div class="composer-heading">

@@ -18,7 +18,7 @@
           :href="spotifyURL"
           >
             <img
-              src="../assets/Spotify_Logo_RGB_White.png"
+              src="@/assets/Spotify_Logo_RGB_White.png"
               class=""
               alt="Spotify"
               height="28px"

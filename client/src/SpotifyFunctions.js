@@ -4,6 +4,26 @@ import {currentConfig} from "./main.js";
 
 var spotify = {
 
+getSpotifyAlbum(token, album) {
+  const path = 'https://api.spotify.com/v1/albums/' + album;
+  axios({
+      method: 'get',
+      url: path,
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + token
+      }
+    })
+    .then((res) => {
+      //console.log(res);
+      eventBus.$emit('fireSpotifyAlbumData', res.data);
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+},
+
 pressPlay(token, device_id) {
   const path = 'https://api.spotify.com/v1/me/player/play';
   axios({

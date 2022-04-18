@@ -4,8 +4,11 @@
       <b-spinner class="m-5"></b-spinner>
     </div>
       <div class="row">
-          <span v-show="!loading && works.length < 1" class="col no-works-found">
+          <span v-show="!loading && works.length < 1 && !artistMode" class="col no-works-found">
             No works found for {{ composer }}.
+          </span>
+          <span v-show="!loading && works.length < 1 && artistMode" class="col no-works-found">
+            Select a composer to see works performed by {{ artist }}.
           </span>
         <b-card-group deck v-show="!loading && works">
           <b-card
@@ -180,6 +183,11 @@ export default {
     })
     eventBus.$on('fireWorkSearch', (item) => {
         this.getSearchWorks(item);
+    })
+    eventBus.$on('fireClearWorks', (artist) => {
+      this.artistMode = true;
+      this.artist = artist;
+        this.getSearchWorks('ggesagoseofsa'); // get no results
     })
   },
 };
