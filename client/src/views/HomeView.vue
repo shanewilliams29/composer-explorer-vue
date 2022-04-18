@@ -51,20 +51,16 @@ export default {
         .then((res) => {
           if (res.data.status == "success") {
             if (res.data.client_token !== null) {
-              //eventBus.$emit('fireToken'); // improve this?
-              currentConfig.loggedIn = true;
               eventBus.$emit('fireLogIn', currentConfig.loggedIn);
               window.token = res.data.client_token;
             } else {
               window.token = res.data.app_token;
-              currentConfig.loggedIn = false;
             }
           }
           console.log(window.token);
         })
         .catch((error) => {
           window.token = null;
-          currentConfig.loggedIn = false;
           console.error(error);
         });
     },

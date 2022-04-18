@@ -30,7 +30,7 @@
 
                   </td>
                   <td class="info-td">
-                    <a @click="getArtistComposers(result[0])">{{ result[0] }}</a><br>
+                    <a clss="artist-name" @click="getArtistComposers(result[0])">{{ result[0] }}</a><br>
                   <span class="born-died">{{result[1]}}</span>
                   </td>
                 </tr>
@@ -135,6 +135,7 @@ export default {
 a{
   color: black !important;
   font-weight: 600;
+  font-size: 14px;
 }
 a:hover{
   color: black !important;
@@ -151,7 +152,7 @@ a:hover{
   color: #343a40;
 }
 .born-died{
-  font-size: 14px !important;
+  font-size: 13px !important;
   color: grey !important;
 }
 .album-info-card{

@@ -34,7 +34,6 @@
 
 <script>
 import {baseURL} from "../main.js";
-import {currentConfig} from "../main.js";
 import {eventBus} from "../main.js";
 
 export default {
@@ -42,7 +41,7 @@ export default {
   data() {
     return {
       spotifyURL: baseURL + "connect_spotify",
-      loggedIn: currentConfig.loggedIn
+      loggedIn: false
     };
   },
   methods: {
