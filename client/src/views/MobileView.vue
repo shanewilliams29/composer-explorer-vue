@@ -82,13 +82,17 @@ export default {
       axios.get(path)
         .then((res) => {
           if (res.data.status == "success") {
-            eventBus.$emit('fireToken');
-            eventBus.spotifyToken = res.data.token;
+            if (res.data.client_token !== null) {
+              eventBus.$emit('fireToken'); // improve this?
+              window.token = res.data.client_token;
+            } else {
+              window.token = res.data.app_token;
+            }
           }
-          console.log(eventBus.spotifyToken);
+          console.log(window.token);
         })
         .catch((error) => {
-          // eslint-disable-next-line
+          window.token = null;
           console.error(error);
         });
     },

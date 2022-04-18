@@ -10,12 +10,13 @@
                 <tr>
                   <td>
 
-                <b-avatar size="60px" src="https://storage.googleapis.com/composer-explorer.appspot.com/misc/record.jpg"></b-avatar>
+                <b-avatar size="60px" src="https://storage.googleapis.com/composer-explorer.appspot.com/misc/record-grey.jpg"></b-avatar>
 
                   </td>
                   <td class="info-td">
                     {{ album.name }}<br>
-                    <span class="born-died">{{ album.label }}<br><a :href="album.uri">Open in Spotify</a></span>
+                    <span class="born-died">{{album.release_date}} · {{ album.label }}</span><br>
+                    <span class="open-in-spotify"><a :href="album.uri">Open in Spotify</a></span>
                   </td>
                 </tr>
               </table>
@@ -188,5 +189,8 @@ table{
 .wiki-link{
   font-style: italic;
   color: grey;
+}
+.open-in-spotify{
+  font-size: 12px;
 }
 </style>

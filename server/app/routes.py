@@ -5,19 +5,33 @@ from app.functions import prepare_composers, group_composers_by_region, prepare_
 from app.models import ComposerList, WorkList, WorkAlbums, AlbumLike, Spotify, Artists
 from app.classes import SortFilter
 from sqlalchemy import func, text
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 import json
 import jsonpickle
 
 
 @app.before_request
 def before_request():
+    # mobile view
+    if not session.get('mobile'):
+        session['mobile'] = None
+
     # get spotify token
     if not session.get('spotify_token'):
         session['spotify_token'] = None
 
-    if not session.get('mobile'):
-        session['mobile'] = None
+    if not session.get('app_token'):
+        session['app_token'] = sp.client_authorize()
+        session['app_token_expire_time'] = datetime.now(timezone.utc) + timedelta(hours=1)
+
+    # token expiry and refresh
+    if session['app_token_expire_time'] < datetime.now((timezone.utc)):
+        session['app_token'] = sp.client_authorize()
+        session['app_token_expire_time'] = datetime.now((timezone.utc)) + timedelta(hours=1)
+    if session['spotify_token']:
+        if session['spotify_token_expire_time'] < datetime.now((timezone.utc)):
+            session['spotify_token'] = sp.refresh_token()
+            session['spotify_token_expire_time'] = datetime.now((timezone.utc)) + timedelta(hours=1)
 
 
 # @app.route('/')
@@ -82,11 +96,13 @@ def log_out():
 @app.route('/api/get_token')
 def get_token():
     # add check for expiry
-    if session['spotify_token']:
-        token = session['spotify_token']
+    if session['spotify_token'] or session['app_token']:
+        client_token = session['spotify_token']
+        app_token = session['app_token']
         # return response
         response_object = {'status': 'success'}
-        response_object['token'] = token
+        response_object['client_token'] = client_token
+        response_object['app_token'] = app_token
         response = jsonify(response_object)
         response.headers.add('Access-Control-Allow-Credentials', 'true')
         return response

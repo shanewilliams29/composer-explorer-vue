@@ -21,11 +21,10 @@ export default {
 
         window.onSpotifyWebPlaybackSDKReady = () => {
             if (process.env.VUE_APP_BASE_URL != "http://localhost:5000/") {
-                this.token = eventBus.spotifyToken; // Improve this?
+                this.token = window.token; // Improve this?
             } else {
-                this.token = 'BQB8-uaFAFZXl3c51qjMa0d-ThtprlpI3iVJqff4WHToD-v9t6dcserfnQVIdAc2Zug4uRamTODnbgZJI4073dnDcWAX9zGlUrDBleIWcbiPgLq7dHg5HT_iOVTgXf24GgUmxB2A01tDhVsUnUwEPgi1mMIL5dqRLjlT';
+                this.token = window.token;
             }
-            window.token = this.token;
 
         if(this.token){
             // eslint-disable-next-line
