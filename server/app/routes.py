@@ -2,7 +2,7 @@ from app import app, db, sp
 from flask import jsonify, request, redirect, session, render_template, abort
 from config import Config
 from app.functions import prepare_composers, group_composers_by_region, prepare_works
-from app.models import ComposerList, WorkList, WorkAlbums, AlbumLike, Spotify, Artists
+from app.models import ComposerList, WorkList, WorkAlbums, AlbumLike, Spotify, Artists, ArtistList
 from app.classes import SortFilter
 from sqlalchemy import func, text
 from datetime import datetime, timedelta, timezone
@@ -455,6 +455,32 @@ def get_artistworks():
 
     response_object = {'status': 'success'}
     response_object['works'] = works_by_genre
+    response = jsonify(response_object)
+    response.headers.add('Access-Control-Allow-Credentials', 'true')
+    return response
+
+
+@app.route('/api/artistlist', methods=['GET'])
+def get_artistlist():
+    artists = db.session.query(ArtistList).first()
+
+    artist_list = artists.content
+
+    response_object = {'status': 'success'}
+    response_object['artists'] = artist_list
+    response = jsonify(response_object)
+    response.headers.add('Access-Control-Allow-Credentials', 'true')
+    return response
+
+
+@app.route('/api/workartists', methods=['GET'])
+def get_workartists():
+    artists = db.session.query(ArtistList).first()
+
+    artist_list = artists.content
+
+    response_object = {'status': 'success'}
+    response_object['artists'] = artist_list
     response = jsonify(response_object)
     response.headers.add('Access-Control-Allow-Credentials', 'true')
     return response

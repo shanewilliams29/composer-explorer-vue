@@ -46,13 +46,19 @@
       <b-col>
         <b-card class="heading-card albums-card">
           <b-form-group>
-              <b-form-input
+<!--               <vue-typeahead-bootstrap
+                v-model="query"
+                :data="['Canada', 'United States', 'Mexico']"
+              /> -->
+              <vue-typeahead-bootstrap
                 v-model="albumSearchField"
-                @change="albumSearch()"
-                @focus="onAlbumFocus()"
+                @hit="albumSearch()"
                 :placeholder="albumSearchPlaceholder"
+                @keyup.enter="albumSearch()"
+                :data="artist_list"
                 size="sm"
-              ></b-form-input>
+                ref="typeahead"
+              />
             <b-form-select
               v-model="albumFilterField"
               :options="albumOptions"
@@ -76,6 +82,7 @@ export default {
     return {
       work_heading: "",
       album_heading: "",
+      artist_list: [],
 
       composerFilterForm: 'popular',
       composerSearchForm: null,
@@ -151,6 +158,7 @@ export default {
       eventBus.$emit('fireWorkSearch', '');
     },
     albumFilter() {
+      this.albumSearchPlaceholder = "Search performers";
       if (this.albumFilterField == "allartists") {
           eventBus.$emit('fireAlbumFilter', currentConfig.work, '');
       } else {
@@ -161,17 +169,33 @@ export default {
     },
     albumSearch() {
       eventBus.$emit('fireAlbumSearch', currentConfig.work, this.albumSearchField);
+      this.albumSearchPlaceholder = this.albumSearchField;
+      this.albumSearchField = '';
       this.albumFilterField = null;
       //console.log(this.workSearchField);
     },
     onAlbumFocus() {
-      this.albumSearchField = '';
+      this.$refs.typeahead.inputValue = ''
       eventBus.$emit('fireAlbumSearch', currentConfig.work, '');
-    }
+    },
+    // getArtistList() {
+    //   const path = 'api/artistlist';
+    //   axios.get(path)
+    //     .then((res) => {
+    //       // this.artist_list = ['Canada', 'United States', 'Mexico'];
+    //       this.artist_list = JSON.parse(res.data.artists);
+    //       //console.log(this.artist_list);
+    //     })
+    //     .catch((error) => {
+    //       // eslint-disable-next-line
+    //       console.error(error);
+    //     });
+    // }
   },
   created() {
     this.work_heading = "Works by Beethoven";
     this.album_heading = "Albums for \"Piano Concerto No. 5 in E♭ major\"";
+
     eventBus.$on('fireComposers', (composer) => {
         this.workSearchPlaceholder = "Search works by " + composer;
         this.workSearchField = '';
@@ -182,12 +206,15 @@ export default {
         this.albumFilterField = null;
     })
     eventBus.$on('fireArtistList', (artistList) => {
+        this.artist_list = []
+        this.albumSearchPlaceholder = "Search performers";
         this.albumOptions = [
           { value: null, text: 'Filter performers', disabled: true},
           { value: 'allartists', text: 'All performers' }
         ];
         for (var key in artistList) {
           this.albumOptions.push({ value: key, text: key + ' (' + artistList[key] + ')'});
+          this.artist_list.push(key);
         }
     })
   },

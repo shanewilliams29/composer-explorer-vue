@@ -10,12 +10,13 @@
                 <tr>
                   <td>
 
-                <b-avatar size="60px" src="https://storage.googleapis.com/composer-explorer.appspot.com/misc/record-grey.jpg"></b-avatar>
+                <!-- <b-avatar size="60px" src="https://storage.googleapis.com/composer-explorer.appspot.com/misc/record-grey.jpg"></b-avatar> -->
+                <b-avatar square size="60px" :src="album.images[1].url"></b-avatar>
 
                   </td>
                   <td class="info-td">
                     {{ album.name }}<br>
-                    <span class="born-died"><a :href="album.external_urls.spotify" target="_blank"><img class="spotify-logo" src="@/assets/small-spotify-logo-black.png"></a> {{ album.label }}</span>
+                    <span class="born-died"><a :href="album.external_urls.spotify" target="_blank"><img class="spotify-logo" src="@/assets/Spotify_Logo_RGB_Black.png"></a> {{ album.label }}, {{album.release_date.slice(0,4)}}</span>
                   </td>
                 </tr>
               </table>
@@ -66,7 +67,7 @@ export default {
     };
   },
   methods: {
-  getPersonInfo(person) { // ADD FUNCTIONALITY TO SHOW ARTIST IF NOT FOUND
+  getPersonInfo(person) {
 
   this.loading = true;
   const path = 'https://kgsearch.googleapis.com/v1/entities:search?indent=true&types=Person&types=MusicGroup&query=' + person + ' Music&limit=50&key=AIzaSyA91Endg_KkrNGhkqcrW5evkG1p7y6CA08';
@@ -212,7 +213,7 @@ table{
   font-size: 12px;
 }
 .spotify-logo{
-  width: 14px;
-  height: 14px;
+  width: auto;
+  height: 18px;
 }
 </style>

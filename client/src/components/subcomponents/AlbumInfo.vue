@@ -14,13 +14,13 @@
             <div class="centered album-data">
               <span style="font-weight: bold">{{title}}</span>
               <span
-                style="font-style: italic; font-weight: bold; color: lightblue"
+                style="font-style: italic; font-weight: bold; color: darkgray;"
                 >{{album.artists}} ({{album.release_date}})</span
               >
-              <span
+<!--               <span
                 style="font-style: italic; color: #a4a7a9"
                 >{{album.minor_artists}}</span
-              >
+              > -->
             </div>
           </b-card-text>
         </b-card-body>
@@ -93,8 +93,8 @@ export default {
   max-height: 100px;
 }
 .card-body {
-  font-size: 12px;
-  padding-left: 2px;
+  font-size: 14px;
+
   margin-right: 6px;
   padding-top: 0px;
   height: 100px;
@@ -109,6 +109,7 @@ export default {
   height: 100px;
 }
 .album-data {
-  line-height: 120%;
+  padding-left: 10px;
+  line-height: 130%;
 }
 </style>

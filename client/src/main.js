@@ -2,6 +2,7 @@ import Vue from 'vue'
 import App from './App.vue'
 import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
 import axios from 'axios';
+import VueTypeaheadBootstrap from 'vue-typeahead-bootstrap';
 
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
@@ -14,6 +15,7 @@ axios.defaults.baseURL = process.env.VUE_APP_BASE_URL;
 
 Vue.use(BootstrapVue)
 Vue.use(IconsPlugin)
+Vue.component('vue-typeahead-bootstrap', VueTypeaheadBootstrap)
 
 export const eventBus = new Vue();
 export const spotifyPlayer = new Vue();
