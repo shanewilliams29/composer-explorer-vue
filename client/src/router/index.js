@@ -2,6 +2,8 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import MobileView from '../views/MobileView.vue'
+import PerformerView from '../views/PerformerView.vue'
+import RadioView from '../views/RadioView.vue'
 
 Vue.use(VueRouter)
 
@@ -15,6 +17,16 @@ const routes = [
     path: '/mobile',
     name: 'mobile',
     component: MobileView
+  },
+  {
+    path: '/performers',
+    name: 'performers',
+    component: PerformerView
+  },
+  {
+    path: '/radio',
+    name: 'radio',
+    component: RadioView
   },
   {
     path: '/about',

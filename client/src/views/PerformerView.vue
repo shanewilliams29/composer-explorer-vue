@@ -1,7 +1,7 @@
 <template>
   <div id="home">
     <NavBar/>
-    <ColumnHeadings/>
+    <PerformersHeadings/>
     <div class="container-fluid">
       <b-row>
         <b-col class="composer-list"><ComposerList/></b-col>
@@ -17,7 +17,7 @@
 
 <script>
 import NavBar from '@/components/NavBar.vue'
-import ColumnHeadings from '@/components/ColumnHeadings.vue'
+import PerformersHeadings from '@/components/PerformersHeadings.vue'
 import ComposerList from '@/components/ComposerList.vue'
 import WorkList from '@/components/WorkList.vue'
 import AlbumList from '@/components/AlbumList.vue'
@@ -32,7 +32,7 @@ export default {
   name: 'HomeView',
   components: {
     NavBar,
-    ColumnHeadings,
+    PerformersHeadings,
     ComposerList,
     WorkList,
     AlbumList,
@@ -90,31 +90,5 @@ export default {
 </script>
 
 <style>
-  #home{
-    overflow-x: hidden;
-    background: #f1f2f4 !important;
-  }
-  .composer-list{
-    height: calc(100vh - 66px - 78px - 100px - var(--panelheight));
-    overflow-y: scroll;
-  }
-  .work-list{
-    height: calc(100vh - 66px - 78px - 100px - var(--panelheight));
-    overflow-y: scroll;
-  }
-  .album-list{
-    height: calc(100vh - 66px - 78px - 100px - var(--panelheight));
-    overflow-y: scroll;
-    overflow-x: hidden;
-  }
-  .info-panel-button{
-  font-size: 10px;
-  border-radius: 0px;
-  padding-top: 1px;
-  padding-bottom: 1px;
-  position:fixed;
-  left: 50%;
-  transform: translateX(-50%);
-  bottom:92px;
-  }
+
 </style>

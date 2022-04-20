@@ -13,9 +13,9 @@
 
 <div>
   <b-nav pills class="navbar-items">
-    <b-nav-item active right><b-icon-music-note-list></b-icon-music-note-list>&nbsp;Browse</b-nav-item>
-    <b-nav-item ><b-icon-person-lines-fill></b-icon-person-lines-fill>&nbsp;Performers</b-nav-item>
-    <b-nav-item><b-icon-volume-up-fill></b-icon-volume-up-fill>&nbsp;Radio</b-nav-item>
+    <b-nav-item :active='$route.path == "/"' href="/"><b-icon-music-note-list></b-icon-music-note-list>&nbsp;Browse</b-nav-item>
+    <b-nav-item :active='$route.name == "performers"' href="/performers"><b-icon-person-lines-fill></b-icon-person-lines-fill>&nbsp;Performers</b-nav-item>
+    <b-nav-item :active='$route.name == "radio"' href="/radio"><b-icon-volume-up-fill></b-icon-volume-up-fill>&nbsp;Radio</b-nav-item>
   </b-nav>
 </div>
 

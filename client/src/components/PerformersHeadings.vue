@@ -2,52 +2,8 @@
   <div class="container-fluid">
     <b-row>
       <b-col>
-        <div>
-          <b-card class="heading-card composer-card">
-            <b-form-group>
-              <b-form-input
-                v-model="composerSearchForm"
-                @input="composerSearch()"
-                @focus="onComposerFocus()"
-                placeholder="Search composers"
-                size="sm"
-              ></b-form-input>
-              <v-select
-                v-model="composerFilterForm"
-                label="text"
-                :options="composerOptions"
-                @input="composerFilter()"
-                :inputId="composerFilterForm"
-                :clearable="false"
-                class="mt-3 style-chooser"
-                :searchable="false"
-              ></v-select>
-            </b-form-group>
-          </b-card>
-        </div>
       </b-col>
       <b-col>
-        <b-card class="heading-card work-card">
-            <b-form-group>
-              <b-form-input
-                v-model="workSearchField"
-                @input="workSearch()"
-                @focus="onWorkFocus()"
-                :placeholder="workSearchPlaceholder"
-                size="sm"
-              ></b-form-input>
-                <v-select
-                v-model="workFilterField"
-                label="text"
-                :options="workOptions"
-                @input="workFilter()"
-                :inputId="workFilterField"
-                :clearable="false"
-                class="mt-3 style-chooser"
-                :searchable="false"
-              ></v-select>
-            </b-form-group>
-        </b-card>
       </b-col>
       <b-col class="last-col">
         <b-card class="heading-card albums-card">
