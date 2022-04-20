@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    <NavBar/>
     <router-view/>
     <SpotifyPlayer/>
     <div class="info-panel" v-show='showPanel'><InfoPanel/></div>
@@ -12,13 +13,15 @@
 import SpotifyPlayer from '@/components/SpotifyPlayer.vue'
 import InfoPanel from '@/components/InfoPanel.vue'
 import PageFooter from '@/components/PageFooter.vue'
+import NavBar from '@/components/NavBar.vue'
 
-import axios from 'axios';
 import {eventBus} from "./main.js";
 import {currentConfig} from "./main.js";
+import spotify from "./SpotifyFunctions.js";
 
 export default {
   components: {
+    NavBar,
     SpotifyPlayer,
     InfoPanel,
     PageFooter
@@ -29,25 +32,6 @@ export default {
     };
   },
   methods: {
-    getSpotifyToken() {
-      const path = 'api/get_token';
-      axios.get(path)
-        .then((res) => {
-          if (res.data.status == "success") {
-            if (res.data.client_token !== null) {
-              eventBus.$emit('fireLogIn', currentConfig.loggedIn);
-              window.token = res.data.client_token;
-            } else {
-              window.token = res.data.app_token;
-            }
-          }
-          console.log(window.token);
-        })
-        .catch((error) => {
-          window.token = null;
-          console.error(error);
-        });
-    },
     togglePanel(){
       this.showPanel = !this.showPanel;
       if (this.showPanel){
@@ -60,13 +44,10 @@ export default {
   },
   beforeCreate(){
     if( screen.width <= 760 ) {
-        //this.$router.replace('mobile');
         window.location.replace('mobile');
     }
   document.documentElement.style.setProperty('--panelheight', `0px`);
-  },
-  created(){
-    this.getSpotifyToken();
+  spotify.getSpotifyToken();
   },
 }
 </script>
@@ -83,6 +64,13 @@ export default {
     overflow-x: hidden;
     background: #f1f2f4 !important;
     }
+
+.page-height{
+    height: calc(100vh - 66px - 78px + 78px - 100px - var(--panelheight));
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+
   .info-panel-button{
   font-size: 10px !important;
   border-radius: 0px !important;

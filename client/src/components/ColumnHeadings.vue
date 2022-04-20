@@ -114,7 +114,7 @@ export default {
           { value: 'all', text: 'All works'}
         ],
 
-      albumFilterField: { value: 'allartists', text: 'All performers of ' + '"' + currentConfig.workTitle+ '"'},
+      albumFilterField: { value: 'allartists', text: 'All performers'},
       albumOptions: [],
 
       albumSortField: { value: 'recommended', text: 'Recommended sorting' },
@@ -127,7 +127,7 @@ export default {
   },
   methods: {
     composerFilter() {
-      console.log(this.composerFilterForm.value);
+      //console.log(this.composerFilterForm.value);
       eventBus.$emit('fireComposerFilter', this.composerFilterForm.value);
       this.composerSearchForm = '';
       //console.log(this.composerFilterForm);
@@ -200,16 +200,15 @@ export default {
         this.workFilterField = { value: 'recommended', text: 'Recommended works' };
     })
     eventBus.$on('fireAlbums', (work_id, title) => { // is this used?
-      console.log(title);
         this.title = title;
         this.album_heading = "Albums for \"" + title + "\"";
-        this.albumFilterField = { value: 'allartists', text: 'All performers of ' + '"' + this.title + '"'};
+        this.albumFilterField = { value: 'allartists', text: 'All performers'};
     })
     eventBus.$on('fireArtistList', (artistList) => {
         this.artist_list = []
         this.albumSearchPlaceholder = "Search performers of " + this.title;
         this.albumOptions = [
-          { value: 'allartists', text: 'All performers of ' + '"' + this.title + '"'}
+          { value: 'allartists', text: 'All performers'}
         ];
         for (var key in artistList) {
           this.albumOptions.push({ value: key, text: key });

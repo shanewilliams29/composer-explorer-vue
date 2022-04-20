@@ -1,9 +1,11 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+import PageNotFound from '../views/PageNotFound.vue'
 import HomeView from '../views/HomeView.vue'
 import MobileView from '../views/MobileView.vue'
 import PerformerView from '../views/PerformerView.vue'
 import RadioView from '../views/RadioView.vue'
+
 
 Vue.use(VueRouter)
 
@@ -36,7 +38,11 @@ const routes = [
     // which is lazy-loaded when the route is visited.
     component: () => import(/* webpackChunkName: "about" */ '../views/AboutView.vue')
   },
-
+  {
+    path: '/:catchAll(.*)*',
+    name: "PageNotFound",
+    component: PageNotFound,
+  },
 ]
 
 const router = new VueRouter({

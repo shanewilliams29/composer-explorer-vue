@@ -23,7 +23,11 @@ Vue.component('v-select', vSelect)
 export const eventBus = new Vue();
 export const spotifyPlayer = new Vue();
 export const baseURL = process.env.VUE_APP_BASE_URL;
-export const defaultConfig = {
+
+
+// Preserve view state between page reloads
+let config = {}
+const defaultConfig = {
                                   composer: "Beethoven",
                                   composerId: "1",
                                   work: "BEETHOVEN00005",
@@ -35,15 +39,26 @@ export const defaultConfig = {
                                   album: "BEETHOVEN000056eOuqhCfrTPp1H0YbQ9PmL"
                                 };
 
-let config = {}
-
 if (localStorage.getItem("currentConfig") !== null) {
     config = JSON.parse(localStorage.getItem('currentConfig'));
 } else {
     config = defaultConfig;
 }
-
 export const currentConfig = config;
+
+// Spotify config
+let spConfig = {}
+const defaultSpotify = {        appToken: null,
+                                clientToken: null,
+                                deviceID: null
+                                };
+
+if (localStorage.getItem("spotifyConfig") !== null) {
+    spConfig = JSON.parse(localStorage.getItem('spotifyConfig'));
+} else {
+    spConfig = defaultSpotify;
+}
+export const spotifyConfig = spConfig;
 
 new Vue({
   router,

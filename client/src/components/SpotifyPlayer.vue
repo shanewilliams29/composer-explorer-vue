@@ -4,6 +4,7 @@
 
 <script>
 import {eventBus} from "../main.js";
+import {spotifyConfig} from "../main.js";
 
 export default {
   data() {
@@ -15,15 +16,16 @@ export default {
   methods: {
   },
   mounted() {
-      let spotifyPlayerScript = document.createElement('script');
-      spotifyPlayerScript.setAttribute('src', 'https://sdk.scdn.co/spotify-player.js');
-      document.head.appendChild(spotifyPlayerScript);
+    let spotifyPlayerScript = document.createElement('script');
+    spotifyPlayerScript.setAttribute('src', 'https://sdk.scdn.co/spotify-player.js');
+    document.head.appendChild(spotifyPlayerScript);
 
         window.onSpotifyWebPlaybackSDKReady = () => {
             if (process.env.VUE_APP_BASE_URL != "http://localhost:5000/") {
-                this.token = window.token; // Improve this?
+                this.token = spotifyConfig.clientToken; // Need this?
             } else {
-                this.token = window.token;
+                this.token = 'BQCmXK-SHmi3KReRo1ajwXhxn6TdidTnduzAx69AFysuy_BXlaVsuarqV4PSyKnO4zXlQRvGqBr0j3s6T0xMQ4G3ej5qAf689Ae2NQzDxYoyeLx7pH_U49xpKkgOmdKDm3ehG4Jld6D8wP2ZON1G0FlowM-dFpmLM7BS6MFCoKzXV-14K9U3L4ekDGVrxeeBdXxm5gg1xI2KbX_B_QTMoHU';
+                spotifyConfig.clientToken = this.token;
             }
 
         if(this.token){
@@ -37,8 +39,7 @@ export default {
             // Ready
             this.player.addListener('ready', ({ device_id }) => {
                 this.device_id = device_id;
-                window.device_id = device_id;
-                eventBus.$emit('firePlayerReady');
+                spotifyConfig.deviceID = device_id;
                 console.log('Ready with Device ID', device_id);
             });
 
@@ -84,7 +85,6 @@ export default {
             this.player.connect();
             }
         }
-
   },
 };
 </script>

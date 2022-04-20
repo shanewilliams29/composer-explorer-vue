@@ -1,19 +1,17 @@
 <template>
   <div id="home">
-    <NavBar/>
     <ColumnHeadings/>
     <div class="container-fluid">
       <b-row>
-        <b-col class="display-list"><ComposerList/></b-col>
-        <b-col class="display-list"><WorkList/></b-col>
-        <b-col class="display-list"><AlbumList/></b-col>
+        <b-col class="display-height"><ComposerList/></b-col>
+        <b-col class="display-height"><WorkList/></b-col>
+        <b-col class="display-height"><AlbumList/></b-col>
       </b-row>
     </div>
   </div>
 </template>
 
 <script>
-import NavBar from '@/components/NavBar.vue'
 import ColumnHeadings from '@/components/ColumnHeadings.vue'
 import ComposerList from '@/components/ComposerList.vue'
 import WorkList from '@/components/WorkList.vue'
@@ -22,7 +20,6 @@ import AlbumList from '@/components/AlbumList.vue'
 export default {
   name: 'HomeView',
   components: {
-    NavBar,
     ColumnHeadings,
     ComposerList,
     WorkList,
@@ -40,7 +37,7 @@ export default {
 </script>
 
 <style>
-  .display-list{
+  .display-height{
     height: calc(100vh - 66px - 78px - 100px - var(--panelheight));
     overflow-y: scroll;
     overflow-x: hidden;

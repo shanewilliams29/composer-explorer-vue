@@ -35,6 +35,7 @@
 import spotify from '@/SpotifyFunctions.js'
 import {eventBus} from "../../main.js";
 import {currentConfig} from "../../main.js";
+import {spotifyConfig} from "../../main.js";
 
 export default {
   data() {
@@ -52,32 +53,32 @@ export default {
   },
   methods: {
     play() {
-      spotify.pressPlay(window.token, window.device_id);
+      spotify.pressPlay(spotifyConfig.clientToken, spotifyConfig.deviceID);
     },
     pause() {
-      spotify.pauseTrack(window.token);
+      spotify.pauseTrack(spotifyConfig.clientToken);
     },
     back() {
       if(this.progress > 2000){
-          spotify.beginningTrack(window.token, window.device_id);
+          spotify.beginningTrack(spotifyConfig.clientToken, spotifyConfig.deviceID);
           this.setPlayback(0, this.duration);
       } else {
       let uriList = {}
       let jsonList = {}
       uriList['uris'] = currentConfig.previousTracks.split(' ');
       jsonList = JSON.stringify(uriList);
-      spotify.playTracks(window.token, window.device_id, jsonList);
+      spotify.playTracks(spotifyConfig.clientToken, spotifyConfig.deviceID, jsonList);
       }
     },
     next() {
-      spotify.nextTrack(window.token);
+      spotify.nextTrack(spotifyConfig.clientToken);
       //eventBus.$emit('fireNextTrack');
     },
     suspendTimer() {
       this.suspend = true; //CHANGE
     },
     seek(progress) {
-      spotify.seekToPosition(window.token, progress);
+      spotify.seekToPosition(spotifyConfig.clientToken, progress);
       //this.setPlayback(progress, this.duration);
     },
     setPlayback(progress, duration) {

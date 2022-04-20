@@ -34,10 +34,6 @@ def before_request():
             session['spotify_token_expire_time'] = datetime.now((timezone.utc)) + timedelta(hours=1)
 
 
-# @app.route('/')
-# def index():
-#     return app.send_static_file('index.html')
-
 @app.route('/', defaults={'path': ''})
 @app.route("/<string:path>")
 def index(path):
@@ -47,11 +43,6 @@ def index(path):
 
     return render_template("index.html")
     # return app.send_static_file('index.html')
-
-
-# @app.route('/mobile')
-# def index_mobile():
-#     return send_from_directory('../dist-mobile', 'index.html')
 
 
 @app.route('/connect_spotify')
@@ -76,30 +67,35 @@ def spotify():
     session['refresh_token'] = response.json()['refresh_token']
     session['spotify_token_expire_time'] = datetime.now() + timedelta(hours=1)
 
-    mode = Config.MODE
-
-    if mode == "DEVELOPMENT":
-        return redirect("http://localhost:8080/")
+    if Config.MODE == "DEVELOPMENT":
+        response = redirect("http://localhost:8080/")
+        return response
+    if session['mobile']:
+        return redirect("/mobile")
     else:
-        if session['mobile']:
-            return redirect("/mobile")
-        else:
-            return redirect("/")
+        return redirect("/")
 
 
 @app.route('/log_out')
 def log_out():
     session.clear()
-    return redirect("/")
+    if Config.MODE == "DEVELOPMENT":
+        response = redirect("http://localhost:8080/")
+        return response
+    if request.MOBILE:
+        return redirect("/mobile")
+    else:
+        return redirect("/")
 
 
 @app.route('/api/get_token')
 def get_token():
     # add check for expiry
+
     if session['spotify_token'] or session['app_token']:
         client_token = session['spotify_token']
         app_token = session['app_token']
-        # return response
+
         response_object = {'status': 'success'}
         response_object['client_token'] = client_token
         response_object['app_token'] = app_token

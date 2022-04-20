@@ -8,6 +8,7 @@
           class="d-inline-block align-top"
           alt="Composer Explorer"
           height="40px"
+          @click="$router.push('/')"
         />
       </b-navbar-brand>
 
@@ -18,7 +19,6 @@
     <b-nav-item :active='$route.name == "radio"' @click="$router.push('/radio')"><b-icon-volume-up-fill></b-icon-volume-up-fill>&nbsp;Radio</b-nav-item>
   </b-nav>
 </div>
-
       <b-navbar-nav class="ml-auto" v-if="!loggedIn">
         <b-nav-item disabled right class="log-in-with">Log in </b-nav-item>
         <b-button right
@@ -46,7 +46,9 @@
 
 <script>
 import {baseURL} from "../main.js";
+import {spotifyConfig} from "../main.js";
 import {eventBus} from "../main.js";
+
 
 export default {
   name: 'NavBar',
@@ -58,11 +60,19 @@ export default {
   },
   methods: {
     },
-  created() {
-    eventBus.$on('fireLogIn', (state) => {
-      this.loggedIn = state;
+  created(){
+    if(spotifyConfig.clientToken !== null){
+      this.loggedIn = true;
+    }
+    eventBus.$on('fireLogIn', () => {
+      this.loggedIn = true;
     })
-  },
+  }
+  // created() {
+  //   eventBus.$on('fireLogIn', (state) => {
+  //     this.loggedIn = state;
+  //   })
+  // },
 }
 </script>
 

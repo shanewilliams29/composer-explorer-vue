@@ -35,6 +35,7 @@
 import {eventBus} from "../../main.js";
 import spotify from '@/SpotifyFunctions.js'
 import {currentConfig} from "../../main.js";
+import {spotifyConfig} from "../../main.js";
 
 export default {
   data() {
@@ -93,7 +94,7 @@ export default {
 
       uriList['uris'] = tracks.split(' ');
       jsonList = JSON.stringify(uriList);
-      spotify.playTracks(window.token, window.device_id, jsonList);
+      spotify.playTracks(spotifyConfig.clientToken, spotifyConfig.deviceID, jsonList);
       // this.selectedTrackNo = this.numTracks - uriList['uris'].length;
       },
     },
@@ -104,7 +105,7 @@ export default {
         localStorage.setItem('currentConfig', JSON.stringify(currentConfig));
 
         this.album = album;
-        if(window.token && window.device_id && !window.firstLoad){
+        if(spotifyConfig.clientToken && spotifyConfig.deviceID && !window.firstLoad){
           this.playTracks(album.tracks[0][2]);
           this.stopMatch = false;
         } else {

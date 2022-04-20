@@ -1,6 +1,5 @@
 <template>
   <div id="performer">
-    <NavBar/>
     <PerformersHeadings/>
     <div class="container-fluid">
       <b-row>
@@ -13,7 +12,6 @@
 </template>
 
 <script>
-import NavBar from '@/components/NavBar.vue'
 import PerformersHeadings from '@/components/PerformersHeadings.vue'
 import ComposerList from '@/components/ComposerList.vue'
 import WorkList from '@/components/WorkList.vue'
@@ -22,7 +20,6 @@ import AlbumList from '@/components/AlbumList.vue'
 export default {
   name: 'PerformerView',
   components: {
-    NavBar,
     PerformersHeadings,
     ComposerList,
     WorkList,

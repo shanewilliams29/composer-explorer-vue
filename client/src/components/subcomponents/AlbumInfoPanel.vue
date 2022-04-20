@@ -55,6 +55,7 @@
 <script>
 import axios from 'axios';
 import {eventBus} from "../../main.js";
+import {spotifyConfig} from "../../main.js";
 import spotify from '@/SpotifyFunctions.js'
 
 export default {
@@ -135,7 +136,7 @@ export default {
       this.results = [];
       this.artists = album.all_artists.split(", ");
       let album_id = album.album_uri.substring(album.album_uri.lastIndexOf(':') + 1);
-      spotify.getSpotifyAlbum(window.token, album_id);
+      spotify.getSpotifyAlbum(spotifyConfig.appToken, album_id);
       this.artists.forEach(element => this.getPersonInfo(element));
     })
     // eslint-disable-next-line

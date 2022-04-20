@@ -1,8 +1,32 @@
 import axios from 'axios';
 import {eventBus} from "./main.js";
 import {currentConfig} from "./main.js";
+import {spotifyConfig} from "./main.js";
 
 var spotify = {
+
+getSpotifyToken() {
+    const path = 'api/get_token';
+    axios.get(path)
+      .then((res) => {
+        if (res.data.status == "success") {
+          if (res.data.client_token !== null) {
+            eventBus.$emit('fireLogIn');
+            spotifyConfig.clientToken = res.data.client_token;
+            spotifyConfig.appToken = res.data.app_token;
+          } else {
+            spotifyConfig.appToken = res.data.app_token;
+          }
+        }
+        console.log(spotifyConfig.appToken);
+        console.log(spotifyConfig.clientToken);
+      })
+      .catch((error) => {
+        spotifyConfig.appToken = null;
+        spotifyConfig.clientToken = null;
+        console.error(error);
+      });
+  },
 
 getSpotifyAlbum(token, album) {
   const path = 'https://api.spotify.com/v1/albums/' + album;

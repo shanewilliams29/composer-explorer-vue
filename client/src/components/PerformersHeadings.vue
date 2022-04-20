@@ -37,6 +37,7 @@
 </template>
 
 <script>
+import axios from 'axios';
 import {eventBus} from "../main.js";
 import {currentConfig} from "../main.js";
 
@@ -134,19 +135,19 @@ export default {
       this.$refs.typeahead.inputValue = ''
       eventBus.$emit('fireAlbumSearch', currentConfig.work, '');
     },
-    // getArtistList() {
-    //   const path = 'api/artistlist';
-    //   axios.get(path)
-    //     .then((res) => {
-    //       // this.artist_list = ['Canada', 'United States', 'Mexico'];
-    //       this.artist_list = JSON.parse(res.data.artists);
-    //       //console.log(this.artist_list);
-    //     })
-    //     .catch((error) => {
-    //       // eslint-disable-next-line
-    //       console.error(error);
-    //     });
-    // }
+    getArtistList() {
+      const path = 'api/artistlist';
+      axios.get(path)
+        .then((res) => {
+          // this.artist_list = ['Canada', 'United States', 'Mexico'];
+          this.artist_list = JSON.parse(res.data.artists);
+          //console.log(this.artist_list);
+        })
+        .catch((error) => {
+          // eslint-disable-next-line
+          console.error(error);
+        });
+    }
   },
   created() {
     this.title = currentConfig.workTitle;
