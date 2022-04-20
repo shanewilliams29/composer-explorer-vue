@@ -12,13 +12,16 @@
                 placeholder="Search composers"
                 size="sm"
               ></b-form-input>
-              <b-form-select
+              <v-select
                 v-model="composerFilterForm"
+                label="text"
                 :options="composerOptions"
-                @change="composerFilter()"
-                size="sm"
-                class="mt-3"
-              ></b-form-select>
+                @input="composerFilter()"
+                :inputId="composerFilterForm"
+                :clearable="false"
+                class="mt-3 style-chooser"
+                :searchable="false"
+              ></v-select>
             </b-form-group>
           </b-card>
         </div>
@@ -33,39 +36,43 @@
                 :placeholder="workSearchPlaceholder"
                 size="sm"
               ></b-form-input>
-              <b-form-select
+                <v-select
                 v-model="workFilterField"
+                label="text"
                 :options="workOptions"
-                @change="workFilter()"
-                size="sm"
-                class="mt-3"
-              ></b-form-select>
+                @input="workFilter()"
+                :inputId="workFilterField"
+                :clearable="false"
+                class="mt-3 style-chooser"
+                :searchable="false"
+              ></v-select>
             </b-form-group>
         </b-card>
       </b-col>
-      <b-col>
+      <b-col class="last-col">
         <b-card class="heading-card albums-card">
           <b-form-group>
-<!--               <vue-typeahead-bootstrap
-                v-model="query"
-                :data="['Canada', 'United States', 'Mexico']"
-              /> -->
-              <vue-typeahead-bootstrap
-                v-model="albumSearchField"
-                @hit="albumSearch()"
-                :placeholder="albumSearchPlaceholder"
-                @keyup.enter="albumSearch()"
-                :data="artist_list"
-                size="sm"
-                ref="typeahead"
-              />
-            <b-form-select
-              v-model="albumFilterField"
-              :options="albumOptions"
-              @change="albumFilter()"
-              size="sm"
-              class="mt-3"
-            ></b-form-select>
+              <v-select
+                v-model="albumFilterField"
+                label="text"
+                :options="albumOptions"
+                @input="albumFilter()"
+                :inputId="albumFilterField"
+                :clearable="false"
+                :autoscroll="false"
+                :components="{OpenIndicator}"
+                class="mt-3 performer-search"
+              ></v-select>
+              <v-select
+                v-model="albumSortField"
+                label="text"
+                :options="albumSortOptions"
+                @input="albumSort()"
+                :inputId="AlbumSortField"
+                :clearable="false"
+                class="mt-3 style-chooser"
+                :searchable="false"
+              ></v-select>
           </b-form-group>
         </b-card>
       </b-col>
@@ -80,89 +87,82 @@ import {currentConfig} from "../main.js";
 export default {
   data() {
     return {
-      work_heading: "",
-      album_heading: "",
       artist_list: [],
+      title: "",
+      OpenIndicator: {
+          render: createElement => createElement('span',''),
+        },
 
-      composerFilterForm: 'popular',
+      composerFilterForm: { value: 'popular', text: 'Most popular' },
       composerSearchForm: null,
       composerOptions: [
-          { value: null, text: 'Filter composers', disabled: true},
-          { label: 'Period',
-            options: [
-              { value: 'common', text: 'Common Practice' },
+              { value: 'popular', text: 'Most popular' },
               { value: 'early', text: 'Early' },
-              { value: 'all', text: 'All - by region' },
-              { value: 'alphabet', text: 'All - alphabetically' }
-            ]
-          },
-          { label: 'Era',
-            options: [
               { value: 'baroque', text: 'Baroque' },
               { value: 'classical', text: 'Classical' },
               { value: 'romantic', text: 'Romantic' },
-              { value: '20th', text: '20th/21st Century' }
-            ]
-          },
-         { label: 'Misc',
-            options: [
-              { value: 'popular', text: 'Most popular' },
-              { value: 'women', text: 'Women'}
-            ]
-          }
-        ],
+              { value: '20th', text: '20th/21st Century' },
+              { value: 'all', text: 'All - by region' },
+              { value: 'alphabet', text: 'All - alphabetically' }
+            ],
 
-      workFilterField: 'recommended',
+      workFilterField: { value: 'recommended', text: 'Recommended works' },
       workSearchField: null,
       workSearchPlaceholder: "Search works by " + currentConfig.composer,
       workOptions: [
-          { value: null, text: 'Filter works', disabled: true},
           { value: 'recommended', text: 'Recommended works' },
-          // { value: 'catalogued', text: 'Catalogued' },
           { value: 'all', text: 'All works'}
         ],
 
-      albumFilterField: 'allartists',
-      albumSearchField: null,
-      albumSearchPlaceholder: "Search performers",
-      albumOptions: []
+      albumFilterField: { value: 'allartists', text: 'All performers' },
+      albumOptions: [],
+
+      albumSortField: { value: 'recommended', text: 'Recommended sorting' },
+      albumSortOptions: [
+          { value: 'recommended', text: 'Recommended sorting' },
+          { value: 'dateascending', text: 'Sort by date, earliest to latest' },
+          { value: 'datedescending', text: 'Sort by date, latest to earliest' }
+        ],
     };
   },
   methods: {
     composerFilter() {
-      eventBus.$emit('fireComposerFilter', this.composerFilterForm);
+      console.log(this.composerFilterForm.value);
+      eventBus.$emit('fireComposerFilter', this.composerFilterForm.value);
       this.composerSearchForm = '';
       //console.log(this.composerFilterForm);
     },
     composerSearch() {
       eventBus.$emit('fireComposerSearch', this.composerSearchForm);
-      this.composerFilterForm = null;
+      this.composerFilterForm = 'Search results for "' + this.composerSearchForm + '"';
       //console.log(this.composerSearchForm);
     },
     onComposerFocus() {
+      this.composerFilterForm = { value: 'popular', text: 'Most popular' };
       this.composerSearchForm = '';
       eventBus.$emit('fireComposerSearch', '');
     },
     workFilter() {
-      eventBus.$emit('fireWorkFilter', this.workFilterField);
+      eventBus.$emit('fireWorkFilter', this.workFilterField.value);
       this.workSearchField = '';
       //console.log(this.workFilterField);
     },
     workSearch() {
       eventBus.$emit('fireWorkSearch', this.workSearchField);
-      this.workFilterField = null;
+      this.workFilterField = 'Search results for "' + this.workSearchField + '"';
       //console.log(this.workSearchField);
     },
     onWorkFocus() {
+      this.workFilterField = { value: 'recommended', text: 'Recommended works' }
       this.workSearchField = '';
       eventBus.$emit('fireWorkSearch', '');
     },
     albumFilter() {
       this.albumSearchPlaceholder = "Search performers";
-      if (this.albumFilterField == "allartists") {
+      if (this.albumFilterField.value == "allartists") {
           eventBus.$emit('fireAlbumFilter', currentConfig.work, '');
       } else {
-          eventBus.$emit('fireAlbumFilter', currentConfig.work, this.albumFilterField);
+          eventBus.$emit('fireAlbumFilter', currentConfig.work, this.albumFilterField.value);
           this.albumSearchField = '';
     }
       //console.log(this.workFilterField);
@@ -193,27 +193,26 @@ export default {
     // }
   },
   created() {
-    this.work_heading = "Works by Beethoven";
-    this.album_heading = "Albums for \"Piano Concerto No. 5 in E♭ major\"";
-
+    this.title = currentConfig.workTitle;
     eventBus.$on('fireComposers', (composer) => {
         this.workSearchPlaceholder = "Search works by " + composer;
         this.workSearchField = '';
-        this.workFilterField = 'recommended';
+        this.workFilterField = { value: 'recommended', text: 'Recommended works' };
     })
     eventBus.$on('fireAlbums', (work_id, title) => { // is this used?
+      console.log(title);
+        this.title = title;
         this.album_heading = "Albums for \"" + title + "\"";
-        this.albumFilterField = null;
+        this.albumFilterField = { value: 'allartists', text: 'All performers' };
     })
     eventBus.$on('fireArtistList', (artistList) => {
         this.artist_list = []
-        this.albumSearchPlaceholder = "Search performers";
+        this.albumSearchPlaceholder = "Search performers of " + this.title;
         this.albumOptions = [
-          { value: null, text: 'Filter performers', disabled: true},
           { value: 'allartists', text: 'All performers' }
         ];
         for (var key in artistList) {
-          this.albumOptions.push({ value: key, text: key + ' (' + artistList[key] + ')'});
+          this.albumOptions.push({ value: key, text: key });
           this.artist_list.push(key);
         }
     })
@@ -221,13 +220,47 @@ export default {
 };
 </script>
 
+<style>
+.form-control{
+  background-color: #3b4047 !important;
+  border: none !important;
+  color: white !important;
+}
+::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+  color: #9ea4ae !important;
+}
+::-moz-placeholder { /* Firefox 19+ */
+  color: #9ea4ae !important;
+}
+:-ms-input-placeholder { /* IE 10+ */
+  color: #9ea4ae !important;
+}
+:-moz-placeholder { /* Firefox 18- */
+  color: #9ea4ae !important;
+}
+</style>
+
 <style scoped>
+.container-fluid{
+  background-color: #54595f;
+  color: #3b4047;
+}
+.last-col{
+  padding-right: 5px !important;
+}
+.albums-card{
+  padding-top: 3.5px !important;
+}
+.card-body{
+  background: none !important;
+  height: 72px;
+}
 .card {
   background: none;
   border: none;
 }
 .heading-card {
-  padding-top: 20px;
+  padding-top: 5px;
   padding-bottom: 0px;
   padding-left: 5px;
 }
@@ -244,4 +277,39 @@ export default {
 .col {
   padding: 0px;
 }
+.style-chooser{
+  margin-top: 5px !important;
+  font-size: 14px;
+  fill: white;
+}
+>>> {
+  --vs-controls-color: #fff;
+  --vs-border-color: #3b4047;
+  --vs-border-width: 1px;
+  --vs-selected-bg: #3b4047;
+  --vs-selected-color: #fff;
+  --vs-line-height: 1;
+  --vs-search-input-color: #fff;
+}
+.performer-search{
+  margin-top: 1.3px !important;
+  font-size: 14px;
+  background-color: #3b4047 !important;
+  height: 31px;
+  border: none;
+  border-radius: 4px;
+}
+
+/*.custom-select{
+
+  border: solid 1px #3b4047;
+  color: white;
+    background: url("data:image/svg+xml,<svg height='10px' width='10px' viewBox='0 0 16 16' fill='white' xmlns='http://www.w3.org/2000/svg'><path d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/></svg>") no-repeat;
+    background-position: calc(100% - 0.75rem) center !important;
+    -moz-appearance:none !important;
+    -webkit-appearance: none !important;
+    appearance: none !important;
+    padding-right: 2rem !important;
+}*/
+
 </style>

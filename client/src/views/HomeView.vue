@@ -95,15 +95,15 @@ export default {
     background: #f1f2f4 !important;
   }
   .composer-list{
-    height: calc(100vh - 66px - 114px - 100px - var(--panelheight));
+    height: calc(100vh - 66px - 77px - 100px - var(--panelheight));
     overflow-y: scroll;
   }
   .work-list{
-    height: calc(100vh - 66px - 114px - 100px - var(--panelheight));
+    height: calc(100vh - 66px - 77px - 100px - var(--panelheight));
     overflow-y: scroll;
   }
   .album-list{
-    height: calc(100vh - 66px - 114px - 100px - var(--panelheight));
+    height: calc(100vh - 66px - 77px - 100px - var(--panelheight));
     overflow-y: scroll;
     overflow-x: hidden;
   }

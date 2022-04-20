@@ -3,9 +3,11 @@ import App from './App.vue'
 import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
 import axios from 'axios';
 import VueTypeaheadBootstrap from 'vue-typeahead-bootstrap';
+import vSelect from 'vue-select'
 
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
+import 'vue-select/dist/vue-select.css';
 import router from './router'
 
 Vue.config.productionTip = false
@@ -16,6 +18,7 @@ axios.defaults.baseURL = process.env.VUE_APP_BASE_URL;
 Vue.use(BootstrapVue)
 Vue.use(IconsPlugin)
 Vue.component('vue-typeahead-bootstrap', VueTypeaheadBootstrap)
+Vue.component('v-select', vSelect)
 
 export const eventBus = new Vue();
 export const spotifyPlayer = new Vue();
