@@ -209,7 +209,7 @@ export default {
 }
 .card-body{
   background: none !important;
-  height: 73px;
+  height: 74.5px;
 }
 .card {
   background: none;

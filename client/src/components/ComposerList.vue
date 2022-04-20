@@ -147,6 +147,7 @@ export default {
       this.loading = true;
       this.visibility=true;
       this.selectedComposer = null;
+      eventBus.$emit('fireClearWorks', artist);
       const path = 'api/artistcomposers/' + artist;
       axios.get(path)
         .then((res) => {
@@ -175,18 +176,15 @@ export default {
   created() {
     this.getComposers();
     this.selectRow(currentConfig.composerId);
-    eventBus.$on('fireComposerFilter', (item) => {
-        this.getFilteredComposers(item);
-    })
-    eventBus.$on('fireComposerSearch', (item) => {
-        this.getSearchComposers(item);
-    })
-    eventBus.$on('fireArtistComposers', (artist) => {
-        this.getArtistComposers(artist);
-        eventBus.$emit('fireClearWorks', artist);
-
-    })
+    eventBus.$on('fireComposerFilter', this.getFilteredComposers);
+    eventBus.$on('fireComposerSearch', this.getSearchComposers);
+    eventBus.$on('fireArtistComposers', this.getArtistComposers);
   },
+  beforeDestroy() {
+    eventBus.$off('fireComposerFilter', this.getFilteredComposers);
+    eventBus.$off('fireComposerSearch', this.getSearchComposers);
+    eventBus.$off('fireArtistComposers', this.getArtistComposers);
+  }
 };
 </script>
 

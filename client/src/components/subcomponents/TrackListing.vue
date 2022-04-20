@@ -104,9 +104,11 @@ export default {
         localStorage.setItem('currentConfig', JSON.stringify(currentConfig));
 
         this.album = album;
-        if(window.token && window.device_id){
+        if(window.token && window.device_id && !window.firstLoad){
           this.playTracks(album.tracks[0][2]);
           this.stopMatch = false;
+        } else {
+          window.firstLoad = false;
         }
         // this.selectTrack(album.tracks[0][1]);
         // this.numTracks = album.tracks.length;

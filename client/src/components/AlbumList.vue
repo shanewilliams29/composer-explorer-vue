@@ -195,23 +195,17 @@ export default {
   },
   created() {
     this.initialGetAlbums(currentConfig.work);
-    eventBus.$on('fireAlbums', (work_id) => {
-            this.getAlbums(work_id);
-    })
-    eventBus.$on('fireAlbumFilter', (id, item) => {
-        this.getFilteredAlbums(id, item);
-    })
-    eventBus.$on('fireAlbumSearch', (id, item) => {
-        this.getSearchAlbums(id, item);
-    })
-    eventBus.$on('fireArtistAlbums', (id, item) => {
-        this.getFilteredAlbums(id, item);
-    })
+    eventBus.$on('fireAlbums', this.getAlbums);
+    eventBus.$on('fireAlbumFilter', this.getFilteredAlbums);
+    eventBus.$on('fireAlbumSearch', this.getSearchAlbums);
+    eventBus.$on('fireArtistAlbums', this.getFilteredAlbums);
   },
-  mounted() {
-    // this.selectRow('3xjbqYLxvXHuanI63XGwri');
-    //this.selectRow(this.$refs["0"][0].id); // selects first album
-  },
+  beforeDestroy() {
+    eventBus.$off('fireAlbums', this.getAlbums);
+    eventBus.$off('fireAlbumFilter', this.getFilteredAlbums);
+    eventBus.$off('fireAlbumSearch', this.getSearchAlbums);
+    eventBus.$off('fireArtistAlbums', this.getFilteredAlbums);
+  }
 };
 </script>
 

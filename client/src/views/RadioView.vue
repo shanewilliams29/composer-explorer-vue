@@ -1,17 +1,14 @@
 <template>
-  <div id="home">
+  <div id="radio">
     <NavBar/>
     <ColumnHeadings/>
     <div class="container-fluid">
       <b-row>
-        <b-col class="composer-list"><ComposerList/></b-col>
-        <b-col class="work-list"><WorkList/></b-col>
-        <b-col cols="4" class="album-list"><AlbumList/></b-col>
+        <b-col class="display-list"><ComposerList/></b-col>
+        <b-col class="display-list"><WorkList/></b-col>
+        <b-col class="display-list"><AlbumList/></b-col>
       </b-row>
     </div>
-    <div class="info-panel" v-show='showPanel'><InfoPanel/></div>
-    <PageFooter/>
-    <b-button class="info-panel-button float" @click="togglePanel()" variant="warning"><span v-if="!showPanel"><b-icon-chevron-up></b-icon-chevron-up></span><span v-else><b-icon-chevron-down></b-icon-chevron-down></span> INFO PANEL</b-button>
   </div>
 </template>
 
@@ -21,12 +18,6 @@ import ColumnHeadings from '@/components/ColumnHeadings.vue'
 import ComposerList from '@/components/ComposerList.vue'
 import WorkList from '@/components/WorkList.vue'
 import AlbumList from '@/components/AlbumList.vue'
-import PageFooter from '@/components/PageFooter.vue'
-import InfoPanel from '@/components/InfoPanel.vue'
-
-import axios from 'axios';
-import {eventBus} from "../main.js";
-import {currentConfig} from "../main.js";
 
 export default {
   name: 'HomeView',
@@ -36,59 +27,14 @@ export default {
     ComposerList,
     WorkList,
     AlbumList,
-    PageFooter,
-    InfoPanel
-  },
-  data() {
-    return {
-      showPanel: false
-    };
-  },
-  methods: {
-    getSpotifyToken() {
-      const path = 'api/get_token';
-      axios.get(path)
-        .then((res) => {
-          if (res.data.status == "success") {
-            if (res.data.client_token !== null) {
-              eventBus.$emit('fireLogIn', currentConfig.loggedIn);
-              window.token = res.data.client_token;
-            } else {
-              window.token = res.data.app_token;
-            }
-          }
-          console.log(window.token);
-        })
-        .catch((error) => {
-          window.token = null;
-          console.error(error);
-        });
-    },
-    togglePanel(){
-      this.showPanel = !this.showPanel;
-      if (this.showPanel){
-        document.documentElement.style.setProperty('--panelheight', `300px`);
-        eventBus.$emit('expandInfoPanel', currentConfig.composer, currentConfig.work);
-      } else{
-        document.documentElement.style.setProperty('--panelheight', `0px`);
-      }
-
-    }
-  },
-  beforeCreate(){
-    if( screen.width <= 760 ) {
-        //this.$router.replace('mobile');
-        window.location.replace('mobile');
-    }
-  document.documentElement.style.setProperty('--panelheight', `0px`);
-
-  },
-  created() {
-    this.getSpotifyToken();
   },
 }
 </script>
 
 <style>
-
+  .display-list{
+    height: calc(100vh - 66px - 78px - 100px - var(--panelheight));
+    overflow-y: scroll;
+    overflow-x: hidden;
+  }
 </style>

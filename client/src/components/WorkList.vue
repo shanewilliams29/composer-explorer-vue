@@ -165,31 +165,33 @@ export default {
           this.loading=false;
         });
     },
+    fireComposers(composer) {
+        this.getWorks(composer);
+        currentConfig.composer = composer;
+        localStorage.setItem('currentConfig', JSON.stringify(currentConfig));
+    },
+    fireClearWorks(artist){
+      this.artistMode = true;
+      this.artist = artist;
+      this.getSearchWorks('ggesagoseofsa'); // get no results
+    }
   },
   created() {
     this.getWorks(currentConfig.composer);
     this.selectRow(currentConfig.work);
-    eventBus.$on('fireComposers', (composer) => {
-            this.getWorks(composer);
-            currentConfig.composer = composer;
-            localStorage.setItem('currentConfig', JSON.stringify(currentConfig));
-    })
-    eventBus.$on('fireArtistWorks', (artist, composer) => {
-            this.getArtistWorks(artist, composer);
-    })
-
-    eventBus.$on('fireWorkFilter', (item) => {
-        this.getFilteredWorks(item);
-    })
-    eventBus.$on('fireWorkSearch', (item) => {
-        this.getSearchWorks(item);
-    })
-    eventBus.$on('fireClearWorks', (artist) => {
-      this.artistMode = true;
-      this.artist = artist;
-        this.getSearchWorks('ggesagoseofsa'); // get no results
-    })
+    eventBus.$on('fireComposers', this.fireComposers);
+    eventBus.$on('fireArtistWorks', this.getArtistWorks);
+    eventBus.$on('fireWorkFilter', this.getFilteredWorks);
+    eventBus.$on('fireWorkSearch', this.getSearchWorks);
+    eventBus.$on('fireClearWorks', this.fireClearWorks);
   },
+  beforeDestroy() {
+    eventBus.$off('fireComposers', this.fireComposers);
+    eventBus.$off('fireArtistWorks', this.getArtistWorks);
+    eventBus.$off('fireWorkFilter', this.getFilteredWorks);
+    eventBus.$off('fireWorkSearch', this.getSearchWorks);
+    eventBus.$off('fireClearWorks', this.fireClearWorks);
+  }
 };
 </script>
 
