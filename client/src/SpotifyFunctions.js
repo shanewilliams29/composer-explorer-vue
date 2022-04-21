@@ -123,9 +123,13 @@ beginningTrack(token) {
         eventBus.$emit('fireNowPaused');
       }
     })
-    .catch((error) => {
+    .catch(function (error) {
+    if (error.response.status == 401) {
+      eventBus.$emit('notLoggedIn');
+    } else {
       console.error(error);
-    });
+    }
+  });
 },
 
 // previousTrack(token) {
@@ -173,9 +177,13 @@ nextTrack(token) {
         eventBus.$emit('fireNowPaused');
       }
     })
-    .catch((error) => {
+    .catch(function (error) {
+    if (error.response.status == 401) {
+      eventBus.$emit('notLoggedIn');
+    } else {
       console.error(error);
-    });
+    }
+  });
 },
 
 playTracks(token, device_id, tracks) {
@@ -194,6 +202,7 @@ playTracks(token, device_id, tracks) {
       }
     })
     .then((res) => {
+      console.log(res);
       if (res.status == 204) {
         eventBus.$emit('fireNowPlaying');
         //this.getCurrentPlayerInfo(token);
@@ -201,9 +210,13 @@ playTracks(token, device_id, tracks) {
         eventBus.$emit('fireNowPaused');
       }
     })
-    .catch((error) => {
+    .catch(function (error) {
+    if (error.response.status == 401) {
+      eventBus.$emit('notLoggedIn');
+    } else {
       console.error(error);
-    });
+    }
+  });
 },
 
 getCurrentPlayerInfo(token) {

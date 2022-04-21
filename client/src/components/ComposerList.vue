@@ -172,6 +172,39 @@ export default {
         currentConfig.composerId = composerId;
         localStorage.setItem('currentConfig', JSON.stringify(currentConfig));
     },
+    fireRadioSelect(type){
+      if(type == "composer"){
+      const path = 'api/composersradio';
+      axios.get(path)
+        .then((res) => {
+          eventBus.$emit('fireComposerListToRadio', res.data.composers);
+        })
+        .catch((error) => {
+          // eslint-disable-next-line
+          console.error(error);
+        });
+      }
+    },
+    getMultiComposers(composers) {
+      if (composers.length < 1){
+        this.getComposers();
+      }
+      else{
+      console.log(composers);
+      const path = 'api/multicomposers';
+      axios.post(path, composers)
+        .then((res) => {
+          console.log(res.data);
+          this.composers = res.data.composers;
+          eventBus.$emit('fireRadioGenreList', res.data.genres);
+          this.visibility=true;
+        })
+        .catch((error) => {
+          // eslint-disable-next-line
+          console.error(error);
+        });
+      }
+    }
   },
   created() {
     this.getComposers();
@@ -179,11 +212,15 @@ export default {
     eventBus.$on('fireComposerFilter', this.getFilteredComposers);
     eventBus.$on('fireComposerSearch', this.getSearchComposers);
     eventBus.$on('fireArtistComposers', this.getArtistComposers);
+    eventBus.$on('fireRadioSelect', this.fireRadioSelect);
+    eventBus.$on('fireComposerSelectRadio', this.getMultiComposers);
   },
   beforeDestroy() {
     eventBus.$off('fireComposerFilter', this.getFilteredComposers);
     eventBus.$off('fireComposerSearch', this.getSearchComposers);
     eventBus.$off('fireArtistComposers', this.getArtistComposers);
+    eventBus.$off('fireRadioSelect', this.fireRadioSelect);
+    eventBus.$off('fireComposerSelectRadio', this.getMultiComposers);
   }
 };
 </script>

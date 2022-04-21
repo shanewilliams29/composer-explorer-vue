@@ -98,6 +98,28 @@ export default {
           this.loading = false;
         });
     },
+    getGenreWorks(genres, filter) {
+      console.log(filter);
+      if (genres.length < 1){
+        console.log("No genres selected");
+      }
+      else{
+      const payload = {genres: genres, filter: filter};
+      console.log(payload);
+      const path = 'api/worksbygenre';
+      axios.post(path, payload)
+        .then((res) => {
+          console.log(res.data);
+          this.works = res.data.works;
+          //eventBus.$emit('fireRadioGenreList', res.data.genres);
+          this.visibility=true;
+        })
+        .catch((error) => {
+          // eslint-disable-next-line
+          console.log(error);
+        });
+      }
+    },
     getArtistWorks(artist, composer) {
       this.loading = true;
       this.artist = artist;
@@ -184,6 +206,7 @@ export default {
     eventBus.$on('fireWorkFilter', this.getFilteredWorks);
     eventBus.$on('fireWorkSearch', this.getSearchWorks);
     eventBus.$on('fireClearWorks', this.fireClearWorks);
+    eventBus.$on('fireGenreSelectRadio', this.getGenreWorks);
   },
   beforeDestroy() {
     eventBus.$off('fireComposers', this.fireComposers);
@@ -191,6 +214,7 @@ export default {
     eventBus.$off('fireWorkFilter', this.getFilteredWorks);
     eventBus.$off('fireWorkSearch', this.getSearchWorks);
     eventBus.$off('fireClearWorks', this.fireClearWorks);
+    eventBus.$off('fireGenreSelectRadio', this.getGenreWorks);
   }
 };
 </script>

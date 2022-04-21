@@ -6,6 +6,7 @@
       </b-col>
       <b-col>
         <PlayerControls />
+        <SpotifyModal />
       </b-col>
       <b-col>
         <TrackListing />
@@ -18,12 +19,24 @@
 import AlbumInfo from './subcomponents/AlbumInfo.vue'
 import PlayerControls from './subcomponents/PlayerControls.vue'
 import TrackListing from './subcomponents/TrackListing.vue'
+import SpotifyModal from './subcomponents/SpotifyModal.vue'
+
+import {eventBus} from "../main.js";
 
 export default {
   components: {
     AlbumInfo,
     PlayerControls,
-    TrackListing
+    TrackListing,
+    SpotifyModal
+  },
+  methods:{
+    notLoggedIn(){
+      this.$bvModal.show('spotify-modal');
+    }
+  },
+  mounted() {
+    eventBus.$on('notLoggedIn', this.notLoggedIn);
   },
 };
 </script>

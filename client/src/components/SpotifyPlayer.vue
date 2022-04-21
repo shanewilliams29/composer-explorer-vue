@@ -23,8 +23,8 @@ export default {
         window.onSpotifyWebPlaybackSDKReady = () => {
             if (process.env.VUE_APP_BASE_URL != "http://localhost:5000/") {
                 this.token = spotifyConfig.clientToken; // Need this?
-            } else {
-                this.token = 'BQCmXK-SHmi3KReRo1ajwXhxn6TdidTnduzAx69AFysuy_BXlaVsuarqV4PSyKnO4zXlQRvGqBr0j3s6T0xMQ4G3ej5qAf689Ae2NQzDxYoyeLx7pH_U49xpKkgOmdKDm3ehG4Jld6D8wP2ZON1G0FlowM-dFpmLM7BS6MFCoKzXV-14K9U3L4ekDGVrxeeBdXxm5gg1xI2KbX_B_QTMoHU';
+            } else { // insert token here for dev work
+                this.token = null;
                 spotifyConfig.clientToken = this.token;
             }
 

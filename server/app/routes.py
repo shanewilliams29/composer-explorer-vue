@@ -205,6 +205,63 @@ def get_composers():
     return response
 
 
+@app.route('/api/multicomposers', methods=['POST'])
+def get_multicomposers():
+    # get composers
+    composers = request.get_json()
+
+    search_list = []
+    for composer in composers:
+        search_list.append(composer['value'])
+
+    # store composers in session
+    session['radio_composers'] = search_list
+
+    composer_list = db.session.query(ComposerList)\
+        .filter(ComposerList.name_short.in_(search_list)) \
+        .order_by(ComposerList.region, ComposerList.born).all()
+
+    # prepare list for display
+    COMPOSERS = prepare_composers(composer_list)
+    composers_by_region = group_composers_by_region(COMPOSERS)
+
+    # get genre list for these composers
+    genres = db.session.query(WorkList.genre)\
+        .filter(WorkList.composer.in_(search_list)).order_by(WorkList.genre).distinct()
+
+    genre_list = []
+    for (item,) in genres:
+        genre_list.append(item)
+
+    # return response
+    response_object = {'status': 'success'}
+    response_object['composers'] = composers_by_region
+    response_object['genres'] = genre_list
+    response = jsonify(response_object)
+    response.headers.add('Access-Control-Allow-Credentials', 'true')
+    return response
+
+
+@app.route('/api/composersradio', methods=['GET'])
+def get_composersradio():
+    # look for search item
+
+    composer_list = db.session.query(ComposerList)\
+        .filter(ComposerList.catalogued == True) \
+        .order_by(ComposerList.name_short).all()
+
+    name_list = []
+    for composer in composer_list:
+        name_list.append(composer.name_short)
+
+    # return response
+    response_object = {'status': 'success'}
+    response_object['composers'] = name_list
+    response = jsonify(response_object)
+    response.headers.add('Access-Control-Allow-Credentials', 'true')
+    return response
+
+
 @app.route('/api/works/<name>', methods=['GET'])
 def get_works(name):
     filter_method = request.args.get('filter')
@@ -254,6 +311,70 @@ def get_works(name):
 
     response = jsonify(response_object)
 
+    response.headers.add('Access-Control-Allow-Credentials', 'true')
+    return response
+
+
+@app.route('/api/worksbygenre', methods=['POST'])
+def get_worksbygenre():
+    # get genres
+    payload = request.get_json()
+
+    search_list = []
+    for genre in payload['genres']:
+        search_list.append(genre['value'])
+
+    work_filter = payload['filter']
+
+    # get composers selected
+    if not session.get('radio_composers'):
+        composer_list = ["Beethoven", "Brahms"]  # for dev server testing
+    else:
+        composer_list = session['radio_composers']
+
+    if search_list[0] == "all":
+        if work_filter == 'recommended':
+            works_list = db.session.query(WorkList)\
+                .filter(WorkList.composer.in_(composer_list), WorkList.recommend == True)\
+                .order_by(WorkList.order, WorkList.genre, WorkList.id).all()
+        elif work_filter == 'obscure':
+            works_list = db.session.query(WorkList)\
+                .filter(WorkList.composer.in_(composer_list), WorkList.recommend == None)\
+                .order_by(WorkList.order, WorkList.genre, WorkList.id).all()
+        else:
+            works_list = db.session.query(WorkList)\
+                .filter(WorkList.composer.in_(composer_list))\
+                .order_by(WorkList.order, WorkList.genre, WorkList.id).all()
+
+    else:
+        if work_filter == 'recommended':
+            works_list = db.session.query(WorkList)\
+                .filter(WorkList.composer.in_(composer_list), WorkList.genre.in_(search_list), WorkList.recommend == True)\
+                .order_by(WorkList.order, WorkList.genre, WorkList.id).all()
+
+        elif work_filter == 'obscure':
+            works_list = db.session.query(WorkList)\
+                .filter(WorkList.composer.in_(composer_list), WorkList.genre.in_(search_list), WorkList.recommend == None)\
+                .order_by(WorkList.order, WorkList.genre, WorkList.id).all()
+
+        else:
+            works_list = db.session.query(WorkList)\
+                .filter(WorkList.composer.in_(composer_list), WorkList.genre.in_(search_list))\
+                .order_by(WorkList.order, WorkList.genre, WorkList.id).all()
+
+    if not works_list:
+        response_object = {'status': 'success'}
+        response_object['works'] = works_list
+        response = jsonify(response_object)
+        response.headers.add('Access-Control-Allow-Credentials', 'true')
+        return response
+
+    # return response
+    works_by_genre = prepare_works(works_list)
+
+    response_object = {'status': 'success'}
+    response_object['works'] = works_by_genre
+    response = jsonify(response_object)
     response.headers.add('Access-Control-Allow-Credentials', 'true')
     return response
 
