@@ -22,6 +22,7 @@
               </table>
               </b-card-title>
 <b-card-text class="info-card-text">
+  <div class="disclaimer"><b-badge variant="warning">BETA </b-badge><span class="born-died">&nbsp; Some performer information may not be correct.</span></div>
   <div v-for="(result, index) in results" :key="index" >
               <table>
                 <tr>
@@ -130,6 +131,21 @@ export default {
   },
   setSpotifyAlbum(album){ // spotify album
     this.album = album;
+    // this.getSpotifyArtistIDs(album); not used
+  },
+  getSpotifyArtistIDs(album){ // not used
+    let artistsList = album.artists;
+    let artistIDsString = ""
+
+    for (var i = 0; i < artistsList.length; i++) {
+      if (i == 0) {
+        artistIDsString = artistsList[i]['id'];
+      } else {
+        artistIDsString = artistIDsString + "," + artistsList[i]['id'];
+      }
+    }
+    //console.log(artistIDsString);
+    spotify.getSpotifyArtists(spotifyConfig.appToken, artistIDsString.trim());
   },
   getSpotifyAlbumData(album){ // database album
       this.loading = true;
@@ -139,10 +155,20 @@ export default {
       spotify.getSpotifyAlbum(spotifyConfig.appToken, album_id);
       this.artists.forEach(element => this.getPersonInfo(element));
   },
+  setSpotifyArtistsData(artistList){ //not used
+    this.results = []
+    for (var i = 0; i < artistList.length; i++) {
+      this.results.push([artistList[i]['name'], "", artistList[i]['images'][1]['url'], 0])
+    }
+    this.loading = false;
+    console.log(this.results);
+  }
 },
   created() {
     eventBus.$on('fireSetAlbum', this.getSpotifyAlbumData);
     eventBus.$on('fireSpotifyAlbumData', this.setSpotifyAlbum);
+    // eventBus.$on('fireSpotifyArtistList', this.setSpotifyArtistsData);
+
   },
 };
 </script>
@@ -177,6 +203,9 @@ a:hover{
   background-color: white !important;
   border: none !important;
 
+}
+.disclaimer{
+  margin-bottom: 11px;
 }
 .card-title{
   font-size: 16px;

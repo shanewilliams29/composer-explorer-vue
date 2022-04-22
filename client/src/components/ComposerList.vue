@@ -1,11 +1,11 @@
 <template>
   <div>
-<!--     <div class="spinner" v-show="loading" role="status">
+    <div class="spinner" v-show="loading" role="status">
       <b-spinner class="m-5"></b-spinner>
-    </div> -->
+    </div>
     <div class="row">
       <span class="m-4 col no-composers-found" v-show="!loading && composers.length < 1 && !radioMode">No composers found.</span>
-      <Transition name="fade"><b-card-group deck v-show="!loading">
+      <b-card-group deck v-show="!loading">
         <b-card
           v-for="(region, index) in composers"
           :key="index"
@@ -71,7 +71,7 @@
           </b-card-text>
         </b-collapse>
         </b-card>
-      </b-card-group></Transition>
+      </b-card-group>
     </div>
   </div>
 </template>

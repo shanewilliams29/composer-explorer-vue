@@ -29,7 +29,6 @@ getSpotifyToken() {
   },
 
 getSpotifyAlbum(token, album) {
-  //console.log(token, album);
   const path = 'https://api.spotify.com/v1/albums/' + album;
   axios({
       method: 'get',
@@ -41,8 +40,27 @@ getSpotifyAlbum(token, album) {
       }
     })
     .then((res) => {
-      // console.log(res);
       eventBus.$emit('fireSpotifyAlbumData', res.data);
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+},
+
+getSpotifyArtists(token, artistIdString) {
+  const path = 'https://api.spotify.com/v1/artists?ids=' + artistIdString;
+  axios({
+      method: 'get',
+      url: path,
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + token
+      }
+    })
+    .then((res) => {
+      console.log(res);
+      eventBus.$emit('fireSpotifyArtistList', res.data.artists);
     })
     .catch((error) => {
       console.error(error);
@@ -203,7 +221,6 @@ playTracks(token, device_id, tracks) {
       }
     })
     .then((res) => {
-      console.log(res);
       if (res.status == 204) {
         eventBus.$emit('fireNowPlaying');
         //this.getCurrentPlayerInfo(token);
