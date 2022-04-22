@@ -129,11 +129,9 @@ export default {
     eventBus.$emit('fireArtistComposers', artist);
   },
   setSpotifyAlbum(album){ // spotify album
-    //console.log(album);
     this.album = album;
   },
   getSpotifyAlbumData(album){ // database album
-      console.log(album);
       this.loading = true;
       this.results = [];
       this.artists = album.all_artists.split(", ");
