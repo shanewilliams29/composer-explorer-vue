@@ -128,26 +128,23 @@ export default {
   getArtistComposers(artist){
     eventBus.$emit('fireArtistComposers', artist);
   },
-},
-  created() {
-    this.loading = true;
-    eventBus.$on('fireSetAlbum', (album) => {
+  setSpotifyAlbum(album){ // spotify album
+    //console.log(album);
+    this.album = album;
+  },
+  getSpotifyAlbumData(album){ // database album
+      console.log(album);
       this.loading = true;
       this.results = [];
       this.artists = album.all_artists.split(", ");
       let album_id = album.album_uri.substring(album.album_uri.lastIndexOf(':') + 1);
       spotify.getSpotifyAlbum(spotifyConfig.appToken, album_id);
       this.artists.forEach(element => this.getPersonInfo(element));
-    })
-    // eslint-disable-next-line
-    eventBus.$on('expandInfoPanel', (composer, workId) => {
-      this.loading = false;
-    })
-    eventBus.$on('fireSpotifyAlbumData', (album) => {
-      this.album = album;
-      // this.getWorkInfo(workId);
-    })
-
+  },
+},
+  created() {
+    eventBus.$on('fireSetAlbum', this.getSpotifyAlbumData);
+    eventBus.$on('fireSpotifyAlbumData', this.setSpotifyAlbum);
   },
 };
 </script>

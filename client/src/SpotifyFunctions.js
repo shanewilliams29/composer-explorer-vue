@@ -29,6 +29,7 @@ getSpotifyToken() {
   },
 
 getSpotifyAlbum(token, album) {
+  //console.log(token, album);
   const path = 'https://api.spotify.com/v1/albums/' + album;
   axios({
       method: 'get',
@@ -40,7 +41,7 @@ getSpotifyAlbum(token, album) {
       }
     })
     .then((res) => {
-      //console.log(res);
+      // console.log(res);
       eventBus.$emit('fireSpotifyAlbumData', res.data);
     })
     .catch((error) => {
