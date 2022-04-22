@@ -1,13 +1,13 @@
 <template>
   <div class="container-fluid">
     <b-row class="footer-row">
-      <b-col class="info-col">
+      <b-col col="4" class="info-col">
         <ComposerInfo/>
       </b-col>
-      <b-col class="info-col">
+      <b-col col="4" class="info-col">
         <WorkInfo/>
       </b-col>
-      <b-col class="info-col">
+      <b-col col="4" class="info-col">
         <AlbumInfoPanel/>
       </b-col>
     </b-row>

@@ -40,6 +40,7 @@
 <script>
 import axios from 'axios';
 import {eventBus} from "../../main.js";
+import {currentConfig} from "../../main.js";
 
 export default {
   data() {
@@ -128,17 +129,17 @@ export default {
 },
   created() {
     this.loading = true;
-
+    this.getWorkInfo(currentConfig.work)
     eventBus.$on('fireAlbums', (workId, title) => {
-      this.loading = false;
+      this.loading = true;
       this.workTitle = title;
       this.getWorkInfo(workId);
     })
     // eslint-disable-next-line
-    eventBus.$on('expandInfoPanel', (composer, workId) => {
-      this.loading = false;
-      this.getWorkInfo(workId);
-    })
+    // eventBus.$on('expandInfoPanel', (composer, workId) => {
+    //   this.loading = false;
+    //   this.getWorkInfo(workId);
+    // })
   },
 };
 </script>

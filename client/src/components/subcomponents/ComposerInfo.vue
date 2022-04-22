@@ -42,6 +42,7 @@
 <script>
 import axios from 'axios';
 import {eventBus} from "../../main.js";
+import {currentConfig} from "../../main.js";
 
 export default {
   data() {
@@ -68,14 +69,15 @@ export default {
   },
   created() {
     this.loading = true;
+    this.getComposerInfo(currentConfig.composer);
     eventBus.$on('fireComposers', (composer) => {
       this.loading = true;
       this.getComposerInfo(composer);
     })
-    eventBus.$on('expandInfoPanel', (composer) => {
-      this.loading = true;
-      this.getComposerInfo(composer);
-    })
+    // eventBus.$on('expandInfoPanel', (composer) => {
+    //   this.loading = true;
+    //   this.getComposerInfo(composer);
+    // })
   },
 };
 </script>

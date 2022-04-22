@@ -3,7 +3,7 @@
     <NavBar/>
     <router-view/>
     <SpotifyPlayer/>
-    <div class="info-panel" v-show='showPanel'><InfoPanel/></div>
+    <Transition name="fadeHeight"><div class="info-panel" v-show='showPanel'><InfoPanel/></div></Transition>
     <b-button class="info-panel-button float" @click="togglePanel()" variant="warning"><span v-if="!showPanel"><b-icon-chevron-up></b-icon-chevron-up></span><span v-else><b-icon-chevron-down></b-icon-chevron-down></span> INFO PANEL</b-button>
     <PageFooter/>
   </div>
@@ -71,6 +71,12 @@ export default {
     overflow-x: hidden;
 }
 
+.info-panel{
+  position:  fixed;
+  bottom: 100px;
+  width: 100%;
+}
+
   .info-panel-button{
   font-size: 10px !important;
   border-radius: 0px !important;
@@ -82,4 +88,15 @@ export default {
   bottom:92px;
   z-index: 1000;
   }
+.fadeHeight-enter-active,
+.fadeHeight-leave-active {
+  transition: all 0.3s;
+  max-height: 300px;
+}
+.fadeHeight-enter,
+.fadeHeight-leave-to
+{
+  opacity: 0;
+  max-height: 0px;
+}
 </style>

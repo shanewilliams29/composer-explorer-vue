@@ -134,7 +134,12 @@ export default {
     },
     composerSearch() {
       eventBus.$emit('fireComposerSearch', this.composerSearchForm);
-      this.composerFilterForm = 'Search results for "' + this.composerSearchForm + '"';
+      if(this.composerSearchForm != ''){
+        this.composerFilterForm = 'Search results for "' + this.composerSearchForm + '"';
+      } else {
+        this.composerFilterForm = { value: 'popular', text: 'Most popular' };
+      }
+
       //console.log(this.composerSearchForm);
     },
     onComposerFocus() {
@@ -149,7 +154,11 @@ export default {
     },
     workSearch() {
       eventBus.$emit('fireWorkSearch', this.workSearchField);
-      this.workFilterField = 'Search results for "' + this.workSearchField + '"';
+      if(this.workSearchField != ''){
+        this.workFilterField = 'Search results for "' + this.workSearchField + '"';
+      } else {
+        this.workFilterField = { value: 'recommended', text: 'Recommended works' };
+      }
       //console.log(this.workSearchField);
     },
     onWorkFocus() {

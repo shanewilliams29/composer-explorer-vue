@@ -1,8 +1,8 @@
 <template>
   <div>
-    <div class="spinner" v-show="loading" role="status">
+<!--     <div class="spinner" v-show="loading" role="status">
       <b-spinner class="m-5"></b-spinner>
-    </div>
+    </div> -->
       <div class="row">
           <span v-show="!loading && albums.length < 1 && !radioMode" class="m-4 col no-albums-found">
             No albums found.
@@ -10,7 +10,7 @@
       </div>
     <div v-if="albums">
       <div class="row">
-        <b-card-group deck v-show="!loading">
+        <Transition name="fade"><b-card-group deck v-show="!loading">
           <b-card
             v-for="album in albums"
             :key="album.id"
@@ -76,7 +76,7 @@
               </b-col>
             </div>
           </b-card>
-        </b-card-group>
+        </b-card-group></Transition>
       </div>
     </div>
     <div v-else>
@@ -215,6 +215,15 @@ export default {
 </script>
 
 <style scoped>
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
 .spinner {
   text-align: center;
 }

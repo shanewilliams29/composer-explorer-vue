@@ -47,7 +47,8 @@ export default {
 }
 
 .container-fluid {
-  position: relative;
+  position: fixed;
+  bottom: 0px;
   background-color: #343a40;
   padding-bottom: 0px;
   border-radius: 0px;

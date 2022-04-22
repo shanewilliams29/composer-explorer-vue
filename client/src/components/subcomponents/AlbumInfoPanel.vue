@@ -142,7 +142,6 @@ export default {
     // eslint-disable-next-line
     eventBus.$on('expandInfoPanel', (composer, workId) => {
       this.loading = false;
-      // this.getWorkInfo(workId);
     })
     eventBus.$on('fireSpotifyAlbumData', (album) => {
       this.album = album;

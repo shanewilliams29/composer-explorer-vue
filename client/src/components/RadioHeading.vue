@@ -36,8 +36,8 @@
               <b-col col=12>
               <v-select multiple
                 v-model="genreSelectField"
-                :deselectFromDropdown="true"
-                :closeOnSelect="false"
+                :deselectFromDropdown="false"
+                :closeOnSelect="true"
                 label="text"
                 :options="genreOptions"
                 @input="genreSelect()"
@@ -163,7 +163,7 @@ export default {
           this.genreOptions = [];
           this.genreOptions.push({ value: 'all', text: 'All Genres' });
         }
-        eventBus.$emit('fireGenreSelectRadio', this.genreSelectField, this.workFilterField.value);
+        eventBus.$emit('fireGenreSelectRadio', this.genreSelectField, this.workFilterField.value, this.workSearchField);
         for (const genre of genreList) {
           this.genreOptions.push({ value: genre, text: genre });
         }
