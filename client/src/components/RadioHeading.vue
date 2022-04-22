@@ -35,8 +35,8 @@
             <b-form-group>
               <v-select multiple
                 v-model="genreSelectField"
-                :deselectFromDropdown="true"
-                :closeOnSelect="false"
+                :deselectFromDropdown="false"
+                :closeOnSelect="true"
                 label="text"
                 :options="genreOptions"
                 @input="genreSelect()"
@@ -83,7 +83,6 @@
 
 <script>
 import {eventBus} from "../main.js";
-import {currentConfig} from "../main.js";
 
 export default {
   data() {
@@ -136,10 +135,17 @@ export default {
     },
     composerSelect(){
         eventBus.$emit('fireComposerSelectRadio', this.composerSelectField);
+        console.log(this.composerSelectField);
     },
     makeGenreList(genreList){
-        this.genreOptions = [];
-        this.genreOptions.push({ value: 'all', text: 'All Genres' });
+        if(genreList.length < 1){
+          this.genreSelectField = [];
+          this.genreOptions = [];
+        } else {
+          this.genreOptions = [];
+          this.genreOptions.push({ value: 'all', text: 'All Genres' });
+        }
+        eventBus.$emit('fireGenreSelectRadio', this.genreSelectField, this.workFilterField.value);
         for (const genre of genreList) {
           this.genreOptions.push({ value: genre, text: genre });
         }
@@ -147,113 +153,14 @@ export default {
     genreSelect(){
         eventBus.$emit('fireGenreSelectRadio', this.genreSelectField, this.workFilterField.value);
     },
-
-
-
-
-
-
-    composerFilter() {
-      //console.log(this.composerFilterForm.value);
-      eventBus.$emit('fireComposerFilter', this.composerFilterForm.value);
-      this.composerSearchForm = '';
-      //console.log(this.composerFilterForm);
-    },
-    composerSearch() {
-      eventBus.$emit('fireComposerSearch', this.composerSearchForm);
-      this.composerFilterForm = 'Search results for "' + this.composerSearchForm + '"';
-      //console.log(this.composerSearchForm);
-    },
-    onComposerFocus() {
-      this.composerFilterForm = { value: 'popular', text: 'Most popular' };
-      this.composerSearchForm = '';
-      eventBus.$emit('fireComposerSearch', '');
-    },
-    workFilter() {
-      eventBus.$emit('fireWorkFilter', this.workFilterField.value);
-      this.workSearchField = '';
-      //console.log(this.workFilterField);
-    },
-    workSearch() {
-      eventBus.$emit('fireWorkSearch', this.workSearchField);
-      this.workFilterField = 'Search results for "' + this.workSearchField + '"';
-      //console.log(this.workSearchField);
-    },
-    onWorkFocus() {
-      this.workFilterField = { value: 'recommended', text: 'Recommended works' }
-      this.workSearchField = '';
-      eventBus.$emit('fireWorkSearch', '');
-    },
-    albumFilter() {
-      this.albumSearchPlaceholder = "Search performers";
-      if (this.albumFilterField.value == "allartists") {
-          eventBus.$emit('fireAlbumFilter', currentConfig.work, '');
-      } else {
-          eventBus.$emit('fireAlbumFilter', currentConfig.work, this.albumFilterField.value);
-          this.albumSearchField = '';
-    }
-      //console.log(this.workFilterField);
-    },
-    albumSearch() {
-      eventBus.$emit('fireAlbumSearch', currentConfig.work, this.albumSearchField);
-      this.albumSearchPlaceholder = this.albumSearchField;
-      this.albumSearchField = '';
-      this.albumFilterField = null;
-      //console.log(this.workSearchField);
-    },
-    onAlbumFocus() {
-      this.$refs.typeahead.inputValue = ''
-      eventBus.$emit('fireAlbumSearch', currentConfig.work, '');
-    },
-    // getArtistList() {
-    //   const path = 'api/artistlist';
-    //   axios.get(path)
-    //     .then((res) => {
-    //       // this.artist_list = ['Canada', 'United States', 'Mexico'];
-    //       this.artist_list = JSON.parse(res.data.artists);
-    //       //console.log(this.artist_list);
-    //     })
-    //     .catch((error) => {
-    //       // eslint-disable-next-line
-    //       console.error(error);
-    //     });
-    // }
   },
   created() {
-
     eventBus.$on('fireComposerListToRadio', this.makeComposerDropdown);
     eventBus.$on('fireRadioGenreList', this.makeGenreList);
-
-
-
-
-    this.title = currentConfig.workTitle;
-    eventBus.$on('fireComposers', (composer) => {
-        this.workSearchPlaceholder = "Search works by " + composer;
-        this.workSearchField = '';
-        this.workFilterField = { value: 'recommended', text: 'Recommended works' };
-    })
-    eventBus.$on('fireAlbums', (work_id, title) => { // is this used?
-        this.title = title;
-        this.album_heading = "Albums for \"" + title + "\"";
-        this.albumFilterField = { value: 'allartists', text: 'All performers'};
-    })
-    eventBus.$on('fireArtistList', (artistList) => {
-        this.artist_list = []
-        this.albumSearchPlaceholder = "Search performers of " + this.title;
-        this.albumOptions = [
-          { value: 'allartists', text: 'All performers'}
-        ];
-        for (var key in artistList) {
-          this.albumOptions.push({ value: key, text: key });
-          this.artist_list.push(key);
-        }
-    })
+    eventBus.$on('fireComposerSelectRadio', this.makeGenreList);
   },
   mounted(){
-    const composer = { value: 'Beethoven', text: 'Beethoven' }
     eventBus.$emit('fireRadioSelect', 'composer');
-    eventBus.$emit('fireComposerSelectRadio', composer);
   }
 };
 </script>

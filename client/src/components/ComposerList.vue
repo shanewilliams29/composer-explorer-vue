@@ -4,7 +4,7 @@
       <b-spinner class="m-5"></b-spinner>
     </div>
     <div class="row">
-      <span class="col no-composers-found" v-show="!loading && composers.length < 1">No composers found.</span>
+      <span class="m-4 col no-composers-found" v-show="!loading && composers.length < 1 && !radioMode">No composers found.</span>
       <b-card-group deck v-show="!loading">
         <b-card
           v-for="(region, index) in composers"
@@ -89,7 +89,8 @@ export default {
       selectedComposer: null,
       visibility: true,
       artist: "",
-      artistMode: false
+      artistMode: false,
+      radioMode: false
     };
   },
   methods: {
@@ -161,16 +162,18 @@ export default {
         });
     },
     getWorks(composer) {
-      if (!this.artistMode){
+      if (!this.artistMode && !this.radioMode){
         eventBus.$emit('fireComposers', composer);
-      } else {
+      } else if (!this.radioMode){
         eventBus.$emit('fireArtistWorks', this.artist, composer);
       }
     },
     selectRow(composerId){
+      if (!this.radioMode){
         this.selectedComposer = composerId;
         currentConfig.composerId = composerId;
         localStorage.setItem('currentConfig', JSON.stringify(currentConfig));
+      }
     },
     fireRadioSelect(type){
       if(type == "composer"){
@@ -178,6 +181,7 @@ export default {
       axios.get(path)
         .then((res) => {
           eventBus.$emit('fireComposerListToRadio', res.data.composers);
+          this.composers = [];
         })
         .catch((error) => {
           // eslint-disable-next-line
@@ -187,14 +191,12 @@ export default {
     },
     getMultiComposers(composers) {
       if (composers.length < 1){
-        this.getComposers();
+        this.composers = []
       }
       else{
-      console.log(composers);
       const path = 'api/multicomposers';
       axios.post(path, composers)
         .then((res) => {
-          console.log(res.data);
           this.composers = res.data.composers;
           eventBus.$emit('fireRadioGenreList', res.data.genres);
           this.visibility=true;
@@ -207,8 +209,13 @@ export default {
     }
   },
   created() {
-    this.getComposers();
-    this.selectRow(currentConfig.composerId);
+    if (window.location.href.indexOf("radio") != -1){ // dont get composers in radio mode
+      this.radioMode = true;
+    } else {
+      this.getComposers();
+      this.selectRow(currentConfig.composerId);
+    }
+
     eventBus.$on('fireComposerFilter', this.getFilteredComposers);
     eventBus.$on('fireComposerSearch', this.getSearchComposers);
     eventBus.$on('fireArtistComposers', this.getArtistComposers);

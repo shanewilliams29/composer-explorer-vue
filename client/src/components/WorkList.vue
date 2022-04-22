@@ -4,11 +4,14 @@
       <b-spinner class="m-5"></b-spinner>
     </div>
       <div class="row">
-          <span v-show="!loading && works.length < 1 && !artistMode" class="col no-works-found">
-            No works found for {{ composer }}.
+          <span v-show="!loading && works.length < 1 && !artistMode && !radioMode" class="col no-works-found">
+            <div class="m-4">No works found for {{ composer }}.</div>
           </span>
-          <span v-show="!loading && works.length < 1 && artistMode" class="col no-works-found">
-            Select a composer to see works performed by {{ artist }}.
+          <span v-show="!loading && works.length < 1 && artistMode && !radioMode" class="col no-works-found">
+            <div class="m-4">Select a composer to see works performed by {{ artist }}.</div>
+          </span>
+          <span v-show="!loading && works.length < 1 && !artistMode && radioMode" class="col no-works-found">
+            <div class="m-4">Select from the options above to create your own customized radio.</div>
           </span>
         <b-card-group deck v-show="!loading && works">
           <b-card
@@ -76,7 +79,8 @@ export default {
       selectedWork: null,
       visibility: true,
       artist: "",
-      artistMode: false
+      artistMode: false,
+      radioMode: false
     };
   },
   methods: {
@@ -99,17 +103,14 @@ export default {
         });
     },
     getGenreWorks(genres, filter) {
-      console.log(filter);
       if (genres.length < 1){
-        console.log("No genres selected");
+        this.works = [];
       }
       else{
       const payload = {genres: genres, filter: filter};
-      console.log(payload);
       const path = 'api/worksbygenre';
       axios.post(path, payload)
         .then((res) => {
-          console.log(res.data);
           this.works = res.data.works;
           //eventBus.$emit('fireRadioGenreList', res.data.genres);
           this.visibility=true;
@@ -199,8 +200,12 @@ export default {
     }
   },
   created() {
-    this.getWorks(currentConfig.composer);
-    this.selectRow(currentConfig.work);
+    if (window.location.href.indexOf("radio") != -1){ // dont get works in radio mode
+      this.radioMode = true;
+    } else {
+      this.getWorks(currentConfig.composer);
+      this.selectRow(currentConfig.work);
+    }
     eventBus.$on('fireComposers', this.fireComposers);
     eventBus.$on('fireArtistWorks', this.getArtistWorks);
     eventBus.$on('fireWorkFilter', this.getFilteredWorks);

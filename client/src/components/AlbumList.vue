@@ -4,7 +4,7 @@
       <b-spinner class="m-5"></b-spinner>
     </div>
       <div class="row">
-          <span v-show="!loading && albums.length < 1" class="col no-albums-found">
+          <span v-show="!loading && albums.length < 1 && !radioMode" class="m-4 col no-albums-found">
             No albums found.
           </span>
       </div>
@@ -100,7 +100,8 @@ export default {
     return {
       albums: [],
       loading: false,
-      selectedAlbum: null
+      selectedAlbum: null,
+      radioMode: false
     };
   },
   methods: {
@@ -194,7 +195,11 @@ export default {
     },
   },
   created() {
-    this.initialGetAlbums(currentConfig.work);
+    if (window.location.href.indexOf("radio") != -1){ // dont get works in radio mode
+      this.radioMode = true;
+    } else {
+      this.initialGetAlbums(currentConfig.work);
+    }
     eventBus.$on('fireAlbums', this.getAlbums);
     eventBus.$on('fireAlbumFilter', this.getFilteredAlbums);
     eventBus.$on('fireAlbumSearch', this.getSearchAlbums);
