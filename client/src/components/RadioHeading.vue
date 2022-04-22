@@ -33,10 +33,11 @@
       <b-col>
         <b-card class="heading-card work-card">
             <b-form-group>
+              <b-col col=12>
               <v-select multiple
                 v-model="genreSelectField"
-                :deselectFromDropdown="false"
-                :closeOnSelect="true"
+                :deselectFromDropdown="true"
+                :closeOnSelect="false"
                 label="text"
                 :options="genreOptions"
                 @input="genreSelect()"
@@ -46,6 +47,19 @@
                 class="mt-3 style-chooser"
                 :searchable="true"
               ></v-select>
+            </b-col>
+            <b-row class="sub-row">
+            <b-col col=6 class="col-padding-right">
+              <b-form-input
+                class="work-search-field"
+                v-model="workSearchField"
+                @input="workSearch()"
+                @focus="onWorkFocus()"
+                placeholder="Search filter"
+                size="sm"
+              ></b-form-input>
+            </b-col>
+              <b-col col=6 class="col-padding-left">
                 <v-select
                 v-model="workFilterField"
                 label="text"
@@ -56,6 +70,8 @@
                 class="mt-3 style-chooser"
                 :searchable="false"
               ></v-select>
+            </b-col>
+          </b-row>
             </b-form-group>
         </b-card>
       </b-col>
@@ -106,6 +122,8 @@ export default {
       genreSelectField: null,
       genreOptions: [],
 
+      workSearchField: '',
+
       workFilterField: { value: 'recommended', text: 'Recommended works' },
       workOptions: [
           { value: 'recommended', text: 'Recommended works' },
@@ -151,7 +169,14 @@ export default {
         }
     },
     genreSelect(){
-        eventBus.$emit('fireGenreSelectRadio', this.genreSelectField, this.workFilterField.value);
+        eventBus.$emit('fireGenreSelectRadio', this.genreSelectField, this.workFilterField.value, this.workSearchField);
+    },
+    workSearch() {
+      eventBus.$emit('fireGenreSelectRadio', this.genreSelectField, this.workFilterField.value, this.workSearchField);
+    },
+    onWorkFocus() {
+      this.workSearchField = '';
+      eventBus.$emit('fireGenreSelectRadio', this.genreSelectField, this.workFilterField.value, this.workSearchField);
     },
   },
   created() {
@@ -228,7 +253,19 @@ input{
   border: none;
   border-radius: 4px;
 }
-
+.sub-row{
+  margin: 0px;
+}
+.work-search-field{
+  margin-top: 5px;
+  height: 28.6px;
+}
+.col-padding-right{
+  padding-right: 2.5px;
+}
+.col-padding-left{
+  padding-left: 2.5px;
+}
 /*.custom-select{
 
   border: solid 1px #3b4047;

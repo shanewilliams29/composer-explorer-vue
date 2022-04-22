@@ -325,6 +325,7 @@ def get_worksbygenre():
         search_list.append(genre['value'])
 
     work_filter = payload['filter']
+    search_term = payload['search']
 
     # get composers selected
     if not session.get('radio_composers'):
@@ -368,6 +369,24 @@ def get_worksbygenre():
         response = jsonify(response_object)
         response.headers.add('Access-Control-Allow-Credentials', 'true')
         return response
+
+    if search_term:
+        return_list = []
+        # search filtering
+        for work in works_list:
+            search_string = str(work.genre) + str(work.cat) + str(work.suite) + str(work.title) + str(work.nickname) + str(work.search)
+            if search_term.lower() in search_string.lower():
+                print(search_term + " MATCH " + search_string)
+                return_list.append(work)
+
+        if not return_list:
+            response_object = {'status': 'success'}
+            response_object['works'] = return_list
+            response = jsonify(response_object)
+            response.headers.add('Access-Control-Allow-Credentials', 'true')
+            return response
+        else:
+            works_list = return_list
 
     # return response
     works_by_genre = prepare_works(works_list)

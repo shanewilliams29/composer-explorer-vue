@@ -102,12 +102,12 @@ export default {
           this.loading = false;
         });
     },
-    getGenreWorks(genres, filter) {
+    getGenreWorks(genres, filter, search) {
       if (genres.length < 1){
         this.works = [];
       }
       else{
-      const payload = {genres: genres, filter: filter};
+      const payload = {genres: genres, filter: filter, search: search};
       const path = 'api/worksbygenre';
       axios.post(path, payload)
         .then((res) => {
