@@ -40,7 +40,7 @@ export default {
 .display-height{
     height: calc(100vh - 66px - 78px - 100px - var(--panelheight));
     padding-right: 12px;
-    padding-bottom: 0px;
+    padding-bottom: 5px;
     overflow-y: scroll;
 }
 .las-col{

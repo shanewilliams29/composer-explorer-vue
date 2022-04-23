@@ -157,7 +157,7 @@ def get_composers():
             date_minmax_sort = sortfilter.get_era_filter(composer_filter)
             datemin = date_minmax_sort[0]
             datemax = date_minmax_sort[1]
-            print(datemin, datemax)
+
             composer_list = ComposerList.query \
                 .filter(ComposerList.born >= datemin, ComposerList.born < datemax) \
                 .order_by(ComposerList.region, ComposerList.born).all()
@@ -270,22 +270,34 @@ def get_works(name):
     # old ordering: WorkList.order, WorkList.genre, WorkList.date, WorkList.cat, WorkList.id
 
     if search:
-        search_term = "%{}%".format(search)
         works_list = WorkList.query.filter_by(composer=name)\
-            .filter(WorkList.genre.ilike(search_term)) \
             .order_by(WorkList.order, WorkList.genre, WorkList.id).all()
-        if not works_list:
-            works_list = WorkList.query.filter_by(composer=name)\
-                .filter(WorkList.title.ilike(search_term)) \
-                .order_by(WorkList.order, WorkList.genre, WorkList.id).all()
-        if not works_list:
-            works_list = WorkList.query.filter_by(composer=name)\
-                .filter(WorkList.cat.ilike(search_term)) \
-                .order_by(WorkList.order, WorkList.genre, WorkList.id).all()
-        if not works_list:
-            works_list = WorkList.query.filter_by(composer=name)\
-                .filter(WorkList.nickname.ilike(search_term)) \
-                .order_by(WorkList.order, WorkList.genre, WorkList.id).all()
+
+        return_list = []
+
+        for work in works_list:
+            search_string = str(work.genre) + str(work.cat) + str(work.suite) + str(work.title) + str(work.nickname) + str(work.search)
+            if search.lower() in search_string.lower():
+                return_list.append(work)
+
+        works_list = return_list
+
+        # search_term = "%{}%".format(search)
+        # works_list = WorkList.query.filter_by(composer=name)\
+        #     .filter(WorkList.genre.ilike(search_term)) \
+        #     .order_by(WorkList.order, WorkList.genre, WorkList.id).all()
+        # if not works_list:
+        #     works_list = WorkList.query.filter_by(composer=name)\
+        #         .filter(WorkList.title.ilike(search_term)) \
+        #         .order_by(WorkList.order, WorkList.genre, WorkList.id).all()
+        # if not works_list:
+        #     works_list = WorkList.query.filter_by(composer=name)\
+        #         .filter(WorkList.cat.ilike(search_term)) \
+        #         .order_by(WorkList.order, WorkList.genre, WorkList.id).all()
+        # if not works_list:
+        #     works_list = WorkList.query.filter_by(composer=name)\
+        #         .filter(WorkList.nickname.ilike(search_term)) \
+        #         .order_by(WorkList.order, WorkList.genre, WorkList.id).all()
 
     elif filter_method:
         if filter_method == "recommended":
@@ -376,7 +388,6 @@ def get_worksbygenre():
         for work in works_list:
             search_string = str(work.genre) + str(work.cat) + str(work.suite) + str(work.title) + str(work.nickname) + str(work.search)
             if search_term.lower() in search_string.lower():
-                print(search_term + " MATCH " + search_string)
                 return_list.append(work)
 
         if not return_list:
