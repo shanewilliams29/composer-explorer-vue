@@ -7,7 +7,7 @@
       <b-col col="4" class="info-col">
         <WorkInfo/>
       </b-col>
-      <b-col col="4" class="info-col">
+      <b-col col="4" class="info-col last-col">
         <AlbumInfoPanel/>
       </b-col>
     </b-row>
@@ -42,5 +42,8 @@ export default {
 .col {
   padding: 5px;
   padding-right: 0px;
+}
+.last-col{
+  padding-right: 5px;
 }
 </style>

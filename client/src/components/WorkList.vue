@@ -1,8 +1,8 @@
 <template>
   <div>
-<!--     <div class="spinner" v-show="loading" role="status">
+    <div class="spinner" v-show="loading" role="status">
       <b-spinner class="m-5"></b-spinner>
-    </div> -->
+    </div>
       <div class="row">
           <span v-show="!loading && works.length < 1 && !artistMode && !radioMode" class="col no-works-found">
             <div class="m-4">No works found for {{ composer }}.</div>
@@ -13,7 +13,7 @@
           <span v-show="!loading && works.length < 1 && !artistMode && radioMode" class="col no-works-found">
             <div class="m-4">Select from the options above to create your own customized radio.</div>
           </span>
-        <Transition name="fade"><b-card-group deck v-show="!loading && works">
+        <b-card-group deck v-show="!loading && works">
           <b-card
             v-for="(genre, index) in works"
             :key="index"
@@ -61,7 +61,7 @@
             </b-card-text>
           </b-collapse>
           </b-card>
-        </b-card-group></Transition>
+        </b-card-group>
     </div>
   </div>
 </template>
