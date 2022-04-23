@@ -40,36 +40,17 @@ export default {
 .display-height{
     height: calc(100vh - 66px - 78px - 100px - var(--panelheight));
     padding-right: 12px;
-    padding-bottom: 5px;
+    padding-bottom: 0px;
     overflow-y: scroll;
 }
 .las-col{
-  margin-right: 5px;
+  margin-right: 3px;
 }
-/*
-scrollbars*/
+
+/*scrollbars*/
  :root {
-        --code-color: darkred;
-        --code-bg-color: #aaaaaa;
-        --code-font-size: 14px;
-        --code-line-height: 1.4;
         --scroll-bar-color: #c5c5c5;
         --scroll-bar-bg-color: #f1f2f4;
-    }
-
-    pre {
-        color: var(--code-color);
-        font-size: var(--code-font-size);
-        line-height: var(--code-line-height);
-        background-color: var(--code-bg-color);
-    }
-
-    .code-block {
-        max-height: 100px;
-        overflow: auto;
-        padding: 8px 7px 5px 15px;
-        margin: 0px 0px 0px 0px;
-        border-radius: 7px;
     }
 
     ::-webkit-scrollbar-corner { background: rgba(0,0,0,0.5); }
