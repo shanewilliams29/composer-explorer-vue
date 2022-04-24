@@ -67,7 +67,7 @@
                 v-model="albumSortField"
                 label="text"
                 :options="albumSortOptions"
-                @input="albumSort()"
+                @input="albumFilter()"
                 :inputId="AlbumSortField"
                 :clearable="false"
                 class="mt-3 style-chooser"
@@ -167,25 +167,11 @@ export default {
       eventBus.$emit('fireWorkSearch', '');
     },
     albumFilter() {
-      this.albumSearchPlaceholder = "Search performers";
       if (this.albumFilterField.value == "allartists") {
-          eventBus.$emit('fireAlbumFilter', currentConfig.work, '');
+          eventBus.$emit('fireAlbumFilter', currentConfig.work, '', this.albumSortField.value);
       } else {
-          eventBus.$emit('fireAlbumFilter', currentConfig.work, this.albumFilterField.value);
-          this.albumSearchField = '';
-    }
-      //console.log(this.workFilterField);
-    },
-    albumSearch() {
-      eventBus.$emit('fireAlbumSearch', currentConfig.work, this.albumSearchField);
-      this.albumSearchPlaceholder = this.albumSearchField;
-      this.albumSearchField = '';
-      this.albumFilterField = null;
-      //console.log(this.workSearchField);
-    },
-    onAlbumFocus() {
-      this.$refs.typeahead.inputValue = ''
-      eventBus.$emit('fireAlbumSearch', currentConfig.work, '');
+          eventBus.$emit('fireAlbumFilter', currentConfig.work, this.albumFilterField.value, this.albumSortField.value);
+      }
     },
     // getArtistList() {
     //   const path = 'api/artistlist';
@@ -210,12 +196,10 @@ export default {
     })
     eventBus.$on('fireAlbums', (work_id, title) => { // is this used?
         this.title = title;
-        this.album_heading = "Albums for \"" + title + "\"";
         this.albumFilterField = { value: 'allartists', text: 'All performers'};
     })
     eventBus.$on('fireArtistList', (artistList) => {
         this.artist_list = []
-        this.albumSearchPlaceholder = "Search performers of " + this.title;
         this.albumOptions = [
           { value: 'allartists', text: 'All performers'}
         ];

@@ -155,28 +155,10 @@ export default {
       selectRow(album){
         this.selectedAlbum = album;
     },
-    getFilteredAlbums(id, item) {
+    getFilteredAlbums(id, item, sort) {
+      console.log(sort);
       this.loading = true;
-      const path = 'api/albums/' + id + '?artist=' + item;
-      axios.get(path)
-        .then((res) => {
-          this.albums = res.data.albums;
-          this.loading = false;
-
-          //this.selectRow(currentConfig.album);
-          //eventBus.$emit('fireAlbumData', currentConfig.album);
-          //this.selectRow(this.albums[0].album_id); // select first row
-          //eventBus.$emit('fireAlbumData', this.albums[0].id);
-        })
-        .catch((error) => {
-          // eslint-disable-next-line
-          console.error(error);
-          this.loading = false;
-        });
-    },
-    getSearchAlbums(id, item) {
-      this.loading = true;
-      const path = 'api/albums/' + id + '?search=' + item;
+      const path = 'api/albums/' + id + '?artist=' + item + '&sort=' + sort;
       axios.get(path)
         .then((res) => {
           this.albums = res.data.albums;
@@ -202,13 +184,11 @@ export default {
     }
     eventBus.$on('fireAlbums', this.getAlbums);
     eventBus.$on('fireAlbumFilter', this.getFilteredAlbums);
-    eventBus.$on('fireAlbumSearch', this.getSearchAlbums);
     eventBus.$on('fireArtistAlbums', this.getFilteredAlbums);
   },
   beforeDestroy() {
     eventBus.$off('fireAlbums', this.getAlbums);
     eventBus.$off('fireAlbumFilter', this.getFilteredAlbums);
-    eventBus.$off('fireAlbumSearch', this.getSearchAlbums);
     eventBus.$off('fireArtistAlbums', this.getFilteredAlbums);
   }
 };

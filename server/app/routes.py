@@ -415,13 +415,11 @@ def get_albums(work_id):
 
     # get filter and search arguments
     artistselect = request.args.get('artist')
-    searchselect = request.args.get('search')
+    sort = request.args.get('sort')
     search = None
 
     if artistselect:
         search = "%{}%".format(artistselect)
-    elif searchselect:
-        search = "%{}%".format(searchselect)
 
     if search:
         albums = db.session.query(WorkAlbums, func.count(AlbumLike.id).label('total')) \
@@ -477,9 +475,15 @@ def get_albums(work_id):
         # add to album list
         album_list.append(item)
 
-        # re-sort the album list on popularity and likes
-        sorted_list = sorted(album_list, key=lambda d: d['score'], reverse=True)
-        sorted_list = sorted(sorted_list, key=lambda d: d['likes'], reverse=True)
+        if sort == 'dateascending':
+            # sort the album list on popularity and likes
+            sorted_list = sorted(album_list, key=lambda d: d['release_date'])
+        elif sort == 'datedescending':
+            sorted_list = sorted(album_list, key=lambda d: d['release_date'], reverse=True)
+        else:
+            # sort the album list on popularity and likes (recommended)
+            sorted_list = sorted(album_list, key=lambda d: d['score'], reverse=True)
+            sorted_list = sorted(sorted_list, key=lambda d: d['likes'], reverse=True)
 
         # return paginated items - NEED TO IMPLEMENT INFINITY SCROLL
         if not session['mobile']:
