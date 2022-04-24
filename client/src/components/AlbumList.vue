@@ -76,7 +76,7 @@
               </b-col>
             </div>
           </b-card>
-          <infinite-loading @infinite="infiniteHandler"></infinite-loading>
+          <infinite-loading :identifier="infiniteId" @infinite="infiniteHandler"></infinite-loading>
         </b-card-group>
       </div>
     </div>
@@ -98,13 +98,14 @@ export default {
       page: 2,
       workId: '',
       artistName: '',
-      sort: ''
+      sort: '',
+      infiniteId: +new Date()
     };
   },
   methods: {
     // loads from selected work
     getAlbums(id) {
-      this.page = 2;
+      this.changeAlbums()
       this.workId = id;
       this.loading = true;
       const path = 'api/albums/' + id;
@@ -127,7 +128,7 @@ export default {
     },
     // loads from localstorage
     initialGetAlbums(id) {
-      this.page = 2;
+      this.changeAlbums()
       this.workId = id;
       this.loading = true;
       const path = 'api/albums/' + id;
@@ -157,7 +158,7 @@ export default {
         this.selectedAlbum = album;
     },
     getFilteredAlbums(id, item, sort) {
-      this.page = 2;
+      this.changeAlbums()
       this.workId = id;
       this.artistName = item;
       this.sort = sort;
@@ -184,6 +185,7 @@ export default {
       const path = 'api/albums/' + this.workId + '?artist=' + this.artistName + '&sort=' + this.sort + '&page=' + this.page;
       axios.get(path)
         .then(({ data }) => {
+          console.log(data);
         if (data.albums.length) {
           this.page += 1;
           this.albums.push(...data.albums);
@@ -192,6 +194,12 @@ export default {
           $state.complete();
         }
       });
+    },
+    changeAlbums() {
+      console.log('CHANGE');
+      this.page = 2;
+      this.albums = [];
+      this.infiniteId += 1;
     },
   },
   created() {

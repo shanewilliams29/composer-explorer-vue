@@ -484,7 +484,7 @@ def get_albums(work_id):
         sorted_list = sorted(album_list, key=lambda d: d['score'], reverse=True)
         sorted_list = sorted(sorted_list, key=lambda d: d['likes'], reverse=True)
 
-    # return paginated items - NEED TO IMPLEMENT INFINITY SCROLL
+    # return paginated items
     results_per_page = 30
     list_start = page * results_per_page - results_per_page
     list_end = page * results_per_page
