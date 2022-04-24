@@ -1,16 +1,17 @@
 import Vue from 'vue'
 import App from './App.vue'
 import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
-import axios from 'axios';
-import VueTypeaheadBootstrap from 'vue-typeahead-bootstrap';
+import axios from 'axios'
+import VueTypeaheadBootstrap from 'vue-typeahead-bootstrap'
 import vSelect from 'vue-select'
-import InfiniteLoading from 'vue-infinite-loading';
+import InfiniteLoading from 'vue-infinite-loading'
+import VueLazyload from 'vue-lazyload'
 
 
 
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
-import 'vue-select/dist/vue-select.css';
+import 'vue-select/dist/vue-select.css'
 
 import router from './router'
 
@@ -25,13 +26,18 @@ Vue.use(InfiniteLoading, {
     distance: 200,
     /* other props need to configure */
   },
-  system: {
-    throttleLimit: 50,
-    /* other settings need to configure */
-  },
 });
 Vue.use(BootstrapVue);
 Vue.use(IconsPlugin);
+
+const loadimage = require('./assets/album_placeholder.png')
+
+Vue.use(VueLazyload, {
+  preLoad: 1.3,
+  error: loadimage,
+  loading: loadimage,
+  attempt: 1
+})
 
 Vue.component('vue-typeahead-bootstrap', VueTypeaheadBootstrap);
 Vue.component('v-select', vSelect);

@@ -22,11 +22,12 @@
           >
             <div class="row">
               <b-col class="album_columns" cols="2">
-                <b-avatar
+                <img
                   rounded="left"
-                  size="48px"
-                  :src="album.album_img"
-                ></b-avatar>
+                  width="48px"
+                  height="48px"
+                  v-lazy="album.album_img"
+                >
  <!--                <b-avatar
                   v-show="album.id == selectedAlbum"
                   variant="dark"
