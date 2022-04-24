@@ -15,8 +15,6 @@ import InfoPanel from '@/components/InfoPanel.vue'
 import PageFooter from '@/components/PageFooter.vue'
 import NavBar from '@/components/NavBar.vue'
 
-import {eventBus} from "./main.js";
-import {currentConfig} from "./main.js";
 import spotify from "./SpotifyFunctions.js";
 
 export default {
@@ -36,7 +34,7 @@ export default {
       this.showPanel = !this.showPanel;
       if (this.showPanel){
         document.documentElement.style.setProperty('--panelheight', `300px`);
-        eventBus.$emit('expandInfoPanel', currentConfig.composer, currentConfig.work);
+        // eventBus.$emit('expandInfoPanel', currentConfig.composer, currentConfig.work);
       } else{
         document.documentElement.style.setProperty('--panelheight', `0px`);
       }
