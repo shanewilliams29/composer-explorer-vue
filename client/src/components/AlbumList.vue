@@ -76,15 +76,8 @@
               </b-col>
             </div>
           </b-card>
+          <infinite-loading @infinite="infiniteHandler"></infinite-loading>
         </b-card-group>
-      </div>
-    </div>
-    <div v-else>
-      <div class="row">
-        <div class="text-center" v-show="loading" role="status">
-          <b-spinner class="m-5"></b-spinner>
-        </div>
-        <span class="no-albums-found"><br />No albums found.</span>
       </div>
     </div>
   </div>
@@ -101,12 +94,18 @@ export default {
       albums: [],
       loading: false,
       selectedAlbum: null,
-      radioMode: false
+      radioMode: false,
+      page: 2,
+      workId: '',
+      artistName: '',
+      sort: ''
     };
   },
   methods: {
     // loads from selected work
     getAlbums(id) {
+      this.page = 2;
+      this.workId = id;
       this.loading = true;
       const path = 'api/albums/' + id;
       axios.get(path)
@@ -128,6 +127,8 @@ export default {
     },
     // loads from localstorage
     initialGetAlbums(id) {
+      this.page = 2;
+      this.workId = id;
       this.loading = true;
       const path = 'api/albums/' + id;
       axios.get(path)
@@ -156,6 +157,10 @@ export default {
         this.selectedAlbum = album;
     },
     getFilteredAlbums(id, item, sort) {
+      this.page = 2;
+      this.workId = id;
+      this.artistName = item;
+      this.sort = sort;
       console.log(sort);
       this.loading = true;
       const path = 'api/albums/' + id + '?artist=' + item + '&sort=' + sort;
@@ -174,6 +179,19 @@ export default {
           console.error(error);
           this.loading = false;
         });
+    },
+      infiniteHandler($state) {
+      const path = 'api/albums/' + this.workId + '?artist=' + this.artistName + '&sort=' + this.sort + '&page=' + this.page;
+      axios.get(path)
+        .then(({ data }) => {
+        if (data.albums.length) {
+          this.page += 1;
+          this.albums.push(...data.albums);
+          $state.loaded();
+        } else {
+          $state.complete();
+        }
+      });
     },
   },
   created() {

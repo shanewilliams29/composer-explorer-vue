@@ -197,12 +197,11 @@ export default {
     eventBus.$on('fireAlbums', (work_id, title) => { // is this used?
         this.title = title;
         this.albumFilterField = { value: 'allartists', text: 'All performers'};
+        this.albumSortField = { value: 'recommended', text: 'Recommended sorting' }
     })
     eventBus.$on('fireArtistList', (artistList) => {
         this.artist_list = []
-        this.albumOptions = [
-          { value: 'allartists', text: 'All performers'}
-        ];
+        this.albumOptions = [{ value: 'allartists', text: 'All performers'}];
         for (var key in artistList) {
           this.albumOptions.push({ value: key, text: key });
           this.artist_list.push(key);

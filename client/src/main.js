@@ -4,6 +4,7 @@ import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
 import axios from 'axios';
 import VueTypeaheadBootstrap from 'vue-typeahead-bootstrap';
 import vSelect from 'vue-select'
+import InfiniteLoading from 'vue-infinite-loading';
 
 
 
@@ -18,7 +19,7 @@ Vue.config.productionTip = false;
 axios.defaults.baseURL = process.env.VUE_APP_BASE_URL;
 // axios.defaults.withCredentials = true;
 
-
+Vue.use(InfiniteLoading);
 Vue.use(BootstrapVue);
 Vue.use(IconsPlugin);
 

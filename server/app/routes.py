@@ -425,13 +425,13 @@ def get_albums(work_id):
         albums = db.session.query(WorkAlbums, func.count(AlbumLike.id).label('total')) \
             .filter(WorkAlbums.workid == work_id, WorkAlbums.hidden != True, WorkAlbums.artists.ilike(search)) \
             .outerjoin(AlbumLike).group_by(WorkAlbums) \
-            .order_by(text('total DESC'), WorkAlbums.score.desc()).paginate(page, 1000, False)
+            .order_by(text('total DESC'), WorkAlbums.score.desc()).paginate(1, 1000, False)
 
     else:
         albums = db.session.query(WorkAlbums, func.count(AlbumLike.id).label('total')) \
             .filter(WorkAlbums.workid == work_id, WorkAlbums.hidden != True)\
             .outerjoin(AlbumLike).group_by(WorkAlbums) \
-            .order_by(text('total DESC'), WorkAlbums.score.desc()).paginate(page, 1000, False)
+            .order_by(text('total DESC'), WorkAlbums.score.desc()).paginate(1, 1000, False)
 
     if not albums.items:
         response_object = {'status': 'success'}
@@ -475,23 +475,21 @@ def get_albums(work_id):
         # add to album list
         album_list.append(item)
 
-        if sort == 'dateascending':
-            # sort the album list on popularity and likes
-            sorted_list = sorted(album_list, key=lambda d: d['release_date'])
-        elif sort == 'datedescending':
-            sorted_list = sorted(album_list, key=lambda d: d['release_date'], reverse=True)
-        else:
-            # sort the album list on popularity and likes (recommended)
-            sorted_list = sorted(album_list, key=lambda d: d['score'], reverse=True)
-            sorted_list = sorted(sorted_list, key=lambda d: d['likes'], reverse=True)
+    if sort == 'dateascending':
+        sorted_list = sorted(album_list, key=lambda d: d['release_date'])
+    elif sort == 'datedescending':
+        sorted_list = sorted(album_list, key=lambda d: d['release_date'], reverse=True)
+    else:
+        # sort the album list on popularity and likes (recommended)
+        sorted_list = sorted(album_list, key=lambda d: d['score'], reverse=True)
+        sorted_list = sorted(sorted_list, key=lambda d: d['likes'], reverse=True)
 
-        # return paginated items - NEED TO IMPLEMENT INFINITY SCROLL
-        if not session['mobile']:
-            sorted_list = sorted_list[0:50]
+    # return paginated items - NEED TO IMPLEMENT INFINITY SCROLL
+    results_per_page = 30
+    list_start = page * results_per_page - results_per_page
+    list_end = page * results_per_page
 
-        # return less items for mobile
-        if session['mobile']:
-            sorted_list = sorted_list[0:25]
+    sorted_list = sorted_list[list_start:list_end]
 
     response_object = {'status': 'success'}
     response_object['albums'] = sorted_list
