@@ -19,7 +19,17 @@ Vue.config.productionTip = false;
 axios.defaults.baseURL = process.env.VUE_APP_BASE_URL;
 // axios.defaults.withCredentials = true;
 
-Vue.use(InfiniteLoading);
+Vue.use(InfiniteLoading, {
+  props: {
+    spinner: 'spiral',
+    distance: 200,
+    /* other props need to configure */
+  },
+  system: {
+    throttleLimit: 50,
+    /* other settings need to configure */
+  },
+});
 Vue.use(BootstrapVue);
 Vue.use(IconsPlugin);
 

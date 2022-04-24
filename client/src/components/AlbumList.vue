@@ -76,7 +76,10 @@
               </b-col>
             </div>
           </b-card>
-          <infinite-loading :identifier="infiniteId" @infinite="infiniteHandler"></infinite-loading>
+          <infinite-loading spinner="spiral" :identifier="infiniteId" @infinite="infiniteHandler">
+              <div slot="no-more"></div>
+              <div slot="no-results"></div>
+          </infinite-loading>
         </b-card-group>
       </div>
     </div>
@@ -183,9 +186,9 @@ export default {
     },
       infiniteHandler($state) {
       const path = 'api/albums/' + this.workId + '?artist=' + this.artistName + '&sort=' + this.sort + '&page=' + this.page;
+      console.log(path);
       axios.get(path)
         .then(({ data }) => {
-          console.log(data);
         if (data.albums.length) {
           this.page += 1;
           this.albums.push(...data.albums);
@@ -196,7 +199,8 @@ export default {
       });
     },
     changeAlbums() {
-      console.log('CHANGE');
+      this.artistName = '';
+      this.sort='';
       this.page = 2;
       this.albums = [];
       this.infiniteId += 1;
