@@ -113,7 +113,8 @@ export default {
       radioTypeOptions: [
           { value: 'composer', text: 'Composer Radio' },
           { value: 'period', text: 'Period/Era Radio'},
-          { value: 'performer', text: 'Performer Radio'}
+          { value: 'performer', text: 'Performer Radio'},
+          { value: 'favorites', text: 'Favorites Radio'}
         ],
 
       composerSelectField: null,

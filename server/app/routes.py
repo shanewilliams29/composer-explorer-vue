@@ -1,7 +1,7 @@
 from app import app, db, sp
 from flask import jsonify, request, redirect, session, render_template, abort
 from config import Config
-from app.functions import prepare_composers, group_composers_by_region, prepare_works
+from app.functions import prepare_composers, group_composers_by_region, prepare_works, new_prepare_works
 from app.models import ComposerList, WorkList, WorkAlbums, AlbumLike, Spotify, Artists, ArtistList
 from app.classes import SortFilter
 from sqlalchemy import func, text
@@ -282,23 +282,6 @@ def get_works(name):
 
         works_list = return_list
 
-        # search_term = "%{}%".format(search)
-        # works_list = WorkList.query.filter_by(composer=name)\
-        #     .filter(WorkList.genre.ilike(search_term)) \
-        #     .order_by(WorkList.order, WorkList.genre, WorkList.id).all()
-        # if not works_list:
-        #     works_list = WorkList.query.filter_by(composer=name)\
-        #         .filter(WorkList.title.ilike(search_term)) \
-        #         .order_by(WorkList.order, WorkList.genre, WorkList.id).all()
-        # if not works_list:
-        #     works_list = WorkList.query.filter_by(composer=name)\
-        #         .filter(WorkList.cat.ilike(search_term)) \
-        #         .order_by(WorkList.order, WorkList.genre, WorkList.id).all()
-        # if not works_list:
-        #     works_list = WorkList.query.filter_by(composer=name)\
-        #         .filter(WorkList.nickname.ilike(search_term)) \
-        #         .order_by(WorkList.order, WorkList.genre, WorkList.id).all()
-
     elif filter_method:
         if filter_method == "recommended":
             works_list = WorkList.query.filter_by(composer=name, recommend=True).order_by(WorkList.order, WorkList.genre, WorkList.id).all()
@@ -316,6 +299,23 @@ def get_works(name):
         response.headers.add('Access-Control-Allow-Credentials', 'true')
         return response
 
+    # This returns liked works
+    # works_list = db.session.query(WorkList, func.count(AlbumLike.id).label('total')) \
+    #     .filter(WorkList.composer == name, WorkList.recommend == True)\
+    #     .join(WorkAlbums, WorkAlbums.workid == WorkList.id)\
+    #     .join(AlbumLike, AlbumLike.album_id == WorkAlbums.id)\
+    #     .group_by(WorkAlbums)\
+    #     .order_by(WorkList.order, WorkList.genre, WorkList.id).all()
+
+    # This returns works with number of likes
+    # works_list = db.session.query(WorkList, func.count(AlbumLike.id).label('total')) \
+    #     .filter(WorkList.composer == name, WorkList.recommend == True)\
+    #     .join(WorkAlbums, WorkAlbums.workid == WorkList.id)\
+    #     .outerjoin(AlbumLike, AlbumLike.album_id == WorkAlbums.id)\
+    #     .group_by(WorkList)\
+    #     .order_by(WorkList.order, WorkList.genre, WorkList.id).all()
+
+    # TESTING
     works_by_genre = prepare_works(works_list)
 
     response_object = {'status': 'success'}

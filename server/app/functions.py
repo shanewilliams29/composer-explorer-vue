@@ -106,3 +106,46 @@ def prepare_works(works_list):
                 works_by_genre[prev_genre] = works_in_genre
 
     return works_by_genre
+
+
+# used if works likst with likes is returned
+def new_prepare_works(works_list):
+    WORKS = []
+    for (work, likes) in works_list:
+
+        info = {
+            'id': work.id,
+            'genre': work.genre,
+            'cat': work.cat,
+            'recommend': work.recommend,
+            'title': work.title,
+            'nickname': work.nickname,
+            'date': work.date,
+            'album_count': work.album_count,
+            'likes': likes
+        }
+        WORKS.append(info)
+
+    # group onto genres
+    works_by_genre = {}
+    works_in_genre = []
+    i = 0
+    prev_genre = WORKS[i]['genre']
+
+    while i < len(WORKS):
+        genre = WORKS[i]['genre']
+        if genre == prev_genre:
+            works_in_genre.append(WORKS[i])
+            i += 1
+            if i == len(WORKS):
+                works_by_genre[prev_genre] = works_in_genre
+        else:
+            works_by_genre[prev_genre] = works_in_genre
+            works_in_genre = []
+            works_in_genre.append(WORKS[i])
+            prev_genre = genre
+            i += 1
+            if i == len(WORKS):
+                works_by_genre[prev_genre] = works_in_genre
+
+    return works_by_genre

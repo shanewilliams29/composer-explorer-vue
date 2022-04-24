@@ -316,8 +316,10 @@ header.card-header {
   padding-left: 0px;
 }
 .badge {
+  vertical-align: middle;
   color: #fff;
   background-color: darkgoldenrod;
   border-radius: 7px;
+  margin-bottom: 2px;
 }
 </style>
