@@ -37,6 +37,23 @@ import {eventBus} from "../../main.js";
 import {currentConfig} from "../../main.js";
 import {spotifyConfig} from "../../main.js";
 
+function debounce(func, timeout = 500){
+  let timer;
+  return (...args) => {
+    if (!timer) {
+      func.apply(this, args);
+    }
+    clearTimeout(timer);
+    timer = setTimeout(() => {
+      timer = undefined;
+    }, timeout);
+  };
+}
+function nextWork(){
+  eventBus.$emit('fireNextWork');
+}
+const debouncedNext = debounce(() => nextWork());
+
 export default {
   data() {
     return {
@@ -72,14 +89,12 @@ export default {
     },
     next() {
       spotify.nextTrack(spotifyConfig.clientToken);
-      //eventBus.$emit('fireNextTrack');
     },
     suspendTimer() {
-      this.suspend = true; //CHANGE
+      this.suspend = true;
     },
     seek(progress) {
       spotify.seekToPosition(spotifyConfig.clientToken, progress);
-      //this.setPlayback(progress, this.duration);
     },
     setPlayback(progress, duration) {
       this.progress = progress;
@@ -98,7 +113,7 @@ export default {
         return minutes + ":" + seconds;
     },
     playbackTimer(){
-        if(!this.suspend) { // CHANGE
+        if(!this.suspend) {
 
             this.progress = parseInt(this.progress) + 1000;
             this.setPlayback(this.progress, this.duration);
@@ -110,7 +125,6 @@ export default {
             if(this.progress < 0) {
                 this.setPlayback(0, this.duration);
             }
-
         }
     },
     startTimer(){
@@ -120,6 +134,12 @@ export default {
     delayStartTimer(){
         this.suspend = true;
         setTimeout(this.startTimer, this.delay);
+    },
+    nextWork(){
+        debouncedNext();
+    },
+    previousWork(){
+        eventBus.$emit('firePreviousWork');
     },
   },
   created() {
@@ -156,11 +176,13 @@ export default {
 
     eventBus.$on('firePlayerStateChanged', (track_data, position, duration, paused) => {
       // console.log(position);
-      //ignore at beginning of song (glitchy)
-      if (position == 0 && !paused){
+      if (position == 0 && !paused){ //ignore at beginning of song (glitchy)
           this.playing = true;
           this.suspend = true;
           this.setPlayback(0, duration);
+      }
+      else if (position == 0 && paused){ //advance to next work when play stops current work
+          this.nextWork();
       }
       else if (position > 0 && position < 3000 && !paused){
           this.playing = true;

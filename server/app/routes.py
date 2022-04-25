@@ -316,10 +316,12 @@ def get_works(name):
     #     .order_by(WorkList.order, WorkList.genre, WorkList.id).all()
 
     # TESTING
+
     works_by_genre = prepare_works(works_list)
 
     response_object = {'status': 'success'}
     response_object['works'] = works_by_genre
+    response_object['playlist'] = works_list  # for back and previous playing
 
     response = jsonify(response_object)
 

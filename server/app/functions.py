@@ -70,8 +70,10 @@ def group_composers_by_region(COMPOSERS):
 
 def prepare_works(works_list):
     WORKS = []
+    i = 0
     for work in works_list:
         info = {
+            'index': i,
             'id': work.id,
             'genre': work.genre,
             'cat': work.cat,
@@ -79,9 +81,10 @@ def prepare_works(works_list):
             'title': work.title,
             'nickname': work.nickname,
             'date': work.date,
-            'album_count': work.album_count
+            'album_count': work.album_count,
         }
         WORKS.append(info)
+        i += 1
 
     # group onto genres
     works_by_genre = {}

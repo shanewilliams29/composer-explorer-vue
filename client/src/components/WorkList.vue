@@ -75,6 +75,7 @@ export default {
   data() {
     return {
       works: [],
+      playlist: [],
       loading: false,
       selectedWork: null,
       visibility: true,
@@ -91,10 +92,11 @@ export default {
       axios.get(path)
         .then((res) => {
           this.works = res.data.works;
+          this.playlist = res.data.playlist;
           this.visibility=true
           this.composer = composer;
           this.loading = false;
-          eventBus.$emit('fireWorksLoaded');
+          eventBus.$emit('fireWorksLoaded'); // need this?
         })
         .catch((error) => {
           // eslint-disable-next-line
@@ -112,7 +114,6 @@ export default {
       axios.post(path, payload)
         .then((res) => {
           this.works = res.data.works;
-          //eventBus.$emit('fireRadioGenreList', res.data.genres);
           this.visibility=true;
         })
         .catch((error) => {
@@ -153,7 +154,6 @@ export default {
     },
       selectRow(work){
         this.selectedWork = work;
-
     },
     getFilteredWorks(item) {
       this.loading = true;
@@ -166,6 +166,7 @@ export default {
       axios.get(path)
         .then((res) => {
           this.works = res.data.works;
+          this.playlist = res.data.playlist;
           this.loading=false;
         })
         .catch((error) => {
@@ -179,6 +180,7 @@ export default {
       axios.get(path)
         .then((res) => {
           this.works = res.data.works;
+          this.playlist = res.data.playlist;
           this.visibility=true;
           this.loading=false;
         })
@@ -197,6 +199,25 @@ export default {
       this.artistMode = true;
       this.artist = artist;
       this.getSearchWorks('ggesagoseofsa'); // get no results
+    },
+    nextWork(){
+      console.log("FIRED");
+      for (var i = 0; i < this.playlist.length; i++) {
+        if (this.playlist[i]['id'] == this.selectedWork && i !== this.playlist.length - 1) {
+          this.selectRow(this.playlist[i + 1]['id']);
+          this.getAlbums(this.playlist[i + 1]['id'], this.playlist[i + 1]['title']);
+          break;
+        }
+      }
+    },
+      previousWork(){
+      for (var i = 0; i < this.playlist.length; i++) {
+        if (this.playlist[i]['id'] == this.selectedWork && i !== 0) {
+          this.selectRow(this.playlist[i - 1]['id']);
+          this.getAlbums(this.playlist[i - 1]['id'], this.playlist[i - 1]['title']);
+          break;
+        }
+      }
     }
   },
   created() {
@@ -212,6 +233,8 @@ export default {
     eventBus.$on('fireWorkSearch', this.getSearchWorks);
     eventBus.$on('fireClearWorks', this.fireClearWorks);
     eventBus.$on('fireGenreSelectRadio', this.getGenreWorks);
+    eventBus.$on('fireNextWork', this.nextWork);
+    eventBus.$on('firePreviousWork', this.previousWork);
   },
   beforeDestroy() {
     eventBus.$off('fireComposers', this.fireComposers);
@@ -220,6 +243,8 @@ export default {
     eventBus.$off('fireWorkSearch', this.getSearchWorks);
     eventBus.$off('fireClearWorks', this.fireClearWorks);
     eventBus.$off('fireGenreSelectRadio', this.getGenreWorks);
+    eventBus.$off('fireNextWork', this.nextWork);
+    eventBus.$off('firePreviousWork', this.previousWork);
   }
 };
 </script>
