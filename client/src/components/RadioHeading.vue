@@ -53,7 +53,7 @@
               <b-form-input
                 class="work-search-field"
                 v-model="workSearchField"
-                @input="workSearch()"
+                v-debounce="workSearch"
                 @focus="onWorkFocus()"
                 placeholder="Search filter"
                 size="sm"

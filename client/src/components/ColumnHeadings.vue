@@ -7,7 +7,8 @@
             <b-form-group>
               <b-form-input
                 v-model="composerSearchForm"
-                @input="composerSearch()"
+                v-debounce="composerSearch"
+                type="text"
                 @focus="onComposerFocus()"
                 placeholder="Search composers"
                 size="sm"
@@ -31,7 +32,8 @@
             <b-form-group>
               <b-form-input
                 v-model="workSearchField"
-                @input="workSearch()"
+                v-debounce="workSearch"
+                type="text"
                 @focus="onWorkFocus()"
                 :placeholder="workSearchPlaceholder"
                 size="sm"

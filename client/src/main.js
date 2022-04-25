@@ -6,6 +6,7 @@ import VueTypeaheadBootstrap from 'vue-typeahead-bootstrap'
 import vSelect from 'vue-select'
 import InfiniteLoading from 'vue-infinite-loading'
 import VueLazyload from 'vue-lazyload'
+import vueDebounce from 'vue-debounce'
 
 
 
@@ -29,6 +30,9 @@ Vue.use(InfiniteLoading, {
 });
 Vue.use(BootstrapVue);
 Vue.use(IconsPlugin);
+Vue.use(vueDebounce, {
+  defaultTime: '300ms'
+})
 
 const loadimage = require('./assets/album_placeholder.png')
 
@@ -38,6 +42,7 @@ Vue.use(VueLazyload, {
   loading: loadimage,
   attempt: 1
 })
+
 
 Vue.component('vue-typeahead-bootstrap', VueTypeaheadBootstrap);
 Vue.component('v-select', vSelect);
