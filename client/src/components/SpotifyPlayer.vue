@@ -24,7 +24,7 @@ export default {
             if (process.env.VUE_APP_BASE_URL != "http://localhost:5000/") {
                 this.token = spotifyConfig.clientToken; // Need this?
             } else { // insert token here for dev work
-                this.token = 'BQDcr9Gfk2aMRKIuG6Lmbf983dsmdFJ-_Z8towbtfDwyDpMM_w-Gk3-mfwuDQn8tbzrrbRLHshTL3RVrQhNrzaEa5foEwk38akISj_jQiYVEy99T1jEqyGFv6-DGWLzqYNOyzEhTzDBGOcLx-rM1jgCnDWtAyeV-Vw8Sfv7KiFufByzK5Bk3P9N77AlAtHz2k3zfpirDVTfO-QxmoCMt57c';
+                this.token = 'BQB1XtnL2NlOIgfuEKFfaNzggdxZr9Jz8eWpwdxzGexUJYWOzBrU3-YDVgCocjgTIOwqoT7wpC43-4M8h6ftQTW6v5liZfBjY1vaH2evNEnuWYcLZniXAm3IjwVfp7upa-Nxpw65U9_FqQISS6-GDcriBIDpaJ5PcTqexOByvHqlyVxfVlNWCiM-adj1eV-z0fGl7-YmTBeGi3SesMJ6Xjo';
                 spotifyConfig.clientToken = this.token;
             }
 
@@ -72,7 +72,7 @@ export default {
               track_window: { current_track }
             }) => {
                 eventBus.$emit('firePlayerStateChanged', current_track, position, duration, paused);
-                console.log(position , duration, paused);
+                //console.log(position , duration, paused);
                 //console.log('Duration of Song', duration);
             });
 

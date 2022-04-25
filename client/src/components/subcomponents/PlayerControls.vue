@@ -2,7 +2,8 @@
   <b-container class="playback-container">
  <b-row class="buttons-row">
   <b-col class="text-center">
-  <b-button class="playback-button" id="shuffle-play" @click="shuffle()"><b-icon-shuffle></b-icon-shuffle></b-button>
+  <b-button class="playback-button" id="shuffle-play" v-show="!shuffle" @click="shufflePlayback()"><b-icon-shuffle></b-icon-shuffle></b-button>
+  <b-button class="playback-button" id="shuffle-play" v-show="shuffle" @click="shufflePlayback()" ><b-icon-shuffle variant="success"></b-icon-shuffle></b-button>
   <b-button class="playback-button" id="previous-work-button" @click="previousWork()"><b-icon-arrow-left-circle></b-icon-arrow-left-circle></b-button>
   <b-button class="playback-button" id="back-button" @click="back()"><b-icon-skip-start-fill></b-icon-skip-start-fill></b-button>
   <b-button class="playback-button" id="play-button" v-show="!playing" @click="play()"><b-icon-play-fill></b-icon-play-fill></b-button>
@@ -65,7 +66,8 @@ export default {
       display_duration: "00:00",
       display_progress: "00:00",
       suspend: true,
-      delay: 1000
+      delay: 1000,
+      shuffle: false
     };
   },
   methods: {
@@ -141,6 +143,11 @@ export default {
     previousWork(){
         eventBus.$emit('firePreviousWork');
     },
+    shufflePlayback(){
+      this.shuffle = !this.shuffle;
+      eventBus.$emit('fireToggleShuffle', this.shuffle);
+
+    }
   },
   created() {
     eventBus.$on('fireNowPlaying', () => {

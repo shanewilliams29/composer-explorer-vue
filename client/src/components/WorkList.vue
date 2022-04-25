@@ -81,7 +81,8 @@ export default {
       visibility: true,
       artist: "",
       artistMode: false,
-      radioMode: false
+      radioMode: false,
+      shuffle: false
     };
   },
   methods: {
@@ -201,7 +202,12 @@ export default {
       this.getSearchWorks('ggesagoseofsa'); // get no results
     },
     nextWork(){
-      console.log("FIRED");
+      if(this.shuffle){
+        currentConfig.previousWork = currentConfig.work;
+        currentConfig.previousWorkTitle = currentConfig.workTitle;
+        console.log("SHUFFLE");
+          this.playRandomWork();
+      } else {
       for (var i = 0; i < this.playlist.length; i++) {
         if (this.playlist[i]['id'] == this.selectedWork && i !== this.playlist.length - 1) {
           this.selectRow(this.playlist[i + 1]['id']);
@@ -209,8 +215,13 @@ export default {
           break;
         }
       }
+    }
     },
       previousWork(){
+      if(this.shuffle){
+          this.selectRow(currentConfig.previousWork); //allows you to jump one back
+          this.getAlbums(currentConfig.previousWork, currentConfig.previousWorkTitle)
+      } else {
       for (var i = 0; i < this.playlist.length; i++) {
         if (this.playlist[i]['id'] == this.selectedWork && i !== 0) {
           this.selectRow(this.playlist[i - 1]['id']);
@@ -219,7 +230,19 @@ export default {
         }
       }
     }
+    },
+    playRandomWork(){
+      function randomIntFromInterval(min, max) { // min and max included
+        return Math.floor(Math.random() * (max - min + 1) + min)
+      }
+      const rndInt = randomIntFromInterval(0, this.playlist.length - 1)
+      this.selectRow(this.playlist[rndInt]['id']);
+      this.getAlbums(this.playlist[rndInt]['id'], this.playlist[rndInt]['title']);
+    },
+    toggleShuffle(shuffleState){
+      this.shuffle = shuffleState;
   },
+},
   created() {
     if (window.location.href.indexOf("radio") != -1){ // dont get works in radio mode
       this.radioMode = true;
@@ -235,6 +258,7 @@ export default {
     eventBus.$on('fireGenreSelectRadio', this.getGenreWorks);
     eventBus.$on('fireNextWork', this.nextWork);
     eventBus.$on('firePreviousWork', this.previousWork);
+    eventBus.$on('fireToggleShuffle', this.toggleShuffle);
   },
   beforeDestroy() {
     eventBus.$off('fireComposers', this.fireComposers);
@@ -245,6 +269,7 @@ export default {
     eventBus.$off('fireGenreSelectRadio', this.getGenreWorks);
     eventBus.$off('fireNextWork', this.nextWork);
     eventBus.$off('firePreviousWork', this.previousWork);
+    eventBus.$off('fireToggleShuffle', this.toggleShuffle);
   }
 };
 </script>
