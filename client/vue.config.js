@@ -6,8 +6,4 @@ module.exports = defineConfig({
 
 module.exports = {
   outputDir: '../server/dist',
-  devServer: {
-    host: '127.0.0.1',
-    port: 8080,
-  }
 }

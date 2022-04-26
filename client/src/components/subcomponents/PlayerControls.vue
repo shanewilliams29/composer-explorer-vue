@@ -72,6 +72,7 @@ export default {
   },
   methods: {
     play() {
+      window.player.activateElement();
       spotify.pressPlay(spotifyConfig.clientToken, spotifyConfig.deviceID);
     },
     pause() {

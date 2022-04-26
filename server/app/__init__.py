@@ -1,4 +1,5 @@
 from flask import Flask
+from flask.sessions import SecureCookieSessionInterface
 from config import Config
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy

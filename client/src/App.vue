@@ -15,8 +15,6 @@ import InfoPanel from '@/components/InfoPanel.vue'
 import PageFooter from '@/components/PageFooter.vue'
 import NavBar from '@/components/NavBar.vue'
 
-import spotify from "./SpotifyFunctions.js";
-
 export default {
   components: {
     NavBar,
@@ -45,7 +43,6 @@ export default {
         window.location.replace('mobile');
     }
   document.documentElement.style.setProperty('--panelheight', `0px`);
-  spotify.getSpotifyToken();
   },
 }
 </script>
