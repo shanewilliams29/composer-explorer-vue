@@ -80,8 +80,7 @@ def spotify():
 def log_out():
     session.clear()
     if Config.MODE == "DEVELOPMENT":
-        response = redirect("http://localhost:8080/")
-        return response
+        return redirect("http://localhost:8080/")
     if request.MOBILE:
         return redirect("/mobile")
     else:
@@ -130,7 +129,6 @@ def get_composers():
             response_object = {'status': 'success'}
             response_object['composers'] = composer_list
             response = jsonify(response_object)
-            response.headers.add('Access-Control-Allow-Credentials', 'true')
             return response
 
     elif composer_filter:
@@ -201,7 +199,6 @@ def get_composers():
     response_object = {'status': 'success'}
     response_object['composers'] = composers_by_region
     response = jsonify(response_object)
-    response.headers.add('Access-Control-Allow-Credentials', 'true')
     return response
 
 
@@ -238,7 +235,6 @@ def get_multicomposers():
     response_object['composers'] = composers_by_region
     response_object['genres'] = genre_list
     response = jsonify(response_object)
-    response.headers.add('Access-Control-Allow-Credentials', 'true')
     return response
 
 
@@ -258,7 +254,6 @@ def get_composersradio():
     response_object = {'status': 'success'}
     response_object['composers'] = name_list
     response = jsonify(response_object)
-    response.headers.add('Access-Control-Allow-Credentials', 'true')
     return response
 
 
@@ -296,7 +291,6 @@ def get_works(name):
         response_object = {'status': 'success'}
         response_object['works'] = works_list
         response = jsonify(response_object)
-        response.headers.add('Access-Control-Allow-Credentials', 'true')
         return response
 
     # This returns liked works
@@ -324,8 +318,6 @@ def get_works(name):
     response_object['playlist'] = works_list  # for back and previous playing
 
     response = jsonify(response_object)
-
-    response.headers.add('Access-Control-Allow-Credentials', 'true')
     return response
 
 
@@ -381,7 +373,6 @@ def get_worksbygenre():
         response_object = {'status': 'success'}
         response_object['works'] = works_list
         response = jsonify(response_object)
-        response.headers.add('Access-Control-Allow-Credentials', 'true')
         return response
 
     if search_term:
@@ -396,7 +387,6 @@ def get_worksbygenre():
             response_object = {'status': 'success'}
             response_object['works'] = return_list
             response = jsonify(response_object)
-            response.headers.add('Access-Control-Allow-Credentials', 'true')
             return response
         else:
             works_list = return_list
@@ -407,7 +397,6 @@ def get_worksbygenre():
     response_object = {'status': 'success'}
     response_object['works'] = works_by_genre
     response = jsonify(response_object)
-    response.headers.add('Access-Control-Allow-Credentials', 'true')
     return response
 
 
@@ -439,7 +428,6 @@ def get_albums(work_id):
         response_object = {'status': 'success'}
         response_object['albums'] = []
         response = jsonify(response_object)
-        response.headers.add('Access-Control-Allow-Credentials', 'true')
         return response
 
     # artist list
@@ -497,7 +485,6 @@ def get_albums(work_id):
     response_object['albums'] = sorted_list
     response_object['artists'] = artist_list
     response = jsonify(response_object)
-    response.headers.add('Access-Control-Allow-Credentials', 'true')
     return response
 
 
@@ -511,12 +498,11 @@ def get_composerinfo(composer):
         flags = json.load(f)
         flag = flags[composer_info.nationality].lower()
 
-    composer_info.region = app.config['STATIC'] + 'flags/1x1/' + flag + '.svg',
+    composer_info.region = app.config['STATIC'] + 'flags/1x1/' + flag + '.svg'
 
     response_object = {'status': 'success'}
     response_object['info'] = composer_info
     response = jsonify(response_object)
-    response.headers.add('Access-Control-Allow-Credentials', 'true')
     return response
 
 
@@ -533,7 +519,6 @@ def get_workinfo(work_id):
     response_object = {'status': 'success'}
     response_object['info'] = work
     response = jsonify(response_object)
-    response.headers.add('Access-Control-Allow-Credentials', 'true')
     return response
 
 
@@ -562,7 +547,6 @@ def get_albuminfo(album_id):
     response_object = {'status': 'success'}
     response_object['album'] = ALBUM
     response = jsonify(response_object)
-    response.headers.add('Access-Control-Allow-Credentials', 'true')
     return response
 
 
@@ -582,7 +566,6 @@ def get_artistcomposers(artist_name):
     response_object = {'status': 'success'}
     response_object['composers'] = composers_by_region
     response = jsonify(response_object)
-    response.headers.add('Access-Control-Allow-Credentials', 'true')
     return response
 
 
@@ -599,7 +582,6 @@ def get_artistworks():
         response_object = {'status': 'success'}
         response_object['works'] = works_list
         response = jsonify(response_object)
-        response.headers.add('Access-Control-Allow-Credentials', 'true')
         return response
 
     works_by_genre = prepare_works(works_list)
@@ -607,7 +589,6 @@ def get_artistworks():
     response_object = {'status': 'success'}
     response_object['works'] = works_by_genre
     response = jsonify(response_object)
-    response.headers.add('Access-Control-Allow-Credentials', 'true')
     return response
 
 
@@ -620,7 +601,6 @@ def get_artistlist():
     response_object = {'status': 'success'}
     response_object['artists'] = artist_list
     response = jsonify(response_object)
-    response.headers.add('Access-Control-Allow-Credentials', 'true')
     return response
 
 
@@ -633,5 +613,4 @@ def get_workartists():
     response_object = {'status': 'success'}
     response_object['artists'] = artist_list
     response = jsonify(response_object)
-    response.headers.add('Access-Control-Allow-Credentials', 'true')
     return response

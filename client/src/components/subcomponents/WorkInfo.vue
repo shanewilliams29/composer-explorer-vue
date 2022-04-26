@@ -21,7 +21,7 @@
               </table>
               </b-card-title>
             <b-card-text class="info-card-text">
-            {{ workBLurb }}<br>
+            {{ workBlurb }}<br>
             <a :href="wikiLink" target="_blank" class="wiki-link"><br>Read more on Wikipedia</a>
             </b-card-text>
           </b-card-body>
@@ -50,7 +50,9 @@ export default {
       pageTitle: "",
       workImg: "",
       workBlurb: "",
-      wikiLink: ""
+      wikiLink: "",
+      catNo: '',
+      date: ''
     };
   },
   methods: {
@@ -105,7 +107,7 @@ export default {
           axios.get(url2)
           .then((res) => {
                       for (var id in res.data.query.pages) {
-                          this.workBLurb = res.data.query.pages[id].extract;
+                          this.workBlurb = res.data.query.pages[id].extract;
                           this.pageTitle = res.data.query.pages[id].title;
                           let wikiurl = "https://en.wikipedia.org/wiki/" + this.pageTitle;
                           this.wikiLink = wikiurl;

@@ -3,7 +3,7 @@
     <div class="spinner" v-show="loading" role="status">
       <b-spinner class="m-5"></b-spinner>
     </div>
-        <b-card class="album-info-card" v-show="!loading">
+        <b-card class="album-info-card" v-if="!loading">
           <b-card-body class="card-body">
    <b-card-title class="card-title">
               <table>
@@ -23,7 +23,7 @@
               </b-card-title>
 <b-card-text class="info-card-text">
   <div class="disclaimer"><b-badge variant="warning">BETA </b-badge><span class="born-died">&nbsp; Some performer information may not be correct.</span></div>
-  <div v-for="(result, index) in results" :key="index" >
+  <div v-for="result in results" :key="result[0]" >
               <table>
                 <tr>
                   <td>
@@ -131,7 +131,6 @@ export default {
   },
   setSpotifyAlbum(album){ // spotify album
     this.album = album;
-    // this.getSpotifyArtistIDs(album); not used
   },
   getSpotifyArtistIDs(album){ // not used
     let artistsList = album.artists;

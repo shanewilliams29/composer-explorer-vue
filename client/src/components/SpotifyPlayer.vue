@@ -16,17 +16,6 @@ export default {
     return {
     };
   },
-    //login
-    // log client token
-    //localhost
-
-
-        //for development server only
-        // if (process.env.VUE_APP_BASE_URL == "http://localhost:5000/") {
-        //     spotifyConfig.clientToken = 'BQCWRGuknSRCKV4JI-rnuiB7eYPXh01zO7Ti3DvWRh4_E9_n17w5iw_LFqMIlQ3BGg7Cs82mTdQfabdNDlOgWZda5Iy8le9eykaenBNmItOV7KiKngq9rxGm7qArC1vFG3jzyy_UCrcyaHkJFgcnqg07zjB29VzO5x7LdhZ8WJu7j2ocd1U7qMwlAcckKxfjMTqel6nbGhonid6ib96YPAE';
-        //     return spotifyConfig.clientToken;
-        // }
-
 
   methods: {
     initializeSpotify() {
@@ -39,6 +28,8 @@ export default {
                         if (res.data.client_token !== null) {
                             spotifyConfig.clientToken = res.data.client_token;
                             spotifyConfig.appToken = res.data.app_token;
+                            eventBus.$emit('fireLogIn');
+
 
                             // eslint-disable-next-line
                             window.player = new Spotify.Player({
