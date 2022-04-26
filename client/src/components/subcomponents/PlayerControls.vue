@@ -9,7 +9,7 @@
   <b-button class="playback-button" id="play-button" v-show="!playing" @click="play()"><b-icon-play-fill></b-icon-play-fill></b-button>
   <b-button class="playback-button" id="pause-button" v-show="playing" @click="pause()"><b-icon-pause-fill></b-icon-pause-fill></b-button>
   <b-button class="playback-button" id="forward-button" @click="next()"><b-icon-skip-end-fill></b-icon-skip-end-fill></b-button>
-  <b-button class="playback-button" id="next-work-button" @click="nextWork()"><b-icon-arrow-right-circle></b-icon-arrow-right-circle></b-button>
+  <b-button class="playback-button" id="next-work-button" @click="nextWorkNoDebounce()"><b-icon-arrow-right-circle></b-icon-arrow-right-circle></b-button>
   <b-button class="playback-button" id="next-work-button" @click="like()"><b-icon-heart></b-icon-heart></b-button>
 </b-col>
 </b-row>
@@ -38,22 +38,38 @@ import {eventBus} from "../../main.js";
 import {currentConfig} from "../../main.js";
 import {spotifyConfig} from "../../main.js";
 
-function debounce(func, timeout = 500){
+// function debounce(func, timeout = 500){
+//   let timer;
+//   return (...args) => {
+//     if (!timer) {
+//       func.apply(this, args);
+//     }
+//     clearTimeout(timer);
+//     timer = setTimeout(() => {
+//       timer = undefined;
+//     }, timeout);
+//   };
+// }
+
+const debouncedNext = debounce(() => fireNextWork());
+let allowNext = false;
+
+function debounce(func, timeout = 2000){
   let timer;
   return (...args) => {
-    if (!timer) {
-      func.apply(this, args);
-    }
     clearTimeout(timer);
-    timer = setTimeout(() => {
-      timer = undefined;
-    }, timeout);
+    timer = setTimeout(() => { func.apply(this, args); }, timeout);
   };
 }
-function nextWork(){
-  eventBus.$emit('fireNextWork');
+
+function fireNextWork(){
+  if (allowNext) {
+    allowNext = false;
+    console.log('NEXT');
+    eventBus.$emit('fireNextWork');
+  }
 }
-const debouncedNext = debounce(() => nextWork());
+
 
 export default {
   data() {
@@ -139,7 +155,12 @@ export default {
         setTimeout(this.startTimer, this.delay);
     },
     nextWork(){
+        console.log("next");
         debouncedNext();
+    },
+    nextWorkNoDebounce(){
+        allowNext = true;
+        fireNextWork();
     },
     previousWork(){
         eventBus.$emit('firePreviousWork');
@@ -183,21 +204,26 @@ export default {
     })
 
     eventBus.$on('firePlayerStateChanged', (track_data, position, duration, paused) => {
-      // console.log(position);
+      console.log(position, paused);
       if (position == 0 && !paused){ //ignore at beginning of song (glitchy)
           this.playing = true;
           this.suspend = true;
           this.setPlayback(0, duration);
       }
-      else if (position == 0 && paused){ //advance to next work when play stops current work
+      else if (position == 0 && paused && allowNext){ //advance to next work when play stops current work
+          // Spotify API spams function with requests when changing track, debounce function
           this.nextWork();
       }
       else if (position > 0 && position < 3000 && !paused){
+          allowNext = true;
           this.playing = true;
           this.startTimer();
       }
       else {
           this.playing = !paused;
+          if (position > 0){ // prevent firefox crash
+            allowNext = true;
+          }
           if (this.playing == true) {
             this.startTimer();
           } else {

@@ -166,7 +166,6 @@ export default {
       this.workId = id;
       this.artistName = item;
       this.sort = sort;
-      console.log(sort);
       this.loading = true;
       const path = 'api/albums/' + id + '?artist=' + item + '&sort=' + sort;
       axios.get(path)
@@ -187,7 +186,6 @@ export default {
     },
       infiniteHandler($state) {
       const path = 'api/albums/' + this.workId + '?artist=' + this.artistName + '&sort=' + this.sort + '&page=' + this.page;
-      console.log(path);
       axios.get(path)
         .then(({ data }) => {
         if (data.albums.length) {
