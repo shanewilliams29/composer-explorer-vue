@@ -5,7 +5,7 @@
         <AlbumInfo />
       </b-col>
       <b-col>
-        <b-button class="info-panel-button" @click="togglePanel()" variant="warning"><span v-if="!showPanel"><b-icon-chevron-up></b-icon-chevron-up></span><span v-else><b-icon-chevron-down></b-icon-chevron-down></span> INFO PANEL</b-button>
+        <b-button class="info-panel-button" @click="togglePanel()" variant="warning"><span v-if="!$parent.showPanel"><b-icon-chevron-up></b-icon-chevron-up></span><span v-else><b-icon-chevron-down></b-icon-chevron-down></span> INFO PANEL</b-button>
         <PlayerControls />
         <SpotifyModal />
         <AutoplayModal />

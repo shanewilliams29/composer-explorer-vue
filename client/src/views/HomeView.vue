@@ -5,7 +5,7 @@
       <b-row>
         <b-col class="display-height first-col"><ComposerList/></b-col>
         <b-col class="display-height"><WorkList/></b-col>
-        <b-col class="display-height last-col"><AlbumList/></b-col>
+        <b-col class="display-height last-col extra-margin"><AlbumList/></b-col>
       </b-row>
     </div>
   </div>
@@ -45,11 +45,12 @@ export default {
 }
 
 .last-col{
-
     -ms-flex: 0 0 330px;
     flex: 0 0 330px;
 }
-
+.extra-margin{
+    margin-right: 3.5px;
+}
 
 /*scrollbars*/
  :root {
