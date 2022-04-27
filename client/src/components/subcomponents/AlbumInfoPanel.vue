@@ -8,7 +8,7 @@
    <b-card-title class="card-title">
               <table>
                 <tr class="heading-tr">
-                  <td class="info-td">
+                  <td class="heading-td">
                     {{ album.name }}<br>
                     <span class="born-died"><a :href="album.external_urls.spotify" target="_blank"><img class="spotify-logo" src="@/assets/Spotify_Logo_RGB_Black.png"></a> {{ album.label }} ℗ {{album.release_date.slice(0,4)}}</span>
                   </td>
@@ -182,7 +182,7 @@ a:hover{
   height: 62px !important;
 }
 .heading-td{
-  padding-left: 0px;
+  padding-left: 2px !important;
 
 }
 .spinner {
@@ -202,6 +202,11 @@ a:hover{
   border: none !important;
 
 }
+.info-td{
+  padding-left: 10px;
+}
+
+
 
 
 .disclaimer{
@@ -221,7 +226,7 @@ a:hover{
   line-height: 130%;
   overflow-y: scroll;
   height: 190px;
-  padding-left: 5px;
+  padding-left: 2px;
 }
 table{
   margin-bottom: 6px;
