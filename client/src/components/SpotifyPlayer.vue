@@ -62,6 +62,10 @@ export default {
                                 console.error(message);
                             });
 
+                            window.player.addListener('playback_error', ({ message }) => {
+                                console.error(message);
+                            });
+
                             window.player.addListener('autoplay_failed', () => {
                               console.log('Autoplay is not allowed by the browser autoplay rules');
                               eventBus.$emit('fireAutoplayFailed');

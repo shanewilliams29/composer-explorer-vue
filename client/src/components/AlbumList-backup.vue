@@ -12,7 +12,6 @@
       <div class="row">
         <b-card-group deck v-show="!loading">
           <b-card
-          class="shadow-sm"
             v-for="album in albums"
             :key="album.id"
             :id="album.id"
@@ -22,21 +21,11 @@
             :class="{'highlight': (album.id == selectedAlbum)}"
           >
             <div class="row">
-              <b-col class="album_columns">
-              <div class="album-titles"
-                          ><span style="color: black; font-weight: 600">{{ album.artists }}</span><br>
-                              <span> {{ album.release_date }} Release</span>
-                      <span v-if="album.likes">&nbsp;
-                      <b-badge v-if="parseInt(album.likes) == 1 ">{{ album.likes }} Like</b-badge>
-                      <b-badge v-if="parseInt(album.likes) > 1 ">{{ album.likes }} Likes</b-badge>
-                      </span>
-                        </div>
-
+              <b-col class="album_columns" cols="2">
                 <img
-                  class="album-cover"
                   rounded="left"
-                  width="300px"
-                  height="auto"
+                  width="48px"
+                  height="48px"
                   v-lazy="album.album_img"
                 >
  <!--                <b-avatar
@@ -47,18 +36,45 @@
                   size="48px"
                 ></b-avatar> -->
               </b-col>
-<!--               <b-col class="album_text_columns">
+              <b-col class="album_text_columns">
                 <b-card-text>
+                  <table cellspacing="0">
+                    <tr>
+                      <td
+                        width="100%"
+                        style="
+                          white-space: nowrap;
+                          text-overflow: ellipsis;
+                          overflow: hidden;
+                          max-width: 1px;
+                        "
+                      >
                         <span style="color: black; font-weight: 600"
-                          >{{ album.artists }} ({{ album.release_date }})</span>
-                      <span style="color: grey; font-style: italic">{{ album.minor_artists }}</span>
+                          >{{ album.artists }} ({{ album.release_date }})</span
+                        >
+                      </td>
+                    </tr>
+                    <tr>
+                      <td
+                        width="100%"
+                        style="
+                          white-space: nowrap;
+                          text-overflow: ellipsis;
+                          overflow: hidden;
+                          max-width: 1px;
+                        "
+                      >
+
                       <span v-if="album.likes">
                       <b-badge v-if="parseInt(album.likes) == 1 ">{{ album.likes }} Like</b-badge>
                       <b-badge v-if="parseInt(album.likes) > 1 ">{{ album.likes }} Likes</b-badge>
-                      </span>
-
+                      &nbsp;</span>
+                      <span style="color: grey; font-style: italic">{{ album.minor_artists }}</span>
+                      </td>
+                    </tr>
+                  </table>
                 </b-card-text>
-              </b-col> -->
+              </b-col>
             </div>
           </b-card>
           <infinite-loading spinner="spiral" :identifier="infiniteId" @infinite="infiniteHandler">
@@ -295,9 +311,7 @@ header.card-header {
   padding-right: 0px;
 }
 .album_text_columns {
-  padding: 10px;
-  padding-right: 20px;
-  font-size: 13px;
+  padding-left: 0px;
 }
 .badge {
   vertical-align: middle;
@@ -305,18 +319,5 @@ header.card-header {
   background-color: darkgoldenrod;
   border-radius: 7px;
   margin-bottom: 2px;
-}
-.album-cover{
-  margin: 5px;
-}
-.album-titles{
-  margin-left: 8px;
-  margin-top: 6px;
-  margin-bottom: 0px;
-  margin-right: 15px;
-  font-size: 13px;
-}
-.highlight div {
-  color: white !important;
 }
 </style>

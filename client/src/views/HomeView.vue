@@ -5,7 +5,7 @@
       <b-row>
         <b-col class="display-height"><ComposerList/></b-col>
         <b-col class="display-height"><WorkList/></b-col>
-        <b-col class="display-height las-col"><AlbumList/></b-col>
+        <b-col class="display-height last-col"><AlbumList/></b-col>
       </b-row>
     </div>
   </div>
@@ -43,8 +43,11 @@ export default {
     padding-bottom: 5px;
     overflow-y: scroll;
 }
-.las-col{
+
+.last-col{
   margin-right: 3px;
+    -ms-flex: 0 0 330px;
+    flex: 0 0 330px;
 }
 
 /*scrollbars*/

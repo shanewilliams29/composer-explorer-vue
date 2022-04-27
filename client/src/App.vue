@@ -78,8 +78,8 @@ export default {
   padding-top: 1px !important;
   padding-bottom: 1px !important;
   position:fixed;
-  left: 50%;
-  transform: translateX(-50%);
+  right: calc(50vw + 55px - (330px / 2));
+/*  transform: translateX(-50%);*/
   bottom:92px;
   z-index: 1000;
   }

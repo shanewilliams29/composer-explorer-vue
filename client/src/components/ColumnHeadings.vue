@@ -234,9 +234,15 @@ export default {
   background-color: #54595f;
   color: #3b4047;
 }
-.last-col{
+/*.last-col{
   padding-right: 5px !important;
+}*/
+.last-col{
+  margin-right: 5px;
+    -ms-flex: 0 0 330px;
+    flex: 0 0 330px;
 }
+
 .albums-card{
   padding-top: 3.5px !important;
 }

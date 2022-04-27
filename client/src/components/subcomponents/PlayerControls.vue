@@ -88,7 +88,10 @@ export default {
   },
   methods: {
     play() {
-      window.player.activateElement();
+      if (window.player) {
+        window.player.activateElement();
+        console.log("ACTIVATED");
+      }
       spotify.pressPlay(spotifyConfig.clientToken, spotifyConfig.deviceID);
     },
     pause() {
@@ -197,11 +200,11 @@ export default {
     //       this.setPlayback(data.progress_ms, data.item.duration_ms);
     // })
 
-    eventBus.$on('fireAutoplayFailed', () => {
-        this.playing = false;
-        this.suspend = true;
-        this.setPlayback(0, this.duration);
-    })
+    // eventBus.$on('fireAutoplayFailed', () => {
+    //     this.playing = false;
+    //     this.suspend = true;
+    //     this.setPlayback(0, this.duration);
+    // })
 
     eventBus.$on('firePlayerStateChanged', (track_data, position, duration, paused) => {
       console.log(position, paused);

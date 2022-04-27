@@ -21,7 +21,7 @@
                 "
               >
                   <!-- {{ track[0] }} vs {{ selectedTrack }} -->
-              ▶&nbsp; {{ track[0].substring(track[0].lastIndexOf(':') + 1) }}
+              <b-icon icon="play-fill" aria-hidden="true"></b-icon> {{ track[0].substring(track[0].lastIndexOf(':') + 1) }}
               </td>
             </tr>
           </table>
@@ -148,6 +148,8 @@ export default {
   overflow-x: hidden;
   margin-top: 3px;
   margin-bottom: 3px;
+  margin-right: 12px !important;
+  margin-left: 22px !important;
   padding-left: 10px;
   right: 3px;
   height: 94px;

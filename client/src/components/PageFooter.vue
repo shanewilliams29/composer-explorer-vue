@@ -7,8 +7,9 @@
       <b-col>
         <PlayerControls />
         <SpotifyModal />
+        <AutoplayModal />
       </b-col>
-      <b-col>
+      <b-col class="last-col">
         <TrackListing />
       </b-col>
     </b-row>
@@ -20,6 +21,7 @@ import AlbumInfo from './subcomponents/AlbumInfo.vue'
 import PlayerControls from './subcomponents/PlayerControls.vue'
 import TrackListing from './subcomponents/TrackListing.vue'
 import SpotifyModal from './subcomponents/SpotifyModal.vue'
+import AutoplayModal from './subcomponents/AutoplayModal.vue'
 
 import {eventBus} from "../main.js";
 
@@ -28,15 +30,20 @@ export default {
     AlbumInfo,
     PlayerControls,
     TrackListing,
-    SpotifyModal
+    SpotifyModal,
+    AutoplayModal
   },
   methods:{
     notLoggedIn(){
       this.$bvModal.show('spotify-modal');
-    }
+    },
+    autoplayDisabled(){
+      this.$bvModal.show('autoplay-modal');
+    },
   },
   mounted() {
     eventBus.$on('notLoggedIn', this.notLoggedIn);
+    eventBus.$on('fireAutoplayFailed', this.autoplayDisabled);
   },
 };
 </script>
