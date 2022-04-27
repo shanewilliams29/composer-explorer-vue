@@ -3,7 +3,7 @@
     <div class="spinner" v-show="loading" role="status">
       <b-spinner class="m-5"></b-spinner>
     </div>
-        <b-card class="composer-info-card" v-show="!loading">
+        <b-card class="composer-info-card shadow-sm" v-show="!loading">
           <b-card-body class="card-body">
             <b-card-title class="card-title">
               <table>
@@ -90,7 +90,7 @@ export default {
   color: #343a40;
 }
 .born-died{
-  font-size: 16px !important;
+  font-size: 15px !important;
   color: grey !important;
 }
 .composer-info-card{

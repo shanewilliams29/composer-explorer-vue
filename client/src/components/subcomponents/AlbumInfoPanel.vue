@@ -3,7 +3,7 @@
     <div class="spinner" v-show="loading" role="status">
       <b-spinner class="m-5"></b-spinner>
     </div>
-        <b-card class="album-info-card" v-if="!loading">
+        <b-card class="album-info-card shadow-sm" v-if="!loading">
           <b-card-body class="card-body">
    <b-card-title class="card-title">
               <table>
