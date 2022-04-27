@@ -316,6 +316,7 @@ header.card-header {
 }
 .album-cover{
   margin: 5px;
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
 }
 .album-titles{
   margin-left: 8px;

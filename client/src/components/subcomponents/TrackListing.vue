@@ -174,8 +174,8 @@ export default {
 
 /*scrollbars*/
  .track-card {
-        --scroll-bar-color: #fff;
-        --scroll-bar-bg-color: #505962;
+        --scroll-bar-color: lightgray;
+        --scroll-bar-bg-color: #454d54;
     }
 
     .track-card{
