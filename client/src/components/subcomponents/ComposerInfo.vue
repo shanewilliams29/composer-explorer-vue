@@ -98,33 +98,62 @@ export default {
   padding-bottom: 10px;
   background-color: white !important;
   border: none !important;
-
 }
+
+
+
+
+
 .card-title{
-  font-size: 18px;
+  font-size: 16px;
 }
 .info-td{
   padding-left: 10px;
 }
 .card-body{
-
   background-color: white !important;
 }
+
+
+
 .info-card-text{
   font-size: 13px;
   line-height: 130%;
   overflow-y: scroll;
   height: 190px;
-}
-.info-card-text {
-    -ms-overflow-style: none;  /* Internet Explorer 10+ */
-    scrollbar-width: none;  /* Firefox */
-}
-.info-card-text::-webkit-scrollbar {
-    display: none;  /* Safari and Chrome */
+  padding-left: 5px;
 }
 .wiki-link{
   font-style: italic;
   color: grey;
 }
+
+/*scrollbars*/
+ .info-card-text {
+        --scroll-bar-color: #c1c2c3;
+        --scroll-bar-bg-color: #fff;
+    }
+
+    .info-card-text{
+        scrollbar-width: thin;
+        scrollbar-color: var(--scroll-bar-color) var(--scroll-bar-bg-color) !important;
+    }
+
+    /* Works on Chrome, Edge, and Safari */
+    .info-card-text::-webkit-scrollbar {
+        width: 12px;
+        height: 12px;
+    }
+
+    .info-card-text::-webkit-scrollbar-track {
+        background: var(--scroll-bar-bg-color) !important;
+    }
+
+    .info-card-text::-webkit-scrollbar-thumb {
+        background-color: var(--scroll-bar-color);
+        border-radius: 20px;
+        border: 3px solid var(--scroll-bar-bg-color)!important;
+    }
+
+
 </style>

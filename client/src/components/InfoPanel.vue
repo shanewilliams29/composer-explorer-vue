@@ -46,4 +46,8 @@ export default {
 .last-col{
   padding-right: 5px;
 }
+
+
+
+
 </style>

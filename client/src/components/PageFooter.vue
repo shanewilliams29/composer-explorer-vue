@@ -84,7 +84,7 @@ export default {
   border-radius: 0px !important;
   padding-top: 1px !important;
   padding-bottom: 1px !important;
-  bottom:92px;
+  bottom:90px;
   z-index: 1000;
   }
 </style>

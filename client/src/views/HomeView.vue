@@ -58,8 +58,6 @@ export default {
         --scroll-bar-bg-color: #f1f2f4;
     }
 
-    ::-webkit-scrollbar-corner { background: rgba(0,0,0,0.5); }
-
     * {
         scrollbar-width: thin;
         scrollbar-color: var(--scroll-bar-color) var(--scroll-bar-bg-color);

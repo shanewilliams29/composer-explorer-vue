@@ -279,7 +279,7 @@ header.card-header {
 }
 .highlight {
 /*  background-color: rgb(52, 58, 64, 0.7) !important;*/
-  background-color: royalblue !important;
+  background-color: #007bff !important;
   color: white !important;
 }
 .highlight span {

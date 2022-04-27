@@ -7,22 +7,16 @@
           <b-card-body class="card-body">
    <b-card-title class="card-title">
               <table>
-                <tr>
-                  <td>
-
-                <!-- <b-avatar size="60px" src="https://storage.googleapis.com/composer-explorer.appspot.com/misc/record-grey.jpg"></b-avatar> -->
-                <b-avatar square size="60px" :src="album.images[1].url"></b-avatar>
-
-                  </td>
+                <tr class="heading-tr">
                   <td class="info-td">
                     {{ album.name }}<br>
-                    <span class="born-died"><a :href="album.external_urls.spotify" target="_blank"><img class="spotify-logo" src="@/assets/Spotify_Logo_RGB_Black.png"></a> {{ album.label }}, {{album.release_date.slice(0,4)}}</span>
+                    <span class="born-died"><a :href="album.external_urls.spotify" target="_blank"><img class="spotify-logo" src="@/assets/Spotify_Logo_RGB_Black.png"></a> {{ album.label }} ℗ {{album.release_date.slice(0,4)}}</span>
                   </td>
                 </tr>
               </table>
               </b-card-title>
 <b-card-text class="info-card-text">
-  <div class="disclaimer"><b-badge variant="warning">BETA </b-badge><span class="born-died">&nbsp; Some performer information may not be correct.</span></div>
+  <div class="disclaimer"><b-badge variant="warning">BETA </b-badge><span class="born-died">&nbsp; Some information may not be correct.</span></div>
   <div v-for="result in results" :key="result[0]" >
               <table>
                 <tr>
@@ -183,8 +177,13 @@ a:hover{
   text-decoration: underline !important;
   cursor: pointer;
 }
-.info-td{
-  padding-left: 10px;
+.heading-tr{
+  vertical-align: middle;
+  height: 62px !important;
+}
+.heading-td{
+  padding-left: 0px;
+
 }
 .spinner {
   text-align: center;
@@ -203,30 +202,29 @@ a:hover{
   border: none !important;
 
 }
+
+
 .disclaimer{
   margin-bottom: 11px;
 }
 .card-title{
   font-size: 16px;
+  height:  62px;
 }
 .card-body{
   background-color: white !important;
+  --scroll-bar-bg-color: #f1f2f4;
 }
+
 .info-card-text{
   font-size: 13px;
   line-height: 130%;
   overflow-y: scroll;
   height: 190px;
+  padding-left: 5px;
 }
 table{
   margin-bottom: 6px;
-}
-.info-card-text {
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-}
-.info-card-text::-webkit-scrollbar {
-    display: none;
 }
 .wiki-link{
   font-style: italic;
@@ -239,4 +237,33 @@ table{
   width: auto;
   height: 18px;
 }
+
+/*scrollbars*/
+ .info-card-text {
+        --scroll-bar-color: #c1c2c3;
+        --scroll-bar-bg-color: #fff;
+    }
+
+    .info-card-text{
+        scrollbar-width: thin;
+        scrollbar-color: var(--scroll-bar-color) var(--scroll-bar-bg-color) !important;
+    }
+
+    /* Works on Chrome, Edge, and Safari */
+    .info-card-text::-webkit-scrollbar {
+        width: 12px;
+        height: 12px;
+    }
+
+    .info-card-text::-webkit-scrollbar-track {
+        background: var(--scroll-bar-bg-color) !important;
+    }
+
+    .info-card-text::-webkit-scrollbar-thumb {
+        background-color: var(--scroll-bar-color);
+        border-radius: 20px;
+        border: 3px solid var(--scroll-bar-bg-color)!important;
+    }
+
+
 </style>
