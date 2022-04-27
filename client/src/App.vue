@@ -4,7 +4,6 @@
     <router-view/>
     <SpotifyPlayer/>
     <Transition name="fadeHeight"><div class="info-panel" v-show='showPanel'><InfoPanel/></div></Transition>
-    <b-button class="info-panel-button float" @click="togglePanel()" variant="warning"><span v-if="!showPanel"><b-icon-chevron-up></b-icon-chevron-up></span><span v-else><b-icon-chevron-down></b-icon-chevron-down></span> INFO PANEL</b-button>
     <PageFooter/>
   </div>
 </template>
@@ -51,13 +50,21 @@ export default {
   html, body {
     height: 100% !important;
     max-height: -webkit-fill-available !important;
+    background: #93989f !important;
     /*font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Open Sans", Roboto, Ubuntu, "Helvetica Neue", Helvetica !important;*/
   }
   #app{
     height: 100% !important;
+    width: 100% !important;
     max-height: -webkit-fill-available !important;
     overflow-x: hidden;
+    overflow-y: hidden;
     background: #f1f2f4 !important;
+    max-width:1300px;
+    position: fixed;
+    left: 50%;
+    transform: translateX(-50%);
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
     }
 
 .page-height{
@@ -72,17 +79,6 @@ export default {
   width: 100%;
 }
 
-  .info-panel-button{
-  font-size: 10px !important;
-  border-radius: 0px !important;
-  padding-top: 1px !important;
-  padding-bottom: 1px !important;
-  position:fixed;
-  right: calc(50vw + 55px - (330px / 2));
-/*  transform: translateX(-50%);*/
-  bottom:92px;
-  z-index: 1000;
-  }
 .fadeHeight-enter-active,
 .fadeHeight-leave-active {
   transition: all 0.3s;
@@ -93,5 +89,10 @@ export default {
 {
   opacity: 0;
   max-height: 0px;
+}
+.last-col{
+
+    -ms-flex: 0 0 330px;
+    flex: 0 0 330px;
 }
 </style>

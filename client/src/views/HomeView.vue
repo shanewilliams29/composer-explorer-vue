@@ -3,7 +3,7 @@
     <ColumnHeadings/>
     <div class="container-fluid">
       <b-row>
-        <b-col class="display-height"><ComposerList/></b-col>
+        <b-col class="display-height first-col"><ComposerList/></b-col>
         <b-col class="display-height"><WorkList/></b-col>
         <b-col class="display-height last-col"><AlbumList/></b-col>
       </b-row>
@@ -45,10 +45,11 @@ export default {
 }
 
 .last-col{
-  margin-right: 3px;
+
     -ms-flex: 0 0 330px;
     flex: 0 0 330px;
 }
+
 
 /*scrollbars*/
  :root {

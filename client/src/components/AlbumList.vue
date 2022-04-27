@@ -25,11 +25,14 @@
               <b-col class="album_columns">
               <div class="album-titles"
                           ><span style="color: black; font-weight: 600">{{ album.artists }}</span><br>
-                              <span> {{ album.release_date }} Release</span>
-                      <span v-if="album.likes">&nbsp;
+                           <span>℗ {{ album.release_date }}</span>
+                                      <span v-if="album.likes">&nbsp;
                       <b-badge v-if="parseInt(album.likes) == 1 ">{{ album.likes }} Like</b-badge>
                       <b-badge v-if="parseInt(album.likes) > 1 ">{{ album.likes }} Likes</b-badge>
-                      </span>
+                      </span><br>
+                          <span v-if="album.minor_artists" style="color: grey; font-size: 12px !important;">{{ album.minor_artists }}</span>
+
+
                         </div>
 
                 <img
@@ -39,6 +42,11 @@
                   height="auto"
                   v-lazy="album.album_img"
                 >
+
+
+
+
+
  <!--                <b-avatar
                   v-show="album.id == selectedAlbum"
                   variant="dark"
@@ -313,8 +321,17 @@ header.card-header {
   margin-left: 8px;
   margin-top: 6px;
   margin-bottom: 0px;
-  margin-right: 15px;
+  margin-right: 20px;
   font-size: 13px;
+  line-height: 135%;
+}
+.minor-album-titles{
+  margin-left: 8px;
+  margin-top: 0px;
+  margin-bottom: 8px;
+  margin-right: 20px;
+  font-size: 13px;
+  color: grey;
 }
 .highlight div {
   color: white !important;

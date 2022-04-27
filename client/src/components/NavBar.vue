@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="container-fluid">
     <!-- Image and text -->
     <b-navbar type="dark" variant="dark">
       <b-navbar-brand href="#">
@@ -77,6 +77,10 @@ export default {
 </script>
 
 <style scoped>
+  .container-fluid{
+    padding: 0px;
+
+  }
 .log-in-with .disabled{
   color: lightgrey !important;
 }

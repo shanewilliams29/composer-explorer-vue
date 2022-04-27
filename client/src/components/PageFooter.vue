@@ -5,6 +5,7 @@
         <AlbumInfo />
       </b-col>
       <b-col>
+        <b-button class="info-panel-button" @click="togglePanel()" variant="warning"><span v-if="!showPanel"><b-icon-chevron-up></b-icon-chevron-up></span><span v-else><b-icon-chevron-down></b-icon-chevron-down></span> INFO PANEL</b-button>
         <PlayerControls />
         <SpotifyModal />
         <AutoplayModal />
@@ -40,6 +41,9 @@ export default {
     autoplayDisabled(){
       this.$bvModal.show('autoplay-modal');
     },
+    togglePanel(){
+      this.$parent.togglePanel();
+    }
   },
   mounted() {
     eventBus.$on('notLoggedIn', this.notLoggedIn);
@@ -49,13 +53,11 @@ export default {
 </script>
 
 <style scoped>
-.float{
-  position:fixed;
-}
-
 .container-fluid {
-  position: fixed;
   bottom: 0px;
+    position: fixed;
+    left: 50%;
+  transform: translateX(-50%);
   background-color: #343a40;
   padding-bottom: 0px;
   border-radius: 0px;
@@ -74,4 +76,15 @@ export default {
 .col {
   padding: 0px;
 }
+  .info-panel-button{
+  position:absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 10px !important;
+  border-radius: 0px !important;
+  padding-top: 1px !important;
+  padding-bottom: 1px !important;
+  bottom:92px;
+  z-index: 1000;
+  }
 </style>
