@@ -142,33 +142,61 @@ export default {
 
 <style scoped>
 .track-card {
-  background-color: #484e53 !important;
+  background-color: #454d54 !important;
   border: 0px;
   width: 100%;
   overflow-x: hidden;
-  margin-top: 3px;
-  margin-bottom: 3px;
   margin-right: 12px !important;
-  margin-left: 22px !important;
-  padding-left: 10px;
+  margin-left: 20px !important;
+  padding-left: 6px;
   right: 3px;
-  height: 94px;
-  border-radius: 3px !important;
+  height: 100px;
+  border-radius: 0px !important;
 }
 .track-table {
   width: 100%;
-  font-size: 12px;
-  line-height: 120%;
+  font-size: 13px;
+  line-height: 152%;
 }
 .track-card-text {
-  padding-top: 6px;
-  padding-bottom: 6px;
+  color: lightgray;
+  padding-top: 8px;
+  padding-bottom: 8px;
   padding-right: 10px;
 }
 .track-row:hover {
   cursor: pointer;
+  color: white;
 }
 .highlight-track {
-  color: #1db954;
+  color: #ffc107 !important;
 }
+
+/*scrollbars*/
+ .track-card {
+        --scroll-bar-color: #fff;
+        --scroll-bar-bg-color: #505962;
+    }
+
+    .track-card{
+        scrollbar-width: thin;
+        scrollbar-color: var(--scroll-bar-color) var(--scroll-bar-bg-color) !important;
+    }
+
+    /* Works on Chrome, Edge, and Safari */
+    .track-card::-webkit-scrollbar {
+        width: 12px;
+        height: 12px;
+    }
+
+    .track-card::-webkit-scrollbar-track {
+        background: var(--scroll-bar-bg-color) !important;
+    }
+
+    .track-card::-webkit-scrollbar-thumb {
+        background-color: var(--scroll-bar-color);
+        border-radius: 20px;
+        border: 3px solid var(--scroll-bar-bg-color)!important;
+    }
+
 </style>

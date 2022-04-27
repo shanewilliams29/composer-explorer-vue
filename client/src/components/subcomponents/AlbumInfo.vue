@@ -12,10 +12,11 @@
         <b-card-body class="info-card-body">
           <b-card-text>
             <div class="centered album-data">
+              <span>{{composer}}</span>
               <span style="font-weight: bold">{{title}}</span>
               <span
-                style="font-style: italic; font-weight: bold; color: darkgray;"
-                >{{album.artists}} ({{album.release_date}})</span
+                style="font-style: italic; color: darkgray; font-size: 13px;"
+                >{{album.artists}}</span
               >
 <!--               <span
                 style="font-style: italic; color: #a4a7a9"
@@ -39,7 +40,8 @@ export default {
     return {
       album: [],
       title: "",
-      hold_title: currentConfig.workTitle
+      hold_title: currentConfig.workTitle,
+      composer: currentConfig.composer
     };
   },
   methods: {
@@ -50,6 +52,7 @@ export default {
           .then((res) => {
             eventBus.$emit('fireSetAlbum', res.data.album);
             this.album = res.data.album; // Change to local file
+            this.composer = currentConfig.composer;
             this.loading = false;
           })
           .catch((error) => {
@@ -109,7 +112,7 @@ export default {
   height: 100px;
 }
 .album-data {
-  padding-left: 10px;
+  padding-left: 12px;
   line-height: 130%;
 }
 </style>
