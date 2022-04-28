@@ -212,7 +212,7 @@ export default {
   font-size: 14px;
 }
 
-.slider {
+/*.slider {
   -webkit-appearance: none;
   width: 100%;
   height: 6px;
@@ -227,9 +227,9 @@ export default {
 }
 
 .slider:hover {
-  opacity: 1; /* Fully shown on mouse-over */
+  opacity: 1; /* Fully shown on mouse-over
 }
-
+*/
 /*.slider::-webkit-slider-thumb {
   -webkit-appearance: none;
   appearance: none;

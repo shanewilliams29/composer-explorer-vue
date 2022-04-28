@@ -1,9 +1,9 @@
 <template>
   <b-container class="playback-container">
  <b-row class="buttons-row">
-  <b-col class="text-center">
+  <b-col class="text-center text-nowrap">
   <b-button class="playback-button" id="shuffle-play" v-show="!shuffle" @click="shufflePlayback()"><b-icon-shuffle></b-icon-shuffle></b-button>
-  <b-button class="playback-button" id="shuffle-play" v-show="shuffle" @click="shufflePlayback()" ><b-icon-shuffle variant="success"></b-icon-shuffle></b-button>
+  <b-button class="playback-button" id="shuffle-play" v-show="shuffle" @click="shufflePlayback()" ><b-icon-shuffle variant="warning"></b-icon-shuffle></b-button>
   <b-button class="playback-button" id="previous-work-button" @click="previousWork()"><b-icon-arrow-left-circle></b-icon-arrow-left-circle></b-button>
   <b-button class="playback-button" id="back-button" @click="back()"><b-icon-skip-start-fill></b-icon-skip-start-fill></b-button>
   <b-button class="playback-button" id="play-button" v-show="!playing" @click="play()"><b-icon-play-fill></b-icon-play-fill></b-button>
@@ -17,14 +17,14 @@
   <b-col class="text-center">
 <table class="seekbar-table" width="100%">
   <tr>
-    <td class="footertable" width="10%"><span id="time-progress">{{ display_progress }}</span></td>
+    <td class="footertable" width="10%"><div class="time" id="time-progress">{{ display_progress }}</div></td>
     <td class="footertable" width="80%">
         <div class="slidecontainer">
             <b-form-input class="slider" id="progressbar" step="1000" v-model="progress" @input="setPlayback(progress, duration); suspendTimer();" @change="seek(progress)" type="range" min="0" :max="Math.floor(duration/1000) * 1000"></b-form-input>
             <!-- <input type="range" min="0" max="100" value="0" class="slider" id="progressbar" oninput="holdrange(this.value)" onchange="seekspotify(this.value)"> -->
         </div>
     </td>
-    <td class="footertable" width="10%"><span id="time-duration">{{ display_duration }}</span></td>
+    <td class="footertable" width="10%"><div class="time" id="time-duration">{{ display_duration }}</div></td>
   </tr>
 </table>
 </b-col>
@@ -264,59 +264,83 @@ export default {
 
 <style scoped>
 .playback-container{
-  /*padding: calc((100px - 36px - 27px)/2);*/
   padding: 13px;
-  padding-top: 18px;
+  padding-top: 20px;
+  padding-bottom: 0px;
   font-size: 14px;
 }
-
-.slider {
-  -webkit-appearance: none;
-  width: 100%;
-  height: 6px;
-  background: #6a7682;
-  outline: none;
-  opacity: 0.8;
-  -webkit-transition: .2s;
-  transition: opacity .2s;
-  cursor: pointer;
-  border-radius: 3px;
-  vertical-align: middle;
+td{
+  vertical-align: top;
+}
+.time{
+  margin-top: 1px;
 }
 
-.slider:hover {
-  opacity: 1; /* Fully shown on mouse-over */
-}
 
-/*.slider::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  appearance: none;
-  width: 12px;
-  height: 12px;
-  background: #fff;
-  cursor: pointer;
-  border-radius: 50%;
-  border: none;
-}
-
-.slider::-moz-range-thumb {
-  width: 12px;
-  height: 12px;
-  background: #fff;
-  cursor: pointer;
-  border-radius: 50%;
-  border: none;
-}*/
 
 .slidecontainer {
   width: 100%;
   padding-left: 10px;
   padding-right: 10px;
-  padding-bottom:  1px;
+  padding-top: 0px;
+  padding-bottom:  0px;
 }
-/*.playback-row{
-  padding: 30px;
-}*/
+
+input[type="range"] {
+  -webkit-appearance: none !important;
+  appearance: none !important;
+  background: transparent !important;
+  cursor: pointer !important;
+  width: 100% !important;
+}
+
+
+input[type="range"]::-webkit-slider-runnable-track {
+  background: #787f87;
+  height: 6px;
+}
+input[type="range"]::-moz-range-track {
+  background: #787f87;
+  height: 6px;
+}
+
+input[type="range"]::-webkit-slider-runnable-track:hover {
+  background: #a0a5ab;
+}
+
+
+input[type="range"]::-webkit-slider-thumb {
+   -webkit-appearance: none; /* Override default look */
+   appearance: none;
+   margin-top: -3px; /* Centers thumb on the track */
+   background-color: #fff;
+   height: 12px;
+   width: 12px;
+}
+input[type="range"]::-moz-range-thumb {
+    border: none; /*Removes extra border that FF applies*/
+    background-color: #fff;
+    height: 12px;
+    width: 12px;
+}
+
+
+input[type="range"]:focus {
+  outline: none;
+}
+input[type="range"]:focus::-webkit-slider-thumb {
+  outline: 1.5px solid rgba(255, 255, 255, 0.5);
+  outline-offset: 0.125rem;
+}
+input[type="range"]:focus::-moz-range-thumb {
+  outline: 1.5px solid rgba(255, 255, 255, 0.5);
+  outline-offset: 0.125rem;
+}
+
+
+
+
+
 .btn-secondary{
   background-color: #343a40 !important;
 }

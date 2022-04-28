@@ -38,16 +38,15 @@
                 <div v-if="album.img_big">
                 <img
                   class="album-cover"
-                  rounded="left"
                   width="301px"
                   height="auto"
                   v-lazy="album.img_big">
                 </div><div v-else><img
                   class="album-cover"
-                  rounded="left"
                   width="301px"
                   height="auto"
                   v-lazy="album.album_img"></div>
+
 
 
 
