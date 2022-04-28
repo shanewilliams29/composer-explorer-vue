@@ -339,6 +339,8 @@ class WorkAlbums(db.Model):
     data = db.Column(db.Text)
     hidden = db.Column(db.Boolean, default=False)
     filled = db.Column(db.Boolean, default=False)
+    spotify_data = db.Column(db.Text)
+    img = db.Column(db.Text)
     likes = db.relationship('AlbumLike', backref='album', lazy='dynamic', passive_deletes=True)
     work = db.relationship("WorkList")
 

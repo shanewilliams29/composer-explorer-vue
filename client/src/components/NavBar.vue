@@ -5,7 +5,7 @@
       <b-navbar-brand href="#">
         <img
           src="../assets/logo.png"
-          class="d-inline-block align-top"
+          class="d-inline-block align-top logo"
           alt="Composer Explorer"
           height="40px"
           @click="$router.push('/')"
@@ -90,6 +90,7 @@ export default {
 }
 img {
   margin-left: 0px;
+  will-change: transform;
 }
 .navbar.navbar-dark.bg-dark {
   background-color: #343a40 !important;

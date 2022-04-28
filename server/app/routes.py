@@ -448,6 +448,7 @@ def get_albums(work_id):
         item = jsonpickle.decode(tup[0].data)
         item['likes'] = tup[1]
         item['id'] = tup[0].id
+        item['img_big'] = tup[0].img
 
         artists_string = ''.join(sorted(item['all_artists'].strip()))  # put alphabetically
         match_string = artists_string + str(item['release_date'])

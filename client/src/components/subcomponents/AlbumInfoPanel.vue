@@ -240,7 +240,7 @@ table{
 }
 .spotify-logo{
   width: auto;
-  height: 18px;
+  height: 20px;
 }
 
 /*scrollbars*/
