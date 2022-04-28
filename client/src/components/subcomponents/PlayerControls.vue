@@ -265,7 +265,7 @@ export default {
 <style scoped>
 .playback-container{
   padding: 13px;
-  padding-top: 20px;
+  padding-top: 21.5px;
   padding-bottom: 0px;
   font-size: 14px;
 }
@@ -273,16 +273,14 @@ td{
   vertical-align: top;
 }
 .time{
-  margin-top: 1px;
+  margin-top: 0.5px;
 }
-
-
 
 .slidecontainer {
   width: 100%;
   padding-left: 10px;
   padding-right: 10px;
-  padding-top: 0px;
+  padding-top: 1px;
   padding-bottom:  0px;
 }
 
@@ -292,6 +290,7 @@ input[type="range"] {
   background: transparent !important;
   cursor: pointer !important;
   width: 100% !important;
+  opacity: 0.85;
 }
 
 
@@ -302,10 +301,11 @@ input[type="range"]::-webkit-slider-runnable-track {
 input[type="range"]::-moz-range-track {
   background: #787f87;
   height: 6px;
+  border-radius: 0px;
 }
 
-input[type="range"]::-webkit-slider-runnable-track:hover {
-  background: #a0a5ab;
+input[type="range"]:hover {
+  opacity: 1;
 }
 
 
@@ -314,28 +314,52 @@ input[type="range"]::-webkit-slider-thumb {
    appearance: none;
    margin-top: -3px; /* Centers thumb on the track */
    background-color: #fff;
-   height: 12px;
-   width: 12px;
+   height: 0px;
+   width: 0px;
 }
 input[type="range"]::-moz-range-thumb {
     border: none; /*Removes extra border that FF applies*/
     background-color: #fff;
-    height: 12px;
-    width: 12px;
+    height: 0px;
+    width: 0px;
 }
 
 
 input[type="range"]:focus {
   outline: none;
 }
-input[type="range"]:focus::-webkit-slider-thumb {
+/*input[type="range"]:focus::-webkit-slider-thumb {
   outline: 1.5px solid rgba(255, 255, 255, 0.5);
   outline-offset: 0.125rem;
 }
 input[type="range"]:focus::-moz-range-thumb {
   outline: 1.5px solid rgba(255, 255, 255, 0.5);
   outline-offset: 0.125rem;
+}*/
+
+/*Chrome*/
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+
+    input[type='range']::-webkit-slider-runnable-track {
+      overflow: hidden;
+      height: 6px;
+      color: #ffc107;
+      margin-top: -3px;
+    }
+
+    input[type='range']::-webkit-slider-thumb {
+      box-shadow: -350px 0 0 350px #ffc107;
+    }
+
 }
+/** FF*/
+input[type="range"]::-moz-range-progress {
+  background-color: #ffc107;
+  height: 6px;
+}
+
+
+
 
 
 
