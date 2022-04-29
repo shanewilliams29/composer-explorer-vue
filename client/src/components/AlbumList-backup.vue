@@ -3,73 +3,35 @@
     <div class="spinner" v-show="loading" role="status">
       <b-spinner class="m-5"></b-spinner>
     </div>
-      <div class="row">
-          <span v-show="!loading && albums.length < 1 && !radioMode" class="m-4 col no-albums-found">
-            No albums found.
-          </span>
-      </div>
+    <div class="row">
+      <span v-show="!loading && albums.length < 1 && !radioMode" class="m-4 col no-albums-found">
+        No albums found.
+      </span>
+    </div>
     <div v-if="albums">
       <div class="row">
         <b-card-group deck v-show="!loading">
-          <b-card
-            v-for="album in albums"
-            :key="album.id"
-            :id="album.id"
-            no-body
-            header-tag="header"
-            @click="selectRow(album.id); getAlbumData(album.id);"
-            :class="{'highlight': (album.id == selectedAlbum)}"
-          >
+          <b-card v-for="album in albums" :key="album.id" :id="album.id" no-body header-tag="header" @click="selectRow(album.id); getAlbumData(album.id);" :class="{'highlight': (album.id == selectedAlbum)}">
             <div class="row">
               <b-col class="album_columns" cols="2">
-                <img
-                  rounded="left"
-                  width="48px"
-                  height="48px"
-                  v-lazy="album.album_img"
-                >
- <!--                <b-avatar
-                  v-show="album.id == selectedAlbum"
-                  variant="dark"
-                  icon="heart"
-                  rounded="left"
-                  size="48px"
-                ></b-avatar> -->
+                <img rounded="left" width="48px" height="48px" v-lazy="album.album_img" />
               </b-col>
               <b-col class="album_text_columns">
                 <b-card-text>
                   <table cellspacing="0">
                     <tr>
-                      <td
-                        width="100%"
-                        style="
-                          white-space: nowrap;
-                          text-overflow: ellipsis;
-                          overflow: hidden;
-                          max-width: 1px;
-                        "
-                      >
-                        <span style="color: black; font-weight: 600"
-                          >{{ album.artists }} ({{ album.release_date }})</span
-                        >
+                      <td width="100%" style="white-space: nowrap; text-overflow: ellipsis; overflow: hidden; max-width: 1px;">
+                        <span style="color: black; font-weight: 600;">{{ album.artists }} ({{ album.release_date }})</span>
                       </td>
                     </tr>
                     <tr>
-                      <td
-                        width="100%"
-                        style="
-                          white-space: nowrap;
-                          text-overflow: ellipsis;
-                          overflow: hidden;
-                          max-width: 1px;
-                        "
-                      >
-
-                      <span v-if="album.likes">
-                      <b-badge v-if="parseInt(album.likes) == 1 ">{{ album.likes }} Like</b-badge>
-                      <b-badge v-if="parseInt(album.likes) > 1 ">{{ album.likes }} Likes</b-badge>
-                      &nbsp;</span>
-                      <span style="color: grey; font-style: italic">{{ album.minor_artists }}</span>
+                      <td width="100%" style="white-space: nowrap; text-overflow: ellipsis; overflow: hidden; max-width: 1px;">
+                        <span v-if="album.likes">
+                          <b-badge v-if="parseInt(album.likes) == 1 ">{{ album.likes }} Like</b-badge>
+                          <b-badge v-if="parseInt(album.likes) > 1 ">{{ album.likes }} Likes</b-badge>
+                          &nbsp;
+                        </span>
+                        <span style="color: grey; font-style: italic;">{{ album.minor_artists }}</span>
                       </td>
                     </tr>
                   </table>
@@ -78,8 +40,8 @@
             </div>
           </b-card>
           <infinite-loading spinner="spiral" :identifier="infiniteId" @infinite="infiniteHandler">
-              <div slot="no-more"></div>
-              <div slot="no-results"></div>
+            <div slot="no-more"></div>
+            <div slot="no-results"></div>
           </infinite-loading>
         </b-card-group>
       </div>

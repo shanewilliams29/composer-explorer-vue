@@ -62,6 +62,7 @@
                 :components="{OpenIndicator}"
                 class="mt-3 performer-search"
               ></v-select>
+              <b-row><b-col style="padding-right: 0px;" cols='8'>
               <v-select
                 v-model="albumSortField"
                 label="text"
@@ -70,7 +71,17 @@
                 :clearable="false"
                 class="mt-3 style-chooser"
                 :searchable="false"
-              ></v-select>
+              ></v-select></b-col><b-col style="padding-left: 5px;" cols='4'>
+              <v-select
+                v-model="albumSizeField"
+                label="text"
+                :options="albumSizeOptions"
+                @input="albumSize()"
+                :clearable="false"
+                class="mt-3 style-chooser"
+                :searchable="false"
+              ></v-select></b-col>
+            </b-row>
           </b-form-group>
         </b-card>
       </b-col>
@@ -121,6 +132,11 @@ export default {
           { value: 'dateascending', text: 'Sort by date, earliest to latest' },
           { value: 'datedescending', text: 'Sort by date, latest to earliest' }
         ],
+      albumSizeField: { value: 'large', text: 'Large' },
+      albumSizeOptions: [
+          { value: 'large', text: 'Large' },
+          { value: 'small', text: 'Small' }
+        ],
     };
   },
   methods: {
@@ -169,6 +185,13 @@ export default {
           eventBus.$emit('fireAlbumFilter', currentConfig.work, '', this.albumSortField.value);
       } else {
           eventBus.$emit('fireAlbumFilter', currentConfig.work, this.albumFilterField.value, this.albumSortField.value);
+      }
+    },
+    albumSize() {
+      if (this.albumSizeField.value == "large") {
+          eventBus.$emit('fireAlbumView', 'large');
+      } else {
+          eventBus.$emit('fireAlbumView', 'small');
       }
     },
     // getArtistList() {

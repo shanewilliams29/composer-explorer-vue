@@ -57,7 +57,8 @@ const defaultConfig = {
                           allTracks: "spotify:track:6cUCckpdlqHJ5Ascf2uH2A spotify:track:1L0a0dpHaMWgAoEEvFfycT spotify:track:7ojkji0OYCOpl3UMy92gEf spotify:track:4IHaNEgvWUD63pMTWrclb2",
                           previousTracks: "spotify:track:6cUCckpdlqHJ5Ascf2uH2A spotify:track:1L0a0dpHaMWgAoEEvFfycT spotify:track:7ojkji0OYCOpl3UMy92gEf spotify:track:4IHaNEgvWUD63pMTWrclb2",
                           trackNo: 0,
-                          album: "BEETHOVEN000056eOuqhCfrTPp1H0YbQ9PmL"
+                          album: "BEETHOVEN000056eOuqhCfrTPp1H0YbQ9PmL",
+                          albumView: 'large'
                         };
 
 if (localStorage.getItem("currentConfig") !== null) {
