@@ -189,9 +189,11 @@ export default {
     },
     albumSize() {
       if (this.albumSizeField.value == "large") {
-          eventBus.$emit('fireAlbumView', 'large');
+        this.$userSettings.albumSize = 'large';
+          // eventBus.$emit('fireAlbumView', 'large');
       } else {
-          eventBus.$emit('fireAlbumView', 'small');
+        this.$userSettings.albumSize = 'small';
+          // eventBus.$emit('fireAlbumView', 'small');
       }
     },
     // getArtistList() {

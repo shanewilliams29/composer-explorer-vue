@@ -11,7 +11,7 @@
     <div v-if="albums">
       <div class="row">
         <b-card-group deck v-show="!loading">
-          <LargeAlbum v-if="albumView == 'large'" v-bind:albums="albums" v-bind:selectedAlbum="selectedAlbum"/>
+          <LargeAlbum v-if="$userSettings.albumSize == 'large'" v-bind:albums="albums" v-bind:selectedAlbum="selectedAlbum"/>
           <SmallAlbum v-else v-bind:albums="albums" v-bind:selectedAlbum="selectedAlbum"/>
           <infinite-loading spinner="spiral" :identifier="infiniteId" @infinite="infiniteHandler">
             <div slot="no-more"></div>
@@ -144,12 +144,13 @@ export default {
     eventBus.$on('fireAlbums', this.getAlbums);
     eventBus.$on('fireAlbumFilter', this.getFilteredAlbums);
     eventBus.$on('fireArtistAlbums', this.getFilteredAlbums);
-    eventBus.$on('fireAlbumView', this.setAlbumView);
+    // eventBus.$on('fireAlbumView', this.setAlbumView);
   },
   beforeDestroy() {
     eventBus.$off('fireAlbums', this.getAlbums);
     eventBus.$off('fireAlbumFilter', this.getFilteredAlbums);
-    eventBus.$off('fireAlbumView', this.setAlbumView);
+    eventBus.$off('fireArtistAlbums', this.getFilteredAlbums);
+    // eventBus.$off('fireAlbumView', this.setAlbumView);
   }
 };
 </script>

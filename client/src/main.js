@@ -45,6 +45,7 @@ export const eventBus = new Vue();
 export const spotifyPlayer = new Vue();
 export const baseURL = process.env.VUE_APP_BASE_URL;
 
+Vue.prototype.$userSettings = Vue.observable({albumSize: 'large'});
 
 // Preserve view state between page reloads
 let config = {}
@@ -58,7 +59,7 @@ const defaultConfig = {
                           previousTracks: "spotify:track:6cUCckpdlqHJ5Ascf2uH2A spotify:track:1L0a0dpHaMWgAoEEvFfycT spotify:track:7ojkji0OYCOpl3UMy92gEf spotify:track:4IHaNEgvWUD63pMTWrclb2",
                           trackNo: 0,
                           album: "BEETHOVEN000056eOuqhCfrTPp1H0YbQ9PmL",
-                          albumView: 'large'
+                          albumSize: 'large'
                         };
 
 if (localStorage.getItem("currentConfig") !== null) {
