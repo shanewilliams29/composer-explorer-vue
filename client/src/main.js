@@ -68,21 +68,13 @@ if (localStorage.getItem("config") !== null) {
     config = defaultConfig;
 }
 
+export const startTracks = config.playTracks; // used in initial startp play button press
+
 Vue.prototype.$config = Vue.observable(config);
-
-// Spotify config
-let spConfig = {}
-const defaultSpotify = { appToken: null,
-                         clientToken: null,
-                         deviceID: null
-                         };
-
-if (localStorage.getItem("spotifyConfig") !== null) {
-    spConfig = JSON.parse(localStorage.getItem('spotifyConfig'));
-} else {
-    spConfig = defaultSpotify;
-}
-export const spotifyConfig = spConfig;
+Vue.prototype.$auth = Vue.observable({ appToken: null,
+                                       clientToken: null,
+                                       deviceID: null
+                                      });
 
 new Vue({
   router,

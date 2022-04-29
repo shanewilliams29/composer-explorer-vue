@@ -35,7 +35,6 @@
 <script>
 import spotify from '@/SpotifyFunctions.js'
 import {eventBus} from "../../main.js";
-import {spotifyConfig} from "../../main.js";
 
 // function debounce(func, timeout = 500){
 //   let timer;
@@ -87,35 +86,31 @@ export default {
   },
   methods: {
     play() {
-      if (window.player) {
-        window.player.activateElement();
-        console.log("ACTIVATED");
-      }
-      spotify.pressPlay(spotifyConfig.clientToken, spotifyConfig.deviceID);
+      spotify.pressPlay(this.$auth.clientToken, this.$auth.deviceID);
     },
     pause() {
-      spotify.pauseTrack(spotifyConfig.clientToken);
+      spotify.pauseTrack(this.$auth.clientToken);
     },
     back() {
       if(this.progress > 2000){
-          spotify.beginningTrack(spotifyConfig.clientToken, spotifyConfig.deviceID);
+          spotify.beginningTrack(this.$auth.clientToken, this.$auth.deviceID);
           this.setPlayback(0, this.duration);
       } else {
       let uriList = {}
       let jsonList = {}
       uriList['uris'] = this.$config.previousTracks.split(' ');
       jsonList = JSON.stringify(uriList);
-      spotify.playTracks(spotifyConfig.clientToken, spotifyConfig.deviceID, jsonList);
+      spotify.playTracks(this.$auth.clientToken, this.$auth.deviceID, jsonList);
       }
     },
     next() {
-      spotify.nextTrack(spotifyConfig.clientToken);
+      spotify.nextTrack(this.$auth.clientToken);
     },
     suspendTimer() {
       this.suspend = true;
     },
     seek(progress) {
-      spotify.seekToPosition(spotifyConfig.clientToken, progress);
+      spotify.seekToPosition(this.$auth.clientToken, progress);
     },
     setPlayback(progress, duration) {
       this.progress = progress;

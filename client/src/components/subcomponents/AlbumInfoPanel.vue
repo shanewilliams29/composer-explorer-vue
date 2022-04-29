@@ -50,7 +50,6 @@
 <script>
 import axios from 'axios';
 import {eventBus} from "../../main.js";
-import {spotifyConfig} from "../../main.js";
 import spotify from '@/SpotifyFunctions.js'
 
 export default {
@@ -138,14 +137,14 @@ export default {
       }
     }
     //console.log(artistIDsString);
-    spotify.getSpotifyArtists(spotifyConfig.appToken, artistIDsString.trim());
+    spotify.getSpotifyArtists(this.$auth.appToken, artistIDsString.trim());
   },
   getSpotifyAlbumData(album){ // database album
       this.loading = true;
       this.results = [];
       this.artists = album.all_artists.split(", ");
       let album_id = album.album_uri.substring(album.album_uri.lastIndexOf(':') + 1);
-      spotify.getSpotifyAlbum(spotifyConfig.appToken, album_id);
+      spotify.getSpotifyAlbum(this.$auth.appToken, album_id);
       this.artists.forEach(element => this.getPersonInfo(element));
   },
   setSpotifyArtistsData(artistList){ //not used

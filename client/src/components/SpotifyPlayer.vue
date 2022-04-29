@@ -5,7 +5,6 @@
 <script>
 import axios from 'axios';
 import {eventBus} from "../main.js";
-import {spotifyConfig} from "../main.js";
 
 let spotifyPlayerScript = document.createElement('script');
 spotifyPlayerScript.setAttribute('src', 'https://sdk.scdn.co/spotify-player.js');
@@ -26,22 +25,21 @@ export default {
                 .then((res) => {
                     if (res.data.status == "success") {
                         if (res.data.client_token !== null) {
-                            spotifyConfig.clientToken = res.data.client_token;
-                            spotifyConfig.appToken = res.data.app_token;
-                            eventBus.$emit('fireLogIn');
+                            this.$auth.clientToken = res.data.client_token;
+                            this.$auth.appToken = res.data.app_token;
 
 
                             // eslint-disable-next-line
                             window.player = new Spotify.Player({
                                 name: 'Composer Explorer',
-                                getOAuthToken: cb => { cb(spotifyConfig.clientToken); },
+                                getOAuthToken: cb => { cb(this.$auth.clientToken); },
                                 volume: 1
                             });
 
                             // Ready
                             window.player.addListener('ready', ({ device_id }) => {
                                 this.device_id = device_id;
-                                spotifyConfig.deviceID = device_id;
+                                this.$auth.deviceID = device_id;
                                 console.log('Ready with Device ID', device_id);
                             });
 
@@ -91,13 +89,13 @@ export default {
                             }, { once: true });
 
                         } else {
-                            spotifyConfig.appToken = res.data.app_token;
+                            this.$auth.appToken = res.data.app_token;
                       }
                     }
                   })
               .catch((error) => {
-                spotifyConfig.appToken = null;
-                spotifyConfig.clientToken = null;
+                this.$auth.appToken = null;
+                this.$auth.clientToken = null;
                 console.error(error);
       });
     }
