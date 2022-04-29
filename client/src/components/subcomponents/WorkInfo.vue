@@ -40,7 +40,6 @@
 <script>
 import axios from 'axios';
 import {eventBus} from "../../main.js";
-import {currentConfig} from "../../main.js";
 
 export default {
   data() {
@@ -131,7 +130,7 @@ export default {
 },
   created() {
     this.loading = true;
-    this.getWorkInfo(currentConfig.work)
+    this.getWorkInfo(this.$config.work)
     eventBus.$on('fireAlbums', (workId, title) => {
       this.loading = true;
       this.workTitle = title;

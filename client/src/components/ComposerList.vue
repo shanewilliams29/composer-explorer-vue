@@ -6,71 +6,32 @@
     <div class="row">
       <span class="m-4 col no-composers-found" v-show="!loading && composers.length < 1 && !radioMode">No composers found.</span>
       <b-card-group deck v-show="!loading">
-        <b-card
-          v-for="(region, index) in composers"
-          :key="index"
-          no-body
-          header-tag="header"
-          class="shadow-sm"
-        >
+        <b-card v-for="(region, index) in composers" :key="index" no-body header-tag="header" class="shadow-sm">
           <div class="#header" v-b-toggle="index.replace(/\s/g, '')">
-            <h6 class="m-2 mb-0">{{ index }}<span class="mb-0 float-right when-opened"><b-icon-chevron-up></b-icon-chevron-up></span><span class="mb-0 float-right when-closed"><b-icon-chevron-down></b-icon-chevron-down></span></h6>
+            <h6 class="m-2 mb-0">
+              {{ index }}<span class="mb-0 float-right when-opened"><b-icon-chevron-up></b-icon-chevron-up></span><span class="mb-0 float-right when-closed"><b-icon-chevron-down></b-icon-chevron-down></span>
+            </h6>
           </div>
           <b-collapse :visible="visibility" :id="index.replace(/\s/g, '')">
-          <b-card-text>
-            <table cellspacing="0">
-
-              <tr
-                v-for="composer in region"
-                :key="composer.id"
-                @click="selectRow(composer.id); getWorks(composer.name_short);"
-                :class="{'highlight': (composer.id == selectedComposer)}"
-              >
-                <td
-                  width="2%"
-                  :style="{border: 'solid 0px !important', backgroundColor:composer.color, opacity: 0.66}"
-                ></td>
-                <td width="2%"></td>
-                <td width="12%" style="white-space: nowrap">
-                  <img
-                    class="composer-img"
-                    :src="composer.flag"
-                    height="20"
-                    width="20"
-                  />
-                  <img
-                    class="composer-img"
-                    :src="composer.img"
-                    height="20"
-                    width="20"
-                  />
-                </td>
-                <td
-                  width="50%"
-                  style="
-                    white-space: nowrap;
-                    text-overflow: ellipsis;
-                    overflow: hidden;
-                    max-width: 1px;
-                  "
-                >
-                  {{ composer.name_full }}
-                </td>
-                <td
-                  width="25%"
-                  style="
-                    white-space: nowrap;
-                    text-overflow: ellipsis;
-                    max-width: 1px;
-                    text-align: right;
-                  "
-                >
-                  {{ composer.born }} - {{ composer.died }}
-                </td>
-              </tr>
-            </table>
-          </b-card-text>
-        </b-collapse>
+            <b-card-text>
+              <table cellspacing="0">
+                <tr v-for="composer in region" :key="composer.id" @click="selectRow(composer.id); getWorks(composer.name_short);" :class="{'highlight': (composer.id == selectedComposer)}">
+                  <td width="2%" :style="{border: 'solid 0px !important', backgroundColor:composer.color, opacity: 0.66}"></td>
+                  <td width="2%"></td>
+                  <td width="12%" style="white-space: nowrap;">
+                    <img class="composer-img" :src="composer.flag" height="20" width="20" />
+                    <img class="composer-img" :src="composer.img" height="20" width="20" />
+                  </td>
+                  <td width="50%" style="white-space: nowrap; text-overflow: ellipsis; overflow: hidden; max-width: 1px;">
+                    {{ composer.name_full }}
+                  </td>
+                  <td width="25%" style="white-space: nowrap; text-overflow: ellipsis; max-width: 1px; text-align: right;">
+                    {{ composer.born }} - {{ composer.died }}
+                  </td>
+                </tr>
+              </table>
+            </b-card-text>
+          </b-collapse>
         </b-card>
       </b-card-group>
     </div>
@@ -80,7 +41,7 @@
 <script>
 import axios from 'axios';
 import {eventBus} from "../main.js";
-import {currentConfig} from "../main.js";
+
 
 export default {
   data() {
@@ -172,8 +133,8 @@ export default {
     selectRow(composerId){
       if (!this.radioMode){
         this.selectedComposer = composerId;
-        currentConfig.composerId = composerId;
-        localStorage.setItem('currentConfig', JSON.stringify(currentConfig));
+        this.$config.composerId = composerId;
+        localStorage.setItem('config', JSON.stringify(this.$config));
       }
     },
     fireRadioSelect(type){
@@ -214,7 +175,7 @@ export default {
       this.radioMode = true;
     } else {
       this.getComposers();
-      this.selectRow(currentConfig.composerId);
+      this.selectRow(this.$config.composerId);
     }
 
     eventBus.$on('fireComposerFilter', this.getFilteredComposers);

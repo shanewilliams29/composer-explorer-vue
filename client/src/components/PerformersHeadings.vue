@@ -39,7 +39,7 @@
 <script>
 import axios from 'axios';
 import {eventBus} from "../main.js";
-import {currentConfig} from "../main.js";
+
 
 export default {
   data() {
@@ -65,13 +65,13 @@ export default {
 
       workFilterField: { value: 'recommended', text: 'Recommended works' },
       workSearchField: null,
-      workSearchPlaceholder: "Search works by " + currentConfig.composer,
+      workSearchPlaceholder: "Search works by " + this.$config.composer,
       workOptions: [
           { value: 'recommended', text: 'Recommended works' },
           { value: 'all', text: 'All works'}
         ],
 
-      albumFilterField: { value: 'allartists', text: 'All performers of ' + '"' + currentConfig.workTitle+ '"'},
+      albumFilterField: { value: 'allartists', text: 'All performers of ' + '"' + this.$config.workTitle+ '"'},
       albumOptions: [],
 
       albumSortField: { value: 'recommended', text: 'Recommended sorting' },
@@ -117,15 +117,15 @@ export default {
     albumFilter() {
       this.albumSearchPlaceholder = "Search performers";
       if (this.albumFilterField.value == "allartists") {
-          eventBus.$emit('fireAlbumFilter', currentConfig.work, '');
+          eventBus.$emit('fireAlbumFilter', this.$config.work, '');
       } else {
-          eventBus.$emit('fireAlbumFilter', currentConfig.work, this.albumFilterField.value);
+          eventBus.$emit('fireAlbumFilter', this.$config.work, this.albumFilterField.value);
           this.albumSearchField = '';
     }
       //console.log(this.workFilterField);
     },
     albumSearch() {
-      eventBus.$emit('fireAlbumSearch', currentConfig.work, this.albumSearchField);
+      eventBus.$emit('fireAlbumSearch', this.$config.work, this.albumSearchField);
       this.albumSearchPlaceholder = this.albumSearchField;
       this.albumSearchField = '';
       this.albumFilterField = null;
@@ -133,7 +133,7 @@ export default {
     },
     onAlbumFocus() {
       this.$refs.typeahead.inputValue = ''
-      eventBus.$emit('fireAlbumSearch', currentConfig.work, '');
+      eventBus.$emit('fireAlbumSearch', this.$config.work, '');
     },
     getArtistList() {
       const path = 'api/artistlist';
@@ -150,7 +150,7 @@ export default {
     }
   },
   created() {
-    this.title = currentConfig.workTitle;
+    this.title = this.$config.workTitle;
     eventBus.$on('fireComposers', (composer) => {
         this.workSearchPlaceholder = "Search works by " + composer;
         this.workSearchField = '';

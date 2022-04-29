@@ -45,7 +45,7 @@ export const eventBus = new Vue();
 export const spotifyPlayer = new Vue();
 export const baseURL = process.env.VUE_APP_BASE_URL;
 
-Vue.prototype.$userSettings = Vue.observable({albumSize: 'large'});
+//Vue.prototype.$userSettings = Vue.observable({albumSize: 'large'});
 
 // Preserve view state between page reloads
 let config = {}
@@ -62,12 +62,13 @@ const defaultConfig = {
                           albumSize: 'large'
                         };
 
-if (localStorage.getItem("currentConfig") !== null) {
-    config = JSON.parse(localStorage.getItem('currentConfig'));
+if (localStorage.getItem("config") !== null) {
+    config = JSON.parse(localStorage.getItem('config'));
 } else {
     config = defaultConfig;
 }
-export const currentConfig = config;
+
+Vue.prototype.$config = Vue.observable(config);
 
 // Spotify config
 let spConfig = {}

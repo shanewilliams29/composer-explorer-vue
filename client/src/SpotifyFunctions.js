@@ -1,6 +1,5 @@
 import axios from 'axios';
 import {eventBus} from "./main.js";
-import {currentConfig} from "./main.js";
 
 var spotify = {
 
@@ -70,7 +69,7 @@ pressPlay(token, device_id) {
       let uriList = {}
       let jsonList = {}
 
-      let tracks = currentConfig.playTracks;
+      let tracks = this.$config.playTracks;
       uriList['uris'] = tracks.split(' ');
       jsonList = JSON.stringify(uriList);
       this.playTracks(token, device_id, jsonList);

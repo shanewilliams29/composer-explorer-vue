@@ -33,15 +33,14 @@
 <script>
 import axios from 'axios';
 import {eventBus} from "../../main.js";
-import {currentConfig} from "../../main.js";
 
 export default {
   data() {
     return {
       album: [],
       title: "",
-      hold_title: currentConfig.workTitle,
-      composer: currentConfig.composer
+      hold_title: this.$config.workTitle,
+      composer: this.$config.composer
     };
   },
   methods: {
@@ -52,7 +51,7 @@ export default {
           .then((res) => {
             eventBus.$emit('fireSetAlbum', res.data.album);
             this.album = res.data.album; // Change to local file
-            this.composer = currentConfig.composer;
+            this.composer = this.$config.composer;
             this.loading = false;
           })
           .catch((error) => {

@@ -40,7 +40,6 @@
 <script>
 import {eventBus} from "../../main.js";
 import spotify from '@/SpotifyFunctions.js'
-import {currentConfig} from "../../main.js";
 
 export default {
   data() {
@@ -87,23 +86,23 @@ export default {
       let uriList = {}
       let jsonList = {}
       let selectedTrack = tracks.split(' ')[0];
-      let allTracks = currentConfig.allTracks.split(' ');
+      let allTracks = this.$config.allTracks.split(' ');
 
       let index = allTracks.indexOf(selectedTrack);
       let previousTracks = "";
 
       if (index == 0) {
-          previousTracks = currentConfig.allTracks;
+          previousTracks = this.$config.allTracks;
       } else {
         for (var i = index - 1; i < allTracks.length; i++) {
           previousTracks = previousTracks + " " + allTracks[i];
         }
       }
 
-      currentConfig.previousTracks = previousTracks.trim();
+      this.$config.previousTracks = previousTracks.trim();
 
-      currentConfig.playTracks = tracks;
-      localStorage.setItem('currentConfig', JSON.stringify(currentConfig));
+      this.$config.playTracks = tracks;
+      localStorage.setItem('config', JSON.stringify(this.$config));
 
       uriList['uris'] = tracks.split(' ');
       jsonList = JSON.stringify(uriList);
@@ -113,9 +112,9 @@ export default {
     },
   created() {
     eventBus.$on('fireSetAlbum', (album) => {
-        currentConfig.allTracks = album.tracks[0][2];
-        currentConfig.playTracks = album.tracks[0][2];
-        localStorage.setItem('currentConfig', JSON.stringify(currentConfig));
+        this.$config.allTracks = album.tracks[0][2];
+        this.$config.playTracks = album.tracks[0][2];
+        localStorage.setItem('config', JSON.stringify(this.$config));
 
         this.album = album;
         if(window.token && window.device_id){

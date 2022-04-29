@@ -11,7 +11,7 @@
     <div v-if="albums">
       <div class="row">
         <b-card-group deck v-show="!loading">
-          <LargeAlbum v-if="$userSettings.albumSize == 'large'" v-bind:albums="albums" v-bind:selectedAlbum="selectedAlbum"/>
+          <LargeAlbum v-if="$config.albumSize == 'large'" v-bind:albums="albums" v-bind:selectedAlbum="selectedAlbum"/>
           <SmallAlbum v-else v-bind:albums="albums" v-bind:selectedAlbum="selectedAlbum"/>
           <infinite-loading spinner="spiral" :identifier="infiniteId" @infinite="infiniteHandler">
             <div slot="no-more"></div>
@@ -28,7 +28,6 @@ import LargeAlbum from '@/components/subcomponents/LargeAlbum.vue';
 import SmallAlbum from '@/components/subcomponents/SmallAlbum.vue';
 import axios from 'axios';
 import {eventBus} from "../main.js";
-import {currentConfig} from "../main.js";
 
 export default {
   components: {
@@ -45,8 +44,7 @@ export default {
       workId: '',
       artistName: '',
       sort: '',
-      infiniteId: +new Date(),
-      albumView: currentConfig.albumView
+      infiniteId: +new Date()
     };
   },
   methods: {
@@ -60,8 +58,8 @@ export default {
         this.albums = res.data.albums;
         this.loading = false;
         this.selectRow(this.albums[0].id); // select first row on work selection
-        currentConfig.album = this.albums[0].id;
-        localStorage.setItem('currentConfig', JSON.stringify(currentConfig));
+        this.$config.album = this.albums[0].id;
+        localStorage.setItem('config', JSON.stringify(this.$config));
         eventBus.$emit('fireArtistList', res.data.artists);
         eventBus.$emit('fireAlbumData', this.albums[0].id);
       }).catch((error) => {
@@ -79,8 +77,8 @@ export default {
         this.albums = res.data.albums;
         eventBus.artists = res.data.artists;
         this.loading = false;
-        this.selectRow(currentConfig.album);
-        eventBus.$emit('fireAlbumData', currentConfig.album);
+        this.selectRow(this.$config.album);
+        eventBus.$emit('fireAlbumData', this.$config.album);
         eventBus.$emit('fireArtistList', res.data.artists);
       }).catch((error) => {
         console.error(error);
@@ -89,8 +87,8 @@ export default {
     },
     getAlbumData(albumId) {
       eventBus.$emit('fireAlbumData', albumId);
-      currentConfig.album = albumId;
-      localStorage.setItem('currentConfig', JSON.stringify(currentConfig));
+      this.$config.album = albumId;
+      localStorage.setItem('config', JSON.stringify(this.$config));
     },
     selectRow(album) {
       this.selectedAlbum = album;
@@ -129,17 +127,12 @@ export default {
       this.albums = [];
       this.infiniteId += 1;
     },
-    setAlbumView(view) {
-      this.albumView = view;
-      currentConfig.albumView = view;
-      localStorage.setItem('currentConfig', JSON.stringify(currentConfig));
-    },
   },
   created() {
     if (window.location.href.indexOf("radio") != -1) { // dont get works in radio mode
       this.radioMode = true;
     } else {
-      this.initialGetAlbums(currentConfig.work);
+      this.initialGetAlbums(this.$config.work);
     }
     eventBus.$on('fireAlbums', this.getAlbums);
     eventBus.$on('fireAlbumFilter', this.getFilteredAlbums);

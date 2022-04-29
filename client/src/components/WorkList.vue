@@ -70,7 +70,6 @@
 <script>
 import axios from 'axios';
 import {eventBus} from "../main.js";
-import {currentConfig} from "../main.js";
 
 export default {
   data() {
@@ -147,9 +146,9 @@ export default {
       getAlbums(workId, title) {
         if(!this.artistMode){
           eventBus.$emit('fireAlbums', workId, title);
-          currentConfig.work = workId;
-          currentConfig.workTitle = title;
-          localStorage.setItem('currentConfig', JSON.stringify(currentConfig));
+          this.$config.work = workId;
+          this.$config.workTitle = title;
+          localStorage.setItem('config', JSON.stringify(this.$config));
         } else {
           eventBus.$emit('fireArtistAlbums', workId, this.artist);
         }
@@ -194,8 +193,8 @@ export default {
     },
     fireComposers(composer) {
         this.getWorks(composer);
-        currentConfig.composer = composer;
-        localStorage.setItem('currentConfig', JSON.stringify(currentConfig));
+        this.$config.composer = composer;
+        localStorage.setItem('config', JSON.stringify(this.$config));
     },
     fireClearWorks(artist){
       this.artistMode = true;
@@ -204,8 +203,8 @@ export default {
     },
     nextWork(){
       if(this.shuffle){
-        currentConfig.previousWork = currentConfig.work;
-        currentConfig.previousWorkTitle = currentConfig.workTitle;
+        this.$config.previousWork = this.$config.work;
+        this.$config.previousWorkTitle = this.$config.workTitle;
         console.log("SHUFFLE");
           this.playRandomWork();
       } else {
@@ -220,8 +219,8 @@ export default {
     },
       previousWork(){
       if(this.shuffle){
-          this.selectRow(currentConfig.previousWork); //allows you to jump one back
-          this.getAlbums(currentConfig.previousWork, currentConfig.previousWorkTitle)
+          this.selectRow(this.$config.previousWork); //allows you to jump one back
+          this.getAlbums(this.$config.previousWork, this.$config.previousWorkTitle)
       } else {
       for (var i = 0; i < this.playlist.length; i++) {
         if (this.playlist[i]['id'] == this.selectedWork && i !== 0) {
@@ -248,8 +247,8 @@ export default {
     if (window.location.href.indexOf("radio") != -1){ // dont get works in radio mode
       this.radioMode = true;
     } else {
-      this.getWorks(currentConfig.composer);
-      this.selectRow(currentConfig.work);
+      this.getWorks(this.$config.composer);
+      this.selectRow(this.$config.work);
     }
     eventBus.$on('fireComposers', this.fireComposers);
     eventBus.$on('fireArtistWorks', this.getArtistWorks);

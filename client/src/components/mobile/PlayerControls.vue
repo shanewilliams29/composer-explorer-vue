@@ -32,7 +32,6 @@
 <script>
 import spotify from '@/SpotifyFunctions.js'
 import {eventBus} from "../../main.js";
-import {currentConfig} from "../../main.js";
 
 export default {
   data() {
@@ -62,7 +61,7 @@ export default {
       } else {
       let uriList = {}
       let jsonList = {}
-      uriList['uris'] = currentConfig.previousTracks.split(' ');
+      uriList['uris'] = this.$config.previousTracks.split(' ');
       jsonList = JSON.stringify(uriList);
       spotify.playTracks(window.token, window.device_id, jsonList);
       }
@@ -177,22 +176,22 @@ export default {
       }
       // update previousTracks
       let selectedTrack = track_data.uri;
-      let allTracks = currentConfig.allTracks.split(' ');
+      let allTracks = this.$config.allTracks.split(' ');
 
       let index = allTracks.indexOf(selectedTrack);
       let previousTracks = "";
 
       if (index == 0) {
-          previousTracks = currentConfig.allTracks;
+          previousTracks = this.$config.allTracks;
       } else if (index < 0 ){ // occurs when spotify redirects, track not found in list
-          previousTracks = currentConfig.allTracks;
+          previousTracks = this.$config.allTracks;
       } else {
         for (var i = index - 1; i < allTracks.length; i++) {
           previousTracks = previousTracks + " " + allTracks[i];
         }
       }
 
-      currentConfig.previousTracks = previousTracks.trim();
+      this.$config.previousTracks = previousTracks.trim();
       // localStorage.setItem('currentConfig', JSON.stringify(currentConfig));
 
     })

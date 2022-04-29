@@ -91,7 +91,6 @@
 
 <script>
 import {eventBus} from "../main.js";
-import {currentConfig} from "../main.js";
 
 export default {
   data() {
@@ -117,7 +116,7 @@ export default {
 
       workFilterField: { value: 'recommended', text: 'Recommended works' },
       workSearchField: null,
-      workSearchPlaceholder: "Search works by " + currentConfig.composer,
+      workSearchPlaceholder: "Search works by " + this.$config.composer,
       workOptions: [
           { value: 'recommended', text: 'Recommended works' },
           { value: 'all', text: 'All works'}
@@ -132,7 +131,7 @@ export default {
           { value: 'dateascending', text: 'Sort by date, earliest to latest' },
           { value: 'datedescending', text: 'Sort by date, latest to earliest' }
         ],
-      albumSizeField: { value: 'large', text: 'Large' },
+      albumSizeField: { value: this.$config.albumSize, text: this.capitalize(this.$config.albumSize)},
       albumSizeOptions: [
           { value: 'large', text: 'Large' },
           { value: 'small', text: 'Small' }
@@ -140,6 +139,10 @@ export default {
     };
   },
   methods: {
+    capitalize(string){
+      let capitalized = string[0].toUpperCase() + string.substring(1);
+      return capitalized;
+    },
     composerFilter() {
       //console.log(this.composerFilterForm.value);
       eventBus.$emit('fireComposerFilter', this.composerFilterForm.value);
@@ -182,18 +185,18 @@ export default {
     },
     albumFilter() {
       if (this.albumFilterField.value == "allartists") {
-          eventBus.$emit('fireAlbumFilter', currentConfig.work, '', this.albumSortField.value);
+          eventBus.$emit('fireAlbumFilter', this.$config.work, '', this.albumSortField.value);
       } else {
-          eventBus.$emit('fireAlbumFilter', currentConfig.work, this.albumFilterField.value, this.albumSortField.value);
+          eventBus.$emit('fireAlbumFilter', this.$config.work, this.albumFilterField.value, this.albumSortField.value);
       }
     },
     albumSize() {
       if (this.albumSizeField.value == "large") {
-        this.$userSettings.albumSize = 'large';
-          // eventBus.$emit('fireAlbumView', 'large');
+        this.$config.albumSize = 'large';
+        localStorage.setItem('config', JSON.stringify(this.$config));
       } else {
-        this.$userSettings.albumSize = 'small';
-          // eventBus.$emit('fireAlbumView', 'small');
+        this.$config.albumSize = 'small';
+        localStorage.setItem('config', JSON.stringify(this.$config));
       }
     },
     // getArtistList() {
@@ -211,7 +214,7 @@ export default {
     // }
   },
   created() {
-    this.title = currentConfig.workTitle;
+    this.title = this.$config.workTitle;
     eventBus.$on('fireComposers', (composer) => {
         this.workSearchPlaceholder = "Search works by " + composer;
         this.workSearchField = '';
