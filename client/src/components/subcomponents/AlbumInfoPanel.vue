@@ -245,7 +245,7 @@ table{
 
 /*scrollbars*/
  .info-card-text {
-        --scroll-bar-color: #c1c2c3;
+        --scroll-bar-color: #d6d9db;
         --scroll-bar-bg-color: #fff;
     }
 

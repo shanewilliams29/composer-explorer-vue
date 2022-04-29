@@ -43,10 +43,11 @@ export default {
     padding-bottom: 5px;
     overflow-y: scroll;
 }
-
-.last-col{
-    -ms-flex: 0 0 330px;
-    flex: 0 0 330px;
+@media only screen and (min-width: 1000px) {
+    .last-col{
+        -ms-flex: 0 0 380px;
+        flex: 0 0 380px;
+    }
 }
 .extra-margin{
     margin-right: 3.5px;
@@ -54,7 +55,7 @@ export default {
 
 /*scrollbars*/
  :root {
-        --scroll-bar-color: #c1c2c3;
+        --scroll-bar-color: #c9cccf;
         --scroll-bar-bg-color: #f1f2f4;
     }
 

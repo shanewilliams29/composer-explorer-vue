@@ -159,10 +159,7 @@ export default {
     background: #f1f2f4 !important;
     padding: 0px !important;
   }
-  #home{
-    overflow-x: hidden;
-    background: #f1f2f4 !important;
-  }
+
   .btn-secondary{
     background-color: #343a40 !important;
     text-align: middle;

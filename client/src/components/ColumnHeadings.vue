@@ -239,8 +239,6 @@ export default {
 }*/
 .last-col{
   margin-right: 5px;
-    -ms-flex: 0 0 330px;
-    flex: 0 0 330px;
 }
 
 .albums-card{

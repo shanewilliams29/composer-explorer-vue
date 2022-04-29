@@ -321,3 +321,64 @@ header.card-header {
   margin-bottom: 2px;
 }
 </style>
+
+
+
+<template>
+  <div>
+    <div class="spinner" v-show="loading" role="status">
+      <b-spinner class="m-5"></b-spinner>
+    </div>
+      <div class="row">
+          <span v-show="!loading && albums.length < 1 && !radioMode" class="m-4 col no-albums-found">
+            No albums found.
+          </span>
+      </div>
+    <div v-if="albums">
+      <div class="row">
+        <b-card-group deck v-show="!loading">
+          <b-card
+          class="shadow-sm"
+            v-for="album in albums"
+            :key="album.id"
+            :id="album.id"
+            no-body
+            header-tag="header"
+            @click="selectRow(album.id); getAlbumData(album.id);"
+            :class="{'highlight': (album.id == selectedAlbum)}"
+          >
+            <div class="row">
+              <b-col class="album_columns">
+              <div class="album-titles"
+                          ><span style="color: black; font-weight: 600">{{ album.artists }}</span><br>
+                           <span>℗ {{ album.release_date }}</span>
+                                      <span v-if="album.likes">&nbsp;
+                      <b-badge v-if="parseInt(album.likes) == 1 ">{{ album.likes }} Like</b-badge>
+                      <b-badge v-if="parseInt(album.likes) > 1 ">{{ album.likes }} Likes</b-badge>
+                      </span><br>
+                          <span v-if="album.minor_artists" style="color: grey; font-size: 12px !important;">{{ album.minor_artists }}</span>
+
+
+                        </div>
+
+                <div v-if="album.img_big">
+                <img
+                  class="album-cover"
+                  height="auto"
+                  v-lazy="album.img_big">
+                </div><div v-else><img
+                  class="album-cover"
+                  height="auto"
+                  v-lazy="album.album_img"></div>
+              </b-col>
+            </div>
+          </b-card>
+          <infinite-loading spinner="spiral" :identifier="infiniteId" @infinite="infiniteHandler">
+              <div slot="no-more"></div>
+              <div slot="no-results"></div>
+          </infinite-loading>
+        </b-card-group>
+      </div>
+    </div>
+  </div>
+</template>

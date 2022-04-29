@@ -156,12 +156,12 @@ export default {
 .track-table {
   width: 100%;
   font-size: 13px;
-  line-height: 152%;
+  line-height: 150%;
 }
 .track-card-text {
   color: lightgray;
-  padding-top: 8px;
-  padding-bottom: 8px;
+  padding-top: 7px;
+  padding-bottom: 7px;
   padding-right: 10px;
 }
 .track-row:hover {
