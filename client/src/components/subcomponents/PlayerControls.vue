@@ -63,7 +63,6 @@ function debounce(func, timeout = 2000){
 function fireNextWork(){
   if (allowNext) {
     allowNext = false;
-    console.log('NEXT');
     eventBus.$emit('fireNextWork');
   }
 }
@@ -152,7 +151,6 @@ export default {
         setTimeout(this.startTimer, this.delay);
     },
     nextWork(){
-        console.log("next");
         debouncedNext();
     },
     nextWorkNoDebounce(){
@@ -201,7 +199,6 @@ export default {
     // })
 
     eventBus.$on('firePlayerStateChanged', (track_data, position, duration, paused) => {
-      console.log(position, paused);
       if (position == 0 && !paused){ //ignore at beginning of song (glitchy)
           this.playing = true;
           this.suspend = true;

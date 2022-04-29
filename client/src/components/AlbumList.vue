@@ -137,13 +137,11 @@ export default {
     eventBus.$on('fireAlbums', this.getAlbums);
     eventBus.$on('fireAlbumFilter', this.getFilteredAlbums);
     eventBus.$on('fireArtistAlbums', this.getFilteredAlbums);
-    // eventBus.$on('fireAlbumView', this.setAlbumView);
   },
   beforeDestroy() {
     eventBus.$off('fireAlbums', this.getAlbums);
     eventBus.$off('fireAlbumFilter', this.getFilteredAlbums);
     eventBus.$off('fireArtistAlbums', this.getFilteredAlbums);
-    // eventBus.$off('fireAlbumView', this.setAlbumView);
   }
 };
 </script>

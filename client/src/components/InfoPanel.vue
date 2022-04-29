@@ -2,13 +2,13 @@
   <div class="container-fluid">
     <b-row class="footer-row">
       <b-col class="info-col">
-        <ComposerInfo/>
+        <ComposerInfo />
       </b-col>
       <b-col class="info-col">
-        <WorkInfo/>
+        <WorkInfo />
       </b-col>
       <b-col class="info-col last-col">
-        <AlbumInfoPanel/>
+        <AlbumInfoPanel />
       </b-col>
     </b-row>
   </div>
@@ -29,7 +29,6 @@ export default {
 </script>
 
 <style scoped>
-
 .container-fluid {
   background-color: #f1f2f4;
   padding-bottom: 0px;
@@ -46,8 +45,4 @@ export default {
 .last-col{
   padding-right: 5px;
 }
-
-
-
-
 </style>

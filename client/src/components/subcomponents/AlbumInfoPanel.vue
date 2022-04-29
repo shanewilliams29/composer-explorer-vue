@@ -153,7 +153,6 @@ export default {
       this.results.push([artistList[i]['name'], "", artistList[i]['images'][1]['url'], 0])
     }
     this.loading = false;
-    console.log(this.results);
   }
 },
   created() {

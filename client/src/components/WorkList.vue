@@ -3,66 +3,40 @@
     <div class="spinner" v-show="loading" role="status">
       <b-spinner class="m-5"></b-spinner>
     </div>
-      <div class="row">
-          <span v-show="!loading && works.length < 1 && !artistMode && !radioMode" class="col no-works-found">
-            <div class="m-4">No works found for {{ composer }}.</div>
-          </span>
-          <span v-show="!loading && works.length < 1 && artistMode && !radioMode" class="col no-works-found">
-            <div class="m-4">Select a composer to see works performed by {{ artist }}.</div>
-          </span>
-          <span v-show="!loading && works.length < 1 && !artistMode && radioMode" class="col no-works-found">
-            <div class="m-4">Select from the options above to create your own customized radio.</div>
-          </span>
-        <b-card-group deck v-show="!loading && works">
-          <b-card
-            v-for="(genre, index) in works"
-            :key="index"
-            no-body
-            header-tag="header"
-            class="shadow-sm"
-          >
-            <div class="#header" v-b-toggle="index.replace(/\s/g, '')">
-              <h6 class="m-2 mb-0">{{ index }}<span class="mb-0 float-right when-opened"><b-icon-chevron-up></b-icon-chevron-up></span><span class="mb-0 float-right when-closed"><b-icon-chevron-down></b-icon-chevron-down></span></h6>
-            </div>
-            <b-collapse :visible="visibility" :id="index.replace(/\s/g, '')">
+    <div class="row">
+      <span v-show="!loading && works.length < 1 && !artistMode && !radioMode" class="col no-works-found">
+        <div class="m-4">No works found for {{ composer }}.</div>
+      </span>
+      <span v-show="!loading && works.length < 1 && artistMode && !radioMode" class="col no-works-found">
+        <div class="m-4">Select a composer to see works performed by {{ artist }}.</div>
+      </span>
+      <span v-show="!loading && works.length < 1 && !artistMode && radioMode" class="col no-works-found">
+        <div class="m-4">Select from the options above to create your own customized radio.</div>
+      </span>
+      <b-card-group deck v-show="!loading && works">
+        <b-card v-for="(genre, index) in works" :key="index" no-body header-tag="header" class="shadow-sm">
+          <div class="#header" v-b-toggle="index.replace(/\s/g, '')">
+            <h6 class="m-2 mb-0">
+              {{ index }}<span class="mb-0 float-right when-opened"><b-icon-chevron-up></b-icon-chevron-up></span><span class="mb-0 float-right when-closed"><b-icon-chevron-down></b-icon-chevron-down></span>
+            </h6>
+          </div>
+          <b-collapse :visible="visibility" :id="index.replace(/\s/g, '')">
             <b-card-text>
               <table cellspacing="0">
-                <tr
-                  v-for="work in genre"
-                  :key="work.id"
-                  @click="selectRow(work.id); getAlbums(work.id, work.title);"
-                  :class="{'highlight': (work.id == selectedWork)}"
-                >
+                <tr v-for="work in genre" :key="work.id" @click="selectRow(work.id); getAlbums(work.id, work.title);" :class="{'highlight': (work.id == selectedWork)}">
                   <td width="17%">
-                    <span style="white-space: nowrap; color: darkred"
-                      ><span v-if="work.cat">{{ work.cat }}&nbsp;&nbsp;</span
-                      ><span v-else>{{ work.date }}</span
-                      ></span
-                    >
+                    <span style="white-space: nowrap; color: darkred;"><span v-if="work.cat">{{ work.cat }}&nbsp;&nbsp;</span><span v-else>{{ work.date }}</span></span>
                   </td>
-                  <td
-                    width="78%"
-                    style="
-                      white-space: nowrap;
-                      text-overflow: ellipsis;
-                      overflow: hidden;
-                      max-width: 1px;
-                    "
-                  >
-                    {{ work.title
-                    }}<span v-if="work.nickname" style="color: gray">
-                      · {{ work.nickname }}</span
-                    >
-                  </td>
-                  <td width="5%" style="text-align: right">
+                  <td width="78%" style="white-space: nowrap; text-overflow: ellipsis; overflow: hidden; max-width: 1px;">{{ work.title }}<span v-if="work.nickname" style="color: gray;"> · {{ work.nickname }}</span></td>
+                  <td width="5%" style="text-align: right;">
                     <b-badge>{{ work.album_count }}</b-badge>
                   </td>
                 </tr>
               </table>
             </b-card-text>
           </b-collapse>
-          </b-card>
-        </b-card-group>
+        </b-card>
+      </b-card-group>
     </div>
   </div>
 </template>
@@ -70,7 +44,6 @@
 <script>
 import axios from 'axios';
 import {eventBus} from "../main.js";
-
 export default {
   data() {
     return {
@@ -90,36 +63,33 @@ export default {
       this.loading = true;
       this.composer = composer;
       const path = 'api/works/' + composer;
-      axios.get(path)
-        .then((res) => {
-          this.works = res.data.works;
-          this.playlist = res.data.playlist;
-          this.visibility=true
-          this.composer = composer;
-          this.loading = false;
-          eventBus.$emit('fireWorksLoaded'); // need this?
-        })
-        .catch((error) => {
-          // eslint-disable-next-line
-          console.error(error);
-          this.loading = false;
-        });
+      axios.get(path).then((res) => {
+        this.works = res.data.works;
+        this.playlist = res.data.playlist;
+        this.visibility = true
+        this.composer = composer;
+        this.loading = false;
+        eventBus.$emit('fireWorksLoaded'); // for mobile
+      }).catch((error) => {
+        console.error(error);
+        this.loading = false;
+      });
     },
     getGenreWorks(genres, filter, search) {
-      if (genres.length < 1){
+      if (genres.length < 1) {
         this.works = [];
-      }
-      else{
-      const payload = {genres: genres, filter: filter, search: search};
-      const path = 'api/worksbygenre';
-      axios.post(path, payload)
-        .then((res) => {
+      } else {
+        const payload = {
+          genres: genres,
+          filter: filter,
+          search: search
+        };
+        const path = 'api/worksbygenre';
+        axios.post(path, payload).then((res) => {
           this.works = res.data.works;
-          this.visibility=true;
-        })
-        .catch((error) => {
-          // eslint-disable-next-line
-          console.log(error);
+          this.visibility = true;
+        }).catch((error) => {
+          console.error(error);
         });
       }
     },
@@ -129,109 +99,98 @@ export default {
       this.artistMode = true;
       this.composer = composer;
       const path = 'api/artistworks?artist=' + artist + '&composer=' + composer;
-      axios.get(path)
-        .then((res) => {
-          this.works = res.data.works;
-          this.visibility=true
-          this.composer = composer;
-          this.loading = false;
-          // eventBus.$emit('fireArtistWorksLoaded');
-        })
-        .catch((error) => {
-          // eslint-disable-next-line
-          console.error(error);
-          this.loading = false;
-        });
+      axios.get(path).then((res) => {
+        this.works = res.data.works;
+        this.visibility = true
+        this.composer = composer;
+        this.loading = false;
+      }).catch((error) => {
+        console.error(error);
+        this.loading = false;
+      });
     },
-      getAlbums(workId, title) {
-        if(!this.artistMode){
-          eventBus.$emit('fireAlbums', workId, title);
-          this.$config.work = workId;
-          this.$config.workTitle = title;
-          localStorage.setItem('config', JSON.stringify(this.$config));
-        } else {
-          eventBus.$emit('fireArtistAlbums', workId, this.artist);
-        }
+    getAlbums(workId, title) {
+      if (!this.artistMode) {
+        eventBus.$emit('fireAlbums', workId, title);
+        this.$config.work = workId;
+        this.$config.workTitle = title;
+        localStorage.setItem('config', JSON.stringify(this.$config));
+      } else {
+        eventBus.$emit('fireArtistAlbums', workId, this.artist);
+      }
     },
-      selectRow(work){
-        this.selectedWork = work;
+    selectRow(work) {
+      this.selectedWork = work;
     },
     getFilteredWorks(item) {
       this.loading = true;
       if (item == "all") {
-        this.visibility=false;
+        this.visibility = false;
       } else {
-        this.visibility=true;
+        this.visibility = true;
       }
       const path = 'api/works/' + this.composer + '?filter=' + item;
-      axios.get(path)
-        .then((res) => {
-          this.works = res.data.works;
-          this.playlist = res.data.playlist;
-          this.loading=false;
-        })
-        .catch((error) => {
-          // eslint-disable-next-line
-          console.error(error);
-          this.loading=false;
-        });
+      axios.get(path).then((res) => {
+        this.works = res.data.works;
+        this.playlist = res.data.playlist;
+        this.loading = false;
+      }).catch((error) => {
+        console.error(error);
+        this.loading = false;
+      });
     },
     getSearchWorks(item) {
       const path = 'api/works/' + this.composer + '?search=' + item;
-      axios.get(path)
-        .then((res) => {
-          this.works = res.data.works;
-          this.playlist = res.data.playlist;
-          this.visibility=true;
-          this.loading=false;
-        })
-        .catch((error) => {
-          // eslint-disable-next-line
-          console.error(error);
-          this.loading=false;
-        });
+      axios.get(path).then((res) => {
+        this.works = res.data.works;
+        this.playlist = res.data.playlist;
+        this.visibility = true;
+        this.loading = false;
+      }).catch((error) => {
+        console.error(error);
+        this.loading = false;
+      });
     },
     fireComposers(composer) {
-        this.getWorks(composer);
-        this.$config.composer = composer;
-        localStorage.setItem('config', JSON.stringify(this.$config));
+      this.getWorks(composer);
+      this.$config.composer = composer;
+      localStorage.setItem('config', JSON.stringify(this.$config));
     },
-    fireClearWorks(artist){
+    fireClearWorks(artist) {
       this.artistMode = true;
       this.artist = artist;
       this.getSearchWorks('ggesagoseofsa'); // get no results
     },
-    nextWork(){
-      if(this.shuffle){
+    nextWork() {
+      if (this.shuffle) {
         this.$config.previousWork = this.$config.work;
         this.$config.previousWorkTitle = this.$config.workTitle;
-        console.log("SHUFFLE");
-          this.playRandomWork();
+        this.playRandomWork();
       } else {
-      for (var i = 0; i < this.playlist.length; i++) {
-        if (this.playlist[i]['id'] == this.selectedWork && i !== this.playlist.length - 1) {
-          this.selectRow(this.playlist[i + 1]['id']);
-          this.getAlbums(this.playlist[i + 1]['id'], this.playlist[i + 1]['title']);
-          break;
+        for (var i = 0; i < this.playlist.length; i++) {
+          if (this.playlist[i]['id'] == this.selectedWork && i !== this.playlist.length - 1) {
+            this.selectRow(this.playlist[i + 1]['id']);
+            this.getAlbums(this.playlist[i + 1]['id'], this.playlist[i + 1]['title']);
+            break;
+          }
         }
       }
-    }
     },
-      previousWork(){
-      if(this.shuffle){
-          this.selectRow(this.$config.previousWork); //allows you to jump one back
-          this.getAlbums(this.$config.previousWork, this.$config.previousWorkTitle)
+    previousWork() {
+      if (this.shuffle) {
+        this.selectRow(this.$config.previousWork); //allows you to jump one back
+        this.getAlbums(this.$config.previousWork, this.$config.previousWorkTitle)
       } else {
-      for (var i = 0; i < this.playlist.length; i++) {
-        if (this.playlist[i]['id'] == this.selectedWork && i !== 0) {
-          this.selectRow(this.playlist[i - 1]['id']);
-          this.getAlbums(this.playlist[i - 1]['id'], this.playlist[i - 1]['title']);
-          break;
+        for (var i = 0; i < this.playlist.length; i++) {
+          if (this.playlist[i]['id'] == this.selectedWork && i !== 0) {
+            this.selectRow(this.playlist[i - 1]['id']);
+            this.getAlbums(this.playlist[i - 1]['id'], this.playlist[i - 1]['title']);
+            break;
+          }
         }
       }
-    }
     },
-    playRandomWork(){
+    playRandomWork() {
       function randomIntFromInterval(min, max) { // min and max included
         return Math.floor(Math.random() * (max - min + 1) + min)
       }
@@ -239,12 +198,12 @@ export default {
       this.selectRow(this.playlist[rndInt]['id']);
       this.getAlbums(this.playlist[rndInt]['id'], this.playlist[rndInt]['title']);
     },
-    toggleShuffle(shuffleState){
+    toggleShuffle(shuffleState) {
       this.shuffle = shuffleState;
+    },
   },
-},
   created() {
-    if (window.location.href.indexOf("radio") != -1){ // dont get works in radio mode
+    if (window.location.href.indexOf("radio") != -1) { // dont get works in radio mode
       this.radioMode = true;
     } else {
       this.getWorks(this.$config.composer);

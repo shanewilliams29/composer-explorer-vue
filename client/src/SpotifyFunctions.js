@@ -3,10 +3,9 @@ import {eventBus} from "./main.js";
 import {startTracks} from "./main.js";
 
 var spotify = {
-
-getSpotifyAlbum(token, album) {
-  const path = 'https://api.spotify.com/v1/albums/' + album;
-  axios({
+  getSpotifyAlbum(token, album) {
+    const path = 'https://api.spotify.com/v1/albums/' + album;
+    axios({
       method: 'get',
       url: path,
       headers: {
@@ -14,18 +13,15 @@ getSpotifyAlbum(token, album) {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer ' + token
       }
-    })
-    .then((res) => {
+    }).then((res) => {
       eventBus.$emit('fireSpotifyAlbumData', res.data);
-    })
-    .catch((error) => {
+    }).catch((error) => {
       console.error(error);
     });
-},
-
-getSpotifyArtists(token, artistIdString) {
-  const path = 'https://api.spotify.com/v1/artists?ids=' + artistIdString;
-  axios({
+  },
+  getSpotifyArtists(token, artistIdString) {
+    const path = 'https://api.spotify.com/v1/artists?ids=' + artistIdString;
+    axios({
       method: 'get',
       url: path,
       headers: {
@@ -33,53 +29,45 @@ getSpotifyArtists(token, artistIdString) {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer ' + token
       }
-    })
-    .then((res) => {
-      console.log(res);
+    }).then((res) => {
       eventBus.$emit('fireSpotifyArtistList', res.data.artists);
-    })
-    .catch((error) => {
+    }).catch((error) => {
       console.error(error);
     });
-},
-
-pressPlay(token, device_id) {
-  const path = 'https://api.spotify.com/v1/me/player/play';
-  axios({
+  },
+  pressPlay(token, device_id) {
+    const path = 'https://api.spotify.com/v1/me/player/play';
+    axios({
       method: 'put',
       url: path,
       params: {
-        'device_id' : device_id
+        'device_id': device_id
       },
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
         'Authorization': 'Bearer ' + token
       }
-    })
-    .then((res) => {
+    }).then((res) => {
       if (res.status == 204) {
         eventBus.$emit('fireNowPlaying');
       } else {
         eventBus.$emit('fireNowPaused');
       }
-    })
     // eslint-disable-next-line
-    .catch((error) => {
+    }).catch((error) => {
       // fails on first play of new startup, play from localstorage
       let uriList = {}
       let jsonList = {}
-
       let tracks = startTracks;
       uriList['uris'] = tracks.split(' ');
       jsonList = JSON.stringify(uriList);
       this.playTracks(token, device_id, jsonList);
     });
-},
-
-pauseTrack(token) {
-  const path = 'https://api.spotify.com/v1/me/player/pause';
-  axios({
+  },
+  pauseTrack(token) {
+    const path = 'https://api.spotify.com/v1/me/player/pause';
+    axios({
       method: 'put',
       url: path,
       headers: {
@@ -87,22 +75,19 @@ pauseTrack(token) {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer ' + token
       }
-    })
-    .then((res) => {
+    }).then((res) => {
       if (res.status == 204) {
         eventBus.$emit('fireNowPaused');
       } else {
         eventBus.$emit('fireNowPlaying');
       }
-    })
-    .catch((error) => {
+    }).catch((error) => {
       console.error(error);
     });
-},
-
-beginningTrack(token) {
-  const path = 'https://api.spotify.com/v1/me/player/seek?position_ms=0';
-  axios({
+  },
+  beginningTrack(token) {
+    const path = 'https://api.spotify.com/v1/me/player/seek?position_ms=0';
+    axios({
       method: 'put',
       url: path,
       headers: {
@@ -110,51 +95,23 @@ beginningTrack(token) {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer ' + token
       }
-    })
-    .then((res) => {
+    }).then((res) => {
       if (res.status == 204) {
         this.pressPlay(token, window.device_id);
       } else {
         eventBus.$emit('fireNowPaused');
       }
-    })
-    .catch(function (error) {
-    if (error.response.status == 401) {
-      eventBus.$emit('notLoggedIn');
-    } else {
-      console.error(error);
-    }
-  });
-},
-
-// previousTrack(token) {
-//   const path = 'https://api.spotify.com/v1/me/player/previous';
-//   axios({
-//       method: 'post',
-//       url: path,
-//       headers: {
-//         'Accept': 'application/json',
-//         'Content-Type': 'application/json',
-//         'Authorization': 'Bearer ' + token
-//       }
-//     })
-//     .then((res) => {
-//       if (res.status == 204) {
-//         this.pressPlay(token, window.device_id);
-//         //eventBus.$emit('fireNowPlaying');
-//         //this.getCurrentPlayerInfo(token);
-//       } else {
-//         eventBus.$emit('fireNowPaused');
-//       }
-//     })
-//     .catch((error) => {
-//       console.error(error);
-//     });
-// },
-
-nextTrack(token) {
-  const path = 'https://api.spotify.com/v1/me/player/next';
-  axios({
+    }).catch(function(error) {
+      if (error.response.status == 401) {
+        eventBus.$emit('notLoggedIn');
+      } else {
+        console.error(error);
+      }
+    });
+  },
+  nextTrack(token) {
+    const path = 'https://api.spotify.com/v1/me/player/next';
+    axios({
       method: 'post',
       url: path,
       headers: {
@@ -162,60 +119,51 @@ nextTrack(token) {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer ' + token
       }
-    })
-    .then((res) => {
+    }).then((res) => {
       if (res.status == 204) {
         this.pressPlay(token, window.device_id);
-        //eventBus.$emit('fireNowPlaying');
-        //this.getCurrentPlayerInfo(token);
       } else {
         eventBus.$emit('fireNowPaused');
       }
-    })
-    .catch(function (error) {
-    if (error.response.status == 401) {
-      eventBus.$emit('notLoggedIn');
-    } else {
-      console.error(error);
-    }
-  });
-},
-
-playTracks(token, device_id, tracks) {
-  const path = 'https://api.spotify.com/v1/me/player/play';
-  axios({
+    }).catch(function(error) {
+      if (error.response.status == 401) {
+        eventBus.$emit('notLoggedIn');
+      } else {
+        console.error(error);
+      }
+    });
+  },
+  playTracks(token, device_id, tracks) {
+    const path = 'https://api.spotify.com/v1/me/player/play';
+    axios({
       method: 'put',
       url: path,
       data: tracks,
       params: {
-        'device_id' : device_id
+        'device_id': device_id
       },
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
         'Authorization': 'Bearer ' + token
       }
-    })
-    .then((res) => {
+    }).then((res) => {
       if (res.status == 204) {
         eventBus.$emit('fireNowPlaying');
-        //this.getCurrentPlayerInfo(token);
       } else {
         eventBus.$emit('fireNowPaused');
       }
-    })
-    .catch(function (error) {
-    if (error.response.status == 401) {
-      eventBus.$emit('notLoggedIn');
-    } else {
-      console.error(error);
-    }
-  });
-},
-
-getCurrentPlayerInfo(token) {
-  const path = 'https://api.spotify.com/v1/me/player';
-  axios({
+    }).catch(function(error) {
+      if (error.response.status == 401) {
+        eventBus.$emit('notLoggedIn');
+      } else {
+        console.error(error);
+      }
+    });
+  },
+  getCurrentPlayerInfo(token) {
+    const path = 'https://api.spotify.com/v1/me/player';
+    axios({
       method: 'get',
       url: path,
       headers: {
@@ -223,21 +171,19 @@ getCurrentPlayerInfo(token) {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer ' + token
       }
-    })
-    .then((res) => {
+    }).then((res) => {
       if (res.status == 200) {
         eventBus.$emit('fireCurrentPlayerInfo', res.data);
       } else {
         eventBus.$emit('fireNowPaused');
       }
-    })
-    .catch((error) => {
+    }).catch((error) => {
       console.error(error);
     });
-},
-seekToPosition(token, position) {
-  const path = 'https://api.spotify.com/v1/me/player/seek?position_ms=' + position;
-  axios({
+  },
+  seekToPosition(token, position) {
+    const path = 'https://api.spotify.com/v1/me/player/seek?position_ms=' + position;
+    axios({
       method: 'put',
       url: path,
       headers: {
@@ -245,18 +191,16 @@ seekToPosition(token, position) {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer ' + token
       }
-    })
-    .then((res) => {
+    }).then((res) => {
       if (res.status == 204) {
         eventBus.$emit('fireSeekToPosition');
       } else {
         this.getCurrentPlayerInfo(token);
       }
-    })
-    .catch((error) => {
+    }).catch((error) => {
       console.error(error);
     });
-},
+  },
 }
 
 export default spotify
