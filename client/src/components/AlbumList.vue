@@ -127,17 +127,18 @@ export default {
     infiniteHandler($state) {
       if(this.$view.mode){
         $state.complete();
-      }
+      } else {
       const path = 'api/albums/' + this.workId + '?artist=' + this.artistName + '&sort=' + this.sort + '&page=' + this.page;
-      axios.get(path).then(({data}) => {
-        if (data.albums.length) {
-          this.page += 1;
-          this.albums.push(...data.albums);
-          $state.loaded();
-        } else {
-          $state.complete();
-        }
-      });
+        axios.get(path).then(({data}) => {
+          if (data.albums.length) {
+            this.page += 1;
+            this.albums.push(...data.albums);
+            $state.loaded();
+          } else {
+            $state.complete();
+          }
+        });
+      }
     },
     changeAlbums() {
       this.artistName = '';
