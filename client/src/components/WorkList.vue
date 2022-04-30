@@ -68,7 +68,7 @@ export default {
         this.playlist = res.data.playlist;
         this.visibility = true
         this.loading = false;
-        eventBus.$emit('fireWorksLoaded'); // for mobile
+        //eventBus.$emit('fireWorksLoaded'); // for mobile
       }).catch((error) => {
         console.error(error);
         this.loading = false;
@@ -99,6 +99,7 @@ export default {
       const path = 'api/artistworks?artist=' + artist + '&composer=' + composer;
       axios.get(path).then((res) => {
         this.works = res.data.works;
+        this.playlist = res.data.playlist;
         this.visibility = true
         this.loading = false;
       }).catch((error) => {

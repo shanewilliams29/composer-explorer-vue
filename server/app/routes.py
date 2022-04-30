@@ -393,7 +393,7 @@ def get_worksbygenre():
 
     # return response
     works_by_genre = prepare_works(works_list)
-
+    # need playlist
     response_object = {'status': 'success'}
     response_object['works'] = works_by_genre
     response = jsonify(response_object)
@@ -589,6 +589,7 @@ def get_artistworks():
 
     response_object = {'status': 'success'}
     response_object['works'] = works_by_genre
+    response_object['playlist'] = works_list  # for back and previous playing
     response = jsonify(response_object)
     return response
 
