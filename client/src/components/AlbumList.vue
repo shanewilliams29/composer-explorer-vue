@@ -47,20 +47,29 @@ export default {
     };
   },
   methods: {
-    // loads from selected work
-    // getAlbums(id) {
-    //   this.changeAlbums()
-    //   this.workId = id;
-    //   this.loading = true;
-    //   const path = 'api/albums/' + id;
-    //   axios.get(path).then((res) => {
-    //     this.albums = res.data.albums;
-    //     this.loading = false;
-    //   }).catch((error) => {
-    //     console.error(error);
-    //     this.loading = false;
-    //   });
-    // },
+    getAlbums(id, artist, sort) {
+      this.changeAlbums();
+      this.workId = id;
+      if(artist){
+        this.artistName = artist;
+      } else {
+        artist = '';
+      }
+      if(sort){
+        this.sort = sort
+      } else {
+        sort = '';
+      }
+      this.loading = true;
+      const path = 'api/albums/' + id + '?artist=' + artist + '&sort=' + sort;
+      axios.get(path).then((res) => {
+        this.albums = res.data.albums;
+        this.loading = false;
+      }).catch((error) => {
+        console.error(error);
+        this.loading = false;
+      });
+    },
     // gets albums and begins playback of first (for next and previous buttons)
     getAlbumsAndPlay(id, artist, sort) {
       this.changeAlbums()
@@ -116,46 +125,6 @@ export default {
     selectRow(album) {
       this.selectedAlbum = album;
     },
-    getAlbums(id, artist, sort) {
-      this.changeAlbums();
-      this.workId = id;
-      if(artist){
-        this.artistName = artist;
-      } else {
-        artist = '';
-      }
-      if(sort){
-        this.sort = sort
-      } else {
-        sort = '';
-      }
-      this.loading = true;
-      const path = 'api/albums/' + id + '?artist=' + artist + '&sort=' + sort;
-      axios.get(path).then((res) => {
-        this.albums = res.data.albums;
-        this.loading = false;
-      }).catch((error) => {
-        console.error(error);
-        this.loading = false;
-      });
-    },
-    // getArtistAlbums(id, artist) {
-    //   this.changeAlbums();
-    //   this.workId = id;
-    //   this.loading = true;
-    //   const path = 'api/albums/' + id + '?artist=' + artist;
-    //   axios.get(path).then((res) => {
-    //     this.albums = res.data.albums;
-    //     this.loading = false;
-    //     //this.selectRow(this.albums[0].id); // select first row on work selection
-    //     //this.$config.album = this.albums[0].id;
-    //     //localStorage.setItem('config', JSON.stringify(this.$config));
-    //     //eventBus.$emit('fireAlbumData', this.albums[0].id);
-    //   }).catch((error) => {
-    //     console.error(error);
-    //     this.loading = false;
-    //   });
-    // },
     clearAlbums() {
       this.albums = [];
     },

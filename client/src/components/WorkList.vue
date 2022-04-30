@@ -124,9 +124,9 @@ export default {
       localStorage.setItem('config', JSON.stringify(this.$config));
 
       if (this.$view.mode != 'performer') {
-        eventBus.$emit('fireAlbumsAndPlay', workId, title);
+        eventBus.$emit('fireAlbumsAndPlay', workId);
       } else {
-        eventBus.$emit('fireArtistAlbums', workId, this.$config.artist);
+        eventBus.$emit('fireAlbumsAndPlay', workId, this.$config.artist);
       }
     },
     selectRow(work) {
