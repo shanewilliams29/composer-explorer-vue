@@ -111,6 +111,7 @@ export default {
   },
 
   getArtistComposers(artist){
+      eventBus.$emit('fireArtistComposers', artist);
       this.$config.artist = artist;
       this.$router.push('/performers?artist=' + artist);
   },

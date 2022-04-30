@@ -71,6 +71,9 @@ export default {
     resetAlbumSort(){
       this.albumSortField = { value: 'recommended', text: 'Recommended sorting' };
     },
+    setArtistField(artist){
+      this.query = artist;
+    },
     albumSize() {
       if (this.albumSizeField.value == "large") {
         this.$config.albumSize = 'large';
@@ -82,14 +85,19 @@ export default {
     },
   },
   created() {
+    this.$config.artist = null;
     this.getArtistList();
     if (this.$route.query.artist){
+      this.artistSearch(this.$route.query.artist);
       this.query = this.$route.query.artist;
+      this.$config.artist = this.$route.query.artist;
     }
     eventBus.$on('fireArtistAlbums', this.resetAlbumSort);
+    eventBus.$on('fireArtistComposers', this.setArtistField);
   },
   beforeDestroy(){
     eventBus.$off('fireArtistAlbums', this.resetAlbumSort);
+    eventBus.$off('fireArtistComposers', this.setArtistField);
   },
 };
 </script>

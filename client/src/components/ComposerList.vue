@@ -113,6 +113,7 @@ export default {
         .then((res) => {
           this.composers = res.data.composers;
           this.loading=false;
+          this.$router.replace({'query': null});
         })
         .catch((error) => {
           // eslint-disable-next-line

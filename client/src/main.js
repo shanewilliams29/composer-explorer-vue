@@ -53,7 +53,7 @@ const defaultConfig = {
   trackNo: 0,
   album: "BEETHOVEN000056eOuqhCfrTPp1H0YbQ9PmL",
   albumSize: 'large',
-  artist:''
+  artist:null
 };
 if (localStorage.getItem("config") !== null) {
   config = JSON.parse(localStorage.getItem('config'));
