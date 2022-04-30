@@ -56,6 +56,20 @@ export default {
       axios.get(path).then((res) => {
         this.albums = res.data.albums;
         this.loading = false;
+      }).catch((error) => {
+        console.error(error);
+        this.loading = false;
+      });
+    },
+    // gets albums and begins playback of first (for next and previous buttons)
+    getAlbumsAndPlay(id) {
+      this.changeAlbums()
+      this.workId = id;
+      this.loading = true;
+      const path = 'api/albums/' + id;
+      axios.get(path).then((res) => {
+        this.albums = res.data.albums;
+        this.loading = false;
         this.selectRow(this.albums[0].id); // select first row on work selection
         this.$config.album = this.albums[0].id;
         localStorage.setItem('config', JSON.stringify(this.$config));
@@ -115,10 +129,10 @@ export default {
       axios.get(path).then((res) => {
         this.albums = res.data.albums;
         this.loading = false;
-        this.selectRow(this.albums[0].id); // select first row on work selection
-        this.$config.album = this.albums[0].id;
-        localStorage.setItem('config', JSON.stringify(this.$config));
-        eventBus.$emit('fireAlbumData', this.albums[0].id);
+        //this.selectRow(this.albums[0].id); // select first row on work selection
+        //this.$config.album = this.albums[0].id;
+        //localStorage.setItem('config', JSON.stringify(this.$config));
+        //eventBus.$emit('fireAlbumData', this.albums[0].id);
       }).catch((error) => {
         console.error(error);
         this.loading = false;
@@ -156,12 +170,14 @@ export default {
       this.initialGetAlbums(this.$config.work);
     }
     eventBus.$on('fireAlbums', this.getAlbums);
+    eventBus.$on('fireAlbumsAndPlay', this.getAlbumsAndPlay);
     eventBus.$on('fireAlbumFilter', this.getFilteredAlbums);
     eventBus.$on('fireArtistAlbums', this.getArtistAlbums);
     eventBus.$on('fireClearAlbums', this.clearAlbums);
   },
   beforeDestroy() {
     eventBus.$off('fireAlbums', this.getAlbums);
+    eventBus.$off('fireAlbumsAndPlay', this.getAlbumsAndPlay);
     eventBus.$off('fireAlbumFilter', this.getFilteredAlbums);
     eventBus.$off('fireArtistAlbums', this.getArtistAlbums);
     eventBus.$off('fireClearAlbums', this.clearAlbums);

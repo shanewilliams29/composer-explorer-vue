@@ -116,7 +116,7 @@ header.card-header {
   border-radius: 7px;
 }
 .highlight .badge {
-  color: #007bff !important;
+  color: #000 !important;
   background-color: #fff;
 }
 </style>
