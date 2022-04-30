@@ -6,9 +6,9 @@
       </b-navbar-brand>
       <div>
         <b-nav pills class="navbar-items">
-          <b-nav-item :active='$route.path == "/"' @click="$router.push('/')"><b-icon-music-note-list></b-icon-music-note-list>&nbsp;Browse</b-nav-item>
-          <b-nav-item :active='$route.name == "performers"' @click="$router.push('/performers')"><b-icon-person-lines-fill></b-icon-person-lines-fill>&nbsp;Performers</b-nav-item>
-          <b-nav-item :active='$route.name == "radio"' @click="$router.push('/radio')"><b-icon-volume-up-fill></b-icon-volume-up-fill>&nbsp;Radio</b-nav-item>
+          <b-nav-item id="home" :active='$route.path == "/"' @click="$router.push('/')"><b-icon-music-note-list></b-icon-music-note-list>&nbsp;Browse</b-nav-item>
+          <b-nav-item id="performer" :active='$route.name == "performers"' @click="$router.push('/performers')"><b-icon-person-lines-fill></b-icon-person-lines-fill>&nbsp;Performers</b-nav-item>
+          <b-nav-item id="radio" :active='$route.name == "radio"' @click="$router.push('/radio')"><b-icon-volume-up-fill></b-icon-volume-up-fill>&nbsp;Radio</b-nav-item>
         </b-nav>
       </div>
       <b-navbar-nav class="ml-auto" v-if="!$auth.clientToken">
@@ -38,6 +38,18 @@ export default {
 </script>
 
 <style scoped>
+#home .active{
+  background-color: var(--blue);
+}
+#performer .active{
+  background-color: var(--purple);
+}
+#radio .active{
+  background-color: var(--green);
+}
+
+
+
 .container-fluid {
   padding: 0px;
 }

@@ -29,6 +29,7 @@ export default {
     if( screen.width <= 760 ) {
         window.location.replace('mobile');
     }
+
   },
   created() {
     window.firstLoad = true; // prevent playback on first load
@@ -54,7 +55,6 @@ export default {
 .extra-margin{
     margin-right: 3.5px;
 }
-
 /*scrollbars*/
  :root {
         --scroll-bar-color: #c9cccf;
@@ -81,4 +81,12 @@ export default {
         border-radius: 20px;
         border: 3px solid var(--scroll-bar-bg-color);
     }
+</style>
+<style scoped>
+>>> .highlight{
+  background-color: var(--blue);
+}
+>>> .highlight td{
+  background-color: var(--blue);
+}
 </style>

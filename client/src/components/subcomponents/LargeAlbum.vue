@@ -44,7 +44,6 @@ export default {
   cursor: pointer;
 }
 .highlight {
-  background-color: #007bff !important;
   color: white;
 }
 .highlight span {

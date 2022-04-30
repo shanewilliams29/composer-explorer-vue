@@ -38,3 +38,11 @@ export default {
     overflow-x: hidden;
   }
 </style>
+<style scoped>
+>>> .highlight{
+  background-color: var(--green);
+}
+>>> .highlight td{
+  background-color: var(--green);
+}
+</style>

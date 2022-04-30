@@ -245,7 +245,6 @@ table {
 }
 .highlight td {
   border-top: 0px solid lightgray;
-  background-color: #007bff;
   color: white;
 }
 tr:hover {

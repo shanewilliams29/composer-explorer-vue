@@ -283,7 +283,7 @@ table {
 }
 .highlight td {
   border-top: 0px solid lightgray;
-  background-color: #007bff;
+  background-color: var(--highlight-color);
   color: white !important;
 }
 .highlight span {

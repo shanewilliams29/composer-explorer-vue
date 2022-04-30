@@ -31,6 +31,11 @@ export default {
   },
 }
 </script>
-
-<style>
+<style scoped>
+>>> .highlight{
+  background-color: var(--purple);
+}
+>>> .highlight td{
+  background-color: var(--purple);
+}
 </style>
