@@ -124,6 +124,9 @@ export default {
         this.loading = false;
       });
     },
+    clearAlbums() {
+      this.albums = [];
+    },
     infiniteHandler($state) {
       if(this.$view.mode){
         $state.complete();
@@ -155,11 +158,13 @@ export default {
     eventBus.$on('fireAlbums', this.getAlbums);
     eventBus.$on('fireAlbumFilter', this.getFilteredAlbums);
     eventBus.$on('fireArtistAlbums', this.getArtistAlbums);
+    eventBus.$on('fireClearAlbums', this.clearAlbums);
   },
   beforeDestroy() {
     eventBus.$off('fireAlbums', this.getAlbums);
     eventBus.$off('fireAlbumFilter', this.getFilteredAlbums);
     eventBus.$off('fireArtistAlbums', this.getArtistAlbums);
+    eventBus.$off('fireClearAlbums', this.clearAlbums);
   }
 };
 </script>

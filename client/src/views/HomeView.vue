@@ -3,9 +3,9 @@
     <ColumnHeadings/>
     <div class="container-fluid">
       <b-row>
-        <b-col class="display-height first-col"><ComposerList/></b-col>
-        <b-col class="display-height"><WorkList/></b-col>
-        <b-col class="display-height last-col extra-margin"><AlbumList/></b-col>
+        <b-col class="display-list first-col"><ComposerList/></b-col>
+        <b-col class="display-list"><WorkList/></b-col>
+        <b-col class="display-list last-col extra-margin"><AlbumList/></b-col>
       </b-row>
     </div>
   </div>
@@ -38,16 +38,17 @@ export default {
 </script>
 
 <style>
-.display-height{
-    height: calc(100vh - 66px - 78px - 100px - var(--panelheight));
+.display-list{
+    height: calc(100vh - 244px - var(--panelheight));
     padding-right: 12px;
     padding-bottom: 5px;
     overflow-y: scroll;
+    overflow-x: hidden;
 }
 @media only screen and (min-width: 1000px) {
     .last-col{
-        -ms-flex: 0 0 380px;
-        flex: 0 0 380px;
+        -ms-flex: 0 0 380px !important;
+        flex: 0 0 380px !important;
     }
 }
 .extra-margin{

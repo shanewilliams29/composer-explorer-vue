@@ -16,7 +16,7 @@
       <span v-show="!loading && works.length < 1 && $view.mode == 'radio'" class="col no-works-found">
         <div class="m-4">Select from the options above to create your own customized radio.</div>
       </span>
-      <b-card-group deck v-show="!loading && works">
+      <b-card-group deck v-if="!loading && works">
         <b-card v-for="(genre, index) in works" :key="index" no-body header-tag="header" class="shadow-sm">
           <div class="#header" v-b-toggle="index.replace(/\s/g, '')">
             <h6 class="m-2 mb-0">
@@ -156,7 +156,7 @@ export default {
     },
     fireClearWorks(artist) {
       this.$config.artist = artist;
-      this.getSearchWorks('ggesagoseofsa'); // get no results
+      this.works = [];
     },
     nextWork() {
       if (this.shuffle) {

@@ -121,10 +121,3 @@ header.card-header {
   background-color: #fff;
 }
 </style>
-
-<!-- <style>
-.last-col{
-  -ms-flex: 0 0 33.3% !important;
-  flex: 0 0 33.3% !important;
-}
-</style> -->

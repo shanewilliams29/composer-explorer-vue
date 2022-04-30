@@ -111,9 +111,11 @@ export default {
   },
 
   getArtistComposers(artist){
-      eventBus.$emit('fireArtistComposers', artist);
-      this.$config.artist = artist;
+    eventBus.$emit('fireArtistComposers', artist);
+    this.$config.artist = artist;
+    if(this.$route.name != 'performers'){
       this.$router.push('/performers?artist=' + artist);
+    }
   },
   setSpotifyAlbum(album){ // spotify album
     this.album = album;

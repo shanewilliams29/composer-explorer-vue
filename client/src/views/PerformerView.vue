@@ -3,9 +3,9 @@
     <PerformersHeadings/>
     <div class="container-fluid">
       <b-row>
-        <b-col class="display-list"><ComposerList/></b-col>
+        <b-col class="display-list first-col"><ComposerList/></b-col>
         <b-col class="display-list"><WorkList/></b-col>
-        <b-col class="display-list"><AlbumList/></b-col>
+        <b-col class="display-list last-col extra-margin"><AlbumList/></b-col>
       </b-row>
     </div>
   </div>
@@ -26,16 +26,11 @@ export default {
     AlbumList,
   },
   created() {
-    window.firstLoad = true; // prevent playback on first load
+    window.firstLoad = false; // allow playback on first load for performer view
     this.$view.mode = 'performer';
   },
 }
 </script>
 
 <style>
-  .display-list{
-    height: calc(100vh - 66px - 78px - 100px - var(--panelheight));
-    overflow-y: scroll;
-    overflow-x: hidden;
-  }
 </style>

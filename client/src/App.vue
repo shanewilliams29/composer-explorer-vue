@@ -66,11 +66,7 @@ body {
   transform: translateX(-50%);
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
-.page-height {
-  height: calc(100vh - 166px - var(--panelheight));
-  overflow-y: scroll;
-  overflow-x: hidden;
-}
+
 .info-panel {
   position: fixed;
   bottom: 100px;
@@ -85,9 +81,5 @@ body {
 .fadeHeight-leave-to {
   opacity: 0;
   max-height: 0px;
-}
-.last-col {
-  -ms-flex: 0 0 330px;
-  flex: 0 0 330px;
 }
 </style>

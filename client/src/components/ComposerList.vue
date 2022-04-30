@@ -108,12 +108,15 @@ export default {
       this.visibility=true;
       this.selectedComposer = null;
       eventBus.$emit('fireClearWorks', artist);
+      eventBus.$emit('fireClearAlbums');
       const path = 'api/artistcomposers/' + artist;
       axios.get(path)
         .then((res) => {
           this.composers = res.data.composers;
           this.loading=false;
-          this.$router.replace({'query': null});
+          if(this.$route.query.artist){
+            this.$router.replace({'query': null}).catch(()=>{});
+          }
         })
         .catch((error) => {
           // eslint-disable-next-line
