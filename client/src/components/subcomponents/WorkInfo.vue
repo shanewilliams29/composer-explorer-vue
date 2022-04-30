@@ -1,40 +1,33 @@
 <template>
-<div>
+  <div>
     <div class="spinner" v-show="loading" role="status">
       <b-spinner class="m-5"></b-spinner>
     </div>
-        <b-card class="composer-info-card shadow-sm" v-show="!loading">
-          <b-card-body class="card-body">
- <b-card-title class="card-title">
-              <table>
-                <tr>
-                  <td>
-
+    <b-card class="composer-info-card shadow-sm" v-show="!loading">
+      <b-card-body class="card-body">
+        <b-card-title class="card-title">
+          <table>
+            <tr>
+              <td>
                 <b-avatar size="60px" :src="workImg"></b-avatar>
-
-                  </td>
-                  <td class="info-td">
-                    {{ workTitle }}<br>
-                    <span v-if="catNo" class="born-died">{{ catNo }}</span><span v-else class="born-died">{{date}}</span>
-                  </td>
-                </tr>
-              </table>
-              </b-card-title>
-            <b-card-text class="info-card-text">
-            {{ workBlurb }}<br>
-            <a :href="wikiLink" target="_blank" class="wiki-link"><br>Read more on Wikipedia</a>
-            </b-card-text>
-          </b-card-body>
-        </b-card>
-</div>
-
-<!--   <div class="composer-heading">
-    <h6><b-avatar size="60px" src="https://storage.googleapis.com/composer-explorer.appspot.com/img/Beethoven.jpg"></b-avatar>&nbsp; Ludwig van Beethoven</h6>
+              </td>
+              <td class="info-td">
+                {{ workTitle }}<br />
+                <span v-if="catNo" class="born-died">{{ catNo }}</span><span v-else class="born-died">{{date}}</span>
+              </td>
+            </tr>
+          </table>
+        </b-card-title>
+        <b-card-text class="info-card-text">
+          {{ workBlurb }}<br />
+          <a :href="wikiLink" target="_blank" class="wiki-link">
+            <br />
+            Read more on Wikipedia
+          </a>
+        </b-card-text>
+      </b-card-body>
+    </b-card>
   </div>
-  <div class="composer-body">
-
-  </div> -->
-
 </template>
 
 <script>
@@ -130,12 +123,19 @@ export default {
 },
   created() {
     this.loading = true;
-    this.getWorkInfo(this.$config.work)
+    this.getWorkInfo(this.$config.work);
     eventBus.$on('fireAlbums', (workId, title) => {
       this.loading = true;
       this.workTitle = title;
       this.getWorkInfo(workId);
     })
+    // eslint-disable-next-line
+    eventBus.$on('fireArtistAlbums', (workId, artist) => {
+      this.loading = true;
+      this.workTitle = this.$config.title;
+      this.getWorkInfo(workId);
+    })
+
     // eslint-disable-next-line
     // eventBus.$on('expandInfoPanel', (composer, workId) => {
     //   this.loading = false;

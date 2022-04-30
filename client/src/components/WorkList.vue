@@ -4,13 +4,16 @@
       <b-spinner class="m-5"></b-spinner>
     </div>
     <div class="row">
-      <span v-show="!loading && works.length < 1 && !artistMode && !radioMode" class="col no-works-found">
-        <div class="m-4">No works found for {{ composer }}.</div>
+      <span v-show="!loading && works.length < 1 && !$view.mode" class="col no-works-found">
+        <div class="m-4">No works found for {{ $config.composer }}.</div>
       </span>
-      <span v-show="!loading && works.length < 1 && artistMode && !radioMode" class="col no-works-found">
-        <div class="m-4">Select a composer to see works performed by {{ artist }}.</div>
+      <span v-show="!loading && works.length < 1 && $view.mode == 'performer' && $config.artist" class="col no-works-found">
+        <div class="m-4">Select a composer to see works performed by {{ $config.artist }}.</div>
       </span>
-      <span v-show="!loading && works.length < 1 && !artistMode && radioMode" class="col no-works-found">
+      <span v-show="!loading && works.length < 1 && $view.mode == 'performer' && !$config.artist" class="col no-works-found">
+        <div class="m-4">Search for a performer to view works they perform.</div>
+      </span>
+      <span v-show="!loading && works.length < 1 && $view.mode == 'radio'" class="col no-works-found">
         <div class="m-4">Select from the options above to create your own customized radio.</div>
       </span>
       <b-card-group deck v-show="!loading && works">
@@ -52,22 +55,18 @@ export default {
       loading: false,
       selectedWork: null,
       visibility: true,
-      artist: "",
-      artistMode: false,
-      radioMode: false,
       shuffle: false
     };
   },
   methods: {
     getWorks(composer) {
       this.loading = true;
-      this.composer = composer;
+      this.$config.composer = composer;
       const path = 'api/works/' + composer;
       axios.get(path).then((res) => {
         this.works = res.data.works;
         this.playlist = res.data.playlist;
         this.visibility = true
-        this.composer = composer;
         this.loading = false;
         eventBus.$emit('fireWorksLoaded'); // for mobile
       }).catch((error) => {
@@ -95,14 +94,12 @@ export default {
     },
     getArtistWorks(artist, composer) {
       this.loading = true;
-      this.artist = artist;
-      this.artistMode = true;
-      this.composer = composer;
+      this.$config.artist = artist;
+      this.$config.composer = composer;
       const path = 'api/artistworks?artist=' + artist + '&composer=' + composer;
       axios.get(path).then((res) => {
         this.works = res.data.works;
         this.visibility = true
-        this.composer = composer;
         this.loading = false;
       }).catch((error) => {
         console.error(error);
@@ -110,13 +107,14 @@ export default {
       });
     },
     getAlbums(workId, title) {
-      if (!this.artistMode) {
+      this.$config.work = workId;
+      this.$config.workTitle = title;
+      localStorage.setItem('config', JSON.stringify(this.$config));
+
+      if (this.$view.mode != 'performer') {
         eventBus.$emit('fireAlbums', workId, title);
-        this.$config.work = workId;
-        this.$config.workTitle = title;
-        localStorage.setItem('config', JSON.stringify(this.$config));
       } else {
-        eventBus.$emit('fireArtistAlbums', workId, this.artist);
+        eventBus.$emit('fireArtistAlbums', workId, this.$config.artist);
       }
     },
     selectRow(work) {
@@ -129,7 +127,7 @@ export default {
       } else {
         this.visibility = true;
       }
-      const path = 'api/works/' + this.composer + '?filter=' + item;
+      const path = 'api/works/' + this.$config.composer + '?filter=' + item;
       axios.get(path).then((res) => {
         this.works = res.data.works;
         this.playlist = res.data.playlist;
@@ -140,7 +138,7 @@ export default {
       });
     },
     getSearchWorks(item) {
-      const path = 'api/works/' + this.composer + '?search=' + item;
+      const path = 'api/works/' + this.$config.composer + '?search=' + item;
       axios.get(path).then((res) => {
         this.works = res.data.works;
         this.playlist = res.data.playlist;
@@ -157,8 +155,7 @@ export default {
       localStorage.setItem('config', JSON.stringify(this.$config));
     },
     fireClearWorks(artist) {
-      this.artistMode = true;
-      this.artist = artist;
+      this.$config.artist = artist;
       this.getSearchWorks('ggesagoseofsa'); // get no results
     },
     nextWork() {
@@ -203,9 +200,7 @@ export default {
     },
   },
   created() {
-    if (window.location.href.indexOf("radio") != -1) { // dont get works in radio mode
-      this.radioMode = true;
-    } else {
+    if (!this.$view.mode) { // dont get works in radio mode or artist mode
       this.getWorks(this.$config.composer);
       this.selectRow(this.$config.work);
     }

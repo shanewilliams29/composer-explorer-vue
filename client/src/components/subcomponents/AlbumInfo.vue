@@ -2,26 +2,15 @@
   <b-card no-body bg-variant="dark" v-show="!loading">
     <b-row no-gutters>
       <b-col cols="12" md="auto" class="album-cover-col">
-        <b-card-img
-          :src="album.album_img"
-          alt="Album Cover"
-          class="rounded-0"
-        ></b-card-img>
+        <b-card-img :src="album.album_img" alt="Album Cover" class="rounded-0"></b-card-img>
       </b-col>
       <b-col>
         <b-card-body class="info-card-body">
           <b-card-text>
             <div class="centered album-data">
               <span>{{composer}}</span>
-              <span style="font-weight: bold">{{title}}</span>
-              <span
-                style="font-style: italic; color: darkgray; font-size: 13px;"
-                >{{album.artists}}</span
-              >
-<!--               <span
-                style="font-style: italic; color: #a4a7a9"
-                >{{album.minor_artists}}</span
-              > -->
+              <span style="font-weight: bold;">{{title}}</span>
+              <span style="font-style: italic; color: darkgray; font-size: 13px;">{{album.artists}}</span>
             </div>
           </b-card-text>
         </b-card-body>
@@ -67,8 +56,11 @@ export default {
         this.getAlbumInfo(album_id);
         this.title = this.hold_title;
     })
-    eventBus.$on('fireAlbums', (work_id, title) => {
-        this.hold_title = title;
+    eventBus.$on('fireAlbums', () => {
+        this.hold_title = this.$config.workTitle;
+    })
+    eventBus.$on('fireArtistAlbums', () => {
+        this.hold_title = this.$config.workTitle;
     })
   },
 };

@@ -4,7 +4,7 @@
       <b-spinner class="m-5"></b-spinner>
     </div>
     <div class="row">
-      <span class="m-4 col no-composers-found" v-show="!loading && composers.length < 1 && !radioMode">No composers found.</span>
+      <span class="m-4 col no-composers-found" v-show="!loading && composers.length < 1 && !$view.mode">No composers found.</span>
       <b-card-group deck v-show="!loading">
         <b-card v-for="(region, index) in composers" :key="index" no-body header-tag="header" class="shadow-sm">
           <div class="#header" v-b-toggle="index.replace(/\s/g, '')">
@@ -51,8 +51,6 @@ export default {
       selectedComposer: null,
       visibility: true,
       artist: "",
-      artistMode: false,
-      radioMode: false
     };
   },
   methods: {
@@ -106,7 +104,6 @@ export default {
     },
     getArtistComposers(artist) {
       this.artist = artist
-      this.artistMode = true;
       this.loading = true;
       this.visibility=true;
       this.selectedComposer = null;
@@ -124,14 +121,14 @@ export default {
         });
     },
     getWorks(composer) {
-      if (!this.artistMode && !this.radioMode){
+      if (!this.$view.mode){
         eventBus.$emit('fireComposers', composer);
-      } else if (!this.radioMode){
+      } else if (this.$view.mode == 'performer'){
         eventBus.$emit('fireArtistWorks', this.artist, composer);
       }
     },
     selectRow(composerId){
-      if (!this.radioMode){
+      if (this.$view.mode != 'radio'){
         this.selectedComposer = composerId;
         this.$config.composerId = composerId;
         localStorage.setItem('config', JSON.stringify(this.$config));
@@ -171,11 +168,12 @@ export default {
     }
   },
   created() {
-    if (window.location.href.indexOf("radio") != -1){ // dont get composers in radio mode
-      this.radioMode = true;
-    } else {
+    if (!this.$view.mode){ // dont get composers in performer or radio modes
       this.getComposers();
       this.selectRow(this.$config.composerId);
+    }
+    if (this.$route.query.artist){
+      this.getArtistComposers(this.$route.query.artist);
     }
 
     eventBus.$on('fireComposerFilter', this.getFilteredComposers);

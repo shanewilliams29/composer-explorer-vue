@@ -1,50 +1,41 @@
 <template>
-<div>
+  <div>
     <div class="spinner" v-show="loading" role="status">
       <b-spinner class="m-5"></b-spinner>
     </div>
-        <b-card class="album-info-card shadow-sm" v-if="!loading">
-          <b-card-body class="card-body">
-   <b-card-title class="card-title">
-              <table>
-                <tr class="heading-tr">
-                  <td class="heading-td">
-                    {{ album.name }}<br>
-                    <span class="born-died"><a :href="album.external_urls.spotify" target="_blank"><img class="spotify-logo" src="@/assets/Spotify_Logo_RGB_Black.png"></a> {{ album.label }} ℗ {{album.release_date.slice(0,4)}}</span>
-                  </td>
-                </tr>
-              </table>
-              </b-card-title>
-<b-card-text class="info-card-text">
-  <div class="disclaimer"><b-badge variant="warning">BETA </b-badge><span class="born-died">&nbsp; Some information may not be correct.</span></div>
-  <div v-for="result in results" :key="result[0]" >
-              <table>
-                <tr>
-                  <td>
-
-                <b-avatar size="40px" :src="result[2]"></b-avatar>
-
-                  </td>
-                  <td class="info-td">
-                    <a clss="artist-name" @click="getArtistComposers(result[0])">{{ result[0] }}</a><br>
+    <b-card class="album-info-card shadow-sm" v-if="!loading">
+      <b-card-body class="card-body">
+        <b-card-title class="card-title">
+          <table>
+            <tr class="heading-tr">
+              <td class="heading-td">
+                {{ album.name }}<br />
+                <span class="born-died">
+                  <a :href="album.external_urls.spotify" target="_blank"><img class="spotify-logo" src="@/assets/Spotify_Logo_RGB_Black.png" /></a> {{ album.label }} ℗ {{album.release_date.slice(0,4)}}
+                </span>
+              </td>
+            </tr>
+          </table>
+        </b-card-title>
+        <b-card-text class="info-card-text">
+          <div class="disclaimer"><b-badge variant="warning">BETA </b-badge><span class="born-died">&nbsp; Some information may not be correct.</span></div>
+          <div v-for="result in results" :key="result[0]">
+            <table>
+              <tr>
+                <td>
+                  <b-avatar size="40px" :src="result[2]"></b-avatar>
+                </td>
+                <td class="info-td">
+                  <a clss="artist-name" @click="getArtistComposers(result[0])">{{ result[0] }}</a><br />
                   <span class="born-died">{{result[1]}}</span>
-                  </td>
-                </tr>
-              </table>
-            </div>
-              </b-card-text>
-
-          </b-card-body>
-        </b-card>
-</div>
-
-<!--   <div class="composer-heading">
-    <h6><b-avatar size="60px" src="https://storage.googleapis.com/composer-explorer.appspot.com/img/Beethoven.jpg"></b-avatar>&nbsp; Ludwig van Beethoven</h6>
+                </td>
+              </tr>
+            </table>
+          </div>
+        </b-card-text>
+      </b-card-body>
+    </b-card>
   </div>
-  <div class="composer-body">
-
-  </div> -->
-
 </template>
 
 <script>
@@ -120,7 +111,8 @@ export default {
   },
 
   getArtistComposers(artist){
-    eventBus.$emit('fireArtistComposers', artist);
+      this.$config.artist = artist;
+      this.$router.push('/performers?artist=' + artist);
   },
   setSpotifyAlbum(album){ // spotify album
     this.album = album;

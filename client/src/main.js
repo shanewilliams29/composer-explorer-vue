@@ -52,7 +52,8 @@ const defaultConfig = {
   previousTracks: "spotify:track:6cUCckpdlqHJ5Ascf2uH2A spotify:track:1L0a0dpHaMWgAoEEvFfycT spotify:track:7ojkji0OYCOpl3UMy92gEf spotify:track:4IHaNEgvWUD63pMTWrclb2",
   trackNo: 0,
   album: "BEETHOVEN000056eOuqhCfrTPp1H0YbQ9PmL",
-  albumSize: 'large'
+  albumSize: 'large',
+  artist:''
 };
 if (localStorage.getItem("config") !== null) {
   config = JSON.parse(localStorage.getItem('config'));
@@ -67,6 +68,8 @@ Vue.prototype.$auth = Vue.observable({
   clientToken: null,
   deviceID: null
 });
+
+Vue.prototype.$view = Vue.observable({mode: null});
 
 new Vue({
   router,

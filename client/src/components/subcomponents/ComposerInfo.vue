@@ -1,42 +1,36 @@
 <template>
-<div>
-    <div class="spinner" v-show="loading" role="status">
-      <b-spinner class="m-5"></b-spinner>
-    </div>
-        <b-card class="composer-info-card shadow-sm" v-show="!loading">
+  <div>
+      <div class="spinner" v-show="loading" role="status">
+          <b-spinner class="m-5"></b-spinner>
+      </div>
+      <b-card class="composer-info-card shadow-sm" v-show="!loading">
           <b-card-body class="card-body">
-            <b-card-title class="card-title">
-              <table>
-                <tr>
-                  <td>
-                    <b-avatar-group size="60px">
-                <b-avatar  :src="composer.region"></b-avatar>
-                <b-avatar  :src="composer.image"></b-avatar>
-              </b-avatar-group>
-                  </td>
-                  <td class = "info-td">
-                    {{ composer.name_full }}<br>
-                    <span class="born-died">{{ composer.born }} - {{ composer.died }}</span>
-                  </td>
-                </tr>
-              </table>
+              <b-card-title class="card-title">
+                  <table>
+                      <tr>
+                          <td>
+                              <b-avatar-group size="60px">
+                                  <b-avatar :src="composer.region"></b-avatar>
+                                  <b-avatar :src="composer.image"></b-avatar>
+                              </b-avatar-group>
+                          </td>
+                          <td class="info-td">
+                              {{ composer.name_full }}<br />
+                              <span class="born-died">{{ composer.born }} - {{ composer.died }}</span>
+                          </td>
+                      </tr>
+                  </table>
               </b-card-title>
-            <b-card-text class="info-card-text">
-            {{ composer.introduction }}<br>
-            <a :href="composer.pageurl" target="_blank" class="wiki-link"><br>Read more on Wikipedia</a>
-            </b-card-text>
+              <b-card-text class="info-card-text">
+                  {{ composer.introduction }}<br />
+                  <a :href="composer.pageurl" target="_blank" class="wiki-link">
+                      <br />
+                      Read more on Wikipedia
+                  </a>
+              </b-card-text>
           </b-card-body>
-        </b-card>
-
-</div>
-
-<!--   <div class="composer-heading">
-    <h6><b-avatar size="60px" src="https://storage.googleapis.com/composer-explorer.appspot.com/img/Beethoven.jpg"></b-avatar>&nbsp; Ludwig van Beethoven</h6>
+      </b-card>
   </div>
-  <div class="composer-body">
-
-  </div> -->
-
 </template>
 
 <script>
@@ -73,10 +67,10 @@ export default {
       this.loading = true;
       this.getComposerInfo(composer);
     })
-    // eventBus.$on('expandInfoPanel', (composer) => {
-    //   this.loading = true;
-    //   this.getComposerInfo(composer);
-    // })
+    eventBus.$on('fireArtistWorks', (artist, composer) => {
+      this.loading = true;
+      this.getComposerInfo(composer);
+    })
   },
 };
 </script>

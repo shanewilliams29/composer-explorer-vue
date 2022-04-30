@@ -4,7 +4,7 @@
       <b-spinner class="m-5"></b-spinner>
     </div>
     <div class="row">
-      <span v-show="!loading && albums.length < 1 && !radioMode" class="m-4 col no-albums-found">
+      <span v-show="!loading && albums.length < 1 && !this.$view.mode" class="m-4 col no-albums-found">
         No albums found.
       </span>
     </div>
@@ -39,7 +39,6 @@ export default {
       albums: [],
       loading: false,
       selectedAlbum: null,
-      radioMode: false,
       page: 2,
       workId: '',
       artistName: '',
@@ -69,7 +68,7 @@ export default {
     },
     // loads from localstorage on initial startup
     initialGetAlbums(id) {
-      this.changeAlbums()
+      this.changeAlbums();
       this.workId = id;
       this.loading = true;
       const path = 'api/albums/' + id;
@@ -94,7 +93,7 @@ export default {
       this.selectedAlbum = album;
     },
     getFilteredAlbums(id, item, sort) {
-      this.changeAlbums()
+      this.changeAlbums();
       this.workId = id;
       this.artistName = item;
       this.sort = sort;
@@ -108,7 +107,27 @@ export default {
         this.loading = false;
       });
     },
+    getArtistAlbums(id, artist) {
+      this.changeAlbums();
+      this.workId = id;
+      this.loading = true;
+      const path = 'api/albums/' + id + '?artist=' + artist;
+      axios.get(path).then((res) => {
+        this.albums = res.data.albums;
+        this.loading = false;
+        this.selectRow(this.albums[0].id); // select first row on work selection
+        this.$config.album = this.albums[0].id;
+        localStorage.setItem('config', JSON.stringify(this.$config));
+        eventBus.$emit('fireAlbumData', this.albums[0].id);
+      }).catch((error) => {
+        console.error(error);
+        this.loading = false;
+      });
+    },
     infiniteHandler($state) {
+      if(this.$view.mode){
+        $state.complete();
+      }
       const path = 'api/albums/' + this.workId + '?artist=' + this.artistName + '&sort=' + this.sort + '&page=' + this.page;
       axios.get(path).then(({data}) => {
         if (data.albums.length) {
@@ -129,19 +148,17 @@ export default {
     },
   },
   created() {
-    if (window.location.href.indexOf("radio") != -1) { // dont get works in radio mode
-      this.radioMode = true;
-    } else {
+    if (!this.$view.mode) { // dont get albums in radio or performer mode
       this.initialGetAlbums(this.$config.work);
     }
     eventBus.$on('fireAlbums', this.getAlbums);
     eventBus.$on('fireAlbumFilter', this.getFilteredAlbums);
-    eventBus.$on('fireArtistAlbums', this.getFilteredAlbums);
+    eventBus.$on('fireArtistAlbums', this.getArtistAlbums);
   },
   beforeDestroy() {
     eventBus.$off('fireAlbums', this.getAlbums);
     eventBus.$off('fireAlbumFilter', this.getFilteredAlbums);
-    eventBus.$off('fireArtistAlbums', this.getFilteredAlbums);
+    eventBus.$off('fireArtistAlbums', this.getArtistAlbums);
   }
 };
 </script>

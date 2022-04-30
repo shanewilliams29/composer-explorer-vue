@@ -32,6 +32,7 @@ export default {
   },
   created() {
     window.firstLoad = true; // prevent playback on first load
+    this.$view.mode = null;
   },
 }
 </script>

@@ -243,7 +243,6 @@ input{
   --vs-border-width: 1px;
   --vs-selected-bg: #3b4047;
   --vs-selected-color: #fff;
-  --vs-line-height: 1;
   --vs-search-input-color: #fff;
 }
 .performer-search{

@@ -25,6 +25,9 @@ export default {
     WorkList,
     AlbumList,
   },
+  created(){
+    this.$view.mode = 'radio';
+  }
 }
 </script>
 
