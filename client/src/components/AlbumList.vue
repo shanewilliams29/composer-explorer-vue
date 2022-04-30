@@ -48,25 +48,35 @@ export default {
   },
   methods: {
     // loads from selected work
-    getAlbums(id) {
-      this.changeAlbums()
-      this.workId = id;
-      this.loading = true;
-      const path = 'api/albums/' + id;
-      axios.get(path).then((res) => {
-        this.albums = res.data.albums;
-        this.loading = false;
-      }).catch((error) => {
-        console.error(error);
-        this.loading = false;
-      });
-    },
+    // getAlbums(id) {
+    //   this.changeAlbums()
+    //   this.workId = id;
+    //   this.loading = true;
+    //   const path = 'api/albums/' + id;
+    //   axios.get(path).then((res) => {
+    //     this.albums = res.data.albums;
+    //     this.loading = false;
+    //   }).catch((error) => {
+    //     console.error(error);
+    //     this.loading = false;
+    //   });
+    // },
     // gets albums and begins playback of first (for next and previous buttons)
-    getAlbumsAndPlay(id) {
+    getAlbumsAndPlay(id, artist, sort) {
       this.changeAlbums()
       this.workId = id;
+      if(artist){
+        this.artistName = artist;
+      } else {
+        artist = '';
+      }
+      if(sort){
+        this.sort = sort
+      } else {
+        sort = '';
+      }
       this.loading = true;
-      const path = 'api/albums/' + id;
+      const path = 'api/albums/' + id + '?artist=' + artist + '&sort=' + sort;
       axios.get(path).then((res) => {
         this.albums = res.data.albums;
         this.loading = false;
@@ -106,13 +116,21 @@ export default {
     selectRow(album) {
       this.selectedAlbum = album;
     },
-    getFilteredAlbums(id, item, sort) {
+    getAlbums(id, artist, sort) {
       this.changeAlbums();
       this.workId = id;
-      this.artistName = item;
-      this.sort = sort;
+      if(artist){
+        this.artistName = artist;
+      } else {
+        artist = '';
+      }
+      if(sort){
+        this.sort = sort
+      } else {
+        sort = '';
+      }
       this.loading = true;
-      const path = 'api/albums/' + id + '?artist=' + item + '&sort=' + sort;
+      const path = 'api/albums/' + id + '?artist=' + artist + '&sort=' + sort;
       axios.get(path).then((res) => {
         this.albums = res.data.albums;
         this.loading = false;
@@ -121,23 +139,23 @@ export default {
         this.loading = false;
       });
     },
-    getArtistAlbums(id, artist) {
-      this.changeAlbums();
-      this.workId = id;
-      this.loading = true;
-      const path = 'api/albums/' + id + '?artist=' + artist;
-      axios.get(path).then((res) => {
-        this.albums = res.data.albums;
-        this.loading = false;
-        //this.selectRow(this.albums[0].id); // select first row on work selection
-        //this.$config.album = this.albums[0].id;
-        //localStorage.setItem('config', JSON.stringify(this.$config));
-        //eventBus.$emit('fireAlbumData', this.albums[0].id);
-      }).catch((error) => {
-        console.error(error);
-        this.loading = false;
-      });
-    },
+    // getArtistAlbums(id, artist) {
+    //   this.changeAlbums();
+    //   this.workId = id;
+    //   this.loading = true;
+    //   const path = 'api/albums/' + id + '?artist=' + artist;
+    //   axios.get(path).then((res) => {
+    //     this.albums = res.data.albums;
+    //     this.loading = false;
+    //     //this.selectRow(this.albums[0].id); // select first row on work selection
+    //     //this.$config.album = this.albums[0].id;
+    //     //localStorage.setItem('config', JSON.stringify(this.$config));
+    //     //eventBus.$emit('fireAlbumData', this.albums[0].id);
+    //   }).catch((error) => {
+    //     console.error(error);
+    //     this.loading = false;
+    //   });
+    // },
     clearAlbums() {
       this.albums = [];
     },
@@ -171,15 +189,11 @@ export default {
     }
     eventBus.$on('fireAlbums', this.getAlbums);
     eventBus.$on('fireAlbumsAndPlay', this.getAlbumsAndPlay);
-    eventBus.$on('fireAlbumFilter', this.getFilteredAlbums);
-    eventBus.$on('fireArtistAlbums', this.getArtistAlbums);
     eventBus.$on('fireClearAlbums', this.clearAlbums);
   },
   beforeDestroy() {
     eventBus.$off('fireAlbums', this.getAlbums);
     eventBus.$off('fireAlbumsAndPlay', this.getAlbumsAndPlay);
-    eventBus.$off('fireAlbumFilter', this.getFilteredAlbums);
-    eventBus.$off('fireArtistAlbums', this.getArtistAlbums);
     eventBus.$off('fireClearAlbums', this.clearAlbums);
   }
 };

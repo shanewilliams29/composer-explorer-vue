@@ -128,9 +128,9 @@ export default {
     },
     albumFilter() {
       if (this.albumFilterField.value == "allartists") {
-          eventBus.$emit('fireAlbumFilter', this.$config.work, '', this.albumSortField.value);
+          eventBus.$emit('fireAlbums', this.$config.work, '', this.albumSortField.value);
       } else {
-          eventBus.$emit('fireAlbumFilter', this.$config.work, this.albumFilterField.value, this.albumSortField.value);
+          eventBus.$emit('fireAlbums', this.$config.work, this.albumFilterField.value, this.albumSortField.value);
       }
     },
     albumSize() {

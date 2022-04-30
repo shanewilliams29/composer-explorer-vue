@@ -113,9 +113,9 @@ export default {
       localStorage.setItem('config', JSON.stringify(this.$config));
 
       if (this.$view.mode != 'performer') {
-        eventBus.$emit('fireAlbums', workId, title);
+        eventBus.$emit('fireAlbums', workId);
       } else {
-        eventBus.$emit('fireArtistAlbums', workId, this.$config.artist);
+        eventBus.$emit('fireAlbums', workId, this.$config.artist);
       }
     },
     getAlbumsAndPlay(workId, title) {
@@ -179,7 +179,7 @@ export default {
         for (var i = 0; i < this.playlist.length; i++) {
           if (this.playlist[i]['id'] == this.selectedWork && i !== this.playlist.length - 1) {
             this.selectRow(this.playlist[i + 1]['id']);
-            this.getAlbumsAndPlay(this.playlist[i + 1]['id'], this.playlist[i + 1]['title']);
+            this.getAlbumsAndPlay(this.playlist[i + 1]['id']);
             break;
           }
         }
@@ -188,12 +188,12 @@ export default {
     previousWork() {
       if (this.shuffle) {
         this.selectRow(this.$config.previousWork); //allows you to jump one back
-        this.getAlbums(this.$config.previousWork, this.$config.previousWorkTitle)
+        this.getAlbumsAndPlay(this.$config.previousWork, this.$config.previousWorkTitle)
       } else {
         for (var i = 0; i < this.playlist.length; i++) {
           if (this.playlist[i]['id'] == this.selectedWork && i !== 0) {
             this.selectRow(this.playlist[i - 1]['id']);
-            this.getAlbumsAndPlay(this.playlist[i - 1]['id'], this.playlist[i - 1]['title']);
+            this.getAlbumsAndPlay(this.playlist[i - 1]['id']);
             break;
           }
         }
@@ -205,7 +205,7 @@ export default {
       }
       const rndInt = randomIntFromInterval(0, this.playlist.length - 1)
       this.selectRow(this.playlist[rndInt]['id']);
-      this.getAlbumsAndPlay(this.playlist[rndInt]['id'], this.playlist[rndInt]['title']);
+      this.getAlbumsAndPlay(this.playlist[rndInt]['id']);
     },
     toggleShuffle(shuffleState) {
       this.shuffle = shuffleState;

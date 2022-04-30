@@ -66,7 +66,7 @@ export default {
       eventBus.$emit('fireArtistComposers', artist);
     },
     albumFilter() {
-      eventBus.$emit('fireAlbumFilter', this.$config.work, this.query, this.albumSortField.value);
+      eventBus.$emit('fireAlbums', this.$config.work, this.query, this.albumSortField.value);
     },
     resetAlbumSort(){
       this.albumSortField = { value: 'recommended', text: 'Recommended sorting' };
