@@ -6,10 +6,7 @@
           <div class="album-titles">
             <span style="color: black; font-weight: 600;">{{ album.artists }}</span><br />
             <span>℗ {{ album.release_date }}</span>
-            <span v-if="album.likes">&nbsp;
-              <b-badge v-if="parseInt(album.likes) == 1 ">{{ album.likes }} Like</b-badge>
-              <b-badge v-if="parseInt(album.likes) > 1 ">{{ album.likes }} Likes</b-badge>
-            </span>
+
             <br />
             <span v-if="album.minor_artists" style="color: grey; font-size: 12px !important;">{{ album.minor_artists }}</span>
           </div>
@@ -17,6 +14,22 @@
             <img class="album-cover" height="auto" v-lazy="album.img_big" />
           </div>
           <div v-else><img class="album-cover" height="auto" v-lazy="album.album_img" /></div>
+          <div class="row">
+          <div class="col">
+           <span v-if="album.likes">&nbsp;
+              <b-badge v-if="parseInt(album.likes) == 1 ">{{ album.likes }} Like</b-badge>
+              <b-badge v-if="parseInt(album.likes) > 1 ">{{ album.likes }} Likes</b-badge>
+            </span>
+          </div>
+          <div class="col footer">
+          <div v-if="album.id == selectedAlbum">
+          <a target="_blank" :href="'https://open.spotify.com/album/' + album.album_id"><span class="open-in">Open in&nbsp; </span><img class="spotify-logo" width=70px src="@/assets/Spotify_Logo_RGB_White.png" /></a>
+          </div>
+          <div v-else>
+          <img class="spotify-logo" width=70px src="@/assets/Spotify_Logo_RGB_Black.png" />
+          </div>
+        </div>
+        </div>
         </b-col>
       </div>
     </b-card>
@@ -34,6 +47,21 @@ export default {
 </script>
 
 <style scoped>
+  a:hover{
+    text-decoration: none;
+  }
+  .footer{
+    text-align: right;
+    font-size: 13px;
+  }
+  .open-in{
+    position:relative;
+    top: -0.4px;
+  }
+.spotify-logo{
+  padding-bottom: 5px;
+  margin-right: 22px;
+}
 .card {
   width: 100%;
   background-color: #fff;
@@ -81,7 +109,7 @@ export default {
 .badge {
   vertical-align: middle;
   color: #fff !important;
-  background-color: #707479;
+  background-color: goldenrod;
   margin-bottom: 2.5px;
   border-radius: 7px;
 }
