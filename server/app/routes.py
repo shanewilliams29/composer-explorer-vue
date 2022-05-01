@@ -410,11 +410,11 @@ def get_albums(work_id):
     search = None
 
     # get rid of compilations
-    work = WorkList.query.filter_by(id=work_id).first_or_404()
-    if work.genre == "Opera" or work.genre == "Stage Work" or work.genre == "Ballet":
-        track_limit = 1000
-    else:
-        track_limit = 50
+    # work = WorkList.query.filter_by(id=work_id).first_or_404()
+    # if work.genre == "Opera" or work.genre == "Stage Work" or work.genre == "Ballet":
+    #     track_limit = 1000
+    # else:
+    #     track_limit = 100
 
     if artistselect:
         search = "%{}%".format(artistselect)
@@ -459,25 +459,22 @@ def get_albums(work_id):
         item['label'] = tup[0].label
         item['track_count'] = tup[0].track_count
 
-        # filter out albums with too many tracks
+        # de-rate newer, crappy albums
         if item['track_count']:
-            if item['track_count'] > track_limit:
-                continue
+            if item['track_count'] > 50 and int(item['release_date'][0:4]) > 2019:
+                item['score'] = item['score'] / 4
 
         # filter out repeat albums
         artists_string = ''.join(sorted(item['artists'].strip()))  # put alphabetically
-        match_string = artists_string
-        # match_string = artists_string + str(item['release_date'])
+        if search:  # return more repeat results for performer filter
+            match_string = artists_string + str(item['release_date'])
+        else:  # return more unique artists otherwise
+            match_string = artists_string
 
         if match_string in duplicates_list:
             continue
         else:
             duplicates_list.append(match_string)
-
-        # de-rate newer, crappy albums
-        # if int(item['release_date']) >= 2020:
-        #     item['score'] = item['score'] / 4
-
         # add to album list
         album_list.append(item)
 
