@@ -1,34 +1,34 @@
 <template>
   <div>
-    <b-card class="shadow-sm" v-for="album in albums" :key="album.id" :id="album.id" no-body header-tag="header" @click="$parent.selectRow(album.id); $parent.getAlbumData(album.id);" :class="{'highlight': (album.id == selectedAlbum)}">
+    <b-card class="shadow-sm" v-for="album in albums" :key="album.id" :id="album.id" no-body header-tag="header" :class="{'highlight': (album.id == selectedAlbum)}">
       <div class="row">
         <b-col class="album_columns">
-          <div class="album-titles">
+          <div class="album-titles" @click="$parent.selectRow(album.id); $parent.getAlbumData(album.id);">
             <span style="color: black; font-weight: 600;">{{ album.artists }}</span><br />
             <span>℗ {{ album.release_date }}</span>
 
             <br />
             <span v-if="album.minor_artists" style="color: grey; font-size: 12px !important;">{{ album.minor_artists }}</span>
           </div>
-          <div v-if="album.img_big">
+          <div v-if="album.img_big" @click="$parent.selectRow(album.id); $parent.getAlbumData(album.id);">
             <img class="album-cover" height="auto" v-lazy="album.img_big" />
           </div>
-          <div v-else><img class="album-cover" height="auto" v-lazy="album.album_img" /></div>
+          <div v-else @click="$parent.selectRow(album.id); $parent.getAlbumData(album.id);"><img class="album-cover" height="auto" v-lazy="album.album_img" /></div>
           <div class="row">
-          <div class="col">
-           <span v-if="album.likes">&nbsp;
+          <b-col class="col" cols="4">
+           <span class="likes" v-if="album.likes">&nbsp;
               <b-badge v-if="parseInt(album.likes) == 1 ">{{ album.likes }} Like</b-badge>
               <b-badge v-if="parseInt(album.likes) > 1 ">{{ album.likes }} Likes</b-badge>
             </span>
-          </div>
-          <div class="col footer">
+          </b-col>
+          <b-col class="col footer" cols="8">
           <div v-if="album.id == selectedAlbum">
           <a target="_blank" :href="'https://open.spotify.com/album/' + album.album_id"><span class="open-in">Open in&nbsp; </span><img class="spotify-logo" width=70px src="@/assets/Spotify_Logo_RGB_White.png" /></a>
           </div>
           <div v-else>
-          <img class="spotify-logo" width=70px src="@/assets/Spotify_Logo_RGB_Black.png" />
+          <a target="_blank" :href="'https://open.spotify.com/album/' + album.album_id"><img class="spotify-logo" width=70px src="@/assets/Spotify_Logo_RGB_Black.png" /></a>
           </div>
-        </div>
+       </b-col>
         </div>
         </b-col>
       </div>
@@ -58,6 +58,10 @@ export default {
     position:relative;
     top: -0.4px;
   }
+  .likes{
+    position:relative;
+    top: -1px;
+  }
 .spotify-logo{
   padding-bottom: 5px;
   margin-right: 22px;
@@ -68,9 +72,7 @@ export default {
   border: none;
   margin-top: 5px;
 }
-.card:hover {
-  cursor: pointer;
-}
+
 .highlight {
   color: white;
 }
@@ -90,6 +92,9 @@ export default {
   box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
   width: calc(100% - 25px);
 }
+.album-cover:hover {
+  cursor: pointer;
+}
 .album-titles {
   margin-left: 8px;
   margin-top: 6px;
@@ -97,6 +102,9 @@ export default {
   margin-right: 20px;
   font-size: 13px;
   line-height: 135%;
+}
+.album-titles:hover {
+  cursor: pointer;
 }
 .minor-album-titles {
   margin-left: 8px;
