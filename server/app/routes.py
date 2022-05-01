@@ -4,7 +4,7 @@ from config import Config
 from app.functions import prepare_composers, group_composers_by_region, prepare_works, new_prepare_works
 from app.models import ComposerList, WorkList, WorkAlbums, AlbumLike, Spotify, Artists, ArtistList
 from app.classes import SortFilter
-from sqlalchemy import func, text
+from sqlalchemy import func, text, or_
 from datetime import datetime, timedelta, timezone
 import json
 import jsonpickle
@@ -409,18 +409,25 @@ def get_albums(work_id):
     sort = request.args.get('sort')
     search = None
 
+    # get rid of compilations
+    work = WorkList.query.filter_by(id=work_id).first_or_404()
+    if work.genre == "Opera" or work.genre == "Stage Work" or work.genre == "Ballet":
+        track_limit = 1000
+    else:
+        track_limit = 50
+
     if artistselect:
         search = "%{}%".format(artistselect)
 
     if search:
         albums = db.session.query(WorkAlbums, func.count(AlbumLike.id).label('total')) \
-            .filter(WorkAlbums.workid == work_id, WorkAlbums.hidden != True, WorkAlbums.artists.ilike(search)) \
+            .filter(WorkAlbums.workid == work_id, WorkAlbums.hidden != True, WorkAlbums.artists.ilike(search), or_(WorkAlbums.album_type == None, WorkAlbums.album_type != "compilation")) \
             .outerjoin(AlbumLike).group_by(WorkAlbums) \
             .order_by(text('total DESC'), WorkAlbums.score.desc()).paginate(1, 1000, False)
 
     else:
         albums = db.session.query(WorkAlbums, func.count(AlbumLike.id).label('total')) \
-            .filter(WorkAlbums.workid == work_id, WorkAlbums.hidden != True)\
+            .filter(WorkAlbums.workid == work_id, WorkAlbums.hidden != True, or_(WorkAlbums.album_type == None, WorkAlbums.album_type != "compilation"))\
             .outerjoin(AlbumLike).group_by(WorkAlbums) \
             .order_by(text('total DESC'), WorkAlbums.score.desc()).paginate(1, 1000, False)
 
@@ -449,10 +456,18 @@ def get_albums(work_id):
         item['likes'] = tup[1]
         item['id'] = tup[0].id
         item['img_big'] = tup[0].img
+        item['label'] = tup[0].label
+        item['track_count'] = tup[0].track_count
 
-        artists_string = ''.join(sorted(item['all_artists'].strip()))  # put alphabetically
-        match_string = artists_string + str(item['release_date'])
-        # match_string = item['artists'].strip() + str(item['release_date'])
+        # filter out albums with too many tracks
+        if item['track_count']:
+            if item['track_count'] > track_limit:
+                continue
+
+        # filter out repeat albums
+        artists_string = ''.join(sorted(item['artists'].strip()))  # put alphabetically
+        match_string = artists_string
+        # match_string = artists_string + str(item['release_date'])
 
         if match_string in duplicates_list:
             continue
@@ -460,8 +475,8 @@ def get_albums(work_id):
             duplicates_list.append(match_string)
 
         # de-rate newer, crappy albums
-        if int(item['release_date']) >= 2020:
-            item['score'] = item['score'] / 4
+        # if int(item['release_date']) >= 2020:
+        #     item['score'] = item['score'] / 4
 
         # add to album list
         album_list.append(item)

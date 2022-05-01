@@ -64,6 +64,7 @@ export default {
       const path = 'api/albums/' + id + '?artist=' + artist + '&sort=' + sort;
       axios.get(path).then((res) => {
         this.albums = res.data.albums;
+        eventBus.$emit('fireArtistList', res.data.artists);
         this.loading = false;
       }).catch((error) => {
         console.error(error);

@@ -112,6 +112,7 @@ export default {
       this.$config.workTitle = title;
       localStorage.setItem('config', JSON.stringify(this.$config));
 
+      eventBus.$emit('changeWork');
       if (this.$view.mode != 'performer') {
         eventBus.$emit('fireAlbums', workId);
       } else {
@@ -123,6 +124,7 @@ export default {
       this.$config.workTitle = title;
       localStorage.setItem('config', JSON.stringify(this.$config));
 
+      eventBus.$emit('changeWork');
       if (this.$view.mode != 'performer') {
         eventBus.$emit('fireAlbumsAndPlay', workId);
       } else {
@@ -171,6 +173,7 @@ export default {
       this.works = [];
     },
     nextWork() {
+      eventBus.$emit('changeWork');
       if (this.shuffle) {
         this.$config.previousWork = this.$config.work;
         this.$config.previousWorkTitle = this.$config.workTitle;
@@ -186,6 +189,7 @@ export default {
       }
     },
     previousWork() {
+      eventBus.$emit('changeWork');
       if (this.shuffle) {
         this.selectRow(this.$config.previousWork); //allows you to jump one back
         this.getAlbumsAndPlay(this.$config.previousWork, this.$config.previousWorkTitle)
@@ -200,6 +204,7 @@ export default {
       }
     },
     playRandomWork() {
+      eventBus.$emit('changeWork');
       function randomIntFromInterval(min, max) { // min and max included
         return Math.floor(Math.random() * (max - min + 1) + min)
       }

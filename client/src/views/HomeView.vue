@@ -48,8 +48,8 @@ export default {
 }
 @media only screen and (min-width: 1000px) {
     .last-col{
-        -ms-flex: 0 0 380px !important;
-        flex: 0 0 380px !important;
+        -ms-flex: 0 0 400px !important;
+        flex: 0 0 400px !important;
     }
 }
 .extra-margin{

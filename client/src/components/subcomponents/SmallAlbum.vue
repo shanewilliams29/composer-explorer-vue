@@ -1,13 +1,13 @@
 <template>
   <div>
-    <b-card v-for="album in albums" :key="album.id" :id="album.id" no-body header-tag="header" @click="$parent.selectRow(album.id); $parent.getAlbumData(album.id);" :class="{'highlight': (album.id == selectedAlbum)}">
+    <b-card v-for="album in albums" :key="album.id" :id="album.id" no-body header-tag="header" :class="{'highlight': (album.id == selectedAlbum)}">
       <div class="row">
         <b-col class="album_columns">
-          <img rounded="left" width="65px" height="65px" v-lazy="album.album_img" />
+          <img @click="$parent.selectRow(album.id); $parent.getAlbumData(album.id);" rounded="left" width="65px" height="65px" v-lazy="album.album_img" />
         </b-col>
         <b-col class="album_text_columns">
           <b-card-text>
-            <table cellspacing="0">
+            <table cellspacing="0" @click="$parent.selectRow(album.id); $parent.getAlbumData(album.id);">
               <tr>
                 <td width="100%" style="white-space: nowrap; text-overflow: ellipsis; overflow: hidden; max-width: 1px;">
                   <span style="color: black; font-weight: 600;">{{ album.artists }} </span>
@@ -15,19 +15,27 @@
               </tr>
               <tr>
                 <td width="100%" style="white-space: nowrap; text-overflow: ellipsis; overflow: hidden; max-width: 1px;">
-                  <span>℗ {{ album.release_date }}</span>
-                  <span v-if="album.likes">&nbsp;
-                    <b-badge v-if="parseInt(album.likes) == 1 ">{{ album.likes }} Like</b-badge>
-                    <b-badge v-if="parseInt(album.likes) > 1 ">{{ album.likes }} Likes</b-badge>
-                  </span>
+                  <span v-if="album.minor_artists" style="color: gray; font-size: 12px;">{{ album.minor_artists }}</span>
+                  <span v-else><br></span>
                 </td>
               </tr>
               <tr>
-                <td width="100%" style="white-space: nowrap; text-overflow: ellipsis; overflow: hidden; max-width: 1px;">
-                  <span style="color: grey; font-style: italic;">{{ album.minor_artists }}</span>
+             <td width="100%" style="white-space: nowrap; text-overflow: ellipsis; overflow: hidden; max-width: 1px;">
+                  <span v-if="album.likes">
+                    <b-badge v-if="parseInt(album.likes) == 1 ">{{ album.likes }} Like</b-badge>
+                    <b-badge v-if="parseInt(album.likes) > 1 ">{{ album.likes }} Likes</b-badge>
+                    <br></span>
+                    <span v-else><br></span>
+                  <span class="label">℗ {{ album.release_date }}</span><span class="label"> · {{ album.label }}</span>
                 </td>
               </tr>
             </table>
+            <div v-if="album.id == selectedAlbum">
+             <a target="_blank" :href="'https://open.spotify.com/album/' + album.album_id"><img class="spotify-icon" width=21px src="@/assets/Spotify_Icon_RGB_White.png" /></a>
+            </div>
+            <div v-else>
+              <a target="_blank" :href="'https://open.spotify.com/album/' + album.album_id"><img class="spotify-icon" width=21px src="@/assets/Spotify_Icon_RGB_Black.png" /></a>
+            </div>
           </b-card-text>
         </b-col>
       </div>
@@ -46,11 +54,24 @@ export default {
 </script>
 
 <style scoped>
+.spotify-icon{
+  position: absolute;
+  right: 20px;
+  bottom: 5px;
+}
 .badge-dark {
   background: none;
 }
 .card {
   width: 100%;
+}
+.label{
+  font-size: 10px;
+  position:relative;
+  top: -2px;
+}
+.gray{
+  color: gray;
 }
 td {
   padding: 0px;
@@ -66,9 +87,10 @@ table {
   font-size: 13px;
   padding: 0px;
   padding-right: 5px;
-  padding-top: 3px;
+  padding-top: 5px;
   padding-left: 2px;
-  padding-bottom: 2px;
+  padding-bottom: 0px;
+  line-height: 110%;
 }
 header.card-header {
   background-color: #fff;
@@ -111,7 +133,7 @@ header.card-header {
 .badge {
   vertical-align: middle;
   color: #fff !important;
-  background-color: #707479;
+  background-color: darkgoldenrod;
   margin-bottom: 2.5px;
   border-radius: 7px;
 }

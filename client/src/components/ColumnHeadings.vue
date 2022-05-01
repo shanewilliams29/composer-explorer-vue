@@ -150,8 +150,7 @@ export default {
         this.workSearchField = '';
         this.workFilterField = { value: 'recommended', text: 'Recommended works' };
     })
-    eventBus.$on('fireAlbums', (work_id, title) => { // is this used?
-        this.title = title;
+    eventBus.$on('changeWork', () => {
         this.albumFilterField = { value: 'allartists', text: 'All performers'};
         this.albumSortField = { value: 'recommended', text: 'Recommended sorting' }
     })
