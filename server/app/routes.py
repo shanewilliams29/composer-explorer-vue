@@ -409,13 +409,6 @@ def get_albums(work_id):
     sort = request.args.get('sort')
     search = None
 
-    # get rid of compilations
-    # work = WorkList.query.filter_by(id=work_id).first_or_404()
-    # if work.genre == "Opera" or work.genre == "Stage Work" or work.genre == "Ballet":
-    #     track_limit = 1000
-    # else:
-    #     track_limit = 100
-
     if artistselect:
         search = "%{}%".format(artistselect)
 
@@ -424,6 +417,12 @@ def get_albums(work_id):
             .filter(WorkAlbums.workid == work_id, WorkAlbums.hidden != True, WorkAlbums.artists.ilike(search), or_(WorkAlbums.album_type == None, WorkAlbums.album_type != "compilation")) \
             .outerjoin(AlbumLike).group_by(WorkAlbums) \
             .order_by(text('total DESC'), WorkAlbums.score.desc()).paginate(1, 1000, False)
+
+        if not albums.items:  # return complilation albums if no results
+            albums = db.session.query(WorkAlbums, func.count(AlbumLike.id).label('total')) \
+                .filter(WorkAlbums.workid == work_id, WorkAlbums.hidden != True, WorkAlbums.artists.ilike(search)) \
+                .outerjoin(AlbumLike).group_by(WorkAlbums) \
+                .order_by(text('total DESC'), WorkAlbums.score.desc()).paginate(1, 1000, False)
 
     else:
         albums = db.session.query(WorkAlbums, func.count(AlbumLike.id).label('total')) \
