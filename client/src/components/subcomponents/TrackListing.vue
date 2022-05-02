@@ -1,12 +1,13 @@
 <template>
   <b-card-group deck>
-    <b-card no-body class="track-card">
+    <b-card no-body class="track-card" ref="scroll-box">
       <b-card-text class="track-card-text">
         <div class="centered-tracks">
           <table class="track-table" cellspacing="0">
             <tr
               class="track-row"
               v-for="track in album.tracks"
+              :id="track[1]"
               :key="track[1]"
               @click="selectTrack(track); playTracks(track[2]); "
               :class="{'highlight-track': trackMatch(track)}"
@@ -21,7 +22,9 @@
                 "
               >
                   <!-- {{ track[0] }} vs {{ selectedTrack }} -->
-              <b-icon icon="play-fill" aria-hidden="true"></b-icon> {{ track[0].substring(track[0].lastIndexOf(':') + 1) }}
+              <b-icon icon="play-fill" aria-hidden="true"></b-icon>
+              <span v-if="$config.genre == 'Opera' || $config.genre == 'Stage Work' || $config.genre == 'Ballet'">{{ track[0].substring(track[0].lastIndexOf(' Act ') + 1).trim() }}</span>
+              <span v-else>{{ track[0].substring(track[0].lastIndexOf(':') + 1) }}</span>
               </td>
             </tr>
           </table>
@@ -53,6 +56,15 @@ export default {
     },
     selectTrack(track){
         this.selectedTrack = track;
+        var trackId = track[1];
+        var element = document.getElementById(trackId);
+        var top = element.offsetTop;
+        console.log(element, top);
+        this.$refs['scroll-box'].scrollTo({
+                                  top: top,
+                                  left: 0,
+                                  behavior: 'smooth'
+                                });
     },
     trackMatch(track){
 
@@ -109,23 +121,7 @@ export default {
         } else {
           window.firstLoad = false;
         }
-        // this.selectTrack(album.tracks[0][1]);
-        // this.numTracks = album.tracks.length;
-        // this.selectedTrackNo = 0;
     })
-
-
-
-    // eventBus.$on('fireNextTrack', () => {
-    //     if (this.selectedTrackNo < this.numTracks - 1) {
-    //       this.selectedTrackNo = this.selectedTrackNo + 1
-    //       this.selectTrack(this.album.tracks[this.selectedTrackNo][1]);
-    //     }
-    //     else{
-    //       eventBus.$emit('fireSetAlbum', this.album);
-    //     }
-
-    // })
     // eslint-disable-next-line
     eventBus.$on('firePlayerStateChanged', (track_data, position, duration, paused) => {
         let track = []
@@ -154,12 +150,12 @@ export default {
 .track-table {
   width: 100%;
   font-size: 13px;
-  line-height: 150%;
+  line-height: 155%;
 }
 .track-card-text {
   color: lightgray;
-  padding-top: 7px;
-  padding-bottom: 7px;
+  padding-top: 6px;
+  padding-bottom: 0px;
   padding-right: 10px;
 }
 .track-row:hover {

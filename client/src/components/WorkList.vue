@@ -26,7 +26,7 @@
           <b-collapse :visible="visibility" :id="index.replace(/\s/g, '')">
             <b-card-text>
               <table cellspacing="0">
-                <tr v-for="work in genre" :key="work.id" @click="selectRow(work.id); getAlbums(work.id, work.title);" :class="{'highlight': (work.id == selectedWork)}">
+                <tr v-for="work in genre" :key="work.id" @click="selectRow(work.id); getAlbums(work.id, work.title); setGenre(index);" :class="{'highlight': (work.id == selectedWork)}">
                   <td width="17%">
                     <span style="white-space: nowrap; color: darkred;"><span v-if="work.cat">{{ work.cat }}&nbsp;&nbsp;</span><span v-else>{{ work.date }}</span></span>
                   </td>
@@ -133,6 +133,10 @@ export default {
     },
     selectRow(work) {
       this.selectedWork = work;
+    },
+    setGenre(genre){
+      this.$config.genre = genre;
+      localStorage.setItem('config', JSON.stringify(this.$config));
     },
     getFilteredWorks(item) {
       this.loading = true;
