@@ -23,7 +23,7 @@
               >
                   <!-- {{ track[0] }} vs {{ selectedTrack }} -->
               <b-icon icon="play-fill" aria-hidden="true"></b-icon>
-              <span v-if="$config.genre == 'Opera' || $config.genre == 'Stage Work' || $config.genre == 'Ballet'">{{ track[0].substring(track[0].lastIndexOf(' Act ') + 1).trim() }}</span>
+              <span v-if="genre == 'Opera' || genre == 'Stage Work' || genre == 'Ballet'">{{ track[0].substring(track[0].lastIndexOf(' Act ') + 1).trim() }}</span>
               <span v-else>{{ track[0].substring(track[0].lastIndexOf(':') + 1) }}</span>
               </td>
             </tr>
@@ -46,6 +46,7 @@ export default {
       selectedTrack: "Track",
       selectedTrackNo : "",
       numTracks: "",
+      genre: "",
       stopMatch: false // necessary in case album has multiple tracks with the same name (would select them all)
     };
   },
@@ -59,7 +60,6 @@ export default {
         var trackId = track[1];
         var element = document.getElementById(trackId);
         var top = element.offsetTop;
-        console.log(element, top);
         this.$refs['scroll-box'].scrollTo({
                                   top: top,
                                   left: 0,
@@ -67,13 +67,12 @@ export default {
                                 });
     },
     trackMatch(track){
-
         // match on IDs
         if (this.selectedTrack[1] == track[1]){
             this.stopMatch = true;
             return true;
 
-        //match on name
+        //match on name if IDs are not valid (Spotify redirected track for licensing purposes)
         } else if (this.strFix(this.selectedTrack[0]) == this.strFix(track[0]) && this.stopMatch == false){
             return true;
         } else {
@@ -110,6 +109,7 @@ export default {
     },
   created() {
     eventBus.$on('fireSetAlbum', (album) => {
+        this.genre = this.$config.genre;
         this.$config.allTracks = album.tracks[0][2];
         this.$config.playTracks = album.tracks[0][2];
         localStorage.setItem('config', JSON.stringify(this.$config));
