@@ -114,9 +114,9 @@ export default {
         .then((res) => {
           this.composers = res.data.composers;
           this.loading=false;
-          if(this.$route.query.artist){
-            this.$router.replace({'query': null}).catch(()=>{});
-          }
+          // if(this.$route.query.artist){
+          //   this.$router.replace({'query': null}).catch(()=>{});
+          // }
         })
         .catch((error) => {
           // eslint-disable-next-line

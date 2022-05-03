@@ -11,14 +11,14 @@
               <td class="heading-td">
                 {{ album.name }}<br />
                 <span class="born-died">
-                  <a :href="album.external_urls.spotify" target="_blank"><img class="spotify-logo" src="@/assets/Spotify_Logo_RGB_Black.png" /></a> {{ album.label }} ℗ {{album.release_date.slice(0,4)}}
+                  ℗ {{album.release_date.slice(0,4)}} · {{ album.label }}
                 </span>
               </td>
             </tr>
           </table>
         </b-card-title>
         <b-card-text class="info-card-text">
-          <div class="disclaimer"><b-badge variant="warning">BETA </b-badge><span class="born-died">&nbsp; Some information may not be correct.</span></div>
+          <!-- <div class="disclaimer"><b-badge variant="warning">BETA </b-badge><span class="born-died">&nbsp; Some information may not be correct.</span></div> -->
           <div v-for="result in results" :key="result[0]">
             <table>
               <tr>
@@ -53,108 +53,100 @@ export default {
     };
   },
   methods: {
-  getPersonInfo(person) {
-
-  this.loading = true;
-  const path = 'https://kgsearch.googleapis.com/v1/entities:search?indent=true&types=Person&types=MusicGroup&query=' + person + ' Music&limit=50&key=AIzaSyA91Endg_KkrNGhkqcrW5evkG1p7y6CA08';
-  axios({
-      method: 'get',
-      url: path,
-    })
-    .then((res) => {
-      let imageUrl = '';
-      let description = '';
-      this.loading = false;
-
-      if (res.data.itemListElement[0] != null) {
-
-        for (var i = 0; i < res.data.itemListElement.length; i++) {
-          if (res.data.itemListElement[i].result.name.slice(-8).includes(person.slice(-8))) {
-              //console.log(res.data.itemListElement[i].result.name + " vs " + person)
-    let rank = 0
-
-          if ('image' in res.data.itemListElement[0].result) {
-             imageUrl = res.data.itemListElement[0].result.image.contentUrl;
-             rank = rank + 1;
-           }else {
-              imageUrl = '';
-           }
-          if ('description' in res.data.itemListElement[0].result) {
-             description = res.data.itemListElement[0].result.description;
-             rank = rank + 1;
-           }else {
-              description = '';
-           }
-
-        this.results.push([person, description, imageUrl, rank]);
-        this.results.sort(function(a,b){return b[3] - a[3]});
-
-        break;
-
+    getPersonInfo(person) {
+      this.loading = true;
+      const path = 'https://kgsearch.googleapis.com/v1/entities:search?indent=true&types=Person&types=MusicGroup&query=' + person + ' Music&limit=50&key=AIzaSyA91Endg_KkrNGhkqcrW5evkG1p7y6CA08';
+      axios({
+        method: 'get',
+        url: path,
+      }).then((res) => {
+        let imageUrl = '';
+        let description = '';
+        this.loading = false;
+        if (res.data.itemListElement[0] != null) {
+          for (var i = 0; i < res.data.itemListElement.length; i++) {
+            var personMatch = person.replace('Sir','').replace('Dame','').trim();
+            if (res.data.itemListElement[i].result.name.includes(personMatch)) {
+              let rank = 0
+              if ('image' in res.data.itemListElement[i].result) {
+                imageUrl = res.data.itemListElement[i].result.image.contentUrl;
+                rank = rank + 1;
+              } else {
+                imageUrl = '';
+              }
+              if ('description' in res.data.itemListElement[i].result) {
+                description = res.data.itemListElement[i].result.description;
+                rank = rank + 1;
+              } else {
+                description = '';
+              }
+              this.results.push([person, description, imageUrl, rank]);
+              this.results.sort(function(a, b) {
+                return b[3] - a[3]
+              });
+              break;
+            }
+            if (i == res.data.itemListElement.length - 1) {
+              this.results.push([person, '', '', -1]);
+              this.results.sort(function(a, b) {
+                return b[3] - a[3]
+              });
+            }
           }
-          if (i == res.data.itemListElement.length - 1) {
-            this.results.push([person, '', '', -1]);
-            this.results.sort(function(a,b){return b[3] - a[3]});
-          }
+        } else {
+          //console.log(person);
+          this.results.push([person, '', '', -1]);
+          this.results.sort(function(a, b) {
+            return b[3] - a[3]
+          });
         }
-      } else {
-        //console.log(person);
-        this.results.push([person, '', '', -1]);
-        this.results.sort(function(a,b){return b[3] - a[3]});
+      }).catch((error) => {
+        console.error(error);
+      });
+    },
+    getArtistComposers(artist) {
+      eventBus.$emit('fireArtistComposers', artist);
+      this.$config.artist = artist;
+      if (this.$route.name != 'performers') {
+        this.$router.push('/performers?artist=' + artist);
       }
-
-
-    })
-    .catch((error) => {
-      console.error(error);
-    });
-  },
-
-  getArtistComposers(artist){
-    eventBus.$emit('fireArtistComposers', artist);
-    this.$config.artist = artist;
-    if(this.$route.name != 'performers'){
-      this.$router.push('/performers?artist=' + artist);
-    }
-  },
-  setSpotifyAlbum(album){ // spotify album
-    this.album = album;
-  },
-  getSpotifyArtistIDs(album){ // not used
-    let artistsList = album.artists;
-    let artistIDsString = ""
-
-    for (var i = 0; i < artistsList.length; i++) {
-      if (i == 0) {
-        artistIDsString = artistsList[i]['id'];
-      } else {
-        artistIDsString = artistIDsString + "," + artistsList[i]['id'];
+    },
+    setSpotifyAlbum(album) { // spotify album
+      this.album = album;
+    },
+    getSpotifyArtistIDs(album) { // not used
+      let artistsList = album.artists;
+      let artistIDsString = ""
+      for (var i = 0; i < artistsList.length; i++) {
+        if (i == 0) {
+          artistIDsString = artistsList[i]['id'];
+        } else {
+          artistIDsString = artistIDsString + "," + artistsList[i]['id'];
+        }
       }
-    }
-    //console.log(artistIDsString);
-    spotify.getSpotifyArtists(this.$auth.appToken, artistIDsString.trim());
-  },
-  getSpotifyAlbumData(album){ // database album
+      //console.log(artistIDsString);
+      spotify.getSpotifyArtists(this.$auth.appToken, artistIDsString.trim());
+    },
+    getSpotifyAlbumData(album) { // database album
       this.loading = true;
       this.results = [];
       this.artists = album.all_artists.split(", ");
       let album_id = album.album_uri.substring(album.album_uri.lastIndexOf(':') + 1);
       spotify.getSpotifyAlbum(this.$auth.appToken, album_id);
       this.artists.forEach(element => this.getPersonInfo(element));
-  },
-  setSpotifyArtistsData(artistList){ //not used
-    this.results = []
-    for (var i = 0; i < artistList.length; i++) {
-      this.results.push([artistList[i]['name'], "", artistList[i]['images'][1]['url'], 0])
+    },
+    setSpotifyArtistsData(artistList) { //not used
+      this.results = []
+      for (var i = 0; i < artistList.length; i++) {
+        this.results.push([artistList[i]['name'], "", artistList[i]['images'][1]['url'], 0])
+      }
+      this.loading = false;
     }
-    this.loading = false;
-  }
-},
+  },
   created() {
     eventBus.$on('fireSetAlbum', this.getSpotifyAlbumData);
     eventBus.$on('fireSpotifyAlbumData', this.setSpotifyAlbum);
     // eventBus.$on('fireSpotifyArtistList', this.setSpotifyArtistsData);
-
   },
 };
 </script>

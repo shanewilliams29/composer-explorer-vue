@@ -1,9 +1,20 @@
 <template>
   <div class="container-fluid">
     <b-row>
-      <b-col>
-      </b-col>
-      <b-col>
+      <b-col class="text-center">
+        <div class="vertical-centered">
+            <table v-if="results">
+              <tr class="tr-performer" v-for="result in results" :key="result[0]">
+                <td>
+                  <b-avatar class="avatar" size="60px" :src="result[2]"></b-avatar>
+                </td>
+                <td class="td-text">
+                  <span class="artist-name">{{ result[0] }}</span><br>
+                  <span class="artist-job">{{result[1]}}</span>
+                </td>
+              </tr>
+            </table>
+        </div>
       </b-col>
       <b-col class="last-col">
         <b-card class="heading-card albums-card">
@@ -45,6 +56,7 @@ export default {
           { value: 'large', text: 'Large' },
           { value: 'small', text: 'Small' }
         ],
+      results: [],
     };
   },
   methods: {
@@ -72,6 +84,8 @@ export default {
       this.albumSortField = { value: 'recommended', text: 'Recommended sorting' };
     },
     setArtistField(artist){
+      this.getPersonInfo(artist);
+      this.$router.push('/performers?artist=' + artist);
       this.query = artist;
     },
     albumSize() {
@@ -83,12 +97,55 @@ export default {
         localStorage.setItem('config', JSON.stringify(this.$config));
       }
     },
+    getPersonInfo(person) {
+      this.results = [];
+      const path = 'https://kgsearch.googleapis.com/v1/entities:search?indent=true&types=Person&types=MusicGroup&query=' + person + ' Music&limit=50&key=AIzaSyA91Endg_KkrNGhkqcrW5evkG1p7y6CA08';
+      axios({
+        method: 'get',
+        url: path,
+      }).then((res) => {
+        let imageUrl = '';
+        let description = '';
+        //this.loading = false;
+        if (res.data.itemListElement[0] != null) {
+          for (var i = 0; i < res.data.itemListElement.length; i++) {
+            var personMatch = person.replace('Sir','').replace('Dame','').trim();
+            if (res.data.itemListElement[i].result.name.includes(personMatch)) {
+              let rank = 0
+              if ('image' in res.data.itemListElement[i].result) {
+                imageUrl = res.data.itemListElement[i].result.image.contentUrl;
+                rank = rank + 1;
+              } else {
+                imageUrl = '';
+              }
+              if ('description' in res.data.itemListElement[i].result) {
+                description = res.data.itemListElement[i].result.description;
+                rank = rank + 1;
+              } else {
+                description = '';
+              }
+              this.results.push([person, description, imageUrl, rank]);
+              break;
+            }
+            if (i == res.data.itemListElement.length - 1) {
+              this.results.push([person, '', '', -1]);
+            }
+          }
+        } else {
+          //console.log(person);
+          this.results.push([person, '', '', -1]);
+        }
+      }).catch((error) => {
+        console.error(error);
+      });
+    },
   },
   created() {
     this.$config.artist = null;
     this.getArtistList();
     if (this.$route.query.artist){
       this.artistSearch(this.$route.query.artist);
+      this.getPersonInfo(this.$route.query.artist);
       this.query = this.$route.query.artist;
       this.$config.artist = this.$route.query.artist;
     }
@@ -124,9 +181,34 @@ export default {
   /* Firefox 18- */
   color: #9ea4ae !important;
 }
-</style><style scoped>.container-fluid {
+</style><style scoped>
+  .container-fluid {
   background-color: #54595f;
   color: #3b4047;
+}
+.vertical-centered{
+  height: 78px;
+  line-height: 78px;
+  text-align: center;
+}
+table {
+  display: inline-block;
+  text-align: left;
+  vertical-align: middle;
+  line-height: normal;
+  margin-bottom: 3px;
+
+}
+.artist-name{
+  font-size: 20px;
+  color: white;
+}
+.artist-job{
+  color: lightgray;
+  font-size: 16px;
+}
+.avatar{
+  margin-right: 10px;
 }
 .last-col {
   margin-right: 5px;
