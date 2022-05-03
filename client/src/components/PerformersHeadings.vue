@@ -3,6 +3,7 @@
     <b-row>
       <b-col class="text-center">
         <div class="vertical-centered">
+          <div class="no-results" v-if="!results[0]">Search for a performer to view composers and works they perform</div>
             <table v-if="results">
               <tr class="tr-performer" v-for="result in results" :key="result[0]">
                 <td>
@@ -14,12 +15,13 @@
                 </td>
               </tr>
             </table>
+
         </div>
       </b-col>
       <b-col class="last-col">
         <b-card class="heading-card albums-card">
           <b-form-group>
-           <vue-typeahead-bootstrap v-model="query" placeholder="Search for a performer" class="mt-3 style-chooser performer-search" @hit="artistSearch" size="sm" :data="this.artistList"/>
+           <vue-typeahead-bootstrap v-model="query" placeholder="Search for a performer" class="mt-3 style-chooser performer-search" @input="resetField" @hit="artistSearch" size="sm" :data="this.artistList"/>
             <b-row>
               <b-col style="padding-right: 0px;" cols="8">
                 <v-select v-model="albumSortField" label="text" :options="albumSortOptions" @input="albumFilter()" :clearable="false" class="mt-3 style-chooser" :searchable="false"></v-select>
@@ -76,6 +78,13 @@ export default {
     },
     artistSearch(artist){
       eventBus.$emit('fireArtistComposers', artist);
+    },
+    resetField(input){
+      if(!input){
+        this.$router.push('/performers');
+        eventBus.$emit('clearPerformers');
+        this.results =[];
+      }
     },
     albumFilter() {
       eventBus.$emit('fireAlbums', this.$config.work, this.query, this.albumSortField.value);
@@ -206,6 +215,10 @@ table {
 .artist-job{
   color: lightgray;
   font-size: 16px;
+}
+.no-results{
+  font-size: 16px;
+  color: lightgray;
 }
 .avatar{
   margin-right: 10px;

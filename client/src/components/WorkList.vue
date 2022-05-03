@@ -5,16 +5,16 @@
     </div>
     <div class="row">
       <span v-show="!loading && works.length < 1 && !$view.mode" class="col no-works-found">
-        <div class="m-4">No works found for {{ $config.composer }}.</div>
+        <div class="m-4">No works found for {{ $config.composer }}</div>
       </span>
       <span v-show="!loading && works.length < 1 && $view.mode == 'performer' && $config.artist" class="col no-works-found">
-        <div class="m-4">Select a composer to see works performed by {{ $config.artist }}.</div>
+        <div class="m-4">Select a composer to view performances by {{ $config.artist }}</div>
       </span>
       <span v-show="!loading && works.length < 1 && $view.mode == 'performer' && !$config.artist" class="col no-works-found">
-        <div class="m-4">Search for a performer to view works they perform.</div>
+        <div class="m-4"></div>
       </span>
       <span v-show="!loading && works.length < 1 && $view.mode == 'radio'" class="col no-works-found">
-        <div class="m-4">Select from the options above to create your own customized radio.</div>
+        <div class="m-4">Select from the options above to create your own customized radio</div>
       </span>
       <b-card-group deck v-if="!loading && works">
         <b-card v-for="(genre, index) in works" :key="index" no-body header-tag="header" class="shadow-sm">

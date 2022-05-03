@@ -8,6 +8,7 @@ from sqlalchemy import func, text, or_
 from datetime import datetime, timedelta, timezone
 import json
 import jsonpickle
+import random
 
 
 @app.before_request
@@ -627,3 +628,45 @@ def get_workartists():
     response_object['artists'] = artist_list
     response = jsonify(response_object)
     return response
+
+
+@app.route('/api/topartists', methods=['GET'])
+def get_topartists():
+    # albums = db.session.query(WorkAlbums, func.count(AlbumLike.id).label('total')) \
+    #     .join(AlbumLike).group_by(WorkAlbums) \
+    #     .order_by(text('total DESC'), WorkAlbums.score.desc()).paginate(1, 100, False)
+
+    artists = db.session.query(Artists, func.count(Artists.id).label('total'))\
+        .group_by(Artists.name).order_by(text('total DESC')).paginate(1, 160, False)
+
+    artist_list = []
+    exclude_list = ['baroque', 'augsburger', 'antiqua', 'milano', 'quartet', 'beethoven', 'carl philipp emanuel bach', 'orchest', 'philharm', 'symphony', 'concert', 'chamber', 'anonymous', 'academy', 'staats', 'consort', 'chopin', 'mozart', 'symphoniker', 'covent garden', 'choir', 'akademie', 'stuttgart', 'llscher']
+
+    flag = False
+    for artist in artists.items:
+        for item in exclude_list:
+            if item in artist[0].name.lower():
+                flag = True
+            else:
+                pass
+        if not flag:
+            item = ['', '', '']
+            item[0] = artist[0].name
+            item[1] = artist[1]
+            item[2] = random.randint(0, 2)
+            artist_list.append(item)
+            print(item[0] + " " + str(item[1]))
+        flag = False
+
+    response = jsonify(artist_list)
+    return response
+
+    # ranking = []
+    # this_rank = 1
+    # ranking.append(this_rank)
+    # for i in range(1, len(artist_list)):
+    #     if artist_list[i]['recordings'] == artist_list[i - 1]['recordings']:
+    #         ranking.append(this_rank)
+    #     else:
+    #         this_rank += 1
+    #         ranking.append(this_rank)
