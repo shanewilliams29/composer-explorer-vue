@@ -35,7 +35,7 @@ export default {
     }
   },
   created() {
-    const artists = require('@/assets/topartists2.json');
+    const artists = require('@/assets/topartists.json');
     this.data = artists;
   },
 }

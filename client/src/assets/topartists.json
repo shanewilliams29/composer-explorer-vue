@@ -1,402 +1,542 @@
 [
   [
-    "Berliner Philharmoniker",
-    8229
-  ],
-  [
-    "London Symphony Orchestra",
-    7193
-  ],
-  [
-    "The English Concert",
-    6560
-  ],
-  [
     "Trevor Pinnock",
-    6518
-  ],
-  [
-    "Wiener Philharmoniker",
-    5993
-  ],
-  [
-    "London Philharmonic Orchestra",
-    5354
+    6518,
+    2
   ],
   [
     "Martha Argerich",
-    5173
-  ],
-  [
-    "Academy of St. Martin in the Fields",
-    5030
+    5173,
+    0
   ],
   [
     "Vladimir Ashkenazy",
-    4937
-  ],
-  [
-    "Philharmonia Orchestra",
-    4929
+    4937,
+    1
   ],
   [
     "Christopher Hogwood",
-    4427
+    4427,
+    2
   ],
   [
     "Maurizio Pollini",
-    4386
+    4386,
+    1
   ],
   [
     "Herbert von Karajan",
-    4302
-  ],
-  [
-    "Academy of Ancient Music",
-    4248
+    4302,
+    1
   ],
   [
     "Sir Neville Marriner",
-    4134
+    4134,
+    2
   ],
   [
     "Maria Jo\u00e3o Pires",
-    3857
+    3857,
+    2
   ],
   [
     "Simon Standage",
-    3805
+    3805,
+    2
   ],
   [
     "Daniel Barenboim",
-    3749
-  ],
-  [
-    "Orpheus Chamber Orchestra",
-    3717
+    3749,
+    1
   ],
   [
     "Wilhelm Kempff",
-    3609
+    3609,
+    2
   ],
   [
     "Claudio Abbado",
-    3521
-  ],
-  [
-    "English Chamber Orchestra",
-    3435
-  ],
-  [
-    "Royal Philharmonic Orchestra",
-    3101
+    3521,
+    1
   ],
   [
     "Dietrich Fischer-Dieskau",
-    2895
+    2895,
+    0
   ],
   [
     "Leonard Bernstein",
-    2696
+    2696,
+    2
   ],
   [
     "Mischa Maisky",
-    2657
+    2657,
+    2
   ],
   [
     "Wolfgang R\u00fcbsam",
-    2620
-  ],
-  [
-    "New York Philharmonic",
-    2498
-  ],
-  [
-    "Amadeus Quartet",
-    2493
+    2620,
+    2
   ],
   [
     "Walter Gieseking",
-    2324
+    2324,
+    2
   ],
   [
     "Gerald Moore",
-    2269
+    2269,
+    1
   ],
   [
     "Reinhard Kammler",
-    2258
-  ],
-  [
-    "Augsburger Domsingknaben",
-    2257
+    2258,
+    0
   ],
   [
     "Sviatoslav Richter",
-    2216
+    2216,
+    1
   ],
   [
     "Andr\u00e1s Schiff",
-    2197
+    2197,
+    2
   ],
   [
     "Vladimir Horowitz",
-    2070
+    2070,
+    2
   ],
   [
     "Tam\u00e1s V\u00e1s\u00e1ry",
-    2003
+    2003,
+    1
   ],
   [
     "Jan Lisiecki",
-    1990
+    1990,
+    1
   ],
   [
     "I Musici",
-    1953
+    1953,
+    2
   ],
   [
     "Karl B\u00f6hm",
-    1945
-  ],
-  [
-    "Chicago Symphony Orchestra",
-    1918
+    1945,
+    2
   ],
   [
     "Nelson Freire",
-    1884
-  ],
-  [
-    "Slovak Philharmonic",
-    1852
+    1884,
+    0
   ],
   [
     "Capella Istropolitana",
-    1849
+    1849,
+    0
   ],
   [
     "Emil Gilels",
-    1843
+    1843,
+    0
   ],
   [
     "Jen\u0151 Jand\u00f3",
-    1841
+    1841,
+    2
   ],
   [
     "Alfred Brendel",
-    1833
+    1833,
+    2
   ],
   [
     "Neeme J\u00e4rvi",
-    1832
-  ],
-  [
-    "Concertgebouworkest",
-    1823
+    1832,
+    1
   ],
   [
     "Mikhail Pletnev",
-    1794
-  ],
-  [
-    "Philadelphia Orchestra",
-    1761
+    1794,
+    2
   ],
   [
     "John Eliot Gardiner",
-    1675
-  ],
-  [
-    "Staatskapelle Dresden",
-    1658
+    1675,
+    2
   ],
   [
     "Monica Huggett",
-    1637
+    1637,
+    1
   ],
   [
     "Arturo Benedetti Michelangeli",
-    1622
+    1622,
+    2
   ],
   [
     "Christoph Eschenbach",
-    1592
+    1592,
+    0
   ],
   [
     "Simon Preston",
-    1538
+    1538,
+    1
   ],
   [
     "Helmuth Rilling",
-    1498
+    1498,
+    2
   ],
   [
     "Willi Boskovsky",
-    1487
-  ],
-  [
-    "Slovak Radio Symphony Orchestra",
-    1477
-  ],
-  [
-    "\ud0dc\uad50 \ub9c8\uc744",
-    1452
+    1487,
+    1
   ],
   [
     "Dimanche FR",
-    1415
-  ],
-  [
-    "Cleveland Orchestra",
-    1411
-  ],
-  [
-    "Venice Baroque Orchestra",
-    1402
+    1415,
+    0
   ],
   [
     "Andr\u00e9 Previn",
-    1386
+    1386,
+    1
   ],
   [
     "Arthur Rubinstein",
-    1381
-  ],
-  [
-    "Bavarian Radio Symphony Orchestra",
-    1376
+    1381,
+    2
   ],
   [
     "Sir Georg Solti",
-    1364
+    1364,
+    1
   ],
   [
     "Yehudi Menuhin",
-    1351
+    1351,
+    1
   ],
   [
     "Ton Koopman",
-    1347
-  ],
-  [
-    "G\u00f6ran S\u00f6llscher",
-    1311
+    1347,
+    2
   ],
   [
     "Sir Colin Davis",
-    1310
+    1310,
+    2
   ],
   [
     "Peter Schmalfuss",
-    1299
-  ],
-  [
-    "Gothenburg Symphony Orchestra",
-    1296
+    1299,
+    0
   ],
   [
     "Idil Biret",
-    1291
+    1291,
+    0
   ],
   [
     "Christiane Jaccottet",
-    1287
-  ],
-  [
-    "Boston Symphony Orchestra",
-    1280
-  ],
-  [
-    "Chamber Orchestra of Europe",
-    1270
+    1287,
+    2
   ],
   [
     "Daniil Trifonov",
-    1235
+    1235,
+    0
   ],
   [
     "Gidon Kremer",
-    1224
+    1224,
+    2
   ],
   [
     "Karl Richter",
-    1224
-  ],
-  [
-    "Vienna State Opera Orchestra",
-    1223
-  ],
-  [
-    "Hagen Quartett",
-    1218
+    1224,
+    2
   ],
   [
     "Bernard Haitink",
-    1218
+    1218,
+    0
   ],
   [
     "Andrea Marcon",
-    1217
+    1217,
+    0
   ],
   [
     "Claudio Colombo",
-    1211
-  ],
-  [
-    "English Baroque Soloists",
-    1209
+    1211,
+    1
   ],
   [
     "Nikolaus Harnoncourt",
-    1207
+    1207,
+    2
   ],
   [
     "Charles Dutoit",
-    1197
+    1197,
+    2
   ],
   [
     "Valentina Lisitsa",
-    1195
+    1195,
+    1
   ],
   [
     "Claudio Arrau",
-    1189
+    1189,
+    2
   ],
   [
     "Pierre Boulez",
-    1152
-  ],
-  [
-    "Anonymous",
-    1145
+    1152,
+    1
   ],
   [
     "V\u00edkingur \u00d3lafsson",
-    1127
+    1127,
+    2
   ],
   [
     "Eugene Ormandy",
-    1122
-  ],
-  [
-    "Gewandhausorchester Leipzig",
-    1119
+    1122,
+    1
   ],
   [
     "Daniel Reuss",
-    1109
+    1109,
+    2
   ],
   [
     "Peter Schreier",
-    1105
-  ],
-  [
-    "Vocalconsort Berlin",
-    1091
+    1105,
+    1
   ],
   [
     "Elina Albach",
-    1082
+    1082,
+    0
+  ],
+  [
+    "Ferenc Fricsay",
+    1082,
+    2
+  ],
+  [
+    "David Parry",
+    1081,
+    0
+  ],
+  [
+    "Sir Adrian Boult",
+    1081,
+    2
+  ],
+  [
+    "Jean-Yves Thibaudet",
+    1081,
+    2
+  ],
+  [
+    "Mstislav Rostropovich",
+    1071,
+    0
+  ],
+  [
+    "Riccardo Muti",
+    1041,
+    1
+  ],
+  [
+    "Rafael Kubelik",
+    1038,
+    0
+  ],
+  [
+    "Axel Gillison",
+    1028,
+    1
+  ],
+  [
+    "Michael Alexander Willens",
+    1020,
+    0
+  ],
+  [
+    "Kurt Masur",
+    1005,
+    0
+  ],
+  [
+    "Wilhelm Furtw\u00e4ngler",
+    989,
+    2
+  ],
+  [
+    "Reinhard Goebel",
+    977,
+    0
+  ],
+  [
+    "Seiji Ozawa",
+    966,
+    0
+  ],
+  [
+    "Andrei Gavrilov",
+    962,
+    2
+  ],
+  [
+    "Elizabeth Wilcock",
+    962,
+    0
+  ],
+  [
+    "Lorin Maazel",
+    946,
+    0
+  ],
+  [
+    "Henrik M\u00e5we",
+    939,
+    0
+  ],
+  [
+    "Daniel Smith",
+    934,
+    0
+  ],
+  [
+    "James Levine",
+    931,
+    1
+  ],
+  [
+    "Helmut Walcha",
+    928,
+    0
+  ],
+  [
+    "Alice Sara Ott",
+    924,
+    2
+  ],
+  [
+    "Peter Hurford",
+    920,
+    0
+  ],
+  [
+    "George Szell",
+    907,
+    1
+  ],
+  [
+    "Murray Perahia",
+    903,
+    2
+  ],
+  [
+    "Iona Brown",
+    900,
+    0
+  ],
+  [
+    "Zubin Mehta",
+    896,
+    2
+  ],
+  [
+    "Various Artists",
+    892,
+    1
+  ],
+  [
+    "Friedrich Gulda",
+    884,
+    2
+  ],
+  [
+    "Ana-Marija Markovina",
+    884,
+    2
+  ],
+  [
+    "Ophira Zakai",
+    881,
+    0
+  ],
+  [
+    "Pl\u00e1cido Domingo",
+    877,
+    2
+  ],
+  [
+    "Carlo Maria Giulini",
+    866,
+    0
+  ],
+  [
+    "Riccardo Chailly",
+    863,
+    2
+  ],
+  [
+    "Samson Fran\u00e7ois",
+    843,
+    0
+  ],
+  [
+    "Luciano Pavarotti",
+    842,
+    2
+  ],
+  [
+    "Sir Thomas Beecham",
+    839,
+    2
+  ],
+  [
+    "Pieter Jan Leusink",
+    834,
+    0
+  ],
+  [
+    "Jaap Ter Linden",
+    829,
+    2
+  ],
+  [
+    "Ulrich Eisenlohr",
+    818,
+    2
+  ],
+  [
+    "Carmen Piazzini",
+    812,
+    0
+  ],
+  [
+    "Mikl\u00f3s Sp\u00e1nyi",
+    811,
+    0
+  ],
+  [
+    "Abbey Simon",
+    810,
+    1
   ]
 ]
