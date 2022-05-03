@@ -7,11 +7,13 @@
             <table v-if="results">
               <tr class="tr-performer" v-for="result in results" :key="result[0]">
                 <td>
-                  <b-avatar class="avatar" size="60px" :src="result[2]"></b-avatar>
+                  <b-avatar class="avatar" size="64px" :src="result[2]"></b-avatar>
                 </td>
                 <td class="td-text">
-                  <span class="artist-name">{{ result[0] }}</span><br>
+                  <span class="artist-name">{{ result[0] }}&nbsp;</span><br>
                   <span class="artist-job">{{result[1]}}</span>
+                  <span v-if="wikiLink" class="wiki-link">&nbsp;&nbsp;<a :href="wikiLink" target="_blank"><b-icon icon="info-circle-fill" aria-hidden="true"></b-icon> Wikipedia</a>&nbsp;&nbsp;</span>
+                  <span class="radio-link"><a target="_blank"><b-icon icon="volume-up-fill" aria-hidden="true"></b-icon> Radio</a></span><br>
                 </td>
               </tr>
             </table>
@@ -44,6 +46,7 @@ import {eventBus} from "../main.js";
 export default {
   data() {
     return {
+      wikiLink: null,
       query: '',
       artistList: [],
 
@@ -133,15 +136,22 @@ export default {
               } else {
                 description = '';
               }
+              if ('url' in res.data.itemListElement[i].result.detailedDescription) {
+                this.wikiLink = res.data.itemListElement[i].result.detailedDescription.url;
+                rank = rank + 1;
+              } else {
+                this.wikiLink = null;
+              }
               this.results.push([person, description, imageUrl, rank]);
               break;
             }
             if (i == res.data.itemListElement.length - 1) {
               this.results.push([person, '', '', -1]);
+              this.wikiLink = null;
             }
           }
         } else {
-          //console.log(person);
+          this.wikiLink = null;
           this.results.push([person, '', '', -1]);
         }
       }).catch((error) => {
@@ -215,6 +225,20 @@ table {
 .artist-job{
   color: lightgray;
   font-size: 16px;
+}
+.wiki-link a{
+  color: darkgray;
+  font-size: 12px;
+  text-decoration: none;
+}
+.radio-link{
+  color: darkgray;
+  font-size: 12px;
+  text-decoration: none;
+}
+.wiki-link a:hover{
+  color: white;
+  cursor: pointer;
 }
 .no-results{
   font-size: 16px;
