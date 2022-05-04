@@ -96,7 +96,12 @@ export default {
       } else {
       let uriList = {}
       let jsonList = {}
-      uriList['uris'] = this.$config.previousTracks.split(' ');
+
+      // ensure unnecessary whitespace in track list (gives spotify erors):
+      var smushTracks = this.$config.previousTracks.replace(/\s/g,'');
+      var cleanTracks = smushTracks.replaceAll('spotify', ' spotify').trim();
+
+      uriList['uris'] = cleanTracks.split(' ');
       jsonList = JSON.stringify(uriList);
       spotify.playTracks(this.$auth.clientToken, this.$auth.deviceID, jsonList);
       }

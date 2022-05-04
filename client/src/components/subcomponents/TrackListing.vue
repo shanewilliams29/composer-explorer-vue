@@ -94,13 +94,15 @@ export default {
           previousTracks = previousTracks + " " + allTracks[i];
         }
       }
-
       this.$config.previousTracks = previousTracks.trim();
-
       this.$config.playTracks = tracks;
       localStorage.setItem('config', JSON.stringify(this.$config));
 
-      uriList['uris'] = tracks.split(' ');
+      // ensure unnecessary whitespace in track list (gives spotify erors):
+      var smushTracks = tracks.replace(/\s/g,'');
+      var cleanTracks = smushTracks.replaceAll('spotify', ' spotify').trim();
+
+      uriList['uris'] = cleanTracks.split(' ');
       jsonList = JSON.stringify(uriList);
       spotify.playTracks(this.$auth.clientToken, this.$auth.deviceID, jsonList);
       // this.selectedTrackNo = this.numTracks - uriList['uris'].length;
