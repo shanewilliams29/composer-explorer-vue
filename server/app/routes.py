@@ -397,6 +397,7 @@ def get_worksbygenre():
     # need playlist
     response_object = {'status': 'success'}
     response_object['works'] = works_by_genre
+    response_object['playlist'] = works_list  # for back and previous playing
     response = jsonify(response_object)
     return response
 
@@ -458,6 +459,7 @@ def get_albums(work_id):
         item['img_big'] = tup[0].img
         item['label'] = tup[0].label
         item['track_count'] = tup[0].track_count
+        item['composer'] = tup[0].composer
 
         # de-rate newer, crappy albums
         if item['track_count']:
@@ -497,6 +499,7 @@ def get_albums(work_id):
     response_object = {'status': 'success'}
     response_object['albums'] = sorted_list
     response_object['artists'] = artist_list
+    response_object['composer'] = sorted_list[0]['composer']
     response = jsonify(response_object)
     return response
 

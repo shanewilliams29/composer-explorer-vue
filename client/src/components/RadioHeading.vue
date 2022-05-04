@@ -10,7 +10,6 @@
                 label="text"
                 :options="radioTypeOptions"
                 @input="radioTypeSelect()"
-                :inputId="radioTypeField"
                 :clearable="false"
                 class="mt-3 style-chooser"
                 :searchable="false"
@@ -21,7 +20,6 @@
                 :options="composerOptions"
                 @input="composerSelect()"
                 placeholder="Select composers"
-                :inputId="composerSelectField"
                 :clearable="true"
                 class="mt-3 style-chooser"
                 :searchable="true"
@@ -41,7 +39,6 @@
                 label="text"
                 :options="genreOptions"
                 @input="genreSelect()"
-                :inputId="genreSelectField"
                 placeholder="Select genres"
                 :clearable="true"
                 class="mt-3 style-chooser"
@@ -83,13 +80,12 @@
                 label="text"
                 :options="performerOptions"
                 @input="performerFilter()"
-                :inputId="performerFilterField"
                 :clearable="false"
                 class="mt-3 style-chooser"
                 :searchable="false"
               ></v-select>
-              <b-button class="radio-button" size="sm" v-if="RadioOff" @click="toggleRadio()" block variant="">Radio Off</b-button>
-              <b-button class="radio-button" size="sm" v-if="!RadioOff" @click="toggleRadio()" block variant="warning">Radio On</b-button>
+              <b-button class="radio-button" size="sm" v-if="!$view.radioPlaying" @click="toggleRadio()" block variant="">Radio Off</b-button>
+              <b-button class="radio-button" size="sm" v-if="$view.radioPlaying" @click="toggleRadio()" block variant="warning">Radio On</b-button>
           </b-form-group>
         </b-card>
       </b-col>
@@ -99,11 +95,11 @@
 
 <script>
 import {eventBus} from "../main.js";
+import spotify from '@/SpotifyFunctions.js'
 
 export default {
   data() {
     return {
-      RadioOff: true,
       artist_list: [],
       title: "",
       OpenIndicator: {
@@ -132,16 +128,24 @@ export default {
           { value: 'all', text: 'All works'}
         ],
 
-      performerFilterField: { value: 'allartists', text: 'All performers' },
+      performerFilterField: { value: 'topartists', text: 'Top performers' },
       performerOptions: [
-          { value: 'allartists', text: 'All performers' },
-          { value: 'favoriteartists', text: 'My favorite performers'}
+          { value: 'topartists', text: 'Top performers' },
+          { value: 'randomartists', text: 'Random performers'}
         ],
     };
   },
   methods: {
     toggleRadio(){
-      this.RadioOff = !this.RadioOff;
+      if(this.$view.enableRadio){
+        this.$view.radioPlaying = !this.$view.radioPlaying;
+      }
+      if (this.$view.radioPlaying){
+        this.$view.shuffle = true;
+        eventBus.$emit('fireNextWork');
+      } else {
+        spotify.pauseTrack(this.$auth.clientToken);
+      }
     },
     radioTypeSelect(){
       eventBus.$emit('fireRadioSelect', this.radioTypeField.value);

@@ -63,6 +63,8 @@ export default {
       this.loading = true;
       const path = 'api/albums/' + id + '?artist=' + artist + '&sort=' + sort;
       axios.get(path).then((res) => {
+        this.$config.composer = res.data.composer;
+        localStorage.setItem('config', JSON.stringify(this.$config));
         this.albums = res.data.albums;
         eventBus.$emit('fireArtistList', res.data.artists);
         this.loading = false;
@@ -92,6 +94,7 @@ export default {
         this.loading = false;
         this.selectRow(this.albums[0].id); // select first row on work selection
         this.$config.album = this.albums[0].id;
+        this.$config.composer = res.data.composer;
         localStorage.setItem('config', JSON.stringify(this.$config));
         eventBus.$emit('fireArtistList', res.data.artists);
         eventBus.$emit('fireAlbumData', this.albums[0].id);

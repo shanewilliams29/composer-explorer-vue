@@ -47,6 +47,8 @@
 <script>
 import axios from 'axios';
 import {eventBus} from "../main.js";
+import spotify from '@/SpotifyFunctions.js'
+
 export default {
   data() {
     return {
@@ -58,7 +60,7 @@ export default {
     };
   },
   methods: {
-    getWorks(composer) {
+    getWorks(composer) { // standard mode
       this.loading = true;
       this.$config.composer = composer;
       const path = 'api/works/' + composer;
@@ -67,14 +69,17 @@ export default {
         this.playlist = res.data.playlist;
         this.visibility = true
         this.loading = false;
-        //eventBus.$emit('fireWorksLoaded'); // for mobile
       }).catch((error) => {
         console.error(error);
         this.loading = false;
       });
     },
-    getGenreWorks(genres, filter, search) {
-      if (genres.length < 1) {
+    getGenreWorks(genres, filter, search) { // used in radio mode
+      if (genres.length < 1) { // no works
+        eventBus.$emit('fireClearAlbums');
+        this.$view.radioPlaying = false;
+        this.$view.enableRadio = false;
+        spotify.pauseTrack(this.$auth.clientToken);
         this.works = [];
       } else {
         const payload = {
@@ -85,16 +90,20 @@ export default {
         const path = 'api/worksbygenre';
         axios.post(path, payload).then((res) => {
           this.works = res.data.works;
+          this.playlist = res.data.playlist;
           this.visibility = true;
+          this.$view.enableRadio = true;
         }).catch((error) => {
           console.error(error);
+          this.$view.enableRadio = false;
         });
       }
     },
-    getArtistWorks(artist, composer) {
+    getArtistWorks(artist, composer) { // used in Performer mode
       this.loading = true;
       this.$config.artist = artist;
       this.$config.composer = composer;
+      localStorage.setItem('config', JSON.stringify(this.$config));
       const path = 'api/artistworks?artist=' + artist + '&composer=' + composer;
       axios.get(path).then((res) => {
         this.works = res.data.works;
@@ -110,11 +119,15 @@ export default {
       this.$config.work = workId;
       this.$config.workTitle = title;
       localStorage.setItem('config', JSON.stringify(this.$config));
+
       eventBus.$emit('changeWork');
-      if (this.$view.mode != 'performer') {
+      if (!this.$view.mode) { // standard compsoer mode
         eventBus.$emit('fireAlbums', workId);
-      } else {
+      } else if (this.$view.mode == 'performer'){ // performer mode
         eventBus.$emit('fireAlbums', workId, this.$config.artist);
+      } else { // radio mode, play automatically
+        eventBus.$emit('fireAlbumsAndPlay', workId);
+        this.$view.radioPlaying = true;
       }
     },
     getAlbumsAndPlay(workId, title) {
