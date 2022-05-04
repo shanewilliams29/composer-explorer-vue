@@ -128,10 +128,10 @@ export default {
           { value: 'all', text: 'All works'}
         ],
 
-      performerFilterField: { value: 'topartists', text: 'Top performers' },
+      performerFilterField: { value: 'topartists', text: 'Top performance' },
       performerOptions: [
-          { value: 'topartists', text: 'Top performers' },
-          { value: 'randomartists', text: 'Random performers'}
+          { value: 'topartists', text: 'Top performance' },
+          { value: 'randomartists', text: 'Random performance'}
         ],
     };
   },
@@ -183,8 +183,17 @@ export default {
       this.workSearchField = '';
       eventBus.$emit('fireGenreSelectRadio', this.genreSelectField, this.workFilterField.value, this.workSearchField);
     },
+      performerFilter(){
+        if(this.performerFilterField.value == 'randomartists'){
+          this.$view.randomAlbum = true;
+        } else {
+          this.$view.randomAlbum = false;
+        }
+    },
   },
   created() {
+    this.$view.radioPlaying = false;
+    this.$view.enableRadio = false;
     eventBus.$on('fireComposerListToRadio', this.makeComposerDropdown);
     eventBus.$on('fireRadioGenreList', this.makeGenreList);
     eventBus.$on('fireComposerSelectRadio', this.makeGenreList);

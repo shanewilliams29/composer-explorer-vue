@@ -75,7 +75,8 @@ Vue.prototype.$view = Vue.observable({
   mode: null,
   shuffle: false,
   radioPlaying: false,
-  enableRadio: false
+  enableRadio: false,
+  randomAlbum: false
 });
 
 new Vue({

@@ -47,7 +47,6 @@
 <script>
 import axios from 'axios';
 import {eventBus} from "../main.js";
-import spotify from '@/SpotifyFunctions.js'
 
 export default {
   data() {
@@ -79,7 +78,6 @@ export default {
         eventBus.$emit('fireClearAlbums');
         this.$view.radioPlaying = false;
         this.$view.enableRadio = false;
-        spotify.pauseTrack(this.$auth.clientToken);
         this.works = [];
       } else {
         const payload = {

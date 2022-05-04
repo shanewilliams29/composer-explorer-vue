@@ -75,6 +75,11 @@ export default {
     },
     // gets albums and begins playback of first (for next and previous buttons)
     getAlbumsAndPlay(id, artist, sort) {
+
+      function randomIntFromInterval(min, max) { // min and max included
+          return Math.floor(Math.random() * (max - min + 1) + min)
+      }
+
       this.changeAlbums()
       this.workId = id;
       if(artist){
@@ -90,7 +95,17 @@ export default {
       this.loading = true;
       const path = 'api/albums/' + id + '?artist=' + artist + '&sort=' + sort;
       axios.get(path).then((res) => {
-        this.albums = res.data.albums;
+        if(this.$view.mode == 'radio'){ // only one album in radiomode
+          if(this.$view.randomAlbum){
+
+              const rndInt = randomIntFromInterval(0, res.data.albums.length - 1)
+              this.albums = [res.data.albums[rndInt]];
+          } else {
+              this.albums = [res.data.albums[0]];
+            }
+        } else {
+          this.albums = res.data.albums;
+        }
         this.loading = false;
         this.selectRow(this.albums[0].id); // select first row on work selection
         this.$config.album = this.albums[0].id;

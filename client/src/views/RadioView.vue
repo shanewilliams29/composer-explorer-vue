@@ -3,9 +3,9 @@
     <RadioHeading/>
     <div class="container-fluid">
       <b-row>
-        <b-col class="display-height"><ComposerList/></b-col>
-        <b-col class="display-height"><WorkList/></b-col>
-        <b-col class="display-height"><AlbumList/></b-col>
+        <b-col class="display-list first-col"><ComposerList/></b-col>
+        <b-col class="display-list"><WorkList/></b-col>
+        <b-col class="display-list last-col extra-margin"><AlbumList/></b-col>
       </b-row>
     </div>
   </div>
@@ -31,13 +31,6 @@ export default {
 }
 </script>
 
-<style>
-  .display-height{
-    height: calc(100vh - 66px - 78px - 100px - var(--panelheight));
-    overflow-y: scroll;
-    overflow-x: hidden;
-  }
-</style>
 <style scoped>
 >>> .highlight{
   background-color: var(--green);
