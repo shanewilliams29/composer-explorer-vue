@@ -15,7 +15,7 @@
           <b-collapse :visible="visibility" :id="index.replace(/\s/g, '')">
             <b-card-text>
               <table cellspacing="0">
-                <tr v-for="composer in region" :key="composer.id" @click="selectRow(composer.id); getWorks(composer.name_short);" :class="{'highlight': (composer.id == selectedComposer)}">
+                <tr v-for="composer in region" :key="composer.id" @click="selectRow(composer.name_short); getWorks(composer.name_short);" :class="[{'cursor': ($view.mode != 'radio')}, {'highlight': (composer.name_short == $config.composer)}]">
                   <td width="2%" :style="{border: 'solid 0px !important', backgroundColor:composer.color, opacity: 0.66}"></td>
                   <td width="2%"></td>
                   <td width="12%" style="white-space: nowrap;">
@@ -48,7 +48,6 @@ export default {
     return {
       composers: [],
       loading: false,
-      selectedComposer: null,
       visibility: true,
       artist: "",
     };
@@ -102,11 +101,11 @@ export default {
           this.loading=false;
         });
     },
-    getArtistComposers(artist) {
+    getArtistComposers(artist) { // performer mode
       this.artist = artist
       this.loading = true;
       this.visibility=true;
-      this.selectedComposer = null;
+      this.$config.artist = artist;
       eventBus.$emit('fireClearWorks', artist);
       eventBus.$emit('fireClearAlbums');
       const path = 'api/artistcomposers/' + artist;
@@ -131,10 +130,9 @@ export default {
         eventBus.$emit('fireArtistWorks', this.artist, composer);
       }
     },
-    selectRow(composerId){
+    selectRow(nameShort){
       if (this.$view.mode != 'radio'){
-        this.selectedComposer = composerId;
-        this.$config.composerId = composerId;
+        this.$config.composer = nameShort;
         localStorage.setItem('config', JSON.stringify(this.$config));
       }
     },
@@ -174,7 +172,7 @@ export default {
   created() {
     if (!this.$view.mode){ // dont get composers in performer or radio modes
       this.getComposers();
-      this.selectRow(this.$config.composerId);
+      this.selectRow(this.$config.composer);
     }
     if (this.$route.query.artist){
       this.getArtistComposers(this.$route.query.artist);
@@ -247,7 +245,7 @@ table {
   border-top: 0px solid lightgray;
   color: white;
 }
-tr:hover {
+.cursor {
   cursor: pointer;
 }
 .highlight td:last-child {
