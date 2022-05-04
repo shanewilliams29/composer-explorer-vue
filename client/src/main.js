@@ -56,7 +56,7 @@ const defaultConfig = {
   trackNo: 0,
   album: "BEETHOVEN000056eOuqhCfrTPp1H0YbQ9PmL",
   albumSize: 'large',
-  artist:null
+  artist: null
 };
 if (localStorage.getItem("config") !== null) {
   config = JSON.parse(localStorage.getItem('config'));
@@ -72,7 +72,10 @@ Vue.prototype.$auth = Vue.observable({
   deviceID: null
 });
 
-Vue.prototype.$view = Vue.observable({mode: null});
+Vue.prototype.$view = Vue.observable({
+  mode: null,
+  shuffle: false,
+});
 
 new Vue({
   router,

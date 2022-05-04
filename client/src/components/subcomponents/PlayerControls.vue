@@ -2,8 +2,8 @@
   <b-container class="playback-container">
  <b-row class="buttons-row">
   <b-col class="text-center text-nowrap">
-  <b-button class="playback-button" id="shuffle-play" v-show="!shuffle" @click="shufflePlayback()"><b-icon-shuffle></b-icon-shuffle></b-button>
-  <b-button class="playback-button" id="shuffle-play" v-show="shuffle" @click="shufflePlayback()" ><b-icon-shuffle variant="warning"></b-icon-shuffle></b-button>
+  <b-button class="playback-button" id="shuffle-play" v-show="!$view.shuffle" @click="shufflePlayback()"><b-icon-shuffle></b-icon-shuffle></b-button>
+  <b-button class="playback-button" id="shuffle-play" v-show="$view.shuffle" @click="shufflePlayback()" ><b-icon-shuffle variant="warning"></b-icon-shuffle></b-button>
   <b-button class="playback-button" id="previous-work-button" @click="previousWork()"><b-icon-arrow-left-circle></b-icon-arrow-left-circle></b-button>
   <b-button class="playback-button" id="back-button" @click="back()"><b-icon-skip-start-fill></b-icon-skip-start-fill></b-button>
   <b-button class="playback-button" id="play-button" v-show="!playing" @click="play()"><b-icon-play-fill></b-icon-play-fill></b-button>
@@ -79,8 +79,7 @@ export default {
       display_duration: "00:00",
       display_progress: "00:00",
       suspend: true,
-      delay: 1000,
-      shuffle: false
+      delay: 1000
     };
   },
   methods: {
@@ -161,9 +160,7 @@ export default {
         eventBus.$emit('firePreviousWork');
     },
     shufflePlayback(){
-      this.shuffle = !this.shuffle;
-      eventBus.$emit('fireToggleShuffle', this.shuffle);
-
+      this.$view.shuffle = !this.$view.shuffle;
     }
   },
   created() {

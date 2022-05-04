@@ -6,4 +6,8 @@ module.exports = defineConfig({
 
 module.exports = {
   outputDir: '../server/dist',
+   devServer: {
+    hot: false,
+    liveReload: false
+  }
 }

@@ -54,8 +54,7 @@ export default {
       playlist: [],
       loading: false,
       selectedWork: null,
-      visibility: true,
-      shuffle: false
+      visibility: true
     };
   },
   methods: {
@@ -111,7 +110,6 @@ export default {
       this.$config.work = workId;
       this.$config.workTitle = title;
       localStorage.setItem('config', JSON.stringify(this.$config));
-
       eventBus.$emit('changeWork');
       if (this.$view.mode != 'performer') {
         eventBus.$emit('fireAlbums', workId);
@@ -178,7 +176,7 @@ export default {
     },
     nextWork() {
       eventBus.$emit('changeWork');
-      if (this.shuffle) {
+      if (this.$view.shuffle) {
         this.$config.previousWork = this.$config.work;
         this.$config.previousWorkTitle = this.$config.workTitle;
         this.playRandomWork();
@@ -186,7 +184,7 @@ export default {
         for (var i = 0; i < this.playlist.length; i++) {
           if (this.playlist[i]['id'] == this.selectedWork && i !== this.playlist.length - 1) {
             this.selectRow(this.playlist[i + 1]['id']);
-            this.getAlbumsAndPlay(this.playlist[i + 1]['id']);
+            this.getAlbumsAndPlay(this.playlist[i + 1]['id'], this.playlist[i + 1]['title']);
             break;
           }
         }
@@ -194,14 +192,14 @@ export default {
     },
     previousWork() {
       eventBus.$emit('changeWork');
-      if (this.shuffle) {
+      if (this.$view.shuffle) {
         this.selectRow(this.$config.previousWork); //allows you to jump one back
         this.getAlbumsAndPlay(this.$config.previousWork, this.$config.previousWorkTitle)
       } else {
         for (var i = 0; i < this.playlist.length; i++) {
           if (this.playlist[i]['id'] == this.selectedWork && i !== 0) {
             this.selectRow(this.playlist[i - 1]['id']);
-            this.getAlbumsAndPlay(this.playlist[i - 1]['id']);
+            this.getAlbumsAndPlay(this.playlist[i - 1]['id'], this.playlist[i - 1]['title']);
             break;
           }
         }
@@ -214,10 +212,7 @@ export default {
       }
       const rndInt = randomIntFromInterval(0, this.playlist.length - 1)
       this.selectRow(this.playlist[rndInt]['id']);
-      this.getAlbumsAndPlay(this.playlist[rndInt]['id']);
-    },
-    toggleShuffle(shuffleState) {
-      this.shuffle = shuffleState;
+      this.getAlbumsAndPlay(this.playlist[rndInt]['id'], this.playlist[rndInt]['title']);
     },
   },
   created() {
@@ -233,7 +228,6 @@ export default {
     eventBus.$on('fireGenreSelectRadio', this.getGenreWorks);
     eventBus.$on('fireNextWork', this.nextWork);
     eventBus.$on('firePreviousWork', this.previousWork);
-    eventBus.$on('fireToggleShuffle', this.toggleShuffle);
   },
   beforeDestroy() {
     eventBus.$off('fireComposers', this.fireComposers);
@@ -244,7 +238,6 @@ export default {
     eventBus.$off('fireGenreSelectRadio', this.getGenreWorks);
     eventBus.$off('fireNextWork', this.nextWork);
     eventBus.$off('firePreviousWork', this.previousWork);
-    eventBus.$off('fireToggleShuffle', this.toggleShuffle);
   }
 };
 </script>

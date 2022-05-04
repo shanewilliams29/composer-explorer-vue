@@ -59,6 +59,9 @@ export default {
     eventBus.$on('fireAlbums', () => {
         this.hold_title = this.$config.workTitle;
     })
+    eventBus.$on('fireAlbumsAndPlay', () => {
+        this.hold_title = this.$config.workTitle;
+    })
     eventBus.$on('fireArtistAlbums', () => {
         this.hold_title = this.$config.workTitle;
     })
