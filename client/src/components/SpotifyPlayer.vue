@@ -18,9 +18,8 @@ export default {
     initializeSpotify() {
       window.onSpotifyWebPlaybackSDKReady = () => {
         const path = 'api/get_token';
-        axios.get(path, {
-          withCredentials: true
-        }).then((res) => {
+        axios.get(path, {withCredentials: true})
+        .then((res) => {
           if (res.data.status == "success") {
             if (res.data.client_token !== null) {
               this.$auth.clientToken = res.data.client_token;

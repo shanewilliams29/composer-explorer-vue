@@ -158,6 +158,7 @@ export default {
       const path = 'api/multicomposers';
       axios.post(path, composers)
         .then((res) => {
+          console.log(res);
           this.composers = res.data.composers;
           eventBus.$emit('fireRadioGenreList', res.data.genres);
           this.visibility=true;

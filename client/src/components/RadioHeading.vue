@@ -98,8 +98,15 @@
               ></v-select>
             </b-col>
           </b-row>
-              <b-button class="radio-button" size="sm" v-if="!$view.radioPlaying" @click="toggleRadio()" block variant="">Radio Off</b-button>
-              <b-button class="radio-button" size="sm" v-if="$view.radioPlaying" @click="toggleRadio()" block variant="warning">Radio On</b-button>
+          <b-row class="sub-row">
+            <b-col col=6 class="col-padding-right">
+              <b-button class="radio-button-off" size="sm" v-if="!$view.radioPlaying" @click="toggleRadio()" block variant="">Radio OFF</b-button>
+              <b-button class="radio-button-on" size="sm" v-if="$view.radioPlaying" @click="toggleRadio()" block variant="warning">Radio ON</b-button>
+            </b-col>
+            <b-col col=6 class="col-padding-left">
+              <b-button class="spotify-export-button" size="sm" @click="exportSpotify()" block variant="success">Export to Spotify</b-button>
+            </b-col>
+         </b-row>
           </b-form-group>
         </b-card>
       </b-col>
@@ -148,15 +155,15 @@ export default {
           { value: 'randomartists', text: 'Random performers'}
         ],
 
-      limitFilterField: { value: '4', text: 'Max # of tracks: 4' },
+      limitFilterField: { value: '4', text: 'Max no. of tracks: 4' },
       limitOptions: [
-          { value: '1', text: 'Max # of tracks: 1' },
-          { value: '2', text: 'Max # of tracks: 2' },
-          { value: '3', text: 'Max # of tracks: 3' },
-          { value: '4', text: 'Max # of tracks: 4' },
-          { value: '5', text: 'Max # of tracks: 5' },
-          { value: '6', text: 'Max # of tracks: 6' },
-          { value: '10', text: 'Max # of tracks: 10' },
+          { value: '1', text: 'Max no. of tracks: 1' },
+          { value: '2', text: 'Max no. of tracks: 2' },
+          { value: '3', text: 'Max no. of tracks: 3' },
+          { value: '4', text: 'Max no. of tracks: 4' },
+          { value: '5', text: 'Max no. of tracks: 5' },
+          { value: '6', text: 'Max no. of tracks: 6' },
+          { value: '10', text: 'Max no. of tracks: 10' },
           { value: '100', text: 'No track limit' },
         ],
     };
@@ -184,7 +191,6 @@ export default {
     },
     composerSelect(){
         eventBus.$emit('fireComposerSelectRadio', this.composerSelectField);
-        console.log(this.composerSelectField);
     },
     makeGenreList(genreList){
         if(genreList.length < 1){
@@ -255,7 +261,22 @@ export default {
   padding-bottom: 5px;
   padding-left: 5px;
 }
-.radio-button{
+.radio-button-off{
+  margin-top: 5px;
+  border: 1px solid #916a08 !important;
+  background-color: #916a08 !important;
+}
+.radio-button-off:hover{
+  margin-top: 5px;
+  border: 1px solid darkgoldenrod !important;
+  background-color: darkgoldenrod !important;
+}
+.radio-button-on{
+  margin-top: 5px;
+  border: 1px solid var(--yellow) !important;
+  background-color: var(--yellow) !important;
+}
+.spotify-export-button{
   margin-top: 5px;
 }
 .form-row {
@@ -301,7 +322,8 @@ input{
 }
 .work-search-field{
   margin-top: 5px;
-  height: 28.6px;
+  height: 31px;
+  border: 1px solid #343a40 !important;
 }
 .col-padding-right{
   padding-right: 2.5px;
