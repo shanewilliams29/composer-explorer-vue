@@ -322,7 +322,7 @@ def get_works(name):
     return response
 
 
-@app.route('/api/worksbygenre', methods=['POST'])
+@app.route('/api/worksbygenre', methods=['POST'])  # used in radio mode
 def get_worksbygenre():
     # get genres
     payload = request.get_json()
@@ -336,7 +336,7 @@ def get_worksbygenre():
 
     # get composers selected
     if not session.get('radio_composers'):
-        composer_list = ["Wagner", "Verdi"]  # for dev server testing
+        composer_list = ["Berlioz", "Wagner", "Beethoven"]  # for dev server testing
     else:
         composer_list = session['radio_composers']
 
@@ -344,31 +344,31 @@ def get_worksbygenre():
         if work_filter == 'recommended':
             works_list = db.session.query(WorkList)\
                 .filter(WorkList.composer.in_(composer_list), WorkList.recommend == True)\
-                .order_by(WorkList.order, WorkList.genre, WorkList.id).all()
+                .order_by(WorkList.genre, WorkList.id).all()  # don't order by order no. in multi mode
         elif work_filter == 'obscure':
             works_list = db.session.query(WorkList)\
-                .filter(WorkList.composer.in_(composer_list), WorkList.recommend == None)\
-                .order_by(WorkList.order, WorkList.genre, WorkList.id).all()
+                .filter(WorkList.composer.in_(composer_list), WorkList.recommend == None, WorkList.album_count > 0)\
+                .order_by(WorkList.genre, WorkList.id).all()
         else:
             works_list = db.session.query(WorkList)\
-                .filter(WorkList.composer.in_(composer_list))\
-                .order_by(WorkList.order, WorkList.genre, WorkList.id).all()
+                .filter(WorkList.composer.in_(composer_list), WorkList.album_count > 0)\
+                .order_by(WorkList.genre, WorkList.id).all()
 
     else:
         if work_filter == 'recommended':
             works_list = db.session.query(WorkList)\
                 .filter(WorkList.composer.in_(composer_list), WorkList.genre.in_(search_list), WorkList.recommend == True)\
-                .order_by(WorkList.order, WorkList.genre, WorkList.id).all()
+                .order_by(WorkList.genre, WorkList.id).all()  # don't order by order no. in multi mode
 
         elif work_filter == 'obscure':
             works_list = db.session.query(WorkList)\
-                .filter(WorkList.composer.in_(composer_list), WorkList.genre.in_(search_list), WorkList.recommend == None)\
-                .order_by(WorkList.order, WorkList.genre, WorkList.id).all()
+                .filter(WorkList.composer.in_(composer_list), WorkList.genre.in_(search_list), WorkList.recommend == None, WorkList.album_count > 0)\
+                .order_by(WorkList.genre, WorkList.id).all()
 
         else:
             works_list = db.session.query(WorkList)\
-                .filter(WorkList.composer.in_(composer_list), WorkList.genre.in_(search_list))\
-                .order_by(WorkList.order, WorkList.genre, WorkList.id).all()
+                .filter(WorkList.composer.in_(composer_list), WorkList.genre.in_(search_list), WorkList.album_count > 0)\
+                .order_by(WorkList.genre, WorkList.id).all()
 
     if not works_list:
         response_object = {'status': 'success'}

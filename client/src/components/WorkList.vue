@@ -87,6 +87,7 @@ export default {
         };
         const path = 'api/worksbygenre';
         axios.post(path, payload).then((res) => {
+          console.log(res);
           this.works = res.data.works;
           this.playlist = res.data.playlist;
           this.visibility = true;
