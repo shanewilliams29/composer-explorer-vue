@@ -142,26 +142,35 @@ export default {
         localStorage.setItem('config', JSON.stringify(this.$config));
       }
     },
-  },
-  created() {
-    this.title = this.$config.workTitle;
-    eventBus.$on('fireComposers', (composer) => {
+    newComposer(composer) {
+      console.log(composer);
         this.workSearchPlaceholder = "Search works by " + composer;
         this.workSearchField = '';
         this.workFilterField = { value: 'recommended', text: 'Recommended works' };
-    })
-    eventBus.$on('changeWork', () => {
+    },
+    newWork() {
         this.albumFilterField = { value: 'allartists', text: 'All performers'};
         this.albumSortField = { value: 'recommended', text: 'Recommended sorting' }
-    })
-    eventBus.$on('fireArtistList', (artistList) => {
+    },
+    createArtistList(artistList){
         this.artist_list = []
         this.albumOptions = [{ value: 'allartists', text: 'All performers'}];
         for (var key in artistList) {
           this.albumOptions.push({ value: key, text: key });
           this.artist_list.push(key);
         }
-    })
+    },
+  },
+  created() {
+    this.title = this.$config.workTitle;
+    eventBus.$on('fireComposers', this.newComposer);
+    eventBus.$on('changeWork', this.newWork);
+    eventBus.$on('fireArtistList', this.createArtistList);
+  },
+  beforeDestroy() {
+    eventBus.$off('fireComposers', this.newComposer);
+    eventBus.$off('changeWork', this.newWork);
+    eventBus.$off('fireArtistList', this.createArtistList);
   },
 };
 </script>
