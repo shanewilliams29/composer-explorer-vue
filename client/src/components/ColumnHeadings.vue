@@ -1,6 +1,6 @@
 <template>
   <div class="container-fluid">
-    <b-row>
+    <b-row class="flex-nowrap">
       <b-col>
         <div>
           <b-card class="heading-card composer-card">
@@ -23,7 +23,7 @@
         <b-card class="heading-card albums-card">
           <b-form-group>
             <v-select v-model="albumFilterField" label="text" :options="albumOptions" @input="albumFilter()" :clearable="false" :autoscroll="false" :components="{OpenIndicator}" class="mt-3 performer-search"></v-select>
-            <b-row>
+            <b-row class="flex-nowrap">
               <b-col style="padding-right: 0px;" cols="8">
                 <v-select v-model="albumSortField" label="text" :options="albumSortOptions" @input="albumFilter()" :clearable="false" class="mt-3 style-chooser" :searchable="false"></v-select>
               </b-col>
@@ -228,6 +228,13 @@ export default {
   margin-top: 5px !important;
   font-size: 14px;
   fill: white;
+}
+>>> .vs__selected-options{
+  flex-wrap: nowrap;
+}
+>>> .vs__selected{
+  white-space:nowrap;
+  overflow: hidden;
 }
 >>> {
   --vs-controls-color: #fff;

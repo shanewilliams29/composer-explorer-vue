@@ -1,6 +1,6 @@
 <template>
   <div class="container-fluid">
-    <b-row>
+    <b-row class="headings-row flex-nowrap">
       <b-col>
         <div>
           <b-card class="heading-card composer-card">
@@ -31,7 +31,7 @@
       <b-col>
         <b-card class="heading-card work-card">
             <b-form-group>
-              <b-col col=12>
+              <b-col>
               <v-select multiple
                 v-model="genreSelectField"
                 :deselectFromDropdown="false"
@@ -45,8 +45,8 @@
                 :searchable="true"
               ></v-select>
             </b-col>
-            <b-row class="sub-row">
-            <b-col col=6 class="col-padding-right">
+            <b-row class="sub-row flex-nowrap">
+            <b-col class="col-padding-right">
               <b-form-input
                 class="work-search-field"
                 v-model="workSearchField"
@@ -56,7 +56,7 @@
                 size="sm"
               ></b-form-input>
             </b-col>
-              <b-col col=6 class="col-padding-left">
+              <b-col class="col-padding-left">
                 <v-select
                 v-model="workFilterField"
                 label="text"
@@ -74,8 +74,8 @@
       <b-col class="last-col">
         <b-card class="heading-card albums-card">
           <b-form-group>
-            <b-row class="sub-row">
-            <b-col col=6 class="col-padding-right">
+            <b-row class="sub-row flex-nowrap">
+            <b-col class="col-padding-right">
                 <v-select
                 v-model="performerFilterField"
                 label="text"
@@ -86,7 +86,7 @@
                 :searchable="false"
               ></v-select>
             </b-col>
-            <b-col col=6 class="col-padding-left">
+            <b-col class="col-padding-left">
               <v-select
                 v-model="limitFilterField"
                 label="text"
@@ -98,13 +98,13 @@
               ></v-select>
             </b-col>
           </b-row>
-          <b-row class="sub-row">
-            <b-col col=6 class="col-padding-right">
-              <b-button class="radio-button-off" size="sm" v-if="!$view.radioPlaying" @click="toggleRadio()" block variant="">Radio OFF</b-button>
-              <b-button class="radio-button-on" size="sm" v-if="$view.radioPlaying" @click="toggleRadio()" block variant="warning">Radio ON</b-button>
+          <b-row class="sub-row flex-nowrap">
+            <b-col cols='3' class="col-padding-right">
+              <b-button class="spotify-export-button" size="sm" @click="exportSpotify()" block variant="success">Export</b-button>
             </b-col>
-            <b-col col=6 class="col-padding-left">
-              <b-button class="spotify-export-button" size="sm" @click="exportSpotify()" block variant="success">Export to Spotify</b-button>
+            <b-col cols='9' class="col-padding-left">
+              <b-button class="radio-button-off" size="sm" v-if="!$view.radioPlaying" @click="toggleRadio()" block >Radio Off</b-button>
+              <b-button class="radio-button-on" size="sm" v-if="$view.radioPlaying" @click="toggleRadio()" block variant="warning">Radio On</b-button>
             </b-col>
          </b-row>
           </b-form-group>
@@ -265,19 +265,23 @@ export default {
   margin-top: 5px;
   border: 1px solid #916a08 !important;
   background-color: #916a08 !important;
+  height: 31px;
 }
 .radio-button-off:hover{
   margin-top: 5px;
   border: 1px solid darkgoldenrod !important;
   background-color: darkgoldenrod !important;
+  height: 31px;
 }
 .radio-button-on{
   margin-top: 5px;
   border: 1px solid var(--yellow) !important;
   background-color: var(--yellow) !important;
+  height: 31px;
 }
 .spotify-export-button{
   margin-top: 5px;
+  height: 31px;
 }
 .form-row {
   margin-bottom: 0px;
@@ -296,6 +300,16 @@ export default {
   margin-top: 5px !important;
   font-size: 14px !important;
   fill: white;
+}
+.headings-row{
+
+}
+>>> .vs__selected-options{
+  flex-wrap: nowrap;
+}
+>>> .vs__selected{
+  white-space:nowrap;
+  overflow: hidden;
 }
 input{
   font-size: 14px !important;
@@ -326,10 +340,12 @@ input{
   border: 1px solid #343a40 !important;
 }
 .col-padding-right{
+  padding-left: 0px;
   padding-right: 2.5px;
 }
 .col-padding-left{
   padding-left: 2.5px;
+  padding-right: 0px;
 }
 /*.custom-select{
 

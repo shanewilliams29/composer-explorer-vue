@@ -1,9 +1,9 @@
 <template>
   <div class="container-fluid">
-    <b-row>
+    <b-row class="flex-nowrap">
       <b-col class="text-center">
         <div class="vertical-centered">
-          <div class="no-results" v-if="!results[0]">Search for a performer to view composers and works they perform</div>
+          <div class="no-results" v-if="!results[0]"><table class="dummy-table">Search for a performer to view composers and works they perform</table></div>
             <table v-if="results">
               <tr class="tr-performer" v-for="result in results" :key="result[0]">
                 <td>
@@ -20,14 +20,13 @@
                 </td>
               </tr>
             </table>
-
         </div>
       </b-col>
       <b-col class="last-col">
         <b-card class="heading-card albums-card">
           <b-form-group>
            <vue-typeahead-bootstrap v-model="query" placeholder="Search for a performer" class="mt-3 style-chooser performer-search" @input="resetField" @hit="artistSearch" size="sm" :data="this.artistList"/>
-            <b-row>
+            <b-row class="flex-nowrap">
               <b-col style="padding-right: 0px;" cols="8">
                 <v-select v-model="albumSortField" label="text" :options="albumSortOptions" @input="albumFilter()" :clearable="false" class="mt-3 style-chooser" :searchable="false"></v-select>
               </b-col>
@@ -220,7 +219,10 @@ table {
   vertical-align: middle;
   line-height: normal;
   margin-bottom: 3px;
-
+}
+.dummy-table{
+  padding: 20px;
+  text-align: center !important;
 }
 .artist-name{
   font-size: 20px;
@@ -287,6 +289,13 @@ table {
   margin-top: 5px !important;
   font-size: 14px;
   fill: white;
+}
+>>> .vs__selected-options{
+  flex-wrap: nowrap;
+}
+>>> .vs__selected{
+  white-space:nowrap;
+  overflow: hidden;
 }
 >>> {
   --vs-controls-color: #fff;
