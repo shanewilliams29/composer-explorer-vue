@@ -13,7 +13,10 @@
                   <span class="artist-name">{{ result[0] }}&nbsp;</span><br>
                   <span class="artist-job">{{result[1]}}</span>
                   <span v-if="wikiLink" class="wiki-link">&nbsp;&nbsp;<a :href="wikiLink" target="_blank"><b-icon icon="info-circle-fill" aria-hidden="true"></b-icon> Wikipedia</a>&nbsp;&nbsp;</span>
-                  <span class="radio-link"><a target="_blank"><b-icon icon="volume-up-fill" aria-hidden="true"></b-icon> Radio</a></span><br>
+                  <span @mouseover="hover = true" @mouseleave="hover = false" class="wiki-link"><a :href="wikiLink" target="_blank">
+                    <img v-if="hover" src="@/assets/radio.svg" class="radio-link" height="14px" />
+                    <img v-else src="@/assets/radio_gray.svg" class="radio-link" height="14px" />
+                  Radio</a></span>
                 </td>
               </tr>
             </table>
@@ -46,6 +49,7 @@ import {eventBus} from "../main.js";
 export default {
   data() {
     return {
+      hover: false,
       wikiLink: null,
       query: '',
       artistList: [],

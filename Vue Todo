@@ -67,6 +67,8 @@
 - "A little less popular"
 - Siegfrid very buggy playback
 - Better shuffle playback
+- Multicomposer in radio mode is glitchy (Bellini and Puccini, added or removed)
+- Info panel in radio mode incorrect
 
 RELINKING
 - Track relinking, what to do if titles are different? Is titles best way to do this?

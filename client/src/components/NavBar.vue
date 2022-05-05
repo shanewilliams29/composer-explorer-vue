@@ -6,9 +6,9 @@
       </b-navbar-brand>
       <div>
         <b-nav pills class="navbar-items">
-          <b-nav-item id="home" :active='$route.path == "/"' @click="$router.push('/')"><b-icon-music-note-list></b-icon-music-note-list>&nbsp;Browse</b-nav-item>
-          <b-nav-item id="performer" :active='$route.name == "performers"' @click="$router.push('/performers')"><b-icon-person-lines-fill></b-icon-person-lines-fill>&nbsp;Performers</b-nav-item>
-          <b-nav-item id="radio" :active='$route.name == "radio"' @click="$router.push('/radio')"><b-icon-volume-up-fill></b-icon-volume-up-fill>&nbsp;Radio</b-nav-item>
+          <b-nav-item id="home" :active='$route.path == "/"' @click="$router.push('/')"><b-icon-music-note-list></b-icon-music-note-list>&nbsp;&nbsp;Browse</b-nav-item>
+          <b-nav-item id="performer" :active='$route.name == "performers"' @click="$router.push('/performers')"><b-icon-person-lines-fill></b-icon-person-lines-fill>&nbsp;&nbsp;Performers</b-nav-item>
+          <b-nav-item id="radio" :active='$route.name == "radio"' @click="$router.push('/radio')"> <img src="@/assets/radio.svg" class="radio-img" height="22px" />&nbsp;&nbsp;Radio</b-nav-item>
         </b-nav>
       </div>
       <b-navbar-nav class="ml-auto" v-if="!$auth.clientToken">
@@ -48,7 +48,9 @@ export default {
   background-color: var(--green);
 }
 
-
+.radio-img{
+  padding-bottom: 0px;
+}
 
 .container-fluid {
   padding: 0px;
