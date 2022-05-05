@@ -3,7 +3,7 @@
     <b-row class="headings-row flex-nowrap">
       <b-col>
         <div>
-          <b-card class="heading-card composer-card">
+
             <b-form-group>
               <v-select
                 v-model="radioTypeField"
@@ -21,17 +21,17 @@
                 @input="composerSelect()"
                 placeholder="Select composers"
                 :clearable="true"
-                class="mt-3 style-chooser"
+                class="mt-3 style-chooser allow-wrap"
                 :searchable="true"
               ></v-select>
             </b-form-group>
-          </b-card>
+
         </div>
       </b-col>
       <b-col>
-        <b-card class="heading-card work-card">
+
             <b-form-group>
-              <b-col>
+              <b-col class="col-no-padding-left">
               <v-select multiple
                 v-model="genreSelectField"
                 :deselectFromDropdown="false"
@@ -41,7 +41,7 @@
                 @input="genreSelect()"
                 placeholder="Select genres"
                 :clearable="true"
-                class="mt-3 style-chooser"
+                class="mt-3 style-chooser allow-wrap"
                 :searchable="true"
               ></v-select>
             </b-col>
@@ -69,10 +69,10 @@
             </b-col>
           </b-row>
             </b-form-group>
-        </b-card>
+
       </b-col>
       <b-col class="last-col">
-        <b-card class="heading-card albums-card">
+
           <b-form-group>
             <b-row class="sub-row flex-nowrap">
             <b-col class="col-padding-right">
@@ -108,7 +108,7 @@
             </b-col>
          </b-row>
           </b-form-group>
-        </b-card>
+
       </b-col>
     </b-row>
   </div>
@@ -245,12 +245,15 @@ export default {
   background-color: #54595f;
   color: #3b4047;
 }
+.form-group{
+  margin-bottom: 5px;
+}
 .last-col{
   padding-right: 5px !important;
 }
 .card-body{
   background: none !important;
-  height: 73px;
+/*  height: 73px;*/
 }
 .card {
   background: none;
@@ -263,14 +266,14 @@ export default {
 }
 .radio-button-off{
   margin-top: 5px;
-  border: 1px solid #916a08 !important;
-  background-color: #916a08 !important;
+  border: 1px solid #787e87 !important;
+  background-color: #787e87 !important;
   height: 31px;
 }
 .radio-button-off:hover{
   margin-top: 5px;
-  border: 1px solid darkgoldenrod !important;
-  background-color: darkgoldenrod !important;
+  border: 1px solid #93989f !important;
+  background-color: #93989f !important;
   height: 31px;
 }
 .radio-button-on{
@@ -295,6 +298,7 @@ export default {
 }
 .col {
   padding: 0px;
+  padding-left: 5px;
 }
 .style-chooser{
   margin-top: 5px !important;
@@ -310,6 +314,9 @@ export default {
 >>> .vs__selected{
   white-space:nowrap;
   overflow: hidden;
+}
+.allow-wrap >>> .vs__selected-options{
+  flex-wrap: wrap !important;
 }
 input{
   font-size: 14px !important;
@@ -346,6 +353,9 @@ input{
 .col-padding-left{
   padding-left: 2.5px;
   padding-right: 0px;
+}
+.col-no-padding-left{
+  padding-left: 0px;
 }
 /*.custom-select{
 
