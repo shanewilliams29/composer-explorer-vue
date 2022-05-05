@@ -94,6 +94,7 @@ export default {
         }).catch((error) => {
           console.error(error);
           this.$view.enableRadio = false;
+          this.works = [];
         });
       }
     },

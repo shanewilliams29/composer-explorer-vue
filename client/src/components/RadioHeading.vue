@@ -200,10 +200,10 @@ export default {
           this.genreOptions = [];
           this.genreOptions.push({ value: 'all', text: 'All Genres' });
         }
-        eventBus.$emit('fireGenreSelectRadio', this.genreSelectField, this.workFilterField.value, this.workSearchField);
         for (const genre of genreList) {
           this.genreOptions.push({ value: genre, text: genre });
         }
+        eventBus.$emit('fireGenreSelectRadio', this.genreSelectField, this.workFilterField.value, this.workSearchField);
     },
     genreSelect(){
         eventBus.$emit('fireGenreSelectRadio', this.genreSelectField, this.workFilterField.value, this.workSearchField);
@@ -236,6 +236,11 @@ export default {
   },
   mounted(){
     eventBus.$emit('fireRadioSelect', 'composer');
+  },
+  beforeDestroy() {
+    eventBus.$off('fireComposerListToRadio', this.makeComposerDropdown);
+    eventBus.$off('fireRadioGenreList', this.makeGenreList);
+    eventBus.$off('fireComposerSelectRadio', this.makeGenreList);
   }
 };
 </script>
