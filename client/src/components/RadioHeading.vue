@@ -62,7 +62,6 @@
                 label="text"
                 :options="workOptions"
                 @input="genreSelect()"
-                :inputId="workFilterField"
                 :clearable="false"
                 class="mt-3 style-chooser"
                 :searchable="false"
@@ -75,6 +74,8 @@
       <b-col class="last-col">
         <b-card class="heading-card albums-card">
           <b-form-group>
+            <b-row class="sub-row">
+            <b-col col=6 class="col-padding-right">
                 <v-select
                 v-model="performerFilterField"
                 label="text"
@@ -84,6 +85,19 @@
                 class="mt-3 style-chooser"
                 :searchable="false"
               ></v-select>
+            </b-col>
+            <b-col col=6 class="col-padding-left">
+              <v-select
+                v-model="limitFilterField"
+                label="text"
+                :options="limitOptions"
+                @input="limitFilter()"
+                :clearable="false"
+                class="mt-3 style-chooser"
+                :searchable="false"
+              ></v-select>
+            </b-col>
+          </b-row>
               <b-button class="radio-button" size="sm" v-if="!$view.radioPlaying" @click="toggleRadio()" block variant="">Radio Off</b-button>
               <b-button class="radio-button" size="sm" v-if="$view.radioPlaying" @click="toggleRadio()" block variant="warning">Radio On</b-button>
           </b-form-group>
@@ -131,7 +145,19 @@ export default {
       performerFilterField: { value: 'topartists', text: 'Top performance' },
       performerOptions: [
           { value: 'topartists', text: 'Top performance' },
-          { value: 'randomartists', text: 'Random performance'}
+          { value: 'randomartists', text: 'Random performers'}
+        ],
+
+      limitFilterField: { value: '4', text: 'Max # of tracks: 4' },
+      limitOptions: [
+          { value: '1', text: 'Max # of tracks: 1' },
+          { value: '2', text: 'Max # of tracks: 2' },
+          { value: '3', text: 'Max # of tracks: 3' },
+          { value: '4', text: 'Max # of tracks: 4' },
+          { value: '5', text: 'Max # of tracks: 5' },
+          { value: '6', text: 'Max # of tracks: 6' },
+          { value: '10', text: 'Max # of tracks: 10' },
+          { value: '100', text: 'No track limit' },
         ],
     };
   },
@@ -182,6 +208,10 @@ export default {
     onWorkFocus() {
       this.workSearchField = '';
       eventBus.$emit('fireGenreSelectRadio', this.genreSelectField, this.workFilterField.value, this.workSearchField);
+    },
+    limitFilter() {
+      this.$view.radioTrackLimit = this.limitFilterField.value;
+      console.log(this.$view.radioTrackLimit);
     },
       performerFilter(){
         if(this.performerFilterField.value == 'randomartists'){

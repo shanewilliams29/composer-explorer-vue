@@ -336,7 +336,7 @@ def get_worksbygenre():
 
     # get composers selected
     if not session.get('radio_composers'):
-        composer_list = ["Beethoven", "Brahms"]  # for dev server testing
+        composer_list = ["Wagner", "Verdi"]  # for dev server testing
     else:
         composer_list = session['radio_composers']
 
@@ -409,6 +409,7 @@ def get_albums(work_id):
     # get filter and search arguments
     artistselect = request.args.get('artist')
     sort = request.args.get('sort')
+    limit = request.args.get('limit', default=100)
     search = None
 
     if artistselect:
@@ -416,7 +417,7 @@ def get_albums(work_id):
 
     if search:
         albums = db.session.query(WorkAlbums, func.count(AlbumLike.id).label('total')) \
-            .filter(WorkAlbums.workid == work_id, WorkAlbums.hidden != True, WorkAlbums.artists.ilike(search), or_(WorkAlbums.album_type == None, WorkAlbums.album_type != "compilation")) \
+            .filter(WorkAlbums.workid == work_id, WorkAlbums.hidden != True, WorkAlbums.artists.ilike(search), WorkAlbums.album_type != "compilation") \
             .outerjoin(AlbumLike).group_by(WorkAlbums) \
             .order_by(text('total DESC'), WorkAlbums.score.desc()).paginate(1, 1000, False)
 
@@ -428,9 +429,15 @@ def get_albums(work_id):
 
     else:
         albums = db.session.query(WorkAlbums, func.count(AlbumLike.id).label('total')) \
-            .filter(WorkAlbums.workid == work_id, WorkAlbums.hidden != True, or_(WorkAlbums.album_type == None, WorkAlbums.album_type != "compilation"))\
+            .filter(WorkAlbums.workid == work_id, WorkAlbums.hidden != True, WorkAlbums.album_type != "compilation", WorkAlbums.work_track_count <= limit)\
             .outerjoin(AlbumLike).group_by(WorkAlbums) \
             .order_by(text('total DESC'), WorkAlbums.score.desc()).paginate(1, 1000, False)
+
+        if not albums.items:  # return complilation albums if no results
+            albums = db.session.query(WorkAlbums, func.count(AlbumLike.id).label('total')) \
+                .filter(WorkAlbums.workid == work_id, WorkAlbums.hidden != True, WorkAlbums.work_track_count <= limit)\
+                .outerjoin(AlbumLike).group_by(WorkAlbums) \
+                .order_by(text('total DESC'), WorkAlbums.score.desc()).paginate(1, 1000, False)
 
     if not albums.items:
         response_object = {'status': 'success'}

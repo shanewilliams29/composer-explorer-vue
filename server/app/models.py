@@ -344,6 +344,7 @@ class WorkAlbums(db.Model):
     label = db.Column(db.String(1024))
     title = db.Column(db.String(2048))
     track_count = db.Column(db.Integer)
+    work_track_count = db.Column(db.Integer)
     album_type = db.Column(db.String(255))
     likes = db.relationship('AlbumLike', backref='album', lazy='dynamic', passive_deletes=True)
     work = db.relationship("WorkList")

@@ -74,6 +74,7 @@ export default {
       });
     },
     // gets albums and begins playback of first (for next and previous buttons)
+    // used in Autoplay and the radio
     getAlbumsAndPlay(id, artist, sort) {
 
       function randomIntFromInterval(min, max) { // min and max included
@@ -93,7 +94,14 @@ export default {
         sort = '';
       }
       this.loading = true;
-      const path = 'api/albums/' + id + '?artist=' + artist + '&sort=' + sort;
+
+      var path = '';
+      if (this.$view.mode == 'radio'){
+        var limit = this.$view.radioTrackLimit;
+        path = 'api/albums/' + id + '?artist=' + artist + '&sort=' + sort + '&limit=' + limit;
+      } else {
+        path = 'api/albums/' + id + '?artist=' + artist + '&sort=' + sort;
+      }
       axios.get(path).then((res) => {
         if(this.$view.mode == 'radio'){ // only one album in radiomode
           if(this.$view.randomAlbum){
