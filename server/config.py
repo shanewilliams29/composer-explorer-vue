@@ -15,3 +15,6 @@ class Config(object):
     SPOTIFY_REDIRECT_URL = os.environ.get('SPOTIFY_REDIRECT_URL')
 
     STATIC = 'https://storage.googleapis.com/composer-explorer.appspot.com/'
+
+    CACHE_TYPE = "SimpleCache"  # Flask-Caching related configs
+    CACHE_DEFAULT_TIMEOUT = 300

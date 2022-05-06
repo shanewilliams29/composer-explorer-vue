@@ -26,7 +26,7 @@
           required
         ></b-form-input>
       </b-form-group>
-      <b-button type="submit" variant="success" class="mt-4">Export to Spotify</b-button>
+      <b-button v-if="$view.playlistTrackCount" type="submit" variant="success" class="mt-4">Export to Spotify</b-button>
     </b-form>
     </div>
   </b-modal>

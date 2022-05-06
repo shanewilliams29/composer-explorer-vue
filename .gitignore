@@ -2,6 +2,7 @@
 node_modules
 dist
 env
+cache
 __pycache__
 .gcloudignore
 app.yaml
