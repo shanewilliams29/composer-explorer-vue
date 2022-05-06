@@ -98,22 +98,42 @@ export default {
         });
       }
     },
-    exportPlaylist(genres, filter, search, limit) { // used in radio mode to export to Spotify
-      if (genres.length < 1) { // no works
+    preparePlaylist(genres, filter, search, limit, prefetch, name) { // used in radio mode to export to Spotify
+      if (!genres) { // no works
         alert("No works are selected!")
       } else {
+        this.$bvModal.show('playlist-modal');
         const payload = {
           genres: genres,
           filter: filter,
           search: search,
           limit: limit,
-          name: "Test Playlist"
+          prefetch: prefetch,
+          name: name,
+          // name: "Test Playlist"
         };
         const path = 'api/exportplaylist';
         axios.post(path, payload).then((res) => {
           console.log(res);
+          if(prefetch){
+            this.$view.playlistTrackCount = res.data.track_count;
+          }
+          else if('error' in res.data){
+            this.$view.playlistError = res.data.error.message;
+            this.$view.playlistSuccess = false;
+            console.log("ERROR");
+          } else {
+            this.$view.playlistSuccess = true;
+            this.$view.playlistError = false;
+            console.log("SUCCESS");
+          }
         }).catch((error) => {
-          console.error(error);
+            if(prefetch){
+              this.$view.playlistError = "Too many tracks selected";
+            }else{
+              this.$view.playlistError = error;
+            }
+            this.$view.playlistSuccess = false;
         });
       }
     },
@@ -259,7 +279,7 @@ export default {
     eventBus.$on('fireGenreSelectRadio', this.getGenreWorks);
     eventBus.$on('fireNextWork', this.nextWork);
     eventBus.$on('firePreviousWork', this.previousWork);
-    eventBus.$on('firePlaylistExport', this.exportPlaylist);
+    eventBus.$on('firePlaylistExport', this.preparePlaylist);
   },
   beforeDestroy() {
     eventBus.$off('fireComposers', this.fireComposers);
@@ -270,7 +290,7 @@ export default {
     eventBus.$off('fireGenreSelectRadio', this.getGenreWorks);
     eventBus.$off('fireNextWork', this.nextWork);
     eventBus.$off('firePreviousWork', this.previousWork);
-    eventBus.$off('firePlaylistExport', this.exportPlaylist);
+    eventBus.$off('firePlaylistExport', this.preparePlaylist);
   }
 };
 </script>

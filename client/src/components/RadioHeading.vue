@@ -99,26 +99,35 @@
             </b-col>
           </b-row>
           <b-row class="sub-row flex-nowrap">
-            <b-col cols='3' class="col-padding-right">
-              <b-button class="spotify-export-button" size="sm" @click="exportSpotify()" block variant="success">Export</b-button>
-            </b-col>
-            <b-col cols='9' class="col-padding-left">
-              <b-button class="radio-button-off" size="sm" v-if="!$view.radioPlaying" @click="toggleRadio()" block >Radio Off</b-button>
+              <b-col cols='9' class="col-padding-right">
+              <b-button class="radio-button-off" size="sm" v-if="!$view.radioPlaying && $view.enableRadio" @click="toggleRadio()" block >Radio Off</b-button>
+              <b-button class="radio-button-off-disabled" size="sm" v-if="!$view.radioPlaying && !$view.enableRadio" @click="toggleRadio()" disabled block>Radio Off</b-button>
               <b-button class="radio-button-on" size="sm" v-if="$view.radioPlaying" @click="toggleRadio()" block variant="warning">Radio On</b-button>
+
             </b-col>
+            <b-col cols='3' class="col-padding-left">
+              <b-button v-if="$view.enableRadio" class="spotify-export-button" size="sm" @click="prepareForExport()" block variant="success">Export</b-button>
+              <b-button v-else class="spotify-export-button" size="sm" block variant="success" disabled>Export</b-button>
+            </b-col>
+
          </b-row>
           </b-form-group>
 
       </b-col>
     </b-row>
+    <PlaylistModal/>
   </div>
 </template>
 
 <script>
 import {eventBus} from "../main.js";
 import spotify from '@/SpotifyFunctions.js'
+import PlaylistModal from './subcomponents/PlaylistModal.vue'
 
 export default {
+  components: {
+    PlaylistModal,
+  },
   data() {
     return {
       artist_list: [],
@@ -225,9 +234,14 @@ export default {
         this.$view.randomAlbum = false;
       }
     },
-    exportSpotify(){
-      eventBus.$emit('firePlaylistExport', this.genreSelectField, this.workFilterField.value, this.workSearchField, this.limitFilterField.value);
-    }
+    prepareForExport(){
+      eventBus.$emit('firePlaylistExport', this.genreSelectField, this.workFilterField.value, this.workSearchField, this.limitFilterField.value, true, 'dummyname');
+      this.$view.playlistError = false;
+      this.$view.playlistSuccess = false;
+    },
+    exportSpotify(name){
+      eventBus.$emit('firePlaylistExport', this.genreSelectField, this.workFilterField.value, this.workSearchField, this.limitFilterField.value, false, name);
+    },
   },
   created() {
     this.$view.radioPlaying = false;
@@ -273,6 +287,12 @@ export default {
 }
 .radio-button-off{
   margin-top: 5px;
+  border: 1px solid #787e87 !important;
+  background-color: #787e87 !important;
+  height: 31px;
+}
+.radio-button-off-disabled{
+    margin-top: 5px;
   border: 1px solid #787e87 !important;
   background-color: #787e87 !important;
   height: 31px;

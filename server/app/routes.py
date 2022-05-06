@@ -336,7 +336,7 @@ def get_worksbygenre():
 
     # get composers selected
     if not session.get('radio_composers'):
-        composer_list = ["Beethoven"]  # for dev server testing
+        composer_list = ["Bach", "Beethoven", "Mozart", "Verdi"]  # for dev server testing
     else:
         composer_list = session['radio_composers']
 
@@ -415,10 +415,11 @@ def exportplaylist():
     search_term = payload['search']
     limit = payload['limit']
     name = payload['name']
+    prefetch = payload['prefetch']
 
     # get composers selected
     if not session.get('radio_composers'):
-        composer_list = ["Beethoven"]  # for dev server testing
+        composer_list = ["Bach", "Beethoven", "Mozart", "Verdi"]  # for dev server testing
     else:
         composer_list = session['radio_composers']
 
@@ -462,7 +463,7 @@ def exportplaylist():
             pass
         else:
             best_albums.append(tup[0])
-            print(tup[0].workid + " " + tup[0].title)
+            # print(tup[0].workid + " " + tup[0].title)
             prev_album_id = tup[0].workid
 
     tracklist = []
@@ -472,9 +473,15 @@ def exportplaylist():
         for track in album['tracks']:
             tracklist.append(track[1])
 
-    # submit to Spotify
+    if prefetch:
+        response_object = {'status': 'success'}
+        response_object['track_count'] = len(tracklist)
+        response = jsonify(response_object)
+        return response
+
+        # submit to Spotify
     user_id = '12173954849'
-    #session['spotify_token'] = 'BQCgrLqPIcPOtWZSZXC2387dHiThMNnayCuQVxb4peRzzWQPJj8Q98gtmCSGUgjykfmqgLtL6-brwLYiCxqnyV2ZQpsdeHiJJ4QtK_q_iMOdJF0KZhU95Aaym9FyJPN02W_tIhvnyMHwn1g5M7cZpFqVffxjCbIMjMLkXGSUBpGU-B1PawLxQVn5NOjzaNcwd5k99gQCJkfcg55CYq908gc'
+    # session['spotify_token'] = 'BQCp3kQhFUQHRL0GZlNabJ7-UDuQgU6kRQBAzrDuslLvjM4MbrdI9ptUDWF9h04h4gCWaDQblP2W3lTDU90H8iffjMwq1VKJbzaJR0f1TRY9Mj-itQJapHrLGwiBe9Yf95xwLgkbZOP3oSk1aQt7mcAH0AGX8-tL7pusvgxgFMO7YtEacC1t9ElvSTzbnjuchfPCOMtpNAlTZh-rbXjWug8'
 
     try:
         response = sp.create_playlist(name, user_id)
@@ -493,7 +500,7 @@ def exportplaylist():
             track = "spotify:track:" + track + ","
             uristring = uristring + track
             #print(str(i) + " " + str(k) + " " + str(len(tracklist)))
-            #print("SEND")
+            # print("SEND")
             response = sp.add_to_playlist(playlist_id, uristring)
             i = 0
             uristring = ""
@@ -502,7 +509,7 @@ def exportplaylist():
             uristring = uristring + track
             #print(str(i) + " " + str(k) + " " + str(len(tracklist)))
 
-    return "DONE"
+    return response.json()
 
     # elif work_filter == 'obscure':
     #     works_list = db.session.query(WorkList)\

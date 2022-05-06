@@ -77,7 +77,10 @@ Vue.prototype.$view = Vue.observable({
   radioPlaying: false,
   enableRadio: false,
   randomAlbum: false,
-  radioTrackLimit: '4'
+  radioTrackLimit: '4',
+  playlistTrackCount: null,
+  playlistSuccess: false,
+  playlistError: false
 });
 
 new Vue({
