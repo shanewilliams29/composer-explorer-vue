@@ -23,7 +23,7 @@ def before_request():
 
     if not session.get('app_token'):
         session['app_token'] = sp.client_authorize()
-        # session['app_token_expire_time'] = datetime.now(timezone.utc) + timedelta(hours=1)
+        session['app_token_expire_time'] = datetime.now(timezone.utc) + timedelta(hours=1)
 
     # token expiry and refresh
     # if session['app_token_expire_time'] < datetime.now((timezone.utc)):
