@@ -68,5 +68,9 @@
 #input-group{
   margin-top: 10px;
 }
+input{
+  color: #000 !important;
+  background-color: #f1f2f4 !important;
+}
 
 </style>

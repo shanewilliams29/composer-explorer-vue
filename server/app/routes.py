@@ -23,16 +23,16 @@ def before_request():
 
     if not session.get('app_token'):
         session['app_token'] = sp.client_authorize()
-        session['app_token_expire_time'] = datetime.now(timezone.utc) + timedelta(hours=1)
+        # session['app_token_expire_time'] = datetime.now(timezone.utc) + timedelta(hours=1)
 
     # token expiry and refresh
-    if session['app_token_expire_time'] < datetime.now((timezone.utc)):
-        session['app_token'] = sp.client_authorize()
-        session['app_token_expire_time'] = datetime.now((timezone.utc)) + timedelta(hours=1)
-    if session['spotify_token']:
-        if session['spotify_token_expire_time'] < datetime.now((timezone.utc)):
-            session['spotify_token'] = sp.refresh_token()
-            session['spotify_token_expire_time'] = datetime.now((timezone.utc)) + timedelta(hours=1)
+    # if session['app_token_expire_time'] < datetime.now((timezone.utc)):
+    #     session['app_token'] = sp.client_authorize()
+    #     session['app_token_expire_time'] = datetime.now((timezone.utc)) + timedelta(hours=1)
+    # if session['spotify_token']:
+    #     if session['spotify_token_expire_time'] < datetime.now((timezone.utc)):
+    #         session['spotify_token'] = sp.refresh_token()
+    #         session['spotify_token_expire_time'] = datetime.now((timezone.utc)) + timedelta(hours=1)
 
 
 @app.route('/', defaults={'path': ''})
@@ -66,7 +66,7 @@ def spotify():
         return jsonify(response_object)
     session['spotify_token'] = response.json()['access_token']
     session['refresh_token'] = response.json()['refresh_token']
-    session['spotify_token_expire_time'] = datetime.now() + timedelta(hours=1)
+    # session['spotify_token_expire_time'] = datetime.now() + timedelta(hours=1)
 
     if Config.MODE == "DEVELOPMENT":
         response = redirect("http://localhost:8080/")
@@ -424,6 +424,7 @@ def exportplaylist():
         composer_list = session['radio_composers']
 
     # ALL
+
     if search_list[0] == "all":
         album_list = db.session.query(WorkAlbums, func.count(AlbumLike.id).label('total')).join(WorkList)\
             .filter(WorkList.composer.in_(composer_list), WorkList.recommend == True, WorkAlbums.hidden != True, WorkAlbums.album_type != "compilation", WorkAlbums.work_track_count <= limit)\
@@ -477,11 +478,12 @@ def exportplaylist():
         response_object = {'status': 'success'}
         response_object['track_count'] = len(tracklist)
         response = jsonify(response_object)
+
         return response
 
-        # submit to Spotify
+    # submit to Spotify
     user_id = '12173954849'
-    # session['spotify_token'] = 'BQCp3kQhFUQHRL0GZlNabJ7-UDuQgU6kRQBAzrDuslLvjM4MbrdI9ptUDWF9h04h4gCWaDQblP2W3lTDU90H8iffjMwq1VKJbzaJR0f1TRY9Mj-itQJapHrLGwiBe9Yf95xwLgkbZOP3oSk1aQt7mcAH0AGX8-tL7pusvgxgFMO7YtEacC1t9ElvSTzbnjuchfPCOMtpNAlTZh-rbXjWug8'
+    # session['spotify_token'] = 'BQAf7fyUYCC_59c579a66zAU2__MBdMh2Q3f57JS0Ga0ydz6QG_XsGyZzOQfhV8jKn-kuhROm__TP-J_LvizfoPoVYazNMtBImpAPT2I5Y1YJE-pW3QspP0009Jra-l9CKukhJJ3DUpNgCCEbgXQoJIzYsMkv4NT7ks8ZDvTumXKolyKKdoaL7pbMZkVFI5Psop-yr2PrQ_dWu2WviR64m8'
 
     try:
         response = sp.create_playlist(name, user_id)
