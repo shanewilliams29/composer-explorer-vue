@@ -100,13 +100,13 @@
           </b-row>
           <b-row class="sub-row flex-nowrap">
               <b-col cols='9' class="col-padding-right">
-              <b-button class="radio-button-off" size="sm" v-if="!$view.radioPlaying && $view.enableRadio" @click="toggleRadio()" block >Radio Off</b-button>
-              <b-button class="radio-button-off-disabled" size="sm" v-if="!$view.radioPlaying && !$view.enableRadio" @click="toggleRadio()" disabled block>Radio Off</b-button>
-              <b-button class="radio-button-on" size="sm" v-if="$view.radioPlaying" @click="toggleRadio()" block variant="warning">Radio On</b-button>
+              <b-button class="radio-button-off" size="sm" v-if="!$view.radioPlaying && $view.enableRadio && $auth.clientToken" @click="toggleRadio()" block >Radio Off</b-button>
+              <b-button class="radio-button-off-disabled" size="sm" v-if="!$view.radioPlaying && !$view.enableRadio || !$auth.clientToken" @click="toggleRadio()" disabled block>Radio Off</b-button>
+              <b-button class="radio-button-on" size="sm" v-if="$view.radioPlaying && $auth.clientToken" @click="toggleRadio()" block variant="warning">Radio On</b-button>
 
             </b-col>
             <b-col cols='3' class="col-padding-left">
-              <b-button v-if="$view.enableRadio" class="spotify-export-button" size="sm" @click="prepareForExport()" block variant="success">Export</b-button>
+              <b-button v-if="$view.enableRadio && $auth.clientToken" class="spotify-export-button" size="sm" @click="prepareForExport()" block variant="success">Export</b-button>
               <b-button v-else class="spotify-export-button" size="sm" block variant="success" disabled>Export</b-button>
             </b-col>
 
