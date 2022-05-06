@@ -336,7 +336,7 @@ def get_worksbygenre():
 
     # get composers selected
     if not session.get('radio_composers'):
-        composer_list = ["Berlioz", "Wagner", "Beethoven"]  # for dev server testing
+        composer_list = ["Beethoven"]  # for dev server testing
     else:
         composer_list = session['radio_composers']
 
@@ -400,6 +400,143 @@ def get_worksbygenre():
     response_object['playlist'] = works_list  # for back and previous playing
     response = jsonify(response_object)
     return response
+
+
+@app.route('/api/exportplaylist', methods=['POST'])  # used in radio mode
+def exportplaylist():
+    # get genres
+    payload = request.get_json()
+
+    search_list = []
+    for genre in payload['genres']:
+        search_list.append(genre['value'])
+
+    work_filter = payload['filter']
+    search_term = payload['search']
+    limit = payload['limit']
+    name = payload['name']
+
+    # get composers selected
+    if not session.get('radio_composers'):
+        composer_list = ["Beethoven"]  # for dev server testing
+    else:
+        composer_list = session['radio_composers']
+
+    # ALL
+    if search_list[0] == "all":
+        album_list = db.session.query(WorkAlbums, func.count(AlbumLike.id).label('total')).join(WorkList)\
+            .filter(WorkList.composer.in_(composer_list), WorkList.recommend == True, WorkAlbums.hidden != True, WorkAlbums.album_type != "compilation", WorkAlbums.work_track_count <= limit)\
+            .outerjoin(AlbumLike).group_by(WorkAlbums) \
+            .order_by(WorkList.genre, WorkList.id, text('total DESC'), WorkAlbums.score.desc()).all()
+
+    # if search_list[0] == "all":
+    #     if work_filter == 'recommended':
+    #         works_list = db.session.query(WorkList)\
+    #             .filter(WorkList.composer.in_(composer_list), WorkList.recommend == True)\
+    #             .order_by(WorkList.genre, WorkList.id).all()  # don't order by order no. in multi mode
+    #     elif work_filter == 'obscure':
+    #         works_list = db.session.query(WorkList)\
+    #             .filter(WorkList.composer.in_(composer_list), WorkList.recommend == None, WorkList.album_count > 0)\
+    #             .order_by(WorkList.genre, WorkList.id).all()
+    #     else:
+    #         works_list = db.session.query(WorkList)\
+    #             .filter(WorkList.composer.in_(composer_list), WorkList.album_count > 0)\
+    #             .order_by(WorkList.genre, WorkList.id).all()
+
+        # albums = db.session.query(WorkAlbums, func.count(AlbumLike.id).label('total')) \
+        # .filter(WorkAlbums.workid == work_id, WorkAlbums.hidden != True, WorkAlbums.artists.ilike(search), WorkAlbums.album_type != "compilation") \
+        # .outerjoin(AlbumLike).group_by(WorkAlbums) \
+        # .order_by(text('total DESC'), WorkAlbums.score.desc()).paginate(1, 1000, False)
+
+    # recommended
+    else:
+        album_list = db.session.query(WorkAlbums, func.count(AlbumLike.id).label('total')).join(WorkList)\
+            .filter(WorkList.composer.in_(composer_list), WorkList.genre.in_(search_list), WorkList.recommend == True, WorkAlbums.hidden != True, WorkAlbums.album_type != "compilation", WorkAlbums.work_track_count <= limit)\
+            .outerjoin(AlbumLike).group_by(WorkAlbums) \
+            .order_by(WorkList.genre, WorkList.id, text('total DESC'), WorkAlbums.score.desc()).all()
+
+    best_albums = []
+    prev_album_id = ""
+    for tup in album_list:
+        if tup[0].workid == prev_album_id:
+            pass
+        else:
+            best_albums.append(tup[0])
+            print(tup[0].workid + " " + tup[0].title)
+            prev_album_id = tup[0].workid
+
+    tracklist = []
+    for album in best_albums:
+        album = json.loads(album.data)
+
+        for track in album['tracks']:
+            tracklist.append(track[1])
+
+    # submit to Spotify
+    user_id = '12173954849'
+    #session['spotify_token'] = 'BQCgrLqPIcPOtWZSZXC2387dHiThMNnayCuQVxb4peRzzWQPJj8Q98gtmCSGUgjykfmqgLtL6-brwLYiCxqnyV2ZQpsdeHiJJ4QtK_q_iMOdJF0KZhU95Aaym9FyJPN02W_tIhvnyMHwn1g5M7cZpFqVffxjCbIMjMLkXGSUBpGU-B1PawLxQVn5NOjzaNcwd5k99gQCJkfcg55CYq908gc'
+
+    try:
+        response = sp.create_playlist(name, user_id)
+        playlist_id = response.json()['id']
+    except:
+        return response.json()
+
+    i = 0
+    k = 0
+    uristring = ""
+    for track in tracklist:
+        i += 1
+        k += 1
+
+        if i == 50 or k == len(tracklist):
+            track = "spotify:track:" + track + ","
+            uristring = uristring + track
+            #print(str(i) + " " + str(k) + " " + str(len(tracklist)))
+            #print("SEND")
+            response = sp.add_to_playlist(playlist_id, uristring)
+            i = 0
+            uristring = ""
+        else:
+            track = "spotify:track:" + track + ","
+            uristring = uristring + track
+            #print(str(i) + " " + str(k) + " " + str(len(tracklist)))
+
+    return "DONE"
+
+    # elif work_filter == 'obscure':
+    #     works_list = db.session.query(WorkList)\
+    #         .filter(WorkList.composer.in_(composer_list), WorkList.genre.in_(search_list), WorkList.recommend == None, WorkList.album_count > 0)\
+    #         .order_by(WorkList.genre, WorkList.id).all()
+
+    # else:
+    #     works_list = db.session.query(WorkList)\
+    #         .filter(WorkList.composer.in_(composer_list), WorkList.genre.in_(search_list), WorkList.album_count > 0)\
+    #         .order_by(WorkList.genre, WorkList.id).all()
+
+    # if not works_list:
+    #     response_object = {'status': 'success'}
+    #     response_object['works'] = works_list
+    #     response = jsonify(response_object)
+    #     return response
+
+    # if search_term:
+    #     return_list = []
+    #     # search filtering
+    #     for work in works_list:
+    #         search_string = str(work.genre) + str(work.cat) + str(work.suite) + str(work.title) + str(work.nickname) + str(work.search)
+    #         if search_term.lower() in search_string.lower():
+    #             return_list.append(work)
+
+    #     if not return_list:
+    #         response_object = {'status': 'success'}
+    #         response_object['works'] = return_list
+    #         response = jsonify(response_object)
+    #         return response
+    #     else:
+    #         works_list = return_list
+
+    # need playlist
 
 
 @app.route('/api/albums/<work_id>', methods=['GET'])

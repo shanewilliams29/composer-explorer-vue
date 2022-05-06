@@ -87,7 +87,6 @@ export default {
         };
         const path = 'api/worksbygenre';
         axios.post(path, payload).then((res) => {
-          console.log(res);
           this.works = res.data.works;
           this.playlist = res.data.playlist;
           this.visibility = true;
@@ -96,6 +95,25 @@ export default {
           console.error(error);
           this.$view.enableRadio = false;
           this.works = [];
+        });
+      }
+    },
+    exportPlaylist(genres, filter, search, limit) { // used in radio mode to export to Spotify
+      if (genres.length < 1) { // no works
+        alert("No works are selected!")
+      } else {
+        const payload = {
+          genres: genres,
+          filter: filter,
+          search: search,
+          limit: limit,
+          name: "Test Playlist"
+        };
+        const path = 'api/exportplaylist';
+        axios.post(path, payload).then((res) => {
+          console.log(res);
+        }).catch((error) => {
+          console.error(error);
         });
       }
     },
@@ -241,6 +259,7 @@ export default {
     eventBus.$on('fireGenreSelectRadio', this.getGenreWorks);
     eventBus.$on('fireNextWork', this.nextWork);
     eventBus.$on('firePreviousWork', this.previousWork);
+    eventBus.$on('firePlaylistExport', this.exportPlaylist);
   },
   beforeDestroy() {
     eventBus.$off('fireComposers', this.fireComposers);
@@ -251,6 +270,7 @@ export default {
     eventBus.$off('fireGenreSelectRadio', this.getGenreWorks);
     eventBus.$off('fireNextWork', this.nextWork);
     eventBus.$off('firePreviousWork', this.previousWork);
+    eventBus.$off('firePlaylistExport', this.exportPlaylist);
   }
 };
 </script>

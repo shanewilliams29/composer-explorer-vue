@@ -23,6 +23,7 @@ export default {
           if (res.data.status == "success") {
             if (res.data.client_token !== null) {
               this.$auth.clientToken = res.data.client_token;
+              console.log(res.data.client_token);
               this.$auth.appToken = res.data.app_token;
               // eslint-disable-next-line
               window.player = new Spotify.Player({

@@ -217,15 +217,17 @@ export default {
     },
     limitFilter() {
       this.$view.radioTrackLimit = this.limitFilterField.value;
-      console.log(this.$view.radioTrackLimit);
     },
-      performerFilter(){
-        if(this.performerFilterField.value == 'randomartists'){
-          this.$view.randomAlbum = true;
-        } else {
-          this.$view.randomAlbum = false;
-        }
+    performerFilter(){
+      if(this.performerFilterField.value == 'randomartists'){
+        this.$view.randomAlbum = true;
+      } else {
+        this.$view.randomAlbum = false;
+      }
     },
+    exportSpotify(){
+      eventBus.$emit('firePlaylistExport', this.genreSelectField, this.workFilterField.value, this.workSearchField, this.limitFilterField.value);
+    }
   },
   created() {
     this.$view.radioPlaying = false;

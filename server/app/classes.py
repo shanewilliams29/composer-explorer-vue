@@ -57,6 +57,28 @@ class SpotifyAPI(object):
         except:
             return "INVALID"
 
+    def create_playlist(self, new_playlist, userid):
+        headers = {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer {}'.format(session['spotify_token']),
+        }
+        data = '{"name":"' + new_playlist + '","description":"Playlist created with ComposerExplorer.com"}'
+        response = requests.post('https://api.spotify.com/v1/users/' + userid + '/playlists', headers=headers, data=data)
+        return response
+
+    def add_to_playlist(self, playlist_id, uristring):
+        headers = {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer {}'.format(session['spotify_token']),
+        }
+        params = (
+            ('uris', uristring),
+        )
+        response = requests.post('https://api.spotify.com/v1/playlists/' + playlist_id + '/tracks', headers=headers, params=params)
+        return response
+
 
 class SortFilter(object):
 
