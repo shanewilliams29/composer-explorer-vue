@@ -5,7 +5,7 @@
      <img :src="spotifyLogoURL" alt="Spotify" height="32px"/>
     </template>
     <div class="m-2 text-center">
-      <h4>Export this radio to a Spotify playlist</h4>
+      <h4>Export this radio as a Spotify playlist</h4>
       <div>&nbsp;</div>
 
       <b-spinner v-if="spinnerShow && !$view.playlistSuccess && !$view.playlistError" label="Large Spinner"></b-spinner>

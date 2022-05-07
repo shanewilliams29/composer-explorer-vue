@@ -484,7 +484,7 @@ def exportplaylist():
                     pass
             else:
                 if random_album and len(best_albums) > 0 and len(hold_albums) > 0:
-                    integer = random.randint(0, len(hold_albums))  # replace with random
+                    integer = random.randint(0, len(hold_albums) - 1)  # replace with random
                     best_albums[-1] = hold_albums[integer]
                     hold_albums = []
 
@@ -499,7 +499,7 @@ def exportplaylist():
 
         # last replacement
         if random_album and len(best_albums) > 0 and len(hold_albums) > 0:
-            integer = random.randint(0, len(hold_albums))  # replace with random
+            integer = random.randint(0, len(hold_albums) - 1)  # replace with random
             best_albums[-1] = hold_albums[integer]
 
         tracklist = []
