@@ -2,7 +2,7 @@
 <div>
   <b-modal id="spotify-modal" hide-footer>
     <template #modal-title>
-      <img src="@/assets/Spotify_Logo_RGB_Black.png" alt="Spotify" height="32px"/>
+      <img :src="spotifyLogoURL" alt="Spotify" height="32px"/>
     </template>
     <div class="m-2 text-center">
       <h3>Connect with your Spotify Premium account to play music.</h3>
@@ -12,6 +12,19 @@
   </b-modal>
 </div>
 </template>
+
+<script>
+import {staticURL} from "@/main.js";
+
+export default {
+  data() {
+    return {
+      spotifyLogoURL: staticURL + 'Spotify_Logo_RGB_Black.png',
+    };
+  },
+}
+</script>
+
 
 <style scoped>
   .mt-4{

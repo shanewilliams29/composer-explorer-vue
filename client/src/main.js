@@ -30,7 +30,7 @@ Vue.use(InfiniteLoading, {
 });
 const loadimage = 'https://storage.googleapis.com/composer-explorer.appspot.com/assets/album_placeholder.png';
 Vue.use(VueLazyload, {
-  preLoad: 1.3,
+  preLoad: 2,
   error: loadimage,
   loading: loadimage,
   attempt: 1

@@ -2,7 +2,7 @@
 <div>
   <b-modal id="playlist-modal" @show="resetForm" hide-footer>
     <template #modal-title>
-      <img src="@/assets/Spotify_Logo_RGB_Black.png" alt="Spotify" height="32px"/>
+     <img :src="spotifyLogoURL" alt="Spotify" height="32px"/>
     </template>
     <div class="m-2 text-center">
       <h4>Export this radio to a Spotify playlist</h4>
@@ -34,7 +34,7 @@
 </template>
 
 <script>
-
+import {staticURL} from "@/main.js";
   export default {
     data() {
       return {
@@ -42,7 +42,8 @@
           name: '',
         },
         formShow: true,
-        spinnerShow: false
+        spinnerShow: false,
+        spotifyLogoURL: staticURL + 'Spotify_Logo_RGB_Black.png',
       }
     },
     methods: {
