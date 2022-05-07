@@ -113,6 +113,7 @@ def get_token():
 
 
 @app.route('/api/composers', methods=['GET'])
+@cache.cached(query_string=True)
 def get_composers():
     # look for search item
     search_item = request.args.get('search')
@@ -240,6 +241,7 @@ def get_multicomposers():
 
 
 @app.route('/api/composersradio', methods=['GET'])
+@cache.cached()
 def get_composersradio():
     # look for search item
 
@@ -259,6 +261,7 @@ def get_composersradio():
 
 
 @app.route('/api/works/<name>', methods=['GET'])
+@cache.cached(query_string=True)
 def get_works(name):
     filter_method = request.args.get('filter')
     search = request.args.get('search')
@@ -553,6 +556,7 @@ def exportplaylist():
 
 
 @app.route('/api/albums/<work_id>', methods=['GET'])
+@cache.cached(query_string=True)
 def get_albums(work_id):
     page = request.args.get('page', 1, type=int)
 
@@ -662,6 +666,7 @@ def get_albums(work_id):
 
 
 @app.route('/api/composerinfo/<composer>', methods=['GET'])
+@cache.cached(query_string=True)
 def get_composerinfo(composer):
     composer_info = db.session.query(ComposerList)\
         .filter(ComposerList.name_short == composer).first()
@@ -680,6 +685,7 @@ def get_composerinfo(composer):
 
 
 @app.route('/api/workinfo/<work_id>', methods=['GET'])
+@cache.cached(query_string=True)
 def get_workinfo(work_id):
     work = db.session.query(WorkList)\
         .filter(WorkList.id == work_id).first()
@@ -724,6 +730,7 @@ def get_albuminfo(album_id):
 
 
 @app.route('/api/artistcomposers/<artist_name>', methods=['GET'])
+@cache.cached(query_string=True)
 def get_artistcomposers(artist_name):
 
     composers = db.session.query(ComposerList).join(Artists, ComposerList.name_short == Artists.composer)\
@@ -767,6 +774,7 @@ def get_artistworks():
 
 
 @app.route('/api/artistlist', methods=['GET'])
+@cache.cached()
 def get_artistlist():
     artists = db.session.query(ArtistList).first()
 
@@ -778,19 +786,7 @@ def get_artistlist():
     return response
 
 
-@app.route('/api/workartists', methods=['GET'])
-def get_workartists():
-    artists = db.session.query(ArtistList).first()
-
-    artist_list = artists.content
-
-    response_object = {'status': 'success'}
-    response_object['artists'] = artist_list
-    response = jsonify(response_object)
-    return response
-
-
-@app.route('/api/topartists', methods=['GET'])
+@app.route('/api/topartists', methods=['GET'])  # used to build json list, not accessible
 def get_topartists():
     # albums = db.session.query(WorkAlbums, func.count(AlbumLike.id).label('total')) \
     #     .join(AlbumLike).group_by(WorkAlbums) \
