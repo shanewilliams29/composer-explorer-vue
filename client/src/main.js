@@ -28,7 +28,7 @@ Vue.use(InfiniteLoading, {
     distance: 200,
   },
 });
-const loadimage = require('./assets/album_placeholder.png')
+const loadimage = 'https://storage.googleapis.com/composer-explorer.appspot.com/assets/album_placeholder.png';
 Vue.use(VueLazyload, {
   preLoad: 1.3,
   error: loadimage,
@@ -42,6 +42,7 @@ Vue.component(VueWordCloud.name, VueWordCloud);
 export const eventBus = new Vue();
 export const spotifyPlayer = new Vue();
 export const baseURL = process.env.VUE_APP_BASE_URL;
+export const staticURL = process.env.VUE_APP_STATIC_URL;
 
 let config = {}
 const defaultConfig = {

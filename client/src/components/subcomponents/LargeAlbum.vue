@@ -23,10 +23,10 @@
           </b-col>
           <b-col class="col footer" cols="8">
           <div v-if="album.id == selectedAlbum">
-          <a target="_blank" :href="'https://open.spotify.com/album/' + album.album_id"><span class="open-in">Open in&nbsp; </span><img class="spotify-logo" width=70px src="@/assets/Spotify_Logo_RGB_White.png" /></a>
+          <a target="_blank" :href="'https://open.spotify.com/album/' + album.album_id"><span class="open-in">Open in&nbsp; </span><img class="spotify-logo" width=70px :src="spotifyLogoURLWhite" /></a>
           </div>
           <div v-else>
-          <a target="_blank" :href="'https://open.spotify.com/album/' + album.album_id"><img class="spotify-logo" width=70px src="@/assets/Spotify_Logo_RGB_Black.png" /></a>
+          <a target="_blank" :href="'https://open.spotify.com/album/' + album.album_id"><img class="spotify-logo" width=70px :src="spotifyLogoURLBlack" /></a>
           </div>
        </b-col>
         </div>
@@ -37,11 +37,18 @@
 </template>
 
 <script>
+import {staticURL} from "@/main.js";
 export default {
   name: 'LargeAlbum',
   props: {
     albums: Array,
     selectedAlbum: String
+  },
+  data() {
+    return {
+      spotifyLogoURLWhite: staticURL + 'Spotify_Logo_RGB_White.png',
+      spotifyLogoURLBlack: staticURL + 'Spotify_Logo_RGB_Black.png',
+    }
   }
 }
 </script>

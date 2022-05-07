@@ -31,10 +31,10 @@
               </tr>
             </table>
             <div v-if="album.id == selectedAlbum">
-             <a target="_blank" :href="'https://open.spotify.com/album/' + album.album_id"><img class="spotify-icon" width=21px src="@/assets/Spotify_Icon_RGB_White.png" /></a>
+             <a target="_blank" :href="'https://open.spotify.com/album/' + album.album_id"><img class="spotify-icon" width=21px :src="spotifyLogoURLWhite" /></a>
             </div>
             <div v-else>
-              <a target="_blank" :href="'https://open.spotify.com/album/' + album.album_id"><img class="spotify-icon" width=21px src="@/assets/Spotify_Icon_RGB_Black.png" /></a>
+              <a target="_blank" :href="'https://open.spotify.com/album/' + album.album_id"><img class="spotify-icon" width=21px :src="spotifyLogoURLBlack" /></a>
             </div>
           </b-card-text>
         </b-col>
@@ -44,11 +44,18 @@
 </template>
 
 <script>
+import {staticURL} from "@/main.js";
 export default {
   name: 'SmallAlbum',
   props: {
     albums: Array,
     selectedAlbum: String
+  },
+  data() {
+    return {
+      spotifyLogoURLWhite: staticURL + 'Spotify_Icon_RGB_White.png',
+      spotifyLogoURLBlack: staticURL + 'Spotify_Icon_RGB_Black.png',
+    }
   }
 }
 </script>

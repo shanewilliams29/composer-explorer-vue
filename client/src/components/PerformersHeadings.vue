@@ -14,8 +14,8 @@
                   <span class="artist-job">{{result[1]}}</span>
                   <span v-if="wikiLink" class="wiki-link">&nbsp;&nbsp;<a :href="wikiLink" target="_blank"><b-icon icon="info-circle-fill" aria-hidden="true"></b-icon> Wikipedia</a>&nbsp;&nbsp;</span>
                   <span @mouseover="hover = true" @mouseleave="hover = false" class="wiki-link"><a :href="wikiLink" target="_blank">
-                    <img v-if="hover" src="@/assets/radio.svg" class="radio-link" height="14px" />
-                    <img v-else src="@/assets/radio_gray.svg" class="radio-link" height="14px" />
+                    <img v-if="hover" :src="radioWhiteUrl" class="radio-link" height="14px" />
+                    <img v-else :src="radioGrayURL" class="radio-link" height="14px" />
                   Radio</a></span>
                 </td>
               </tr>
@@ -43,11 +43,13 @@
 
 <script>
 import axios from 'axios';
-import {eventBus} from "../main.js";
+import {eventBus, staticURL} from "../main.js";
 
 export default {
   data() {
     return {
+      radioGrayURL: staticURL + 'radio_gray.svg',
+      radioWhiteUrl: staticURL + 'radio.svg',
       hover: false,
       wikiLink: null,
       query: '',

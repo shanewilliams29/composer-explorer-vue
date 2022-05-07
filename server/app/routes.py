@@ -485,7 +485,7 @@ def exportplaylist():
 
     # submit to Spotify
     user_id = '12173954849'
-    session['spotify_token'] = 'BQDTmkwKJX1jNwtdH_Mr8Co-kNfEkASWY8Mt8Crhim259fkEC1yurrgl30iCoBqse_quh3N3H-oGK9mfS4ZyqTxvY4RNztB4PrcdzTR7-7IVaTBB37YeH0MOe9xh6qBXpAnoC1wCDD-i2aqrKYyWsbMb37dsGhOuOqHmOP_gXZ11fZyydKjTeVGzXz7joGnHDnPtSKeJ4NeBxKQFnpWJYKQ'
+    # session['spotify_token'] = 'BQBxgth8o1uwGoIszQn-QFf8ur0R6NlPtvrOyANCfy5o0zWfEDM2f_jF5JvqD3vQIx13HQwrMnNtSLuMrfLaoTHGI-Mo2TPBKy71czkdtuuFX0gmHnKJQexRKPqAXV3fvBSf9FIzdbaFMADnri8V2RyuF5vBMxS5PtUQjPIPPMljJH1stujUahmYxujTp5YWOfIbxgrOPZ9Xw_FjOl284kk'
 
     tracklist = cache.get('tracks')
 

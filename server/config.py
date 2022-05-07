@@ -16,5 +16,6 @@ class Config(object):
 
     STATIC = 'https://storage.googleapis.com/composer-explorer.appspot.com/'
 
-    CACHE_TYPE = "SimpleCache"  # Flask-Caching related configs
-    CACHE_DEFAULT_TIMEOUT = 300
+    CACHE_TYPE = "FileSystemCache"  # Flask-Caching related configs
+    CACHE_THRESHOLD = 1000
+    CACHE_DIR = '/tmp/flaskcache'

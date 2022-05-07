@@ -5,7 +5,7 @@
       <img src="@/assets/Spotify_Logo_RGB_Black.png" alt="Spotify" height="32px"/>
     </template>
     <div class="m-2 text-center">
-      <h4>Export this radio to a Spotify Playlist</h4>
+      <h4>Export this radio to a Spotify playlist</h4>
       <div>&nbsp;</div>
 
       <b-spinner v-if="spinnerShow && !$view.playlistSuccess && !$view.playlistError" label="Large Spinner"></b-spinner>
@@ -17,7 +17,7 @@
 
        <b-form @submit.prevent="onSubmit" v-if="formShow && !$view.playlistError">
       <div v-if="$view.playlistTrackCount">{{ $view.playlistTrackCount}} tracks will be added</div>
-      <div v-else><b-spinner small label="Small Spinner"></b-spinner> Calculating number of tracks...</div>
+      <div v-else><b-spinner small label="Small Spinner"></b-spinner> Preparing tracks...</div>
      <b-form-group id="input-group">
         <b-form-input
           id="form-input"

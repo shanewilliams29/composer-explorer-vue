@@ -2,19 +2,19 @@
   <div class="container-fluid">
     <b-navbar type="dark" variant="dark">
       <b-navbar-brand href="#">
-        <img src="../assets/logo.png" class="d-inline-block align-top logo" alt="Composer Explorer" height="40px" @click="$router.push('/')" />
+        <img :src="logoURL" class="d-inline-block align-top logo" alt="Composer Explorer" height="40px" @click="$router.push('/')" />
       </b-navbar-brand>
       <div>
         <b-nav pills class="navbar-items">
           <b-nav-item id="home" :active='$route.path == "/"' @click="$router.push('/')"><b-icon-music-note-list></b-icon-music-note-list>&nbsp;&nbsp;Browse</b-nav-item>
           <b-nav-item id="performer" :active='$route.name == "performers"' @click="$router.push('/performers')"><b-icon-person-lines-fill></b-icon-person-lines-fill>&nbsp;&nbsp;Performers</b-nav-item>
-          <b-nav-item id="radio" :active='$route.name == "radio"' @click="$router.push('/radio')"> <img src="@/assets/radio.svg" class="radio-img" height="22px" />&nbsp;&nbsp;Radio</b-nav-item>
+          <b-nav-item id="radio" :active='$route.name == "radio"' @click="$router.push('/radio')"> <img :src="radioImgURL" class="radio-img" height="22px" />&nbsp;&nbsp;Radio</b-nav-item>
         </b-nav>
       </div>
       <b-navbar-nav class="ml-auto" v-if="!$auth.clientToken">
         <b-nav-item disabled right class="log-in-with">Log in </b-nav-item>
         <b-button right variant="success" class="spotify-button" :href="spotifyURL">
-          <img src="@/assets/Spotify_Logo_RGB_White.png" class="" alt="Spotify" height="28px" />
+          <img :src="spotifyLogoURL" class="" alt="Spotify" height="28px" />
         </b-button>
       </b-navbar-nav>
       <b-navbar-nav class="ml-auto" v-if="$auth.clientToken">
@@ -25,12 +25,15 @@
 </template>
 
 <script>
-import {baseURL} from "../main.js";
+import {baseURL, staticURL} from "../main.js";
 
 export default {
   name: 'NavBar',
   data() {
     return {
+      radioImgURL: staticURL + 'radio.svg',
+      spotifyLogoURL: staticURL + 'Spotify_Logo_RGB_White.png',
+      logoURL: staticURL + 'logo.png',
       spotifyURL: baseURL + "connect_spotify",
     };
   },
