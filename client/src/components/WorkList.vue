@@ -110,7 +110,8 @@ export default {
           limit: limit,
           prefetch: prefetch,
           name: name,
-          // name: "Test Playlist"
+          random: this.$view.randomAlbum,
+
         };
         const path = 'api/exportplaylist';
         axios.post(path, payload).then((res) => {
