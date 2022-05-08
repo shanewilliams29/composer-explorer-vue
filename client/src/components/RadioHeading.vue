@@ -15,6 +15,7 @@
                 :searchable="false"
               ></v-select>
               <v-select multiple
+                v-if="radioTypeField.value == 'composer'"
                 v-model="composerSelectField"
                 label="text"
                 :options="composerOptions"
@@ -23,6 +24,17 @@
                 :clearable="true"
                 class="mt-3 style-chooser allow-wrap"
                 :searchable="true"
+              ></v-select>
+                <v-select
+                v-if="radioTypeField.value == 'period'"
+                v-model="periodSelectField"
+                label="text"
+                :options="periodOptions"
+                @input="periodSelect()"
+                placeholder="Select period/era"
+                :clearable="false"
+                class="mt-3 style-chooser allow-wrap"
+                :searchable="false"
               ></v-select>
             </b-form-group>
 
@@ -146,6 +158,17 @@ export default {
       composerSelectField: null,
       composerOptions: [],
 
+      periodSelectField: { value: 'popular', text: 'Most popular' },
+      periodOptions: [
+        { value: 'popular', text: 'Most popular' },
+        { value: 'early', text: 'Early' },
+        { value: 'baroque', text: 'Baroque' },
+        { value: 'classical', text: 'Classical' },
+        { value: 'romantic', text: 'Romantic' },
+        { value: '20th', text: '20th/21st Century' },
+        { value: 'all', text: 'All' },
+      ],
+
       genreSelectField: null,
       genreOptions: [],
 
@@ -201,7 +224,7 @@ export default {
     composerSelect(){
         eventBus.$emit('fireComposerSelectRadio', this.composerSelectField);
     },
-    makeGenreList(genreList){
+    makeGenreList(genreList){ //select all default?
         if(genreList.length < 1){
           this.genreSelectField = [];
           this.genreOptions = [];
@@ -213,6 +236,9 @@ export default {
           this.genreOptions.push({ value: genre, text: genre });
         }
         eventBus.$emit('fireGenreSelectRadio', this.genreSelectField, this.workFilterField.value, this.workSearchField);
+    },
+    periodSelect(){
+      eventBus.$emit('fireComposerFilter', this.periodSelectField.value);
     },
     genreSelect(){
         eventBus.$emit('fireGenreSelectRadio', this.genreSelectField, this.workFilterField.value, this.workSearchField);

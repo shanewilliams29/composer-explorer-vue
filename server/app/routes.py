@@ -114,11 +114,12 @@ def get_token():
 
 
 @app.route('/api/composers', methods=['GET'])
-@cache.cached(query_string=True)
+# @cache.cached(query_string=True)
 def get_composers():
     # look for search item
     search_item = request.args.get('search')
     composer_filter = request.args.get('filter')
+    get_genres = request.args.get('genres')
 
     eras = ['common', 'early', 'baroque', 'classical', 'romantic', '20th']
 
@@ -145,9 +146,11 @@ def get_composers():
                 .order_by(ComposerList.region, ComposerList.born).all()
         if composer_filter == "all":
             composer_list = db.session.query(ComposerList)\
+                .filter(ComposerList.catalogued == True) \
                 .order_by(ComposerList.region, ComposerList.born).all()
         if composer_filter == "alphabet":
             composer_list = db.session.query(ComposerList)\
+                .filter(ComposerList.catalogued == True) \
                 .order_by(ComposerList.name_short, ComposerList.born).all()
         if composer_filter == "popular":
             composer_list = db.session.query(ComposerList)\
@@ -160,7 +163,7 @@ def get_composers():
             datemax = date_minmax_sort[1]
 
             composer_list = ComposerList.query \
-                .filter(ComposerList.born >= datemin, ComposerList.born < datemax) \
+                .filter(ComposerList.born >= datemin, ComposerList.born < datemax, ComposerList.catalogued == True) \
                 .order_by(ComposerList.region, ComposerList.born).all()
 
     else:
@@ -198,9 +201,24 @@ def get_composers():
         # group onto regions
         composers_by_region = group_composers_by_region(COMPOSERS)
 
+    # get genres (for radio)
+    search_list = []
+    for composer in composer_list:
+        search_list.append(composer.name_short)
+
+    genres = db.session.query(WorkList.genre)\
+        .filter(WorkList.composer.in_(search_list)).order_by(WorkList.genre).distinct()
+
+    genre_list = []
+    for (item,) in genres:
+        genre_list.append(item)
+
+    session['radio_composers'] = search_list
+
     # return response
     response_object = {'status': 'success'}
     response_object['composers'] = composers_by_region
+    response_object['genres'] = genre_list
     response = jsonify(response_object)
     return response
 

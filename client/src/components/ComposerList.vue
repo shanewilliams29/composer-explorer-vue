@@ -71,7 +71,7 @@ export default {
     getFilteredComposers(item) {
       this.loading = true;
       if (item == "all" || item == "alphabet" || item == "romantic" || item == "20th" || item == "common") {
-        this.visibility=false;
+        this.visibility=true; // change to false when there are a lot of composers
       } else {
         this.visibility=true;
       }
@@ -79,6 +79,9 @@ export default {
       axios.get(path)
         .then((res) => {
           this.composers = res.data.composers;
+          if(this.$view.mode == 'radio'){
+            eventBus.$emit('fireRadioGenreList', res.data.genres);
+          }
           this.loading=false;
         })
         .catch((error) => {
