@@ -214,6 +214,8 @@ def get_composers():
         genre_list.append(item)
 
     session['radio_composers'] = search_list
+    if Config.MODE == "DEVELOPMENT":
+        cache.set('composers', search_list)  # store in cache for dev server
 
     # return response
     response_object = {'status': 'success'}
@@ -234,6 +236,8 @@ def get_multicomposers():
 
     # store composers in session
     session['radio_composers'] = search_list
+    if Config.MODE == "DEVELOPMENT":
+        cache.set('composers', search_list)
 
     composer_list = db.session.query(ComposerList)\
         .filter(ComposerList.name_short.in_(search_list)) \
@@ -358,7 +362,7 @@ def get_worksbygenre():
 
     # get composers selected
     if not session.get('radio_composers'):
-        composer_list = ["Beethoven"]  # for dev server testing
+        composer_list = cache.get('composers')   # for dev server testing
     else:
         composer_list = session['radio_composers']
 
@@ -443,7 +447,7 @@ def exportplaylist():
     if prefetch:
         # get composers selected
         if not session.get('radio_composers'):
-            composer_list = ["Beethoven"]  # for dev server testing
+            composer_list = cache.get('composers')  # for dev server testing
         else:
             composer_list = session['radio_composers']
 

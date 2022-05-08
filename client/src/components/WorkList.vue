@@ -17,10 +17,10 @@
         <div class="m-4">Select from the options above to create your own customized radio</div>
       </span>
       <b-card-group deck v-if="!loading && works">
-        <b-card v-for="(genre, index) in works" :key="index" no-body header-tag="header" class="shadow-sm">
+        <b-card v-for="(genre, index) in works" :key="index" :id="index" no-body header-tag="header" class="shadow-sm">
           <div class="#header" v-b-toggle="index.replace(/\s/g, '')">
             <h6 class="m-2 mb-0">
-              {{ index }}<span class="mb-0 float-right when-opened"><b-icon-chevron-up></b-icon-chevron-up></span><span class="mb-0 float-right when-closed"><b-icon-chevron-down></b-icon-chevron-down></span>
+              <span :class="{'music-note': (index == $config.genre && !visibility)}">{{ index }}&nbsp;&nbsp;</span><span v-if="index == $config.genre && !visibility" class="music-note float-middle"><b-icon-volume-up-fill></b-icon-volume-up-fill></span><span class="mb-0 float-right when-opened"><b-icon-chevron-up></b-icon-chevron-up></span><span class="mb-0 float-right when-closed"><b-icon-chevron-down></b-icon-chevron-down></span>
             </h6>
           </div>
           <b-collapse :visible="visibility" :id="index.replace(/\s/g, '')">
@@ -89,7 +89,11 @@ export default {
         axios.post(path, payload).then((res) => {
           this.works = res.data.works;
           this.playlist = res.data.playlist;
-          this.visibility = true;
+          if (this.playlist.length > 300){
+            this.visibility = false;
+          } else{
+            this.visibility = true;
+          }
           this.$view.enableRadio = true;
         }).catch((error) => {
           console.error(error);
@@ -187,6 +191,14 @@ export default {
     setGenre(genre){
       this.$config.genre = genre;
       localStorage.setItem('config', JSON.stringify(this.$config));
+
+        var element = document.getElementById(genre);
+        var top = element.offsetTop - 4;
+        this.$parent.$refs['scroll-box'].scrollTo({
+                                  top: top,
+                                  left: 0,
+                                  behavior: 'smooth'
+                                });
     },
     getFilteredWorks(item) {
       this.loading = true;
@@ -236,6 +248,7 @@ export default {
         for (var i = 0; i < this.playlist.length; i++) {
           if (this.playlist[i]['id'] == this.selectedWork && i !== this.playlist.length - 1) {
             this.selectRow(this.playlist[i + 1]['id']);
+            this.setGenre(this.playlist[i + 1]['genre']);
             this.getAlbumsAndPlay(this.playlist[i + 1]['id'], this.playlist[i + 1]['title']);
             break;
           }
@@ -251,6 +264,7 @@ export default {
         for (var i = 0; i < this.playlist.length; i++) {
           if (this.playlist[i]['id'] == this.selectedWork && i !== 0) {
             this.selectRow(this.playlist[i - 1]['id']);
+            this.setGenre(this.playlist[i - 1]['genre']);
             this.getAlbumsAndPlay(this.playlist[i - 1]['id'], this.playlist[i - 1]['title']);
             break;
           }
@@ -264,6 +278,7 @@ export default {
       }
       const rndInt = randomIntFromInterval(0, this.playlist.length - 1)
       this.selectRow(this.playlist[rndInt]['id']);
+      this.setGenre(this.playlist[rndInt]['genre']);
       this.getAlbumsAndPlay(this.playlist[rndInt]['id'], this.playlist[rndInt]['title']);
     },
   },
@@ -415,5 +430,8 @@ header.card-header:hover {
   font-size: 14px;
   color: grey;
   text-align: center;
+}
+.music-note{
+
 }
 </style>

@@ -89,4 +89,7 @@ export default {
 >>> .highlight td{
   background-color: var(--blue);
 }
+>>> .music-note{
+  color: var(--blue);
+}
 </style>

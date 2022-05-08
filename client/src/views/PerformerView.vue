@@ -65,4 +65,7 @@ export default {
 >>> .highlight td{
   background-color: var(--purple);
 }
+>>> .music-note{
+  color: var(--purple);
+}
 </style>
