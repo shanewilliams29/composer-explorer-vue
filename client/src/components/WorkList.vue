@@ -218,8 +218,8 @@ export default {
                                 this.$parent.$refs['scroll-box'].scrollTo({
                                       top: top,
                                       left: 0,
-                                      behavior: 'instant'
-                              })}, 500);
+                                      behavior: 'smooth'
+                              })}, 300);
           }
     },
     getFilteredWorks(item) {

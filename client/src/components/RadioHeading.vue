@@ -323,20 +323,19 @@ export default {
 }
 .radio-button-off{
   margin-top: 5px;
-  border: 1px solid #787e87 !important;
-  background-color: #787e87 !important;
+  border: 1px solid var(--yellow) !important;
+  background-color: #54595f !important;
   height: 31px;
 }
 .radio-button-off-disabled{
-    margin-top: 5px;
-  border: 1px solid #787e87 !important;
-  background-color: #787e87 !important;
+  margin-top: 5px;
+  border: 1px solid darkgoldenrod !important;
+  background-color: #54595f !important;
   height: 31px;
 }
 .radio-button-off:hover{
   margin-top: 5px;
-  border: 1px solid #93989f !important;
-  background-color: #93989f !important;
+  border: 1px solid var(--yellow) !important;
   height: 31px;
 }
 .radio-button-on{
@@ -348,6 +347,12 @@ export default {
 .spotify-export-button{
   margin-top: 5px;
   height: 31px;
+  background-color: #54595f !important;
+  border: 1px solid var(--green) !important;
+}
+.spotify-export-button:hover{
+    background-color: #54595f !important;
+    border: 1px solid var(--green) !important;
 }
 .form-row {
   margin-bottom: 0px;
