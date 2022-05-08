@@ -17,16 +17,16 @@
         <div class="m-4">Select from the options above to create your own customized radio</div>
       </span>
       <b-card-group deck v-if="!loading && works">
-        <b-card v-for="(genre, index) in works" :key="index" :id="index" no-body header-tag="header" class="shadow-sm">
+        <b-card v-for="(genre, index) in works" :key="index" :ref="index" no-body header-tag="header" class="shadow-sm">
           <div class="#header" v-b-toggle="index.replace(/\s/g, '')">
             <h6 class="m-2 mb-0">
               <span :class="{'music-note': (index == $config.genre && !visibility)}">{{ index }}&nbsp;&nbsp;</span><span v-if="index == $config.genre && !visibility" class="music-note float-middle"><b-icon-volume-up-fill></b-icon-volume-up-fill></span><span class="mb-0 float-right when-opened"><b-icon-chevron-up></b-icon-chevron-up></span><span class="mb-0 float-right when-closed"><b-icon-chevron-down></b-icon-chevron-down></span>
             </h6>
           </div>
-          <b-collapse :visible="visibility" :id="index.replace(/\s/g, '')">
+          <b-collapse :visible="visibility || index == $config.genre" :id="index.replace(/\s/g, '')">
             <b-card-text>
               <table cellspacing="0">
-                <tr v-for="work in genre" :key="work.id" @click="selectRow(work.id); getAlbums(work.id, work.title); setGenre(index);" :class="{'highlight': (work.id == selectedWork)}">
+                <tr v-for="(work, index) in genre" :ref="work.id" :key="work.id" :id="index" @click="selectRow(work.id); getAlbums(work.id, work.title); setGenre(index);" :class="{'highlight': (work.id == selectedWork)}">
                   <td width="17%">
                     <span style="white-space: nowrap; color: darkred;"><span v-if="work.cat">{{ work.cat }}&nbsp;&nbsp;</span><span v-else>{{ work.date }}</span></span>
                   </td>
@@ -76,10 +76,13 @@ export default {
     getGenreWorks(genres, filter, search) { // used in radio mode
       if (genres.length < 1) { // no works
         eventBus.$emit('fireClearAlbums');
+        this.loading = false;
         this.$view.radioPlaying = false;
         this.$view.enableRadio = false;
+        this.$view.enableExport = false;
         this.works = [];
       } else {
+        this.loading = true;
         const payload = {
           genres: genres,
           filter: filter,
@@ -87,17 +90,26 @@ export default {
         };
         const path = 'api/worksbygenre';
         axios.post(path, payload).then((res) => {
+          this.loading = false;
           this.works = res.data.works;
           this.playlist = res.data.playlist;
           if (this.playlist.length > 300){
             this.visibility = false;
-          } else{
+            this.$view.enableRadio = true;
+            this.$view.enableExport = false;
+          } else if (this.playlist.length < 1){
+            this.$view.enableExport = false;
+            this.$view.enableRadio = false;
+          }else{
             this.visibility = true;
+            this.$view.enableExport = true;
+            this.$view.enableRadio = true;
           }
-          this.$view.enableRadio = true;
         }).catch((error) => {
           console.error(error);
+          this.loading = false;
           this.$view.enableRadio = false;
+          this.$view.enableExport = false;
           this.works = [];
         });
       }
@@ -185,20 +197,30 @@ export default {
         eventBus.$emit('fireAlbumsAndPlay', workId, this.$config.artist);
       }
     },
-    selectRow(work) {
-      this.selectedWork = work;
+    selectRow(workid) {
+      this.selectedWork = workid;
     },
     setGenre(genre){
-      this.$config.genre = genre;
-      localStorage.setItem('config', JSON.stringify(this.$config));
+        this.$config.genre = genre;
+        localStorage.setItem('config', JSON.stringify(this.$config));
 
-        var element = document.getElementById(genre);
-        var top = element.offsetTop - 4;
-        this.$parent.$refs['scroll-box'].scrollTo({
-                                  top: top,
-                                  left: 0,
-                                  behavior: 'smooth'
-                                });
+
+        // var row = this.$refs[this.selectedWork][0];
+        // var height = this.$refs[genre][0].offsetParent.offsetHeight / 2;
+        // var top = card.offsetTop + row.offsetTop - height + 50;
+
+        if(this.$view.mode == 'radio'){
+            setTimeout(() => {  var card = this.$refs[genre][0];
+                                var row = this.$refs[this.selectedWork][0];
+                                var height = this.$refs[genre][0].offsetParent.offsetHeight / 2;
+                                var top = card.offsetTop + row.offsetTop - height + 100;
+
+                                this.$parent.$refs['scroll-box'].scrollTo({
+                                      top: top,
+                                      left: 0,
+                                      behavior: 'instant'
+                              })}, 500);
+          }
     },
     getFilteredWorks(item) {
       this.loading = true;
@@ -242,6 +264,7 @@ export default {
       eventBus.$emit('changeWork');
       if (this.$view.shuffle) {
         this.$config.previousWork = this.$config.work;
+        this.$config.previousGenre = this.$config.genre;
         this.$config.previousWorkTitle = this.$config.workTitle;
         this.playRandomWork();
       } else {
@@ -259,6 +282,7 @@ export default {
       eventBus.$emit('changeWork');
       if (this.$view.shuffle) {
         this.selectRow(this.$config.previousWork); //allows you to jump one back
+        this.setGenre(this.$config.previousGenre);
         this.getAlbumsAndPlay(this.$config.previousWork, this.$config.previousWorkTitle)
       } else {
         for (var i = 0; i < this.playlist.length; i++) {
@@ -333,6 +357,11 @@ export default {
 }
 .not-collapsed .when-opened{
   display: show;
+}
+.collapsing {
+    -webkit-transition: none !important;
+    transition: none !important;
+    display: none;
 }
 .spinner {
   text-align: center;

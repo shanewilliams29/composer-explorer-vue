@@ -63,7 +63,7 @@
                 class="work-search-field"
                 v-model="workSearchField"
                 v-debounce="workSearch"
-                @focus="onWorkFocus()"
+
                 placeholder="Search filter"
                 size="sm"
               ></b-form-input>
@@ -118,7 +118,7 @@
 
             </b-col>
             <b-col cols='3' class="col-padding-left">
-              <b-button v-if="$view.enableRadio && $auth.clientToken" class="spotify-export-button" size="sm" @click="prepareForExport()" block variant="success">Export</b-button>
+              <b-button v-if="$view.enableExport && $auth.clientToken" class="spotify-export-button" size="sm" @click="prepareForExport()" block variant="success">Export</b-button>
               <b-button v-else class="spotify-export-button" size="sm" block variant="success" disabled>Export</b-button>
             </b-col>
 
@@ -169,7 +169,7 @@ export default {
         { value: 'all', text: 'All' },
       ],
 
-      genreSelectField: null,
+      genreSelectField: [{ value: 'all', text: 'All Genres' }],
       genreOptions: [],
 
       workSearchField: '',
@@ -212,8 +212,16 @@ export default {
         spotify.pauseTrack(this.$auth.clientToken);
       }
     },
-    radioTypeSelect(){
+    radioTypeSelect(){ // reset everything on radio type change
       eventBus.$emit('fireRadioSelect', this.radioTypeField.value);
+      eventBus.$emit('fireClearWorks');
+      eventBus.$emit('fireClearAlbums');
+      this.$view.radioPlaying = false;
+      this.$view.enableRadio = false;
+      this.$view.enableExport = false;
+      this.genreSelectField = [{ value: 'all', text: 'All Genres' }];
+      this.workSearchField = '';
+      this.workFilterField = { value: 'recommended', text: 'Recommended works' }
     },
     makeComposerDropdown(composers){
         this.composerOptions = [];
@@ -222,11 +230,16 @@ export default {
         }
     },
     composerSelect(){
-        eventBus.$emit('fireComposerSelectRadio', this.composerSelectField);
+        if(this.composerSelectField < 1){
+            this.$config.composer = null;
+            this.radioTypeSelect(); // clears works and albums
+        }else {
+          eventBus.$emit('fireComposerSelectRadio', this.composerSelectField);
+        }
     },
     makeGenreList(genreList){ //select all default?
         if(genreList.length < 1){
-          this.genreSelectField = [];
+          this.genreSelectField = [{ value: 'all', text: 'All Genres' }];
           this.genreOptions = [];
         } else {
           this.genreOptions = [];
@@ -244,10 +257,6 @@ export default {
         eventBus.$emit('fireGenreSelectRadio', this.genreSelectField, this.workFilterField.value, this.workSearchField);
     },
     workSearch() {
-      eventBus.$emit('fireGenreSelectRadio', this.genreSelectField, this.workFilterField.value, this.workSearchField);
-    },
-    onWorkFocus() {
-      this.workSearchField = '';
       eventBus.$emit('fireGenreSelectRadio', this.genreSelectField, this.workFilterField.value, this.workSearchField);
     },
     limitFilter() {
@@ -272,9 +281,10 @@ export default {
   created() {
     this.$view.radioPlaying = false;
     this.$view.enableRadio = false;
+    this.$view.enableExport = false;
     eventBus.$on('fireComposerListToRadio', this.makeComposerDropdown);
     eventBus.$on('fireRadioGenreList', this.makeGenreList);
-    eventBus.$on('fireComposerSelectRadio', this.makeGenreList);
+    //eventBus.$on('fireComposerSelectRadio', this.makeGenreList);
   },
   mounted(){
     eventBus.$emit('fireRadioSelect', 'composer');
@@ -282,7 +292,7 @@ export default {
   beforeDestroy() {
     eventBus.$off('fireComposerListToRadio', this.makeComposerDropdown);
     eventBus.$off('fireRadioGenreList', this.makeGenreList);
-    eventBus.$off('fireComposerSelectRadio', this.makeGenreList);
+    //eventBus.$off('fireComposerSelectRadio', this.makeGenreList);
   }
 };
 </script>

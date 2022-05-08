@@ -140,12 +140,12 @@ export default {
       }
     },
     fireRadioSelect(type){
+      this.composers = [];
       if(type == "composer"){
       const path = 'api/composersradio';
       axios.get(path)
         .then((res) => {
           eventBus.$emit('fireComposerListToRadio', res.data.composers);
-          this.composers = [];
         })
         .catch((error) => {
           // eslint-disable-next-line
