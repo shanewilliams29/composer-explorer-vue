@@ -213,7 +213,7 @@ def get_composers():
     # for (item,) in genres:
     #     genre_list.append(item)
 
-    genre_list = ['Ballet', 'Chamber', 'Cello concerto', 'Concerto', 'Film', 'Incidental', 'Keyboard', 'Misc', 'Opera', 'Orchestral', 'Organ', 'Piano', 'Piano sonata', 'Piano transcription', 'Violin concerto', 'Vocal', 'Choral', 'Cantata', 'Oratorio', 'Sacred', 'Song', 'Lied']
+    genre_list = ['Symphony', 'Ballet', 'Chamber', 'Cello concerto', 'Concerto', 'Piano concerto', 'Film', 'Incidental', 'Keyboard', 'Misc', 'Opera', 'Orchestral', 'Organ', 'Piano', 'Piano sonata', 'Piano transcription', 'Violin concerto', 'Vocal', 'Choral', 'Cantata', 'Oratorio', 'Sacred', 'Song', 'Lied']
     genre_list = sorted(genre_list)
 
     session['radio_composers'] = search_list
@@ -258,7 +258,7 @@ def get_multicomposers():
     # for (item,) in genres:
     #     genre_list.append(item)
 
-    genre_list = ['Ballet', 'Chamber', 'Cello concerto', 'Concerto', 'Film', 'Incidental', 'Keyboard', 'Misc', 'Opera', 'Orchestral', 'Organ', 'Piano', 'Piano sonata', 'Piano transcription', 'Violin concerto', 'Vocal', 'Choral', 'Cantata', 'Oratorio', 'Sacred', 'Song', 'Lied']
+    genre_list = ['Symphony', 'Ballet', 'Chamber', 'Cello concerto', 'Concerto', 'Piano concerto', 'Film', 'Incidental', 'Keyboard', 'Misc', 'Opera', 'Orchestral', 'Organ', 'Piano', 'Piano sonata', 'Piano transcription', 'Violin concerto', 'Vocal', 'Choral', 'Cantata', 'Oratorio', 'Sacred', 'Song', 'Lied']
     genre_list = sorted(genre_list)
     # return response
     response_object = {'status': 'success'}
