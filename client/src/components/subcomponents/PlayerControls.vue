@@ -201,16 +201,16 @@ export default {
     // })
 
     eventBus.$on('firePlayerStateChanged', (track_data, position, duration, paused) => {
-      if (position == 0 && !paused){ //ignore at beginning of song (glitchy)
+      if (position == 0 && !paused){ // can delay timer here if glitchy
           this.playing = true;
-          this.suspend = true;
+          this.startTimer();
           this.setPlayback(0, duration);
       }
       else if (position == 0 && paused && allowNext){ //advance to next work when play stops current work
           // Spotify API spams function with requests when changing track, debounce function
           this.nextWork();
       }
-      else if (position > 0 && position < 3000 && !paused){
+      else if (position > 0 && position < 3000 && !paused){ // used to need this, Spotify changed behavior to not need it though?
           allowNext = true;
           this.playing = true;
           this.startTimer();
