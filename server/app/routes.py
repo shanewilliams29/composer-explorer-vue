@@ -206,12 +206,15 @@ def get_composers():
     for composer in composer_list:
         search_list.append(composer.name_short)
 
-    genres = db.session.query(WorkList.genre)\
-        .filter(WorkList.composer.in_(search_list)).order_by(WorkList.genre).distinct()
+    # genres = db.session.query(WorkList.genre)\
+    #     .filter(WorkList.composer.in_(search_list)).order_by(WorkList.genre).distinct()
 
-    genre_list = []
-    for (item,) in genres:
-        genre_list.append(item)
+    # genre_list = []
+    # for (item,) in genres:
+    #     genre_list.append(item)
+
+    genre_list = ['Ballet', 'Chamber', 'Cello concerto', 'Concerto', 'Film', 'Incidental', 'Keyboard', 'Misc', 'Opera', 'Orchestral', 'Organ', 'Piano', 'Piano sonata', 'Piano transcription', 'Violin concerto', 'Vocal', 'Choral', 'Cantata', 'Oratorio', 'Sacred', 'Song', 'Lied']
+    genre_list = sorted(genre_list)
 
     session['radio_composers'] = search_list
     if Config.MODE == "DEVELOPMENT":
@@ -248,13 +251,15 @@ def get_multicomposers():
     composers_by_region = group_composers_by_region(COMPOSERS)
 
     # get genre list for these composers
-    genres = db.session.query(WorkList.genre)\
-        .filter(WorkList.composer.in_(search_list)).order_by(WorkList.genre).distinct()
+    # genres = db.session.query(WorkList.genre)\
+    #     .filter(WorkList.composer.in_(search_list)).order_by(WorkList.genre).distinct()
 
-    genre_list = []
-    for (item,) in genres:
-        genre_list.append(item)
+    # genre_list = []
+    # for (item,) in genres:
+    #     genre_list.append(item)
 
+    genre_list = ['Ballet', 'Chamber', 'Cello concerto', 'Concerto', 'Film', 'Incidental', 'Keyboard', 'Misc', 'Opera', 'Orchestral', 'Organ', 'Piano', 'Piano sonata', 'Piano transcription', 'Violin concerto', 'Vocal', 'Choral', 'Cantata', 'Oratorio', 'Sacred', 'Song', 'Lied']
+    genre_list = sorted(genre_list)
     # return response
     response_object = {'status': 'success'}
     response_object['composers'] = composers_by_region
@@ -381,19 +386,30 @@ def get_worksbygenre():
                 .order_by(WorkList.genre, WorkList.id).all()
 
     else:
+
+        conditions = []
+        for genre in search_list:
+            conditions.append(WorkList.genre.ilike('%{}%'.format(genre)))
+
+        for genre in search_list:
+            conditions.append(WorkList.search.ilike('%{}%'.format(genre)))
+
+        for genre in search_list:
+            conditions.append(WorkList.title.ilike('%{}%'.format(genre)))
+
         if work_filter == 'recommended':
             works_list = db.session.query(WorkList)\
-                .filter(WorkList.composer.in_(composer_list), WorkList.genre.in_(search_list), WorkList.recommend == True)\
+                .filter(WorkList.composer.in_(composer_list), or_(*conditions), WorkList.recommend == True)\
                 .order_by(WorkList.genre, WorkList.id).all()  # don't order by order no. in multi mode
 
         elif work_filter == 'obscure':
             works_list = db.session.query(WorkList)\
-                .filter(WorkList.composer.in_(composer_list), WorkList.genre.in_(search_list), WorkList.recommend == None, WorkList.album_count > 0)\
+                .filter(WorkList.composer.in_(composer_list), or_(*conditions), WorkList.recommend == None, WorkList.album_count > 0)\
                 .order_by(WorkList.genre, WorkList.id).all()
 
         else:
             works_list = db.session.query(WorkList)\
-                .filter(WorkList.composer.in_(composer_list), WorkList.genre.in_(search_list), WorkList.album_count > 0)\
+                .filter(WorkList.composer.in_(composer_list), or_(*conditions), WorkList.album_count > 0)\
                 .order_by(WorkList.genre, WorkList.id).all()
 
     if not works_list:
