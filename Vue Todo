@@ -74,6 +74,7 @@
 - Don't get genres in main view
 - Limit number of tracks that can be exported (use playlist)
 - Get genre in autoplay
+- Test
 
 RELINKING
 - Track relinking, what to do if titles are different? Is titles best way to do this?
