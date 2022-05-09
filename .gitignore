@@ -1,7 +1,7 @@
 .DS_Store
 node_modules
 dist
-env
+venv
 cache
 __pycache__
 .gcloudignore
