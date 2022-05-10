@@ -34,7 +34,6 @@
 
 <script>
 import axios from 'axios';
-import {eventBus} from "../../main.js";
 
 export default {
   data() {
@@ -48,6 +47,16 @@ export default {
       catNo: '',
       date: ''
     };
+  },
+  computed:{
+    workChanged(){
+      return this.$config.work;
+    }
+  },
+  watch: {
+    workChanged(newWork) {
+      this.getWorkInfo(newWork);
+    }
   },
   methods: {
     getWorkInfo(work) {
@@ -133,13 +142,8 @@ export default {
 },
   created() {
     this.getWorkInfo(this.$config.work);
-    eventBus.$on('fireAlbums', this.getWorkInfo);
-    eventBus.$on('fireArtistAlbums', this.getWorkInfo);
+
   },
-  beforeDestroy(){
-    eventBus.$off('fireAlbums', this.getWorkInfo);
-    eventBus.$off('fireArtistAlbums', this.getWorkInfo);
-  }
 };
 </script>
 
