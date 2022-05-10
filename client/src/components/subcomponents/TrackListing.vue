@@ -23,7 +23,7 @@
               >
               <b-icon icon="play-fill" aria-hidden="true"></b-icon>
               <span v-if="genre == 'Opera' || genre == 'Stage Work' || genre == 'Ballet'">{{ track[0].substring(track[0].lastIndexOf(' Act ') + 1).trim() }}</span>
-              <span v-else>{{genre}}{{ track[0].substring(track[0].lastIndexOf(':') + 1) }}</span>
+              <span v-else>{{ track[0].substring(track[0].lastIndexOf(':') + 1) }}</span>
               </td>
             </tr>
           </table>

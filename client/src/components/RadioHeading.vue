@@ -52,7 +52,7 @@
                 :options="genreOptions"
                 @input="genreSelect()"
                 placeholder="Select genres"
-                :clearable="true"
+                :clearable="false"
                 class="mt-3 style-chooser allow-wrap"
                 :searchable="true"
               ></v-select>
@@ -243,7 +243,7 @@ export default {
           this.genreOptions = [];
         } else {
           this.genreOptions = [];
-          this.genreOptions.push({ value: 'all', text: 'All Genres' });
+          // this.genreOptions.push({ value: 'all', text: 'All Genres' });
         }
         for (const genre of genreList) {
           this.genreOptions.push({ value: genre, text: genre });
@@ -254,6 +254,13 @@ export default {
       eventBus.$emit('fireComposerFilter', this.periodSelectField.value);
     },
     genreSelect(){
+        if (this.genreSelectField.length > 1){ // removes All Genres from multiselect
+          var newList = this.genreSelectField.filter(item => item.value !== 'all');
+          this.genreSelectField = newList;
+        }
+        if (this.genreSelectField.length < 1){ // puts All Genres back into multiselect
+          this.genreSelectField = [{ value: 'all', text: 'All Genres' }];
+        }
         eventBus.$emit('fireGenreSelectRadio', this.genreSelectField, this.workFilterField.value, this.workSearchField);
     },
     workSearch() {

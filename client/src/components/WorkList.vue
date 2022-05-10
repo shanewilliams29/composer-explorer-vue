@@ -202,7 +202,6 @@ export default {
     },
     setGenre(genre){
         this.$config.genre = genre;
-        console.log(genre);
         localStorage.setItem('config', JSON.stringify(this.$config));
 
 
@@ -215,7 +214,7 @@ export default {
                                 var row = this.$refs[this.selectedWork][0];
                                 var height = this.$refs[genre][0].offsetParent.offsetHeight / 2;
                                 var top = card.offsetTop + row.offsetTop - height + 100;
-                                console.log(card.offsetTop, row.offsetTop);
+  
                                 this.$parent.$refs['scroll-box'].scrollTo({
                                       top: top,
                                       left: 0,
