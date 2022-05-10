@@ -6,8 +6,8 @@
         <b-col class="word-cloud"><WordCloud/></b-col>
       </b-row>
       <b-row v-else>
-        <b-col class="display-list first-col"><ComposerList/></b-col>
-        <b-col class="display-list"><WorkList/></b-col>
+        <b-col class="display-list first-col" ref="scroll-box-comp"><ComposerList/></b-col>
+        <b-col class="display-list" ref="scroll-box"><WorkList/></b-col>
         <b-col class="display-list last-col extra-margin"><AlbumList/></b-col>
       </b-row>
     </div>

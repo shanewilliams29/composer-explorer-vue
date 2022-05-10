@@ -59,6 +59,14 @@ export default {
   },
   watch: {
     composerChanged(newComposer) {
+      var timeout = 0;
+      if (this.visibility){
+        timeout = 0;
+      } else {
+        timeout = 1000;
+      }
+
+
       setTimeout(() => {  var card = this.$refs[newComposer][0].offsetParent.offsetParent;
                           var row = this.$refs[newComposer][0];
                           var height = this.$refs[newComposer][0].offsetParent.offsetParent.offsetParent.offsetHeight / 2;
@@ -68,7 +76,7 @@ export default {
                                 top: top,
                                 left: 0,
                                 behavior: 'smooth'
-                        })}, 1000);
+                        })}, timeout);
     }
   },
   methods: {

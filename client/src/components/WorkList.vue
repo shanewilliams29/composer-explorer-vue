@@ -206,12 +206,13 @@ export default {
         this.$config.genre = genre;
         localStorage.setItem('config', JSON.stringify(this.$config));
 
+      var timeout = 0;
+      if (this.visibility){
+        timeout = 0;
+      } else {
+        timeout = 1000;
+      }
 
-        // var row = this.$refs[this.selectedWork][0];
-        // var height = this.$refs[genre][0].offsetParent.offsetHeight / 2;
-        // var top = card.offsetTop + row.offsetTop - height + 50;
-
-        if(this.$view.mode == 'radio'){
             setTimeout(() => {  var card = this.$refs[genre][0];
                                 var row = this.$refs[this.selectedWork][0];
                                 var height = this.$refs[genre][0].offsetParent.offsetHeight / 2;
@@ -221,8 +222,8 @@ export default {
                                       top: top,
                                       left: 0,
                                       behavior: 'smooth'
-                              })}, 1000);
-          }
+                              })}, timeout);
+          
     },
     getFilteredWorks(item) {
       this.loading = true;
