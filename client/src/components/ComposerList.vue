@@ -15,7 +15,7 @@
           <b-collapse :visible="visibility" :id="index.replace(/\s/g, '')">
             <b-card-text>
               <table cellspacing="0">
-                <tr v-for="composer in region" :key="composer.id" @click="selectRow(composer.name_short); getWorks(composer.name_short);" :class="[{'cursor': ($view.mode != 'radio')}, {'highlight': (composer.name_short == $config.composer)}]">
+                <tr v-for="composer in region" :key="composer.id" :ref="composer.name_short" @click="selectRow(composer.name_short); getWorks(composer.name_short);" :class="[{'cursor': ($view.mode != 'radio')}, {'highlight': (composer.name_short == $config.composer)}]">
                   <td width="2%" :style="{border: 'solid 0px !important', backgroundColor:composer.color, opacity: 0.66}"></td>
                   <td width="2%"></td>
                   <td width="12%" style="white-space: nowrap;">
@@ -51,6 +51,25 @@ export default {
       visibility: true,
       artist: "",
     };
+  },
+  computed:{
+    composerChanged(){
+      return this.$config.composer;
+    }
+  },
+  watch: {
+    composerChanged(newComposer) {
+      setTimeout(() => {  var card = this.$refs[newComposer][0].offsetParent.offsetParent;
+                          var row = this.$refs[newComposer][0];
+                          var height = this.$refs[newComposer][0].offsetParent.offsetParent.offsetParent.offsetHeight / 2;
+                          var top = card.offsetTop + row.offsetTop - height + 100;
+                          console.log(card.offsetTop, row.offsetTop, height);
+                          this.$parent.$refs['scroll-box-comp'].scrollTo({
+                                top: top,
+                                left: 0,
+                                behavior: 'smooth'
+                        })}, 1000);
+    }
   },
   methods: {
     getComposers() {
