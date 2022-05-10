@@ -26,7 +26,7 @@
           <b-collapse :visible="visibility || index == $config.genre" :id="index.replace(/\s/g, '')">
             <b-card-text>
               <table cellspacing="0">
-                <tr v-for="(work, index) in genre" :ref="work.id" :key="work.id" :id="index" @click="selectRow(work.id); getAlbums(work.id, work.title); setGenre(index);" :class="{'highlight': (work.id == selectedWork)}">
+                <tr v-for="(work, index) in genre" :ref="work.id" :key="work.id" :id="index" @click="selectRow(work.id); getAlbums(work.id, work.title); setGenre(work.genre);" :class="{'highlight': (work.id == selectedWork)}">
                   <td width="17%">
                     <span style="white-space: nowrap; color: darkred;"><span v-if="work.cat">{{ work.cat }}&nbsp;&nbsp;</span><span v-else>{{ work.date }}</span></span>
                   </td>
@@ -202,6 +202,7 @@ export default {
     },
     setGenre(genre){
         this.$config.genre = genre;
+        console.log(genre);
         localStorage.setItem('config', JSON.stringify(this.$config));
 
 
@@ -214,12 +215,12 @@ export default {
                                 var row = this.$refs[this.selectedWork][0];
                                 var height = this.$refs[genre][0].offsetParent.offsetHeight / 2;
                                 var top = card.offsetTop + row.offsetTop - height + 100;
-
+                                console.log(card.offsetTop, row.offsetTop);
                                 this.$parent.$refs['scroll-box'].scrollTo({
                                       top: top,
                                       left: 0,
                                       behavior: 'smooth'
-                              })}, 300);
+                              })}, 1000);
           }
     },
     getFilteredWorks(item) {
