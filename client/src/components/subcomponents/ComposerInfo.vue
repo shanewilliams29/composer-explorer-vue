@@ -1,9 +1,6 @@
 <template>
   <div>
-      <div class="spinner" v-show="loading" role="status">
-          <b-spinner class="m-5"></b-spinner>
-      </div>
-      <b-card class="composer-info-card shadow-sm" v-show="!loading">
+      <b-card class="composer-info-card shadow-sm">
           <b-card-body class="card-body">
               <b-card-title class="card-title">
                   <table>
@@ -21,12 +18,17 @@
                       </tr>
                   </table>
               </b-card-title>
-              <b-card-text class="info-card-text">
+              <b-card-text class="info-card-text" >
+                    <div class="spinner" v-show="loading" role="status">
+          <b-spinner class="m-5"></b-spinner>
+      </div>
+                <div v-show="!loading">
                   {{ composer.introduction }}<br />
                   <a :href="composer.pageurl" target="_blank" class="wiki-link">
                       <br />
                       Read more on Wikipedia
                   </a>
+                </div>
               </b-card-text>
           </b-card-body>
       </b-card>
@@ -35,7 +37,6 @@
 
 <script>
 import axios from 'axios';
-import {eventBus} from "../../main.js";
 
 export default {
   data() {
@@ -43,6 +44,16 @@ export default {
       loading: true,
       composer: {}
     };
+  },
+  computed:{
+    composerChanged(){
+      return this.$config.composer;
+    }
+  },
+  watch: {
+    composerChanged(newComposer) {
+      this.getComposerInfo(newComposer);
+    }
   },
   methods: {
     getComposerInfo(composer) {
@@ -63,14 +74,6 @@ export default {
   created() {
     this.loading = true;
     this.getComposerInfo(this.$config.composer);
-    eventBus.$on('fireComposers', (composer) => {
-      this.loading = true;
-      this.getComposerInfo(composer);
-    })
-    eventBus.$on('fireArtistWorks', (artist, composer) => {
-      this.loading = true;
-      this.getComposerInfo(composer);
-    })
   },
 };
 </script>

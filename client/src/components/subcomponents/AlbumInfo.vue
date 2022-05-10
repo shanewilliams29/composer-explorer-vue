@@ -34,6 +34,7 @@ export default {
   },
   methods: {
     getAlbumInfo(album_id) {
+      this.title = this.hold_title;
         this.loading = true;
         const path = 'api/albuminfo/' + album_id;
         axios.get(path)
@@ -51,22 +52,22 @@ export default {
             this.loading = false;
           });
       },
+      holdTitle(){
+        this.hold_title = this.$config.workTitle
+      },
   },
   created() {
     this.loading = true;
-    eventBus.$on('fireAlbumData', (album_id) => {
-        this.getAlbumInfo(album_id);
-        this.title = this.hold_title;
-    })
-    eventBus.$on('fireAlbums', () => {
-        this.hold_title = this.$config.workTitle;
-    })
-    eventBus.$on('fireAlbumsAndPlay', () => {
-        this.hold_title = this.$config.workTitle;
-    })
-    eventBus.$on('fireArtistAlbums', () => {
-        this.hold_title = this.$config.workTitle;
-    })
+    eventBus.$on('fireAlbumData', this.getAlbumInfo);
+    eventBus.$on('fireAlbums', this.holdTitle);
+    eventBus.$on('fireAlbumsAndPlay', this.holdTitle);
+    eventBus.$on('fireArtistAlbums', this.holdTitle);
+  },
+    beforeDestroy() {
+    eventBus.$off('fireAlbumData', this.getAlbumInfo);
+    eventBus.$off('fireAlbums', this.holdTitle);
+    eventBus.$off('fireAlbumsAndPlay', this.holdTitle);
+    eventBus.$off('fireArtistAlbums', this.holdTitle);
   },
 };
 </script>

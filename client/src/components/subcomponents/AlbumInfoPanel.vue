@@ -1,9 +1,6 @@
 <template>
   <div>
-    <div class="spinner" v-show="loading" role="status">
-      <b-spinner class="m-5"></b-spinner>
-    </div>
-    <b-card class="album-info-card shadow-sm" v-if="!loading">
+    <b-card class="album-info-card shadow-sm">
       <b-card-body class="card-body">
         <b-card-title class="card-title">
           <table>
@@ -18,9 +15,11 @@
           </table>
         </b-card-title>
         <b-card-text class="info-card-text">
-          <!-- <div class="disclaimer"><b-badge variant="warning">BETA </b-badge><span class="born-died">&nbsp; Some information may not be correct.</span></div> -->
+      <div class="spinner" v-show="loading" role="status">
+      <b-spinner class="m-5"></b-spinner>
+     </div>
           <div v-for="result in results" :key="result[0]">
-            <table>
+            <table v-show="!loading">
               <tr>
                 <td>
                   <b-avatar size="40px" :src="result[2]"></b-avatar>
@@ -151,8 +150,11 @@ export default {
     this.getSpotifyAlbumData(this.$config.albumData);
     eventBus.$on('fireSetAlbum', this.getSpotifyAlbumData);
     eventBus.$on('fireSpotifyAlbumData', this.setSpotifyAlbum);
-    // eventBus.$on('fireSpotifyArtistList', this.setSpotifyArtistsData);
   },
+  beforeDestroy(){
+    eventBus.$off('fireSetAlbum', this.getSpotifyAlbumData);
+    eventBus.$off('fireSpotifyAlbumData', this.setSpotifyAlbum);
+  }
 };
 </script>
 

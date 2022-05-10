@@ -1,9 +1,6 @@
 <template>
   <div>
-    <div class="spinner" v-show="loading" role="status">
-      <b-spinner class="m-5"></b-spinner>
-    </div>
-    <b-card class="composer-info-card shadow-sm" v-show="!loading">
+    <b-card class="composer-info-card shadow-sm">
       <b-card-body class="card-body">
         <b-card-title class="card-title">
           <table>
@@ -19,11 +16,16 @@
           </table>
         </b-card-title>
         <b-card-text class="info-card-text">
+          <div class="spinner" v-show="loading" role="status">
+            <b-spinner class="m-5"></b-spinner>
+          </div>
+          <div v-show="!loading">
           {{ workBlurb }}<br />
-          <a :href="wikiLink" target="_blank" class="wiki-link">
+          <a :href="wikiLink" target="_blank" class="wiki-link" v-if="pageTitle">
             <br />
-            Read more on Wikipedia
+            Read more on Wikipedia: {{pageTitle}}
           </a>
+        </div>
         </b-card-text>
       </b-card-body>
     </b-card>
@@ -61,7 +63,7 @@ export default {
             this.wikiWork(this.composer + " " + this.workTitle + " " + this.catNo);
           })
           .catch((error) => {
-            // eslint-disable-next-line
+            this.loading = false;
             console.error(error);
 
           });
@@ -83,7 +85,15 @@ export default {
           .then((res) => {
 
             // SECOND SEARCH
-            let pageid = res.data.query.search[0].pageid;
+            let pageid = '';
+            try{
+              pageid = res.data.query.search[0].pageid;
+            } catch(error){
+              this.workBlurb = "Work not found on Wikipedia.";
+              this.pageTitle = null;
+              this.loading = false;
+              return(error);
+            }
             var url2 = "https://en.wikipedia.org/w/api.php";
             var params2 = {
                 action: "query",
@@ -110,38 +120,26 @@ export default {
 
           })
           .catch((error) => {
-            // eslint-disable-next-line
+            this.loading = false;
             console.error(error);
           });
 
           })
           .catch((error) => {
-            // eslint-disable-next-line
+            this.loading = false;
             console.error(error);
           });
   },
 },
   created() {
-    this.loading = true;
     this.getWorkInfo(this.$config.work);
-    eventBus.$on('fireAlbums', (workId, title) => {
-      this.loading = true;
-      this.workTitle = title;
-      this.getWorkInfo(workId);
-    })
-    // eslint-disable-next-line
-    eventBus.$on('fireArtistAlbums', (workId, artist) => {
-      this.loading = true;
-      this.workTitle = this.$config.title;
-      this.getWorkInfo(workId);
-    })
-
-    // eslint-disable-next-line
-    // eventBus.$on('expandInfoPanel', (composer, workId) => {
-    //   this.loading = false;
-    //   this.getWorkInfo(workId);
-    // })
+    eventBus.$on('fireAlbums', this.getWorkInfo);
+    eventBus.$on('fireArtistAlbums', this.getWorkInfo);
   },
+  beforeDestroy(){
+    eventBus.$off('fireAlbums', this.getWorkInfo);
+    eventBus.$off('fireArtistAlbums', this.getWorkInfo);
+  }
 };
 </script>
 
