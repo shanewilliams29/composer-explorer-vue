@@ -14,13 +14,13 @@
         <div class="m-4"></div>
       </span>
       <span v-show="!loading && works.length < 1 && $view.mode == 'radio'" class="col no-works-found">
-        <div class="m-4">Select from the options above to create your own customized radio</div>
+        <div class="m-4">{{ message }}</div>
       </span>
       <b-card-group deck v-if="!loading && works">
         <b-card v-for="(genre, index) in works" :key="index" :ref="index" no-body header-tag="header" class="shadow-sm">
           <div class="#header" v-b-toggle="index.replace(/\s/g, '')">
             <h6 class="m-2 mb-0">
-              <span :class="{'music-note': (index == $config.genre && !visibility)}">{{ index }}&nbsp;&nbsp;</span><span v-if="index == $config.genre && !visibility" class="music-note float-middle"><b-icon-volume-up-fill></b-icon-volume-up-fill></span><span class="mb-0 float-right when-opened"><b-icon-chevron-up></b-icon-chevron-up></span><span class="mb-0 float-right when-closed"><b-icon-chevron-down></b-icon-chevron-down></span>
+              <span :class="{'music-note': (index == $config.genre)} && false">{{ index }}&nbsp;&nbsp;</span><span v-if="index == $config.genre && false" class="music-note float-middle"><b-icon-volume-up-fill></b-icon-volume-up-fill></span><span class="mb-0 float-right when-opened"><b-icon-chevron-up></b-icon-chevron-up></span><span class="mb-0 float-right when-closed"><b-icon-chevron-down></b-icon-chevron-down></span>
             </h6>
           </div>
           <b-collapse :visible="visibility || index == $config.genre" :id="index.replace(/\s/g, '')">
@@ -55,7 +55,8 @@ export default {
       playlist: [],
       loading: false,
       selectedWork: null,
-      visibility: true
+      visibility: true,
+      message: "Select from the options above to create your own customized radio"
     };
   },
   methods: {
@@ -100,6 +101,7 @@ export default {
           } else if (this.playlist.length < 1){
             this.$view.enableExport = false;
             this.$view.enableRadio = false;
+            this.message = "No works found for selection. Try different genres, and selecting \"All works\""
           }else{
             this.visibility = true;
             this.$view.enableExport = true;
@@ -259,6 +261,7 @@ export default {
     fireClearWorks(artist) {
       this.$config.artist = artist;
       this.works = [];
+      this.message = "Select from the options above to create your own customized radio"
     },
     nextWork() {
       eventBus.$emit('changeWork');

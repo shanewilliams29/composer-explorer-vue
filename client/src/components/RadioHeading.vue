@@ -216,6 +216,7 @@ export default {
       eventBus.$emit('fireRadioSelect', this.radioTypeField.value);
       eventBus.$emit('fireClearWorks');
       eventBus.$emit('fireClearAlbums');
+      this.$config.genre = null;
       this.$view.radioPlaying = false;
       this.$view.enableRadio = false;
       this.$view.enableExport = false;
@@ -286,6 +287,7 @@ export default {
     },
   },
   created() {
+    this.$config.genre = null;
     this.$view.radioPlaying = false;
     this.$view.enableRadio = false;
     this.$view.enableExport = false;

@@ -414,7 +414,8 @@ def get_worksbygenre():
 
     if not works_list:
         response_object = {'status': 'success'}
-        response_object['works'] = works_list
+        response_object['works'] = []
+        response_object['playlist'] = []
         response = jsonify(response_object)
         return response
 
@@ -428,7 +429,8 @@ def get_worksbygenre():
 
         if not return_list:
             response_object = {'status': 'success'}
-            response_object['works'] = return_list
+            response_object['works'] = []
+            response_object['playlist'] = []
             response = jsonify(response_object)
             return response
         else:
