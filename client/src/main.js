@@ -56,7 +56,8 @@ const defaultConfig = {
   trackNo: 0,
   album: "BEETHOVEN000056eOuqhCfrTPp1H0YbQ9PmL",
   albumSize: 'large',
-  artist: null
+  artist: null,
+  albumData: {}
 };
 if (localStorage.getItem("config") !== null) {
   config = JSON.parse(localStorage.getItem('config'));
@@ -69,7 +70,8 @@ Vue.prototype.$config = Vue.observable(config);
 Vue.prototype.$auth = Vue.observable({
   appToken: null,
   clientToken: null,
-  deviceID: null
+  deviceID: null,
+  knowledgeKey: null
 });
 
 Vue.prototype.$view = Vue.observable({
@@ -82,7 +84,8 @@ Vue.prototype.$view = Vue.observable({
   radioTrackLimit: '4',
   playlistTrackCount: null,
   playlistSuccess: false,
-  playlistError: false
+  playlistError: false,
+  panelVisible: false
 });
 
 new Vue({

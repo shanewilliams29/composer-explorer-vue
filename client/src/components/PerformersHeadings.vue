@@ -3,8 +3,11 @@
     <b-row class="flex-nowrap">
       <b-col class="text-center">
         <div class="vertical-centered">
-          <div class="no-results" v-if="!results[0]"><table class="dummy-table">Search for a performer to view composers and works they perform</table></div>
-            <table v-if="results">
+          <div class="spinner" v-show="loading" role="status">
+            <b-spinner></b-spinner>
+          </div>
+          <div class="no-results" v-if="!results[0] && !loading"><table class="dummy-table">Search for a performer to view composers and works they perform</table></div>
+            <table v-if="results && !loading">
               <tr class="tr-performer" v-for="result in results" :key="result[0]">
                 <td>
                   <b-avatar class="avatar" size="64px" :src="result[2]"></b-avatar>
@@ -54,6 +57,7 @@ export default {
       wikiLink: null,
       query: '',
       artistList: [],
+      loading: false,
 
       albumSortField: { value: 'recommended', text: 'Recommended sorting' },
       albumSortOptions: [
@@ -115,12 +119,14 @@ export default {
       }
     },
     getPersonInfo(person) {
+      this.loading = true;
       this.results = [];
-      const path = 'https://kgsearch.googleapis.com/v1/entities:search?indent=true&types=Person&types=MusicGroup&query=' + person + ' Music&limit=50&key=AIzaSyA91Endg_KkrNGhkqcrW5evkG1p7y6CA08';
+      const path = 'https://kgsearch.googleapis.com/v1/entities:search?indent=true&types=Person&types=MusicGroup&query=' + person + ' Music&limit=50&key=' + this.$auth.knowledgeKey;
       axios({
         method: 'get',
         url: path,
       }).then((res) => {
+        this.loading = false;
         let imageUrl = '';
         let description = '';
         //this.loading = false;
@@ -161,6 +167,9 @@ export default {
         }
       }).catch((error) => {
         console.error(error);
+          this.wikiLink = null;
+          this.results.push([person, '', '', -1]);
+          this.loading = false;
       });
     },
   },
@@ -206,6 +215,10 @@ export default {
   color: #9ea4ae !important;
 }
 </style><style scoped>
+  .spinner {
+  text-align: center;
+  color: grey;
+}
   .container-fluid {
   background-color: #54595f;
   color: #3b4047;

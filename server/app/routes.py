@@ -100,6 +100,7 @@ def get_token():
         response_object = {'status': 'success'}
         response_object['client_token'] = client_token
         response_object['app_token'] = app_token
+        response_object['knowledge_api'] = Config.GOOGLE_KNOWLEDGE_GRAPH_API_KEY
         response = jsonify(response_object)
         response.headers.add('Access-Control-Allow-Credentials', 'true')
         return response

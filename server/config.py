@@ -14,6 +14,8 @@ class Config(object):
     SPOTIFY_CLIENT_SECRET = os.environ.get('SPOTIFY_CLIENT_SECRET')
     SPOTIFY_REDIRECT_URL = os.environ.get('SPOTIFY_REDIRECT_URL')
 
+    GOOGLE_KNOWLEDGE_GRAPH_API_KEY = os.environ.get('GOOGLE_KNOWLEDGE_GRAPH_API_KEY')
+
     STATIC = 'https://storage.googleapis.com/composer-explorer.appspot.com/'
 
     CACHE_TYPE = "FileSystemCache"  # Flask-Caching related configs

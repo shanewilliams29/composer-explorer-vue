@@ -54,8 +54,7 @@ export default {
   },
   methods: {
     getPersonInfo(person) {
-      this.loading = true;
-      const path = 'https://kgsearch.googleapis.com/v1/entities:search?indent=true&types=Person&types=MusicGroup&query=' + person + ' Music&limit=50&key=AIzaSyA91Endg_KkrNGhkqcrW5evkG1p7y6CA08';
+      const path = 'https://kgsearch.googleapis.com/v1/entities:search?indent=true&types=Person&types=MusicGroup&query=' + person + ' Music&limit=50&key=' + this.$auth.knowledgeKey;
       axios({
         method: 'get',
         url: path,
@@ -102,6 +101,11 @@ export default {
         }
       }).catch((error) => {
         console.error(error);
+          this.loading = false;
+          this.results.push([person, '', '', -1]);
+          this.results.sort(function(a, b) {
+            return b[3] - a[3]
+          });
       });
     },
     getArtistComposers(artist) {
@@ -127,7 +131,7 @@ export default {
       //console.log(artistIDsString);
       spotify.getSpotifyArtists(this.$auth.appToken, artistIDsString.trim());
     },
-    getSpotifyAlbumData(album) { // database album
+    getSpotifyAlbumData(album) { // database album object
       this.loading = true;
       this.results = [];
       this.artists = album.all_artists.split(", ");
@@ -144,6 +148,7 @@ export default {
     }
   },
   created() {
+    this.getSpotifyAlbumData(this.$config.albumData);
     eventBus.$on('fireSetAlbum', this.getSpotifyAlbumData);
     eventBus.$on('fireSpotifyAlbumData', this.setSpotifyAlbum);
     // eventBus.$on('fireSpotifyArtistList', this.setSpotifyArtistsData);

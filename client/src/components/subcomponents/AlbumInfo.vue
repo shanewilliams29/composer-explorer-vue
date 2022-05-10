@@ -38,6 +38,8 @@ export default {
         const path = 'api/albuminfo/' + album_id;
         axios.get(path)
           .then((res) => {
+            this.$config.albumData = res.data.album
+            localStorage.setItem('config', JSON.stringify(this.$config));
             eventBus.$emit('fireSetAlbum', res.data.album);
             this.album = res.data.album; // Change to local file
             this.composer = this.$config.composer;

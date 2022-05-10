@@ -31,9 +31,11 @@ export default {
     togglePanel() {
       this.showPanel = !this.showPanel;
       if (this.showPanel) {
+        this.$view.panelVisible = true;
         document.documentElement.style.setProperty('--panelheight', `300px`);
       } else {
         document.documentElement.style.setProperty('--panelheight', `0px`);
+        this.$view.panelVisible = false;
       }
     }
   },
@@ -42,6 +44,7 @@ export default {
       window.location.replace('mobile');
     }
     document.documentElement.style.setProperty('--panelheight', `0px`);
+    this.$view.panelVisible = false;
   },
 }
 </script>
