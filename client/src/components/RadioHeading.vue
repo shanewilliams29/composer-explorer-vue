@@ -142,6 +142,7 @@ export default {
   },
   data() {
     return {
+      allowClear: true,
       artist_list: [],
       title: "",
       OpenIndicator: {
@@ -258,9 +259,13 @@ export default {
         if (this.genreSelectField.length > 1){ // removes All Genres from multiselect
           var newList = this.genreSelectField.filter(item => item.value !== 'all');
           this.genreSelectField = newList;
+          this.allowClear = false;
         }
-        if (this.genreSelectField.length < 1){ // puts All Genres back into multiselect
+        if (this.genreSelectField.length < 1 && !this.allowClear){ // puts All Genres back into multiselect
           this.genreSelectField = [{ value: 'all', text: 'All Genres' }];
+          this.allowClear = true;
+        } else {
+          this.allowClear = false;
         }
         eventBus.$emit('fireGenreSelectRadio', this.genreSelectField, this.workFilterField.value, this.workSearchField);
     },
