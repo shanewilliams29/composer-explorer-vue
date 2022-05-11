@@ -6,7 +6,9 @@
     </template>
     <div class="m-2 text-center">
       <h3>Your browser is blocking audio playback.</h3>
-      <b-button variant="success" class="mt-4" @click="enableAutoplay()">Click to enable</b-button>
+      <p>This is a problem affecting some browsers due to audio Autoplay restrictions. This website works best with Chrome or Firefox.</p>
+      <p>You may be able to correct this error by refreshing the page.</p>
+      <b-button class="mt-4" @click="refreshPage()">Click to refresh</b-button>
     </div>
   </b-modal>
 </div>
@@ -21,10 +23,8 @@ export default {
     };
   },
   methods: {
-    enableAutoplay() {
-        window.player.activateElement();
-        console.log("ACTIVATED");
-        this.$bvModal.hide('autoplay-modal')
+    refreshPage() {
+        location.reload();
       },
   },
 };

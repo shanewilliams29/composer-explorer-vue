@@ -35,6 +35,8 @@ Vue.use(VueLazyload, {
   loading: loadimage,
   attempt: 1
 })
+
+
 Vue.component('vue-typeahead-bootstrap', VueTypeaheadBootstrap);
 Vue.component('v-select', vSelect);
 Vue.component(VueWordCloud.name, VueWordCloud);

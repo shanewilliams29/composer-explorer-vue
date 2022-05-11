@@ -36,6 +36,7 @@
 <script>
 import {eventBus} from "../../main.js";
 import spotify from '@/SpotifyFunctions.js'
+import smoothscroll from 'smoothscroll-polyfill';
 
 export default {
   data() {
@@ -56,6 +57,8 @@ export default {
     },
     selectTrack(track){
         this.selectedTrack = track;
+
+        smoothscroll.polyfill(); // for Safari smooth scrolling
         var trackId = track[1];
         var element = document.getElementById(trackId);
         var top = element.offsetTop;

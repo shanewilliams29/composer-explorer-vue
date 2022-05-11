@@ -41,7 +41,7 @@
 <script>
 import axios from 'axios';
 import {eventBus} from "../main.js";
-
+import smoothscroll from 'smoothscroll-polyfill';
 
 export default {
   data() {
@@ -66,7 +66,7 @@ export default {
         timeout = 1000;
       }
 
-
+      smoothscroll.polyfill(); // for Safari smooth scrolling
       setTimeout(() => {  var card = this.$refs[newComposer][0].offsetParent.offsetParent;
                           var row = this.$refs[newComposer][0];
                           var height = this.$refs[newComposer][0].offsetParent.offsetParent.offsetParent.offsetHeight / 2;
