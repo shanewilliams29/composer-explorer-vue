@@ -32,10 +32,14 @@ export default {
       this.showPanel = !this.showPanel;
       if (this.showPanel) {
         this.$view.panelVisible = true;
-        document.documentElement.style.setProperty('--panelheight', `300px`);
+        setTimeout(() => {
+          document.documentElement.style.setProperty('--panelheight', `300px`);
+        }, 300);
       } else {
         document.documentElement.style.setProperty('--panelheight', `0px`);
-        this.$view.panelVisible = false;
+        setTimeout(() => {
+          this.$view.panelVisible = false; // Delay to allow animation
+        }, 300);
       }
     }
   },
