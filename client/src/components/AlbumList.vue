@@ -151,6 +151,7 @@ export default {
     },
     selectRow(album) {
       this.selectedAlbum = album;
+      console.log(album);
     },
     clearAlbums() {
       this.albums = [];

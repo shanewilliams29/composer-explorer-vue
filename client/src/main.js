@@ -87,7 +87,8 @@ Vue.prototype.$view = Vue.observable({
   playlistTrackCount: null,
   playlistSuccess: false,
   playlistError: false,
-  panelVisible: false
+  panelVisible: false,
+  like: false
 });
 
 new Vue({

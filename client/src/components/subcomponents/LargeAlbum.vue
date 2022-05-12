@@ -16,10 +16,7 @@
           <div v-else @click="$parent.selectRow(album.id); $parent.getAlbumData(album.id);"><img class="album-cover" height="auto" v-lazy="album.album_img" /></div>
           <div class="row">
           <b-col class="col" cols="4">
-           <span class="likes" v-if="album.likes">&nbsp;
-              <b-badge v-if="parseInt(album.likes) == 1 ">{{ album.likes }} Like</b-badge>
-              <b-badge v-if="parseInt(album.likes) > 1 ">{{ album.likes }} Likes</b-badge>
-            </span>
+            <AlbumLikes v-bind:album="album" v-bind:selectedAlbum="selectedAlbum"/>
           </b-col>
           <b-col class="col footer" cols="8">
           <div v-if="album.id == selectedAlbum">
@@ -38,7 +35,12 @@
 
 <script>
 import {staticURL} from "@/main.js";
+import AlbumLikes from '@/components/subcomponents/AlbumLikes.vue';
+
 export default {
+  components: {
+    AlbumLikes
+  },
   name: 'LargeAlbum',
   props: {
     albums: Array,

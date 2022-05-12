@@ -2,7 +2,8 @@
   <b-container class="playback-container">
  <b-row class="buttons-row">
   <b-col class="text-center text-nowrap">
-  <b-button class="playback-button" id="shuffle-play" v-show="!$view.shuffle" @click="shufflePlayback()"><b-icon-shuffle></b-icon-shuffle></b-button>
+  <b-button class="playback-button gray" id="random-button" @click="shufflePlayback()"><b-icon-dice5></b-icon-dice5></b-button>
+  <b-button class="playback-button gray" id="shuffle-play" v-show="!$view.shuffle" @click="shufflePlayback()"><b-icon-shuffle></b-icon-shuffle></b-button>
   <b-button class="playback-button" id="shuffle-play" v-show="$view.shuffle" @click="shufflePlayback()" ><b-icon-shuffle variant="warning"></b-icon-shuffle></b-button>
   <b-button class="playback-button" id="previous-work-button" @click="previousWork()"><b-icon-arrow-left-circle></b-icon-arrow-left-circle></b-button>
   <b-button class="playback-button" id="back-button" @click="back()"><b-icon-skip-start-fill></b-icon-skip-start-fill></b-button>
@@ -10,7 +11,9 @@
   <b-button class="playback-button" id="pause-button" v-show="playing" @click="pause()"><b-icon-pause-fill></b-icon-pause-fill></b-button>
   <b-button class="playback-button" id="forward-button" @click="next()"><b-icon-skip-end-fill></b-icon-skip-end-fill></b-button>
   <b-button class="playback-button" id="next-work-button" @click="nextWorkNoDebounce()"><b-icon-arrow-right-circle></b-icon-arrow-right-circle></b-button>
-  <b-button class="playback-button" id="next-work-button" @click="like()"><b-icon-heart></b-icon-heart></b-button>
+  <b-button class="playback-button gray" id="like-work-button" v-show="!$view.like" @click="toggleLike()"><b-icon-heart></b-icon-heart></b-button>
+  <b-button class="playback-button red" id="unlike-work-button" v-show="$view.like" @click="toggleLike()"><b-icon-heart-fill></b-icon-heart-fill></b-button>
+  <b-button class="playback-button gray" id="playlist-button" @click="playlist()"><b-icon-music-note-list></b-icon-music-note-list></b-button>
 </b-col>
 </b-row>
  <b-row class="seekbar-row">
@@ -166,6 +169,14 @@ export default {
     },
     shufflePlayback(){
       this.$view.shuffle = !this.$view.shuffle;
+    },
+    toggleLike(){
+      this.$view.like = !this.$view.like;
+      if(this.$view.like){
+        eventBus.$emit('fireLikeAlbum');
+      } else {
+        eventBus.$emit('fireUnlikeAlbum');
+      }
     }
   },
   created() {
@@ -368,6 +379,12 @@ input[type="range"]::-moz-range-progress {
     border: none !important;
     outline: none !important;
     box-shadow: none !important;
+}
+.gray{
+    color: darkgray !important;
+}
+.red{
+    color: var(--red) !important;
 }
 .btn:focus,.btn:active:focus,.btn.active:focus,
 .btn.focus,.btn:active.focus,.btn.active.focus {
