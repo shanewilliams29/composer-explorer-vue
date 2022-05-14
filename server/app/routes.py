@@ -213,8 +213,8 @@ def get_composers():
     # genre_list = []
     # for (item,) in genres:
     #     genre_list.append(item)
-
-    genre_list = ['Symphony', 'Ballet', 'Chamber', 'Cello concerto', 'Concerto', 'Piano concerto', 'Film', 'Incidental', 'Keyboard', 'Misc', 'Opera', 'Orchestral', 'Organ', 'Piano', 'Piano sonata', 'Piano transcription', 'Violin concerto', 'Vocal', 'Choral', 'Cantata', 'Oratorio', 'Sacred', 'Song', 'Lied']
+    with open('app/static/genres.json') as f:
+        genre_list = json.load(f)
     genre_list = sorted(genre_list)
 
     session['radio_composers'] = search_list
@@ -259,8 +259,10 @@ def get_multicomposers():
     # for (item,) in genres:
     #     genre_list.append(item)
 
-    genre_list = ['Symphony', 'Ballet', 'Chamber', 'Cello concerto', 'Concerto', 'Piano concerto', 'Film', 'Incidental', 'Keyboard', 'Misc', 'Opera', 'Orchestral', 'Organ', 'Piano', 'Piano sonata', 'Piano transcription', 'Violin concerto', 'Vocal', 'Choral', 'Cantata', 'Oratorio', 'Sacred', 'Song', 'Lied']
+    with open('app/static/genres.json') as f:
+        genre_list = json.load(f)
     genre_list = sorted(genre_list)
+
     # return response
     response_object = {'status': 'success'}
     response_object['composers'] = composers_by_region
@@ -397,6 +399,9 @@ def get_worksbygenre():
 
         for genre in search_list:
             conditions.append(WorkList.title.ilike('%{}%'.format(genre)))
+
+        for genre in search_list:
+            conditions.append(WorkList.nickname.ilike('%{}%'.format(genre)))
 
         if work_filter == 'recommended':
             works_list = db.session.query(WorkList)\

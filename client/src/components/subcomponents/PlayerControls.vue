@@ -2,7 +2,6 @@
   <b-container class="playback-container">
  <b-row class="buttons-row">
   <b-col class="text-center text-nowrap">
-  <b-button class="playback-button gray" id="random-button" @click="shufflePlayback()"><b-icon-dice5></b-icon-dice5></b-button>
   <b-button class="playback-button gray" id="shuffle-play" v-show="!$view.shuffle" @click="shufflePlayback()"><b-icon-shuffle></b-icon-shuffle></b-button>
   <b-button class="playback-button" id="shuffle-play" v-show="$view.shuffle" @click="shufflePlayback()" ><b-icon-shuffle variant="warning"></b-icon-shuffle></b-button>
   <b-button class="playback-button" id="previous-work-button" @click="previousWork()"><b-icon-arrow-left-circle></b-icon-arrow-left-circle></b-button>
@@ -13,7 +12,6 @@
   <b-button class="playback-button" id="next-work-button" @click="nextWorkNoDebounce()"><b-icon-arrow-right-circle></b-icon-arrow-right-circle></b-button>
   <b-button class="playback-button gray" id="like-work-button" v-show="!$view.like" @click="toggleLike()"><b-icon-heart></b-icon-heart></b-button>
   <b-button class="playback-button red" id="unlike-work-button" v-show="$view.like" @click="toggleLike()"><b-icon-heart-fill></b-icon-heart-fill></b-button>
-  <b-button class="playback-button gray" id="playlist-button" @click="playlist()"><b-icon-music-note-list></b-icon-music-note-list></b-button>
 </b-col>
 </b-row>
  <b-row class="seekbar-row">
