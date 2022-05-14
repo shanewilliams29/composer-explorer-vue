@@ -3,7 +3,7 @@
     <b-card class="album-info-card shadow-sm">
       <b-card-body class="card-body">
         <b-card-title class="card-title">
-          <table>
+          <table v-if="album.release_date">
             <tr class="heading-tr">
               <td class="heading-td">
                 {{ album.name }}<br />

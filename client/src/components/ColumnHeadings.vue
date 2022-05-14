@@ -143,7 +143,6 @@ export default {
       }
     },
     newComposer(composer) {
-      console.log(composer);
         this.workSearchPlaceholder = "Search works by " + composer;
         this.workSearchField = '';
         this.workFilterField = { value: 'recommended', text: 'Recommended works' };

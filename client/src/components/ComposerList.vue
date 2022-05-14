@@ -71,7 +71,6 @@ export default {
                           var row = this.$refs[newComposer][0];
                           var height = this.$refs[newComposer][0].offsetParent.offsetParent.offsetParent.offsetHeight / 2;
                           var top = card.offsetTop + row.offsetTop - height + 100;
-                          console.log(card.offsetTop, row.offsetTop, height);
                           this.$parent.$refs['scroll-box-comp'].scrollTo({
                                 top: top,
                                 left: 0,

@@ -86,7 +86,6 @@ export default {
               window.player.connect();
               // for Safari autoplay enable
               document.getElementById("app").addEventListener("click", function() {
-                console.log("ACTIVATED");
                 window.player.activateElement();
               }, {
                 once: true

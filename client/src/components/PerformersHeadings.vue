@@ -15,11 +15,13 @@
                 <td class="td-text">
                   <span class="artist-name">{{ result[0] }}&nbsp;</span><br>
                   <span class="artist-job">{{result[1]}}</span>
+                  
                   <span v-if="wikiLink" class="wiki-link">&nbsp;&nbsp;<a :href="wikiLink" target="_blank"><b-icon icon="info-circle-fill" aria-hidden="true"></b-icon> Wikipedia</a>&nbsp;&nbsp;</span>
-                  <span @mouseover="hover = true" @mouseleave="hover = false" class="wiki-link"><a :href="wikiLink" target="_blank">
+                  
+                  <span @mouseover="hover = true" @mouseleave="hover = false" class="radio-link"><a :href="wikiLink" target="_blank">
                     <img v-if="hover" :src="radioWhiteUrl" class="radio-link" height="14px" />
                     <img v-else :src="radioGrayURL" class="radio-link" height="14px" />
-                  Radio</a></span>
+                    Radio</a></span>
                 </td>
               </tr>
             </table>
@@ -252,7 +254,7 @@ table {
   font-size: 12px;
   text-decoration: none;
 }
-.radio-link{
+.radio-link a{
   color: darkgray;
   font-size: 12px;
   text-decoration: none;
