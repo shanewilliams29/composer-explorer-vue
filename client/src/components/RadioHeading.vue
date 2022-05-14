@@ -188,7 +188,7 @@ export default {
           { value: 'randomartists', text: 'Random performers'}
         ],
 
-      limitFilterField: { value: '4', text: 'Max no. of tracks: 4' },
+      limitFilterField: { value: '6', text: 'Max no. of tracks: 6' },
       limitOptions: [
           { value: '1', text: 'Max no. of tracks: 1' },
           { value: '2', text: 'Max no. of tracks: 2' },

@@ -26,11 +26,11 @@
           <b-collapse :visible="visibility || index == $config.genre" :id="index.replace(/\s/g, '')">
             <b-card-text>
               <table cellspacing="0">
-                <tr v-for="(work, index) in genre" :ref="work.id" :key="work.id" :id="index" @click="selectRow(work.id); getAlbums(work.id, work.title); setGenre(work.genre);" :class="{'highlight': (work.id == selectedWork)}">
+                <tr v-for="(work, index) in genre" :ref="work.id" :key="work.id" :id="index" @click="selectRow(work.id); getAlbums(work.id, work.title); setGenre(work.genre);" :class="{'highlight': (work.id == selectedWork), 'no-albums': (work.album_count == 0)}">
                   <td width="17%">
                     <span style="white-space: nowrap; color: darkred;"><span v-if="work.cat">{{ work.cat }}&nbsp;&nbsp;</span><span v-else>{{ work.date }}</span></span>
                   </td>
-                  <td width="78%" style="white-space: nowrap; text-overflow: ellipsis; overflow: hidden; max-width: 1px;">{{ work.title }}<span v-if="work.nickname" style="color: gray;"> · {{ work.nickname }}</span></td>
+                  <td width="78%" style="white-space: nowrap; text-overflow: ellipsis; overflow: hidden; max-width: 1px;"><span>{{ work.title }}</span><span v-if="work.nickname" style="color: gray;"> · {{ work.nickname }}</span></td>
                   <td width="5%" style="text-align: right;">
                     <b-badge>{{ work.album_count }}</b-badge>
                   </td>
@@ -431,6 +431,12 @@ tr:hover {
 }
 .highlight td:last-child:after {
   left: 100%;
+}
+.no-albums span{
+  opacity: 0.45;
+}
+.no-albums:hover {
+  cursor: default !important;
 }
 header.card-header {
   background-color: #fff;
