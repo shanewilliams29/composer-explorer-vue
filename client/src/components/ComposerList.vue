@@ -106,7 +106,7 @@ export default {
         .then((res) => {
           this.composers = res.data.composers;
           if(this.$view.mode == 'radio'){
-            eventBus.$emit('aRadioGenreList', res.data.genres);
+            eventBus.$emit('fireRadioGenreList', res.data.genres);
           }
           this.loading=false;
         })
