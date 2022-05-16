@@ -24,6 +24,8 @@ GENERAL
 - Deselect composer on view mode change
 - Remember radio settings
 - User ID in playlist generator python (currently set to mine)
+- Export playlist for performers
+- Radio playback if no albums? (ie. Yuja concerto limited to 1 track)
 
 RELINKING
 - Track relinking, what to do if titles are different? Is titles best way to do this?

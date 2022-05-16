@@ -696,13 +696,13 @@ def get_albums(work_id):
 
     if search:
         albums = db.session.query(WorkAlbums, func.count(AlbumLike.id).label('total')) \
-            .filter(WorkAlbums.workid == work_id, WorkAlbums.hidden != True, WorkAlbums.artists.ilike(search), WorkAlbums.album_type != "compilation") \
+            .filter(WorkAlbums.workid == work_id, WorkAlbums.hidden != True, WorkAlbums.artists.ilike(search), WorkAlbums.work_track_count <= limit, WorkAlbums.album_type != "compilation") \
             .outerjoin(AlbumLike).group_by(WorkAlbums) \
             .order_by(text('total DESC'), WorkAlbums.score.desc()).paginate(1, 1000, False)
 
         if not albums.items:  # return complilation albums if no results
             albums = db.session.query(WorkAlbums, func.count(AlbumLike.id).label('total')) \
-                .filter(WorkAlbums.workid == work_id, WorkAlbums.hidden != True, WorkAlbums.artists.ilike(search)) \
+                .filter(WorkAlbums.workid == work_id, WorkAlbums.hidden != True, WorkAlbums.artists.ilike(search), WorkAlbums.work_track_count <= limit) \
                 .outerjoin(AlbumLike).group_by(WorkAlbums) \
                 .order_by(text('total DESC'), WorkAlbums.score.desc()).paginate(1, 1000, False)
 

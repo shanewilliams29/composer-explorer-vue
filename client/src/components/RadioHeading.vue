@@ -188,7 +188,7 @@ export default {
       performerFilterField: { value: 'topartists', text: 'Top performance' },
       performerOptions: [
           { value: 'topartists', text: 'Top performance' },
-          { value: 'randomartists', text: 'Random performers'}
+          { value: 'randomartists', text: 'Random performance'}
         ],
 
       limitFilterField: { value: '6', text: 'Max no. of tracks: 6' },
