@@ -36,6 +36,7 @@
                 class="mt-3 style-chooser allow-wrap"
                 :searchable="false"
               ></v-select>
+               <vue-typeahead-bootstrap v-if="radioTypeField.value == 'performer'" v-model="query" placeholder="Search for a performer" class="mt-3 style-chooser performer-search" @hit="artistSearch" size="sm" :data="this.artistList"/>
             </b-form-group>
 
         </div>
@@ -132,6 +133,7 @@
 </template>
 
 <script>
+import axios from 'axios';
 import {eventBus} from "../main.js";
 import spotify from '@/SpotifyFunctions.js'
 import PlaylistModal from './subcomponents/PlaylistModal.vue'
@@ -143,7 +145,8 @@ export default {
   data() {
     return {
       allowClear: true,
-      artist_list: [],
+      artistList: [],
+      query: null,
       title: "",
       OpenIndicator: {
           render: createElement => createElement('span',''),
@@ -202,6 +205,16 @@ export default {
     };
   },
   methods: {
+    getArtistList() {
+      const path = 'api/artistlist';
+      axios.get(path)
+        .then((res) => {
+        this.artistList = JSON.parse(res.data.artists);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    },
     toggleRadio(){
       if(this.$view.enableRadio){
         this.$view.radioPlaying = !this.$view.radioPlaying;
@@ -217,10 +230,13 @@ export default {
       eventBus.$emit('fireRadioSelect', this.radioTypeField.value);
       eventBus.$emit('fireClearWorks');
       eventBus.$emit('fireClearAlbums');
+      this.query = null;
+      this.$config.artist = null;
       this.$config.genre = null;
       this.$view.radioPlaying = false;
       this.$view.enableRadio = false;
       this.$view.enableExport = false;
+      this.composerSelectField = '';
       this.genreSelectField = [{ value: 'all', text: 'All Genres' }];
       this.workSearchField = '';
       this.workFilterField = { value: 'recommended', text: 'Recommended works' }
@@ -250,7 +266,7 @@ export default {
         for (const genre of genreList) {
           this.genreOptions.push({ value: genre, text: genre });
         }
-        eventBus.$emit('fireGenreSelectRadio', this.genreSelectField, this.workFilterField.value, this.workSearchField);
+        eventBus.$emit('fireGenreSelectRadio', this.genreSelectField, this.workFilterField.value, this.workSearchField, this.query);
     },
     periodSelect(){
       eventBus.$emit('fireComposerFilter', this.periodSelectField.value);
@@ -267,10 +283,10 @@ export default {
         } else {
           this.allowClear = false;
         }
-        eventBus.$emit('fireGenreSelectRadio', this.genreSelectField, this.workFilterField.value, this.workSearchField);
+        eventBus.$emit('fireGenreSelectRadio', this.genreSelectField, this.workFilterField.value, this.workSearchField, this.query);
     },
     workSearch() {
-      eventBus.$emit('fireGenreSelectRadio', this.genreSelectField, this.workFilterField.value, this.workSearchField);
+      eventBus.$emit('fireGenreSelectRadio', this.genreSelectField, this.workFilterField.value, this.workSearchField, this.query);
     },
     limitFilter() {
       this.$view.radioTrackLimit = this.limitFilterField.value;
@@ -282,6 +298,10 @@ export default {
         this.$view.randomAlbum = false;
       }
     },
+    artistSearch(artist){
+      this.$config.artist = artist;
+      eventBus.$emit('fireArtistComposers', artist);
+    },
     prepareForExport(){
       eventBus.$emit('firePlaylistExport', this.genreSelectField, this.workFilterField.value, this.workSearchField, this.limitFilterField.value, true, 'dummyname');
       this.$view.playlistError = false;
@@ -292,7 +312,9 @@ export default {
     },
   },
   created() {
+    this.getArtistList();
     this.$config.genre = null;
+    this.$config.artist = null;
     this.$view.radioPlaying = false;
     this.$view.enableRadio = false;
     this.$view.enableExport = false;
@@ -413,7 +435,7 @@ input{
   --vs-search-input-color: #fff;
 }
 .performer-search{
-  margin-top: 1.3px !important;
+  margin-top: 5px !important;
   font-size: 14px;
   background-color: #3b4047 !important;
   height: 31px;

@@ -106,7 +106,7 @@ export default {
         .then((res) => {
           this.composers = res.data.composers;
           if(this.$view.mode == 'radio'){
-            eventBus.$emit('fireRadioGenreList', res.data.genres);
+            eventBus.$emit('aRadioGenreList', res.data.genres);
           }
           this.loading=false;
         })
@@ -130,7 +130,7 @@ export default {
           this.loading=false;
         });
     },
-    getArtistComposers(artist) { // performer mode
+    getArtistComposers(artist) { // performer mode, radio mode
       this.artist = artist
       this.loading = true;
       this.visibility=true;
@@ -142,6 +142,9 @@ export default {
         .then((res) => {
           this.composers = res.data.composers;
           this.loading=false;
+          if(this.$view.mode == 'radio'){
+            eventBus.$emit('fireRadioGenreList', res.data.genres);
+          }
           // if(this.$route.query.artist){
           //   this.$router.replace({'query': null}).catch(()=>{});
           // }

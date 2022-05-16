@@ -75,7 +75,7 @@ export default {
         this.loading = false;
       });
     },
-    getGenreWorks(genres, filter, search) { // used in radio mode
+    getGenreWorks(genres, filter, search, artist) { // used in radio mode
       if (genres.length < 1) { // no works
         eventBus.$emit('fireClearAlbums');
         this.loading = false;
@@ -88,7 +88,8 @@ export default {
         const payload = {
           genres: genres,
           filter: filter,
-          search: search
+          search: search,
+          artist: artist
         };
         const path = 'api/worksbygenre';
         axios.post(path, payload).then((res) => {
@@ -184,7 +185,11 @@ export default {
       } else if (this.$view.mode == 'performer'){ // performer mode
         eventBus.$emit('fireAlbums', workId, this.$config.artist);
       } else { // radio mode, play automatically
-        eventBus.$emit('fireAlbumsAndPlay', workId);
+        if (this.$config.artist) {
+          eventBus.$emit('fireAlbumsAndPlay', workId, this.$config.artist);
+        } else {
+          eventBus.$emit('fireAlbumsAndPlay', workId);
+        }
         this.$view.radioPlaying = true;
       }
     },
@@ -195,7 +200,11 @@ export default {
 
       eventBus.$emit('changeWork');
       if (this.$view.mode != 'performer') {
-        eventBus.$emit('fireAlbumsAndPlay', workId);
+        if (this.$config.artist && this.$view.mode == 'radio'){
+          eventBus.$emit('fireAlbumsAndPlay', workId, this.$config.artist);
+        } else {
+          eventBus.$emit('fireAlbumsAndPlay', workId);
+        }
       } else {
         eventBus.$emit('fireAlbumsAndPlay', workId, this.$config.artist);
       }

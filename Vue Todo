@@ -1,81 +1,29 @@
+GENERAL
 - Date for works after composer death (no date)
 - If only one artist, allow more years from album crap filter
-- Glitch for Josquin, two spinners, not centered
-- Album info API hit 3 times on refresh
-- Player advance to next track on list automatically
-- Remember last piece played by user
-- Open in Spotify
-- Track list, scroll to top a new song
-- Recorded?
-- No composers, no works, no albums found
-- check synconicity of spotify login vs window.token
-- Era filter
-- Lazy load albums
-- Collapsible for all works
 - 2050 > present
 - token refresh
-- Info panel with composer, work, performer?
-- Catalogued vs Popular
-- Fine tune playback controls
-- Forward button glitchy when wrap arround
-- Change in spotify, change in app (COncermaster does this)
-- One second delay for start of playtback at beginning
-- padding right on albums
-- get artist info from Spotify?
-- jump to next album, work
-- continue playing through works when done with album
-- do we need fireNowPlaying or fireNowPaused with the WebPlacback listener?
-- Scroll (operas) tracks automatically
-- Track highligh glitch, sometimes doesnt work (duplicate ids?)
-- Global artist search?
-- Albums infinity scroll
-- Albuminfo api gets called repeated... happen in production?
-- Track: break at : from right
-- Token refresh, move token to current_config
-- Header wrap text nowrap
-- Previous track
-- Improve duplicates removal?
 - filters/searches in localstorage?
-- Improve google API by matching name
-- Chopin, Impromptu, work search hangs on wikipedia
-- Paragraph for work description
 - Get artist IDs from Spotify?
-- Title not updating on artistmode
-- Search not clearing on new composer selection
-- Jessye Norman not appearing on 2012 Lohengrin solti recording
 - Make performer filter absolute match not a search
-- Long titles in search bar wrapping
 - Spiders web beween performers
-- Debounce search api
-- Load info panel in backgroun? or v-if?
-- BWV 1042  	Violin Concerto in E major  - buggy album with no cover quite a ways down
-- Work advance may be buggy (ie drag slider to 0)
-- Etude no. 4 in C# minor · Torrent. wikipedia data not loading
-- other recordings on CD
 - Click next on last track, jump to next work? Buggy
-- Acts/scenes for opera in track listing
--blue borders on work list highlights????
-- Album filtering, no duplicates vs remasters? make it an option
+- blue borders on work list highlights????
 - Log in with non-Premium account?
 - Refine performers page so no url change when already on page
-- Disable autoplay
 - No shadow on small albums
-- Total performance length
+- Shadow on selected album
 - Favorites menu item?
-- Small glitch where switching from non-opera to opera in the track listing, ugly
-- next work (automatic) not updating work title in playback area
 - "A little less popular"
-- Siegfrid very buggy playback
 - Better shuffle playback
-- Multicomposer in radio mode is glitchy (Bellini and Puccini, added or removed)
-- Info panel in radio mode incorrect
 - Line appearing on album info pane... card?
 - Too many tracks selected error when no tracks selected (radio)
-- Don't get genres in main view
-- Limit number of tracks that can be exported (use playlist)
-- Get genre in autoplay
 - Better images for work info panel
 - Improve Conductor/Orchestra, display in consistent manner.
+- If not playable, advance to next (radio)
+- Deselect composer on view mode change
+- Remember radio settings
+- User ID in playlist generator python (currently set to mine)
 
 RELINKING
 - Track relinking, what to do if titles are different? Is titles best way to do this?
@@ -87,4 +35,3 @@ RELINKING
 COMPOSERS
 - Fix Monteverdi
 - CPE Bach or Bach, CPE (might break special case for algorithm)
-- Milano, orphaned from Teatro Alla Scala, Milano

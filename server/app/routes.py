@@ -367,6 +367,7 @@ def get_worksbygenre():
 
     work_filter = payload['filter']
     search_term = payload['search']
+    artist_name = payload['artist']
 
     # get composers selected
     if not session.get('radio_composers'):
@@ -374,19 +375,38 @@ def get_worksbygenre():
     else:
         composer_list = session['radio_composers']
 
+        # works_list = db.session.query(WorkList).join(Artists)\
+        # .filter(Artists.name == artist_name, WorkList.composer == composer_name)\
+        # .order_by(WorkList.order, WorkList.genre, WorkList.id).all()
+
+
     if search_list[0] == "all":
-        if work_filter == 'recommended':
-            works_list = db.session.query(WorkList)\
-                .filter(WorkList.composer.in_(composer_list), WorkList.recommend == True)\
-                .order_by(WorkList.genre, WorkList.id).all()  # don't order by order no. in multi mode
-        elif work_filter == 'obscure':
-            works_list = db.session.query(WorkList)\
-                .filter(WorkList.composer.in_(composer_list), WorkList.recommend == None, WorkList.album_count > 0)\
-                .order_by(WorkList.genre, WorkList.id).all()
+        if artist_name:
+            if work_filter == 'recommended':
+                works_list = db.session.query(WorkList).join(Artists)\
+                    .filter(Artists.name == artist_name, WorkList.composer.in_(composer_list), WorkList.recommend == True)\
+                    .order_by(WorkList.genre, WorkList.id).all()  # don't order by order no. in multi mode
+            elif work_filter == 'obscure':
+                works_list = db.session.query(WorkList).join(Artists)\
+                    .filter(Artists.name == artist_name, WorkList.composer.in_(composer_list), WorkList.recommend == None, WorkList.album_count > 0)\
+                    .order_by(WorkList.genre, WorkList.id).all()
+            else:
+                works_list = db.session.query(WorkList).join(Artists)\
+                    .filter(Artists.name == artist_name, WorkList.composer.in_(composer_list), WorkList.album_count > 0)\
+                    .order_by(WorkList.genre, WorkList.id).all()
         else:
-            works_list = db.session.query(WorkList)\
-                .filter(WorkList.composer.in_(composer_list), WorkList.album_count > 0)\
-                .order_by(WorkList.genre, WorkList.id).all()
+            if work_filter == 'recommended':
+                works_list = db.session.query(WorkList)\
+                    .filter(WorkList.composer.in_(composer_list), WorkList.recommend == True)\
+                    .order_by(WorkList.genre, WorkList.id).all()  # don't order by order no. in multi mode
+            elif work_filter == 'obscure':
+                works_list = db.session.query(WorkList)\
+                    .filter(WorkList.composer.in_(composer_list), WorkList.recommend == None, WorkList.album_count > 0)\
+                    .order_by(WorkList.genre, WorkList.id).all()
+            else:
+                works_list = db.session.query(WorkList)\
+                    .filter(WorkList.composer.in_(composer_list), WorkList.album_count > 0)\
+                    .order_by(WorkList.genre, WorkList.id).all()
 
     else:
 
@@ -403,20 +423,36 @@ def get_worksbygenre():
         for genre in search_list:
             conditions.append(WorkList.nickname.ilike('%{}%'.format(genre)))
 
-        if work_filter == 'recommended':
-            works_list = db.session.query(WorkList)\
-                .filter(WorkList.composer.in_(composer_list), or_(*conditions), WorkList.recommend == True)\
-                .order_by(WorkList.genre, WorkList.id).all()  # don't order by order no. in multi mode
+        if artist_name:
+            if work_filter == 'recommended':
+                works_list = db.session.query(WorkList).join(Artists)\
+                    .filter(Artists.name == artist_name, WorkList.composer.in_(composer_list), or_(*conditions), WorkList.recommend == True)\
+                    .order_by(WorkList.genre, WorkList.id).all()  # don't order by order no. in multi mode
 
-        elif work_filter == 'obscure':
-            works_list = db.session.query(WorkList)\
-                .filter(WorkList.composer.in_(composer_list), or_(*conditions), WorkList.recommend == None, WorkList.album_count > 0)\
-                .order_by(WorkList.genre, WorkList.id).all()
+            elif work_filter == 'obscure':
+                works_list = db.session.query(WorkList).join(Artists)\
+                    .filter(Artists.name == artist_name, WorkList.composer.in_(composer_list), or_(*conditions), WorkList.recommend == None, WorkList.album_count > 0)\
+                    .order_by(WorkList.genre, WorkList.id).all()
 
+            else:
+                works_list = db.session.query(WorkList).join(Artists)\
+                    .filter(Artists.name == artist_name, WorkList.composer.in_(composer_list), or_(*conditions), WorkList.album_count > 0)\
+                    .order_by(WorkList.genre, WorkList.id).all()  
         else:
-            works_list = db.session.query(WorkList)\
-                .filter(WorkList.composer.in_(composer_list), or_(*conditions), WorkList.album_count > 0)\
-                .order_by(WorkList.genre, WorkList.id).all()
+            if work_filter == 'recommended':
+                works_list = db.session.query(WorkList)\
+                    .filter(WorkList.composer.in_(composer_list), or_(*conditions), WorkList.recommend == True)\
+                    .order_by(WorkList.genre, WorkList.id).all()  # don't order by order no. in multi mode
+
+            elif work_filter == 'obscure':
+                works_list = db.session.query(WorkList)\
+                    .filter(WorkList.composer.in_(composer_list), or_(*conditions), WorkList.recommend == None, WorkList.album_count > 0)\
+                    .order_by(WorkList.genre, WorkList.id).all()
+
+            else:
+                works_list = db.session.query(WorkList)\
+                    .filter(WorkList.composer.in_(composer_list), or_(*conditions), WorkList.album_count > 0)\
+                    .order_by(WorkList.genre, WorkList.id).all()
 
     if not works_list:
         response_object = {'status': 'success'}
@@ -819,12 +855,20 @@ def get_albuminfo(album_id):
 
 
 @app.route('/api/artistcomposers/<artist_name>', methods=['GET'])
-@cache.cached(query_string=True)
+# @cache.cached(query_string=True)
 def get_artistcomposers(artist_name):
 
     composers = db.session.query(ComposerList).join(Artists, ComposerList.name_short == Artists.composer)\
         .filter(Artists.name == artist_name)\
         .order_by(ComposerList.region, ComposerList.born).all()
+
+    search_list = []
+    for composer in composers:
+        search_list.append(composer.name_short)
+
+    session['radio_composers'] = search_list
+    if Config.MODE == "DEVELOPMENT":
+        cache.set('composers', search_list)  # store in cache for dev server  
 
     # prepare list for display
     COMPOSERS = prepare_composers(composers)
@@ -832,8 +876,13 @@ def get_artistcomposers(artist_name):
    # group onto regions
     composers_by_region = group_composers_by_region(COMPOSERS)
 
+    with open('app/static/genres.json') as f:
+        genre_list = json.load(f)
+    genre_list = sorted(genre_list)
+
     response_object = {'status': 'success'}
     response_object['composers'] = composers_by_region
+    response_object['genres'] = genre_list
     response = jsonify(response_object)
     return response
 
