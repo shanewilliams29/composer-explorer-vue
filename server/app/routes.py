@@ -25,16 +25,6 @@ def before_request():
         session['app_token'] = sp.client_authorize()
         session['app_token_expire_time'] = datetime.now(timezone.utc) + timedelta(minutes=50)
 
-    # token expiry and refresh
-    if session['app_token_expire_time'] < datetime.now((timezone.utc)):
-        session['app_token'] = sp.client_authorize()
-        session['app_token_expire_time'] = datetime.now((timezone.utc)) + timedelta(minutes=50)
-    if session['spotify_token']:
-        if session['spotify_token_expire_time'] < datetime.now((timezone.utc)):
-            session['spotify_token'] = sp.refresh_token()
-            session['spotify_token_expire_time'] = datetime.now((timezone.utc)) + timedelta(minutes=50)
-
-
 @app.route('/', defaults={'path': ''})
 @app.route("/<string:path>")
 def index(path):
@@ -66,7 +56,7 @@ def spotify():
         return jsonify(response_object)
     session['spotify_token'] = response.json()['access_token']
     session['refresh_token'] = response.json()['refresh_token']
-    session['spotify_token_expire_time'] = datetime.now() + timedelta(minutes=50)
+    session['spotify_token_expire_time'] = datetime.now((timezone.utc)) + timedelta(minutes=50)
 
     if Config.MODE == "DEVELOPMENT":
         cache.set('token', session['spotify_token'])  # store in cache for dev server
@@ -93,12 +83,19 @@ def log_out():
 def get_token():
 
     if session['spotify_token'] or session['app_token']:
-        client_token = session['spotify_token']
-        app_token = session['app_token']
+
+        # token expiry and refresh
+        if session['app_token_expire_time'] < datetime.now((timezone.utc)):
+            session['app_token'] = sp.client_authorize()
+            session['app_token_expire_time'] = datetime.now((timezone.utc)) + timedelta(minutes=50)
+        if session['spotify_token']:
+            if session['spotify_token_expire_time'] < datetime.now((timezone.utc)):
+                session['spotify_token'] = sp.refresh_token()
+                session['spotify_token_expire_time'] = datetime.now((timezone.utc)) + timedelta(minutes=50)
 
         response_object = {'status': 'success'}
-        response_object['client_token'] = client_token
-        response_object['app_token'] = app_token
+        response_object['client_token'] = session['spotify_token']
+        response_object['app_token'] = session['app_token']
         response_object['knowledge_api'] = Config.GOOGLE_KNOWLEDGE_GRAPH_API_KEY
         response = jsonify(response_object)
         response.headers.add('Access-Control-Allow-Credentials', 'true')
