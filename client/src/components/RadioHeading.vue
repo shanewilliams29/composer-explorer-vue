@@ -120,7 +120,7 @@
             </b-col>
             <b-col cols='3' class="col-padding-left">
               <b-button v-if="$view.enableExport && $auth.clientToken" class="spotify-export-button" size="sm" @click="prepareForExport()" block variant="success">Export</b-button>
-              <b-button v-else class="spotify-export-button" size="sm" block variant="success" disabled>Export</b-button>
+              <b-button v-else class="spotify-export-button-disabled" size="sm" block variant="success" disabled>Export</b-button>
             </b-col>
 
          </b-row>
@@ -227,6 +227,7 @@ export default {
       }
     },
     radioTypeSelect(){ // reset everything on radio type change
+      this.$router.replace({'query': null}); 
       eventBus.$emit('fireRadioSelect', this.radioTypeField.value);
       eventBus.$emit('fireClearWorks');
       eventBus.$emit('fireClearAlbums');
@@ -370,7 +371,7 @@ export default {
 .radio-button-off{
   margin-top: 5px;
   border: 1px solid var(--yellow) !important;
-  background-color: #54595f !important;
+  background-color: #805d07 !important;
   height: 31px;
 }
 .radio-button-off-disabled{
@@ -382,6 +383,7 @@ export default {
 .radio-button-off:hover{
   margin-top: 5px;
   border: 1px solid var(--yellow) !important;
+  background-color: darkgoldenrod !important;
   height: 31px;
 }
 .radio-button-on{
@@ -393,11 +395,17 @@ export default {
 .spotify-export-button{
   margin-top: 5px;
   height: 31px;
+  background-color: var(--green) !important;
+  border: 1px solid var(--green) !important;
+}
+.spotify-export-button-disabled{
+  margin-top: 5px;
+  height: 31px;
   background-color: #54595f !important;
   border: 1px solid var(--green) !important;
 }
 .spotify-export-button:hover{
-    background-color: #54595f !important;
+    background-color: #3daf57 !important;
     border: 1px solid var(--green) !important;
 }
 .form-row {
