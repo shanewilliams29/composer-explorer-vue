@@ -18,10 +18,10 @@
                   
                   <span v-if="wikiLink" class="wiki-link">&nbsp;&nbsp;<a :href="wikiLink" target="_blank"><b-icon icon="info-circle-fill" aria-hidden="true"></b-icon> Wikipedia</a>&nbsp;&nbsp;</span>
                   
-                  <span @mouseover="hover = true" @mouseleave="hover = false" @click="goToAristRadio(result[0])" class="radio-link"><a href="">
+                  <span @mouseover="hover = true" @mouseleave="hover = false" @click="goToAristRadio(result[0])" class="radio-link">
                     <img v-if="hover" :src="radioWhiteUrl" class="radio-link" height="14px" />
                     <img v-else :src="radioGrayURL" class="radio-link" height="14px" />
-                    Radio</a></span>
+                    <a>&nbsp;Radio</a></span>
                 </td>
               </tr>
             </table>
@@ -260,12 +260,12 @@ table {
   text-decoration: none;
 }
 .radio-link a{
-  color: darkgray;
+  color: darkgray !important;
   font-size: 12px;
   text-decoration: none;
 }
 .radio-link a:hover{
-  color: white;
+  color: white !important;
   cursor: pointer;
 }
 .wiki-link a:hover{
