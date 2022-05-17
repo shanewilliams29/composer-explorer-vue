@@ -109,7 +109,6 @@ export default {
         .then((res) => {
           if (res.data.status == "success") {
             if (res.data.client_token !== null) {
-              console.log(res.data.client_token);
               this.$auth.clientToken = res.data.client_token;
               this.$auth.appToken = res.data.app_token;
               this.$auth.knowledgeKey = res.data.knowledge_api;
@@ -123,7 +122,7 @@ export default {
           this.$auth.clientToken = null;
           console.error(error);
         });
-  }
+    }
   },
   mounted() { 
     this.initializeSpotify();

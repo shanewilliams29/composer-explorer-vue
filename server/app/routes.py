@@ -91,7 +91,6 @@ def log_out():
 
 @app.route('/api/get_token')
 def get_token():
-    # add check for expiry
 
     if session['spotify_token'] or session['app_token']:
         client_token = session['spotify_token']
