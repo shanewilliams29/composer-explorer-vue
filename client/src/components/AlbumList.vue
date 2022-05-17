@@ -20,6 +20,9 @@
         </b-card-group>
       </div>
     </div>
+    <b-toast id="example-toast" no-close-button static no-auto-hide>
+      No albums found for this work with the specified track limit. Advancing to next...
+    </b-toast>
   </div>
 </template>
 
@@ -103,24 +106,38 @@ export default {
         path = 'api/albums/' + id + '?artist=' + artist + '&sort=' + sort;
       }
       axios.get(path).then((res) => {
-        if(this.$view.mode == 'radio'){ // only one album in radiomode
-          if(this.$view.randomAlbum){
 
-              const rndInt = randomIntFromInterval(0, res.data.albums.length - 1)
-              this.albums = [res.data.albums[rndInt]];
-          } else {
-              this.albums = [res.data.albums[0]];
+        if (res.data.albums.length < 1){
+          this.$bvToast.show('example-toast')
+          setTimeout(() => {
+            eventBus.$emit('fireNextWork');
+            this.$bvToast.hide('example-toast');
             }
+            , 3000); // Bypass and continue to next work)
+          
+          console.log("No albums found, skipping to next work.");
         } else {
-          this.albums = res.data.albums;
+        
+          if(this.$view.mode == 'radio'){ // only one album in radiomode
+            if(this.$view.randomAlbum){
+
+                const rndInt = randomIntFromInterval(0, res.data.albums.length - 1)
+                this.albums = [res.data.albums[rndInt]];
+            } else {
+                this.albums = [res.data.albums[0]];
+              }
+          } else {
+            this.albums = res.data.albums;
+          }
+          this.loading = false;
+          this.selectRow(this.albums[0].id); // select first row on work selection
+          this.$config.album = this.albums[0].id;
+          this.$config.composer = res.data.composer;
+          localStorage.setItem('config', JSON.stringify(this.$config));
+          eventBus.$emit('fireArtistList', res.data.artists);
+          eventBus.$emit('fireAlbumData', this.albums[0].id);
         }
-        this.loading = false;
-        this.selectRow(this.albums[0].id); // select first row on work selection
-        this.$config.album = this.albums[0].id;
-        this.$config.composer = res.data.composer;
-        localStorage.setItem('config', JSON.stringify(this.$config));
-        eventBus.$emit('fireArtistList', res.data.artists);
-        eventBus.$emit('fireAlbumData', this.albums[0].id);
+
       }).catch((error) => {
         console.error(error);
         this.loading = false;

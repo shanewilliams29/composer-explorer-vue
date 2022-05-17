@@ -719,7 +719,7 @@ def get_albums(work_id):
                 .order_by(text('total DESC'), WorkAlbums.score.desc()).paginate(1, 1000, False)
 
     if not albums.items:
-        response_object = {'status': 'success'}
+        response_object = {'status': 'error'}
         response_object['albums'] = []
         response = jsonify(response_object)
         return response
