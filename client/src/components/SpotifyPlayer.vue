@@ -102,9 +102,36 @@ export default {
         });
       }
     },
+
+  refreshToken(){
+        const path = 'api/get_token';
+        axios.get(path, {withCredentials: true})
+        .then((res) => {
+          if (res.data.status == "success") {
+            if (res.data.client_token !== null) {
+              console.log(res.data.client_token);
+              this.$auth.clientToken = res.data.client_token;
+              this.$auth.appToken = res.data.app_token;
+              this.$auth.knowledgeKey = res.data.knowledge_api;
+            } else {
+              this.$auth.appToken = res.data.app_token;
+              this.$auth.knowledgeKey = res.data.knowledge_api;
+            }
+          }
+        }).catch((error) => {
+          this.$auth.appToken = null;
+          this.$auth.clientToken = null;
+          console.error(error);
+        });
+  }
   },
-  mounted() {
+  mounted() { 
     this.initializeSpotify();
+
+    //Timer for refreshing tokens
+    setInterval(() => {
+      this.refreshToken();
+    }, 3540000);
   },
 };
 </script>
