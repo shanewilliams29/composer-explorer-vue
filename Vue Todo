@@ -26,6 +26,8 @@ GENERAL
 - User ID in playlist generator python (currently set to mine)
 - Export playlist for performers
 - Radio playback if no albums? (ie. Yuja concerto limited to 1 track)
+- Hide Google API Key?
+- Search on nicknames for refreshalbums?
 
 RELINKING
 - Track relinking, what to do if titles are different? Is titles best way to do this?

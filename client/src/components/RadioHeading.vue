@@ -314,7 +314,11 @@ export default {
   created() {
     this.getArtistList();
     this.$config.genre = null;
-    this.$config.artist = null;
+    if (this.$route.query.artist){
+      this.$config.artist = this.$route.query.artist;
+    } else {
+      this.$config.artist = null;
+    }
     this.$view.radioPlaying = false;
     this.$view.enableRadio = false;
     this.$view.enableExport = false;
@@ -323,7 +327,13 @@ export default {
     //eventBus.$on('fireComposerSelectRadio', this.makeGenreList);
   },
   mounted(){
-    eventBus.$emit('fireRadioSelect', 'composer');
+    if (this.$route.query.artist){
+      this.radioTypeField = { value: 'performer', text: 'Performer Radio'};
+      this.query = this.$route.query.artist;
+      eventBus.$emit('fireRadioSelect', 'performer');
+    } else {
+      eventBus.$emit('fireRadioSelect', 'composer');
+    }
   },
   beforeDestroy() {
     eventBus.$off('fireComposerListToRadio', this.makeComposerDropdown);

@@ -18,7 +18,7 @@
                   
                   <span v-if="wikiLink" class="wiki-link">&nbsp;&nbsp;<a :href="wikiLink" target="_blank"><b-icon icon="info-circle-fill" aria-hidden="true"></b-icon> Wikipedia</a>&nbsp;&nbsp;</span>
                   
-                  <span @mouseover="hover = true" @mouseleave="hover = false" class="radio-link"><a :href="wikiLink" target="_blank">
+                  <span @mouseover="hover = true" @mouseleave="hover = false" @click="goToAristRadio(result[0])" class="radio-link"><a href="">
                     <img v-if="hover" :src="radioWhiteUrl" class="radio-link" height="14px" />
                     <img v-else :src="radioGrayURL" class="radio-link" height="14px" />
                     Radio</a></span>
@@ -120,10 +120,15 @@ export default {
         localStorage.setItem('config', JSON.stringify(this.$config));
       }
     },
+    goToAristRadio(artist) {
+      this.$config.artist = artist;
+      this.$router.push('/radio?artist=' + artist);
+    },
     getPersonInfo(person) {
       this.loading = true;
       this.results = [];
-      const path = 'https://kgsearch.googleapis.com/v1/entities:search?indent=true&types=Person&types=MusicGroup&query=' + person + ' Music&limit=50&key=' + this.$auth.knowledgeKey;
+      const key = localStorage.getItem("APIKey");
+      const path = 'https://kgsearch.googleapis.com/v1/entities:search?indent=true&types=Person&types=MusicGroup&query=' + person + ' Music&limit=50&key=' + key;
       axios({
         method: 'get',
         url: path,
@@ -258,6 +263,10 @@ table {
   color: darkgray;
   font-size: 12px;
   text-decoration: none;
+}
+.radio-link a:hover{
+  color: white;
+  cursor: pointer;
 }
 .wiki-link a:hover{
   color: white;
