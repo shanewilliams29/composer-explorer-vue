@@ -288,7 +288,7 @@ def get_composersradio():
 
 
 @app.route('/api/works/<name>', methods=['GET'])
-@cache.cached(query_string=True)
+# @cache.cached(query_string=True)
 def get_works(name):
     filter_method = request.args.get('filter')
     search = request.args.get('search')

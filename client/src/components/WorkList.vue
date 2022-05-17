@@ -407,6 +407,11 @@ table {
   padding-top: 0px;
   padding-bottom: 2px;
 }
+
+
+
+
+
 .highlight td {
   border-top: 0px solid lightgray;
   background-color: var(--highlight-color);
@@ -428,8 +433,8 @@ tr:hover {
 .highlight td:last-child:after {
   content: "";
   position: absolute;
-  top: 0px;
-  bottom: 0px;
+  top: 0px !important;
+  bottom: 0px !important;
   width: 6px;
   display: block;
   background: inherit;
@@ -441,6 +446,35 @@ tr:hover {
 .highlight td:last-child:after {
   left: 100%;
 }
+
+/*.soft-highlight td {
+  background-color: #eaf6ed;
+}
+.soft-highlight td:first-child,
+.soft-highlight td:last-child {
+  position: relative;
+}
+
+.soft-highlight td:first-child:before,
+.soft-highlight td:last-child:after {
+  content: "";
+  position: absolute;
+  top: -1px;
+  bottom: -1px;
+  width: 6px;
+  display: block;
+  background: inherit;
+}
+.soft-highlight td:first-child:before {
+  right: 100%;
+}
+.soft-highlight td:last-child:after {
+  left: 100%;
+}
+*/
+
+
+
 .no-albums span{
   opacity: 0.45;
 }

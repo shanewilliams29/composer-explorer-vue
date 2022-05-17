@@ -75,6 +75,7 @@ def prepare_works(works_list):
         info = {
             'index': i,
             'id': work.id,
+            'composer': work.composer,
             'genre': work.genre,
             'cat': work.cat,
             'recommend': work.recommend,
