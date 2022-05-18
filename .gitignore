@@ -9,6 +9,7 @@ app.yaml
 .env
 .flaskenv
 backups
+composer-explorer-4ab69db6d8b0.json
 
 # local env files
 .env.local

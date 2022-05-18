@@ -1,6 +1,9 @@
 from app import app
 import json
-
+from google.cloud import storage
+import requests
+from PIL import Image
+import io
 
 def prepare_composers(composer_list):
 
@@ -153,3 +156,39 @@ def new_prepare_works(works_list):
                 works_by_genre[prev_genre] = works_in_genre
 
     return works_by_genre
+
+
+def get_avatar(username, imgurl):
+
+    try:
+        response = requests.head(imgurl)
+    except:
+        return "Error: Invalid URL specified.", 403
+    try:
+        filetype = response.headers['content-type']
+        filesize = float(response.headers['content-length']) / 5242880
+    except:
+        return "Error: Invalid image link.", 403
+
+    if "image/jpeg" not in filetype and "image/png" not in filetype:
+        return "Error: Link is not to a .jpg or .png file", 403
+
+    if filesize > 5:
+        return "Error: Image size is too large. Max size is 5 MB.", 403
+
+    client = storage.Client(project='composer-explorer')
+    bucket = client.get_bucket('composer-explorer.appspot.com')
+    blob = bucket.blob('avatars/{}.jpg'.format(username))
+
+    image = Image.open(requests.get(imgurl, stream=True).raw)
+    image.thumbnail((200, 200))
+    image = image.convert('RGB')
+
+    img_byte_arr = io.BytesIO()
+    image.save(img_byte_arr, format='JPEG')
+    img_byte_arr = img_byte_arr.getvalue()
+
+    blob.cache_control = 'public, max-age=0'
+    blob.upload_from_string(img_byte_arr, content_type='image/jpeg')
+
+    return app.config['STATIC'] + 'avatars/{}.jpg'.format(username), 200

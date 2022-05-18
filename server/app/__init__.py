@@ -4,7 +4,7 @@ from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
 from flask_mobility import Mobility
 from flask_caching import Cache
-
+from flask_login import LoginManager
 
 # instantiate the app
 app = Flask(__name__, static_folder='../dist', static_url_path='/', template_folder='../dist')
@@ -12,6 +12,8 @@ app.config.from_object(Config)
 db = SQLAlchemy(app)
 Mobility(app)
 cache = Cache(app)
+login = LoginManager()
+login.init_app(app)
 
 from app.classes import SpotifyAPI
 sp = SpotifyAPI(Config.SPOTIFY_CLIENT_ID, Config.SPOTIFY_CLIENT_SECRET, Config.SPOTIFY_REDIRECT_URL)

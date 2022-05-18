@@ -1,8 +1,11 @@
 from app import app, db, sp, cache
 from flask import jsonify, request, redirect, session, render_template, abort
+from flask_login import login_user, logout_user, current_user
 from config import Config
-from app.functions import prepare_composers, group_composers_by_region, prepare_works, new_prepare_works
-from app.models import ComposerList, WorkList, WorkAlbums, AlbumLike, Spotify, Artists, ArtistList
+from app.functions import prepare_composers, group_composers_by_region
+from app.functions import prepare_works, get_avatar
+from app.models import ComposerList, WorkList, WorkAlbums, AlbumLike, Artists
+from app.models import ArtistList, User
 from app.classes import SortFilter
 from sqlalchemy import func, text, or_
 from datetime import datetime, timedelta, timezone
@@ -23,7 +26,9 @@ def before_request():
 
     if not session.get('app_token'):
         session['app_token'] = sp.client_authorize()
-        session['app_token_expire_time'] = datetime.now(timezone.utc) + timedelta(minutes=50)
+        session['app_token_expire_time'] = (datetime.now(timezone.utc) 
+                                            + timedelta(minutes=50))
+
 
 @app.route('/', defaults={'path': ''})
 @app.route("/<string:path>")
@@ -56,10 +61,50 @@ def spotify():
         return jsonify(response_object)
     session['spotify_token'] = response.json()['access_token']
     session['refresh_token'] = response.json()['refresh_token']
-    session['spotify_token_expire_time'] = datetime.now((timezone.utc)) + timedelta(minutes=50)
+    session['spotify_token_expire_time'] = (datetime.now((timezone.utc)) 
+                                            + timedelta(minutes=50)) 
+
+    response = sp.get_user()
+    info = response.json()
+
+    try:
+        username = info['id']
+    except KeyError:
+        abort(403)
+
+    if info['product'] == "premium":
+        session['premium'] = True
+    else:
+        session['premium'] = False
+
+    user = User.query.filter_by(username=username).first()
+    if user is None:
+        display_name = info['display_name']
+        try:
+            image_url = info['images'][0]['url']
+            response = get_avatar(username, image_url)
+            image = response[0]
+        except KeyError:
+            image = None
+
+        duplicateuser = User.query.filter_by(display_name=display_name).first()
+        if duplicateuser:
+            display_name = display_name + str(random.randint(1, 9999))
+
+        user = User(username=username, 
+                    email=info['email'], 
+                    display_name=display_name, 
+                    img=image, 
+                    country=info['country'],
+                    product=info['product'])
+        user.set_password(username)
+        db.session.add(user)
+        db.session.commit()
+        login_user(user)
+    login_user(user)
 
     if Config.MODE == "DEVELOPMENT":
-        cache.set('token', session['spotify_token'])  # store in cache for dev server
+        cache.set('token', session['spotify_token'])  # store in cache for dev
         response = redirect("http://localhost:8080/")
         return response
     if session['mobile']:
@@ -71,6 +116,7 @@ def spotify():
 @app.route('/log_out')
 def log_out():
     session.clear()
+    logout_user()
     if Config.MODE == "DEVELOPMENT":
         return redirect("http://localhost:8080/")
     if request.MOBILE:
@@ -87,11 +133,14 @@ def get_token():
         # token expiry and refresh
         if session['app_token_expire_time'] < datetime.now((timezone.utc)):
             session['app_token'] = sp.client_authorize()
-            session['app_token_expire_time'] = datetime.now((timezone.utc)) + timedelta(minutes=50)
+            session['app_token_expire_time'] = ((datetime.now((timezone.utc)) 
+                                                + timedelta(minutes=50)))
         if session['spotify_token']:
-            if session['spotify_token_expire_time'] < datetime.now((timezone.utc)):
+            if session['spotify_token_expire_time'] \
+                    < datetime.now((timezone.utc)):
                 session['spotify_token'] = sp.refresh_token()
-                session['spotify_token_expire_time'] = datetime.now((timezone.utc)) + timedelta(minutes=50)
+                session['spotify_token_expire_time'] \
+                    = datetime.now((timezone.utc)) + timedelta(minutes=50)
 
         response_object = {'status': 'success'}
         response_object['client_token'] = session['spotify_token']

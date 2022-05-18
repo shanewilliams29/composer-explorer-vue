@@ -38,6 +38,8 @@ class User(UserMixin, db.Model):
     page_viewing = db.Column(db.String(1024))
     admin = db.Column(db.Boolean, default=False)
     patreon = db.Column(db.Boolean, default=False)
+    country = db.Column(db.String(64))
+    product = db.Column(db.String(64))
     forum_posts = db.relationship("ForumPost", backref="user")
     forum_comments = db.relationship("ForumComment", backref="user")
 

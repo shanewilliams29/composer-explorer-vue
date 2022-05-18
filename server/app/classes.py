@@ -79,6 +79,13 @@ class SpotifyAPI(object):
         response = requests.post('https://api.spotify.com/v1/playlists/' + playlist_id + '/tracks', headers=headers, params=params)
         return response
 
+    def get_user(self):
+        headers = {
+            'Authorization': 'Bearer {}'.format(session['spotify_token']),
+        }
+        response = requests.get('https://api.spotify.com/v1/me', headers=headers)
+        return response
+
 
 class SortFilter(object):
 
