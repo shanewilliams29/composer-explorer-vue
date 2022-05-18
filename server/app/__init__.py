@@ -12,8 +12,7 @@ app.config.from_object(Config)
 db = SQLAlchemy(app)
 Mobility(app)
 cache = Cache(app)
-login = LoginManager()
-login.init_app(app)
+login = LoginManager(app)
 
 from app.classes import SpotifyAPI
 sp = SpotifyAPI(Config.SPOTIFY_CLIENT_ID, Config.SPOTIFY_CLIENT_SECRET, Config.SPOTIFY_REDIRECT_URL)

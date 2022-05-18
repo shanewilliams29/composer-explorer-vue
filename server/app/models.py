@@ -1,8 +1,7 @@
 from flask import current_app
 from datetime import datetime
 from hashlib import md5
-# from app import db, login
-from app import db
+from app import db, login
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
 from time import time
@@ -182,9 +181,9 @@ class User(UserMixin, db.Model):
             return True
 
 
-# @login.user_loader
-# def load_user(id):
-#     return User.query.get(int(id))
+@login.user_loader
+def load_user(id):
+    return User.query.get(int(id))
 
 
 class Post(db.Model):
