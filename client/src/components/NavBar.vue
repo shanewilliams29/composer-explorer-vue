@@ -19,6 +19,7 @@
       </b-navbar-nav>
       <b-navbar-nav class="ml-auto" v-if="$auth.clientToken">
         <b-nav-item href="/log_out" right>Log out</b-nav-item>
+        <b-avatar :src="'https://storage.googleapis.com/composer-explorer.appspot.com/avatars/' + $auth.userid + '.jpg'"></b-avatar>
       </b-navbar-nav>
     </b-navbar>
   </div>
@@ -34,7 +35,7 @@ export default {
       radioImgURL: staticURL + 'radio.svg',
       spotifyLogoURL: staticURL + 'Spotify_Logo_RGB_White.png',
       logoURL: staticURL + 'logo.png',
-      spotifyURL: baseURL + "connect_spotify",
+      spotifyURL: baseURL + "connect_spotify"
     };
   },
 }

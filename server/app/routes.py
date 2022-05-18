@@ -1,6 +1,6 @@
 from app import app, db, sp, cache
 from flask import jsonify, request, redirect, session, render_template, abort
-from flask_login import login_user, logout_user, current_user
+from flask_login import login_user, logout_user, current_user, login_required
 from config import Config
 from app.functions import prepare_composers, group_composers_by_region
 from app.functions import prepare_works, get_avatar
@@ -39,6 +39,11 @@ def index(path):
 
     return render_template("index.html")
     # return app.send_static_file('index.html')
+
+
+@app.route("/test")
+def test():
+    return str(current_user.username)
 
 
 @app.route('/connect_spotify')
@@ -146,6 +151,10 @@ def get_token():
         response_object['client_token'] = session['spotify_token']
         response_object['app_token'] = session['app_token']
         response_object['knowledge_api'] = Config.GOOGLE_KNOWLEDGE_GRAPH_API_KEY
+        if current_user.is_authenticated:
+            response_object['user_id'] = current_user.username
+        else:
+            response_object['user_id'] = None
         response = jsonify(response_object)
         response.headers.add('Access-Control-Allow-Credentials', 'true')
         return response
@@ -534,6 +543,7 @@ def get_worksbygenre():
 
 
 @app.route('/api/exportplaylist', methods=['POST'])  # used in radio mode
+@login_required
 def exportplaylist():
     # get genres
     payload = request.get_json()
@@ -673,11 +683,13 @@ def exportplaylist():
         return response
 
     # submit to Spotify
-    user_id = '12173954849'
 
     if Config.MODE == "DEVELOPMENT":
-        session['spotify_token'] = cache.get('token')  # store in cache for dev server
-
+        session['spotify_token'] = cache.get('token')  # store in cache for dev
+        user_id = '12173954849'
+    else:
+        user_id = current_user.username
+    
     tracklist = cache.get('tracks')
 
     try:

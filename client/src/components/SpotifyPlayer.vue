@@ -24,6 +24,7 @@ export default {
             if (res.data.client_token !== null) {
               this.$auth.clientToken = res.data.client_token;
               this.$auth.appToken = res.data.app_token;
+              this.$auth.userid = res.data.user_id;
               this.$auth.knowledgeKey = res.data.knowledge_api;
               localStorage.setItem('APIKey', this.$auth.knowledgeKey);
               // eslint-disable-next-line
