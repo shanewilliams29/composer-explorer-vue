@@ -21,7 +21,7 @@ export default {
         axios.get(path, {withCredentials: true})
         .then((res) => {
           if (res.data.status == "success") {
-            if (res.data.client_token !== null) {
+            if (res.data.client_token !== null && res.data.premium) {
               this.$auth.clientToken = res.data.client_token;
               this.$auth.appToken = res.data.app_token;
               this.$auth.userid = res.data.user_id;
@@ -92,6 +92,12 @@ export default {
               }, {
                 once: true
               });
+            } else if (res.data.client_token !== null){
+              this.$auth.clientToken = res.data.client_token;
+              this.$auth.userid = res.data.user_id;
+              this.$auth.appToken = res.data.app_token;
+              this.$auth.knowledgeKey = res.data.knowledge_api;
+              eventBus.$emit('notPremium');
             } else {
               this.$auth.appToken = res.data.app_token;
               this.$auth.knowledgeKey = res.data.knowledge_api;

@@ -70,8 +70,11 @@ def spotify():
                                             + timedelta(minutes=50)) 
 
     response = sp.get_user()
-    info = response.json()
-
+    try:
+        info = response.json()
+    except Exception:
+        abort(403)
+    
     try:
         username = info['id']
     except KeyError:
@@ -153,8 +156,10 @@ def get_token():
         response_object['knowledge_api'] = Config.GOOGLE_KNOWLEDGE_GRAPH_API_KEY
         if current_user.is_authenticated:
             response_object['user_id'] = current_user.username
+            response_object['premium'] = session['premium']
         else:
             response_object['user_id'] = None
+            response_object['premium'] = False
         response = jsonify(response_object)
         response.headers.add('Access-Control-Allow-Credentials', 'true')
         return response
