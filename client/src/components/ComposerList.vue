@@ -59,26 +59,28 @@ export default {
   },
   watch: {
     composerChanged(newComposer) {
+      this.scrollToComposer(newComposer);
+    }
+  },
+  methods: {
+    scrollToComposer(composer){
       var timeout = 0;
       if (this.visibility){
         timeout = 0;
       } else {
         timeout = 1000;
       }
-
       smoothscroll.polyfill(); // for Safari smooth scrolling
-      setTimeout(() => {  var card = this.$refs[newComposer][0].offsetParent.offsetParent;
-                          var row = this.$refs[newComposer][0];
-                          var height = this.$refs[newComposer][0].offsetParent.offsetParent.offsetParent.offsetHeight / 2;
+      setTimeout(() => {  var card = this.$refs[composer][0].offsetParent.offsetParent;
+                          var row = this.$refs[composer][0];
+                          var height = this.$refs[composer][0].offsetParent.offsetParent.offsetParent.offsetHeight / 2;
                           var top = card.offsetTop + row.offsetTop - height + 100;
                           this.$parent.$refs['scroll-box-comp'].scrollTo({
                                 top: top,
                                 left: 0,
                                 behavior: 'smooth'
                         })}, timeout);
-    }
-  },
-  methods: {
+    },
     getComposers() {
       this.loading = true;
       const path = 'api/composers';
@@ -87,6 +89,7 @@ export default {
           this.composers = res.data.composers;
           this.loading=false;
           this.visibility=true;
+          this.scrollToComposer(this.$config.composer);
         })
         .catch((error) => {
           // eslint-disable-next-line

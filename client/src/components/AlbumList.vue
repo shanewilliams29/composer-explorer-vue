@@ -115,7 +115,6 @@ export default {
             }
             , 3000); // Bypass and continue to next work)
           
-          console.log("No albums found, skipping to next work.");
         } else {
         
           if(this.$view.mode == 'radio'){ // only one album in radiomode

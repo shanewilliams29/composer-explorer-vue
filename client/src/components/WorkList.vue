@@ -70,6 +70,7 @@ export default {
         this.playlist = res.data.playlist;
         this.visibility = true
         this.loading = false;
+        this.setGenre(this.$config.genre);
       }).catch((error) => {
         console.error(error);
         this.loading = false;
@@ -96,15 +97,15 @@ export default {
           this.loading = false;
           this.works = res.data.works;
           this.playlist = res.data.playlist;
-          if (this.playlist.length > 300){
+          if (this.playlist.length > 300) {
             this.visibility = false;
             this.$view.enableRadio = true;
             this.$view.enableExport = false;
-          } else if (this.playlist.length < 1){
+          } else if (this.playlist.length < 1) {
             this.$view.enableExport = false;
             this.$view.enableRadio = false;
             this.message = "No works found for selection. Try different genres, and selecting \"All works\""
-          }else{
+          } else {
             this.visibility = true;
             this.$view.enableExport = true;
             this.$view.enableRadio = true;
@@ -131,15 +132,13 @@ export default {
           prefetch: prefetch,
           name: name,
           random: this.$view.randomAlbum,
-
         };
         const path = 'api/exportplaylist';
         axios.post(path, payload).then((res) => {
           console.log(res);
-          if(prefetch){
+          if (prefetch) {
             this.$view.playlistTrackCount = res.data.track_count;
-          }
-          else if('error' in res.data){
+          } else if ('error' in res.data) {
             this.$view.playlistError = res.data.error.message;
             this.$view.playlistSuccess = false;
             console.log("ERROR");
@@ -149,12 +148,12 @@ export default {
             console.log("SUCCESS");
           }
         }).catch((error) => {
-            if(prefetch){
-              this.$view.playlistError = "Too many tracks selected";
-            }else{
-              this.$view.playlistError = error;
-            }
-            this.$view.playlistSuccess = false;
+          if (prefetch) {
+            this.$view.playlistError = "Too many tracks selected";
+          } else {
+            this.$view.playlistError = error;
+          }
+          this.$view.playlistSuccess = false;
         });
       }
     },
@@ -178,11 +177,10 @@ export default {
       this.$config.work = workId;
       this.$config.workTitle = title;
       localStorage.setItem('config', JSON.stringify(this.$config));
-
       eventBus.$emit('changeWork');
       if (!this.$view.mode) { // standard compsoer mode
         eventBus.$emit('fireAlbums', workId);
-      } else if (this.$view.mode == 'performer'){ // performer mode
+      } else if (this.$view.mode == 'performer') { // performer mode
         eventBus.$emit('fireAlbums', workId, this.$config.artist);
       } else { // radio mode, play automatically
         if (this.$config.artist) {
@@ -197,10 +195,9 @@ export default {
       this.$config.work = workId;
       this.$config.workTitle = title;
       localStorage.setItem('config', JSON.stringify(this.$config));
-
       eventBus.$emit('changeWork');
       if (this.$view.mode != 'performer') {
-        if (this.$config.artist && this.$view.mode == 'radio'){
+        if (this.$config.artist && this.$view.mode == 'radio') {
           eventBus.$emit('fireAlbumsAndPlay', workId, this.$config.artist);
         } else {
           eventBus.$emit('fireAlbumsAndPlay', workId);
@@ -212,28 +209,31 @@ export default {
     selectRow(workid) {
       this.selectedWork = workid;
     },
-    setGenre(genre){
-        this.$config.genre = genre;
-        localStorage.setItem('config', JSON.stringify(this.$config));
-
+    setGenre(genre) {
+      this.$config.genre = genre;
+      localStorage.setItem('config', JSON.stringify(this.$config));
       var timeout = 0;
-      if (this.visibility){
-        timeout = 0;
+      if (this.visibility) {
+        timeout = 0
       } else {
         timeout = 1000;
       }
-            smoothscroll.polyfill(); // for Safari smooth scrolling
-            setTimeout(() => {  var card = this.$refs[genre][0];
-                                var row = this.$refs[this.selectedWork][0];
-                                var height = this.$refs[genre][0].offsetParent.offsetHeight / 2;
-                                var top = card.offsetTop + row.offsetTop - height + 100;
-  
-                                this.$parent.$refs['scroll-box'].scrollTo({
-                                      top: top,
-                                      left: 0,
-                                      behavior: 'smooth'
-                              })}, timeout);
-          
+      smoothscroll.polyfill(); // for Safari smooth scrolling
+      setTimeout(() => {
+        try {
+          var card = this.$refs[genre][0];
+          var row = this.$refs[this.selectedWork][0];
+          var height = this.$refs[genre][0].offsetParent.offsetHeight / 2;
+          var top = card.offsetTop + row.offsetTop - height + 100;
+          this.$parent.$refs['scroll-box'].scrollTo({
+            top: top,
+            left: 0,
+            behavior: 'smooth'
+          })
+        } catch {
+          //pass
+        }
+      }, timeout);
     },
     getFilteredWorks(item) {
       this.loading = true;
@@ -311,6 +311,7 @@ export default {
     },
     playRandomWork() {
       eventBus.$emit('changeWork');
+
       function randomIntFromInterval(min, max) { // min and max included
         return Math.floor(Math.random() * (max - min + 1) + min)
       }
