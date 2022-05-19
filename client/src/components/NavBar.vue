@@ -20,7 +20,18 @@
         <b-nav-item class="menu-button" right v-b-toggle.sidebar-right><b-icon-three-dots-vertical></b-icon-three-dots-vertical></b-nav-item>
       </b-navbar-nav>
       <b-navbar-nav class="ml-auto" v-if="$auth.clientToken">
-        <b-avatar href="/log_out" :src="'https://storage.googleapis.com/composer-explorer.appspot.com/avatars/' + $auth.userid + '.jpg'"></b-avatar>
+
+        
+
+ 
+
+<b-dropdown class="avatar-button" right no-caret>
+    <template #button-content>
+               <b-avatar href="#" :src="'https://storage.googleapis.com/composer-explorer.appspot.com/avatars/' + $auth.userid + '.jpg'"></b-avatar>
+    </template>
+    <b-dropdown-item href="/log_out">Log out</b-dropdown-item>
+</b-dropdown>
+
               <b-nav-item class="menu-button" right v-b-toggle.sidebar-right><b-icon-three-dots-vertical></b-icon-three-dots-vertical></b-nav-item>
       </b-navbar-nav>
     </b-navbar>
@@ -44,7 +55,7 @@ Listen to works on Spotify, made navigable for Classical music.</p>
         </p>
         <h6>Acknowledgements</h6>
         <p>
-          Composer and work information are used under licence from <a href="https://en.wikipedia.org/" target="_blank">Wikipedia</a>, <a href="https://imslp.org/" target="_blank">IMSLP</a>, and <a href="https://openopus.org/" target="_blank">Open Opus</a>. Album data and cover art provided by <a href="https://www.spotify.com/" target="_blank">Spotify</a>. 
+          Composer and work information is used under licence from <a href="https://en.wikipedia.org/" target="_blank">Wikipedia</a>, <a href="https://imslp.org/" target="_blank">IMSLP</a>, and <a href="https://openopus.org/" target="_blank">Open Opus</a>. Album data and cover art provided by <a href="https://www.spotify.com/" target="_blank">Spotify</a>. 
         </p>
         <h6>Disclaimer</h6>
          <p>
@@ -119,5 +130,10 @@ img {
 }
 .sidebar-text{
   font-size: 14px;
+}
+.avatar-button >>> .btn{
+  border: none !important;
+  padding: 0px !important;
+  background: transparent !important;
 }
 </style>
