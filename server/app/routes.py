@@ -880,7 +880,7 @@ def get_workinfo(work_id):
     if work.genre == "Opera" or work.genre == "Stage Work" or work.genre == "Ballet":
         work.search = app.config['STATIC'] + 'headers/' + work.title + '.jpg'  # use for image
     else:
-        work.search = app.config['STATIC'] + 'headers/' + 'Arrangement' + '.jpg'  # use for image
+        work.search = app.config['STATIC'] + 'headers/' + work.genre.split()[0] + '.jpg'  # use for image
 
     response_object = {'status': 'success'}
     response_object['info'] = work
