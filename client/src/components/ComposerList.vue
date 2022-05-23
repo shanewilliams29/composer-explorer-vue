@@ -343,4 +343,9 @@ header.card-header:hover {
   color: grey;
   text-align: center;
 }
+.collapsing {
+    -webkit-transition: none !important;
+    transition: none !important;
+    display: none;
+}
 </style>

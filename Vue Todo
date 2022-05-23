@@ -1,7 +1,6 @@
 GENERAL
 - Date for works after composer death (no date)
 - If only one artist, allow more years from album crap filter
-- 2050 > present
 - Get artist IDs from Spotify?
 - Make performer filter absolute match not a search
 - Spiders web beween performers
@@ -9,7 +8,6 @@ GENERAL
 - blue borders on work list highlights????
 - Refine performers page so no url change when already on page
 - Favorites menu item?
-- "A little less popular"
 - Better shuffle playback
 - Line appearing on album info pane... card?
 - Too many tracks selected error when no tracks selected (radio)

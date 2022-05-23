@@ -220,6 +220,10 @@ def get_composers():
                 .order_by(ComposerList.region, ComposerList.born).all()
         if composer_filter == "tier3":
             composer_list = db.session.query(ComposerList)\
+                .filter(ComposerList.tier == 3) \
+                .order_by(ComposerList.region, ComposerList.born).all()
+        if composer_filter == "tier4":
+            composer_list = db.session.query(ComposerList)\
                 .filter(ComposerList.tier == None) \
                 .order_by(ComposerList.region, ComposerList.born).all()
         if composer_filter in eras:
