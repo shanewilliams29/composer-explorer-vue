@@ -206,15 +206,21 @@ def get_composers():
                 .order_by(ComposerList.region, ComposerList.born).all()
         if composer_filter == "all":
             composer_list = db.session.query(ComposerList)\
-                .filter(ComposerList.catalogued == True) \
                 .order_by(ComposerList.region, ComposerList.born).all()
         if composer_filter == "alphabet":
             composer_list = db.session.query(ComposerList)\
-                .filter(ComposerList.catalogued == True) \
                 .order_by(ComposerList.name_short, ComposerList.born).all()
         if composer_filter == "popular":
             composer_list = db.session.query(ComposerList)\
-                .filter(ComposerList.catalogued == True) \
+                .filter(ComposerList.tier == 1) \
+                .order_by(ComposerList.region, ComposerList.born).all()
+        if composer_filter == "tier2":
+            composer_list = db.session.query(ComposerList)\
+                .filter(ComposerList.tier == 2) \
+                .order_by(ComposerList.region, ComposerList.born).all()
+        if composer_filter == "tier3":
+            composer_list = db.session.query(ComposerList)\
+                .filter(ComposerList.tier == None) \
                 .order_by(ComposerList.region, ComposerList.born).all()
         if composer_filter in eras:
             sortfilter = SortFilter()
@@ -223,12 +229,12 @@ def get_composers():
             datemax = date_minmax_sort[1]
 
             composer_list = ComposerList.query \
-                .filter(ComposerList.born >= datemin, ComposerList.born < datemax, ComposerList.catalogued == True) \
+                .filter(ComposerList.born >= datemin, ComposerList.born < datemax) \
                 .order_by(ComposerList.region, ComposerList.born).all()
 
     else:
         composer_list = db.session.query(ComposerList)\
-            .filter(ComposerList.catalogued == True) \
+            .filter(ComposerList.tier == 1) \
             .order_by(ComposerList.region, ComposerList.born).all()
 
     # prepare list for display
@@ -879,6 +885,8 @@ def get_workinfo(work_id):
 
     if work.genre == "Opera" or work.genre == "Stage Work" or work.genre == "Ballet":
         work.search = app.config['STATIC'] + 'headers/' + work.title + '.jpg'  # use for image
+    elif "piano concerto" in work.title.lower():
+        work.search = app.config['STATIC'] + 'headers/' + 'pianoconcerto' + '.jpg'
     else:
         work.search = app.config['STATIC'] + 'headers/' + work.genre.split()[0] + '.jpg'  # use for image
 

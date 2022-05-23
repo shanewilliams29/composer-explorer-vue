@@ -229,6 +229,7 @@ class ComposerList(db.Model):
     spotify: str
     clicks: int
     catalogued: bool
+    tier: int
     female: bool
     general: bool
     view: int
@@ -254,6 +255,7 @@ class ComposerList(db.Model):
     spotify = db.Column(db.String(255))
     clicks = db.Column(db.Integer)
     catalogued = db.Column(db.Boolean)
+    tier = db.Column(db.Integer)
     female = db.Column(db.Boolean)
     general = db.Column(db.Boolean)
     view = db.Column(db.Integer)

@@ -26,7 +26,7 @@
                     {{ composer.name_full }}
                   </td>
                   <td width="25%" style="white-space: nowrap; text-overflow: ellipsis; max-width: 1px; text-align: right;">
-                    {{ composer.born }} - {{ composer.died }}
+                    {{ composer.born }} - {{ deathDate(composer.died) }}
                   </td>
                 </tr>
               </table>
@@ -55,7 +55,7 @@ export default {
   computed:{
     composerChanged(){
       return this.$config.composer;
-    }
+    },
   },
   watch: {
     composerChanged(newComposer) {
@@ -63,6 +63,14 @@ export default {
     }
   },
   methods: {
+    deathDate(date){
+      var year = new Date().getFullYear();
+      if(date > year){
+        return "present";
+      } else {
+        return date;
+      }
+    },
     scrollToComposer(composer){
       var timeout = 0;
       if (this.visibility){
@@ -100,7 +108,7 @@ export default {
     getFilteredComposers(item) {
       this.loading = true;
       if (item == "all" || item == "alphabet" || item == "romantic" || item == "20th" || item == "common") {
-        this.visibility=true; // change to false when there are a lot of composers
+        this.visibility=false; // change to false when there are a lot of composers
       } else {
         this.visibility=true;
       }

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <b-card v-for="album in albums" :key="album.id" :id="album.id" no-body header-tag="header" :class="{'highlight': (album.id == selectedAlbum)}">
+    <b-card class="shadow-sm" v-for="album in albums" :key="album.id" :id="album.id" no-body header-tag="header" :class="{'highlight': (album.id == selectedAlbum)}">
       <div class="row">
         <b-col class="album_columns">
           <img @click="$parent.selectRow(album.id); $parent.getAlbumData(album.id);" rounded="left" width="65px" height="65px" v-lazy="album.album_img" />
