@@ -77,7 +77,7 @@ def spotify():
     
     try:
         username = info['id']
-    except KeyError:
+    except Exception:
         abort(403)
 
     if info['product'] == "premium":
@@ -92,7 +92,7 @@ def spotify():
             image_url = info['images'][0]['url']
             response = get_avatar(username, image_url)
             image = response[0]
-        except KeyError:
+        except Exception:
             image = None
 
         duplicateuser = User.query.filter_by(display_name=display_name).first()
