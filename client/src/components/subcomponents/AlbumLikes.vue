@@ -3,8 +3,10 @@
    <span class="likes" v-if="currentLikes">&nbsp;
      <b-badge v-if="parseInt(currentLikes) == 1 ">{{ currentLikes }} Like</b-badge>
      <b-badge v-if="parseInt(currentLikes) > 1 ">{{ currentLikes }} Likes</b-badge>
-     <span class="user-liked">&nbsp;<b-icon-heart-fill></b-icon-heart-fill></span>
    </span>
+     <span class="user-liked" v-if="userLikes">&nbsp;
+      <b-icon-heart-fill></b-icon-heart-fill>
+    </span>
   </div>
 </template>
 
@@ -17,32 +19,50 @@ export default {
   name: 'AlbumLikes',
   props: {
     album: Object,
-    selectedAlbum: String
+    selectedAlbum: String,
+    likedAlbums: Array
   },
   data() {
     return {
-      currentLikes: this.album.likes
+      currentLikes: this.album.likes,
+      userLikes: (this.likedAlbums.indexOf(this.album.id) > -1)
     };
   },
   methods:{
+    detectLike(album_id){
+      if(album_id == this.album.id && this.userLikes){
+        //console.log(album_id, this.album.id, this.userLikes);
+        this.$view.like = true;
+      }
+      else if(album_id == this.album.id && !this.userLikes){
+        this.$view.like = false;
+        //console.log(this.selectedAlbum, this.album.id, this.userLikes)
+      } else if (album_id != this.album.id) {
+        //console.log("do nothing");
+      }
+    },
     likeAlbum(){
-      if(this.selectedAlbum == this.album.id){
-        this.currentLikes = this.album.likes + 1;
+      if(this.selectedAlbum == this.album.id && !this.userLikes){
+        this.currentLikes = this.currentLikes + 1;
+        this.userLikes = true;
       }
     },
     unlikeAlbum(){
-      if(this.selectedAlbum == this.album.id){
-        this.currentLikes = this.album.likes;
+      if(this.selectedAlbum == this.album.id && this.userLikes){
+        this.currentLikes = this.currentLikes - 1;
+        this.userLikes = false;
       }
     }
   },
   created() {
     eventBus.$on('fireLikeAlbum', this.likeAlbum);
     eventBus.$on('fireUnlikeAlbum', this.unlikeAlbum);
+    eventBus.$on('fireAlbumData', this.detectLike);
   },
   beforeDestroy() {
     eventBus.$off('fireLikeAlbum', this.likeAlbum);
     eventBus.$off('fireUnlikeAlbum', this.unlikeAlbum);
+    eventBus.$off('fireAlbumData', this.detectLike);
   }
 }
 </script>

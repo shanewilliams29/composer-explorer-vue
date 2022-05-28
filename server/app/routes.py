@@ -282,6 +282,7 @@ def get_composers():
     # genre_list = []
     # for (item,) in genres:
     #     genre_list.append(item)
+    
     with open('app/static/genres.json') as f:
         genre_list = json.load(f)
     genre_list = sorted(genre_list)
@@ -753,7 +754,7 @@ def exportplaylist():
 
 
 @app.route('/api/albums/<work_id>', methods=['GET'])
-@cache.cached(query_string=True)
+#@cache.cached(query_string=True)
 def get_albums(work_id):
     page = request.args.get('page', 1, type=int)
 
@@ -854,10 +855,29 @@ def get_albums(work_id):
 
     sorted_list = sorted_list[list_start:list_end]
 
+    # get list of current_user's liked albums:
+    search = "%{}%".format(work_id)
+
+    if current_user.is_authenticated:
+        albumlikes = db.session.query(AlbumLike)\
+            .filter(AlbumLike.user_id == current_user.id, 
+                    AlbumLike.album_id.ilike(search)).all()
+    elif Config.MODE == 'DEVELOPMENT':
+        albumlikes = db.session.query(AlbumLike)\
+            .filter(AlbumLike.user_id == '85', 
+                    AlbumLike.album_id.ilike(search)).all()
+    else:
+        albumlikes = []
+
+    liked_albums = []
+    for album in albumlikes:
+        liked_albums.append(album.album_id)
+
     response_object = {'status': 'success'}
     response_object['albums'] = sorted_list
     response_object['artists'] = artist_list
     response_object['composer'] = sorted_list[0]['composer']
+    response_object['liked_albums'] = liked_albums
     response = jsonify(response_object)
     return response
 

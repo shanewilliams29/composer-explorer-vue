@@ -16,7 +16,7 @@
           <div v-else @click="$parent.selectRow(album.id); $parent.getAlbumData(album.id);"><img class="album-cover" height="auto" v-lazy="album.album_img" /></div>
           <div class="row">
           <b-col class="col" cols="4">
-            <AlbumLikes v-bind:album="album" v-bind:selectedAlbum="selectedAlbum"/>
+            <AlbumLikes v-bind:likedAlbums="likedAlbums" v-bind:album="album" v-bind:selectedAlbum="selectedAlbum"/>
           </b-col>
           <b-col class="col footer" cols="8">
           <div v-if="album.id == selectedAlbum">
@@ -44,7 +44,8 @@ export default {
   name: 'LargeAlbum',
   props: {
     albums: Array,
-    selectedAlbum: String
+    selectedAlbum: String,
+    likedAlbums: Array
   },
   data() {
     return {

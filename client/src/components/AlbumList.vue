@@ -11,7 +11,7 @@
     <div v-if="albums">
       <div class="row">
         <b-card-group deck v-show="!loading">
-          <LargeAlbum v-if="$config.albumSize == 'large' || $view.mode == 'radio'" v-bind:albums="albums" v-bind:selectedAlbum="selectedAlbum"/>
+          <LargeAlbum v-if="$config.albumSize == 'large' || $view.mode == 'radio'" v-bind:albums="albums" v-bind:selectedAlbum="selectedAlbum" v-bind:likedAlbums="likedAlbums"/>
           <SmallAlbum v-else v-bind:albums="albums" v-bind:selectedAlbum="selectedAlbum"/>
           <infinite-loading spinner="spiral" :identifier="infiniteId" @infinite="infiniteHandler">
             <div slot="no-more"></div>
@@ -42,6 +42,7 @@ export default {
       albums: [],
       loading: false,
       selectedAlbum: null,
+      likedAlbums: [],
       page: 2,
       workId: '',
       artistName: '',
@@ -69,6 +70,7 @@ export default {
         this.$config.composer = res.data.composer;
         localStorage.setItem('config', JSON.stringify(this.$config));
         this.albums = res.data.albums;
+        this.likedAlbums= res.data.liked_albums;
         eventBus.$emit('fireArtistList', res.data.artists);
         this.loading = false;
       }).catch((error) => {
@@ -151,6 +153,7 @@ export default {
       axios.get(path).then((res) => {
         this.albums = res.data.albums;
         eventBus.artists = res.data.artists;
+        this.likedAlbums= res.data.liked_albums;
         this.loading = false;
         this.selectRow(this.$config.album);
         eventBus.$emit('fireAlbumData', this.$config.album);
