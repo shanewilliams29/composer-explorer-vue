@@ -71,10 +71,11 @@ def group_composers_by_region(COMPOSERS):
     return composers_by_region
 
 
-def prepare_works(works_list):
+def prepare_works(works_list, liked_list):
     WORKS = []
     i = 0
     for work in works_list:
+
         info = {
             'index': i,
             'id': work.id,
@@ -87,6 +88,12 @@ def prepare_works(works_list):
             'date': work.date,
             'album_count': work.album_count,
         }
+
+        if work.id in liked_list:
+            info['liked'] = True
+        else:
+            info['liked'] = None
+
         WORKS.append(info)
         i += 1
 
@@ -116,46 +123,46 @@ def prepare_works(works_list):
 
 
 # used if works likst with likes is returned
-def new_prepare_works(works_list):
-    WORKS = []
-    for (work, likes) in works_list:
+# def new_prepare_works(works_list):
+#     WORKS = []
+#     for (work, likes) in works_list:
 
-        info = {
-            'id': work.id,
-            'genre': work.genre,
-            'cat': work.cat,
-            'recommend': work.recommend,
-            'title': work.title,
-            'nickname': work.nickname,
-            'date': work.date,
-            'album_count': work.album_count,
-            'likes': likes
-        }
-        WORKS.append(info)
+#         info = {
+#             'id': work.id,
+#             'genre': work.genre,
+#             'cat': work.cat,
+#             'recommend': work.recommend,
+#             'title': work.title,
+#             'nickname': work.nickname,
+#             'date': work.date,
+#             'album_count': work.album_count,
+#             'likes': likes
+#         }
+#         WORKS.append(info)
 
-    # group onto genres
-    works_by_genre = {}
-    works_in_genre = []
-    i = 0
-    prev_genre = WORKS[i]['genre']
+#     # group onto genres
+#     works_by_genre = {}
+#     works_in_genre = []
+#     i = 0
+#     prev_genre = WORKS[i]['genre']
 
-    while i < len(WORKS):
-        genre = WORKS[i]['genre']
-        if genre == prev_genre:
-            works_in_genre.append(WORKS[i])
-            i += 1
-            if i == len(WORKS):
-                works_by_genre[prev_genre] = works_in_genre
-        else:
-            works_by_genre[prev_genre] = works_in_genre
-            works_in_genre = []
-            works_in_genre.append(WORKS[i])
-            prev_genre = genre
-            i += 1
-            if i == len(WORKS):
-                works_by_genre[prev_genre] = works_in_genre
+#     while i < len(WORKS):
+#         genre = WORKS[i]['genre']
+#         if genre == prev_genre:
+#             works_in_genre.append(WORKS[i])
+#             i += 1
+#             if i == len(WORKS):
+#                 works_by_genre[prev_genre] = works_in_genre
+#         else:
+#             works_by_genre[prev_genre] = works_in_genre
+#             works_in_genre = []
+#             works_in_genre.append(WORKS[i])
+#             prev_genre = genre
+#             i += 1
+#             if i == len(WORKS):
+#                 works_by_genre[prev_genre] = works_in_genre
 
-    return works_by_genre
+#     return works_by_genre
 
 
 def get_avatar(username, imgurl):

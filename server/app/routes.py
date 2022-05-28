@@ -398,30 +398,30 @@ def get_works(name):
         response = jsonify(response_object)
         return response
 
-    # This returns liked works
-    # works_list = db.session.query(WorkList, func.count(AlbumLike.id).label('total')) \
-    #     .filter(WorkList.composer == name, WorkList.recommend == True)\
-    #     .join(WorkAlbums, WorkAlbums.workid == WorkList.id)\
-    #     .join(AlbumLike, AlbumLike.album_id == WorkAlbums.id)\
-    #     .group_by(WorkAlbums)\
-    #     .order_by(WorkList.order, WorkList.genre, WorkList.id).all()
+    # get liked works
+    if current_user.is_authenticated:
+        user_id = current_user.id
+    elif Config.MODE == 'DEVELOPMENT':
+        user_id = 85
+    else:
+        user_id = None
 
-    # This returns works with number of likes
-    # works_list = db.session.query(WorkList, func.count(AlbumLike.id).label('total')) \
-    #     .filter(WorkList.composer == name, WorkList.recommend == True)\
-    #     .join(WorkAlbums, WorkAlbums.workid == WorkList.id)\
-    #     .outerjoin(AlbumLike, AlbumLike.album_id == WorkAlbums.id)\
-    #     .group_by(WorkList)\
-    #     .order_by(WorkList.order, WorkList.genre, WorkList.id).all()
+    if user_id:
+        liked_albums = db.session.query(WorkAlbums).join(AlbumLike).join(User)\
+            .filter(User.id == user_id, WorkAlbums.composer == name).all()
+    else:
+        liked_albums = []
 
-    # TESTING
+    liked_works = []
+    for album in liked_albums:
+        liked_works.append(album.workid)
 
-    works_by_genre = prepare_works(works_list)
+    # generate works list
+    works_by_genre = prepare_works(works_list, liked_works)
 
     response_object = {'status': 'success'}
     response_object['works'] = works_by_genre
     response_object['playlist'] = works_list  # for back and previous playing
-
     response = jsonify(response_object)
     return response
 
