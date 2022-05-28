@@ -32,7 +32,7 @@
                   </td>
                   <td width="78%" style="white-space: nowrap; text-overflow: ellipsis; overflow: hidden; max-width: 1px;"><span>{{ work.title }}</span><span v-if="work.nickname" style="color: gray;"> · {{ work.nickname }}</span></td>
                   <td width="5%" style="text-align: right;">
-                    <span style="white-space: nowrap;"><span style="color: darkred; font-size: 12px;" v-if="work.liked"><b-icon-heart-fill></b-icon-heart-fill>&nbsp;</span>
+                    <span style="white-space: nowrap;"><span style="color: rgb(52, 58, 64, 0.7); font-size: 12px;" v-if="work.liked"><b-icon-heart-fill></b-icon-heart-fill>&nbsp;</span>
                     <b-badge>{{ work.album_count }}</b-badge></span>
                   </td>
                 </tr>

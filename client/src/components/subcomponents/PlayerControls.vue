@@ -169,11 +169,13 @@ export default {
       this.$view.shuffle = !this.$view.shuffle;
     },
     toggleLike(){
-      this.$view.like = !this.$view.like;
-      if(this.$view.like){
-        eventBus.$emit('fireLikeAlbum');
-      } else {
-        eventBus.$emit('fireUnlikeAlbum');
+      if (this.$auth.clientToken){
+        this.$view.like = !this.$view.like;
+        if(this.$view.like){
+          eventBus.$emit('fireLikeAlbum');
+        } else {
+          eventBus.$emit('fireUnlikeAlbum');
+        }
       }
     }
   },
