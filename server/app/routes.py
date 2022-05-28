@@ -882,6 +882,25 @@ def get_albums(work_id):
     return response
 
 
+@ app.route('/api/like/<album_id>/<action>')
+def like_action(album_id, action):
+    if current_user.is_authenticated:
+        album = WorkAlbums.query.filter_by(id=album_id).first()
+        if action == 'like':
+            current_user.like_album(album)
+            db.session.commit()
+        if action == 'unlike':
+            current_user.unlike_album(album)
+            db.session.commit()
+        response_object = {'status': 'success'}
+        response = jsonify(response_object)
+        return response
+
+    response_object = {'error': 'must be logged in to like albums'}
+    response = jsonify(response_object)
+    return response
+
+
 @app.route('/api/composerinfo/<composer>', methods=['GET'])
 @cache.cached(query_string=True)
 def get_composerinfo(composer):

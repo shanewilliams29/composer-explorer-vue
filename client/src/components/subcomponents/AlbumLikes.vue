@@ -14,6 +14,7 @@
 // Need to add logic for if user likes this album
 
 import {eventBus} from "@/main.js";
+import axios from 'axios';
 
 export default {
   name: 'AlbumLikes',
@@ -45,13 +46,23 @@ export default {
       if(this.selectedAlbum == this.album.id && !this.userLikes){
         this.currentLikes = this.currentLikes + 1;
         this.userLikes = true;
+        this.updateDatabase(this.album.id, 'like');
       }
     },
     unlikeAlbum(){
       if(this.selectedAlbum == this.album.id && this.userLikes){
         this.currentLikes = this.currentLikes - 1;
         this.userLikes = false;
+        this.updateDatabase(this.album.id, 'unlike');
       }
+    },
+    updateDatabase(albumID, action){
+      const path = 'api/like/' + albumID + '/' + action;
+      axios.get(path).then((res) => {
+        console.log(res)
+      }).catch((error) => {
+        console.error(error);
+      })
     }
   },
   created() {
