@@ -895,6 +895,18 @@ def like_action(album_id, action):
         response_object = {'status': 'success'}
         response = jsonify(response_object)
         return response
+    elif Config.MODE == 'DEVELOPMENT':
+        user = User.query.filter_by(id=85).first()
+        album = WorkAlbums.query.filter_by(id=album_id).first()
+        if action == 'like':
+            user.like_album(album)
+            db.session.commit()
+        if action == 'unlike':
+            user.unlike_album(album)
+            db.session.commit()
+        response_object = {'status': 'success'}
+        response = jsonify(response_object)
+        return response
 
     response_object = {'error': 'must be logged in to like albums'}
     response = jsonify(response_object)
