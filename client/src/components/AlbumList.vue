@@ -133,6 +133,8 @@ export default {
           this.loading = false;
           this.selectRow(this.albums[0].id); // select first row on work selection
           this.$config.album = this.albums[0].id;
+          this.likedAlbums = res.data.liked_albums;
+          this.determineHeart(this.$config.album); //needed for first load as fireAlbumData misses
           this.$config.composer = res.data.composer;
           localStorage.setItem('config', JSON.stringify(this.$config));
           eventBus.$emit('fireArtistList', res.data.artists);
@@ -156,6 +158,7 @@ export default {
         this.likedAlbums= res.data.liked_albums;
         this.loading = false;
         this.selectRow(this.$config.album);
+        this.determineHeart(this.$config.album); //necessary for first load only, misses fireAlbumData
         eventBus.$emit('fireAlbumData', this.$config.album);
         eventBus.$emit('fireArtistList', res.data.artists);
       }).catch((error) => {
@@ -173,6 +176,15 @@ export default {
     },
     clearAlbums() {
       this.albums = [];
+    },
+    determineHeart(albumId){
+    console.log(albumId);
+    console.log(this.likedAlbums);
+    if(this.likedAlbums.includes(albumId)){
+        this.$view.like = true;
+      } else {
+        this.$view.like = false;
+      }
     },
     infiniteHandler($state) {
       if(this.$view.mode){
