@@ -58,8 +58,9 @@ export default {
     },
     updateDatabase(albumID, action){
       const path = 'api/like/' + albumID + '/' + action;
+      // eslint-disable-next-line
       axios.get(path).then((res) => {
-        console.log(res)
+        eventBus.$emit('fireRefreshWorks');
       }).catch((error) => {
         console.error(error);
       })

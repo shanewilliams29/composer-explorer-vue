@@ -54,6 +54,7 @@ export default {
   data() {
     return {
       works: [],
+      radioPayload: {},
       playlist: [],
       loading: false,
       selectedWork: null,
@@ -76,6 +77,19 @@ export default {
         console.error(error);
         this.loading = false;
       });
+    },
+    refreshWorks() { // used to quietly refresh works when likes change
+      this.loading = false;
+      // getWorks
+      if(!this.$view.mode){
+        const path = 'api/works/' + this.$config.composer;
+        axios.get(path).then((res) => {
+          this.works = res.data.works;
+          // this.setGenre(this.$config.genre);
+        }).catch((error) => {
+          console.error(error);
+        });
+      }
     },
     getGenreWorks(genres, filter, search, artist) { // used in radio mode
       if (genres.length < 1) { // no works
@@ -336,6 +350,7 @@ export default {
     eventBus.$on('fireNextWork', this.nextWork);
     eventBus.$on('firePreviousWork', this.previousWork);
     eventBus.$on('firePlaylistExport', this.preparePlaylist);
+    eventBus.$on('fireRefreshWorks', this.refreshWorks);
   },
   beforeDestroy() {
     eventBus.$off('fireComposers', this.fireComposers);
@@ -347,6 +362,7 @@ export default {
     eventBus.$off('fireNextWork', this.nextWork);
     eventBus.$off('firePreviousWork', this.previousWork);
     eventBus.$off('firePlaylistExport', this.preparePlaylist);
+    eventBus.$off('fireRefreshWorks', this.refreshWorks);
   }
 };
 </script>
