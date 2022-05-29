@@ -36,6 +36,7 @@
 <script>
 import spotify from '@/SpotifyFunctions.js'
 import {eventBus} from "../../main.js";
+import axios from 'axios';
 
 // function debounce(func, timeout = 500){
 //   let timer;
@@ -168,12 +169,23 @@ export default {
     shufflePlayback(){
       this.$view.shuffle = !this.$view.shuffle;
     },
+    likeDatabase(albumID, action){
+      const path = 'api/like/' + albumID + '/' + action;
+      // eslint-disable-next-line
+      axios.get(path).then((res) => {
+        eventBus.$emit('fireRefreshWorks');
+      }).catch((error) => {
+        console.error(error);
+      })
+    },
     toggleLike(){
       if (this.$auth.clientToken){
         this.$view.like = !this.$view.like;
         if(this.$view.like){
+          this.likeDatabase(this.$config.album, 'like');
           eventBus.$emit('fireLikeAlbum');
         } else {
+          this.likeDatabase(this.$config.album, 'unlike');
           eventBus.$emit('fireUnlikeAlbum');
         }
       }
