@@ -54,6 +54,8 @@ export default {
   data() {
     return {
       works: [],
+      searchItem: null,
+      filterItem: null,
       radioPayload: {},
       playlist: [],
       loading: false,
@@ -64,6 +66,8 @@ export default {
   },
   methods: {
     getWorks(composer) { // standard mode
+      this.searchItem = null;
+      this.filterItem = null;
       this.loading = true;
       this.$config.composer = composer;
       const path = 'api/works/' + composer;
@@ -80,12 +84,51 @@ export default {
     },
     refreshWorks() { // used to quietly refresh works when likes change
       this.loading = false;
-      // getWorks
-      if(!this.$view.mode){
+      // getWorks base
+      if(!this.$view.mode && !this.searchItem && !this.filterItem){
         const path = 'api/works/' + this.$config.composer;
         axios.get(path).then((res) => {
           this.works = res.data.works;
+          console.log(this.searchItem);
           // this.setGenre(this.$config.genre);
+        }).catch((error) => {
+          console.error(error);
+        });
+      }
+      // getWorks search
+      if(!this.$view.mode && this.searchItem){
+        const path = 'api/works/' + this.$config.composer + '?search=' + this.searchItem;
+        axios.get(path).then((res) => {
+          this.works = res.data.works;
+          console.log(this.searchItem);
+        }).catch((error) => {
+          console.error(error);
+        });
+      }   
+      // getWorks filter
+      if(!this.$view.mode && this.filterItem){
+        const path = 'api/works/' + this.$config.composer + '?filter=' + this.filterItem;
+        axios.get(path).then((res) => {
+          this.works = res.data.works;
+        }).catch((error) => {
+          console.error(error);
+        });
+      }  
+      // Performer view works
+      if(this.$view.mode == 'performer'){
+        const path = 'api/artistworks?artist=' + this.$config.artist + '&composer=' + this.$config.composer;
+        axios.get(path).then((res) => {
+          this.works = res.data.works;
+        }).catch((error) => {
+          console.error(error);
+        });
+      }
+      // Radio view works  
+      if(this.$view.mode == 'radio'){
+        const payload = this.radioPayload;
+        const path = 'api/worksbygenre';
+        axios.post(path, payload).then((res) => {
+          this.works = res.data.works;
         }).catch((error) => {
           console.error(error);
         });
@@ -107,6 +150,7 @@ export default {
           search: search,
           artist: artist
         };
+        this.radioPayload = payload;
         const path = 'api/worksbygenre';
         axios.post(path, payload).then((res) => {
           this.loading = false;
@@ -251,6 +295,8 @@ export default {
       }, timeout);
     },
     getFilteredWorks(item) {
+      this.filterItem = item;
+      this.searchItem = null;
       this.loading = true;
       if (item == "all") {
         this.visibility = false;
@@ -268,6 +314,8 @@ export default {
       });
     },
     getSearchWorks(item) {
+      this.filterItem = null;
+      this.searchItem = item;
       const path = 'api/works/' + this.$config.composer + '?search=' + item;
       axios.get(path).then((res) => {
         this.works = res.data.works;

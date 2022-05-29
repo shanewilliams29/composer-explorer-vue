@@ -548,9 +548,27 @@ def get_worksbygenre():
         else:
             works_list = return_list
 
-    # return response
-    works_by_genre = prepare_works(works_list)
-    # need playlist
+    # get liked works
+    if current_user.is_authenticated:
+        user_id = current_user.id
+    elif Config.MODE == 'DEVELOPMENT':
+        user_id = 85
+    else:
+        user_id = None
+
+    if user_id:
+        liked_albums = db.session.query(WorkAlbums).join(AlbumLike).join(User)\
+            .filter(User.id == user_id, WorkAlbums.composer.in_(composer_list)).all()
+    else:
+        liked_albums = []
+
+    liked_works = []
+    for album in liked_albums:
+        liked_works.append(album.workid)
+
+    # generate works list
+    works_by_genre = prepare_works(works_list, liked_works)
+
     response_object = {'status': 'success'}
     response_object['works'] = works_by_genre
     response_object['playlist'] = works_list  # for back and previous playing
@@ -1027,7 +1045,26 @@ def get_artistworks():
         response = jsonify(response_object)
         return response
 
-    works_by_genre = prepare_works(works_list)
+    # get liked works
+    if current_user.is_authenticated:
+        user_id = current_user.id
+    elif Config.MODE == 'DEVELOPMENT':
+        user_id = 85
+    else:
+        user_id = None
+
+    if user_id:
+        liked_albums = db.session.query(WorkAlbums).join(AlbumLike).join(User)\
+            .filter(User.id == user_id, WorkAlbums.composer == composer_name).all()
+    else:
+        liked_albums = []
+
+    liked_works = []
+    for album in liked_albums:
+        liked_works.append(album.workid)
+
+    # generate works list
+    works_by_genre = prepare_works(works_list, liked_works)
 
     response_object = {'status': 'success'}
     response_object['works'] = works_by_genre
