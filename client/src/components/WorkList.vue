@@ -134,7 +134,7 @@ export default {
         });
       }
     },
-    getGenreWorks(genres, filter, search, artist) { // used in radio mode
+    getGenreWorks(genres, filter, search, artist, radioType) { // used in radio mode
       if (genres.length < 1) { // no works
         eventBus.$emit('fireClearAlbums');
         this.loading = false;
@@ -148,7 +148,8 @@ export default {
           genres: genres,
           filter: filter,
           search: search,
-          artist: artist
+          artist: artist,
+          radio_type: radioType
         };
         this.radioPayload = payload;
         const path = 'api/worksbygenre';

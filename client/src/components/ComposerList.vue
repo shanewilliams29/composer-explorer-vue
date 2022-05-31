@@ -192,6 +192,25 @@ export default {
           console.error(error);
         });
       }
+      if(type == "favorites"){
+        this.getFavoritesComposers();
+      }
+    },
+    getFavoritesComposers() {
+      this.loading = true;
+      const path = 'api/favoritescomposers';
+      axios.get(path)
+        .then((res) => {
+          this.composers = res.data.composers;
+          eventBus.$emit('fireRadioGenreList', res.data.genres);
+          this.visibility=true;
+          this.loading = false;
+        })
+        .catch((error) => {
+          // eslint-disable-next-line
+          console.error(error);
+          this.loading = false;
+        });
     },
     getMultiComposers(composers) {
       if (composers.length < 1){

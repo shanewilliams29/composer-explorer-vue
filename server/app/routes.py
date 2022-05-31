@@ -299,6 +299,43 @@ def get_composers():
     return response
 
 
+@app.route('/api/favoritescomposers', methods=['GET'])
+def get_favoritescomposers():
+    if current_user.is_authenticated:
+        user_id = current_user.id
+    elif Config.MODE == 'DEVELOPMENT':
+        user_id = 85
+    else:
+        user_id = None
+
+    composer_list = db.session.query(ComposerList).join(WorkAlbums).join(AlbumLike)\
+        .filter(AlbumLike.user_id == user_id)\
+        .order_by(ComposerList.region, ComposerList.born).all()
+
+    search_list = []
+    for composer in composer_list:
+        search_list.append(composer.name_short)
+
+    session['radio_composers'] = search_list
+    if Config.MODE == "DEVELOPMENT":
+        cache.set('composers', search_list)  # store in cache for dev server 
+
+    # prepare list for display
+    COMPOSERS = prepare_composers(composer_list)
+    composers_by_region = group_composers_by_region(COMPOSERS)
+
+    with open('app/static/genres.json') as f:
+        genre_list = json.load(f)
+    genre_list = sorted(genre_list)
+
+    # return response
+    response_object = {'status': 'success'}
+    response_object['composers'] = composers_by_region
+    response_object['genres'] = genre_list
+    response = jsonify(response_object)
+    return response
+
+
 @app.route('/api/multicomposers', methods=['POST'])
 def get_multicomposers():
     # get composers
@@ -438,6 +475,7 @@ def get_worksbygenre():
     work_filter = payload['filter']
     search_term = payload['search']
     artist_name = payload['artist']
+    radio_type = payload['radio_type']
 
     # get composers selected
     if not session.get('radio_composers'):
@@ -448,7 +486,6 @@ def get_worksbygenre():
         # works_list = db.session.query(WorkList).join(Artists)\
         # .filter(Artists.name == artist_name, WorkList.composer == composer_name)\
         # .order_by(WorkList.order, WorkList.genre, WorkList.id).all()
-
 
     if search_list[0] == "all":
         if artist_name:
@@ -557,21 +594,32 @@ def get_worksbygenre():
         user_id = None
 
     if user_id:
-        liked_albums = db.session.query(WorkAlbums).join(AlbumLike).join(User)\
-            .filter(User.id == user_id, WorkAlbums.composer.in_(composer_list)).all()
+        liked_works = db.session.query(WorkList).join(WorkAlbums).join(AlbumLike)\
+            .filter(AlbumLike.user_id == user_id, WorkList.composer.in_(composer_list)).all()
     else:
-        liked_albums = []
+        liked_works = []
 
-    liked_works = []
-    for album in liked_albums:
-        liked_works.append(album.workid)
+    liked_works_ids = []
+    for work in liked_works:
+        liked_works_ids.append(work.id)
+
+    # filter out liked works only in favorites radio
+    final_works = []
+    if radio_type == 'favorites':
+        for work in works_list:
+            if work.id in liked_works_ids:
+                final_works.append(work)
+            else:
+                pass
+    else:
+        final_works = works_list
 
     # generate works list
-    works_by_genre = prepare_works(works_list, liked_works)
+    works_by_genre = prepare_works(final_works, liked_works_ids)
 
     response_object = {'status': 'success'}
     response_object['works'] = works_by_genre
-    response_object['playlist'] = works_list  # for back and previous playing
+    response_object['playlist'] = final_works  # for back and previous playing
     response = jsonify(response_object)
     return response
 

@@ -178,8 +178,6 @@ export default {
       this.albums = [];
     },
     determineHeart(albumId){
-    console.log(albumId);
-    console.log(this.likedAlbums);
     if(this.likedAlbums.includes(albumId)){
         this.$view.like = true;
       } else {

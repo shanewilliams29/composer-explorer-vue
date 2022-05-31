@@ -1,26 +1,38 @@
 GENERAL
 - Date for works after composer death (no date)
 - If only one artist, allow more years from album crap filter
-- Get artist IDs from Spotify?
 - Make performer filter absolute match not a search
-- Spiders web beween performers
 - Click next on last track, jump to next work? Buggy
-- blue borders on work list highlights????
+- blue borders on work list highlights?
 - Refine performers page so no url change when already on page
 - Favorites menu item?
 - Better shuffle playback
 - Line appearing on album info pane... card?
 - Too many tracks selected error when no tracks selected (radio)
-- Better images for work info panel
 - Improve Conductor/Orchestra, display in consistent manner.
-- If not playable, advance to next (radio)
 - Deselect composer on view mode change
 - Remember radio settings
-- User ID in playlist generator python (currently set to mine)
 - Export playlist for performers
-- Radio playback if no albums? (ie. Yuja concerto limited to 1 track)
 - Hide Google API Key?
 - Search on nicknames for refreshalbums?
+- What to do when performer album liked but not on main list due to compilation (ie. Yuja Wang Mend. 1)
+- Album spinner showing on a few albums?
+- Composer tiers in radio mode
+- Give user options for advancing to next work automatically?
+- Liked albums radio mode
+- Small albums like display
+- Show which users like work?
+- Liked works filter
+- Make sure cache is not messing up the likes displaying
+- Word cloud font on Apple
+- Solti Mass in B Minor - what to do for regional issues, also for radio
+- Openopus composers
+- Don't collapse composers in radio mode
+- Open composers' region when selected in views with many composers
+- Grey out composers not catalogued
+- Options: exclude operas from radio mode
+- Playlist functionality
+
 
 RELINKING
 - Track relinking, what to do if titles are different? Is titles best way to do this?
@@ -29,10 +41,12 @@ RELINKING
 ... if track returned is different from track requested?
 ... areyouplaying for tracks that still don't work (see old version)
 
+
 COMPOSERS
 - Fix Monteverdi
 - CPE Bach or Bach, CPE (might break special case for algorithm)
 
 
-
-
+PARKING LOT
+- Get artist IDs from Spotify?
+- Spiders web beween performers

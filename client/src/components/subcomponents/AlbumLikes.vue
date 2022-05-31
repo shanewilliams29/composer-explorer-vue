@@ -30,7 +30,6 @@ export default {
   },
   methods:{
     detectLike(album_id){
-      console.log("DETECT LIKE");
       //console.log(album_id);
       if(album_id == this.album.id && this.userLikes){
         //console.log(album_id, this.album.id, this.userLikes);
