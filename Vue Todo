@@ -32,6 +32,9 @@ GENERAL
 - Grey out composers not catalogued
 - Options: exclude operas from radio mode
 - Playlist functionality
+- Does favorites work when no favorites by user?
+- Favorites doesn't play user favorite album?
+- Loading spinners for heading fields which need ajax
 
 
 RELINKING

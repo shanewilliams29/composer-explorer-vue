@@ -304,13 +304,20 @@ def get_favoritescomposers():
     if current_user.is_authenticated:
         user_id = current_user.id
     elif Config.MODE == 'DEVELOPMENT':
-        user_id = 85
+        user_id = 85  # 85
     else:
         user_id = None
 
     composer_list = db.session.query(ComposerList).join(WorkAlbums).join(AlbumLike)\
         .filter(AlbumLike.user_id == user_id)\
         .order_by(ComposerList.region, ComposerList.born).all()
+
+    if not composer_list:
+        response_object = {'status': 'success'}
+        response_object['composers'] = []
+        response_object['genres'] = []
+        response = jsonify(response_object)
+        return response
 
     search_list = []
     for composer in composer_list:
@@ -589,7 +596,7 @@ def get_worksbygenre():
     if current_user.is_authenticated:
         user_id = current_user.id
     elif Config.MODE == 'DEVELOPMENT':
-        user_id = 85
+        user_id = 85  # 85
     else:
         user_id = None
 
@@ -605,7 +612,7 @@ def get_worksbygenre():
 
     # filter out liked works only in favorites radio
     final_works = []
-    if radio_type == 'favorites':
+    if radio_type == 'favorites' and user_id:
         for work in works_list:
             if work.id in liked_works_ids:
                 final_works.append(work)
