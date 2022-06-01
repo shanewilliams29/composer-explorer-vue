@@ -312,13 +312,6 @@ def get_favoritescomposers():
         .filter(AlbumLike.user_id == user_id)\
         .order_by(ComposerList.region, ComposerList.born).all()
 
-    if not composer_list:
-        response_object = {'status': 'success'}
-        response_object['composers'] = []
-        response_object['genres'] = []
-        response = jsonify(response_object)
-        return response
-
     search_list = []
     for composer in composer_list:
         search_list.append(composer.name_short)
@@ -326,6 +319,13 @@ def get_favoritescomposers():
     session['radio_composers'] = search_list
     if Config.MODE == "DEVELOPMENT":
         cache.set('composers', search_list)  # store in cache for dev server 
+
+    if not composer_list:
+        response_object = {'status': 'success'}
+        response_object['composers'] = []
+        response_object['genres'] = []
+        response = jsonify(response_object)
+        return response
 
     # prepare list for display
     COMPOSERS = prepare_composers(composer_list)
@@ -446,7 +446,7 @@ def get_works(name):
     if current_user.is_authenticated:
         user_id = current_user.id
     elif Config.MODE == 'DEVELOPMENT':
-        user_id = 85
+        user_id = 85  # 85
     else:
         user_id = None
 
@@ -490,9 +490,12 @@ def get_worksbygenre():
     else:
         composer_list = session['radio_composers']
 
-        # works_list = db.session.query(WorkList).join(Artists)\
-        # .filter(Artists.name == artist_name, WorkList.composer == composer_name)\
-        # .order_by(WorkList.order, WorkList.genre, WorkList.id).all()
+    if not composer_list:
+        response_object = {'status': 'success'}
+        response_object['works'] = []
+        response_object['playlist'] = []
+        response = jsonify(response_object)
+        return response
 
     if search_list[0] == "all":
         if artist_name:
@@ -1104,7 +1107,7 @@ def get_artistworks():
     if current_user.is_authenticated:
         user_id = current_user.id
     elif Config.MODE == 'DEVELOPMENT':
-        user_id = 85
+        user_id = 85  # 85
     else:
         user_id = None
 
