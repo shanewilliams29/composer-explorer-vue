@@ -20,7 +20,7 @@
         </b-card-group>
       </div>
     </div>
-    <b-toast id="example-toast" no-close-button static no-auto-hide>
+    <b-toast id="no-tracks-toast" no-close-button static no-auto-hide>
       No albums found for this work with the specified track limit. Advancing to next...
     </b-toast>
   </div>
@@ -103,29 +103,31 @@ export default {
       var path = '';
       if (this.$view.mode == 'radio'){
         var limit = this.$view.radioTrackLimit;
-        path = 'api/albums/' + id + '?artist=' + artist + '&sort=' + sort + '&limit=' + limit;
+        var favorites = this.$view.favoritesAlbums;
+        path = 'api/albums/' + id + '?artist=' + artist + '&sort=' + sort + '&limit=' + limit + '&favorites=' + favorites;
       } else {
         path = 'api/albums/' + id + '?artist=' + artist + '&sort=' + sort;
       }
       axios.get(path).then((res) => {
 
         if (res.data.albums.length < 1){
-          this.$bvToast.show('example-toast')
+          this.$bvToast.show('no-tracks-toast')
           setTimeout(() => {
             eventBus.$emit('fireNextWork');
-            this.$bvToast.hide('example-toast');
+            this.$bvToast.hide('no-tracks-toast');
             }
-            , 3000); // Bypass and continue to next work)
+            , 2000); // Bypass and continue to next work)
           
         } else {
         
-          if(this.$view.mode == 'radio'){ // only one album in radiomode
+          if(this.$view.mode == 'radio'){ // only one album in radiomode unless favorites
             if(this.$view.randomAlbum){
-
                 const rndInt = randomIntFromInterval(0, res.data.albums.length - 1)
                 this.albums = [res.data.albums[rndInt]];
-            } else {
+              } else if (!this.$view.favoritesAlbums){
                 this.albums = [res.data.albums[0]];
+              } else {
+                this.albums = res.data.albums;
               }
           } else {
             this.albums = res.data.albums;

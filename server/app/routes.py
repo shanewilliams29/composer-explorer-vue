@@ -838,6 +838,7 @@ def get_albums(work_id):
     artistselect = request.args.get('artist')
     sort = request.args.get('sort')
     limit = request.args.get('limit', default=100)
+    favorites = request.args.get('favorites', default=None)
     search = None
 
     if artistselect:
@@ -855,7 +856,7 @@ def get_albums(work_id):
                 .outerjoin(AlbumLike).group_by(WorkAlbums) \
                 .order_by(text('total DESC'), WorkAlbums.score.desc()).paginate(1, 1000, False)
 
-    else:
+    elif not favorites:
         albums = db.session.query(WorkAlbums, func.count(AlbumLike.id).label('total')) \
             .filter(WorkAlbums.workid == work_id, WorkAlbums.hidden != True, WorkAlbums.album_type != "compilation", WorkAlbums.work_track_count <= limit)\
             .outerjoin(AlbumLike).group_by(WorkAlbums) \
@@ -866,6 +867,19 @@ def get_albums(work_id):
                 .filter(WorkAlbums.workid == work_id, WorkAlbums.hidden != True, WorkAlbums.work_track_count <= limit)\
                 .outerjoin(AlbumLike).group_by(WorkAlbums) \
                 .order_by(text('total DESC'), WorkAlbums.score.desc()).paginate(1, 1000, False)
+
+    else:  # user favorites albums
+        if current_user.is_authenticated:
+            user_id = current_user.id
+        elif Config.MODE == 'DEVELOPMENT':
+            user_id = 85
+        else:
+            user_id = None
+
+        albums = db.session.query(WorkAlbums, func.count(AlbumLike.id).label('total')) \
+            .join(AlbumLike).group_by(WorkAlbums) \
+            .filter(WorkAlbums.workid == work_id, AlbumLike.user_id == user_id)\
+            .order_by(text('total DESC'), WorkAlbums.score.desc()).paginate(1, 1000, False)
 
     if not albums.items:
         response_object = {'status': 'error'}

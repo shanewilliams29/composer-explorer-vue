@@ -2,7 +2,7 @@ import Vue from 'vue'
 import App from './App.vue'
 import {BootstrapVue,IconsPlugin} from 'bootstrap-vue'
 import axios from 'axios'
-import VueTypeaheadBootstrap from 'vue-typeahead-bootstrap' // not used?
+import VueTypeaheadBootstrap from 'vue-typeahead-bootstrap'
 import vSelect from 'vue-select'
 import InfiniteLoading from 'vue-infinite-loading'
 import VueLazyload from 'vue-lazyload'
@@ -83,6 +83,7 @@ Vue.prototype.$view = Vue.observable({
   enableRadio: false,
   enableExport: false,
   randomAlbum: false,
+  favoritesAlbums: '',
   radioTrackLimit: '6',
   playlistTrackCount: null,
   playlistSuccess: false,

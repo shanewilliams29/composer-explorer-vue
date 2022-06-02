@@ -180,6 +180,7 @@ export default {
       }
     },
     fireRadioSelect(type){
+      this.$view.favoritesAlbums = '';
       this.composers = [];
       if(type == "composer"){
       const path = 'api/composersradio';
@@ -193,6 +194,7 @@ export default {
         });
       }
       if(type == "favorites"){
+        this.$view.favoritesAlbums = true;
         this.getFavoritesComposers();
       }
     },
