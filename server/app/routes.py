@@ -868,7 +868,7 @@ def get_albums(work_id):
                 .outerjoin(AlbumLike).group_by(WorkAlbums) \
                 .order_by(text('total DESC'), WorkAlbums.score.desc()).paginate(1, 1000, False)
 
-    else:  # user favorites albums
+    else:  # user favorites albums, for radio mode
         if current_user.is_authenticated:
             user_id = current_user.id
         elif Config.MODE == 'DEVELOPMENT':

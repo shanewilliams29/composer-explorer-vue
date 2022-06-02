@@ -90,6 +90,7 @@
             <b-row class="sub-row flex-nowrap">
             <b-col class="col-padding-right">
                 <v-select
+                v-if="!$view.favoritesAlbums"
                 v-model="performerFilterField"
                 label="text"
                 :options="performerOptions"
@@ -101,6 +102,7 @@
             </b-col>
             <b-col class="col-padding-left">
               <v-select
+                v-if="!$view.favoritesAlbums"
                 v-model="limitFilterField"
                 label="text"
                 :options="limitOptions"
