@@ -70,12 +70,17 @@ export default {
 }
 .overlay {
   border-radius: 20px;
-
-  background-color: rgb(255, 255, 255, 0.7);
-  backdrop-filter: blur(10px);
+  background-color: rgb(241, 242, 244, 0.8);
   -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
   z-index: 1;
-
+}
+@supports (-moz-appearance:none) {
+  .overlay {
+    border-radius: 20px;
+    background-color: #f1f2f4;
+    z-index: 1;
+  }
 }
 .bg-text {
   color: black;
@@ -89,20 +94,23 @@ export default {
   text-align: center;
 }
 .icon-box {
-  padding: 10px;
+  padding: 0px;
   text-align: center;
   transition: all ease-in-out 0.3s;
 }
 .icon {
   align-items: center;
-  background: rgb(0, 0, 0, 0.05);
-  border-radius: 50px;
+/*  background: rgb(241, 242, 244, 0.7);*/
+/*  border-radius: 50px;*/
   display: flex;
   height: 64px;
   justify-content: center;
   margin: 0 auto;
-  margin-bottom: 20px;
+  margin-bottom: 0px;
   width: 64px;
   font-size: 24px;
+}
+.btn{
+  margin-top: 20px;
 }
 </style>
