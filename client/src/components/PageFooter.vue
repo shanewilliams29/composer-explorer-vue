@@ -94,6 +94,6 @@ export default {
   padding-top: 1px !important;
   padding-bottom: 1px !important;
   bottom: 90px;
-  z-index: 1000;
+  z-index: 9999;
 }
 </style>

@@ -1,6 +1,7 @@
 <template>
   <div id="app">
     <NavBar />
+    <WelcomeOverlay />
     <router-view />
     <SpotifyPlayer />
     <Transition name="fadeHeight">
@@ -11,6 +12,7 @@
 </template>
 
 <script>
+import WelcomeOverlay from '@/components/WelcomeOverlay.vue'
 import SpotifyPlayer from '@/components/SpotifyPlayer.vue'
 import InfoPanel from '@/components/InfoPanel.vue'
 import PageFooter from '@/components/PageFooter.vue'
@@ -18,6 +20,7 @@ import NavBar from '@/components/NavBar.vue'
 export default {
   components: {
     NavBar,
+    WelcomeOverlay,
     SpotifyPlayer,
     InfoPanel,
     PageFooter
