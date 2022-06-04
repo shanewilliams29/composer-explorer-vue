@@ -3,7 +3,9 @@
     <div class="bg-text">
       <div id="welcome" class="jumbotron overlay">
         <div class="container">
-          <h1 class="display-4">Welcome</h1>
+          <h1>
+          <img :src="logoURL" class="d-inline-block align-top logo" alt="Composer Explorer" height="60px"/>
+        </h1>
           <p class="lead">Welcome to your Classical Music Portal. Explore composers from the Medieval to the present. <br> Listen to works on <b>Spotify, made navigable for Classical music.</b></p>
 
             <div class="container">
@@ -45,13 +47,14 @@
 </template>
 
 <script>
-import {baseURL} from "../main.js";
+import {baseURL, staticURL} from "../main.js";
 
 export default {
   name: 'NavBar',
   data() {
     return {
-      spotifyURL: baseURL + "connect_spotify"
+      spotifyURL: baseURL + "connect_spotify",
+      logoURL: staticURL + 'logo.png',
     };
   },
   methods: {
@@ -69,21 +72,23 @@ export default {
   padding-bottom: 32px;
 }
 .overlay {
+box-shadow: rgba(0, 0, 0, 0.07) 0px 1px 2px, rgba(0, 0, 0, 0.07) 0px 2px 4px, rgba(0, 0, 0, 0.07) 0px 4px 8px, rgba(0, 0, 0, 0.07) 0px 8px 16px, rgba(0, 0, 0, 0.07) 0px 16px 32px, rgba(0, 0, 0, 0.07) 0px 32px 64px;
   border-radius: 20px;
-  background-color: rgb(241, 242, 244, 0.8);
+  background-color: rgb(52, 58, 64, 0.85);
   -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
   z-index: 1;
 }
 @supports (-moz-appearance:none) {
   .overlay {
-    border-radius: 20px;
-    background-color: #f1f2f4;
-    z-index: 1;
+    background-color: rgb(52, 58, 64, 0.95);
   }
 }
+img{
+  margin: 5px;
+}
 .bg-text {
-  color: black;
+  color: white;
   position: absolute;
   top: 50%;
   left: 50%;
@@ -93,24 +98,27 @@ export default {
   padding: 20px;
   text-align: center;
 }
+p{
+  font-weight: 300;
+}
 .icon-box {
   padding: 0px;
   text-align: center;
-  transition: all ease-in-out 0.3s;
 }
 .icon {
   align-items: center;
-/*  background: rgb(241, 242, 244, 0.7);*/
-/*  border-radius: 50px;*/
+  background: rgb(241, 242, 244, 0.1);
+  border-radius: 50px;
   display: flex;
   height: 64px;
   justify-content: center;
   margin: 0 auto;
-  margin-bottom: 0px;
+  margin-bottom: 15px;
   width: 64px;
   font-size: 24px;
 }
 .btn{
-  margin-top: 20px;
+  margin-top: 15px;
+  border: none;
 }
 </style>
