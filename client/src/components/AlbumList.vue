@@ -12,7 +12,7 @@
       <div class="row">
         <b-card-group deck v-show="!loading">
           <LargeAlbum v-if="$config.albumSize == 'large' || $view.mode == 'radio'" v-bind:albums="albums" v-bind:selectedAlbum="selectedAlbum" v-bind:likedAlbums="likedAlbums"/>
-          <SmallAlbum v-else v-bind:albums="albums" v-bind:selectedAlbum="selectedAlbum"/>
+          <SmallAlbum v-else v-bind:albums="albums" v-bind:selectedAlbum="selectedAlbum" v-bind:likedAlbums="likedAlbums"/>
           <infinite-loading spinner="spiral" :identifier="infiniteId" @infinite="infiniteHandler">
             <div slot="no-more"></div>
             <div slot="no-results"></div>

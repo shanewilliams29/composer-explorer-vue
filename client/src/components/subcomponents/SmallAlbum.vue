@@ -21,11 +21,7 @@
               </tr>
               <tr>
              <td width="100%" style="white-space: nowrap; text-overflow: ellipsis; overflow: hidden; max-width: 1px;">
-                  <span v-if="album.likes">
-                    <b-badge v-if="parseInt(album.likes) == 1 ">{{ album.likes }} Like</b-badge>
-                    <b-badge v-if="parseInt(album.likes) > 1 ">{{ album.likes }} Likes</b-badge>
-                    <br></span>
-                    <span v-else><br></span>
+                  <AlbumLikes v-bind:likedAlbums="likedAlbums" v-bind:album="album" v-bind:selectedAlbum="selectedAlbum"/>
                   <span class="label">℗ {{ album.release_date }}</span><span class="label"> · {{ album.label }}</span>
                 </td>
               </tr>
@@ -45,11 +41,17 @@
 
 <script>
 import {staticURL} from "@/main.js";
+import AlbumLikes from '@/components/subcomponents/AlbumLikes.vue';
+
 export default {
+  components: {
+    AlbumLikes
+  },
   name: 'SmallAlbum',
   props: {
     albums: Array,
-    selectedAlbum: String
+    selectedAlbum: String,
+    likedAlbums: Array
   },
   data() {
     return {

@@ -1,11 +1,14 @@
 <template>
   <div>
-   <span class="likes" v-if="currentLikes">&nbsp;
+   <span class="likes" v-if="currentLikes">
      <b-badge v-if="parseInt(currentLikes) == 1 ">{{ currentLikes }} Like</b-badge>
      <b-badge v-if="parseInt(currentLikes) > 1 ">{{ currentLikes }} Likes</b-badge>
    </span>
      <span class="user-liked" v-if="userLikes">&nbsp;
       <b-icon-heart-fill></b-icon-heart-fill>
+    </span>
+    <span class="likes" v-if="!currentLikes">
+      <br>
     </span>
   </div>
 </template>

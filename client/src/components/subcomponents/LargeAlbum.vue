@@ -15,7 +15,7 @@
           </div>
           <div v-else @click="$parent.selectRow(album.id); $parent.getAlbumData(album.id);"><img class="album-cover" height="auto" v-lazy="album.album_img" /></div>
           <div class="row">
-          <b-col class="col" cols="4">
+          <b-col class="col likes-col" cols="4">
             <AlbumLikes v-bind:likedAlbums="likedAlbums" v-bind:album="album" v-bind:selectedAlbum="selectedAlbum"/>
           </b-col>
           <b-col class="col footer" cols="8">
@@ -134,5 +134,8 @@ export default {
 .highlight .badge {
   color: #000 !important;
   background-color: #fff;
+}
+.likes-col{
+  padding-left: 20px;
 }
 </style>

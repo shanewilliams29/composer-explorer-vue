@@ -4,12 +4,12 @@
 
 <script>
 import axios from 'axios';
-import {
-  eventBus
-} from "../main.js";
+import {eventBus} from "../main.js";
+
 let spotifyPlayerScript = document.createElement('script');
 spotifyPlayerScript.setAttribute('src', 'https://sdk.scdn.co/spotify-player.js');
 document.head.appendChild(spotifyPlayerScript);
+
 export default {
   data() {
     return {};

@@ -31,14 +31,11 @@ GENERAL
 - Open composers' region when selected in views with many composers
 - Grey out composers not catalogued
 - Options: exclude operas from radio mode
-- Playlist functionality
 - Does favorites work when no favorites by user?
 - Favorites doesn't play user favorite album?
 - Loading spinners for heading fields which need ajax
 - When people like albums in performers page but not on main page, what happens?
-- Token refresh if listening for a long time
 - Patreon
-- Fix blur overlay in firefox
 - Scroll to album?
 
 
@@ -58,3 +55,4 @@ COMPOSERS
 PARKING LOT
 - Get artist IDs from Spotify?
 - Spiders web beween performers
+- Playlist functionality
