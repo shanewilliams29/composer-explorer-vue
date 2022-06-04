@@ -67,7 +67,7 @@ def spotify():
     session['spotify_token'] = response.json()['access_token']
     session['refresh_token'] = response.json()['refresh_token']
     session['spotify_token_expire_time'] = (datetime.now((timezone.utc)) 
-                                            + timedelta(minutes=50)) 
+                                            + timedelta(minutes=0))  # always get new token when called
 
     response = sp.get_user()
     try:
@@ -142,13 +142,13 @@ def get_token():
         if session['app_token_expire_time'] < datetime.now((timezone.utc)):
             session['app_token'] = sp.client_authorize()
             session['app_token_expire_time'] = ((datetime.now((timezone.utc)) 
-                                                + timedelta(minutes=50)))
+                                                + timedelta(minutes=0)))  # always get new token when called
         if session['spotify_token']:
             if session['spotify_token_expire_time'] \
                     < datetime.now((timezone.utc)):
                 session['spotify_token'] = sp.refresh_token()
                 session['spotify_token_expire_time'] \
-                    = datetime.now((timezone.utc)) + timedelta(minutes=50)
+                    = datetime.now((timezone.utc)) + timedelta(minutes=0)  # always get new token when called
 
         response_object = {'status': 'success'}
         response_object['client_token'] = session['spotify_token']
