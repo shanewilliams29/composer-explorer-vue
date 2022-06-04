@@ -138,7 +138,7 @@ export default {
     //Timer for refreshing tokens
     setInterval(() => {
       this.refreshToken();
-    }, 3540000);
+    }, 3300000);
   },
 };
 </script>
