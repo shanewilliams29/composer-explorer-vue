@@ -23,15 +23,15 @@
                   <div class="icon-box">
                     <div class="icon"><b-icon icon="music-note-beamed" aria-hidden="true"></b-icon></div>
                     <h4>Play Music</h4>
-                    <p>Browse albums and connect with your Spotify account to play music and create playlists. Discover new artists.</p>
+                    <p>Browse albums and connect with your Spotify account to play music and create radios.</p>
                   </div>
                 </div>
 
                 <div class="col-lg-4 col-md-4 d-flex align-items-stretch">
                   <div class="icon-box">
-                    <div class="icon"><b-icon icon="chat-right" aria-hidden="true"></b-icon></div>
+                    <div class="icon"><b-icon icon="heart" aria-hidden="true"></b-icon></div>
                     <h4>Engage</h4>
-                    <p>Discuss works and performances, rate albums, track works you've explored, and add composers to your favorites.</p>
+                    <p>Discover new performers, and add your favorite works and performances to your favorites.</p>
                   </div>
                 </div>
 
