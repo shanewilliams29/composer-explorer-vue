@@ -1,7 +1,7 @@
 <template>
   <div v-if="$view.banner && !$auth.clientToken" class="container-fluid ">
     <div class="bg-text">
-      <div id="welcome" class="jumbotron jumbotron-fluid overlay">
+      <div id="welcome" class="jumbotron overlay">
         <div class="container">
           <h1 class="display-4">Welcome</h1>
           <p class="lead">Welcome to your Classical Music Portal. Explore composers from the Medieval to the present. <br> Listen to works on <b>Spotify, made navigable for Classical music.</b></p>
@@ -37,7 +37,7 @@
 
             </div>
   
-          <a :href="spotifyURL" class="btn btn-success">Get Started</a> <button @click="hideBanner()" class="btn btn-secondary">Hide</button>
+          <a :href="spotifyURL" class="btn btn-success">Log in with Spotify</a> <button @click="hideBanner()" class="btn btn-secondary">Hide</button>
         </div>
       </div>
     </div>
@@ -63,12 +63,17 @@ export default {
 </script>
 
 <style scoped>
+.jumbotron{
+  margin-bottom: 0px;
+  padding-top: 32px;
+  padding-bottom: 32px;
+}
 .overlay {
   border-radius: 20px;
-  border: 1px solid #f1f2f4;
-  background-color: rgb(255, 255, 255, 0.6);
-  backdrop-filter: blur(15px);
-  -webkit-backdrop-filter: blur(15px);
+
+  background-color: rgb(255, 255, 255, 0.7);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   z-index: 1;
 
 }
