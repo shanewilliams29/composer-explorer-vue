@@ -505,7 +505,7 @@ def get_worksbygenre():
                     .order_by(WorkList.genre, WorkList.id).all()  # don't order by order no. in multi mode
             elif work_filter == 'obscure':
                 works_list = db.session.query(WorkList).join(Artists)\
-                    .filter(Artists.name == artist_name, WorkList.composer.in_(composer_list), WorkList.recommend == None, WorkList.album_count > 0)\
+                    .filter(Artists.name == artist_name, WorkList.composer.in_(composer_list), or_(WorkList.recommend == None, WorkList.recommend != True), WorkList.album_count > 0)\
                     .order_by(WorkList.genre, WorkList.id).all()
             else:
                 works_list = db.session.query(WorkList).join(Artists)\
@@ -518,7 +518,7 @@ def get_worksbygenre():
                     .order_by(WorkList.genre, WorkList.id).all()  # don't order by order no. in multi mode
             elif work_filter == 'obscure':
                 works_list = db.session.query(WorkList)\
-                    .filter(WorkList.composer.in_(composer_list), WorkList.recommend == None, WorkList.album_count > 0)\
+                    .filter(WorkList.composer.in_(composer_list), or_(WorkList.recommend == None, WorkList.recommend != True), WorkList.album_count > 0)\
                     .order_by(WorkList.genre, WorkList.id).all()
             else:
                 works_list = db.session.query(WorkList)\

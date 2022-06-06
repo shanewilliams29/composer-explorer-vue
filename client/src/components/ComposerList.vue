@@ -309,7 +309,7 @@ table {
 }
 .highlight td {
   border-top: 0px solid lightgray;
-  color: white;
+  color: white !important;
 }
 .cursor {
   cursor: pointer;
