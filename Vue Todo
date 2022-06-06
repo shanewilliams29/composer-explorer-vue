@@ -37,8 +37,12 @@ GENERAL
 - When people like albums in performers page but not on main page, what happens?
 - Patreon
 - Scroll to album?
-
-
+- When less popular composer selected, how to handle refresh of page to show?
+- "Less popular" not working for OpenOpus works
+- 0 date for OpenOpus, do not show in list
+- Normalize artist names?
+- Spinny thing at bottom of Reich's albums
+- Search works field being misued by search_spotify_and_save?
 RELINKING
 - Track relinking, what to do if titles are different? Is titles best way to do this?
 - What to do if multipe tracks with the same name?

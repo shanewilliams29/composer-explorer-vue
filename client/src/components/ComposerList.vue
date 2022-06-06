@@ -23,10 +23,12 @@
                     <img class="composer-img" :src="composer.img" height="20" width="20" />
                   </td>
                   <td width="50%" style="white-space: nowrap; text-overflow: ellipsis; overflow: hidden; max-width: 1px;">
-                    {{ composer.name_full }}
+                    <span v-if="composer.catalogued">{{ composer.name_full }}</span>
+                    <span v-else style="color: gray;">{{ composer.name_full }}</span>
                   </td>
                   <td width="25%" style="white-space: nowrap; text-overflow: ellipsis; max-width: 1px; text-align: right;">
-                    {{ composer.born }} - {{ deathDate(composer.died) }}
+                    <span v-if="composer.catalogued">{{ composer.born }} - {{ deathDate(composer.died) }}</span>
+                    <span v-else style="color: gray;">{{ composer.born }} - {{ deathDate(composer.died) }}</span>
                   </td>
                 </tr>
               </table>

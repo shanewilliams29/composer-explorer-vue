@@ -28,7 +28,7 @@
               <table cellspacing="0">
                 <tr v-for="(work, index) in genre" :ref="work.id" :key="work.id" :id="index" @click="selectRow(work.id); getAlbums(work.id, work.title); setGenre(work.genre);" :class="{'highlight': (work.id == selectedWork), 'no-albums': (work.album_count == 0)}">
                   <td width="17%">
-                    <span style="white-space: nowrap; color: darkred;"><span v-if="work.cat">{{ work.cat }}&nbsp;&nbsp;</span><span v-else>{{ work.date }}</span></span>
+                    <span style="white-space: nowrap; color: darkred;"><span v-if="work.cat">{{ work.cat }}&nbsp;&nbsp;</span><span v-else><span v-if="work.date">{{ work.date }}</span><span v-else>N/D</span></span></span>
                   </td>
                   <td width="78%" style="white-space: nowrap; text-overflow: ellipsis; overflow: hidden; max-width: 1px;"><span>{{ work.title }}</span><span v-if="work.nickname" style="color: gray;"> · {{ work.nickname }}</span></td>
                   <td width="5%" style="text-align: right;">

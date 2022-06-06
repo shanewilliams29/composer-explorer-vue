@@ -39,7 +39,7 @@ def prepare_composers(composer_list):
             'img': app.config['STATIC'] + 'img/' + composer.name_short + '.jpg',
             'region': region_name,
             'color': era_color,
-            'popular': composer.catalogued
+            'catalogued': composer.catalogued
         }
         COMPOSERS.append(info)
 

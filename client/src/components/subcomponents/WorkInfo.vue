@@ -10,7 +10,7 @@
               </td>
               <td class="info-td">
                 {{ workTitle }}<br />
-                <span v-if="catNo" class="born-died">{{ catNo }}</span><span v-else class="born-died">{{date}}</span>
+                <span v-if="catNo" class="born-died">{{ catNo }}</span><span v-else class="born-died"><span v-if="date">{{date}}</span></span>
               </td>
             </tr>
           </table>
