@@ -25,6 +25,9 @@ export default {
     WorkList,
     AlbumList,
   },
+  beforeCreate() {
+    document.documentElement.style.setProperty('--flex', '0 0 400px');
+  },
   created(){
     this.$view.mode = 'radio';
   }

@@ -70,7 +70,7 @@ body {
   overflow-x: hidden;
   overflow-y: hidden;
   background-color: #f1f2f4 !important;
-  max-width: 1280px;
+  max-width: 1440px;
   position: fixed;
   left: 50%;
   transform: translateX(-50%);

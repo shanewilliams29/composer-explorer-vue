@@ -25,11 +25,26 @@ export default {
     WorkList,
     AlbumList,
   },
-  beforeCreate(){
-    if( screen.width <= 760 ) {
-        window.location.replace('mobile');
+  computed:{
+    albumSizeChanged(){
+      return this.$config.albumSize;
     }
-
+  },
+  watch: {
+    albumSizeChanged(newSize) {
+        if(newSize == 'large'){
+            document.documentElement.style.setProperty('--flex', '0 0 400px');
+        } else {
+            document.documentElement.style.setProperty('--flex', '1');
+        }
+    }
+  },
+  beforeCreate() {
+    if(this.$config.albumSize == 'large'){
+        document.documentElement.style.setProperty('--flex', '0 0 400px');
+    } else {
+        document.documentElement.style.setProperty('--flex', '1');
+    }
   },
   created() {
     window.firstLoad = true; // prevent playback on first load
@@ -48,8 +63,8 @@ export default {
 }
 @media only screen and (min-width: 1000px) {
     .last-col{
-        -ms-flex: 0 0 400px !important;
-        flex: 0 0 400px !important;
+        -ms-flex: var(--flex) !important;
+        flex: var(--flex) !important;
     }
 }
 .extra-margin{

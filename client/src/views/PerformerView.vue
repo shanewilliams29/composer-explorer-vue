@@ -45,6 +45,13 @@ export default {
       this.showCloud = true;
     },
   },
+  beforeCreate() {
+    if(this.$config.albumSize == 'large'){
+        document.documentElement.style.setProperty('--flex', '0 0 400px');
+    } else {
+        document.documentElement.style.setProperty('--flex', '0 0 450px');
+    }
+  },
   created() {
     window.firstLoad = false; // allow playback on first load for performer view
     eventBus.$on('fireArtistComposers', this.hideCloud);

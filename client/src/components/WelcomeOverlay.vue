@@ -31,7 +31,7 @@
                   <div class="icon-box">
                     <div class="icon"><b-icon icon="heart" aria-hidden="true"></b-icon></div>
                     <h4>Engage</h4>
-                    <p>Discover new performers, and add your favorite works and performances to your favorites.</p>
+                    <p>Discover new performers, and add works and performances to your favorites.</p>
                   </div>
                 </div>
 
