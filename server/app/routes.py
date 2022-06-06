@@ -966,7 +966,8 @@ def get_albums(work_id):
     response_object = {'status': 'success'}
     response_object['albums'] = sorted_list
     response_object['artists'] = artist_list
-    response_object['composer'] = sorted_list[0]['composer']
+    if sorted_list:
+        response_object['composer'] = sorted_list[0]['composer']
     response_object['liked_albums'] = liked_albums
     response = jsonify(response_object)
     return response
