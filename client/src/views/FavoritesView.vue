@@ -1,0 +1,110 @@
+<template>
+  <div id="home">
+    <ColumnHeadings/>
+    <div class="container-fluid">
+      <b-row>
+        <b-col class="display-list first-col" ref="scroll-box-comp"><ComposerList/></b-col>
+        <b-col class="display-list" ref="scroll-box"><WorkList/></b-col>
+        <b-col class="display-list last-col extra-margin"><AlbumList/></b-col>
+      </b-row>
+    </div>
+  </div>
+</template>
+
+<script>
+import ColumnHeadings from '@/components/ColumnHeadings.vue'
+import ComposerList from '@/components/ComposerList.vue'
+import WorkList from '@/components/WorkList.vue'
+import AlbumList from '@/components/AlbumList.vue'
+
+export default {
+  name: 'FavoritesView',
+  components: {
+    ColumnHeadings,
+    ComposerList,
+    WorkList,
+    AlbumList,
+  },
+  computed:{
+    albumSizeChanged(){
+      return this.$config.albumSize;
+    }
+  },
+  watch: {
+    albumSizeChanged(newSize) {
+        if(newSize == 'large'){
+            document.documentElement.style.setProperty('--flex', '0 0 400px');
+        } else {
+            document.documentElement.style.setProperty('--flex', '1');
+        }
+    }
+  },
+  beforeCreate() {
+    if(this.$config.albumSize == 'large'){
+        document.documentElement.style.setProperty('--flex', '0 0 400px');
+    } else {
+        document.documentElement.style.setProperty('--flex', '1');
+    }
+  },
+  created() {
+    window.firstLoad = false; // allow playback on first load
+    this.$view.mode = 'favorites';
+  },
+}
+</script>
+
+<style>
+.display-list{
+    height: calc(100vh - 244px - var(--panelheight));
+    padding-right: 12px;
+    padding-bottom: 5px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+@media only screen and (min-width: 1000px) {
+    .last-col{
+        -ms-flex: var(--flex) !important;
+        flex: var(--flex) !important;
+    }
+}
+.extra-margin{
+    margin-right: 3.5px;
+}
+/*scrollbars*/
+ :root {
+        --scroll-bar-color: #c9cccf;
+        --scroll-bar-bg-color: #f1f2f4;
+    }
+
+    * {
+        scrollbar-width: thin;
+        scrollbar-color: var(--scroll-bar-color) var(--scroll-bar-bg-color);
+    }
+
+    /* Works on Chrome, Edge, and Safari */
+    *::-webkit-scrollbar {
+        width: 12px;
+        height: 12px;
+    }
+
+    *::-webkit-scrollbar-track {
+        background: var(--scroll-bar-bg-color);
+    }
+
+    *::-webkit-scrollbar-thumb {
+        background-color: var(--scroll-bar-color);
+        border-radius: 20px;
+        border: 3px solid var(--scroll-bar-bg-color);
+    }
+</style>
+<style scoped>
+>>> .highlight{
+  background-color: var(--red);
+}
+>>> .highlight td{
+  background-color: var(--red);
+}
+>>> .music-note{
+  color: var(--red);
+}
+</style>

@@ -20,20 +20,32 @@
         <b-card v-for="(genre, index) in works" :key="index" :ref="index" no-body header-tag="header" class="shadow-sm">
           <div class="#header" v-b-toggle="index.replace(/\s/g, '')">
             <h6 class="m-2 mb-0">
-              <span :class="{'music-note': (index == $config.genre)} && false">{{ index }}&nbsp;&nbsp;</span><span v-if="index == $config.genre && false" class="music-note float-middle"><b-icon-volume-up-fill></b-icon-volume-up-fill></span><span class="mb-0 float-right when-opened"><b-icon-chevron-up></b-icon-chevron-up></span><span class="mb-0 float-right when-closed"><b-icon-chevron-down></b-icon-chevron-down></span>
+              <span :class="{'music-note': (index == $config.genre)} && false">{{ index }}&nbsp;&nbsp;</span>
+              <span v-if="index == $config.genre && false" class="music-note float-middle"><b-icon-volume-up-fill></b-icon-volume-up-fill></span>
+              <span class="mb-0 float-right when-opened"><b-icon-chevron-up></b-icon-chevron-up></span><span class="mb-0 float-right when-closed"><b-icon-chevron-down></b-icon-chevron-down></span>
             </h6>
           </div>
           <b-collapse :visible="visibility || index == $config.genre" :id="index.replace(/\s/g, '')">
             <b-card-text>
               <table cellspacing="0">
-                <tr v-for="(work, index) in genre" :ref="work.id" :key="work.id" :id="index" @click="selectRow(work.id); getAlbums(work.id, work.title); setGenre(work.genre);" :class="{'highlight': (work.id == selectedWork), 'no-albums': (work.album_count == 0)}">
+                <tr
+                  v-for="(work, index) in genre"
+                  :ref="work.id"
+                  :key="work.id"
+                  :id="index"
+                  @click="selectRow(work.id); getAlbums(work.id, work.title); setGenre(work.genre);"
+                  :class="{'highlight': (work.id == selectedWork), 'no-albums': (work.album_count == 0)}"
+                >
                   <td width="17%">
-                    <span style="white-space: nowrap; color: darkred;"><span v-if="work.cat">{{ work.cat }}&nbsp;&nbsp;</span><span v-else><span v-if="work.date">{{ work.date }}</span><span v-else>N/D</span></span></span>
+                    <span style="white-space: nowrap; color: darkred;">
+                      <span v-if="work.cat">{{ work.cat }}&nbsp;&nbsp;</span><span v-else><span v-if="work.date">{{ work.date }}</span><span v-else>-</span></span>
+                    </span>
                   </td>
                   <td width="78%" style="white-space: nowrap; text-overflow: ellipsis; overflow: hidden; max-width: 1px;"><span>{{ work.title }}</span><span v-if="work.nickname" style="color: gray;"> · {{ work.nickname }}</span></td>
                   <td width="5%" style="text-align: right;">
-                    <span style="white-space: nowrap;"><span style="color: rgb(52, 58, 64, 0.7); font-size: 12px;" v-if="work.liked"><b-icon-heart-fill></b-icon-heart-fill>&nbsp;</span>
-                    <b-badge>{{ work.album_count }}</b-badge></span>
+                    <span style="white-space: nowrap;">
+                      <span style="color: rgb(52, 58, 64, 0.7); font-size: 12px;" v-if="work.liked"><b-icon-heart-fill></b-icon-heart-fill>&nbsp;</span> <b-badge>{{ work.album_count }}</b-badge>
+                    </span>
                   </td>
                 </tr>
               </table>
@@ -71,6 +83,23 @@ export default {
       this.loading = true;
       this.$config.composer = composer;
       const path = 'api/works/' + composer;
+      axios.get(path).then((res) => {
+        this.works = res.data.works;
+        this.playlist = res.data.playlist;
+        this.visibility = true
+        this.loading = false;
+        this.setGenre(this.$config.genre);
+      }).catch((error) => {
+        console.error(error);
+        this.loading = false;
+      });
+    },
+    getFavoriteWorks(composer) { // favorites mode
+      this.searchItem = null;
+      this.filterItem = null;
+      this.loading = true;
+      this.$config.composer = composer;
+      const path = 'api/favoriteworks/' + composer;
       axios.get(path).then((res) => {
         this.works = res.data.works;
         this.playlist = res.data.playlist;
@@ -128,6 +157,15 @@ export default {
         const payload = this.radioPayload;
         const path = 'api/worksbygenre';
         axios.post(path, payload).then((res) => {
+          this.works = res.data.works;
+        }).catch((error) => {
+          console.error(error);
+        });
+      }
+      // Favorites view works
+      if(this.$view.mode == 'favorites'){
+        const path = 'api/favoriteworks/' + this.$config.composer;
+        axios.get(path).then((res) => {
           this.works = res.data.works;
         }).catch((error) => {
           console.error(error);
@@ -242,6 +280,8 @@ export default {
         eventBus.$emit('fireAlbums', workId);
       } else if (this.$view.mode == 'performer') { // performer mode
         eventBus.$emit('fireAlbums', workId, this.$config.artist);
+      } else if (this.$view.mode == 'favorites') { // favorites mode
+        eventBus.$emit('fireFavoritesAlbums', workId);
       } else { // radio mode, play automatically
         if (this.$config.artist) {
           eventBus.$emit('fireAlbumsAndPlay', workId, this.$config.artist);
@@ -400,6 +440,7 @@ export default {
     eventBus.$on('firePreviousWork', this.previousWork);
     eventBus.$on('firePlaylistExport', this.preparePlaylist);
     eventBus.$on('fireRefreshWorks', this.refreshWorks);
+    eventBus.$on('fireFavoriteWorks', this.getFavoriteWorks);
   },
   beforeDestroy() {
     eventBus.$off('fireComposers', this.fireComposers);
@@ -412,6 +453,7 @@ export default {
     eventBus.$off('firePreviousWork', this.previousWork);
     eventBus.$off('firePlaylistExport', this.preparePlaylist);
     eventBus.$off('fireRefreshWorks', this.refreshWorks);
+    eventBus.$off('fireFavoriteWorks', this.getFavoriteWorks);
   }
 };
 </script>

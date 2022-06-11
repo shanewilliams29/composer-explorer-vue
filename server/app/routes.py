@@ -451,17 +451,17 @@ def get_works(name):
         user_id = None
 
     if user_id:
-        liked_albums = db.session.query(WorkAlbums).join(AlbumLike).join(User)\
-            .filter(User.id == user_id, WorkAlbums.composer == name).all()
+        liked_works = db.session.query(WorkList).join(WorkAlbums).join(AlbumLike)\
+            .filter(AlbumLike.user_id == user_id, WorkList.composer == name).all()
     else:
-        liked_albums = []
+        liked_works = []
 
-    liked_works = []
-    for album in liked_albums:
-        liked_works.append(album.workid)
+    liked_works_ids = []
+    for work in liked_works:
+        liked_works_ids.append(work.id)
 
     # generate works list
-    works_by_genre = prepare_works(works_list, liked_works)
+    works_by_genre = prepare_works(works_list, liked_works_ids)
 
     response_object = {'status': 'success'}
     response_object['works'] = works_by_genre
@@ -469,6 +469,41 @@ def get_works(name):
     response = jsonify(response_object)
     return response
 
+@app.route('/api/favoriteworks/<name>', methods=['GET'])
+# @cache.cached(query_string=True)
+def get_favoriteworks(name):
+
+    # get liked works
+    if current_user.is_authenticated:
+        user_id = current_user.id
+    elif Config.MODE == 'DEVELOPMENT':
+        user_id = 85  # 85
+    else:
+        user_id = None
+
+    works_list = db.session.query(WorkList).join(WorkAlbums).join(AlbumLike)\
+        .filter(AlbumLike.user_id == user_id, WorkList.composer == name).all()
+
+    if not works_list:
+        response_object = {'status': 'success'}
+        response_object['works'] = works_list
+        response = jsonify(response_object)
+        return response
+
+    liked_works = works_list
+
+    liked_works_ids = []
+    for work in liked_works:
+        liked_works_ids.append(work.id)
+
+    # generate works list
+    works_by_genre = prepare_works(works_list, liked_works_ids)
+
+    response_object = {'status': 'success'}
+    response_object['works'] = works_by_genre
+    response_object['playlist'] = works_list  # for back and previous playing
+    response = jsonify(response_object)
+    return response
 
 @app.route('/api/worksbygenre', methods=['POST'])  # used in radio mode
 def get_worksbygenre():

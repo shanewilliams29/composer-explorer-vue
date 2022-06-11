@@ -5,6 +5,7 @@ import HomeView from '../views/HomeView.vue'
 import MobileView from '../views/MobileView.vue'
 import PerformerView from '../views/PerformerView.vue'
 import RadioView from '../views/RadioView.vue'
+import FavoritesView from '../views/FavoritesView.vue'
 
 
 Vue.use(VueRouter)
@@ -29,6 +30,11 @@ const routes = [
     path: '/radio',
     name: 'radio',
     component: RadioView
+  },
+    {
+    path: '/favorites',
+    name: 'favorites',
+    component: FavoritesView
   },
   // {
   //   path: '/about',

@@ -16,17 +16,13 @@ GENERAL
 - Hide Google API Key?
 - Search on nicknames for refreshalbums?
 - What to do when performer album liked but not on main list due to compilation (ie. Yuja Wang Mend. 1)
-- Album spinner showing on a few albums?
 - Composer tiers in radio mode
 - Give user options for advancing to next work automatically?
-- Liked albums radio mode
-- Small albums like display
 - Show which users like work?
 - Liked works filter
 - Make sure cache is not messing up the likes displaying
 - Word cloud font on Apple
 - Solti Mass in B Minor - what to do for regional issues, also for radio
-- Openopus composers
 - Don't collapse composers in radio mode
 - Open composers' region when selected in views with many composers
 - Grey out composers not catalogued
@@ -39,7 +35,6 @@ GENERAL
 - Scroll to album?
 - When less popular composer selected, how to handle refresh of page to show?
 - Normalize artist names?
-- Spinny thing at bottom of Reich's albums
 - Search works field being misued by search_spotify_and_save?
 
 RELINKING

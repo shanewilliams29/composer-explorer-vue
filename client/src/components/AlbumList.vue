@@ -78,6 +78,23 @@ export default {
         this.loading = false;
       });
     },
+      getFavoritesAlbums(id) {
+      this.changeAlbums();
+      this.workId = id;
+      this.loading = true;
+      const path = 'api/albums/' + id + '?favorites=true';
+      axios.get(path).then((res) => {
+        this.$config.composer = res.data.composer;
+        localStorage.setItem('config', JSON.stringify(this.$config));
+        this.albums = res.data.albums;
+        this.likedAlbums= res.data.liked_albums;
+        eventBus.$emit('fireArtistList', res.data.artists);
+        this.loading = false;
+      }).catch((error) => {
+        console.error(error);
+        this.loading = false;
+      });
+    },
     // gets albums and begins playback of first (for next and previous buttons)
     // used in Autoplay and the radio
     getAlbumsAndPlay(id, artist, sort) {
@@ -216,11 +233,13 @@ export default {
     }
     eventBus.$on('fireAlbums', this.getAlbums);
     eventBus.$on('fireAlbumsAndPlay', this.getAlbumsAndPlay);
+    eventBus.$on('fireFavoritesAlbums', this.getFavoritesAlbums);
     eventBus.$on('fireClearAlbums', this.clearAlbums);
   },
   beforeDestroy() {
     eventBus.$off('fireAlbums', this.getAlbums);
     eventBus.$off('fireAlbumsAndPlay', this.getAlbumsAndPlay);
+    eventBus.$off('fireFavoritesAlbums', this.getFavoritesAlbums);
     eventBus.$off('fireClearAlbums', this.clearAlbums);
   }
 };

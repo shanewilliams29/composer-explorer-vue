@@ -1,5 +1,5 @@
 <template>
-  <div class="container-fluid">
+  <div v-if="$view.mode != 'favorites'" class="container-fluid">
     <b-row class="flex-nowrap">
       <b-col>
         <div>

@@ -173,6 +173,8 @@ export default {
         eventBus.$emit('fireComposers', composer);
       } else if (this.$view.mode == 'performer'){
         eventBus.$emit('fireArtistWorks', this.artist, composer);
+      } else if (this.$view.mode == 'favorites'){
+        eventBus.$emit('fireFavoriteWorks', composer);
       }
     },
     selectRow(nameShort){
@@ -238,7 +240,12 @@ export default {
   created() {
     if (!this.$view.mode){ // dont get composers in performer or radio modes
       this.getComposers();
-      this.selectRow(this.$config.composer);
+    }
+    if (this.$view.mode) { // clear selected composer in other modes
+      this.$config.composer = "";
+    }
+    if (this.$view.mode == 'favorites'){
+      this.getFavoritesComposers();
     }
     if (this.$route.query.artist){
       this.getArtistComposers(this.$route.query.artist);
