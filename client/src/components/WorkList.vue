@@ -4,8 +4,11 @@
       <b-spinner class="m-5"></b-spinner>
     </div>
     <div class="row">
-      <span v-show="!loading && works.length < 1 && !$view.mode" class="col no-works-found">
+      <span v-show="!loading && works.length < 1 && !$view.mode && $config.composer" class="col no-works-found">
         <div class="m-4">No works found for {{ $config.composer }}</div>
+      </span>
+      <span v-show="!loading && works.length < 1 && !$view.mode && !$config.composer" class="col no-works-found">
+        <div class="m-4">Select a composer to view works.</div>
       </span>
       <span v-show="!loading && works.length < 1 && $view.mode == 'performer' && $config.artist" class="col no-works-found">
         <div class="m-4">Select a composer to view performances by {{ $config.artist }}</div>

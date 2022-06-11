@@ -240,6 +240,8 @@ export default {
   created() {
     if (!this.$view.mode){ // dont get composers in performer or radio modes
       this.getComposers();
+      const config = JSON.parse(localStorage.getItem('config'));
+      this.$config.composer = config.composer;
     }
     if (this.$view.mode) { // clear selected composer in other modes
       this.$config.composer = "";
