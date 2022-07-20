@@ -206,9 +206,11 @@ def get_composers():
                 .order_by(ComposerList.region, ComposerList.born).all()
         if composer_filter == "all":
             composer_list = db.session.query(ComposerList)\
+                .filter(ComposerList.catalogued == True) \
                 .order_by(ComposerList.region, ComposerList.born).all()
         if composer_filter == "alphabet":
             composer_list = db.session.query(ComposerList)\
+                .filter(ComposerList.catalogued == True) \
                 .order_by(ComposerList.name_short, ComposerList.born).all()
         if composer_filter == "popular":
             composer_list = db.session.query(ComposerList)\
@@ -216,7 +218,7 @@ def get_composers():
                 .order_by(ComposerList.region, ComposerList.born).all()
         if composer_filter == "tier2":
             composer_list = db.session.query(ComposerList)\
-                .filter(ComposerList.tier == 2) \
+                .filter(ComposerList.tier == 2, ComposerList.catalogued == True) \
                 .order_by(ComposerList.region, ComposerList.born).all()
         if composer_filter == "tier3":
             composer_list = db.session.query(ComposerList)\
@@ -233,7 +235,7 @@ def get_composers():
             datemax = date_minmax_sort[1]
 
             composer_list = ComposerList.query \
-                .filter(ComposerList.born >= datemin, ComposerList.born < datemax) \
+                .filter(ComposerList.born >= datemin, ComposerList.born < datemax, ComposerList.catalogued == True) \
                 .order_by(ComposerList.region, ComposerList.born).all()
 
     else:

@@ -54,9 +54,9 @@ export default {
       composerSearchForm: null,
       composerOptions: [
               { value: 'popular', text: 'Most popular' },
-              { value: 'tier2', text: 'A little less popular' },
-              { value: 'tier3', text: 'More obscure' },
-              { value: 'tier4', text: 'Quite obscure' },
+              { value: 'tier2', text: 'Less popular' },
+              // { value: 'tier3', text: 'More obscure' },
+              // { value: 'tier4', text: 'Quite obscure' },
               { value: 'early', text: 'Early' },
               { value: 'baroque', text: 'Baroque' },
               { value: 'classical', text: 'Classical' },

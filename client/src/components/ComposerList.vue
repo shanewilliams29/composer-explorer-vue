@@ -110,7 +110,7 @@ export default {
     getFilteredComposers(item) {
       this.loading = true;
       if (item == "all" || item == "alphabet" || item == "romantic" || item == "20th" || item == "common") {
-        this.visibility=false; // change to false when there are a lot of composers
+        this.visibility=true; // change to false when there are a lot of composers
       } else {
         this.visibility=true;
       }
