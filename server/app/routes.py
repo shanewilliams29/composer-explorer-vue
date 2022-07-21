@@ -672,7 +672,7 @@ def get_worksbygenre():
 
 
 @app.route('/api/exportplaylist', methods=['POST'])  # used in radio mode
-@login_required
+#@login_required
 def exportplaylist():
     # get genres
     payload = request.get_json()
@@ -687,6 +687,7 @@ def exportplaylist():
     name = payload['name']
     prefetch = payload['prefetch']
     random_album = payload['random']
+    performer = payload['performer']
 
     if prefetch:
         # get composers selected
@@ -699,52 +700,17 @@ def exportplaylist():
         if search_list[0] == "all":
 
             conditions = []
+            conditions2 = []
+
             if search_term: 
                 conditions.append(WorkList.genre.ilike('%{}%'.format(search_term)))
                 conditions.append(WorkList.search.ilike('%{}%'.format(search_term)))
                 conditions.append(WorkList.title.ilike('%{}%'.format(search_term)))
                 conditions.append(WorkList.nickname.ilike('%{}%'.format(search_term)))
+                conditions.append(WorkList.cat.ilike('%{}%'.format(search_term)))
 
-            if work_filter == 'recommended':
-                album_list = db.session.query(WorkAlbums, func.count(AlbumLike.id).label('total')).join(WorkList)\
-                    .filter(WorkList.composer.in_(composer_list), or_(*conditions), WorkList.album_count > 0, WorkList.recommend == True, WorkAlbums.hidden != True, WorkAlbums.album_type != "compilation", WorkAlbums.work_track_count <= limit)\
-                    .outerjoin(AlbumLike).group_by(WorkAlbums) \
-                    .order_by(WorkList.genre, WorkList.id, text('total DESC'), WorkAlbums.score.desc()).all()
-
-            elif work_filter == 'obscure':
-                album_list = db.session.query(WorkAlbums, func.count(AlbumLike.id).label('total')).join(WorkList)\
-                    .filter(WorkList.composer.in_(composer_list), or_(*conditions), WorkList.album_count > 0, WorkList.recommend == None, WorkAlbums.hidden != True, WorkAlbums.album_type != "compilation", WorkAlbums.work_track_count <= limit)\
-                    .outerjoin(AlbumLike).group_by(WorkAlbums) \
-                    .order_by(WorkList.genre, WorkList.id, text('total DESC'), WorkAlbums.score.desc()).all()
-
-            else:
-                album_list = db.session.query(WorkAlbums, func.count(AlbumLike.id).label('total')).join(WorkList)\
-                    .filter(WorkList.composer.in_(composer_list), or_(*conditions), WorkList.album_count > 0, WorkAlbums.hidden != True, WorkAlbums.album_type != "compilation", WorkAlbums.work_track_count <= limit)\
-                    .outerjoin(AlbumLike).group_by(WorkAlbums) \
-                    .order_by(WorkList.genre, WorkList.id, text('total DESC'), WorkAlbums.score.desc()).all()
-
-        # SELECTED GENRES
-        else:
-            conditions = []
-            conditions2 = []
-
-            for genre in search_list:
-                conditions.append(WorkList.genre.ilike('%{}%'.format(genre)))
-
-            for genre in search_list:
-                conditions.append(WorkList.search.ilike('%{}%'.format(genre)))
-
-            for genre in search_list:
-                conditions.append(WorkList.title.ilike('%{}%'.format(genre)))
-
-            for genre in search_list:
-                conditions.append(WorkList.nickname.ilike('%{}%'.format(genre)))
-
-            if search_term: 
-                conditions2.append(WorkList.genre.ilike('%{}%'.format(search_term)))
-                conditions2.append(WorkList.search.ilike('%{}%'.format(search_term)))
-                conditions2.append(WorkList.title.ilike('%{}%'.format(search_term)))
-                conditions2.append(WorkList.nickname.ilike('%{}%'.format(search_term)))
+            if performer: 
+                conditions2.append(WorkAlbums.artists.ilike('%{}%'.format(performer)))
 
             if work_filter == 'recommended':
                 album_list = db.session.query(WorkAlbums, func.count(AlbumLike.id).label('total')).join(WorkList)\
@@ -761,6 +727,46 @@ def exportplaylist():
             else:
                 album_list = db.session.query(WorkAlbums, func.count(AlbumLike.id).label('total')).join(WorkList)\
                     .filter(WorkList.composer.in_(composer_list), or_(*conditions), or_(*conditions2), WorkList.album_count > 0, WorkAlbums.hidden != True, WorkAlbums.album_type != "compilation", WorkAlbums.work_track_count <= limit)\
+                    .outerjoin(AlbumLike).group_by(WorkAlbums) \
+                    .order_by(WorkList.genre, WorkList.id, text('total DESC'), WorkAlbums.score.desc()).all()
+
+        # SELECTED GENRES
+        else:
+            conditions = []
+            conditions2 = []
+            conditions3 = []
+
+            for genre in search_list:
+                conditions.append(WorkList.genre.ilike('%{}%'.format(genre)))
+                conditions.append(WorkList.search.ilike('%{}%'.format(genre)))
+                conditions.append(WorkList.title.ilike('%{}%'.format(genre)))
+                conditions.append(WorkList.nickname.ilike('%{}%'.format(genre)))               
+
+            if search_term: 
+                conditions2.append(WorkList.genre.ilike('%{}%'.format(search_term)))
+                conditions2.append(WorkList.search.ilike('%{}%'.format(search_term)))
+                conditions2.append(WorkList.title.ilike('%{}%'.format(search_term)))
+                conditions2.append(WorkList.nickname.ilike('%{}%'.format(search_term)))
+                conditions2.append(WorkList.cat.ilike('%{}%'.format(search_term)))
+
+            if performer: 
+                conditions3.append(WorkAlbums.artists.ilike('%{}%'.format(performer)))
+
+            if work_filter == 'recommended':
+                album_list = db.session.query(WorkAlbums, func.count(AlbumLike.id).label('total')).join(WorkList)\
+                    .filter(WorkList.composer.in_(composer_list), or_(*conditions), or_(*conditions2), or_(*conditions3), WorkList.album_count > 0, WorkList.recommend == True, WorkAlbums.hidden != True, WorkAlbums.album_type != "compilation", WorkAlbums.work_track_count <= limit)\
+                    .outerjoin(AlbumLike).group_by(WorkAlbums) \
+                    .order_by(WorkList.genre, WorkList.id, text('total DESC'), WorkAlbums.score.desc()).all()
+
+            elif work_filter == 'obscure':
+                album_list = db.session.query(WorkAlbums, func.count(AlbumLike.id).label('total')).join(WorkList)\
+                    .filter(WorkList.composer.in_(composer_list), or_(*conditions), or_(*conditions2), or_(*conditions3), WorkList.album_count > 0, WorkList.recommend == None, WorkAlbums.hidden != True, WorkAlbums.album_type != "compilation", WorkAlbums.work_track_count <= limit)\
+                    .outerjoin(AlbumLike).group_by(WorkAlbums) \
+                    .order_by(WorkList.genre, WorkList.id, text('total DESC'), WorkAlbums.score.desc()).all()
+
+            else:
+                album_list = db.session.query(WorkAlbums, func.count(AlbumLike.id).label('total')).join(WorkList)\
+                    .filter(WorkList.composer.in_(composer_list), or_(*conditions), or_(*conditions2), or_(*conditions3), WorkList.album_count > 0, WorkAlbums.hidden != True, WorkAlbums.album_type != "compilation", WorkAlbums.work_track_count <= limit)\
                     .outerjoin(AlbumLike).group_by(WorkAlbums) \
                     .order_by(WorkList.genre, WorkList.id, text('total DESC'), WorkAlbums.score.desc()).all()
 

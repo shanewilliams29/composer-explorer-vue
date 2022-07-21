@@ -306,12 +306,12 @@ export default {
       eventBus.$emit('fireArtistComposers', artist);
     },
     prepareForExport(){
-      eventBus.$emit('firePlaylistExport', this.genreSelectField, this.workFilterField.value, this.workSearchField, this.limitFilterField.value, true, 'dummyname');
+      eventBus.$emit('firePlaylistExport', this.query, this.genreSelectField, this.workFilterField.value, this.workSearchField, this.limitFilterField.value, true, 'dummyname');
       this.$view.playlistError = false;
       this.$view.playlistSuccess = false;
     },
     exportSpotify(name){
-      eventBus.$emit('firePlaylistExport', this.genreSelectField, this.workFilterField.value, this.workSearchField, this.limitFilterField.value, false, name);
+      eventBus.$emit('firePlaylistExport', this.query, this.genreSelectField, this.workFilterField.value, this.workSearchField, this.limitFilterField.value, false, name);
     },
   },
   created() {
