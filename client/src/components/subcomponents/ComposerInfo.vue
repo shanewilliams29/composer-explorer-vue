@@ -47,12 +47,15 @@ export default {
   },
   computed:{
     composerChanged(){
+      console.log(this.$config.composer);
       return this.$config.composer;
     }
   },
   watch: {
     composerChanged(newComposer) {
-      this.getComposerInfo(newComposer);
+      if(newComposer != ''){
+        this.getComposerInfo(newComposer);
+      }
     }
   },
   methods: {
