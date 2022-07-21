@@ -127,7 +127,7 @@ export default {
     getPersonInfo(person) {
       this.loading = true;
       this.results = [];
-      const key = localStorage.getItem("APIKey");
+      const key = this.$auth.knowledgeKey;
       const path = 'https://kgsearch.googleapis.com/v1/entities:search?indent=true&types=Person&types=MusicGroup&query=' + person + ' Music&limit=50&key=' + key;
       axios({
         method: 'get',

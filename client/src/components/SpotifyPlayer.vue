@@ -26,7 +26,6 @@ export default {
               this.$auth.appToken = res.data.app_token;
               this.$auth.userid = res.data.user_id;
               this.$auth.knowledgeKey = res.data.knowledge_api;
-              localStorage.setItem('APIKey', this.$auth.knowledgeKey);
               // eslint-disable-next-line
               window.player = new Spotify.Player({
                 name: 'Composer Explorer',
