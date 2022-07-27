@@ -220,13 +220,14 @@ export default {
         });
       }
     },
-    preparePlaylist(performer, genres, filter, search, limit, prefetch, name) { // used in radio mode to export to Spotify
+    preparePlaylist(performer, radioType, genres, filter, search, limit, prefetch, name) { // used in radio mode to export to Spotify
       if (!genres) { // no works
         alert("No works are selected!")
       } else {
         this.$bvModal.show('playlist-modal');
         const payload = {
           performer: performer,
+          radio_type: radioType,
           genres: genres,
           filter: filter,
           search: search,

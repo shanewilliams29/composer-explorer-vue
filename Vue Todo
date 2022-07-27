@@ -44,6 +44,9 @@ GENERAL
 - Favorites move. When advancing to next work (automatically or button) all albums are shown
 - Fix mobile
 - Yuja export playlist: obscure not working?
+- Performer view, glitch when repeatedly click on performer name in info panel
+- CPE showing in performer view
+- Performer export - Exporting the final item?
 
 RELINKING
 - Track relinking, what to do if titles are different? Is titles best way to do this?

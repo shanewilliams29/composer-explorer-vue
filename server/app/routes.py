@@ -688,13 +688,16 @@ def exportplaylist():
     prefetch = payload['prefetch']
     random_album = payload['random']
     performer = payload['performer']
+    radio_type = payload['radio_type']
 
     if prefetch:
         # get composers selected
         if not session.get('radio_composers'):
             composer_list = cache.get('composers')  # for dev server testing
+            user_id = 85
         else:
             composer_list = session['radio_composers']
+            user_id = current_user.id
 
         # ALL GENRES
         if search_list[0] == "all":
@@ -711,6 +714,10 @@ def exportplaylist():
 
             if performer: 
                 conditions2.append(WorkAlbums.artists.ilike('%{}%'.format(performer)))
+
+            if radio_type == 'favorites': 
+                conditions2.append(AlbumLike.user_id == user_id)
+                limit = 1000
 
             if work_filter == 'recommended':
                 album_list = db.session.query(WorkAlbums, func.count(AlbumLike.id).label('total')).join(WorkList)\
@@ -751,6 +758,10 @@ def exportplaylist():
 
             if performer: 
                 conditions3.append(WorkAlbums.artists.ilike('%{}%'.format(performer)))
+
+            if radio_type == 'favorites': 
+                conditions3.append(AlbumLike.user_id == user_id)
+                limit = 1000
 
             if work_filter == 'recommended':
                 album_list = db.session.query(WorkAlbums, func.count(AlbumLike.id).label('total')).join(WorkList)\
