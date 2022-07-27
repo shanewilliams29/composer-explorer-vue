@@ -672,7 +672,7 @@ def get_worksbygenre():
 
 
 @app.route('/api/exportplaylist', methods=['POST'])  # used in radio mode
-#@login_required
+@login_required
 def exportplaylist():
     # get genres
     payload = request.get_json()
