@@ -1,36 +1,25 @@
 GENERAL
 - Date for works after composer death (no date)
 - If only one artist, allow more years from album crap filter
-- Make performer filter absolute match not a search
 - Click next on last track, jump to next work? Buggy
 - blue borders on work list highlights?
 - Refine performers page so no url change when already on page
-- Favorites menu item?
 - Better shuffle playback
 - Line appearing on album info pane... card?
-- Too many tracks selected error when no tracks selected (radio)
 - Improve Conductor/Orchestra, display in consistent manner.
 - Deselect composer on view mode change
 - Remember radio settings
-- Export playlist for performers
 - Hide Google API Key?
 - Search on nicknames for refreshalbums?
 - What to do when performer album liked but not on main list due to compilation (ie. Yuja Wang Mend. 1)
 - Composer tiers in radio mode
-- Give user options for advancing to next work automatically?
 - Show which users like work?
-- Liked works filter
-- Make sure cache is not messing up the likes displaying
 - Word cloud font on Apple
 - Solti Mass in B Minor - what to do for regional issues, also for radio
-- Don't collapse composers in radio mode
 - Open composers' region when selected in views with many composers
-- Grey out composers not catalogued
 - Options: exclude operas from radio mode
 - Does favorites work when no favorites by user?
-- Favorites doesn't play user favorite album?
 - Loading spinners for heading fields which need ajax
-- When people like albums in performers page but not on main page, what happens?
 - Patreon
 - Scroll to album?
 - When less popular composer selected, how to handle refresh of page to show?
@@ -39,14 +28,16 @@ GENERAL
 - Little bit of blank space underneath album on small view with likes
 - IMSLP link to works
 - Glitch in composer name in play area. When switch composers but play albums by previous composer
-- Flip album to reveal details?
-- Export favorites to radio?
 - Favorites move. When advancing to next work (automatically or button) all albums are shown
 - Fix mobile
 - Yuja export playlist: obscure not working?
 - Performer view, glitch when repeatedly click on performer name in info panel
 - CPE showing in performer view
 - Performer export - Exporting the final item?
+- Export - compilation albums when user favorites them?
+- Highlight work playing (subtle) when selecting other work
+- Favorites, song title not showing correctly
+- Favorites, extra space when info box showing
 
 RELINKING
 - Track relinking, what to do if titles are different? Is titles best way to do this?

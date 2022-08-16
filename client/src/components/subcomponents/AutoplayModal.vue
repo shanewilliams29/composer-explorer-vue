@@ -7,8 +7,9 @@
     <div class="m-2 text-center">
       <h3>Your browser is blocking audio playback.</h3>
       <p>This is a problem affecting some browsers due to audio Autoplay restrictions. This website works best with Chrome or Firefox.</p>
-      <p>You may be able to correct this error by refreshing the page.</p>
-      <b-button class="mt-4" @click="refreshPage()">Click to refresh</b-button>
+      <p>If using Safari, enable Autoplay in site settings: <br>
+      <span style="font-size: 12px;">Safari > Settings for composerexplorer.com... > Auto-Play > Allow All Auto-Play</span></p>
+      <b-button class="mt-4" @click="refreshPage()">Click to try again</b-button>
     </div>
   </b-modal>
 </div>
