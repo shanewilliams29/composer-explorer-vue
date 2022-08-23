@@ -301,9 +301,14 @@ export default {
       this.$config.workTitle = title;
       localStorage.setItem('config', JSON.stringify(this.$config));
       eventBus.$emit('changeWork');
+      console.log(this.$view.favoritesAlbums);
       if (this.$view.mode != 'performer') {
         if (this.$config.artist && this.$view.mode == 'radio') {
           eventBus.$emit('fireAlbumsAndPlay', workId, this.$config.artist);
+        } else if (this.$view.mode == 'favorites') { // favorites mode
+          this.$view.favoritesAlbums = true;
+          console.log(this.$view.favoritesAlbums);
+          eventBus.$emit('fireAlbumsAndPlay', workId);
         } else {
           eventBus.$emit('fireAlbumsAndPlay', workId);
         }

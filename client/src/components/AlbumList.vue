@@ -118,10 +118,12 @@ export default {
       this.loading = true;
 
       var path = '';
+      var favorites = this.$view.favoritesAlbums;
       if (this.$view.mode == 'radio'){
         var limit = this.$view.radioTrackLimit;
-        var favorites = this.$view.favoritesAlbums;
         path = 'api/albums/' + id + '?artist=' + artist + '&sort=' + sort + '&limit=' + limit + '&favorites=' + favorites;
+      } else if (this.$view.mode == 'favorites') {
+        path = 'api/albums/' + id + '?artist=' + artist + '&sort=' + sort + '&favorites=' + favorites;
       } else {
         path = 'api/albums/' + id + '?artist=' + artist + '&sort=' + sort;
       }

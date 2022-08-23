@@ -60,12 +60,14 @@ export default {
     this.loading = true;
     eventBus.$on('fireAlbumData', this.getAlbumInfo);
     eventBus.$on('fireAlbums', this.holdTitle);
+    eventBus.$on('fireFavoritesAlbums', this.holdTitle);
     eventBus.$on('fireAlbumsAndPlay', this.holdTitle);
     eventBus.$on('fireArtistAlbums', this.holdTitle);
   },
     beforeDestroy() {
     eventBus.$off('fireAlbumData', this.getAlbumInfo);
     eventBus.$off('fireAlbums', this.holdTitle);
+    eventBus.$off('fireFavoritesAlbums', this.holdTitle);
     eventBus.$off('fireAlbumsAndPlay', this.holdTitle);
     eventBus.$off('fireArtistAlbums', this.holdTitle);
   },
