@@ -131,7 +131,10 @@ def spotify():
         else:
             return redirect('https://www.composerexplorer.com/mobile')
     else:
-        return redirect("/")
+        if Config.MODE == "DEVELOPMENT":
+            return redirect("http://localhost:8080/")
+        else:
+            return redirect("/")
 
 
 @app.route('/log_out')
