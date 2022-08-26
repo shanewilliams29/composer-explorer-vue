@@ -92,18 +92,22 @@ export default {
   created() {
     eventBus.$on('fireComposers', (composer) => {
         this.composer = composer;
-    })
-    eventBus.$on('fireWorksLoaded', () => {
-      if (this.initialWorksLoad != true){
         this.workToggle();
-      } else{
-        this.initialWorksLoad = false;
-      }
     })
+    // eventBus.$on('fireWorksLoaded', () => {
+    //   if (this.initialWorksLoad != true){
+    //     this.workToggle();
+    //   } else{
+    //     this.initialWorksLoad = false;
+    //   }
+    // })
     // eslint-disable-next-line
-    eventBus.$on('fireAlbums', (work_id, title) => {
+    eventBus.$on('fireAlbums', () => {
           this.title = this.$config.workTitle;
           this.albumToggle();
+    })
+    eventBus.$on('fireAlbumsAndPlay', () => {
+          this.title = this.$config.workTitle;
     })
     // eslint-disable-next-line
     // eventBus.$on('fireAlbumData', (work_id, title) => {
