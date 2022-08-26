@@ -6,6 +6,9 @@
       </b-col>
       <b-col>
         <PlayerControls />
+        <SpotifyModal />
+        <AutoplayModal />
+        <NotPremiumModal />
       </b-col>
       <b-col v-if="false">
         <TrackListing />
@@ -16,14 +19,20 @@
 
 <script>
 import AlbumInfo from '@/components/subcomponents/AlbumInfo.vue'
-import PlayerControls from '@/components/mobile/PlayerControls.vue'
+import PlayerControls from '@/components/subcomponents/PlayerControls.vue'
 import TrackListing from '@/components/subcomponents/TrackListing.vue'
+import SpotifyModal from '@/components/subcomponents/SpotifyModal.vue'
+import AutoplayModal from '@/components/subcomponents/AutoplayModal.vue'
+import NotPremiumModal from '@/components/subcomponents/NotPremiumModal.vue'
 
 export default {
   components: {
     AlbumInfo,
     PlayerControls,
-    TrackListing
+    TrackListing,
+    SpotifyModal,
+    AutoplayModal,
+    NotPremiumModal
   },
 };
 </script>

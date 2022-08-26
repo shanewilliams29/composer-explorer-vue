@@ -44,7 +44,10 @@ def before_request():
 def index(path):
     if request.MOBILE and not session['mobile']:
         session['mobile'] = 'true'
-        return redirect('https://www.composerexplorer.com/mobile')
+        if Config.MODE == "DEVELOPMENT":
+            return redirect('http://localhost:8080/mobile')
+        else:
+            return redirect('https://www.composerexplorer.com/mobile')
 
     return render_template("index.html")
     # return app.send_static_file('index.html')
@@ -122,10 +125,11 @@ def spotify():
 
     if Config.MODE == "DEVELOPMENT":
         cache.set('token', session['spotify_token'])  # store in cache for dev
-        response = redirect("http://localhost:8080/")
-        return response
     if session['mobile']:
-        return redirect("/mobile")
+        if Config.MODE == "DEVELOPMENT":
+            return redirect('http://localhost:8080/mobile')
+        else:
+            return redirect('https://www.composerexplorer.com/mobile')
     else:
         return redirect("/")
 

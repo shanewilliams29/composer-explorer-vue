@@ -102,7 +102,7 @@ export default {
     })
     // eslint-disable-next-line
     eventBus.$on('fireAlbums', (work_id, title) => {
-          this.title = title;
+          this.title = this.$config.workTitle;
           this.albumToggle();
     })
     // eslint-disable-next-line
@@ -122,49 +122,6 @@ export default {
 </script>
 
 <style>
-  #app{
-    height: 100% !important;
-    max-height: -webkit-fill-available !important;
-  }
-  .heading-text{
-    padding-left: 20px;
-  }
-  .card-body{
-    background: #f1f2f4 !important;
-    padding: 0px !important;
-  }
-
-  .btn-secondary{
-    background-color: #343a40 !important;
-    text-align: middle;
-  }
-  .btn-secondary:hover{
-    background-color: #717579 !important;
-  }
-
-  .card-header{
-    border: 0px !important;
-  }
-  .btn{
-    border:  0px;
-  }
-  .header-button{
-    border-radius: 0px !important;
-    border-top: solid 2px white !important;
-      outline: none !important;
-      box-shadow: none !important;
-  }
-  .last-button{
-    border-bottom: solid 2px white !important;
-  }
-  .p-1{
-    padding: 0px !important;
-    border-radius: 0px !important;
-  }
-  .mb-1{
-    border: none;
-    margin: 0px !important;
-  }
   .composer-list-mobile{
     /*height: calc(100vh - 314px);*/
     height: calc(var(--vh, 1vh) * 100 - 314px + 8.5px);
@@ -224,7 +181,53 @@ export default {
   }
 
 </style>
+
 <style scoped>
+ >>> .playback-container{
+    padding: 13px;
+    padding-top: 3px !important;
+    padding-bottom: 0px;
+    font-size: 14px;
+  }
+  .heading-text{
+    padding-left: 20px;
+  }
+  .card-body{
+    background: #f1f2f4 !important;
+    padding: 0px !important;
+  }
+
+  .btn-secondary{
+    background-color: #343a40 !important;
+    text-align: middle;
+  }
+  .btn-secondary:hover{
+    background-color: #717579 !important;
+  }
+
+  .card-header{
+    border: 0px !important;
+  }
+  .btn{
+    border:  0px;
+  }
+  .header-button{
+    border-radius: 0px !important;
+    border-top: solid 2px white !important;
+      outline: none !important;
+      box-shadow: none !important;
+  }
+  .last-button{
+    border-bottom: solid 2px white !important;
+  }
+  .p-1{
+    padding: 0px !important;
+    border-radius: 0px !important;
+  }
+  .mb-1{
+    border: none;
+    margin: 0px !important;
+  }
 >>> .highlight{
   background-color: var(--blue);
 }

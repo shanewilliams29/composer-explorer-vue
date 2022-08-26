@@ -92,6 +92,8 @@ export default {
         this.visibility = true
         this.loading = false;
         this.setGenre(this.$config.genre);
+        eventBus.$emit('fireWorksLoaded'); // for mobile
+
       }).catch((error) => {
         console.error(error);
         this.loading = false;
