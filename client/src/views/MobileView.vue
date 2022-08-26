@@ -48,7 +48,6 @@ import AlbumList from '@/components/AlbumList.vue'
 import MobileTracks from '@/components/mobile/MobileTracks.vue'
 import PageFooter from '@/components/mobile/PageFooter.vue'
 import {eventBus} from "../main.js";
-import {currentConfig} from "../main.js";
 
 export default {
   name: 'MobileView',
@@ -61,9 +60,8 @@ export default {
   },
   data() {
     return {
-      composer: currentConfig.composer,
-      title: currentConfig.workTitle,
-      // hold_title: "Piano Concerto No. 5 in E♭ major",
+      composer: this.$config.composer,
+      title: this.$config.workTitle,
       composerDisabled: true,
       workDisabled: false,
       albumDisabled: false,
@@ -120,11 +118,10 @@ export default {
       document.documentElement.style.setProperty('--vh', `${vh}px`);
     });
   },
-
 }
 </script>
 
-<!-- <style>
+<style>
   #app{
     height: 100% !important;
     max-height: -webkit-fill-available !important;
@@ -226,4 +223,15 @@ export default {
     line-height: 130%;
   }
 
-</style> -->
+</style>
+<style scoped>
+>>> .highlight{
+  background-color: var(--blue);
+}
+>>> .highlight td{
+  background-color: var(--blue);
+}
+>>> .music-note{
+  color: var(--blue);
+}
+</style>
