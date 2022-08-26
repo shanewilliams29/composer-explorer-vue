@@ -7,7 +7,10 @@
       </b-card-header>
       <b-collapse :visible="composerDisabled" id="accordion-1" accordion="my-accordion" role="tabpanel">
         <b-card-body>
-<b-col class="composer-list-mobile"><ComposerList/></b-col>
+          <b-col class="composer-list-mobile disable-scrollbars">
+            <ComposerHeading />
+            <ComposerList/>
+          </b-col>
         </b-card-body>
       </b-collapse>
     </b-card>
@@ -18,7 +21,7 @@
       </b-card-header>
       <b-collapse :visible="workDisabled" id="accordion-2" accordion="my-accordion" role="tabpanel">
         <b-card-body>
-<b-col class="work-list-mobile"><WorkList/></b-col>
+<b-col class="work-list-mobile disable-scrollbars"><WorkList/></b-col>
         </b-card-body>
       </b-collapse>
     </b-card>
@@ -29,7 +32,7 @@
       </b-card-header>
       <b-collapse :visible="albumDisabled" id="accordion-3" accordion="my-accordion" role="tabpanel">
         <b-card-body>
- <b-col class="album-list-mobile"><AlbumList/></b-col>
+ <b-col class="album-list-mobile disable-scrollbars"><AlbumList/></b-col>
         </b-card-body>
       </b-collapse>
     </b-card>
@@ -47,6 +50,7 @@ import WorkList from '@/components/WorkList.vue'
 import AlbumList from '@/components/AlbumList.vue'
 import MobileTracks from '@/components/mobile/MobileTracks.vue'
 import PageFooter from '@/components/mobile/PageFooter.vue'
+import ComposerHeading from '@/components/subcomponents/ComposerHeading.vue'
 import {eventBus} from "../main.js";
 
 export default {
@@ -56,7 +60,8 @@ export default {
     WorkList,
     AlbumList,
     MobileTracks,
-    PageFooter
+    PageFooter,
+    ComposerHeading
   },
   data() {
     return {
@@ -88,7 +93,7 @@ export default {
   },
   beforeCreate(){
     this.$view.mobile = true;
-    this.$config.albumSize = 'small';
+    this.$config.albumSize = 'large';
   },
   created() {
     eventBus.$on('fireComposers', (composer) => {
@@ -184,10 +189,13 @@ export default {
     font-size: 14px !important;
     line-height: 130%;
   }
-
 </style>
 
 <style scoped>
+  >>> .composer-card{
+    margin-left: -15px;
+    margin-right: -10px;
+  }
  >>> .playback-container{
     padding: 13px;
     padding-top: 3px !important;
@@ -198,7 +206,7 @@ export default {
     padding-left: 20px;
   }
   .card-body{
-    background: #f1f2f4 !important;
+    background: #54595f !important;
     padding: 0px !important;
   }
 
@@ -206,9 +214,13 @@ export default {
     background-color: #343a40 !important;
     text-align: middle;
   }
-  .btn-secondary:hover{
+/*  .btn-secondary:hover{
     background-color: #717579 !important;
-  }
+  }*/
+
+  .btn.disabled, .btn:disabled {
+    opacity: 1;
+}
 
   .card-header{
     border: 0px !important;
@@ -218,12 +230,12 @@ export default {
   }
   .header-button{
     border-radius: 0px !important;
-    border-top: solid 2px white !important;
+    border-top: solid 2px #54595f !important;
       outline: none !important;
       box-shadow: none !important;
   }
   .last-button{
-    border-bottom: solid 2px white !important;
+    border-bottom: solid 2px #54595f !important;
   }
   .p-1{
     padding: 0px !important;
@@ -241,5 +253,14 @@ export default {
 }
 >>> .music-note{
   color: var(--blue);
+}
+.disable-scrollbars::-webkit-scrollbar {
+  background: transparent; /* Chrome/Safari/Webkit */
+  width: 0px;
+}
+    
+.disable-scrollbars {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none;  /* IE 10+ */
 }
 </style>

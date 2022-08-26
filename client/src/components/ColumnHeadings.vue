@@ -2,14 +2,7 @@
   <div v-if="$view.mode != 'favorites'" class="container-fluid">
     <b-row class="flex-nowrap">
       <b-col>
-        <div>
-          <b-card class="heading-card composer-card">
-            <b-form-group>
-              <b-form-input v-model="composerSearchForm" v-debounce="composerSearch" type="text" @focus="onComposerFocus()" placeholder="Search composers" size="sm"></b-form-input>
-              <v-select v-model="composerFilterForm" label="text" :options="composerOptions" @input="composerFilter()" :clearable="false" class="mt-3 style-chooser" :searchable="false"></v-select>
-            </b-form-group>
-          </b-card>
-        </div>
+        <ComposerHeading />
       </b-col>
       <b-col>
         <b-card class="heading-card work-card">
@@ -39,9 +32,14 @@
 </template>
 
 <script>
+import ComposerHeading from '@/components/subcomponents/ComposerHeading.vue'
 import {eventBus} from "../main.js";
 
 export default {
+  name: 'ColumnHeadings',
+  components: {
+    ComposerHeading
+  },
   data() {
     return {
       artist_list: [],
@@ -49,22 +47,6 @@ export default {
       OpenIndicator: {
           render: createElement => createElement('span',''),
         },
-
-      composerFilterForm: { value: 'popular', text: 'Most popular' },
-      composerSearchForm: null,
-      composerOptions: [
-              { value: 'popular', text: 'Most popular' },
-              { value: 'tier2', text: 'Less popular' },
-              // { value: 'tier3', text: 'More obscure' },
-              // { value: 'tier4', text: 'Quite obscure' },
-              { value: 'early', text: 'Early' },
-              { value: 'baroque', text: 'Baroque' },
-              { value: 'classical', text: 'Classical' },
-              { value: 'romantic', text: 'Romantic' },
-              { value: '20th', text: '20th/21st Century' },
-              { value: 'all', text: 'All - by region' },
-              { value: 'alphabet', text: 'All - alphabetically' }
-            ],
 
       workFilterField: { value: 'recommended', text: 'Recommended works' },
       workSearchField: null,
@@ -94,23 +76,6 @@ export default {
     capitalize(string){
       let capitalized = string[0].toUpperCase() + string.substring(1);
       return capitalized;
-    },
-    composerFilter() {
-      eventBus.$emit('fireComposerFilter', this.composerFilterForm.value);
-      this.composerSearchForm = '';
-    },
-    composerSearch() {
-      eventBus.$emit('fireComposerSearch', this.composerSearchForm);
-      if(this.composerSearchForm != ''){
-        this.composerFilterForm = 'Search results for "' + this.composerSearchForm + '"';
-      } else {
-        this.composerFilterForm = { value: 'popular', text: 'Most popular' };
-      }
-    },
-    onComposerFocus() {
-      this.composerFilterForm = { value: 'popular', text: 'Most popular' };
-      this.composerSearchForm = '';
-      eventBus.$emit('fireComposerSearch', '');
     },
     workFilter() {
       eventBus.$emit('fireWorkFilter', this.workFilterField.value);
@@ -183,6 +148,11 @@ export default {
   border: none !important;
   color: white !important;
 }
+.heading-card {
+  padding-top: 5px;
+  padding-bottom: 0px;
+  padding-left: 5px;
+}
 ::-webkit-input-placeholder {
   /* Chrome/Opera/Safari */
   color: #9ea4ae !important;
@@ -199,7 +169,9 @@ export default {
   /* Firefox 18- */
   color: #9ea4ae !important;
 }
-</style><style scoped>.container-fluid {
+</style>
+<style scoped>
+.container-fluid {
   background-color: #54595f;
   color: #3b4047;
 }
@@ -217,11 +189,7 @@ export default {
   background: none;
   border: none;
 }
-.heading-card {
-  padding-top: 5px;
-  padding-bottom: 0px;
-  padding-left: 5px;
-}
+
 .form-row {
   margin-bottom: 0px;
 }
