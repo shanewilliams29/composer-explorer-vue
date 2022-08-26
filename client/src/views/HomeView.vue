@@ -40,6 +40,7 @@ export default {
     }
   },
   beforeCreate() {
+    this.$view.mobile = false;
     if(this.$config.albumSize == 'large'){
         document.documentElement.style.setProperty('--flex', '0 0 400px');
     } else {
@@ -60,6 +61,9 @@ export default {
     padding-bottom: 5px;
     overflow-y: scroll;
     overflow-x: hidden;
+}
+.card-body{
+    padding: 0px !important;
 }
 @media only screen and (min-width: 1000px) {
     .last-col{

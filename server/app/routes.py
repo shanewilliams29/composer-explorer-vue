@@ -16,6 +16,15 @@ import random
 
 @app.before_request
 def before_request():
+    # redirect to https
+    if "localhost:5000" in request.url:
+        pass
+    else:
+        if not request.is_secure:
+            url = request.url.replace('http://', 'https://', 1)
+            code = 301
+            return redirect(url, code=code)
+
     # mobile view
     if not session.get('mobile'):
         session['mobile'] = None
@@ -35,7 +44,7 @@ def before_request():
 def index(path):
     if request.MOBILE and not session['mobile']:
         session['mobile'] = 'true'
-        return redirect('/mobile')
+        return redirect('https://www.composerexplorer.com/mobile')
 
     return render_template("index.html")
     # return app.send_static_file('index.html')

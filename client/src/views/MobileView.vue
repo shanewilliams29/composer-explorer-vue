@@ -1,7 +1,5 @@
 <template>
   <div id="home">
-    <NavBar/>
-
   <div role="tablist">
     <b-card no-body class="mb-1 mobile-card">
       <b-card-header header-tag="header" class="p-1" role="tab">
@@ -40,24 +38,21 @@
     <MobileTracks/>
     <PageFooter/>
 </div>
-  </div>
+  </div> 
 </template>
 
 <script>
-import NavBar from '@/components/NavBar.vue'
 import ComposerList from '@/components/ComposerList.vue'
 import WorkList from '@/components/WorkList.vue'
 import AlbumList from '@/components/AlbumList.vue'
 import MobileTracks from '@/components/mobile/MobileTracks.vue'
 import PageFooter from '@/components/mobile/PageFooter.vue'
-import axios from 'axios';
 import {eventBus} from "../main.js";
 import {currentConfig} from "../main.js";
 
 export default {
   name: 'MobileView',
   components: {
-    NavBar,
     ComposerList,
     WorkList,
     AlbumList,
@@ -77,25 +72,6 @@ export default {
     };
   },
   methods: {
-    getSpotifyToken() {
-      const path = 'api/get_token';
-      axios.get(path)
-        .then((res) => {
-          if (res.data.status == "success") {
-            if (res.data.client_token !== null) {
-              eventBus.$emit('fireLogIn', currentConfig.loggedIn);
-              window.token = res.data.client_token;
-            } else {
-              window.token = res.data.app_token;
-            }
-          }
-          console.log(window.token);
-        })
-        .catch((error) => {
-          window.token = null;
-          console.error(error);
-        });
-    },
       composerToggle() {
         this.composerDisabled = true;
         this.workDisabled = false;
@@ -105,7 +81,6 @@ export default {
         this.composerDisabled = false;
         this.workDisabled = true;
         this.albumDisabled = false;
-
       },
       albumToggle() {
         this.composerDisabled = false;
@@ -113,8 +88,10 @@ export default {
         this.albumDisabled = true;
       },
   },
+  beforeCreate(){
+    this.$view.mobile = true;
+  },
   created() {
-    this.getSpotifyToken();
     eventBus.$on('fireComposers', (composer) => {
         this.composer = composer;
     })
@@ -147,7 +124,7 @@ export default {
 }
 </script>
 
-<style>
+<!-- <style>
   #app{
     height: 100% !important;
     max-height: -webkit-fill-available !important;
@@ -249,4 +226,4 @@ export default {
     line-height: 130%;
   }
 
-</style>
+</style> -->

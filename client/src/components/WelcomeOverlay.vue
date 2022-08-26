@@ -1,5 +1,5 @@
 <template>
-  <div v-if="$view.banner && !$auth.clientToken" class="container-fluid ">
+  <div v-if="$view.banner && !$auth.clientToken && !$view.mobile" class="container-fluid ">
     <div class="bg-text">
       <div id="welcome" class="jumbotron overlay">
         <div class="container">
@@ -54,14 +54,14 @@ export default {
   data() {
     return {
       spotifyURL: baseURL + "connect_spotify",
-      logoURL: staticURL + 'logo.png',
+      logoURL: staticURL + 'logo.png'
     };
   },
   methods: {
     hideBanner(){
       this.$view.banner = false;
     }
-  }
+  },
 }
 </script>
 

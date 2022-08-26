@@ -3,9 +3,10 @@
     <div class="container-fluid">
       <b-navbar type="dark" variant="dark">
         <b-navbar-brand href="#">
-          <img :src="logoURL" class="d-inline-block align-top logo" alt="Composer Explorer" height="40px" @click="$router.push('/')" />
+          <img :src="logoURL" class="d-inline-block align-top logo" alt="Composer Explorer" height="40px"/>
         </b-navbar-brand>
-        <div>
+
+        <div v-if="!$view.mobile">
           <b-nav pills class="navbar-items">
             <b-nav-item id="home" :active='$route.path == "/"' @click="$router.push('/')"><b-icon-music-note-list></b-icon-music-note-list>&nbsp;&nbsp;Browse</b-nav-item>
             <b-nav-item id="performer" :active='$route.name == "performers"' @click="$router.push('/performers')"><b-icon-person-lines-fill></b-icon-person-lines-fill>&nbsp;&nbsp;Performers</b-nav-item>

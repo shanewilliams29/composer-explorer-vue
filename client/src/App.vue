@@ -7,7 +7,9 @@
     <Transition name="fadeHeight">
       <div class="info-panel" v-show="showPanel"><InfoPanel /></div>
     </Transition>
+    <div v-if="!$view.mobile">
     <PageFooter />
+  </div>
   </div>
 </template>
 
@@ -47,9 +49,9 @@ export default {
     }
   },
   beforeCreate() {
-    if (screen.width <= 760) {
-      window.location.replace('mobile');
-    }
+    // if (screen.width <= 760) {
+    //   window.location.replace('mobile');
+    // }
     document.documentElement.style.setProperty('--panelheight', `0px`);
     this.$view.panelVisible = false;
   },
