@@ -44,6 +44,9 @@ GENERAL
 
 ***
 - Bach WTC I No. 1 Richer (First album) breaks playback???
+	- Deletes device???
+	- Handle if 404 error returned, not available in your country
+	- Still a bit glitchy, second doesnt play either?
 ***
 
 RELINKING

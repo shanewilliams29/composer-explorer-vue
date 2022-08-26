@@ -111,6 +111,16 @@ export default {
       }
     },
 
+  reInitializeSpotify() {
+        // When spotify doesnt find track, it breaks device connection. Re-establish here
+        window.player.disconnect()
+        window.player.connect().then(success => {
+        if (success) {
+          console.log('The Web Playback SDK successfully connected to Spotify!');
+        }
+      })
+    },
+
   refreshToken(){
         const path = 'api/get_token';
         axios.get(path, {withCredentials: true})
@@ -130,6 +140,9 @@ export default {
           this.$auth.clientToken = null;
           console.error(error);
         });
+    },
+    test(){
+      console.log("TEST");
     }
   },
   mounted() { 
@@ -139,6 +152,9 @@ export default {
     setInterval(() => {
       this.refreshToken();
     }, 3300000);
+
+    //Re-initialize Spotify player
+    eventBus.$on('notAvailable', this.reInitializeSpotify);
   },
 };
 </script>

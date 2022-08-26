@@ -12,6 +12,7 @@
         <SpotifyModal />
         <AutoplayModal />
         <NotPremiumModal />
+        <NotAvailableModal />
       </b-col>
       <b-col class="last-col">
         <TrackListing />
@@ -27,6 +28,7 @@ import TrackListing from './subcomponents/TrackListing.vue'
 import SpotifyModal from './subcomponents/SpotifyModal.vue'
 import AutoplayModal from './subcomponents/AutoplayModal.vue'
 import NotPremiumModal from './subcomponents/NotPremiumModal.vue'
+import NotAvailableModal from './subcomponents/NotAvailableModal.vue'
 
 import {eventBus} from "../main.js";
 
@@ -37,7 +39,8 @@ export default {
     TrackListing,
     SpotifyModal,
     AutoplayModal,
-    NotPremiumModal
+    NotPremiumModal,
+    NotAvailableModal
   },
   methods:{
     notLoggedIn(){
@@ -45,6 +48,9 @@ export default {
     },
     notPremium(){
       this.$bvModal.show('not-premium-modal');
+    },
+    notAvailable(){
+      this.$bvModal.show('not-available-modal');
     },
     autoplayDisabled(){
       this.$bvModal.show('autoplay-modal');
@@ -57,6 +63,7 @@ export default {
     eventBus.$on('notLoggedIn', this.notLoggedIn);
     eventBus.$on('fireAutoplayFailed', this.autoplayDisabled);
     eventBus.$on('notPremium', this.notPremium);
+    eventBus.$on('notAvailable', this.notAvailable);
   },
 };
 </script>
