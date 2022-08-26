@@ -9,6 +9,7 @@
         <SpotifyModal />
         <AutoplayModal />
         <NotPremiumModal />
+        <NotAvailableModal />
       </b-col>
       <b-col v-if="false">
         <TrackListing />
@@ -24,6 +25,7 @@ import TrackListing from '@/components/subcomponents/TrackListing.vue'
 import SpotifyModal from '@/components/subcomponents/SpotifyModal.vue'
 import AutoplayModal from '@/components/subcomponents/AutoplayModal.vue'
 import NotPremiumModal from '@/components/subcomponents/NotPremiumModal.vue'
+import NotAvailableModal from '@/components/subcomponents/NotAvailableModal.vue'
 
 export default {
   components: {
@@ -32,7 +34,8 @@ export default {
     TrackListing,
     SpotifyModal,
     AutoplayModal,
-    NotPremiumModal
+    NotPremiumModal,
+    NotAvailableModal
   },
 };
 </script>

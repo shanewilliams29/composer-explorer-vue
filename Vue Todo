@@ -40,13 +40,17 @@ GENERAL
 - Browse - Bottom of columns cut off?
 - MOBILE
 - Show number of favorites on favorites
-- Glitch where multiple players open?
+- Glitch where multiple players open? Start on new player > advances to next on old? Check work skipping.
+- Mobile: Opera Acts in track display
+- Mobile: Popup with track listing?
+- Localhost mobile automatically plays after login? Doesn't happen on production...
 
 ***
 - Bach WTC I No. 1 Richer (First album) breaks playback???
 	- Deletes device???
 	- Handle if 404 error returned, not available in your country
 	- Still a bit glitchy, second doesnt play either?
+	- What about radio mode?
 ***
 
 RELINKING

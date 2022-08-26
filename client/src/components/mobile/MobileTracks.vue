@@ -19,12 +19,6 @@
       </tr>
     </table>
     </div>
-    <div class="carousel-item">
-      Test 2
-    </div>
-    <div class="carousel-item">
-      Test 3
-    </div>
   </div>
 <!--   <a class="carousel-control-prev" @click="previousTrack()" role="button" data-slide="prev">
     <span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -106,7 +100,8 @@ export default {
 
       uriList['uris'] = tracks.split(' ');
       jsonList = JSON.stringify(uriList);
-      spotify.playTracks(window.token, window.device_id, jsonList);
+
+      spotify.playTracks(this.$auth.clientToken, this.$auth.deviceID, jsonList);
       // this.selectedTrackNo = this.numTracks - uriList['uris'].length;
       },
     },
@@ -117,10 +112,10 @@ export default {
         localStorage.setItem('config', JSON.stringify(this.$config));
 
         this.album = album;
-        if(window.token && window.device_id){
-          this.playTracks(album.tracks[0][2]);
-          this.stopMatch = false;
-        }
+        // if(window.token && window.device_id){
+        //   this.playTracks(album.tracks[0][2]);
+        //   this.stopMatch = false;
+        // }
         // this.selectTrack(album.tracks[0][1]);
         // this.numTracks = album.tracks.length;
         // this.selectedTrackNo = 0;
