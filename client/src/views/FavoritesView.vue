@@ -52,52 +52,10 @@ export default {
   },
 }
 </script>
-
-<style>
-.display-list{
-    height: calc(100vh - 244px + 78px - var(--panelheight));
-    padding-right: 12px;
-    padding-bottom: 5px;
-    overflow-y: scroll;
-    overflow-x: hidden;
-}
-@media only screen and (min-width: 1000px) {
-    .last-col{
-        -ms-flex: var(--flex) !important;
-        flex: var(--flex) !important;
-    }
-}
-.extra-margin{
-    margin-right: 3.5px;
-}
-/*scrollbars*/
- :root {
-        --scroll-bar-color: #c9cccf;
-        --scroll-bar-bg-color: #f1f2f4;
-    }
-
-    * {
-        scrollbar-width: thin;
-        scrollbar-color: var(--scroll-bar-color) var(--scroll-bar-bg-color);
-    }
-
-    /* Works on Chrome, Edge, and Safari */
-    *::-webkit-scrollbar {
-        width: 12px;
-        height: 12px;
-    }
-
-    *::-webkit-scrollbar-track {
-        background: var(--scroll-bar-bg-color);
-    }
-
-    *::-webkit-scrollbar-thumb {
-        background-color: var(--scroll-bar-color);
-        border-radius: 20px;
-        border: 3px solid var(--scroll-bar-bg-color);
-    }
-</style>
 <style scoped>
+.display-list{
+    height: calc(100vh - 244px + 78px - var(--panelheight)) !important;
+}
 >>> .highlight{
   background-color: var(--red);
 }
