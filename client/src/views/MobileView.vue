@@ -93,7 +93,7 @@ export default {
   },
   beforeCreate(){
     this.$view.mobile = true;
-    this.$config.albumSize = 'large';
+    this.$config.albumSize = 'small';
   },
   created() {
     eventBus.$on('fireComposers', (composer) => {
