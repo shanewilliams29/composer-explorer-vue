@@ -213,6 +213,7 @@ export default {
   >>> .albums-card{
     margin-left: -15px;
     margin-right: -10px;
+    padding-top: 1.5px !important;
   }
  >>> .playback-container{
     padding: 13px;
@@ -223,8 +224,14 @@ export default {
   .heading-text{
     padding-left: 20px;
   }
-  .card-body{
+  .heading-card{
     background: #54595f !important;
+    padding-right: 5px;
+    margin-right: -15px;
+    border-radius: 0px;
+  }
+  .card-body{
+    background: #f1f2f4 !important;
     padding: 0px !important;
   }
 

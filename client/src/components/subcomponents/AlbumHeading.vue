@@ -130,4 +130,7 @@ export default {
   border: none;
   border-radius: 4px;
 }
+.albums-card {
+  padding-top: 3.5px !important;
+}
 </style>
