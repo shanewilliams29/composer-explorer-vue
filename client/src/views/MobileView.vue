@@ -35,7 +35,10 @@
       </b-card-header>
       <b-collapse :visible="albumDisabled" id="accordion-3" accordion="my-accordion" role="tabpanel">
         <b-card-body>
- <b-col class="album-list-mobile disable-scrollbars"><AlbumList/></b-col>
+          <b-col class="album-list-mobile disable-scrollbars">
+           <AlbumHeading />
+           <AlbumList/>
+          </b-col>
         </b-card-body>
       </b-collapse>
     </b-card>
@@ -55,6 +58,7 @@ import MobileTracks from '@/components/mobile/MobileTracks.vue'
 import PageFooter from '@/components/mobile/PageFooter.vue'
 import ComposerHeading from '@/components/subcomponents/ComposerHeading.vue'
 import WorkHeading from '@/components/subcomponents/WorkHeading.vue'
+import AlbumHeading from '@/components/subcomponents/AlbumHeading.vue'
 import {eventBus} from "../main.js";
 
 export default {
@@ -66,7 +70,8 @@ export default {
     MobileTracks,
     PageFooter,
     ComposerHeading,
-    WorkHeading
+    WorkHeading,
+    AlbumHeading
   },
   data() {
     return {
@@ -202,6 +207,10 @@ export default {
     margin-right: -10px;
   }
   >>> .work-card{
+    margin-left: -15px;
+    margin-right: -10px;
+  }
+  >>> .albums-card{
     margin-left: -15px;
     margin-right: -10px;
   }

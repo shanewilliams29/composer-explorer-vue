@@ -40,7 +40,18 @@ export default {
       this.workSearchField = '';
       eventBus.$emit('fireWorkSearch', '');
     },
-  }
+    newComposer(composer) {
+        this.workSearchPlaceholder = "Search works by " + composer;
+        this.workSearchField = '';
+        this.workFilterField = { value: 'recommended', text: 'Recommended works' };
+    },
+  },
+  created() {
+    eventBus.$on('fireComposers', this.newComposer);
+  },
+  beforeDestroy() {
+    eventBus.$off('fireComposers', this.newComposer);
+  },
 };
 </script>
 
