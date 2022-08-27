@@ -91,7 +91,8 @@ Vue.prototype.$view = Vue.observable({
   playlistError: false,
   panelVisible: false,
   like: false,
-  mobile: false
+  mobile: false,
+  mobileKeyboard: false
 });
 
 new Vue({

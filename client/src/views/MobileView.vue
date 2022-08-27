@@ -43,7 +43,7 @@
       </b-collapse>
     </b-card>
   </div>
-<div id="footer">
+<div id="footer" v-show="!$view.mobileKeyboard">
     <MobileTracks/>
     <PageFooter/>
 </div>
@@ -133,8 +133,17 @@ export default {
     document.documentElement.style.setProperty('--vh', `${vh}px`);
 
     window.addEventListener('resize', () => {
-    // We execute the same script as before
+
       let vh = window.innerHeight * 0.01;
+
+      // for mobile keyboard
+      if (window.innerHeight < 550){
+        this.$view.mobileKeyboard = true;
+        vh = vh + (202 * 0.01);
+      } else {
+        this.$view.mobileKeyboard = false;
+      }
+      
       document.documentElement.style.setProperty('--vh', `${vh}px`);
     });
   },
