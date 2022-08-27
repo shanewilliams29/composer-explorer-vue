@@ -1,7 +1,7 @@
 <template>
           <b-card class="heading-card composer-card">
             <b-form-group>
-              <b-form-input v-model="composerSearchForm" v-debounce="composerSearch" type="text" @focus="onComposerFocus()" placeholder="Search composers" size="sm"></b-form-input>
+              <b-form-input v-model="composerSearchForm" v-debounce="composerSearch" type="text" @focus="onComposerFocus()" placeholder="Search composers" size="sm" autocomplete="off"></b-form-input>
               <v-select v-model="composerFilterForm" label="text" :options="composerOptions" @input="composerFilter()" :clearable="false" class="mt-3 style-chooser" :searchable="false"></v-select>
             </b-form-group>
           </b-card>

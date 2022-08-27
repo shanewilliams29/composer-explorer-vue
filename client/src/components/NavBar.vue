@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-show="!$view.mobileKeyboard">
     <div class="container-fluid">
       <b-navbar type="dark" variant="dark">
         <b-navbar-brand href="#">
