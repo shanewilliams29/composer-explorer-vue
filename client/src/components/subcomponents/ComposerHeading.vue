@@ -31,10 +31,6 @@ export default {
     };
   },
   methods: {
-    capitalize(string){
-      let capitalized = string[0].toUpperCase() + string.substring(1);
-      return capitalized;
-    },
     composerFilter() {
       eventBus.$emit('fireComposerFilter', this.composerFilterForm.value);
       this.composerSearchForm = '';

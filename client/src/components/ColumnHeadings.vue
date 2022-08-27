@@ -5,12 +5,7 @@
         <ComposerHeading />
       </b-col>
       <b-col>
-        <b-card class="heading-card work-card">
-          <b-form-group>
-            <b-form-input v-model="workSearchField" v-debounce="workSearch" type="text" @focus="onWorkFocus()" :placeholder="workSearchPlaceholder" size="sm"></b-form-input>
-            <v-select v-model="workFilterField" label="text" :options="workOptions" @input="workFilter()" :clearable="false" class="mt-3 style-chooser" :searchable="false"></v-select>
-          </b-form-group>
-        </b-card>
+        <WorkHeading />
       </b-col>
       <b-col class="last-col">
         <b-card class="heading-card albums-card">
@@ -33,12 +28,14 @@
 
 <script>
 import ComposerHeading from '@/components/subcomponents/ComposerHeading.vue'
+import WorkHeading from '@/components/subcomponents/WorkHeading.vue'
 import {eventBus} from "../main.js";
 
 export default {
   name: 'ColumnHeadings',
   components: {
-    ComposerHeading
+    ComposerHeading,
+    WorkHeading
   },
   data() {
     return {
@@ -47,14 +44,6 @@ export default {
       OpenIndicator: {
           render: createElement => createElement('span',''),
         },
-
-      workFilterField: { value: 'recommended', text: 'Recommended works' },
-      workSearchField: null,
-      workSearchPlaceholder: "Search works by " + this.$config.composer,
-      workOptions: [
-          { value: 'recommended', text: 'Recommended works' },
-          { value: 'all', text: 'All works'}
-        ],
 
       albumFilterField: { value: 'allartists', text: 'All performers'},
       albumOptions: [],
@@ -76,23 +65,6 @@ export default {
     capitalize(string){
       let capitalized = string[0].toUpperCase() + string.substring(1);
       return capitalized;
-    },
-    workFilter() {
-      eventBus.$emit('fireWorkFilter', this.workFilterField.value);
-      this.workSearchField = '';
-    },
-    workSearch() {
-      eventBus.$emit('fireWorkSearch', this.workSearchField);
-      if(this.workSearchField != ''){
-        this.workFilterField = 'Search results for "' + this.workSearchField + '"';
-      } else {
-        this.workFilterField = { value: 'recommended', text: 'Recommended works' };
-      }
-    },
-    onWorkFocus() {
-      this.workFilterField = { value: 'recommended', text: 'Recommended works' }
-      this.workSearchField = '';
-      eventBus.$emit('fireWorkSearch', '');
     },
     albumFilter() {
       if (this.albumFilterField.value == "allartists") {
