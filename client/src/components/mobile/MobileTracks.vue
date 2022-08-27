@@ -1,7 +1,10 @@
 <template>
 <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
-  <ol class="carousel-indicators">
-    <li data-target="carouselExampleIndicators" :class="{'active': trackMatch(track)}" :data-slide-to="track[1]" v-for="track in album.tracks" :key="track[1]" @click="playTracks(track[2])"></li>
+  <ol class="carousel-indicators" v-if="album.id">
+    <li data-target="carouselExampleIndicators" :class="{'active': trackMatch(track)}" :data-slide-to="track[1]" v-for="track in album.tracks" :key="track[1]" @click="playTracks(track[2])" v-show="album.tracks.length <= 12"></li>
+    <span class="album-track-display" v-show="album.tracks.length > 12 && trackIndex">Track {{trackIndex}} of {{album.tracks.length}}</span>
+  </ol>
+  <ol class="carousel-indicators" v-else> <!-- Dummy while loading -->
   </ol>
   <div class="carousel-inner">
     <div class="carousel-item" :class="{'active': trackMatch(track)}" v-for="track in album.tracks" :key="track[1]">
@@ -20,14 +23,6 @@
     </table>
     </div>
   </div>
-<!--   <a class="carousel-control-prev" @click="previousTrack()" role="button" data-slide="prev">
-    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-    <span class="sr-only">Previous</span>
-  </a>
-  <a class="carousel-control-next" @click="nextTrack()" role="button" data-slide="next">
-    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-    <span class="sr-only">Next</span>
-  </a> -->
 </div>
 </template>
 
@@ -38,15 +33,33 @@ import spotify from '@/SpotifyFunctions.js'
 export default {
   data() {
     return {
-      album: [],
+      album: {},
       title: "",
       selectedTrack: "Track",
       selectedTrackNo : "",
       numTracks: "",
+      loading: true,
       slide: 0,
       sliding: null,
       stopMatch: false // necessary in case album has multiple tracks with the same name (would select them all)
     };
+  },
+  computed: {
+    trackIndex() {
+      var tracks = this.album.tracks;
+
+      for (var i = 0; i < tracks.length; i++) {
+        var matchTrack = tracks[i][1];
+        // console.log(matchTrack);
+        // console.log(this.selectedTrack[1]);
+        if (matchTrack == this.selectedTrack[1]){
+          return i + 1;
+        } else {
+          continue;
+        }
+      }
+      return null;
+    }
   },
   methods: {
     strFix(item){
@@ -112,6 +125,7 @@ export default {
         localStorage.setItem('config', JSON.stringify(this.$config));
 
         this.album = album;
+        console.log(this.album);
         // if(window.token && window.device_id){
         //   this.playTracks(album.tracks[0][2]);
         //   this.stopMatch = false;
@@ -154,6 +168,10 @@ td{
   padding-right: 50px;
   text-align: center;
   vertical-align: middle;
+}
+.album-track-display{
+  color: lightgray;
+  font-size: 12px;
 }
 .carousel-inner{
   width:100%;
