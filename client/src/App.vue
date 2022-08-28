@@ -38,8 +38,7 @@ export default {
   },
   data() {
     return {
-      showPanel: false,
-      routerKey: 0
+      showPanel: false
     };
   },
   methods: {

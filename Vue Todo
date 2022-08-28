@@ -44,6 +44,7 @@ GENERAL
 - Mobile: Opera Acts in track display
 - Mobile: Popup with track listing?
 - Mobile: Scrolling
+- Mobile: Track starts from beginning when switching from radio to main
 - Localhost mobile automatically plays after login? Doesn't happen on production...
 
 ***
