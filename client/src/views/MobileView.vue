@@ -9,7 +9,7 @@
         <b-card-body>
           <b-col class="composer-list-mobile disable-scrollbars">
             <ComposerHeading />
-            <ComposerList/>
+            <ComposerList />
           </b-col>
         </b-card-body>
       </b-collapse>
@@ -73,7 +73,8 @@ export default {
       workDisabled: false,
       albumDisabled: false,
       initialWorksLoad: true,
-      initialAlbumsLoad: true
+      initialAlbumsLoad: true,
+      composerListKey: 0
     };
   },
   methods: {
@@ -98,6 +99,7 @@ export default {
     this.$config.albumSize = 'small';
   },
   created() {
+    this.$view.mode = null;
     eventBus.$on('fireComposers', (composer) => {
         this.composer = composer;
         this.workToggle();

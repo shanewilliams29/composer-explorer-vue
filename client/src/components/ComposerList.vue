@@ -57,7 +57,7 @@ export default {
   computed:{
     composerChanged(){
       return this.$config.composer;
-    },
+    }
   },
   watch: {
     composerChanged(newComposer) {

@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <NavBar />
+    <NavBar/>
     <WelcomeOverlay />
     <router-view />
     <SpotifyPlayer />
@@ -11,7 +11,7 @@
       <PageFooter />
     </div>
     <div id="footer" v-if="$view.mobile" v-show="!$view.mobileKeyboard">
-      <MobileTracks/>
+      <MobileTracks />
       <MobileFooter/>
   </div>
   </div>
@@ -38,7 +38,8 @@ export default {
   },
   data() {
     return {
-      showPanel: false
+      showPanel: false,
+      routerKey: 0
     };
   },
   methods: {

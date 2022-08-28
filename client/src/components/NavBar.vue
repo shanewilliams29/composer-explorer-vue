@@ -25,7 +25,8 @@
         </b-navbar-nav>
         <b-navbar-nav class="ml-auto" v-if="$auth.clientToken">
           <b-nav pills class="navbar-items">
-            <b-nav-item id="radio" :active='$route.name == "mobileradio"' @click="$router.push('/mobileradio')"> <img :src="radioImgURL" class="radio-img" height="22px" />&nbsp;&nbsp;Radio</b-nav-item>
+            <b-nav-item v-if="$view.mobile && ($route.name != 'mobileradio')" id="radio" :active='$route.name == "mobileradio"' @click="$router.push('/mobileradio')"> <img :src="radioImgURL" class="radio-img" height="22px" />&nbsp;&nbsp;Radio</b-nav-item>
+            <b-nav-item v-if="$view.mobile && ($route.name == 'mobileradio')" id="radio" :active='$route.name == "mobileradio"' @click="$router.push('/mobile')"> <img :src="radioImgURL" class="radio-img" height="22px" />&nbsp;&nbsp;Radio</b-nav-item>
           </b-nav>
           <b-dropdown class="avatar-button" right no-caret>
             <template #button-content>
