@@ -43,10 +43,6 @@
       </b-collapse>
     </b-card>
   </div>
-<div id="footer" v-show="!$view.mobileKeyboard">
-    <MobileTracks/>
-    <PageFooter/>
-</div>
   </div> 
 </template>
 
@@ -54,8 +50,6 @@
 import ComposerList from '@/components/ComposerList.vue'
 import WorkList from '@/components/WorkList.vue'
 import AlbumList from '@/components/AlbumList.vue'
-import MobileTracks from '@/components/mobile/MobileTracks.vue'
-import PageFooter from '@/components/mobile/PageFooter.vue'
 import ComposerHeading from '@/components/subcomponents/ComposerHeading.vue'
 import WorkHeading from '@/components/subcomponents/WorkHeading.vue'
 import AlbumHeading from '@/components/subcomponents/AlbumHeading.vue'
@@ -67,8 +61,6 @@ export default {
     ComposerList,
     WorkList,
     AlbumList,
-    MobileTracks,
-    PageFooter,
     ComposerHeading,
     WorkHeading,
     AlbumHeading
@@ -224,12 +216,12 @@ export default {
     margin-right: -10px;
     padding-top: 1.5px !important;
   }
- >>> .playback-container{
+/* .playback-container{
     padding: 13px;
     padding-top: 3px !important;
     padding-bottom: 0px;
     font-size: 14px;
-  }
+  }*/
   .heading-text{
     padding-left: 20px;
   }

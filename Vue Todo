@@ -43,6 +43,7 @@ GENERAL
 - Glitch where multiple players open? Start on new player > advances to next on old? Check work skipping.
 - Mobile: Opera Acts in track display
 - Mobile: Popup with track listing?
+- Mobile: Scrolling
 - Localhost mobile automatically plays after login? Doesn't happen on production...
 
 ***

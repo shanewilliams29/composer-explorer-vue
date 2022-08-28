@@ -280,8 +280,8 @@ export default {
 
 <style scoped>
 .playback-container{
+  /*top padding set in App.vue*/
   padding: 13px;
-  padding-top: 21.5px;
   padding-bottom: 0px;
   font-size: 14px;
 }

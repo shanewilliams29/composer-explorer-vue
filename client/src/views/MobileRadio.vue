@@ -10,10 +10,6 @@
         <b-col v-show="false" class="display-list last-col extra-margin"><AlbumList/></b-col>
       </b-row>
     </div>
-    <div id="footer" v-show="!$view.mobileKeyboard">
-        <MobileTracks/>
-        <PageFooter/>
-    </div>
   </div>
 </template>
 
@@ -24,8 +20,6 @@ import MobileRadioHeading from '@/components/mobile/MobileRadioHeading.vue'
 import ComposerList from '@/components/ComposerList.vue'
 import WorkList from '@/components/WorkList.vue'
 import AlbumList from '@/components/AlbumList.vue'
-import MobileTracks from '@/components/mobile/MobileTracks.vue'
-import PageFooter from '@/components/mobile/PageFooter.vue'
 
 export default {
   name: 'MobileRadio',
@@ -34,8 +28,6 @@ export default {
     ComposerList,
     WorkList,
     AlbumList,
-    PageFooter,
-    MobileTracks
   },
   beforeCreate() {
     this.$view.mobile = true;
@@ -75,12 +67,12 @@ export default {
 >>> .music-note{
   color: var(--green);
 }
- >>> .playback-container{
+/* .playback-container{
     padding: 13px;
     padding-top: 3px !important;
     padding-bottom: 0px;
     font-size: 14px;
-  }
+  }*/
 .disable-scrollbars::-webkit-scrollbar {
   background: transparent; /* Chrome/Safari/Webkit */
   width: 0px;

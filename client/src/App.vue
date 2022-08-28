@@ -8,7 +8,11 @@
       <div class="info-panel" v-show="showPanel"><InfoPanel /></div>
     </Transition>
     <div v-if="!$view.mobile">
-    <PageFooter />
+      <PageFooter />
+    </div>
+    <div id="footer" v-if="$view.mobile" v-show="!$view.mobileKeyboard">
+      <MobileTracks/>
+      <MobileFooter/>
   </div>
   </div>
 </template>
@@ -19,11 +23,16 @@ import SpotifyPlayer from '@/components/SpotifyPlayer.vue'
 import InfoPanel from '@/components/InfoPanel.vue'
 import PageFooter from '@/components/PageFooter.vue'
 import NavBar from '@/components/NavBar.vue'
+import MobileTracks from '@/components/mobile/MobileTracks.vue'
+import MobileFooter from '@/components/mobile/MobileFooter.vue'
+
 export default {
   components: {
     NavBar,
     WelcomeOverlay,
     SpotifyPlayer,
+    MobileTracks,
+    MobileFooter,
     InfoPanel,
     PageFooter
   },
@@ -55,6 +64,14 @@ export default {
     document.documentElement.style.setProperty('--panelheight', `0px`);
     this.$view.panelVisible = false;
   },
+  mounted(){
+    console.log(this.$view.mobile);
+    if(this.$view.mobile){
+      document.documentElement.style.setProperty('--playerpadding', `3px`);
+    } else {
+      document.documentElement.style.setProperty('--playerpadding', `21.5px`);
+    }
+  }
 }
 </script>
 
@@ -94,4 +111,7 @@ body {
   opacity: 0;
   max-height: 0px;
 }
+ .playback-container{
+    padding-top: var(--playerpadding) !important;
+  }
 </style>

@@ -2,7 +2,10 @@
   <div v-show="!$view.mobileKeyboard">
     <div class="container-fluid">
       <b-navbar type="dark" variant="dark">
-        <b-navbar-brand href="#">
+        <b-navbar-brand v-if="!$view.mobile">
+          <img :src="logoURL" class="d-inline-block align-top logo" alt="Composer Explorer" height="40px"/>
+        </b-navbar-brand>
+          <b-navbar-brand @click="$router.push('/mobile')" v-if="$view.mobile">
           <img :src="logoURL" class="d-inline-block align-top logo" alt="Composer Explorer" height="40px"/>
         </b-navbar-brand>
 
@@ -21,6 +24,9 @@
           <b-nav-item class="menu-button" right v-b-toggle.sidebar-right><b-icon-three-dots-vertical></b-icon-three-dots-vertical></b-nav-item>
         </b-navbar-nav>
         <b-navbar-nav class="ml-auto" v-if="$auth.clientToken">
+          <b-nav pills class="navbar-items">
+            <b-nav-item id="radio" :active='$route.name == "mobileradio"' @click="$router.push('/mobileradio')"> <img :src="radioImgURL" class="radio-img" height="22px" />&nbsp;&nbsp;Radio</b-nav-item>
+          </b-nav>
           <b-dropdown class="avatar-button" right no-caret>
             <template #button-content>
               <b-avatar href="#" :src="'https://storage.googleapis.com/composer-explorer.appspot.com/avatars/' + $auth.userid + '.jpg'"></b-avatar>
@@ -124,5 +130,6 @@ img {
   border: none !important;
   padding: 0px !important;
   background: transparent !important;
+  margin-left: 5px;
 }
 </style>
