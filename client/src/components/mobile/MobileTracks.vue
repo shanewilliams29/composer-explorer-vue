@@ -125,7 +125,6 @@ export default {
         localStorage.setItem('config', JSON.stringify(this.$config));
 
         this.album = album;
-        console.log(this.album);
         // if(window.token && window.device_id){
         //   this.playTracks(album.tracks[0][2]);
         //   this.stopMatch = false;
