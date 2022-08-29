@@ -1,5 +1,4 @@
 <template>
-  <div>
     <b-card class="composer-info-card shadow-sm">
       <b-card-body class="card-body">
         <b-card-title class="card-title">
@@ -15,7 +14,7 @@
             </tr>
           </table>
         </b-card-title>
-        <b-card-text class="info-card-text">
+        <b-card-text class="info-card-text" v-if="!$view.mobile">
           <div class="spinner" v-show="loading" role="status">
             <b-spinner class="m-5"></b-spinner>
           </div>
@@ -29,7 +28,6 @@
         </b-card-text>
       </b-card-body>
     </b-card>
-  </div>
 </template>
 
 <script>

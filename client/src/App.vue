@@ -11,6 +11,9 @@
       <PageFooter />
     </div>
     <div id="footer" v-if="$view.mobile" v-show="!$view.mobileKeyboard">
+      <Transition name="fadeHeight">
+        <div class="info-panel-mobile" v-show="true"><MobileInfoPanel /></div>
+      </Transition>
       <MobileTracks />
       <MobileFooter/>
   </div>
@@ -23,6 +26,7 @@ import SpotifyPlayer from '@/components/SpotifyPlayer.vue'
 import InfoPanel from '@/components/InfoPanel.vue'
 import PageFooter from '@/components/PageFooter.vue'
 import NavBar from '@/components/NavBar.vue'
+import MobileInfoPanel from '@/components/mobile/MobileInfoPanel.vue'
 import MobileTracks from '@/components/mobile/MobileTracks.vue'
 import MobileFooter from '@/components/mobile/MobileFooter.vue'
 
@@ -33,6 +37,7 @@ export default {
     SpotifyPlayer,
     MobileTracks,
     MobileFooter,
+    MobileInfoPanel,
     InfoPanel,
     PageFooter
   },
@@ -99,6 +104,11 @@ body {
 .info-panel {
   position: fixed;
   bottom: 100px;
+  width: 100%;
+}
+.info-panel-mobile {
+  position: fixed;
+  bottom: 133px;
   width: 100%;
 }
 .fadeHeight-enter-active,

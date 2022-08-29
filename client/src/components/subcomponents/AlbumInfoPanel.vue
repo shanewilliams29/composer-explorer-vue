@@ -1,8 +1,8 @@
 <template>
-  <div>
+
     <b-card class="album-info-card shadow-sm">
       <b-card-body class="card-body">
-        <b-card-title class="card-title">
+        <b-card-title class="card-title" v-if="!$view.mobile">
           <table v-if="album.release_date">
             <tr class="heading-tr">
               <td class="heading-td">
@@ -34,7 +34,7 @@
         </b-card-text>
       </b-card-body>
     </b-card>
-  </div>
+
 </template>
 
 <script>
