@@ -1,5 +1,5 @@
 <template>
-  <div v-if="true" class="container-fluid">
+  <div v-if="$view.panelVisible && $view.mobile" class="container-fluid">
     <div class="footer-row">
       <b-row class="info-row">
         <ComposerInfo />
@@ -29,7 +29,7 @@ export default {
     WorkInfo,
     AlbumInfoPanel,
     TrackListing
-  },
+  }
 };
 </script>
 
@@ -79,7 +79,7 @@ export default {
   font-size: 13px;
   line-height: 130%;
   overflow-y: scroll;
-  height: 100px;
+  height: calc(100vh - 532px);
   padding-left: 2px;
 }
 >>> .card-deck{

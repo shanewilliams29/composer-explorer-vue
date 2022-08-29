@@ -11,9 +11,7 @@
       <PageFooter />
     </div>
     <div id="footer" v-if="$view.mobile" v-show="!$view.mobileKeyboard">
-      <Transition name="fadeHeight">
-        <div class="info-panel-mobile" v-show="true"><MobileInfoPanel /></div>
-      </Transition>
+      <div class="info-panel-mobile" v-show="showPanel"><MobileInfoPanel /></div>
       <MobileTracks />
       <MobileFooter/>
   </div>

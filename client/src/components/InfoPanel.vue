@@ -1,5 +1,5 @@
 <template>
-  <div v-if="$view.panelVisible" class="container-fluid">
+  <div v-if="$view.panelVisible && !$view.mobile" class="container-fluid">
     <b-row class="footer-row">
       <b-col class="info-col">
         <ComposerInfo />
