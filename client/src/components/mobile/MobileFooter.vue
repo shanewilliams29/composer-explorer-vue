@@ -5,8 +5,8 @@
         <AlbumInfo />
       </b-col>
       <b-col>
-          <b-button class="info-panel-button" @click="togglePanel()" variant="warning">
-          <span v-if="!$parent.showPanel"><b-icon-chevron-up></b-icon-chevron-up></span><span v-else><b-icon-chevron-down></b-icon-chevron-down></span> INFO PANEL
+          <b-button class="info-panel-button" @click="togglePanel()">
+          <span><b-icon-info-circle></b-icon-info-circle></span>
         </b-button>
         <PlayerControls />
         <SpotifyModal />
@@ -69,5 +69,26 @@ export default {
 }
 .col {
   padding: 0px;
+}
+.info-panel-button {
+  position: absolute;
+  right: 10px;
+  font-size: 20px !important;
+  border-radius: 50% !important;
+  padding-left: 2.8px !important;
+  padding-right: 2.8px !important;
+  padding-top: 1.2px;
+  padding-bottom: 0px;
+  bottom: 90px;
+  z-index: 9999;
+  background-color: #343a40 !important;
+  border: none !important;
+  color: var(--warning);
+}
+.info-panel-button:hover {
+  color: var(--warning);
+}
+.info-panel-button:focus {
+  color: var(--warning);
 }
 </style>

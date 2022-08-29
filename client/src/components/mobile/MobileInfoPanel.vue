@@ -1,17 +1,17 @@
 <template>
-  <div v-if="$view.panelVisible && $view.mobile" class="container-fluid">
+  <div v-if="$view.mobile" class="container-fluid">
     <div class="footer-row">
-      <b-row class="info-row">
+      <b-row v-if="$view.panelVisible" class="info-row">
         <ComposerInfo />
       </b-row>
-      <b-row class="info-row">
+      <b-row v-if="$view.panelVisible" class="info-row">
         <WorkInfo />
       </b-row>
-      <b-row class="info-row">
+      <b-row v-if="$view.panelVisible" class="info-row">
         <AlbumInfoPanel />
       </b-row>
       <b-row class="track-listing-mobile">
-        <TrackListing />
+        <TrackListing /> <!-- this is causing playback to start after loading? -->
       </b-row>
     </div>
   </div>
