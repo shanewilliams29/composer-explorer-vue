@@ -10,6 +10,9 @@
       <b-row class="info-row">
         <AlbumInfoPanel />
       </b-row>
+      <b-row class="track-listing-mobile">
+        <TrackListing />
+      </b-row>
     </div>
   </div>
 </template>
@@ -18,12 +21,14 @@
 import ComposerInfo from '@/components/subcomponents/ComposerInfo.vue';
 import WorkInfo from '@/components/subcomponents/WorkInfo.vue';
 import AlbumInfoPanel from '@/components/subcomponents/AlbumInfoPanel.vue';
+import TrackListing from '@/components/subcomponents/TrackListing.vue'
 
 export default {
   components: {
     ComposerInfo,
     WorkInfo,
-    AlbumInfoPanel
+    AlbumInfoPanel,
+    TrackListing
   },
 };
 </script>
@@ -35,7 +40,7 @@ export default {
   border-radius: 0px;
 }
 .footer-row {
-  height: calc(100vh - 200px);
+  height: calc(100vh - 190px);
   color: black;
 }
 .col {
@@ -52,6 +57,9 @@ export default {
  padding-bottom: 0px;
  margin: 0px !important;
  height: auto !important;
+}
+.track-listing-mobile{
+  width: 100%;
 }
 >>> .composer-info-card{
   padding: 15px;
@@ -73,5 +81,19 @@ export default {
   overflow-y: scroll;
   height: 100px;
   padding-left: 2px;
+}
+>>> .card-deck{
+
+}
+>>> .track-card {
+  width: 100vw;
+  margin: 0px !important;
+  padding-left: 6px;
+  right: 3px;
+  height: 94.58px;
+  position: absolute;
+  bottom: 0px;
+  left: 0px;
+
 }
 </style>

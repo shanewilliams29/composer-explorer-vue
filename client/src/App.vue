@@ -108,7 +108,7 @@ body {
 }
 .info-panel-mobile {
   position: fixed;
-  bottom: 133px;
+  bottom: 123px;
   width: 100%;
 }
 .fadeHeight-enter-active,
