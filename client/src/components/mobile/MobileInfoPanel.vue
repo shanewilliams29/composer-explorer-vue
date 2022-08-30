@@ -10,8 +10,8 @@
       <b-row v-if="$view.panelVisible" class="info-row">
         <AlbumInfoPanel />
       </b-row>
-      <b-row class="track-listing-mobile">
-        <TrackListing /> <!-- this is causing playback to start after loading? -->
+      <b-row class="info-row">
+        <TrackListingMobile /> <!-- this is causing playback to start after loading? -->
       </b-row>
     </div>
   </div>
@@ -21,14 +21,14 @@
 import ComposerInfo from '@/components/subcomponents/ComposerInfo.vue';
 import WorkInfo from '@/components/subcomponents/WorkInfo.vue';
 import AlbumInfoPanel from '@/components/subcomponents/AlbumInfoPanel.vue';
-import TrackListing from '@/components/subcomponents/TrackListing.vue'
+import TrackListingMobile from '@/components/mobile/TrackListingMobile.vue'
 
 export default {
   components: {
     ComposerInfo,
     WorkInfo,
     AlbumInfoPanel,
-    TrackListing
+    TrackListingMobile
   }
 };
 </script>
@@ -63,12 +63,25 @@ export default {
 }
 >>> .composer-info-card{
   padding: 15px;
-  padding-bottom: 5px;
+  padding-bottom: 0px;
   background-color: white !important;
   border: none !important;
   width: 100%;
 }
 >>> .album-info-card{
+  padding: 15px;
+  padding-bottom: 5px;
+  background-color: white !important;
+  border: none !important;
+  width: 100%;
+}
+>>> .heading-tr{
+  height: auto !important;
+}
+>>> .card-title{
+  height:  auto;
+}
+>>> .track-info-card{
   padding: 15px;
   padding-bottom: 5px;
   background-color: white !important;
