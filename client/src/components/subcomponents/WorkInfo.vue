@@ -5,7 +5,8 @@
           <table>
             <tr>
               <td>
-                <b-avatar size="60px" :src="workImg"></b-avatar>
+                <b-avatar size="40px" :src="workImg" v-if="$view.mobile"></b-avatar>
+                <b-avatar size="60px" :src="workImg" v-if="!$view.mobile"></b-avatar>
               </td>
               <td class="info-td">
                 {{ workTitle }}<br />
@@ -148,6 +149,7 @@ export default {
 <style scoped>
 .info-td{
   padding-left: 10px;
+  font-size: 16px;
 }
 .spinner {
   text-align: center;

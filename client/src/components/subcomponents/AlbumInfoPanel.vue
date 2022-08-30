@@ -2,9 +2,13 @@
 
     <b-card class="album-info-card shadow-sm">
       <b-card-body class="card-body">
-        <b-card-title class="card-title" v-if="!$view.mobile">
+        <b-card-title class="card-title">
           <table v-if="album.release_date">
             <tr class="heading-tr">
+              <td>
+                <b-avatar square size="40px" :src="album.images[1].url" v-if="$view.mobile"></b-avatar>
+                <b-avatar square size="60px" :src="album.images[1].url" v-if="!$view.mobile"></b-avatar>
+              </td>
               <td class="heading-td">
                 {{ album.name }}<br />
                 <span class="born-died">
@@ -116,6 +120,7 @@ export default {
     },
     setSpotifyAlbum(album) { // spotify album
       this.album = album;
+      console.log(album);
     },
     getSpotifyArtistIDs(album) { // not used
       let artistsList = album.artists;
@@ -174,8 +179,8 @@ a:hover{
   height: 62px !important;
 }
 .heading-td{
-  padding-left: 2px !important;
-
+  padding-left: 10px;
+  font-size: 16px;
 }
 .spinner {
   text-align: center;

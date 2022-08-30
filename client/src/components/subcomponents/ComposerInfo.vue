@@ -6,7 +6,8 @@
                   <table>
                       <tr>
                           <td>
-                              <b-avatar-group size="60px">
+                              <b-avatar :src="composer.image" v-if="$view.mobile"></b-avatar>
+                              <b-avatar-group size="60px" v-if="!$view.mobile">
                                   <b-avatar :src="composer.region"></b-avatar>
                                   <b-avatar :src="composer.image"></b-avatar>
                               </b-avatar-group>
@@ -106,6 +107,7 @@ export default {
 }
 .info-td{
   padding-left: 10px;
+  font-size: 16px;
 }
 .card-body{
   background-color: white !important;

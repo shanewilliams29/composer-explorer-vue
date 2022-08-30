@@ -35,7 +35,7 @@ export default {
 
 <style scoped>
 .container-fluid {
-  background-color: #f1f2f4;
+  background-color: #454d54;
   padding-bottom: 0px;
   border-radius: 0px;
 }
@@ -79,7 +79,7 @@ export default {
   font-size: 13px;
   line-height: 130%;
   overflow-y: scroll;
-  height: calc(100vh - 532px);
+  height: 96px;
   padding-left: 2px;
 }
 >>> .card-deck{
