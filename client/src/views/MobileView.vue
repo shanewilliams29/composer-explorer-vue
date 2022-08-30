@@ -206,6 +206,9 @@ export default {
 </style>
 
 <style scoped>
+  >>> .card{
+    color: #343a40;
+  }
   >>> .composer-card{
     margin-left: -15px;
     margin-right: -10px;
@@ -217,7 +220,7 @@ export default {
   >>> .albums-card{
     margin-left: -15px;
     margin-right: -10px;
-    padding-top: 1.5px !important;
+    padding-top: 6.5px !important;
   }
 /* .playback-container{
     padding: 13px;
@@ -230,12 +233,13 @@ export default {
   }
   .heading-card{
     background: #54595f !important;
+    padding-top:  10px;
     padding-right: 5px;
     margin-right: -15px;
     border-radius: 0px;
   }
   .card-body{
-    background: #f1f2f4 !important;
+    background: #54595f !important;
     padding: 0px !important;
   }
 
