@@ -47,6 +47,7 @@ GENERAL
 - Mobile: Track starts from beginning when switching from radio to main
 - Mobile: Track starts playing immediately, after adding Tracklisting to MobileInfoPanel...
 - Mobile: Improve Tracklisting
+- Mobile: if choose different composer/work, the info panel is wrong, should show details of track playing
 - Localhost mobile automatically plays after login? Doesn't happen on production...
 
 ***

@@ -48,7 +48,6 @@ export default {
   },
   computed:{
     composerChanged(){
-      console.log(this.$config.composer);
       return this.$config.composer;
     }
   },

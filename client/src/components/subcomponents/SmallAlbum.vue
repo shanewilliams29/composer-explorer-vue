@@ -20,8 +20,8 @@
                 </td>
               </tr>
               <tr>
-             <td width="100%" style="white-space: nowrap; text-overflow: ellipsis; overflow: hidden; max-width: 1px;">
-                  <AlbumLikes v-bind:likedAlbums="likedAlbums" v-bind:album="album" v-bind:selectedAlbum="selectedAlbum"/>
+             <td width="100%" style="white-space: nowrap; text-overflow: ellipsis; overflow: hidden; max-width: 1px;"><span class="album-likes-class">
+                  <AlbumLikes v-bind:likedAlbums="likedAlbums" v-bind:album="album" v-bind:selectedAlbum="selectedAlbum"/></span>
                   <span class="label">℗ {{ album.release_date }}</span><span class="label"> · {{ album.label }}</span>
                 </td>
               </tr>
@@ -126,11 +126,6 @@ header.card-header {
 .highlight span {
   color: white !important;
 }
-.badge {
-  color: #fff;
-  background-color: #777777;
-  border-radius: 7px;
-}
 .album_columns {
   padding-right: 5px;
   -ms-flex: 0 0 65px;
@@ -139,15 +134,17 @@ header.card-header {
 .album_text_columns {
   padding-left: 0px;
 }
-.badge {
-  vertical-align: middle;
-  color: #fff !important;
-  background-color: darkgoldenrod;
-  margin-bottom: 2.5px;
-  border-radius: 7px;
+.row{
+  height: 65px !important;
+  overflow-y: hidden !important;
 }
-.highlight .badge {
-  color: #000 !important;
-  background-color: #fff;
+.album-likes-class{
+  font-size: 12px !important;
+}
+>>> .badge {
+  vertical-align: top;
+  margin-top: 0px;
+  margin-bottom: 0px;
+  border-radius: 7px;
 }
 </style>

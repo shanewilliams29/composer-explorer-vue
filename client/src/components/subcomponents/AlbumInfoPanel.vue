@@ -120,7 +120,7 @@ export default {
     },
     setSpotifyAlbum(album) { // spotify album
       this.album = album;
-      console.log(album);
+      //console.log(album);
     },
     getSpotifyArtistIDs(album) { // not used
       let artistsList = album.artists;
