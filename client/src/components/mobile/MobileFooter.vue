@@ -14,9 +14,6 @@
         <NotPremiumModal />
         <NotAvailableModal />
       </b-col>
-      <b-col v-if="false">
-        <TrackListing />
-      </b-col>
     </b-row>
   </div>
 </template>
@@ -24,7 +21,6 @@
 <script>
 import AlbumInfo from '@/components/subcomponents/AlbumInfo.vue'
 import PlayerControls from '@/components/subcomponents/PlayerControls.vue'
-import TrackListing from '@/components/subcomponents/TrackListing.vue'
 import SpotifyModal from '@/components/subcomponents/SpotifyModal.vue'
 import AutoplayModal from '@/components/subcomponents/AutoplayModal.vue'
 import NotPremiumModal from '@/components/subcomponents/NotPremiumModal.vue'
@@ -34,7 +30,6 @@ export default {
   components: {
     AlbumInfo,
     PlayerControls,
-    TrackListing,
     SpotifyModal,
     AutoplayModal,
     NotPremiumModal,

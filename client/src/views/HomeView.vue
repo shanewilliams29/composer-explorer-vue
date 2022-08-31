@@ -40,6 +40,9 @@ export default {
     }
   },
   beforeCreate() {
+    if( screen.width <= 760 ) {
+        window.location.replace('mobile');
+    }
     this.$view.mobile = false;
     if(this.$config.albumSize == 'large'){
         document.documentElement.style.setProperty('--flex', '0 0 400px');

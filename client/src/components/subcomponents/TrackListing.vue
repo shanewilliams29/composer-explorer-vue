@@ -112,6 +112,7 @@ export default {
       },
     },
   created() {
+    console.log(this.$view.mobile);
     eventBus.$on('fireSetAlbum', (album) => {
         this.genre = this.$config.genre;
         this.$config.allTracks = album.tracks[0][2];

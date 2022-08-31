@@ -61,20 +61,16 @@ export default {
     }
   },
   beforeCreate() {
-    // if (screen.width <= 760) {
-    //   window.location.replace('mobile');
-    // }
+    if (this.$route.name == 'mobile' || this.$route.name == 'mobileradio'){
+      this.$view.mobile = true;
+      document.documentElement.style.setProperty('--playerpadding', `3px`);
+    } else {
+      this.$view.mobile = false;
+      document.documentElement.style.setProperty('--playerpadding', `21.5px`);
+    }
     document.documentElement.style.setProperty('--panelheight', `0px`);
     this.$view.panelVisible = false;
   },
-  mounted(){
-    console.log(this.$view.mobile);
-    if(this.$view.mobile){
-      document.documentElement.style.setProperty('--playerpadding', `3px`);
-    } else {
-      document.documentElement.style.setProperty('--playerpadding', `21.5px`);
-    }
-  }
 }
 </script>
 
