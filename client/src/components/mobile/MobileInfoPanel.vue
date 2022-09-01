@@ -40,7 +40,8 @@ export default {
   border-radius: 0px;
 }
 .footer-row {
-  height: calc(100vh - 190px);
+  /*height: calc(var(--vh, 1vh) * 100 - 314px + 8.5px);*/
+  height: calc(var(--vh, 1vh) * 100 - 123px - 66px);
   color: black;
 }
 .col {
