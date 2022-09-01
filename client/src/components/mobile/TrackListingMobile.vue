@@ -224,7 +224,7 @@ a:hover{
   overflow-y: scroll;
 /*  height: 190px;*/
   height: auto;
-  max-height: calc(100vh - 570px);;
+  max-height: calc(var(--vh, 1vh) * 100 - 570px);;
   padding-left: 2px;
 }
 table{
