@@ -6,7 +6,8 @@
       </b-col>
       <b-col>
           <b-button class="info-panel-button" @click="togglePanel()">
-          <span><b-icon-info-circle></b-icon-info-circle></span>
+          <span class="icon-inactive" v-if="!buttonActive"><b-icon-info-circle></b-icon-info-circle></span>
+          <span class="icon-active" v-if="buttonActive"><b-icon-info-circle></b-icon-info-circle></span>
         </b-button>
         <PlayerControls />
       </b-col>
@@ -23,9 +24,15 @@ export default {
     AlbumInfo,
     PlayerControls,
   },
+  data() {
+    return {
+      buttonActive: false
+    };
+  },
   methods:{
     togglePanel(){
       this.$parent.togglePanel();
+      this.buttonActive = !this.buttonActive;
     }
   }
 };
@@ -55,23 +62,27 @@ export default {
 }
 .info-panel-button {
   position: absolute;
-  right: 10px;
-  font-size: 20px !important;
+  right: 13px;
+  font-size: 18px !important;
   border-radius: 50% !important;
   padding-left: 2.8px !important;
   padding-right: 2.8px !important;
   padding-top: 1.2px;
   padding-bottom: 0px;
-  bottom: 90px;
+  bottom: 92px;
   z-index: 9999;
   background-color: #343a40 !important;
   border: none !important;
-  color: var(--warning);
+  box-shadow: none !important;
 }
-.info-panel-button:hover {
-  color: var(--warning);
+.btn:hover, .btn:focus, .btn:active{
+   outline: none !important;
+   box-shadow: none;
 }
-.info-panel-button:focus {
-  color: var(--warning);
+.icon-inactive{
+  color: white !important;
+}
+.icon-active{
+  color: var(--yellow) !important;
 }
 </style>
