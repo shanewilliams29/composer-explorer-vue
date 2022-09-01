@@ -62,6 +62,7 @@ export default {
         var trackId = track[1];
         var element = document.getElementById(trackId);
         var top = element.offsetTop;
+        console.log(top);
         this.$refs['scroll-box'].scrollTo({
                                   top: top,
                                   left: 0,

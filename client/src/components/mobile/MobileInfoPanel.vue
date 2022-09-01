@@ -11,7 +11,7 @@
         <AlbumInfoPanel />
       </b-row>
       <b-row class="info-row">
-        <TrackListingMobile /> <!-- this is causing playback to start after loading? -->
+        <TrackListingMobile />
       </b-row>
     </div>
   </div>

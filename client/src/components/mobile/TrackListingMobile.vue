@@ -1,12 +1,16 @@
 <template>
-    <b-card class="track-info-card shadow-sm">
-      <b-card-body class="card-body">
-        <b-card-text class="info-card-text-tracks">
-          <div v-for="(track, index) in album.tracks" :key="track[1]">
+    <b-card no-body class="track-info-card shadow-sm">
+        <b-card-text class="info-card-text-tracks" ref="scroll-box">
             <table>
-              <tr>
+              <tr v-for="(track, index) in album.tracks"
+                  @click="selectTrack(track); playTracks(track[2]);" 
+                  :class="{'highlight-track': trackMatch(track)}"
+                  :id="track[1]"
+                  :key="track[1]"
+              >
                 <td>
-                  <b-avatar size="40px" :text="(index + 1)"></b-avatar>
+                  <b-avatar v-if="trackMatch(track)" variant="warning" size="40px" :text="(index + 1).toString()"></b-avatar>
+                  <b-avatar v-if="!trackMatch(track)" size="40px" :text="(index + 1).toString()"></b-avatar>
                 </td>
                 <td class="info-td">
                   <a clss="artist-name">
@@ -16,9 +20,7 @@
                 </td>
               </tr>
             </table>
-          </div>
         </b-card-text>
-      </b-card-body>
     </b-card>
 
 
@@ -73,6 +75,18 @@ export default {
       genre: "",
       stopMatch: false // necessary in case album has multiple tracks with the same name (would select them all)
     };
+  },
+  computed:{
+    panelShow(){
+      return this.$view.panelVisible;
+    }
+  },
+  watch: {
+    panelShow(panelState) {
+      if (panelState == true){
+        this.selectTrack(this.selectedTrack);
+      }
+    }
   },
   methods: {
     strFix(item){
@@ -163,14 +177,15 @@ export default {
 </script>
 
 <style scoped>
+td{
+  padding-bottom: 5px;
+}
 a{
-  color: black !important;
+  color: black;
   font-weight: 600;
   font-size: 14px;
 }
 a:hover{
-  color: black !important;
-  text-decoration: underline !important;
   cursor: pointer;
 }
 .heading-tr{
@@ -195,17 +210,17 @@ a:hover{
   padding: 15px;
   padding-top: 15px !important;
   padding-bottom: 10px;
-  background-color: white !important;
+  background-color: 343a40 !important;
   border: none !important;
 
 }
 .info-td{
   padding-left: 10px;
 }
+.highlight-track {
+  color: var(--yellow) !important;
 
-
-
-
+}
 .disclaimer{
   margin-bottom: 11px;
 }
