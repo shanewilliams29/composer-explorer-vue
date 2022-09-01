@@ -9,10 +9,6 @@
           <span><b-icon-info-circle></b-icon-info-circle></span>
         </b-button>
         <PlayerControls />
-        <SpotifyModal />
-        <AutoplayModal />
-        <NotPremiumModal />
-        <NotAvailableModal />
       </b-col>
     </b-row>
   </div>
@@ -21,19 +17,11 @@
 <script>
 import AlbumInfo from '@/components/subcomponents/AlbumInfo.vue'
 import PlayerControls from '@/components/subcomponents/PlayerControls.vue'
-import SpotifyModal from '@/components/subcomponents/SpotifyModal.vue'
-import AutoplayModal from '@/components/subcomponents/AutoplayModal.vue'
-import NotPremiumModal from '@/components/subcomponents/NotPremiumModal.vue'
-import NotAvailableModal from '@/components/subcomponents/NotAvailableModal.vue'
 
 export default {
   components: {
     AlbumInfo,
     PlayerControls,
-    SpotifyModal,
-    AutoplayModal,
-    NotPremiumModal,
-    NotAvailableModal
   },
   methods:{
     togglePanel(){

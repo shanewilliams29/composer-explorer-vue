@@ -9,10 +9,6 @@
           <span v-if="!$parent.showPanel"><b-icon-chevron-up></b-icon-chevron-up></span><span v-else><b-icon-chevron-down></b-icon-chevron-down></span> INFO PANEL
         </b-button>
         <PlayerControls />
-        <SpotifyModal />
-        <AutoplayModal />
-        <NotPremiumModal />
-        <NotAvailableModal />
       </b-col>
       <b-col class="last-col">
         <TrackListing />
@@ -25,46 +21,18 @@
 import AlbumInfo from './subcomponents/AlbumInfo.vue'
 import PlayerControls from './subcomponents/PlayerControls.vue'
 import TrackListing from './subcomponents/TrackListing.vue'
-import SpotifyModal from './subcomponents/SpotifyModal.vue'
-import AutoplayModal from './subcomponents/AutoplayModal.vue'
-import NotPremiumModal from './subcomponents/NotPremiumModal.vue'
-import NotAvailableModal from './subcomponents/NotAvailableModal.vue'
-
-import {eventBus} from "../main.js";
 
 export default {
   components: {
     AlbumInfo,
     PlayerControls,
     TrackListing,
-    SpotifyModal,
-    AutoplayModal,
-    NotPremiumModal,
-    NotAvailableModal
   },
   methods:{
-    notLoggedIn(){
-      this.$bvModal.show('spotify-modal');
-    },
-    notPremium(){
-      this.$bvModal.show('not-premium-modal');
-    },
-    notAvailable(){
-      this.$bvModal.show('not-available-modal');
-    },
-    autoplayDisabled(){
-      this.$bvModal.show('autoplay-modal');
-    },
     togglePanel(){
       this.$parent.togglePanel();
     }
-  },
-  mounted() {
-    eventBus.$on('notLoggedIn', this.notLoggedIn);
-    eventBus.$on('fireAutoplayFailed', this.autoplayDisabled);
-    eventBus.$on('notPremium', this.notPremium);
-    eventBus.$on('notAvailable', this.notAvailable);
-  },
+  }
 };
 </script>
 

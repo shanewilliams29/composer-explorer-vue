@@ -4,6 +4,7 @@
     <WelcomeOverlay />
     <router-view />
     <SpotifyPlayer />
+    <ModalContainer/>
     <Transition name="fadeHeight">
       <div class="info-panel" v-show="showPanel"><InfoPanel /></div>
     </Transition>
@@ -24,6 +25,7 @@ import SpotifyPlayer from '@/components/SpotifyPlayer.vue'
 import InfoPanel from '@/components/InfoPanel.vue'
 import PageFooter from '@/components/PageFooter.vue'
 import NavBar from '@/components/NavBar.vue'
+import ModalContainer from '@/components/ModalContainer.vue'
 import MobileInfoPanel from '@/components/mobile/MobileInfoPanel.vue'
 import MobileTracks from '@/components/mobile/MobileTracks.vue'
 import MobileFooter from '@/components/mobile/MobileFooter.vue'
@@ -33,6 +35,7 @@ export default {
     NavBar,
     WelcomeOverlay,
     SpotifyPlayer,
+    ModalContainer,
     MobileTracks,
     MobileFooter,
     MobileInfoPanel,
