@@ -34,6 +34,9 @@ export default {
 </script>
 
 <style scoped>
+>>> a:hover{
+  text-decoration: none !important;
+}
 .container-fluid {
   background-color: #454d54;
   padding-bottom: 0px;

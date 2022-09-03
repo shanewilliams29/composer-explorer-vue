@@ -112,10 +112,12 @@ export default {
       });
     },
     getArtistComposers(artist) {
-      eventBus.$emit('fireArtistComposers', artist);
-      this.$config.artist = artist;
-      if (this.$route.name != 'performers') {
-        this.$router.push('/performers?artist=' + artist);
+      if(!this.$view.mobile){
+        eventBus.$emit('fireArtistComposers', artist);
+        this.$config.artist = artist;
+        if (this.$route.name != 'performers') {
+          this.$router.push('/performers?artist=' + artist);
+        }
       }
     },
     setSpotifyAlbum(album) { // spotify album
