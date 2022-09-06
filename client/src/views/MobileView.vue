@@ -188,11 +188,6 @@ export default {
     margin-bottom: 0px !important;
   }
 
-  .album-list-mobile table{
-    padding-top: 3px;
-    font-size: 14px !important;
-  }
-
   #footer{
     height: 124px;
     overflow-x: hidden;

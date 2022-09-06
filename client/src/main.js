@@ -59,7 +59,7 @@ const defaultConfig = {
   album: "BEETHOVEN000056eOuqhCfrTPp1H0YbQ9PmL",
   albumSize: 'large',
   artist: null,
-  albumData: {}
+  albumData: {},
 };
 if (localStorage.getItem("config") !== null) {
   config = JSON.parse(localStorage.getItem('config'));

@@ -62,7 +62,7 @@
 <script>
 import {eventBus} from "../../main.js";
 import spotify from '@/SpotifyFunctions.js'
-import smoothscroll from 'smoothscroll-polyfill';
+//import smoothscroll from 'smoothscroll-polyfill';
 
 export default {
   data() {
@@ -96,15 +96,15 @@ export default {
     selectTrack(track){
         this.selectedTrack = track;
 
-        smoothscroll.polyfill(); // for Safari smooth scrolling
-        var trackId = track[1];
-        var element = document.getElementById(trackId);
-        var top = element.offsetTop;
-        this.$refs['scroll-box'].scrollTo({
-                                  top: top,
-                                  left: 0,
-                                  behavior: 'smooth'
-                                });
+        // smoothscroll.polyfill(); // for Safari smooth scrolling
+        // var trackId = track[1];
+        // var element = document.getElementById(trackId);
+        // var top = element.offsetTop;
+        // this.$refs['scroll-box'].scrollTo({
+        //                           top: top,
+        //                           left: 0,
+        //                           behavior: 'smooth'
+        //                         });
     },
     trackMatch(track){
         // match on IDs
@@ -239,7 +239,7 @@ a:hover{
   overflow-y: scroll;
 /*  height: 190px;*/
   height: auto;
-  max-height: calc(var(--vh, 1vh) * 100 - 570px);;
+  /*max-height: calc(var(--vh, 1vh) * 100 - 570px);*/
   padding-left: 2px;
 }
 table{
@@ -283,7 +283,6 @@ table{
         border-radius: 20px;
         border: 3px solid var(--scroll-bar-bg-color)!important;
     }
-
 
 </style>
 

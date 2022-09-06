@@ -121,14 +121,19 @@ export default {
   --vs-selected-color: #fff;
   --vs-line-height: 1;
   --vs-search-input-color: #fff;
+  --vs-font-size: 14px;
 }
 .performer-search {
   margin-top: 1.3px !important;
-  font-size: 14px;
+  padding-top: 3px;
+  font-size: 14px !important;
   background-color: #3b4047 !important;
   height: 31px;
-  border: none;
   border-radius: 4px;
+}
+.performer-search >>> {
+  --vs-border-width: 0px;
+  font-size: 14px !important;
 }
 .albums-card {
   padding-top: 3.5px !important;

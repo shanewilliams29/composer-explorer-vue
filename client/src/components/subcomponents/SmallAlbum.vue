@@ -2,15 +2,15 @@
   <div>
     <b-card class="shadow-sm" v-for="album in albums" :key="album.id" :id="album.id" no-body header-tag="header" :class="{'highlight': (album.id == selectedAlbum)}">
       <div class="row">
-        <b-col class="album_columns">
-          <img @click="$parent.selectRow(album.id); $parent.getAlbumData(album.id);" rounded="left" width="65px" height="65px" v-lazy="album.album_img" />
+        <b-col cols="auto" class="album_columns">
+          <img class="album-img-small" @click="$parent.selectRow(album.id); $parent.getAlbumData(album.id);" v-lazy="album.album_img" />
         </b-col>
         <b-col class="album_text_columns">
           <b-card-text>
             <table cellspacing="0" @click="$parent.selectRow(album.id); $parent.getAlbumData(album.id);">
               <tr>
                 <td width="100%" style="white-space: nowrap; text-overflow: ellipsis; overflow: hidden; max-width: 1px;">
-                  <span style="color: black; font-weight: 600;">{{ album.artists }} </span>
+                  <span style="color: black; font-weight: 600; font-size: 13px;">{{ album.artists }} </span>
                 </td>
               </tr>
               <tr>
@@ -20,8 +20,13 @@
                 </td>
               </tr>
               <tr>
-             <td width="100%" style="white-space: nowrap; text-overflow: ellipsis; overflow: hidden; max-width: 1px;"><span class="album-likes-class">
+                <td width="100%" style="white-space: nowrap; text-overflow: ellipsis; overflow: hidden; max-width: 1px;">
+                  <span class="album-likes-class">
                   <AlbumLikes v-bind:likedAlbums="likedAlbums" v-bind:album="album" v-bind:selectedAlbum="selectedAlbum"/></span>
+                </td>
+              </tr>
+              <tr>
+             <td width="100%" style="white-space: nowrap; text-overflow: ellipsis; overflow: hidden; max-width: 1px;">
                   <span class="label">℗ {{ album.release_date }}</span><span class="label"> · {{ album.label }}</span>
                 </td>
               </tr>
@@ -63,6 +68,13 @@ export default {
 </script>
 
 <style scoped>
+.album-img-small{
+  border-top-left-radius: 0.25rem;
+  border-bottom-left-radius: 0.25rem;
+  width: 72px; 
+  height: 100%;
+}
+
 .spotify-icon{
   position: absolute;
   right: 20px;
@@ -76,15 +88,14 @@ export default {
 }
 .label{
   font-size: 10px;
-  position:relative;
-  top: -2px;
 }
 .gray{
   color: gray;
 }
 td {
   padding: 0px;
-  vertical-align: bottom;
+  height: 17px !important;
+  vertical-align: middle;
   /*   border-top: 1px dotted lightgray;*/
 }
 tr {
@@ -93,23 +104,20 @@ tr {
 table {
   width: 100%;
   border-collapse: separate;
-  font-size: 13px;
   padding: 0px;
   padding-right: 5px;
-  padding-top: 5px;
+  padding-top: 3px;
   padding-left: 2px;
   padding-bottom: 0px;
-  line-height: 110%;
+  font-size: 14px !important;
+  line-height: 120%;
+  height: 70px;
 }
 header.card-header {
   background-color: #fff;
   border: none;
   padding-left: 10px;
   padding-bottom: 0px;
-}
-.mb-0 {
-  font-size: 12px;
-  font-weight: bold;
 }
 .card {
   background-color: #fff;
@@ -127,24 +135,17 @@ header.card-header {
   color: white !important;
 }
 .album_columns {
-  padding-right: 5px;
-  -ms-flex: 0 0 65px;
-  flex: 0 0 65px;
+  padding-right: 3px;
+/*  -ms-flex: 0 0 91.917px;
+  flex: 0 0 91.917px;*/
 }
 .album_text_columns {
   padding-left: 0px;
 }
-.row{
-  height: 65px !important;
-  overflow-y: hidden !important;
-}
-.album-likes-class{
+/*.album-likes-class{
   font-size: 12px !important;
-}
+}*/
 >>> .badge {
-  vertical-align: top;
-  margin-top: 0px;
-  margin-bottom: 0px;
-  border-radius: 7px;
+  margin-bottom: 0px !important;
 }
 </style>

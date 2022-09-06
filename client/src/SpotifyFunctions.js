@@ -162,8 +162,10 @@ var spotify = {
       if (error.response.status == 401) {
         eventBus.$emit('notLoggedIn');
       } else if (error.response.status == 404) {
+        //alert(error.response.data.error.message);
         eventBus.$emit('notAvailable');
       } else {
+        //alert(error.response.data.error.message);
         console.error(error);
       }
     });

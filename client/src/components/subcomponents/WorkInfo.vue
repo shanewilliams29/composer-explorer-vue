@@ -5,10 +5,11 @@
           <table>
             <tr>
               <td>
-                <b-avatar size="40px" :src="workImg" v-if="$view.mobile"></b-avatar>
+                <b-avatar size="60px" :src="composerImg" v-if="$view.mobile"></b-avatar>
                 <b-avatar size="60px" :src="workImg" v-if="!$view.mobile"></b-avatar>
               </td>
               <td class="info-td">
+                <span class='composer-name' v-if="$view.mobile">{{ composer }}<br/></span>
                 {{ workTitle }}<br />
                 <span v-if="catNo" class="born-died">{{ catNo }}</span><span v-else class="born-died"><span v-if="date">{{date}}</span></span>
               </td>
@@ -44,7 +45,8 @@ export default {
       workBlurb: "",
       wikiLink: "",
       catNo: '',
-      date: ''
+      date: '',
+      composer: ''
     };
   },
   computed:{
@@ -66,6 +68,7 @@ export default {
             this.composer = res.data.info.composer;
             this.workTitle = res.data.info.title;
             this.workImg = res.data.info.search;
+            this.composerImg = 'https://storage.googleapis.com/composer-explorer.appspot.com/img/' + this.composer + '.jpg'
             this.catNo = res.data.info.cat;
             this.date = res.data.info.date;
             this.wikiWork(this.composer + " " + this.workTitle + " " + this.catNo);

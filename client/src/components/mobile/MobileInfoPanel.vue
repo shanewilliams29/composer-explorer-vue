@@ -1,10 +1,7 @@
 <template>
   <div v-if="$view.mobile" class="container-fluid">
-    <div class="footer-row">
-      <b-row v-if="$view.panelVisible" class="info-row">
-        <ComposerInfo />
-      </b-row>
-      <b-row v-if="$view.panelVisible" class="info-row">
+    <div class="footer-row disable-scrollbars">
+      <b-row v-if="$view.panelVisible" class="info-row work-info">
         <WorkInfo />
       </b-row>
       <b-row v-if="$view.panelVisible" class="info-row">
@@ -18,14 +15,12 @@
 </template>
 
 <script>
-import ComposerInfo from '@/components/subcomponents/ComposerInfo.vue';
 import WorkInfo from '@/components/subcomponents/WorkInfo.vue';
 import AlbumInfoPanel from '@/components/subcomponents/AlbumInfoPanel.vue';
 import TrackListingMobile from '@/components/mobile/TrackListingMobile.vue'
 
 export default {
   components: {
-    ComposerInfo,
     WorkInfo,
     AlbumInfoPanel,
     TrackListingMobile
@@ -46,6 +41,8 @@ export default {
   /*height: calc(var(--vh, 1vh) * 100 - 314px + 8.5px);*/
   height: calc(var(--vh, 1vh) * 100 - 123px - 66px);
   color: black;
+  overflow-y: scroll;
+  padding-bottom: 10px;
 }
 .col {
   padding: 5px;
@@ -96,7 +93,7 @@ export default {
   font-size: 13px;
   line-height: 130%;
   overflow-y: scroll;
-  height: 96px;
+  height: auto;
   padding-left: 2px;
 }
 >>> .card-deck{
@@ -112,5 +109,14 @@ export default {
   bottom: 0px;
   left: 0px;
 
+}
+.disable-scrollbars::-webkit-scrollbar {
+  background: transparent; /* Chrome/Safari/Webkit */
+  width: 0px;
+}
+    
+.disable-scrollbars {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none;  /* IE 10+ */
 }
 </style>
