@@ -129,6 +129,7 @@ export default {
 
     window.addEventListener('resize', () => {
 
+
       let vh = window.innerHeight * 0.01;
 
       // for mobile keyboard
@@ -148,7 +149,7 @@ export default {
 <style>
   .composer-list-mobile{
     /*height: calc(100vh - 314px);*/
-    height: calc(var(--vh, 1vh) * 100 - 314px + 8.5px);
+    height: calc(var(--vh, 1vh) * 100 - 300px);
     overflow-y: scroll;
   }
   .composer-list-mobile .composer-img{
@@ -167,7 +168,7 @@ export default {
   }
   .work-list-mobile{
     /*height: calc(100vh - 314px);*/
-    height: calc(var(--vh, 1vh) * 100 - 314px + 8.5px);
+    height: calc(var(--vh, 1vh) * 100 - 300px);
     overflow-y: scroll;
   }
   .work-list-mobile .card{
@@ -180,7 +181,7 @@ export default {
   }
   .album-list-mobile{
     /*height: calc(100vh - 314px);*/
-    height: calc(var(--vh, 1vh) * 100 - 314px + 8.5px);
+    height: calc(var(--vh, 1vh) * 100 - 300px);
     overflow-y: scroll;
     overflow-x: hidden;
   }

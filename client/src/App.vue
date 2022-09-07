@@ -15,7 +15,7 @@
       <div class="info-panel-mobile" v-show="showPanel"><MobileInfoPanel /></div>
       <MobileTracks />
       <MobileFooter/>
-  </div>
+    </div>
   </div>
 </template>
 
@@ -97,6 +97,10 @@ body {
   transform: translateX(-50%);
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
+#footer{
+  height: 200px !important;
+  background-color: #343a40 !important;
+}
 
 .info-panel {
   position: fixed;
@@ -105,7 +109,7 @@ body {
 }
 .info-panel-mobile {
   position: fixed;
-  bottom: 123px;
+  bottom: 117px;
   width: 100%;
 }
 .fadeHeight-enter-active,

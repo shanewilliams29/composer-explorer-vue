@@ -84,7 +84,7 @@ export default {
 }
   .work-list-radio-mobile{
     /*height: calc(100vh - 314px);*/
-    height: calc(var(--vh, 1vh) * 100 - 387px);
+    height: calc(var(--vh, 1vh) * 100 - 380px - 1px);
     overflow-y: scroll;
   }
 </style>

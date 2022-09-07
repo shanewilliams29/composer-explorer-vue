@@ -9,7 +9,7 @@
           <span class="icon-inactive" v-if="!buttonActive"><b-icon-info-circle></b-icon-info-circle></span>
           <span class="icon-active" v-if="buttonActive"><b-icon-info-circle></b-icon-info-circle></span>
         </b-button>
-        <PlayerControls />
+        <MobilePlayerControls />
       </b-col>
     </b-row>
   </div>
@@ -17,12 +17,12 @@
 
 <script>
 import AlbumInfo from '@/components/subcomponents/AlbumInfo.vue'
-import PlayerControls from '@/components/subcomponents/PlayerControls.vue'
+import MobilePlayerControls from '@/components/mobile/MobilePlayerControls.vue'
 
 export default {
   components: {
     AlbumInfo,
-    PlayerControls,
+    MobilePlayerControls,
   },
   data() {
     return {
@@ -46,15 +46,10 @@ export default {
   border-radius: 0px;
   border-radius: 0px;
 }
-.info-col {
-  height: 83px;
-  overflow-y: hidden;
-}
 .album-cover-col {
   padding-right: 0px;
 }
 .footer-row {
-  height: 83px;
   color: white;
 }
 .col {
@@ -69,8 +64,8 @@ export default {
   padding-right: 2.8px !important;
   padding-top: 1.2px;
   padding-bottom: 0px;
-  bottom: 92px;
-  z-index: 9999;
+  bottom: calc(117px - 22.5px - 13px);
+  z-index: 1;
   background-color: #343a40 !important;
   border: none !important;
   box-shadow: none !important;
