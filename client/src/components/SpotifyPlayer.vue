@@ -4,7 +4,9 @@
 
 <script>
 import axios from 'axios';
-import {eventBus} from "../main.js";
+import {eventBus} from "@/main.js";
+import {startTracks} from "@/main.js";
+import spotify from '@/SpotifyFunctions.js'
 
 let spotifyPlayerScript = document.createElement('script');
 spotifyPlayerScript.setAttribute('src', 'https://sdk.scdn.co/spotify-player.js');
@@ -40,6 +42,7 @@ export default {
               }) => {
                 this.device_id = device_id;
                 this.$auth.deviceID = device_id;
+                window.device_id = device_id;
                 console.log('Ready with Device ID', device_id);
               });
               // Not Ready
@@ -74,7 +77,7 @@ export default {
               });
               window.player.addListener('autoplay_failed', () => {
                 console.log('Autoplay is not allowed by the browser autoplay rules');
-                eventBus.$emit('fireAutoplayFailed');
+                // eventBus.$emit('fireAutoplayFailed');
               });
               window.player.addListener('player_state_changed', ({
                 position,
@@ -90,11 +93,26 @@ export default {
               });
               window.player.connect();
               // for Safari autoplay enable
-              document.getElementById("app").addEventListener("click", function() {
+              
+              document.getElementById("play-button").addEventListener("click", function() {
                 window.player.activateElement();
-                console.log("Activated");
+                let uriList = {}
+                let jsonList = {}
+                let tracks = startTracks;
+
+
+                // ensure unnecessary whitespace in track list (gives spotify erors):
+                var smushTracks = tracks.replace(/\s/g,'');
+                var cleanTracks = smushTracks.replaceAll('spotify', ' spotify').trim();
+
+                uriList['uris'] = cleanTracks.split(' ');
+                jsonList = JSON.stringify(uriList);
+                spotify.playTracks(res.data.client_token, window.device_id, jsonList);
               }, {
                 once: true
+              });
+              document.getElementById("play-button").addEventListener("click", function() {
+                window.player.togglePlay();
               });
             } else if (res.data.client_token !== null){
               this.$auth.clientToken = res.data.client_token;

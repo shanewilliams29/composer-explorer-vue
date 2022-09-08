@@ -7,7 +7,7 @@
   <b-button class="playback-button gray" id="random-button" v-show="$view.mode != 'radio'" @click="playRandom()" ><b-icon-dice5></b-icon-dice5></b-button>
   <b-button class="playback-button" v-show="$view.mode == 'radio'" id="previous-work-button" @click="previousWork()"><b-icon-arrow-left-circle></b-icon-arrow-left-circle></b-button>
   <b-button class="playback-button" id="back-button" @click="back()"><b-icon-skip-start-fill></b-icon-skip-start-fill></b-button>
-  <b-button class="playback-button" id="play-button" v-show="!playing" @click="play()"><b-icon-play-fill></b-icon-play-fill></b-button>
+  <b-button class="playback-button" id="play-button" v-show="!playing"><b-icon-play-fill></b-icon-play-fill></b-button>
   <b-button class="playback-button" id="pause-button" v-show="playing" @click="pause()"><b-icon-pause-fill></b-icon-pause-fill></b-button>
   <b-button class="playback-button" id="forward-button" @click="next()"><b-icon-skip-end-fill></b-icon-skip-end-fill></b-button>
   <b-button class="playback-button" v-show="$view.mode == 'radio'" id="next-work-button" @click="nextWorkNoDebounce()"><b-icon-arrow-right-circle></b-icon-arrow-right-circle></b-button>
@@ -390,6 +390,9 @@ input[type="range"]::-moz-range-progress {
   background-color: #343a40 !important;
 }
 .btn:hover{
+  background-color: #484e53 !important;
+}
+.btn:active{
   background-color: #484e53 !important;
 }
 .btn{

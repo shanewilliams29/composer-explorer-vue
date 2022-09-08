@@ -49,13 +49,18 @@ def index(path):
         else:
             return redirect('https://www.composerexplorer.com/mobile')
 
-    return render_template("index.html")
-    # return app.send_static_file('index.html')
+    # return render_template("index.html")
+    return app.send_static_file('index.html')
 
 
 @app.route("/test")
 def test():
-    return str(current_user.username)
+    return "Hello"
+
+
+@app.route("/.well-known/assetlinks.json")
+def assetlinks():
+    return app.send_static_file('assetlinks.json')
 
 
 @app.route('/connect_spotify')
@@ -64,8 +69,15 @@ def connect_spotify():
     return redirect(url)
 
 
-@app.route('/spotify')
+@app.route('/spotify')  # landing page from Spotify auth
 def spotify():
+    code = request.args.get('code')
+    url = '/login?code=' + code
+    return redirect(url)
+
+
+@app.route('/login')
+def login():
 
     # get access token
     code = request.args.get('code')
@@ -76,6 +88,7 @@ def spotify():
             'info': 'Spotify authorization failed.'
         }
         return jsonify(response_object)
+
     session['spotify_token'] = response.json()['access_token']
     session['refresh_token'] = response.json()['refresh_token']
     session['spotify_token_expire_time'] = (datetime.now((timezone.utc)) 

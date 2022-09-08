@@ -96,7 +96,6 @@ export default {
   },
   beforeCreate(){
     this.$view.mobile = true;
-    this.$config.albumSize = 'small';
   },
   created() {
     this.$view.mode = null;

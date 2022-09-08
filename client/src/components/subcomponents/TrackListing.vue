@@ -62,7 +62,6 @@ export default {
         var trackId = track[1];
         var element = document.getElementById(trackId);
         var top = element.offsetTop;
-        console.log(top);
         this.$refs['scroll-box'].scrollTo({
                                   top: top,
                                   left: 0,
@@ -113,7 +112,6 @@ export default {
       },
     },
   created() {
-    console.log(this.$view.mobile);
     eventBus.$on('fireSetAlbum', (album) => {
         this.genre = this.$config.genre;
         this.$config.allTracks = album.tracks[0][2];
