@@ -6,6 +6,7 @@
   <b-button class="playback-button" id="shuffle-play" v-show="$view.shuffle" @click="shufflePlayback()" ><b-icon-shuffle variant="warning"></b-icon-shuffle></b-button>
   <b-button class="playback-button" id="previous-work-button" @click="previousWork()"><b-icon-arrow-left-circle></b-icon-arrow-left-circle></b-button>
   <b-button class="playback-button" id="back-button" @click="back()"><b-icon-skip-start-fill></b-icon-skip-start-fill></b-button>
+  <!-- Play button is handled in the SpotifyPlayer.vue listener -->
   <b-button class="playback-button" id="play-button" v-show="!playing"><b-icon-play-fill></b-icon-play-fill></b-button>
   <b-button class="playback-button" id="pause-button" v-show="playing" @click="pause()"><b-icon-pause-fill></b-icon-pause-fill></b-button>
   <b-button class="playback-button" id="forward-button" @click="next()"><b-icon-skip-end-fill></b-icon-skip-end-fill></b-button>

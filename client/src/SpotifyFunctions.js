@@ -139,7 +139,6 @@ var spotify = {
     });
   },
   playTracks(token, device_id, tracks) {
-    console.log(token + " " + device_id + " " + tracks);
     const path = 'https://api.spotify.com/v1/me/player/play';
     axios({
       method: 'put',
