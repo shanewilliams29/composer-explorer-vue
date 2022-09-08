@@ -7,7 +7,7 @@ from flask_caching import Cache
 from flask_login import LoginManager
 
 # instantiate the app
-app = Flask(__name__, static_folder='../dist', static_url_path='/', template_folder='static')
+app = Flask(__name__, static_folder='../dist', static_url_path='/', template_folder='../dist')
 app.config.from_object(Config)
 db = SQLAlchemy(app)
 Mobility(app)

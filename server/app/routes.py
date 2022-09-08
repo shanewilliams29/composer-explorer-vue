@@ -1,5 +1,5 @@
 from app import app, db, sp, cache
-from flask import jsonify, request, redirect, session, render_template, abort
+from flask import jsonify, request, redirect, session, render_template, abort, send_from_directory
 from flask_login import login_user, logout_user, current_user, login_required
 from config import Config
 from app.functions import prepare_composers, group_composers_by_region
@@ -41,6 +41,7 @@ def before_request():
 
 @app.route('/', defaults={'path': ''})
 @app.route("/<string:path>")
+
 def index(path):
     if request.MOBILE and not session['mobile']:
         session['mobile'] = 'true'
@@ -49,8 +50,13 @@ def index(path):
         else:
             return redirect('https://www.composerexplorer.com/mobile')
 
-    # return render_template("index.html")
-    return app.send_static_file('index.html')
+    # user last seen
+    if current_user.is_authenticated:
+        current_user.last_seen = datetime.utcnow()
+        db.session.commit()
+
+    return render_template("index.html")
+    # return app.send_static_file('index.html')
 
 
 @app.route("/test")
@@ -60,7 +66,7 @@ def test():
 
 @app.route("/.well-known/assetlinks.json")
 def assetlinks():
-    return app.send_static_file('assetlinks.json')
+    return send_from_directory('static', 'assetlinks.json')
 
 
 @app.route('/connect_spotify')
