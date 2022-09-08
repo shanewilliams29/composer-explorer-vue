@@ -72,6 +72,13 @@ export default {
         });
     },
   },
+  beforeCreate() {
+    if(this.$config.albumSize == 'large'){
+        document.documentElement.style.setProperty('--flex', '0 0 400px');
+    } else {
+        document.documentElement.style.setProperty('--flex', '1');
+    }
+  },
   created() {
     this.getComposers();
   },
@@ -79,7 +86,7 @@ export default {
 </script>
 <style scoped>
 .user-list{
-    height: calc(100vh - 244px - var(--panelheight));
+    height: calc(100vh - 244px + 78px - var(--panelheight)) !important;
     overflow-y: scroll;
     overflow-x: hidden;
 }
