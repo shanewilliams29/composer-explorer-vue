@@ -55,8 +55,8 @@ def index(path):
         current_user.last_seen = datetime.utcnow()
         db.session.commit()
 
-    return render_template("index.html")
-    # return app.send_static_file('index.html')
+    # return render_template("index.html")
+    return app.send_static_file('index.html')
 
 
 @app.route("/test")
@@ -67,6 +67,21 @@ def test():
 @app.route("/.well-known/assetlinks.json")
 def assetlinks():
     return send_from_directory('static', 'assetlinks.json')
+
+
+@app.route("/custom.css")
+def custom_css():
+    return send_from_directory('static', 'custom.css')
+
+
+@app.route('/user_list')
+def user_list():
+
+    users = User.query.order_by(User.last_seen.desc()).all()
+    usercount = User.query.count()
+    onlinecheck = datetime.utcnow() - timedelta(minutes=5)
+
+    return render_template("userlist.html", title='User List', onlinecheck=onlinecheck, users=users, usercount=usercount)
 
 
 @app.route('/connect_spotify')
