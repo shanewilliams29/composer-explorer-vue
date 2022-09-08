@@ -40,6 +40,7 @@ GENERAL
 - Browse - Bottom of columns cut off?
 - Fix fullscreen ablum display bottom left hand corner when screen smaller
 - Combine playback controls in mobile and standard into one file
+- Fix avatars for people without pictures
 - MOBILE
 - Show number of favorites on favorites
 - Glitch where multiple players open? Start on new player > advances to next on old? Check work skipping.
@@ -77,3 +78,7 @@ PARKING LOT
 - Get artist IDs from Spotify?
 - Spiders web beween performers
 - Playlist functionality
+
+
+INFO
+keytool -printcert -jarfile app-debug.apk // For getting Sha key of .apk

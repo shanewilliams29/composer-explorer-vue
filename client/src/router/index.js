@@ -7,6 +7,7 @@ import PerformerView from '../views/PerformerView.vue'
 import RadioView from '../views/RadioView.vue'
 import FavoritesView from '../views/FavoritesView.vue'
 import MobileRadio from '../views/MobileRadio.vue'
+import UserList from '../views/UserList.vue'
 
 Vue.use(VueRouter)
 
@@ -40,6 +41,11 @@ const routes = [
     path: '/mobileradio',
     name: 'mobileradio',
     component: MobileRadio
+  },
+    {
+    path: '/users',
+    name: 'users',
+    component: UserList
   },
   // {
   //   path: '/about',

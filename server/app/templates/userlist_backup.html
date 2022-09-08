@@ -1,4 +1,15 @@
+<html>
+<head>
+<title>User List</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="{{url_for('static', filename='custom.css')}}">
+{{ moment.include_moment() }}
 <style>
+body{
+    background: #f1f2f4;
+}
+
 .rcorners{
   border-radius: 6px;
   background: #fff;
@@ -8,17 +19,20 @@
   margin-bottom: 10px;
   height: auto;
 }
-.user-list-img {
-  height: 70px;
-  object-fit: cover;
-  width: 70px;
-  border-radius: 50%;
-}
+
 </style>
+</head>
+<body>
+<div class="container">
+<div class="jumbotron">
+    <h1>User List</h1>
+    <h3></h3>
+</div>
 
-<h1>User List</h1>
 
-<p>{{usercount}} users total, sorted by date last seen:</p>
+<div class="container">
+        <p>{{usercount}} users total, sorted by date last seen:</p>
+  </div>
 
 
 {% for user in users %}
@@ -48,7 +62,8 @@
   </div>
 {% endfor %}
 </div>
-
+</body>
+</html>
 
 
 
