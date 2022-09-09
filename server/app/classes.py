@@ -1,9 +1,12 @@
 from flask import session
+from flask_wtf import FlaskForm
+from wtforms.validators import Length
 import six
 import base64
 import requests
 import urllib.parse
 import json
+from wtforms import StringField, SubmitField, RadioField, FileField
 
 
 class SpotifyAPI(object):
@@ -113,3 +116,10 @@ class SortFilter(object):
                     date_minmax = [1500, 2051, "region"]
 
         return date_minmax
+
+
+class ChangeAvatar(FlaskForm):
+    choice = RadioField('Change Profile Picture', choices=[('remove', 'Remove photo'), ('restore', 'Restore Spotify photo'), ('upload', 'Upload image')], default='upload')
+    link = StringField('Option 1: Paste URL to image', description='Must be a .jpg or .png file smaller than 5 MB.', validators=[Length(min=0, max=2064)])
+    file = FileField('Option 2: Upload an image from device', description='Must be a .jpg or .png file smaller than 5 MB.', validators=[Length(min=0, max=2064)])
+    submit = SubmitField('Submit')

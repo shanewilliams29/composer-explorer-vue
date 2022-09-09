@@ -199,3 +199,26 @@ def get_avatar(username, imgurl):
     blob.upload_from_string(img_byte_arr, content_type='image/jpeg')
 
     return app.config['STATIC'] + 'avatars/{}.jpg'.format(username), 200
+
+
+def upload_avatar(username, file):
+
+    client = storage.Client(project='composer-explorer')
+    bucket = client.get_bucket('composer-explorer.appspot.com')
+    blob = bucket.blob('avatars/{}.jpg'.format(username))
+
+    try:
+        image = Image.open(file)
+    except:
+        return "Error: Invalid or no image file specified.", 403
+    image.thumbnail((200, 200))
+    image = image.convert('RGB')
+
+    img_byte_arr = io.BytesIO()
+    image.save(img_byte_arr, format='JPEG')
+    img_byte_arr = img_byte_arr.getvalue()
+
+    blob.cache_control = 'public, max-age=0'
+    blob.upload_from_string(img_byte_arr, content_type='image/jpeg')
+
+    return app.config['STATIC'] + 'avatars/{}.jpg'.format(username), 200

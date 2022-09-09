@@ -1,12 +1,12 @@
 from app import app, db, sp, cache
-from flask import jsonify, request, redirect, session, render_template, abort, send_from_directory
+from flask import jsonify, request, redirect, session, render_template, abort, send_from_directory, flash, url_for
 from flask_login import login_user, logout_user, current_user, login_required
 from config import Config
 from app.functions import prepare_composers, group_composers_by_region
-from app.functions import prepare_works, get_avatar
+from app.functions import prepare_works, get_avatar, upload_avatar
 from app.models import ComposerList, WorkList, WorkAlbums, AlbumLike, Artists
 from app.models import ArtistList, User
-from app.classes import SortFilter
+from app.classes import SortFilter, ChangeAvatar
 from sqlalchemy import func, text, or_
 from datetime import datetime, timedelta, timezone
 import json
@@ -82,6 +82,59 @@ def user_list():
     onlinecheck = datetime.utcnow() - timedelta(minutes=5)
 
     return render_template("userlist.html", title='User List', onlinecheck=onlinecheck, users=users, usercount=usercount)
+
+
+@app.route('/change_avatar', methods=['GET', 'POST'])
+@login_required
+def change_avatar():
+
+    if Config.MODE == "DEVELOPMENT":
+        user = User.query.filter_by(username='12173954849').first()
+        login_user(user)
+
+    form = ChangeAvatar()
+    if request.method == 'POST':
+        if form.choice.data == "remove":
+            current_user.img = ""
+            db.session.commit()
+            flash("You have removed your Spotify photo.")
+        if form.choice.data == "restore":
+            response = sp.get_user()
+            info = response.json()
+            try:
+                image_url = info['images'][0]['url']
+                response = get_avatar(current_user.username, image_url)
+                image = response[0]
+            except Exception:
+                flash("Error: Could not retrieve a photo from Spotify.")
+                return redirect(url_for('change_avatar'))
+            current_user.img = image
+            db.session.commit()
+            flash("You have restored your Spotify photo.")
+        if form.choice.data == "upload":
+            if form.link.data:
+                response = get_avatar(current_user.username, form.link.data)
+                if response[1] == 200:
+                    current_user.img = response[0]
+                    db.session.commit()
+                    flash('Your profile picture has been changed.')
+                else:
+                    flash(response[0], 'danger')
+                    return redirect(url_for('change_avatar'))
+            else:
+                uploaded_file = request.files['file']
+                response = upload_avatar(current_user.username, uploaded_file)
+                if response[1] == 200:
+                    current_user.img = response[0]
+                    db.session.commit()
+                    flash('Your profile picture has been changed.')
+                else:
+                    flash(response[0], 'danger')
+                    return redirect(url_for('change_avatar'))
+
+        return redirect(url_for('index'))
+    return render_template('change_avatar.html', title='Change Profile Picture',
+                           form=form)
 
 
 @app.route('/connect_spotify')
