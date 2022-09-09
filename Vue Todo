@@ -43,6 +43,7 @@ GENERAL
 - Fix avatars for people without pictures
 - Other people's favorites
 - What others are listening to
+- Dont show welcome panel unless user not logged in
 - MOBILE
 - Show number of favorites on favorites
 - Glitch where multiple players open? Start on new player > advances to next on old? Check work skipping.

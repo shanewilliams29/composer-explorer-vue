@@ -78,7 +78,7 @@ Vue.prototype.$auth = Vue.observable({
 });
 
 Vue.prototype.$view = Vue.observable({
-  banner: true,
+  banner: false,
   mode: null,
   shuffle: false,
   radioPlaying: false,

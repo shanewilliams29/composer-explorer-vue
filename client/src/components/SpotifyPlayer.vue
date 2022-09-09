@@ -125,6 +125,7 @@ export default {
             } else {
               this.$auth.appToken = res.data.app_token;
               this.$auth.knowledgeKey = res.data.knowledge_api;
+              this.$view.banner = true;
             }
           }
         }).catch((error) => {
