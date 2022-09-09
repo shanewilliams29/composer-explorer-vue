@@ -59,7 +59,7 @@ export default {
 
 <style>
 .display-list{
-    height: calc(100vh - 244px - var(--panelheight));
+    height: calc(100vh - var(--workingheight) - var(--panelheight));
     padding-right: 12px;
     padding-bottom: 5px;
     overflow-y: scroll;

@@ -67,9 +67,13 @@ export default {
     if (this.$route.name == 'mobile' || this.$route.name == 'mobileradio'){
       this.$view.mobile = true;
       document.documentElement.style.setProperty('--playerpadding', `3px`);
+      document.documentElement.style.setProperty('--workingheight', `300px`);
+      document.documentElement.style.setProperty('--workingheightnoheader', `184px`);
     } else {
       this.$view.mobile = false;
       document.documentElement.style.setProperty('--playerpadding', `21.5px`);
+      document.documentElement.style.setProperty('--workingheight', `244px`);
+      document.documentElement.style.setProperty('--workingheightnoheader', `183px`);
     }
     document.documentElement.style.setProperty('--panelheight', `0px`);
     this.$view.panelVisible = false;

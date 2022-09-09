@@ -41,6 +41,8 @@ GENERAL
 - Fix fullscreen ablum display bottom left hand corner when screen smaller
 - Combine playback controls in mobile and standard into one file
 - Fix avatars for people without pictures
+- Other people's favorites
+- What others are listening to
 - MOBILE
 - Show number of favorites on favorites
 - Glitch where multiple players open? Start on new player > advances to next on old? Check work skipping.

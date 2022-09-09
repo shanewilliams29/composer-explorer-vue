@@ -74,7 +74,7 @@ def custom_css():
     return send_from_directory('static', 'custom.css')
 
 
-@app.route('/user_list')
+@app.route('/html/user_list')
 def user_list():
 
     users = User.query.order_by(User.last_seen.desc()).all()

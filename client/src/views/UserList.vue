@@ -1,8 +1,11 @@
 <template>
   <div id="userlist">
     <div class="container-fluid">
+        <div class="spinner user-list" v-show="loading" role="status">
+        <b-spinner class="m-5"></b-spinner>
+        </div>
       <b-row>
-        <b-col class="user-list" v-html="composers"></b-col>
+        <b-col v-show="!loading" class="user-list" v-html="composers"></b-col>
       </b-row>
     </div>
   </div>
@@ -53,17 +56,27 @@ export default {
   data() {
     return {
       composers: [],
+      loading: true
     };
   },
   methods: {
+    turnOffLoading(){
+        this.loading = false; 
+    },
     getComposers() {
       this.loading = true;
       moment.locale("en");
-      const path = '/user_list';
+      const path = '/html/user_list';
       axios.get(path)
         .then((res) => {
+           
           this.composers = res.data;
-          setTimeout(function() { flask_moment_render_all(); }, 1000);
+          setTimeout(function() { 
+            flask_moment_render_all(); 
+            }, 1000);
+        setTimeout(() => { 
+            this.turnOffLoading(); 
+            }, 1000);
         })
         .catch((error) => {
           // eslint-disable-next-line
@@ -86,8 +99,11 @@ export default {
 </script>
 <style scoped>
 .user-list{
-    height: calc(100vh - 244px + 78px - var(--panelheight)) !important;
+    height: calc(100vh - var(--workingheightnoheader) - var(--panelheight)) !important;
     overflow-y: scroll;
     overflow-x: hidden;
+}
+.spinner {
+  text-align: center;
 }
 </style>

@@ -148,7 +148,7 @@ export default {
 <style>
   .composer-list-mobile{
     /*height: calc(100vh - 314px);*/
-    height: calc(var(--vh, 1vh) * 100 - 300px);
+    height: calc(var(--vh, 1vh) * 100 - var(--workingheight));
     overflow-y: scroll;
   }
   .composer-list-mobile .composer-img{
@@ -167,7 +167,7 @@ export default {
   }
   .work-list-mobile{
     /*height: calc(100vh - 314px);*/
-    height: calc(var(--vh, 1vh) * 100 - 300px);
+    height: calc(var(--vh, 1vh) * 100 - var(--workingheight));
     overflow-y: scroll;
   }
   .work-list-mobile .card{
@@ -180,7 +180,7 @@ export default {
   }
   .album-list-mobile{
     /*height: calc(100vh - 314px);*/
-    height: calc(var(--vh, 1vh) * 100 - 300px);
+    height: calc(var(--vh, 1vh) * 100 - var(--workingheight));
     overflow-y: scroll;
     overflow-x: hidden;
   }

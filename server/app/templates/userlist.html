@@ -3,9 +3,9 @@
   border-radius: 6px;
   background: #fff;
   border: 1px solid #d4d7dd;
-  padding: 15px;
+  padding: 5px;
   padding-bottom: 0px;
-  margin-bottom: 10px;
+  margin-bottom: 5px;
   height: auto;
 }
 .user-list-img {
@@ -13,6 +13,9 @@
   object-fit: cover;
   width: 70px;
   border-radius: 50%;
+}
+.table{
+    margin-bottom: 0px !important;
 }
 h1 {
     margin-top: 15px;
@@ -37,7 +40,7 @@ h1 {
              {% if user.admin %}<span style="color:goldenrod;">Admin</span>{% endif %}
           {% if user.last_seen %}
              {% if user.last_seen > onlinecheck %}
-             <span style="color:green;"><b>⚫ Online</b></span><br>
+             <span style="color:green;"><br><b>Online</b></span>
              {% else %}
              <br>Last seen {{ moment(user.last_seen).fromNow()}}<br>
              {% endif %}
