@@ -73,7 +73,8 @@ Vue.prototype.$auth = Vue.observable({
   appToken: null,
   clientToken: null,
   deviceID: null,
-  knowledgeKey: null
+  knowledgeKey: null,
+  avatar: null
 });
 
 Vue.prototype.$view = Vue.observable({

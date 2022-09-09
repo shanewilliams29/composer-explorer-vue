@@ -28,6 +28,7 @@ export default {
               this.$auth.appToken = res.data.app_token;
               this.$auth.userid = res.data.user_id;
               this.$auth.knowledgeKey = res.data.knowledge_api;
+              this.$auth.avatar = res.data.avatar;
               // eslint-disable-next-line
               window.player = new Spotify.Player({
                 name: 'Composer Explorer',
@@ -119,6 +120,7 @@ export default {
               this.$auth.userid = res.data.user_id;
               this.$auth.appToken = res.data.app_token;
               this.$auth.knowledgeKey = res.data.knowledge_api;
+              this.$auth.avatar = res.data.avatar;
               eventBus.$emit('notPremium');
             } else {
               this.$auth.appToken = res.data.app_token;

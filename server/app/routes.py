@@ -207,9 +207,11 @@ def get_token():
         if current_user.is_authenticated:
             response_object['user_id'] = current_user.username
             response_object['premium'] = session['premium']
+            response_object['avatar'] = current_user.avatar(140)
         else:
             response_object['user_id'] = None
             response_object['premium'] = False
+            response_object['avatar'] = None
         response = jsonify(response_object)
         response.headers.add('Access-Control-Allow-Credentials', 'true')
         return response

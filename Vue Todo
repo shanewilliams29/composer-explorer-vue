@@ -84,3 +84,4 @@ PARKING LOT
 
 INFO
 keytool -printcert -jarfile app-debug.apk // For getting Sha key of .apk
+https://storage.googleapis.com/composer-explorer.appspot.com/avatars/12173954849.jpg avatar

@@ -30,7 +30,7 @@
           </b-nav>
           <b-dropdown class="avatar-button" right no-caret>
             <template #button-content>
-              <b-avatar href="#" :src="'https://storage.googleapis.com/composer-explorer.appspot.com/avatars/' + $auth.userid + '.jpg'"></b-avatar>
+              <b-avatar href="#" :src="$auth.avatar"></b-avatar>
             </template>
             <b-dropdown-item @click="$router.push('/users')">User List</b-dropdown-item>
             <b-dropdown-item href="/log_out">Log out</b-dropdown-item>
