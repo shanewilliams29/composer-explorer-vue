@@ -97,7 +97,6 @@ def change_avatar():
         if form.choice.data == "remove":
             current_user.img = ""
             db.session.commit()
-            flash("You have removed your Spotify photo.")
         if form.choice.data == "restore":
             response = sp.get_user()
             info = response.json()
@@ -110,14 +109,12 @@ def change_avatar():
                 return redirect(url_for('change_avatar'))
             current_user.img = image
             db.session.commit()
-            flash("You have restored your Spotify photo.")
         if form.choice.data == "upload":
             if form.link.data:
                 response = get_avatar(current_user.username, form.link.data)
                 if response[1] == 200:
                     current_user.img = response[0]
                     db.session.commit()
-                    flash('Your profile picture has been changed.')
                 else:
                     flash(response[0], 'danger')
                     return redirect(url_for('change_avatar'))
@@ -127,7 +124,6 @@ def change_avatar():
                 if response[1] == 200:
                     current_user.img = response[0]
                     db.session.commit()
-                    flash('Your profile picture has been changed.')
                 else:
                     flash(response[0], 'danger')
                     return redirect(url_for('change_avatar'))
