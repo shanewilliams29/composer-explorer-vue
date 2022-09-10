@@ -237,7 +237,6 @@ export default {
     },
     playNextAlbum() { 
       this.currentAlbum += 1;
-      console.log(this.albums);
       if (this.currentAlbum >= this.albums.length){
         eventBus.$emit('fireNextWork');
       }

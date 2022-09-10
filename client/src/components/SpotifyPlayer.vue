@@ -51,30 +51,30 @@ export default {
                 device_id
               }) => {
                 console.log('Device ID has gone offline', device_id);
-                alert('DEVICE NOT READY');
+                // alert('DEVICE NOT READY');
               });
               window.player.addListener('initialization_error', ({
                 message
               }) => {
-                alert(message);
+                // alert(message);
                 console.error(message);
               });
               window.player.addListener('authentication_error', ({
                 message
               }) => {
-                alert('AUTHENTICATION ERROR: ' + message);
+                // alert('AUTHENTICATION ERROR: ' + message);
                 console.error(message);
               });
               window.player.addListener('account_error', ({
                 message
               }) => {
-                alert('ACCOUNT ERROR ' + message);
+                // alert('ACCOUNT ERROR ' + message);
                 console.error(message);
               });
               window.player.addListener('playback_error', ({
                 message
               }) => {
-                alert('PLAYBACK ERROR ' + message);
+                // alert('PLAYBACK ERROR ' + message);
                 console.error(message);
               });
               window.player.addListener('autoplay_failed', () => {
@@ -130,7 +130,7 @@ export default {
             }
           }
         }).catch((error) => {
-          alert('OTHER ERROR: ' + error);
+          // alert('OTHER ERROR: ' + error);
           this.$auth.appToken = null;
           this.$auth.clientToken = null;
           console.error(error);
@@ -140,10 +140,16 @@ export default {
 
   reInitializeSpotify() {
         // When spotify doesnt find track, it breaks device connection. Re-establish here
+        // Need to run this twice due to Spotify glitchiness...
         window.player.disconnect()
         window.player.connect().then(success => {
         if (success) {
-          console.log('The Web Playback SDK successfully connected to Spotify!');
+          window.player.disconnect()
+          window.player.connect().then(success => {
+          if (success) {
+            console.log('The Web Playback SDK successfully connected to Spotify!');
+          }
+        })
         }
       })
     },
