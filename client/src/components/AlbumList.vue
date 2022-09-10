@@ -195,11 +195,9 @@ export default {
     },
     selectRow(album) {
       this.selectedAlbum = album;
-
       for (let i = 0; i < this.albums.length; i++) {
         if (this.albums[i].id == album){
           this.currentAlbum = i;
-          console.log(this.currentAlbum);
           break;
         }
       }
@@ -238,7 +236,11 @@ export default {
       this.infiniteId += 1;
     },
     playNextAlbum() { 
-      this.currentAlbum += 1; // need to fix for when not first album
+      this.currentAlbum += 1;
+      console.log(this.albums);
+      if (this.currentAlbum >= this.albums.length){
+        eventBus.$emit('fireNextWork');
+      }
       this.selectRow(this.albums[this.currentAlbum].id); // select first row on work selection
       this.$config.album = this.albums[this.currentAlbum].id;
       eventBus.$emit('fireAlbumData', this.albums[this.currentAlbum].id);
