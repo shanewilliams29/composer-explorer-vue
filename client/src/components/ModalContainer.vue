@@ -32,7 +32,7 @@ export default {
     notAvailable(){
       this.$bvModal.show('not-available-modal');
       setTimeout(() => { this.$bvModal.hide('not-available-modal'); }, 3000);
-      setTimeout(() => { eventBus.$emit('fireNextAlbum'); }, 3000);
+      // Next album is fired from SpotifyPlayer.vue after connection to Spotify is re-established.
     },
     autoplayDisabled(){
       this.$bvModal.show('autoplay-modal');

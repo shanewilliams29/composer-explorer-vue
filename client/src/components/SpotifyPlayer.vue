@@ -147,6 +147,7 @@ export default {
           window.player.disconnect()
           window.player.connect().then(success => {
           if (success) {
+            setTimeout(() => { eventBus.$emit('fireNextAlbum'); }, 0);
             console.log('The Web Playback SDK successfully connected to Spotify!');
           }
         })
