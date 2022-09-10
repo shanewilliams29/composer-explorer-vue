@@ -47,7 +47,8 @@ export default {
       workId: '',
       artistName: '',
       sort: '',
-      infiniteId: +new Date()
+      infiniteId: +new Date(),
+      currentAlbum: 0
     };
   },
   methods: {
@@ -194,6 +195,14 @@ export default {
     },
     selectRow(album) {
       this.selectedAlbum = album;
+
+      for (let i = 0; i < this.albums.length; i++) {
+        if (this.albums[i].id == album){
+          this.currentAlbum = i;
+          console.log(this.currentAlbum);
+          break;
+        }
+      }
     },
     clearAlbums() {
       this.albums = [];
@@ -228,6 +237,12 @@ export default {
       this.albums = [];
       this.infiniteId += 1;
     },
+    playNextAlbum() { 
+      this.currentAlbum += 1; // need to fix for when not first album
+      this.selectRow(this.albums[this.currentAlbum].id); // select first row on work selection
+      this.$config.album = this.albums[this.currentAlbum].id;
+      eventBus.$emit('fireAlbumData', this.albums[this.currentAlbum].id);
+    },
   },
   created() {
     if (!this.$view.mode) { // dont get albums in radio or performer mode
@@ -237,12 +252,14 @@ export default {
     eventBus.$on('fireAlbumsAndPlay', this.getAlbumsAndPlay);
     eventBus.$on('fireFavoritesAlbums', this.getFavoritesAlbums);
     eventBus.$on('fireClearAlbums', this.clearAlbums);
+    eventBus.$on('fireNextAlbum', this.playNextAlbum);
   },
   beforeDestroy() {
     eventBus.$off('fireAlbums', this.getAlbums);
     eventBus.$off('fireAlbumsAndPlay', this.getAlbumsAndPlay);
     eventBus.$off('fireFavoritesAlbums', this.getFavoritesAlbums);
     eventBus.$off('fireClearAlbums', this.clearAlbums);
+    eventBus.$off('fireNextAlbum', this.playNextAlbum);
   }
 };
 </script>

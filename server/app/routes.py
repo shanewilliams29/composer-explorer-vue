@@ -105,7 +105,7 @@ def change_avatar():
                 response = get_avatar(current_user.username, image_url)
                 image = response[0]
             except Exception:
-                flash("Error: Could not retrieve a photo from Spotify.")
+                flash("Error: Could not retrieve a photo from Spotify.", 'danger')
                 return redirect(url_for('change_avatar'))
             current_user.img = image
             db.session.commit()

@@ -62,18 +62,19 @@ export default {
               window.player.addListener('authentication_error', ({
                 message
               }) => {
-                alert('AUTHENTICATION ERROR');
+                alert('AUTHENTICATION ERROR: ' + message);
                 console.error(message);
               });
               window.player.addListener('account_error', ({
                 message
               }) => {
-                alert('ACCOUNT ERROR');
+                alert('ACCOUNT ERROR ' + message);
                 console.error(message);
               });
               window.player.addListener('playback_error', ({
                 message
               }) => {
+                alert('PLAYBACK ERROR ' + message);
                 console.error(message);
               });
               window.player.addListener('autoplay_failed', () => {
@@ -129,7 +130,7 @@ export default {
             }
           }
         }).catch((error) => {
-          alert('OTHER ERROR');
+          alert('OTHER ERROR: ' + error);
           this.$auth.appToken = null;
           this.$auth.clientToken = null;
           console.error(error);

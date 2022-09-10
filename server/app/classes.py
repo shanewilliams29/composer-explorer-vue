@@ -119,7 +119,7 @@ class SortFilter(object):
 
 
 class ChangeAvatar(FlaskForm):
-    choice = RadioField('Change Profile Picture', choices=[('remove', 'Remove photo'), ('restore', 'Restore Spotify photo'), ('upload', 'Upload image')], default='upload')
+    choice = RadioField('Select an option:', choices=[('remove', 'Remove photo'), ('restore', 'Restore Spotify photo'), ('upload', 'Upload image')], default='upload')
     link = StringField('Option 1: Paste URL to image', description='Must be a .jpg or .png file smaller than 5 MB.', validators=[Length(min=0, max=2064)])
     file = FileField('Option 2: Upload an image from device', description='Must be a .jpg or .png file smaller than 5 MB.', validators=[Length(min=0, max=2064)])
     submit = SubmitField('Submit')

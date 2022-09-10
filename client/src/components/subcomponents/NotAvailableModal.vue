@@ -7,7 +7,7 @@
     <div class="m-2 text-center">
       <h3>Recording Not Available</h3>
       <br>
-      <p>We're sorry but Spotify has not made this recording available in your country. Try another!</p>
+      <p>We're sorry but Spotify has not made this recording available in your country. Let's try the next one!</p>
     </div>
   </b-modal>
 </div>
