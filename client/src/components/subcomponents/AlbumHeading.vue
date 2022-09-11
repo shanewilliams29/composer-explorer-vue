@@ -87,9 +87,73 @@ export default {
 </script>
 
 <style scoped>
+.albums-card{
+  padding-top: 5px !important;
+}
+.form-group{
+  margin-bottom: 0px;
+}
 .card-body {
   background: none !important;
-  height: 73px;
+}
+.card {
+  background: none;
+  border: none;
+}
+.form-row {
+  margin-bottom: 0px;
+}
+.col {
+  padding: 0px;
+}
+.style-chooser {
+  margin-top: 5px !important;
+  font-size: 14px;
+  fill: white;
+}
+>>> .vs__selected-options{
+  flex-wrap: nowrap;
+}
+>>> .vs__selected{
+  white-space:nowrap;
+  overflow: hidden;
+}
+>>> {
+  --vs-controls-color: #fff;
+  --vs-border-color: #3b4047;
+  --vs-border-width: 1px;
+  --vs-selected-bg: #3b4047;
+  --vs-selected-color: #fff;
+  --vs-line-height: 1;
+  --vs-search-input-color: #fff;
+}
+.performer-search {
+  margin-top: 0px !important;
+  padding-top: 3px;
+  font-size: 14px !important;
+  background-color: #3b4047 !important;
+  height: 31px;
+  border-radius: 4px;
+}
+.performer-search >>> {
+  --vs-border-width: 0px;
+  font-size: 14px !important;
+  --vs-font-size: 14px;
+}
+</style>
+
+<!-- <style scoped>
+.albums-card{
+  padding-top: 5px !important;
+}
+.form-group{
+  margin-bottom: 0px;
+}
+.form-control{
+  padding-top: 0px;
+}
+.card-body {
+  background: none !important;
 }
 .card {
   background: none;
@@ -124,7 +188,7 @@ export default {
   --vs-font-size: 14px;
 }
 .performer-search {
-  margin-top: 1.3px !important;
+  margin-top: 0px !important;
   padding-top: 3px;
   font-size: 14px !important;
   background-color: #3b4047 !important;
@@ -135,7 +199,4 @@ export default {
   --vs-border-width: 0px;
   font-size: 14px !important;
 }
-.albums-card {
-  padding-top: 3.5px !important;
-}
-</style>
+</style> -->

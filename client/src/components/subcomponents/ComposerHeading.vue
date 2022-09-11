@@ -53,9 +53,14 @@ export default {
 </script>
 
 <style scoped>
+.composer-card{
+  padding-top: 5px !important;
+}
+.form-group{
+  margin-bottom: 0px;
+}
 .card-body {
   background: none !important;
-  height: 73px;
 }
 .card {
   background: none;

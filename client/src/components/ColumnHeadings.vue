@@ -36,7 +36,6 @@ export default {
   color: white !important;
 }
 .heading-card {
-  padding-top: 5px;
   padding-bottom: 0px;
   padding-left: 5px;
 }
@@ -67,5 +66,8 @@ export default {
 }
 .col {
   padding: 0px;
+}
+.flex-nowrap{
+  padding-bottom: 6.5px;
 }
 </style>

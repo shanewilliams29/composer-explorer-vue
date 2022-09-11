@@ -187,6 +187,13 @@ export default {
   .album-list-mobile .card{
     margin-bottom: 0px !important;
   }
+  .album-list-mobile .card{
+    margin-bottom: 0px !important;
+  }
+  .album-list-mobile .albums-card{
+  padding-top: 0px !important;
+  margin-top: -3.5px !important;
+}
 
   #footer{
     height: 124px;
