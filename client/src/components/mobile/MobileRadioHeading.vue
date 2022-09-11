@@ -70,7 +70,7 @@
                 size="sm"
               ></b-form-input>
             </b-col>
-              <b-col class="col-padding-left">
+              <b-col class="col-no-padding-left">
                 <v-select
                 v-model="workFilterField"
                 label="text"
