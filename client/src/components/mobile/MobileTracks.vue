@@ -17,7 +17,8 @@
               overflow: hidden;
               max-width: 1px;
             ">
-            {{ track[0].substring(track[0].lastIndexOf(':') + 1) }}
+            <span v-if="genre == 'Opera' || genre == 'Stage Work' || genre == 'Ballet'">{{ track[0].substring(track[0].lastIndexOf(' Act ') + 1).trim() }}</span>
+            <span v-else>{{ track[0].substring(track[0].lastIndexOf(':') + 1) }}</span>
         </td>
       </tr>
     </table>
@@ -35,6 +36,7 @@ export default {
     return {
       album: {},
       title: "",
+      genre:"",
       selectedTrack: "Track",
       selectedTrackNo : "",
       numTracks: "",
@@ -123,7 +125,7 @@ export default {
         this.$config.allTracks = album.tracks[0][2];
         this.$config.playTracks = album.tracks[0][2];
         localStorage.setItem('config', JSON.stringify(this.$config));
-
+        this.genre = this.$config.genre;
         this.album = album;
         // if(window.token && window.device_id){
         //   this.playTracks(album.tracks[0][2]);

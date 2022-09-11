@@ -85,7 +85,15 @@ export default {
                           var row = this.$refs[composer][0];
                           var height = this.$refs[composer][0].offsetParent.offsetParent.offsetParent.offsetHeight / 2;
                           var top = card.offsetTop + row.offsetTop - height + 100;
-                          this.$parent.$refs['scroll-box-comp'].scrollTo({
+
+                          var scrollBox = {};
+                          if(this.$view.mobile){
+                            scrollBox = this.$parent.$parent.$refs['scroll-box-comp'];
+                          } else {
+                            scrollBox = this.$parent.$refs['scroll-box-comp'];
+                          }
+
+                          scrollBox.scrollTo({
                                 top: top,
                                 left: 0,
                                 behavior: 'smooth'

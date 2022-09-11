@@ -41,6 +41,7 @@ export default {
       loading: true,
       workTitle: "",
       pageTitle: "",
+      composerImg: '',
       workImg: "",
       workBlurb: "",
       wikiLink: "",

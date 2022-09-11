@@ -7,7 +7,7 @@
       </b-card-header>
       <b-collapse :visible="composerDisabled" id="accordion-1" accordion="my-accordion" role="tabpanel">
         <b-card-body>
-          <b-col class="composer-list-mobile disable-scrollbars">
+          <b-col class="composer-list-mobile disable-scrollbars" ref="scroll-box-comp">
             <ComposerHeading />
             <ComposerList />
           </b-col>
@@ -21,7 +21,7 @@
       </b-card-header>
       <b-collapse :visible="workDisabled" id="accordion-2" accordion="my-accordion" role="tabpanel">
         <b-card-body>
-          <b-col class="work-list-mobile disable-scrollbars">
+          <b-col class="work-list-mobile disable-scrollbars" ref="scroll-box">
             <WorkHeading />
             <WorkList/>
           </b-col>

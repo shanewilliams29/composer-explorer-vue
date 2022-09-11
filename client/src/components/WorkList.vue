@@ -123,7 +123,7 @@ export default {
         const path = 'api/works/' + this.$config.composer;
         axios.get(path).then((res) => {
           this.works = res.data.works;
-          console.log(this.searchItem);
+          // console.log(this.searchItem);
           // this.setGenre(this.$config.genre);
         }).catch((error) => {
           console.error(error);
@@ -134,7 +134,7 @@ export default {
         const path = 'api/works/' + this.$config.composer + '?search=' + this.searchItem;
         axios.get(path).then((res) => {
           this.works = res.data.works;
-          console.log(this.searchItem);
+          // console.log(this.searchItem);
         }).catch((error) => {
           console.error(error);
         });
@@ -240,17 +240,17 @@ export default {
         };
         const path = 'api/exportplaylist';
         axios.post(path, payload).then((res) => {
-          console.log(res);
+          // console.log(res);
           if (prefetch) {
             this.$view.playlistTrackCount = res.data.track_count;
           } else if ('error' in res.data) {
             this.$view.playlistError = res.data.error.message;
             this.$view.playlistSuccess = false;
-            console.log("ERROR");
+            // console.log("ERROR");
           } else {
             this.$view.playlistSuccess = true;
             this.$view.playlistError = false;
-            console.log("SUCCESS");
+            // console.log("SUCCESS");
           }
         }).catch((error) => {
           if (prefetch) {
@@ -303,13 +303,13 @@ export default {
       this.$config.workTitle = title;
       localStorage.setItem('config', JSON.stringify(this.$config));
       eventBus.$emit('changeWork');
-      console.log(this.$view.favoritesAlbums);
+      // console.log(this.$view.favoritesAlbums);
       if (this.$view.mode != 'performer') {
         if (this.$config.artist && this.$view.mode == 'radio') {
           eventBus.$emit('fireAlbumsAndPlay', workId, this.$config.artist);
         } else if (this.$view.mode == 'favorites') { // favorites mode
           this.$view.favoritesAlbums = true;
-          console.log(this.$view.favoritesAlbums);
+          // console.log(this.$view.favoritesAlbums);
           eventBus.$emit('fireAlbumsAndPlay', workId);
         } else {
           eventBus.$emit('fireAlbumsAndPlay', workId);
@@ -337,7 +337,15 @@ export default {
           var row = this.$refs[this.selectedWork][0];
           var height = this.$refs[genre][0].offsetParent.offsetHeight / 2;
           var top = card.offsetTop + row.offsetTop - height + 100;
-          this.$parent.$refs['scroll-box'].scrollTo({
+
+          var scrollBox = {};
+          if(this.$view.mobile){
+            scrollBox = this.$parent.$parent.$refs['scroll-box'];
+          } else {
+            scrollBox = this.$parent.$refs['scroll-box'];
+          }
+
+          scrollBox.scrollTo({
             top: top,
             left: 0,
             behavior: 'smooth'
