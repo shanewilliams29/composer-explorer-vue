@@ -2,6 +2,7 @@ import os
 
 
 class Config(object):
+    MAX_CONTENT_LENGTH = 1024 * 1024 * 5
     SECRET_KEY = os.environ.get('SECRET_KEY')
     MODE = os.environ.get('MODE')
 

@@ -49,9 +49,12 @@
           <h6>Usage</h6>
           <p>Log in with your <b>Spotify Premium</b> account to play music. Add performances to your favorites and create your own customized radios.</p>
           <h6>Acknowledgements</h6>
-          <p>
+          <p v-if="!$view.mobile">
             Composer and work information is used under licence from <a href="https://en.wikipedia.org/" target="_blank">Wikipedia</a>, <a href="https://imslp.org/" target="_blank">IMSLP</a>, and
             <a href="https://openopus.org/" target="_blank">Open Opus</a>. Album data and cover art provided by <a href="https://www.spotify.com/" target="_blank">Spotify</a>.
+          </p>
+            <p v-if="$view.mobile">
+            Composer and work information is used under licence from Wikipedia, IMSLP, and Open Opus. Album data and cover art provided by Spotify.
           </p>
           <h6>Disclaimer</h6>
           <p>
@@ -59,7 +62,8 @@
             given work. No guarantee is made as to the accuracy of catalogued composer and work information, and use is recommended for recreational purposes only.
           </p>
           <h6>Contact</h6>
-          <p>For all inquiries, please contact: <a href="mailto:admin@composerexplorer.com">admin@composerexplorer.com</a></p>
+          <p v-if="!$view.mobile">For all inquiries, please contact: <a href="mailto:admin@composerexplorer.com">admin@composerexplorer.com</a></p>
+          <p v-if="$view.mobile">For all inquiries, please contact: admin@composerexplorer.com</p>
           <h6>Copyright</h6>
           <p>
             © 2022 ComposerExplorer.com. All rights reserved.
