@@ -66,7 +66,11 @@ export default {
 </script>
 
 <style scoped>
+.floating-image{
+
+}
 .header-image {
+  mask-image: linear-gradient(to top, rgba(0, 0, 0, 1.0) 50%, transparent 100%);
   position: absolute;
   object-fit: cover;
   height: 120px;
@@ -77,7 +81,9 @@ export default {
   bottom: 0px;
   z-index: -5;
   opacity: 0.2;
+
 }
+
 .container-fluid {
   position: relative;
   background:  none;
