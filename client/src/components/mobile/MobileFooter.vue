@@ -37,6 +37,7 @@ export default {
     return {
       buttonActive: false,
       genreTitle: this.$config.genre,
+      defaultImage: "https://storage.googleapis.com/composer-explorer.appspot.com/headers/Chamber.jpg",
       imgLink: "https://storage.googleapis.com/composer-explorer.appspot.com/headers/" + encodeURIComponent(this.$config.genre) + ".jpg",
       liveImage: ''
     };
@@ -67,8 +68,17 @@ export default {
       this.buttonActive = !this.buttonActive;
     },
       updatePic(){
-      this.liveImage = this.imgLink;
-    }
+      this.checkImage(this.imgLink, 
+        () => { this.liveImage = this.imgLink; }, 
+        () => { this.liveImage = this.defaultImage; } 
+        );
+    },
+      checkImage(imageSrc, good, bad) {
+        var img = new Image();
+        img.onload = good; 
+        img.onerror = bad;
+        img.src = imageSrc;
+      }
   },
   created(){
     eventBus.$on('fireSetAlbum', this.updatePic);
