@@ -15,7 +15,7 @@
     </b-row>
   </div>
 <div class="floating-img">
-  <img class="header-image" src="https://storage.googleapis.com/composer-explorer.appspot.com/headers/Tristan%20und%20Isolde.jpg">
+  <img class="header-image" :src="imgLink">
 </div>
 </div>
 </template>
@@ -31,8 +31,30 @@ export default {
   },
   data() {
     return {
-      buttonActive: false
+      buttonActive: false,
+      genreTitle: this.$config.genre,
+      imgLink: "https://storage.googleapis.com/composer-explorer.appspot.com/headers/" + encodeURIComponent(this.$config.genre) + ".jpg"
     };
+  },
+  computed:{
+    genreChanged(){
+      return this.$config.genre;
+    },
+    titleChanged(){
+      return this.$config.workTitle;
+    }
+  },
+  watch: {
+    genreChanged(newGenre) {
+      this.genreTitle = newGenre;
+      this.imgLink = "https://storage.googleapis.com/composer-explorer.appspot.com/headers/" + encodeURIComponent(this.genreTitle) + ".jpg"
+      console.log(this.imgLink);
+    },
+    titleChanged(newTitle){
+      if(this.genreTitle == 'Opera' || this.genreTitle == 'Stage Work' || this.genreTitle == 'Ballet'){
+        this.imgLink = "https://storage.googleapis.com/composer-explorer.appspot.com/headers/" + encodeURIComponent(newTitle) + ".jpg"
+      }
+    }
   },
   methods:{
     togglePanel(){
@@ -42,17 +64,19 @@ export default {
   }
 };
 </script>
+
 <style scoped>
 .header-image {
   position: absolute;
+  object-fit: cover;
   height: 120px;
-  width: auto;
+  width: 100%;
 /*  left: 50%;
   transform: translate(-50%, 0);*/
   left: 0px;
   bottom: 0px;
   z-index: -5;
-  opacity: 0.3;
+  opacity: 0.2;
 }
 .container-fluid {
   position: relative;
