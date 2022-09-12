@@ -14,8 +14,11 @@
       </b-col>
     </b-row>
   </div>
-<div class="floating-img">
-  <img class="header-image" :src="imgLink">
+<div>
+  <img class="header-image" :src="liveImage">
+</div>
+<div class="fade-panel">
+   
 </div>
 </div>
 </template>
@@ -23,6 +26,7 @@
 <script>
 import AlbumInfo from '@/components/subcomponents/AlbumInfo.vue'
 import MobilePlayerControls from '@/components/mobile/MobilePlayerControls.vue'
+import {eventBus} from "@/main.js";
 
 export default {
   components: {
@@ -33,7 +37,8 @@ export default {
     return {
       buttonActive: false,
       genreTitle: this.$config.genre,
-      imgLink: "https://storage.googleapis.com/composer-explorer.appspot.com/headers/" + encodeURIComponent(this.$config.genre) + ".jpg"
+      imgLink: "https://storage.googleapis.com/composer-explorer.appspot.com/headers/" + encodeURIComponent(this.$config.genre) + ".jpg",
+      liveImage: ''
     };
   },
   computed:{
@@ -60,17 +65,29 @@ export default {
     togglePanel(){
       this.$parent.togglePanel();
       this.buttonActive = !this.buttonActive;
+    },
+      updatePic(){
+      this.liveImage = this.imgLink;
     }
+  },
+  created(){
+    eventBus.$on('fireSetAlbum', this.updatePic);
   }
 };
 </script>
 
 <style scoped>
-.floating-image{
-
-}
+/*.fade-panel {
+  position: fixed;
+  bottom: 0px;
+  height: 120px;
+  width: 100%;
+  background: rgb(0,0,0);
+  background: linear-gradient(0deg, rgba(0,0,0,1) 0%, rgba(52,58,64,1) 100%);
+  z-index: -10;
+}*/
 .header-image {
-  mask-image: linear-gradient(to top, rgba(0, 0, 0, 1.0) 50%, transparent 100%);
+  mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 1.0) 0%, transparent 100%);
   position: absolute;
   object-fit: cover;
   height: 120px;
@@ -80,8 +97,9 @@ export default {
   left: 0px;
   bottom: 0px;
   z-index: -5;
-  opacity: 0.2;
-
+  opacity: 0.3;
+/*  -webkit-filter: grayscale(100%);
+  filter: grayscale(100%);*/
 }
 
 .container-fluid {
