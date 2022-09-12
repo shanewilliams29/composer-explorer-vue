@@ -160,9 +160,8 @@ export default {
     margin-bottom: 0px !important;
   }
   .composer-list-mobile table td{
-    padding-top: 2px;
-    padding-bottom: 2px;
-    font-size: 14px !important;
+    padding-top: 4px;
+    padding-bottom: 4px;
     vertical-align: middle;
   }
   .work-list-mobile{
@@ -176,7 +175,6 @@ export default {
   .work-list-mobile table td{
     padding-top: 5px;
     padding-bottom: 5px;
-    font-size: 14px !important;
   }
   .album-list-mobile{
     /*height: calc(100vh - 314px);*/
@@ -297,5 +295,54 @@ export default {
 .disable-scrollbars {
   scrollbar-width: none; /* Firefox */
   -ms-overflow-style: none;  /* IE 10+ */
+}
+
+/*Text sizing for mobile*/
+
+>>> .heading-text{
+  font-size: 16px !important;
+}
+>>> .form-control-sm{
+  font-size: 16px !important;
+}
+>>> .vs__selected{
+  font-size: 16px !important;
+}
+>>> .style-chooser {
+  font-size: 16px !important;
+}
+>>> .performer-search {
+  font-size: 16px !important;
+}
+>>> .performer-search >>> {
+  font-size: 16px !important;
+  --vs-font-size: 16px;
+}
+>>> h6{
+  font-size: 16px !important;
+}
+>>> .cursor span{
+  font-size: 16px !important;
+}
+>>> .works-table span{
+  font-size: 16px !important;
+}
+>>> .works-table .heart-number span{
+  font-size: 12px !important;
+}
+>>> .album_text_columns span{
+  font-size: 14px !important;
+}
+>>> .album_text_columns .album-likes-class .likes span{
+  font-size: 12px !important;
+}
+>>> .album_text_columns .album-likes-class .user-liked span{
+  font-size: 14px !important;
+}
+>>> .album_text_columns .label{
+  font-size: 12px !important;
+}
+>>> .album-titles {
+  font-size: 14px !important;
 }
 </style>
