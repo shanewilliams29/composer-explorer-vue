@@ -69,11 +69,13 @@ export default {
       document.documentElement.style.setProperty('--playerpadding', `3px`);
       document.documentElement.style.setProperty('--workingheight', `300px`);
       document.documentElement.style.setProperty('--workingheightnoheader', `184px`);
+      document.documentElement.style.setProperty('--appbackgroundcolor', `#343a40`);
     } else {
       this.$view.mobile = false;
       document.documentElement.style.setProperty('--playerpadding', `21.5px`);
       document.documentElement.style.setProperty('--workingheight', `244px`);
       document.documentElement.style.setProperty('--workingheightnoheader', `183px`);
+      document.documentElement.style.setProperty('--appbackgroundcolor', `#f1f2f4`);
     }
     document.documentElement.style.setProperty('--panelheight', `0px`);
     this.$view.panelVisible = false;
@@ -94,7 +96,7 @@ body {
   max-height: -webkit-fill-available !important;
   overflow-x: hidden;
   overflow-y: hidden;
-  background-color: #f1f2f4 !important;
+  background-color: var(--appbackgroundcolor) !important;
   max-width: 1440px;
   position: fixed;
   left: 50%;
@@ -103,7 +105,7 @@ body {
 }
 #footer{
   height: 200px !important;
-  background-color: #343a40 !important;
+  background: none;
 }
 
 .info-panel {

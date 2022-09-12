@@ -127,6 +127,7 @@ export default {
         localStorage.setItem('config', JSON.stringify(this.$config));
         this.genre = this.$config.genre;
         this.album = album;
+        this.title = this.$config.workTitle;
         // if(window.token && window.device_id){
         //   this.playTracks(album.tracks[0][2]);
         //   this.stopMatch = false;
@@ -156,7 +157,6 @@ export default {
   },
 };
 </script>
-
 <style scoped>
 table{
   width: 100%;
@@ -177,7 +177,7 @@ td{
 .carousel-inner{
   width:100%;
   height: 50px !important;
-  background-color: #343a40;
+  background: none;
 }
 .carousel-item{
   text-align: center;
@@ -197,7 +197,7 @@ li.active {
 }
 
 .track-card {
-  background-color: #343a40 !important;
+  background: !important;
   border: 0px;
   width: 100%;
   overflow-x: hidden;

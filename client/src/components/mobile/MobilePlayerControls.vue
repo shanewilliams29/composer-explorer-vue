@@ -283,7 +283,6 @@ export default {
   },
 };
 </script>
-
 <style scoped>
 .playback-container{
   /*top padding set in App.vue*/
@@ -388,7 +387,7 @@ input[type="range"]::-moz-range-progress {
 
 
 .btn-secondary{
-  background-color: #343a40 !important;
+  background: none !important;
 }
 .btn:hover{
   background-color: #484e53 !important;
@@ -412,6 +411,6 @@ input[type="range"]::-moz-range-progress {
   border: none !important;
     outline: none !important;
     box-shadow: none !important;
-    background-color: #343a40 !important;
+    background: none !important;
 }
 </style>

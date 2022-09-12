@@ -164,6 +164,9 @@ export default {
     padding-bottom: 4px;
     vertical-align: middle;
   }
+  .composer-list-mobile .composer-name{
+    padding-left: 3px;
+  }
   .work-list-mobile{
     /*height: calc(100vh - 314px);*/
     height: calc(var(--vh, 1vh) * 100 - var(--workingheight));
@@ -230,6 +233,7 @@ export default {
   }*/
   .heading-text{
     padding-left: 20px;
+    font-weight: 500;
   }
   .heading-card{
     background: #54595f !important;
