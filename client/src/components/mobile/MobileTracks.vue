@@ -160,7 +160,7 @@ export default {
 <style scoped>
 table{
   width: 100%;
-  margin-top: 10px;
+  margin-top: 17px;
   margin-bottom: 5px;
 }
 td{
@@ -172,21 +172,24 @@ td{
 }
 .album-track-display{
   color: lightgray;
-  font-size: 12px;
+  font-size: 14px;
 }
 .carousel-inner{
   width:100%;
-  height: 50px !important;
+  height: 60px !important;
   background: none;
 }
 .carousel-item{
   text-align: center;
 }
-  .carousel-item{
+.carousel-item{
         transition: -webkit-transform .6s ease;
         transition: transform .6s ease;
         transition: transform .6s ease,-webkit-transform .6s ease;
-    }
+  }
+.carousel-item >>> span{
+  font-size: 16px !important;
+}  
 .carousel-indicators li{
   border-bottom-width: 7px;
   opacity: 0.25;

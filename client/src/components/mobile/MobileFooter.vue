@@ -90,14 +90,14 @@ export default {
   mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 1.0) 0%, transparent 100%);
   position: absolute;
   object-fit: cover;
-  height: 120px;
+  height: 130px;
   width: 100%;
 /*  left: 50%;
   transform: translate(-50%, 0);*/
   left: 0px;
   bottom: 0px;
   z-index: -5;
-  opacity: 0.3;
+  opacity: 0.35;
 /*  -webkit-filter: grayscale(100%);
   filter: grayscale(100%);*/
 }

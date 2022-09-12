@@ -66,9 +66,9 @@ export default {
   beforeCreate() {
     if (this.$route.name == 'mobile' || this.$route.name == 'mobileradio'){
       this.$view.mobile = true;
-      document.documentElement.style.setProperty('--playerpadding', `3px`);
-      document.documentElement.style.setProperty('--workingheight', `300px`);
-      document.documentElement.style.setProperty('--workingheightnoheader', `184px`);
+      document.documentElement.style.setProperty('--playerpadding', `0px`);
+      document.documentElement.style.setProperty('--workingheight', `310px`);
+      document.documentElement.style.setProperty('--workingheightnoheader', `194px`);
       document.documentElement.style.setProperty('--appbackgroundcolor', `#343a40`);
     } else {
       this.$view.mobile = false;
