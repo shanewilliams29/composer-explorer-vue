@@ -90,6 +90,15 @@ export default {
 
 
 /*Text sizing for mobile*/
+>>> h6{
+  font-size: 16px !important;
+}
+>>> input{
+  font-size: 16px !important;
+}
+>>> .performer-search{
+  height: 34.4px !important;
+}
 >>> .card{
   margin-bottom: 0px !important;
 }

@@ -14,8 +14,14 @@
       </b-col>
     </b-row>
   </div>
+
 <div>
-  <img class="header-image" :src="liveImage">
+<Transition name="fade">
+  <img v-if="reveal" class="header-image" key="1" :src="image1">
+ </Transition>
+<Transition name="fade">
+  <img v-if="!reveal" class="header-image" key="2" :src="image2">
+ </Transition>
 </div>
 <div class="fade-panel">
    
@@ -39,7 +45,9 @@ export default {
       genreTitle: this.$config.genre,
       defaultImage: "https://storage.googleapis.com/composer-explorer.appspot.com/headers/Chamber.jpg",
       imgLink: "https://storage.googleapis.com/composer-explorer.appspot.com/headers/" + encodeURIComponent(this.$config.genre) + ".jpg",
-      liveImage: ''
+      image1: "https://storage.googleapis.com/composer-explorer.appspot.com/headers/Chamber.jpg",
+      image2: "https://storage.googleapis.com/composer-explorer.appspot.com/headers/Chamber.jpg",
+      reveal: false
     };
   },
   computed:{
@@ -68,10 +76,25 @@ export default {
       this.buttonActive = !this.buttonActive;
     },
       updatePic(){
-      this.checkImage(this.imgLink, 
-        () => { this.liveImage = this.imgLink; }, 
-        () => { this.liveImage = this.defaultImage; } 
-        );
+        console.log("UPDATE");
+
+      this.reveal = !this.reveal;
+
+      if (this.reveal) {
+        this.checkImage(this.imgLink, 
+          () => { this.image1 = this.imgLink; }, 
+          () => { this.image1 = this.defaultImage; } 
+          );
+      } else {
+        this.checkImage(this.imgLink, 
+          () => { this.image2 = this.imgLink; }, 
+          () => { this.image2 = this.defaultImage; } 
+          );
+      }
+      // setTimeout(() => { this.oldImage = this.liveImage; }, 2000);
+      //setTimeout(() => { this.reveal = false }, 3000);
+      // setTimeout(() => { this.reveal = false; }, 5000);
+
     },
       checkImage(imageSrc, good, bad) {
         var img = new Image();
@@ -102,14 +125,16 @@ export default {
   object-fit: cover;
   height: 130px;
   width: 100%;
-/*  left: 50%;
-  transform: translate(-50%, 0);*/
   left: 0px;
   bottom: 0px;
   z-index: -5;
   opacity: 0.3;
-/*  -webkit-filter: grayscale(100%);
-  filter: grayscale(100%);*/
+}
+.fade-enter-active, .fade-leave-active {
+  transition: opacity 2s;
+}
+.fade-enter, .fade-leave-to {
+  opacity: 0;
 }
 
 .container-fluid {
