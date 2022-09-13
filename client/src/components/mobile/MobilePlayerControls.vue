@@ -2,9 +2,9 @@
   <b-container class="playback-container">
  <b-row class="buttons-row">
   <b-col class="text-center text-nowrap">
-  <b-button size="lg" class="playback-button gray" id="shuffle-play" v-show="!$view.shuffle && $view.mode == 'radio'" @click="shufflePlayback()"><b-icon-shuffle></b-icon-shuffle></b-button>
-  <b-button size="lg" class="playback-button" id="shuffle-play" v-show="$view.shuffle && $view.mode == 'radio'" @click="shufflePlayback()" ><b-icon-shuffle variant="warning"></b-icon-shuffle></b-button>
-  <b-button size="lg" class="playback-button gray" id="random-button" v-show="$view.mode != 'radio'" @click="playRandom()" ><b-icon-dice5></b-icon-dice5></b-button>
+  <b-button class="playback-button gray" id="shuffle-play" v-show="!$view.shuffle && $view.mode == 'radio'" @click="shufflePlayback()"><b-icon-shuffle></b-icon-shuffle></b-button>
+  <b-button class="playback-button" id="shuffle-play" v-show="$view.shuffle && $view.mode == 'radio'" @click="shufflePlayback()" ><b-icon-shuffle variant="warning"></b-icon-shuffle></b-button>
+  <b-button class="playback-button gray" id="random-button" v-show="$view.mode != 'radio'" @click="playRandom()" ><b-icon-dice5></b-icon-dice5></b-button>
   <b-button class="playback-button" v-show="$view.mode == 'radio'" id="previous-work-button" @click="previousWork()"><b-icon-arrow-left-circle></b-icon-arrow-left-circle></b-button>
   <b-button size="lg" class="playback-button" id="back-button" @click="back()"><b-icon-skip-start-fill></b-icon-skip-start-fill></b-button>
   <!-- Play button is handled in the SpotifyPlayer.vue listener -->
@@ -12,8 +12,8 @@
   <b-button size="lg" class="playback-button" id="pause-button" v-show="playing" @click="pause()"><b-icon-pause-fill></b-icon-pause-fill></b-button>
   <b-button size="lg" class="playback-button" id="forward-button" @click="next()"><b-icon-skip-end-fill></b-icon-skip-end-fill></b-button>
   <b-button class="playback-button" v-show="$view.mode == 'radio'" id="next-work-button" @click="nextWorkNoDebounce()"><b-icon-arrow-right-circle></b-icon-arrow-right-circle></b-button>
-  <b-button size="lg" class="playback-button gray" id="like-work-button" v-show="!$view.like" @click="toggleLike()"><b-icon-heart></b-icon-heart></b-button>
-  <b-button size="lg" class="playback-button red" id="unlike-work-button" v-show="$view.like" @click="toggleLike()"><b-icon-heart-fill></b-icon-heart-fill></b-button>
+  <b-button class="playback-button gray" id="like-work-button" v-show="!$view.like" @click="toggleLike()"><b-icon-heart></b-icon-heart></b-button>
+  <b-button class="playback-button red" id="unlike-work-button" v-show="$view.like" @click="toggleLike()"><b-icon-heart-fill></b-icon-heart-fill></b-button>
 </b-col>
 </b-row>
  <b-row class="seekbar-row">

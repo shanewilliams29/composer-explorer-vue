@@ -339,12 +339,11 @@ export default {
           var top = card.offsetTop + row.offsetTop - height + 100;
 
           var scrollBox = {};
-          if(this.$view.mobile){
+          if (this.$route.name == 'mobile'){
             scrollBox = this.$parent.$parent.$refs['scroll-box'];
           } else {
             scrollBox = this.$parent.$refs['scroll-box'];
           }
-
           scrollBox.scrollTo({
             top: top,
             left: 0,

@@ -48,6 +48,7 @@ GENERAL
 - Secure the MYSQL database, better password
 - Glitch where multiple players open? Start on new player > advances to next on old? Check work skipping.
 - Mobile: Opera Acts in track display
+- Mobile: "cache" the results for performers from google
 - Mobile: Popup with track listing?
 - Mobile: Scrolling
 - Mobile: Track starts from beginning when switching from radio to main

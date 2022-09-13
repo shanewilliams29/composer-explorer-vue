@@ -223,7 +223,7 @@ export default {
   >>> .albums-card{
     margin-left: -15px;
     margin-right: -10px;
-    padding-top: 6.5px !important;
+    padding-top: 8.5px !important;
   }
 /* .playback-container{
     padding: 13px;
@@ -272,7 +272,7 @@ export default {
       box-shadow: none !important;
   }
   .last-button{
-    border-bottom: solid 2px #54595f !important;
+/*    border-bottom: solid 2px #54595f !important;*/
   }
   .p-1{
     padding: 0px !important;

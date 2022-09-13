@@ -107,7 +107,7 @@ export default {
   left: 0px;
   bottom: 0px;
   z-index: -5;
-  opacity: 0.35;
+  opacity: 0.3;
 /*  -webkit-filter: grayscale(100%);
   filter: grayscale(100%);*/
 }

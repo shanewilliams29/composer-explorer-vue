@@ -174,6 +174,9 @@ td{
   color: lightgray;
   font-size: 14px;
 }
+.carousel{
+  border-top: solid 2px #54595f !important;
+}
 .carousel-inner{
   width:100%;
   height: 60px !important;
