@@ -157,14 +157,14 @@ export default {
 }
 .info-panel-button {
   position: absolute;
-  right: 13px;
+  right: 20px;
   font-size: 18px !important;
   border-radius: 50% !important;
   padding-left: 2.8px !important;
   padding-right: 2.8px !important;
   padding-top: 1.2px;
   padding-bottom: 0px;
-  bottom: calc(117px - 22.5px - 13px);
+  bottom: calc(90px);
   z-index: 1;
   background: none;
   border: none !important;
