@@ -14,7 +14,9 @@ document.head.appendChild(spotifyPlayerScript);
 
 export default {
   data() {
-    return {};
+    return {
+      firstLoad: true
+    };
   },
   methods: {
     initializeSpotify() {
@@ -45,6 +47,13 @@ export default {
                 this.$auth.deviceID = device_id;
                 window.device_id = device_id;
                 console.log('Ready with Device ID', device_id);
+
+                if (!this.firstLoad){
+                  eventBus.$emit('fireNextAlbum'); // next album when selected not found. Due to Spotify glitch player must be re-initialized
+                }
+
+                this.firstLoad = false;
+                
               });
               // Not Ready
               window.player.addListener('not_ready', ({
@@ -141,19 +150,34 @@ export default {
   reInitializeSpotify() {
         // When spotify doesnt find track, it breaks device connection. Re-establish here
         // Need to run this twice due to Spotify glitchiness...
-        window.player.disconnect()
-        window.player.connect().then(success => {
-        if (success) {
+
           window.player.disconnect()
-          window.player.connect().then(success => {
-          if (success) {
-            setTimeout(() => { eventBus.$emit('fireNextAlbum'); }, 0);
-            console.log('The Web Playback SDK successfully connected to Spotify!');
-          }
-        })
-        }
-      })
-    },
+          setTimeout(()=>{
+            window.player.connect().then(success => {
+            if (success) {
+              setTimeout(() => {  }, 1000);
+              console.log('The Web Playback SDK successfully connected to Spotify!');
+            }
+          })
+          }, 1000);
+
+
+  },
+
+
+
+      //   window.player.disconnect()
+      //   window.player.connect().then(success => {
+      //   if (success) {
+      //     window.player.disconnect()
+      //     window.player.connect().then(success => {
+      //     if (success) {
+      //       setTimeout(() => { eventBus.$emit('fireNextAlbum'); }, 0);
+      //       console.log('The Web Playback SDK successfully connected to Spotify!');
+      //     }
+      //   })
+      //   }
+      // })
 
   refreshToken(){
         const path = 'api/get_token';
