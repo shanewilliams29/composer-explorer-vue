@@ -39,7 +39,7 @@ export default {
 }
 .footer-row {
   /*height: calc(var(--vh, 1vh) * 100 - 314px + 8.5px);*/
-  height: calc(var(--vh, 1vh) * 100 - 117px - 66px);
+  height: calc(var(--vh, 1vh) * 100 - var(--workingheight) + 114px);
   color: black;
   overflow-y: scroll;
   padding-bottom: 10px;

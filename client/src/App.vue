@@ -115,8 +115,9 @@ body {
 }
 .info-panel-mobile {
   position: fixed;
-  bottom: 117px;
+  bottom: 130px;
   width: 100%;
+  z-index: 1000;
 }
 .fadeHeight-enter-active,
 .fadeHeight-leave-active {
