@@ -367,7 +367,7 @@ header.card-header:hover {
   text-align: center;
 }
 .m-5 {
-  color: #343a40;
+  color: #54595f;
 }
 .card {
   background-color: #fff;
