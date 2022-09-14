@@ -251,7 +251,7 @@ export default {
       const config = JSON.parse(localStorage.getItem('config'));
       this.$config.composer = config.composer;
     }
-    if (this.$view.mode) { // clear selected composer in other modes
+    if (this.$view.mode && !this.$view.mobile) { // clear selected composer in other modes, except mobile
       this.$config.composer = "";
     }
     if (this.$view.mode == 'favorites'){

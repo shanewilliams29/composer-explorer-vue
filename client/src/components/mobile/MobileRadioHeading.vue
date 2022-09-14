@@ -255,7 +255,7 @@ export default {
     },
     composerSelect(){
         if(this.composerSelectField < 1){
-            this.$config.composer = null;
+            //this.$config.composer = null;
             this.radioTypeSelect(); // clears works and albums
         }else {
           eventBus.$emit('fireComposerSelectRadio', this.composerSelectField);

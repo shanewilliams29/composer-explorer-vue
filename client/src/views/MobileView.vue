@@ -87,6 +87,7 @@ export default {
         this.composerDisabled = false;
         this.workDisabled = true;
         this.albumDisabled = false;
+        eventBus.$emit('fireWorkScroll', this.$config.genre); // for mobile
       },
       albumToggle() {
         this.composerDisabled = false;

@@ -43,10 +43,10 @@ export default {
     return {
       buttonActive: false,
       genreTitle: this.$config.genre,
-      defaultImage: "https://storage.googleapis.com/composer-explorer.appspot.com/headers/Chamber.jpg",
+      defaultImage: "https://storage.googleapis.com/composer-explorer.appspot.com/headers/Symphony.jpg",
       imgLink: "https://storage.googleapis.com/composer-explorer.appspot.com/headers/" + encodeURIComponent(this.$config.genre) + ".jpg",
-      image1: "https://storage.googleapis.com/composer-explorer.appspot.com/headers/Chamber.jpg",
-      image2: "https://storage.googleapis.com/composer-explorer.appspot.com/headers/Chamber.jpg",
+      image1: "https://storage.googleapis.com/composer-explorer.appspot.com/headers/Symphony.jpg",
+      image2: "https://storage.googleapis.com/composer-explorer.appspot.com/headers/Symphony.jpg",
       reveal: false
     };
   },
@@ -62,7 +62,6 @@ export default {
     genreChanged(newGenre) {
       this.genreTitle = newGenre;
       this.imgLink = "https://storage.googleapis.com/composer-explorer.appspot.com/headers/" + encodeURIComponent(this.genreTitle) + ".jpg"
-      console.log(this.imgLink);
     },
     titleChanged(newTitle){
       if(this.genreTitle == 'Opera' || this.genreTitle == 'Stage Work' || this.genreTitle == 'Ballet'){
@@ -75,9 +74,7 @@ export default {
       this.$parent.togglePanel();
       this.buttonActive = !this.buttonActive;
     },
-      updatePic(){
-        console.log("UPDATE");
-
+    updatePic(){
       this.reveal = !this.reveal;
 
       if (this.reveal) {
@@ -89,19 +86,15 @@ export default {
         this.checkImage(this.imgLink, 
           () => { this.image2 = this.imgLink; }, 
           () => { this.image2 = this.defaultImage; } 
-          );
+        );
       }
-      // setTimeout(() => { this.oldImage = this.liveImage; }, 2000);
-      //setTimeout(() => { this.reveal = false }, 3000);
-      // setTimeout(() => { this.reveal = false; }, 5000);
-
     },
-      checkImage(imageSrc, good, bad) {
-        var img = new Image();
-        img.onload = good; 
-        img.onerror = bad;
-        img.src = imageSrc;
-      }
+    checkImage(imageSrc, good, bad) {
+      var img = new Image();
+      img.onload = good; 
+      img.onerror = bad;
+      img.src = imageSrc;
+    }
   },
   created(){
     eventBus.$on('fireSetAlbum', this.updatePic);

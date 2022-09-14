@@ -460,6 +460,8 @@ export default {
     eventBus.$on('firePlaylistExport', this.preparePlaylist);
     eventBus.$on('fireRefreshWorks', this.refreshWorks);
     eventBus.$on('fireFavoriteWorks', this.getFavoriteWorks);
+    eventBus.$on('fireWorkScroll', this.setGenre);
+
   },
   beforeDestroy() {
     eventBus.$off('fireComposers', this.fireComposers);
@@ -473,6 +475,7 @@ export default {
     eventBus.$off('firePlaylistExport', this.preparePlaylist);
     eventBus.$off('fireRefreshWorks', this.refreshWorks);
     eventBus.$off('fireFavoriteWorks', this.getFavoriteWorks);
+    eventBus.$off('fireWorkScroll', this.setGenre);
   }
 };
 </script>
