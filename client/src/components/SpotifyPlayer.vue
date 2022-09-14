@@ -103,8 +103,12 @@ export default {
                 //console.log('Duration of Song', duration);
               });
               window.player.connect();
-              // for Safari autoplay enable
               
+              document.getElementById("play-button").addEventListener("click", function() {
+                  window.player.togglePlay();
+              });
+              
+              // For initial startup and playback
               document.getElementById("play-button").addEventListener("click", function() {
                 window.player.activateElement();
                 let uriList = {}
@@ -121,9 +125,6 @@ export default {
                 spotify.playTracks(res.data.client_token, window.device_id, jsonList);
               }, {
                 once: true
-              });
-              document.getElementById("play-button").addEventListener("click", function() {
-                window.player.togglePlay();
               });
             } else if (res.data.client_token !== null){
               this.$auth.clientToken = res.data.client_token;
@@ -149,7 +150,6 @@ export default {
 
   reInitializeSpotify() {
         // When spotify doesnt find track, it breaks device connection. Re-establish here
-        // Need to run this twice due to Spotify glitchiness...
 
           window.player.disconnect()
           setTimeout(()=>{
@@ -160,25 +160,7 @@ export default {
             }
           })
           }, 1000);
-
-
   },
-
-
-
-      //   window.player.disconnect()
-      //   window.player.connect().then(success => {
-      //   if (success) {
-      //     window.player.disconnect()
-      //     window.player.connect().then(success => {
-      //     if (success) {
-      //       setTimeout(() => { eventBus.$emit('fireNextAlbum'); }, 0);
-      //       console.log('The Web Playback SDK successfully connected to Spotify!');
-      //     }
-      //   })
-      //   }
-      // })
-
   refreshToken(){
         const path = 'api/get_token';
         axios.get(path, {withCredentials: true})
@@ -199,12 +181,15 @@ export default {
           console.error(error);
         });
     },
-    test(){
-      console.log("TEST");
-    }
   },
   mounted() { 
     this.initializeSpotify();
+
+  document.getElementById("play-button").addEventListener("click", () => {
+    if(!this.$auth.clientToken){
+      eventBus.$emit('notLoggedIn');
+    }
+  });
 
     //Timer for refreshing tokens
     setInterval(() => {

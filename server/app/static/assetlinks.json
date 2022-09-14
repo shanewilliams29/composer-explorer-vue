@@ -1,5 +1,16 @@
-[{
-  "relation": ["delegate_permission/common.handle_all_urls"],
-  "target" : { "namespace": "android_app", "package_name": "com.app.composerexplorer",
-               "sha256_cert_fingerprints": ["C4:3C:B1:A0:68:36:B6:07:45:E3:EB:6F:11:35:4C:CA:4B:78:38:28:5F:35:70:30:31:00:C3:70:EA:47:34:6C"] }
-}]
+[
+  {
+    "relation": [
+      "delegate_permission/common.handle_all_urls"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.app.composerexplorer",
+      "sha256_cert_fingerprints": [
+        "C4:3C:B1:A0:68:36:B6:07:45:E3:EB:6F:11:35:4C:CA:4B:78:38:28:5F:35:70:30:31:00:C3:70:EA:47:34:6C",
+        "8D:DB:47:0F:B5:58:7A:51:B4:6E:47:DA:84:64:11:09:81:C4:35:03:BB:BF:86:79:05:C8:5D:B0:22:AB:6A:C1",
+        "85:EF:E9:AA:7A:C5:C8:BA:E3:9D:15:11:FA:EB:FA:D8:F7:15:82:D6:D8:CC:89:41:E8:5A:20:BE:71:28:21:E9"
+      ]
+    }
+  }
+]

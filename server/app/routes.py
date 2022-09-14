@@ -59,9 +59,9 @@ def index(path):
     return app.send_static_file('index.html')
 
 
-@app.route("/test")
-def test():
-    return "Hello"
+@app.route("/privacy")
+def privacy():
+    return render_template('privacy.html')
 
 
 @app.route("/.well-known/assetlinks.json")
@@ -142,6 +142,10 @@ def connect_spotify():
 @app.route('/spotify')  # landing page from Spotify auth
 def spotify():
     code = request.args.get('code')
+
+    if not code:
+        return redirect(url_for('index'))
+
     url = '/login?code=' + code
     return redirect(url)
 
