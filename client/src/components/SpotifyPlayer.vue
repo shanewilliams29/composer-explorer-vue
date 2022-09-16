@@ -49,17 +49,17 @@ export default {
                 window.device_id = device_id;
                 console.log('Ready with Device ID', device_id);
 
+                // FIRST LOAD OF PLAYER
                 if (this.firstLoad){
                   window.player.activateElement();
                   console.log("FIRST LOAD");
                   this.firstLoad = false;
                 
+                // RELOAD TRACKS IF ERROR AND TRY AGAIN
                 } else if (this.reload) {
                   let uriList = {}
                   let jsonList = {}
                   let tracks = this.$config.playTracks;
-
-                  // ensure unnecessary whitespace in track list (gives spotify erors):
                   var smushTracks = tracks.replace(/\s/g,'');
                   var cleanTracks = smushTracks.replaceAll('spotify', ' spotify').trim();
                   uriList['uris'] = cleanTracks.split(' ');
@@ -69,18 +69,12 @@ export default {
                   console.log("TRY AGAIN");
                   this.reload = false;
                 } else{
-                  // next album when selected not found. Due to Spotify glitch player must be re-initialized
+                  // NEXT ALBUM IF ERROR PERSISTS (Spotify Album not permitted in Country)
                   eventBus.$emit('fireNextAlbum');
                   console.log("NEXT ALBUM");
                   eventBus.$emit('fireNotFoundModal');
                   this.reload = true;
                 }
-                
-                // if (!this.firstLoad){
-                //   
-                // }
-
-                
                 
               });
               // Not Ready
@@ -186,7 +180,6 @@ export default {
           setTimeout(()=>{
             window.player.connect().then(success => {
             if (success) {
-              // this.reload = true;
               console.log('The Web Playback SDK successfully connected to Spotify!');
             }
           })

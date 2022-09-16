@@ -164,7 +164,7 @@ var spotify = {
       } else if (error.response.status == 404) {
         eventBus.$emit('notAvailable');
         //alert(error.response.data.error.message);
-        console.log(error);
+        //console.log(error);
       } else {
         //alert(error.response.data.error.message);
         console.error(error);
