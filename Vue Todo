@@ -48,6 +48,8 @@ GENERAL
 - Secure the MYSQL database, better password
 - Glitch where multiple players open? Start on new player > advances to next on old? Check work skipping.
 - Links to a performance?
+- Switch spotify API from web playback to player?
+- Spinners for works and albums etc. not showin on mobile (same color as background)
 - Mobile: Opera Acts in track display
 - Mobile: "cache" the results for performers from google
 - Mobile: Popup with track listing?

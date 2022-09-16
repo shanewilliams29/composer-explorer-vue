@@ -99,6 +99,7 @@ export default {
       }
       this.$config.previousTracks = previousTracks.trim();
       this.$config.playTracks = tracks;
+      console.log(this.$config.playTracks);
       localStorage.setItem('config', JSON.stringify(this.$config));
 
       // ensure unnecessary whitespace in track list (gives spotify erors):

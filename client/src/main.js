@@ -57,7 +57,7 @@ const defaultConfig = {
   previousTracks: "spotify:track:6cUCckpdlqHJ5Ascf2uH2A spotify:track:1L0a0dpHaMWgAoEEvFfycT spotify:track:7ojkji0OYCOpl3UMy92gEf spotify:track:4IHaNEgvWUD63pMTWrclb2",
   trackNo: 0,
   album: "BEETHOVEN000056eOuqhCfrTPp1H0YbQ9PmL",
-  albumSize: 'large',
+  albumSize: 'small',
   artist: null,
   albumData: {},
 };
@@ -93,7 +93,8 @@ Vue.prototype.$view = Vue.observable({
   panelVisible: false,
   like: false,
   mobile: false,
-  mobileKeyboard: false
+  mobileKeyboard: false,
+  avatar: false
 });
 
 new Vue({

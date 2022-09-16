@@ -17,7 +17,7 @@ class SpotifyAPI(object):
 
     def authorize(self):
         client_url = urllib.parse.quote(self.client_url)
-        url = 'https://accounts.spotify.com/authorize?client_id=' + self.client_id + '&response_type=code&redirect_uri=' + client_url + '&scope=user-read-playback-state user-read-playback-position user-modify-playback-state user-read-private playlist-read-private user-read-email playlist-modify-public user-read-currently-playing streaming'
+        url = 'https://accounts.spotify.com/authorize?client_id=' + self.client_id + '&response_type=code&redirect_uri=' + client_url + '&scope=streaming app-remote-control user-read-playback-state user-read-playback-position user-modify-playback-state user-read-private playlist-read-private user-read-email playlist-modify-public user-read-currently-playing streaming'
         return url
 
     def client_authorize(self):

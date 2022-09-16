@@ -15,7 +15,8 @@ document.head.appendChild(spotifyPlayerScript);
 export default {
   data() {
     return {
-      firstLoad: true
+      firstLoad: true,
+      reload: true
     };
   },
   methods: {
@@ -48,11 +49,38 @@ export default {
                 window.device_id = device_id;
                 console.log('Ready with Device ID', device_id);
 
-                if (!this.firstLoad){
-                  eventBus.$emit('fireNextAlbum'); // next album when selected not found. Due to Spotify glitch player must be re-initialized
-                }
+                if (this.firstLoad){
+                  window.player.activateElement();
+                  console.log("FIRST LOAD");
+                  this.firstLoad = false;
+                
+                } else if (this.reload) {
+                  let uriList = {}
+                  let jsonList = {}
+                  let tracks = this.$config.playTracks;
 
-                this.firstLoad = false;
+                  // ensure unnecessary whitespace in track list (gives spotify erors):
+                  var smushTracks = tracks.replace(/\s/g,'');
+                  var cleanTracks = smushTracks.replaceAll('spotify', ' spotify').trim();
+                  uriList['uris'] = cleanTracks.split(' ');
+                  jsonList = JSON.stringify(uriList);
+                  spotify.playTracks(this.$auth.clientToken, this.device_id, jsonList);
+
+                  console.log("TRY AGAIN");
+                  this.reload = false;
+                } else{
+                  // next album when selected not found. Due to Spotify glitch player must be re-initialized
+                  eventBus.$emit('fireNextAlbum');
+                  console.log("NEXT ALBUM");
+                  eventBus.$emit('fireNotFoundModal');
+                  this.reload = true;
+                }
+                
+                // if (!this.firstLoad){
+                //   
+                // }
+
+                
                 
               });
               // Not Ready
@@ -85,7 +113,20 @@ export default {
               }) => {
                 // alert('PLAYBACK ERROR ' + message);
                 console.error(message);
+
+                // Error due to no list loaded. Send list of tracks to player.
+                let uriList = {}
+                let jsonList = {}
+                let tracks = startTracks;
+                // ensure unnecessary whitespace in track list (gives spotify erors):
+                var smushTracks = tracks.replace(/\s/g,'');
+                var cleanTracks = smushTracks.replaceAll('spotify', ' spotify').trim();
+
+                uriList['uris'] = cleanTracks.split(' ');
+                jsonList = JSON.stringify(uriList);
+                spotify.playTracks(res.data.client_token, window.device_id, jsonList);
               });
+
               window.player.addListener('autoplay_failed', () => {
                 console.log('Autoplay is not allowed by the browser autoplay rules');
                 // eventBus.$emit('fireAutoplayFailed');
@@ -104,28 +145,18 @@ export default {
               });
               window.player.connect();
               
-              document.getElementById("play-button").addEventListener("click", function() {
-                  window.player.togglePlay();
-              });
-              
               // For initial startup and playback
               document.getElementById("play-button").addEventListener("click", function() {
                 window.player.activateElement();
-                let uriList = {}
-                let jsonList = {}
-                let tracks = startTracks;
-
-
-                // ensure unnecessary whitespace in track list (gives spotify erors):
-                var smushTracks = tracks.replace(/\s/g,'');
-                var cleanTracks = smushTracks.replaceAll('spotify', ' spotify').trim();
-
-                uriList['uris'] = cleanTracks.split(' ');
-                jsonList = JSON.stringify(uriList);
-                spotify.playTracks(res.data.client_token, window.device_id, jsonList);
-              }, {
-                once: true
+                window.player.togglePlay();
+                
               });
+
+              // normal playback
+              // document.getElementById("play-button").addEventListener("click", function() {
+              //     window.player.togglePlay();
+              // });
+
             } else if (res.data.client_token !== null){
               this.$auth.clientToken = res.data.client_token;
               this.$auth.userid = res.data.user_id;
@@ -155,7 +186,7 @@ export default {
           setTimeout(()=>{
             window.player.connect().then(success => {
             if (success) {
-              setTimeout(() => {  }, 1000);
+              // this.reload = true;
               console.log('The Web Playback SDK successfully connected to Spotify!');
             }
           })
@@ -186,7 +217,7 @@ export default {
     this.initializeSpotify();
 
   document.getElementById("play-button").addEventListener("click", () => {
-    if(!this.$auth.clientToken){
+    if(!this.$auth.clientToken || this.$auth.clientToken == 'INVALID'){ // investigate why returning invalid in app?
       eventBus.$emit('notLoggedIn');
     }
   });

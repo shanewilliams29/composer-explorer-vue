@@ -42,7 +42,7 @@ export default {
     eventBus.$on('notLoggedIn', this.notLoggedIn);
     eventBus.$on('fireAutoplayFailed', this.autoplayDisabled);
     eventBus.$on('notPremium', this.notPremium);
-    eventBus.$on('notAvailable', this.notAvailable);
+    eventBus.$on('fireNotFoundModal', this.notAvailable);
   },
 };
 </script>
