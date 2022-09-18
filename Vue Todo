@@ -50,6 +50,7 @@ GENERAL
 - Links to a performance?
 - Switch spotify API from web playback to player?
 - Spinners for works and albums etc. not showin on mobile (same color as background)
+- Hide albums not avaialble in localstorage
 - Mobile: Opera Acts in track display
 - Mobile: "cache" the results for performers from google
 - Mobile: Popup with track listing?
@@ -91,3 +92,9 @@ PARKING LOT
 INFO
 keytool -printcert -jarfile app-debug.apk // For getting Sha key of .apk
 https://storage.googleapis.com/composer-explorer.appspot.com/avatars/12173954849.jpg avatar
+
+
+BATTERY
+
+Settings > Apps > Composer Explorer > Battery > Unrestricted
+

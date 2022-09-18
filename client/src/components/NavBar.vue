@@ -48,6 +48,7 @@
           <p>Welcome to your Classical Music Portal. Explore composers from the Medieval to the present. Listen to works on Spotify, made navigable for Classical music.</p>
           <h6>Usage</h6>
           <p>Log in with your <b>Spotify Premium</b> account to play music. Add performances to your favorites and create your own customized radios.</p>
+          <p v-if="false"><span style="color: red;"><b>Android App:</b></span> Battery optimizations may stop playback (such as when phone is locked). Enable unrestricted battery access to the app in your phone's settings: <span style="color: darkblue;">Settings > Apps > Composer Explorer > Battery > Unrestricted</span>.</p>
           <h6>Acknowledgements</h6>
           <p v-if="!$view.mobile">
             Composer and work information is used under licence from <a href="https://en.wikipedia.org/" target="_blank">Wikipedia</a>, <a href="https://imslp.org/" target="_blank">IMSLP</a>, and

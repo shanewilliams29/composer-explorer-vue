@@ -49,13 +49,14 @@ export default {
                 window.device_id = device_id;
                 console.log('Ready with Device ID', device_id);
 
+                // THESE STEPS ARE NECESSARY BECAUSE SPOTIFY BREAKS CONNECTION WHEN TRACK NOT AVAILABLE
                 // FIRST LOAD OF PLAYER
                 if (this.firstLoad){
                   window.player.activateElement();
                   console.log("FIRST LOAD");
                   this.firstLoad = false;
                 
-                // RELOAD TRACKS IF ERROR AND TRY AGAIN
+                // RELOAD TRACKS IF ERROR AND TRY AGAIN (WEBVIEW GLITCH)
                 } else if (this.reload) {
                   let uriList = {}
                   let jsonList = {}
@@ -69,7 +70,7 @@ export default {
                   console.log("TRY AGAIN");
                   this.reload = false;
                 } else{
-                  // NEXT ALBUM IF ERROR PERSISTS (Spotify Album not permitted in Country)
+                  // NEXT ALBUM IF ERROR PERSISTS (Spotify Album not found, 404)
                   eventBus.$emit('fireNextAlbum');
                   console.log("NEXT ALBUM");
                   eventBus.$emit('fireNotFoundModal');

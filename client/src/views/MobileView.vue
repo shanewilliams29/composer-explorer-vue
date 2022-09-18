@@ -100,6 +100,7 @@ export default {
   },
   created() {
     this.$view.mode = null;
+    this.$view.shuffle = false;
 
     window.firstLoad = true; // prevent playback on first load
     eventBus.$on('fireComposers', (composer) => {
