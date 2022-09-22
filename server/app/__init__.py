@@ -10,6 +10,7 @@ from flask_moment import Moment
 # instantiate the app
 app = Flask(__name__, static_folder='../dist', static_url_path='/', template_folder='templates')
 app.config.from_object(Config)
+
 db = SQLAlchemy(app)
 Mobility(app)
 cache = Cache(app)

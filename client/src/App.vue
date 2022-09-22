@@ -1,6 +1,7 @@
 <template>
   <div id="app">
     <NavBar/>
+    <ConnectingOverlay />
     <WelcomeOverlay />
     <router-view />
     <SpotifyPlayer />
@@ -20,6 +21,7 @@
 </template>
 
 <script>
+import ConnectingOverlay from '@/components/ConnectingOverlay.vue'
 import WelcomeOverlay from '@/components/WelcomeOverlay.vue'
 import SpotifyPlayer from '@/components/SpotifyPlayer.vue'
 import InfoPanel from '@/components/InfoPanel.vue'
@@ -34,6 +36,7 @@ export default {
   components: {
     NavBar,
     WelcomeOverlay,
+    ConnectingOverlay,
     SpotifyPlayer,
     ModalContainer,
     MobileTracks,

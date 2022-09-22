@@ -139,7 +139,7 @@ def connect_spotify():
     return redirect(url)
 
 
-@app.route('/spotify')  # landing page from Spotify auth
+@app.route('/spotify')  # landing page from Spotify auth, app deep link
 def spotify():
     code = request.args.get('code')
 
@@ -150,7 +150,7 @@ def spotify():
     return redirect(url)
 
 
-@app.route('/login')
+@app.route('/login')  # log in the user
 def login():
 
     # get access token

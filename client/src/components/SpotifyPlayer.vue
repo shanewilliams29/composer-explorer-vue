@@ -48,6 +48,7 @@ export default {
                 this.$auth.deviceID = device_id;
                 window.device_id = device_id;
                 console.log('Ready with Device ID', device_id);
+                this.$view.showConnecting = false;
 
                 // THESE STEPS ARE NECESSARY BECAUSE SPOTIFY BREAKS CONNECTION WHEN TRACK NOT AVAILABLE
                 // FIRST LOAD OF PLAYER
@@ -83,23 +84,28 @@ export default {
                 device_id
               }) => {
                 console.log('Device ID has gone offline', device_id);
+                this.$view.showConnecting = false;
+
                 // alert('DEVICE NOT READY');
               });
               window.player.addListener('initialization_error', ({
                 message
               }) => {
                 // alert(message);
+                this.$view.showConnecting = false;
                 console.error(message);
               });
               window.player.addListener('authentication_error', ({
                 message
               }) => {
+                this.$view.showConnecting = false;
                 // alert('AUTHENTICATION ERROR: ' + message);
                 console.error(message);
               });
               window.player.addListener('account_error', ({
                 message
               }) => {
+                this.$view.showConnecting = false;
                 // alert('ACCOUNT ERROR ' + message);
                 console.error(message);
               });
@@ -159,10 +165,12 @@ export default {
               this.$auth.knowledgeKey = res.data.knowledge_api;
               this.$auth.avatar = res.data.avatar;
               eventBus.$emit('notPremium');
+              this.$view.showConnecting = false;
             } else {
               this.$auth.appToken = res.data.app_token;
               this.$auth.knowledgeKey = res.data.knowledge_api;
               this.$view.banner = true;
+              this.$view.showConnecting = false;
             }
           }
         }).catch((error) => {
@@ -170,6 +178,7 @@ export default {
           this.$auth.appToken = null;
           this.$auth.clientToken = null;
           console.error(error);
+          this.$view.showConnecting = false;
         });
       }
     },

@@ -94,7 +94,8 @@ Vue.prototype.$view = Vue.observable({
   like: false,
   mobile: false,
   mobileKeyboard: false,
-  avatar: false
+  avatar: false,
+  showConnecting: true
 });
 
 new Vue({
