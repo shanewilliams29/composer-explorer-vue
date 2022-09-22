@@ -1,5 +1,5 @@
 <template>
-  <div v-if="$auth.clientToken && $view.showConnecting">
+  <div v-if="$auth.clientToken && $view.showConnecting && $auth.clientToken != 'INVALID'">
     <div class="bg-text">
       <div id="connecting" class="jumbotron overlay">
 
