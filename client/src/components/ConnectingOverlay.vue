@@ -42,7 +42,7 @@ img{
   left: 50%;
   transform: translate(-50%, -50%);
   z-index: 2;
-  width: 80%;
+  width: 300px;
   padding: 20px;
   text-align: center;
 }
