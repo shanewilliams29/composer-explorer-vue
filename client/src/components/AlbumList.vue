@@ -270,7 +270,7 @@ export default {
   text-align: center;
 }
 .m-5 {
-  color: #54595f;
+  color: #343a40;
 }
 .card-deck {
   display: flex;

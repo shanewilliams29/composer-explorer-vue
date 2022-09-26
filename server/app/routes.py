@@ -41,7 +41,6 @@ def before_request():
 
 @app.route('/', defaults={'path': ''})
 @app.route("/<string:path>")
-
 def index(path):
     if request.MOBILE and not session['mobile']:
         session['mobile'] = 'true'

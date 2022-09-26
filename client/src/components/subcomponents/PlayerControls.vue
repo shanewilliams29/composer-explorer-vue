@@ -225,6 +225,7 @@ export default {
     // })
 
     eventBus.$on('firePlayerStateChanged', (track_data, position, duration, paused) => {
+      //console.log(position, + ' ' + duration +" " +paused);
       if (position == 0 && !paused){ // can delay timer here if glitchy
           this.playing = true;
           this.startTimer();

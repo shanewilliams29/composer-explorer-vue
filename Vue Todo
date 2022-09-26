@@ -1,73 +1,25 @@
-GENERAL
-- Date for works after composer death (no date)
-- If only one artist, allow more years from album crap filter
-- Click next on last track, jump to next work? Buggy
-- blue borders on work list highlights?
-- Refine performers page so no url change when already on page
-- Better shuffle playback
-- Line appearing on album info pane... card?
-- Improve Conductor/Orchestra, display in consistent manner.
-- Deselect composer on view mode change
-- Remember radio settings
-- Hide Google API Key?
-- Search on nicknames for refreshalbums?
-- What to do when performer album liked but not on main list due to compilation (ie. Yuja Wang Mend. 1)
-- Composer tiers in radio mode
-- Show which users like work?
-- Word cloud font on Apple
-- Solti Mass in B Minor - what to do for regional issues, also for radio
-- Open composers' region when selected in views with many composers
-- Options: exclude operas from radio mode
-- Does favorites work when no favorites by user?
-- Loading spinners for heading fields which need ajax
+HIGH PRIORITY
 - Patreon
-- Scroll to album?
-- When less popular composer selected, how to handle refresh of page to show?
-- Normalize artist names?
-- "Search works by" if coming from Favorites page, is empty
-- Little bit of blank space underneath album on small view with likes
-- IMSLP link to works
-- Glitch in composer name in play area. When switch composers but play albums by previous composer
-- Favorites move. When advancing to next work (automatically or button) all albums are shown
-- Fix mobile
-- Yuja export playlist: obscure not working?
-- Performer view, glitch when repeatedly click on performer name in info panel
-- CPE showing in performer view
-- Performer export - Exporting the final item?
-- Export - compilation albums when user favorites them?
-- Highlight work playing (subtle) when selecting other work
-- Autoplay not working on Safari again...
-- Browse - Bottom of columns cut off?
-- Fix fullscreen ablum display bottom left hand corner when screen smaller
-- Combine playback controls in mobile and standard into one file
-- Fix avatars for people without pictures
-- Other people's favorites
-- What others are listening to
-- Dont show welcome panel unless user not logged in
-- Show number of favorites on favorites
+- Remember radio settings
+- What to do when performer album liked but not on main list due to compilation (ie. Yuja Wang Mend. 1)
 - Secure the MYSQL database, better password
 - Glitch where multiple players open? Start on new player > advances to next on old? Check work skipping.
-- Links to a performance?
-- Switch spotify API from web playback to player?
-- Spinners for works and albums etc. not showin on mobile (same color as background)
-- Hide albums not avaialble in localstorage
-- Mobile: Opera Acts in track display
-- Mobile: "cache" the results for performers from google
-- Mobile: Popup with track listing?
-- Mobile: Scrolling
-- Mobile: Track starts from beginning when switching from radio to main
-- Mobile: Track starts playing immediately, after adding Tracklisting to MobileInfoPanel...
-- Mobile: Improve Tracklisting
-- Mobile: if choose different composer/work, the info panel is wrong, should show details of track playing
-- Localhost mobile automatically plays after login? Doesn't happen on production...
 
-***
-- Bach WTC I No. 1 Richer (First album) breaks playback???
-	- Deletes device???
-	- Handle if 404 error returned, not available in your country
-	- Still a bit glitchy, second doesnt play either?
-	- What about radio mode?
-***
+LOW PRIORITY
+- Date for works after composer death (no date)
+- Better shuffle playback
+- Composer tiers in radio mode
+- Show which users like work?
+- Open composers' region when selected in views with many composers
+- Options: exclude operas from radio mode
+- Normalize artist names?
+- "Search works by" if coming from Favorites page, is empty
+- Yuja export playlist: obscure not working?
+- Combine playback controls in mobile and standard into one file
+- What others are listening to
+- Safari, side panel acts funky
+- Hide albums not avaialble in localstorage
+- Mobile: if choose different composer/work, the info panel is wrong, should show details of track playing
 
 RELINKING
 - Track relinking, what to do if titles are different? Is titles best way to do this?
@@ -76,25 +28,14 @@ RELINKING
 ... if track returned is different from track requested?
 ... areyouplaying for tracks that still don't work (see old version)
 
-
 COMPOSERS
 - Fix Monteverdi
 - CPE Bach or Bach, CPE (might break special case for algorithm)
-
 
 PARKING LOT
 - Get artist IDs from Spotify?
 - Spiders web beween performers
 - Playlist functionality
 - Youtube Version?
-
-
-INFO
-
-https://storage.googleapis.com/composer-explorer.appspot.com/avatars/12173954849.jpg avatar
-
-
-BATTERY
-
-Settings > Apps > Composer Explorer > Battery > Unrestricted
+- Forum
 

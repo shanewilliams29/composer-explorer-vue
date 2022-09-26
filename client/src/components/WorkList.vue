@@ -4,11 +4,14 @@
       <b-spinner class="m-5"></b-spinner>
     </div>
     <div class="row">
+      <span v-show="!loading && works.length < 1 && $view.mode == 'favorites'" class="col no-works-found">
+        <div class="m-4">Access your favorite works and performances here</div>
+      </span>
       <span v-show="!loading && works.length < 1 && !$view.mode && $config.composer" class="col no-works-found">
         <div class="m-4">No works found for {{ $config.composer }}</div>
       </span>
       <span v-show="!loading && works.length < 1 && !$view.mode && !$config.composer" class="col no-works-found">
-        <div class="m-4">Select a composer to view works.</div>
+        <div class="m-4">Select a composer to view works</div>
       </span>
       <span v-show="!loading && works.length < 1 && $view.mode == 'performer' && $config.artist" class="col no-works-found">
         <div class="m-4">Select a composer to view performances by {{ $config.artist }}</div>
@@ -512,7 +515,7 @@ export default {
   text-align: center;
 }
 .m-5 {
-  color: #54595f;
+  color: #343a40;
 }
 .card-deck {
   display: flex;

@@ -30,7 +30,8 @@
       <b-col class="last-col">
         <b-card class="heading-card albums-card">
           <b-form-group>
-           <vue-typeahead-bootstrap v-model="query" placeholder="Search for a performer" class="mt-3 style-chooser performer-search" @input="resetField" @hit="artistSearch" size="sm" :data="this.artistList"/>
+              <vue-typeahead-bootstrap v-show="listLoading" v-model="query" placeholder="Loading..." class="mt-3 style-chooser performer-search" size="sm"/>
+           <vue-typeahead-bootstrap v-show="!listLoading" v-model="query" placeholder="Search for a performer" class="mt-3 style-chooser performer-search" @input="resetField" @hit="artistSearch" size="sm" :data="this.artistList"/>
             <b-row class="flex-nowrap">
               <b-col style="padding-right: 0px;" cols="8">
                 <v-select v-model="albumSortField" label="text" :options="albumSortOptions" @input="albumFilter()" :clearable="false" class="mt-3 style-chooser" :searchable="false"></v-select>
@@ -60,6 +61,7 @@ export default {
       query: '',
       artistList: [],
       loading: false,
+      listLoading: false,
 
       albumSortField: { value: 'recommended', text: 'Recommended sorting' },
       albumSortOptions: [
@@ -75,15 +77,30 @@ export default {
       results: [],
     };
   },
+  computed:{
+    apiKeyGot(){
+      return this.$auth.knowledgeKey;
+    }
+  },
+  watch: {
+    apiKeyGot() {
+      if(this.$route.query.artist){
+        this.getPersonInfo(this.$route.query.artist);
+      }
+    }
+  },
   methods: {
     getArtistList() {
+      this.listLoading = true;
       const path = 'api/artistlist';
       axios.get(path)
         .then((res) => {
         this.artistList = JSON.parse(res.data.artists);
+        this.listLoading = false;
         })
         .catch((error) => {
           console.error(error);
+          this.listLoading = false;
         });
     },
     capitalize(string){
