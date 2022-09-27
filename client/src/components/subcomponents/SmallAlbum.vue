@@ -16,26 +16,23 @@
               <tr>
                 <td width="100%" style="white-space: nowrap; text-overflow: ellipsis; overflow: hidden; max-width: 1px;">
                   <span v-if="album.minor_artists" style="color: gray; font-size: 12px;">{{ album.minor_artists }}</span>
-                  <span v-else><br></span>
+                  <span v-else><br /></span>
                 </td>
               </tr>
               <tr>
                 <td width="100%" style="white-space: nowrap; text-overflow: ellipsis; overflow: hidden; max-width: 1px;">
-                  <span class="album-likes-class">
-                  <AlbumLikes v-bind:likedAlbums="likedAlbums" v-bind:album="album" v-bind:selectedAlbum="selectedAlbum"/></span>
+                  <span class="album-likes-class"> <AlbumLikes v-bind:likedAlbums="likedAlbums" v-bind:album="album" v-bind:selectedAlbum="selectedAlbum" /></span>
                 </td>
               </tr>
               <tr>
-             <td width="100%" style="white-space: nowrap; text-overflow: ellipsis; overflow: hidden; max-width: 1px;">
-                  <span class="label">℗ {{ album.release_date }}</span><span class="label"> · {{ album.label }}</span>
-                </td>
+                <td width="100%" style="white-space: nowrap; text-overflow: ellipsis; overflow: hidden; max-width: 1px;"><span class="label">℗ {{ album.release_date }}</span><span class="label"> · {{ album.label }}</span></td>
               </tr>
             </table>
             <div v-if="album.id == selectedAlbum">
-             <a target="_blank" :href="'https://open.spotify.com/album/' + album.album_id"><img class="spotify-icon" width=21px :src="spotifyLogoURLWhite" /></a>
+              <a target="_blank" :href="'https://open.spotify.com/album/' + album.album_id"><img class="spotify-icon" width="21px" :src="spotifyLogoURLWhite" /></a>
             </div>
             <div v-else>
-              <a target="_blank" :href="'https://open.spotify.com/album/' + album.album_id"><img class="spotify-icon" width=21px :src="spotifyLogoURLBlack" /></a>
+              <a target="_blank" :href="'https://open.spotify.com/album/' + album.album_id"><img class="spotify-icon" width="21px" :src="spotifyLogoURLBlack" /></a>
             </div>
           </b-card-text>
         </b-col>
@@ -45,26 +42,26 @@
 </template>
 
 <script>
-import {staticURL} from "@/main.js";
-import AlbumLikes from '@/components/subcomponents/AlbumLikes.vue';
+import { staticURL } from "@/main.js";
+import AlbumLikes from "@/components/subcomponents/AlbumLikes.vue";
 
 export default {
   components: {
-    AlbumLikes
+    AlbumLikes,
   },
-  name: 'SmallAlbum',
+  name: "SmallAlbum",
   props: {
     albums: Array,
     selectedAlbum: String,
-    likedAlbums: Array
+    likedAlbums: Array,
   },
   data() {
     return {
-      spotifyLogoURLWhite: staticURL + 'Spotify_Icon_RGB_White.png',
-      spotifyLogoURLBlack: staticURL + 'Spotify_Icon_RGB_Black.png',
-    }
-  }
-}
+      spotifyLogoURLWhite: staticURL + "Spotify_Icon_RGB_White.png",
+      spotifyLogoURLBlack: staticURL + "Spotify_Icon_RGB_Black.png",
+    };
+  },
+};
 </script>
 
 <style scoped>
@@ -96,7 +93,6 @@ td {
   padding: 0px;
   height: 17px !important;
   vertical-align: middle;
-  /*   border-top: 1px dotted lightgray;*/
 }
 tr {
   border-bottom: 0px;
@@ -128,7 +124,6 @@ header.card-header {
   cursor: pointer;
 }
 .highlight {
-/*  background-color: rgb(52, 58, 64, 0.7) !important;*/
   color: white !important;
 }
 .highlight span {
@@ -136,15 +131,10 @@ header.card-header {
 }
 .album_columns {
   padding-right: 3px;
-/*  -ms-flex: 0 0 91.917px;
-  flex: 0 0 91.917px;*/
 }
 .album_text_columns {
   padding-left: 0px;
 }
-/*.album-likes-class{
-  font-size: 12px !important;
-}*/
 >>> .badge {
   margin-bottom: 0px !important;
 }

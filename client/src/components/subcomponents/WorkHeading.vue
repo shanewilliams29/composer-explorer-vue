@@ -1,56 +1,56 @@
 <template>
-        <b-card class="heading-card work-card">
-          <b-form-group>
-            <b-form-input v-model="workSearchField" v-debounce="workSearch" type="text" @focus="onWorkFocus()" :placeholder="workSearchPlaceholder" size="sm" autocomplete="off"></b-form-input>
-            <v-select v-model="workFilterField" label="text" :options="workOptions" @input="workFilter()" :clearable="false" class="mt-3 style-chooser" :searchable="false"></v-select>
-          </b-form-group>
-        </b-card>
+  <b-card class="heading-card work-card">
+    <b-form-group>
+      <b-form-input v-model="workSearchField" v-debounce="workSearch" type="text" @focus="onWorkFocus()" :placeholder="workSearchPlaceholder" size="sm" autocomplete="off"></b-form-input>
+      <v-select v-model="workFilterField" label="text" :options="workOptions" @input="workFilter()" :clearable="false" class="mt-3 style-chooser" :searchable="false"></v-select>
+    </b-form-group>
+  </b-card>
 </template>
 
 <script>
-import {eventBus} from "@/main.js";
+import { eventBus } from "@/main.js";
 
 export default {
   data() {
     return {
-      workFilterField: { value: 'recommended', text: 'Recommended works' },
+      workFilterField: { value: "recommended", text: "Recommended works" },
       workSearchField: null,
       workSearchPlaceholder: "Search works by " + this.$config.composer,
       workOptions: [
-          { value: 'recommended', text: 'Recommended works' },
-          { value: 'all', text: 'All works'}
-        ],
+        { value: "recommended", text: "Recommended works" },
+        { value: "all", text: "All works" },
+      ],
     };
   },
   methods: {
     workFilter() {
-      eventBus.$emit('fireWorkFilter', this.workFilterField.value);
-      this.workSearchField = '';
+      eventBus.$emit("fireWorkFilter", this.workFilterField.value);
+      this.workSearchField = "";
     },
     workSearch() {
-      eventBus.$emit('fireWorkSearch', this.workSearchField);
-      if(this.workSearchField != ''){
+      eventBus.$emit("fireWorkSearch", this.workSearchField);
+      if (this.workSearchField != "") {
         this.workFilterField = 'Search results for "' + this.workSearchField + '"';
       } else {
-        this.workFilterField = { value: 'recommended', text: 'Recommended works' };
+        this.workFilterField = { value: "recommended", text: "Recommended works" };
       }
     },
     onWorkFocus() {
-      this.workFilterField = { value: 'recommended', text: 'Recommended works' }
-      this.workSearchField = '';
-      eventBus.$emit('fireWorkSearch', '');
+      this.workFilterField = { value: "recommended", text: "Recommended works" };
+      this.workSearchField = "";
+      eventBus.$emit("fireWorkSearch", "");
     },
     newComposer(composer) {
-        this.workSearchPlaceholder = "Search works by " + composer;
-        this.workSearchField = '';
-        this.workFilterField = { value: 'recommended', text: 'Recommended works' };
+      this.workSearchPlaceholder = "Search works by " + composer;
+      this.workSearchField = "";
+      this.workFilterField = { value: "recommended", text: "Recommended works" };
     },
   },
   created() {
-    eventBus.$on('fireComposers', this.newComposer);
+    eventBus.$on("fireComposers", this.newComposer);
   },
   beforeDestroy() {
-    eventBus.$off('fireComposers', this.newComposer);
+    eventBus.$off("fireComposers", this.newComposer);
   },
 };
 </script>

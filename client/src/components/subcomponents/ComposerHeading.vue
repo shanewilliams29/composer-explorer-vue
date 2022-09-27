@@ -1,62 +1,62 @@
 <template>
-          <b-card class="heading-card composer-card">
-            <b-form-group>
-              <b-form-input v-model="composerSearchForm" v-debounce="composerSearch" type="text" @focus="onComposerFocus()" placeholder="Search composers" size="sm" autocomplete="off"></b-form-input>
-              <v-select v-model="composerFilterForm" label="text" :options="composerOptions" @input="composerFilter()" :clearable="false" class="mt-3 style-chooser" :searchable="false"></v-select>
-            </b-form-group>
-          </b-card>
+  <b-card class="heading-card composer-card">
+    <b-form-group>
+      <b-form-input v-model="composerSearchForm" v-debounce="composerSearch" type="text" @focus="onComposerFocus()" placeholder="Search composers" size="sm" autocomplete="off"></b-form-input>
+      <v-select v-model="composerFilterForm" label="text" :options="composerOptions" @input="composerFilter()" :clearable="false" class="mt-3 style-chooser" :searchable="false"></v-select>
+    </b-form-group>
+  </b-card>
 </template>
 
 <script>
-import {eventBus} from "@/main.js";
+import { eventBus } from "@/main.js";
 
 export default {
   data() {
     return {
-      composerFilterForm: { value: 'popular', text: 'Most popular' },
+      composerFilterForm: { value: "popular", text: "Most popular" },
       composerSearchForm: null,
       composerOptions: [
-              { value: 'popular', text: 'Most popular' },
-              { value: 'tier2', text: 'Less popular' },
-              // { value: 'tier3', text: 'More obscure' },
-              // { value: 'tier4', text: 'Quite obscure' },
-              { value: 'early', text: 'Early' },
-              { value: 'baroque', text: 'Baroque' },
-              { value: 'classical', text: 'Classical' },
-              { value: 'romantic', text: 'Romantic' },
-              { value: '20th', text: '20th/21st Century' },
-              { value: 'all', text: 'All - by region' },
-              { value: 'alphabet', text: 'All - alphabetically' }
-            ],
+        { value: "popular", text: "Most popular" },
+        { value: "tier2", text: "Less popular" },
+        // { value: 'tier3', text: 'More obscure' },
+        // { value: 'tier4', text: 'Quite obscure' },
+        { value: "early", text: "Early" },
+        { value: "baroque", text: "Baroque" },
+        { value: "classical", text: "Classical" },
+        { value: "romantic", text: "Romantic" },
+        { value: "20th", text: "20th/21st Century" },
+        { value: "all", text: "All - by region" },
+        { value: "alphabet", text: "All - alphabetically" },
+      ],
     };
   },
   methods: {
     composerFilter() {
-      eventBus.$emit('fireComposerFilter', this.composerFilterForm.value);
-      this.composerSearchForm = '';
+      eventBus.$emit("fireComposerFilter", this.composerFilterForm.value);
+      this.composerSearchForm = "";
     },
     composerSearch() {
-      eventBus.$emit('fireComposerSearch', this.composerSearchForm);
-      if(this.composerSearchForm != ''){
+      eventBus.$emit("fireComposerSearch", this.composerSearchForm);
+      if (this.composerSearchForm != "") {
         this.composerFilterForm = 'Search results for "' + this.composerSearchForm + '"';
       } else {
-        this.composerFilterForm = { value: 'popular', text: 'Most popular' };
+        this.composerFilterForm = { value: "popular", text: "Most popular" };
       }
     },
     onComposerFocus() {
-      this.composerFilterForm = { value: 'popular', text: 'Most popular' };
-      this.composerSearchForm = '';
-      eventBus.$emit('fireComposerSearch', '');
+      this.composerFilterForm = { value: "popular", text: "Most popular" };
+      this.composerSearchForm = "";
+      eventBus.$emit("fireComposerSearch", "");
     },
-  }
+  },
 };
 </script>
 
 <style scoped>
-.composer-card{
+.composer-card {
   padding-top: 5px !important;
 }
-.form-group{
+.form-group {
   margin-bottom: 0px;
 }
 .card-body {
@@ -77,11 +77,11 @@ export default {
   font-size: 14px;
   fill: white;
 }
->>> .vs__selected-options{
+>>> .vs__selected-options {
   flex-wrap: nowrap;
 }
->>> .vs__selected{
-  white-space:nowrap;
+>>> .vs__selected {
+  white-space: nowrap;
   overflow: hidden;
 }
 >>> {

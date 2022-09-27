@@ -48,12 +48,8 @@ var spotify = {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer ' + token
       }
+    // eslint-disable-next-line
     }).then((res) => {
-      if (res.status == 204) {
-        eventBus.$emit('fireNowPlaying');
-      } else {
-        eventBus.$emit('fireNowPaused');
-      }
     // eslint-disable-next-line
     }).catch((error) => {
       // fails on first play of new startup, play from localstorage
@@ -80,12 +76,8 @@ var spotify = {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer ' + token
       }
+    // eslint-disable-next-line
     }).then((res) => {
-      if (res.status == 204) {
-        eventBus.$emit('fireNowPaused');
-      } else {
-        eventBus.$emit('fireNowPlaying');
-      }
     }).catch((error) => {
       console.error(error);
     });
@@ -103,8 +95,6 @@ var spotify = {
     }).then((res) => {
       if (res.status == 204) {
         this.pressPlay(token, window.device_id);
-      } else {
-        eventBus.$emit('fireNowPaused');
       }
     }).catch(function(error) {
       if (error.response.status == 401) {
@@ -127,8 +117,6 @@ var spotify = {
     }).then((res) => {
       if (res.status == 204) {
         this.pressPlay(token, window.device_id);
-      } else {
-        eventBus.$emit('fireNowPaused');
       }
     }).catch(function(error) {
       if (error.response.status == 401) {
@@ -152,21 +140,14 @@ var spotify = {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer ' + token
       }
+    // eslint-disable-next-line
     }).then((res) => {
-      if (res.status == 204) {
-        eventBus.$emit('fireNowPlaying');
-      } else {
-        eventBus.$emit('fireNowPaused');
-      }
     }).catch(function(error) {
       if (error.response.status == 401) {
         eventBus.$emit('notLoggedIn');
       } else if (error.response.status == 404) {
         eventBus.$emit('notAvailable');
-        //alert(error.response.data.error.message);
-        //console.log(error);
       } else {
-        //alert(error.response.data.error.message);
         console.error(error);
       }
     });
@@ -184,8 +165,6 @@ var spotify = {
     }).then((res) => {
       if (res.status == 200) {
         eventBus.$emit('fireCurrentPlayerInfo', res.data);
-      } else {
-        eventBus.$emit('fireNowPaused');
       }
     }).catch((error) => {
       console.error(error);

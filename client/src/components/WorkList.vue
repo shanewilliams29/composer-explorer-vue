@@ -67,8 +67,17 @@
 import axios from 'axios';
 import {eventBus} from "../main.js";
 import smoothscroll from 'smoothscroll-polyfill';
+import { useSound } from '@vueuse/sound';
+import dingding from '../assets/dingding.mp3';
 
 export default {
+  setup() {
+    const play = useSound(dingding, { volume: 0.5 })
+
+    return {
+      play,
+    }
+  },
   data() {
     return {
       works: [],
@@ -401,6 +410,7 @@ export default {
       this.message = "Select from the options above to create your own customized radio"
     },
     nextWork() {
+      this.play.play();
       eventBus.$emit('changeWork');
       if (this.$view.shuffle) {
         this.$config.previousWork = this.$config.work;
@@ -419,6 +429,7 @@ export default {
       }
     },
     previousWork() {
+      this.play.play();
       eventBus.$emit('changeWork');
       if (this.$view.shuffle) {
         this.selectRow(this.$config.previousWork); //allows you to jump one back

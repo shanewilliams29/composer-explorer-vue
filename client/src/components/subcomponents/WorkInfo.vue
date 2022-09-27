@@ -1,39 +1,40 @@
 <template>
-    <b-card class="composer-info-card shadow-sm">
-      <b-card-body class="card-body">
-        <b-card-title class="card-title">
-          <table>
-            <tr>
-              <td>
-                <b-avatar size="60px" :src="composerImg" v-if="$view.mobile"></b-avatar>
-                <b-avatar size="60px" :src="workImg" v-if="!$view.mobile"></b-avatar>
-              </td>
-              <td class="info-td">
-                <span class='composer-name' v-if="$view.mobile">{{ composer }}<br/></span>
-                {{ workTitle }}<br />
-                <span v-if="catNo" class="born-died">{{ catNo }}</span><span v-else class="born-died"><span v-if="date">{{date}}</span></span>
-              </td>
-            </tr>
-          </table>
-        </b-card-title>
-        <b-card-text class="info-card-text" v-if="!$view.mobile">
-          <div class="spinner" v-show="loading" role="status">
-            <b-spinner class="m-5"></b-spinner>
-          </div>
-          <div v-show="!loading">
+  <b-card class="composer-info-card shadow-sm">
+    <b-card-body class="card-body">
+      <b-card-title class="card-title">
+        <table>
+          <tr>
+            <td>
+              <b-avatar size="60px" :src="composerImg" v-if="$view.mobile"></b-avatar>
+              <b-avatar size="60px" :src="workImg" v-if="!$view.mobile"></b-avatar>
+            </td>
+            <td class="info-td">
+              <span class="composer-name" v-if="$view.mobile">{{ composer }}<br /></span>
+              {{ workTitle }}<br />
+              <span v-if="catNo" class="born-died">{{ catNo }}</span><span v-else class="born-died"><span v-if="date">{{date}}</span></span>
+            </td>
+          </tr>
+        </table>
+      </b-card-title>
+      <b-card-text class="info-card-text" v-if="!$view.mobile">
+        <div class="spinner" v-show="loading" role="status">
+          <b-spinner class="m-5"></b-spinner>
+        </div>
+        <div v-show="!loading">
           {{ workBlurb }}<br />
           <a :href="wikiLink" target="_blank" class="wiki-link" v-if="pageTitle">
             <br />
             Read more on Wikipedia: {{pageTitle}}
           </a>
         </div>
-        </b-card-text>
-      </b-card-body>
-    </b-card>
+      </b-card-text>
+    </b-card-body>
+  </b-card>
 </template>
 
+
 <script>
-import axios from 'axios';
+import axios from "axios";
 
 export default {
   data() {
@@ -41,113 +42,115 @@ export default {
       loading: true,
       workTitle: "",
       pageTitle: "",
-      composerImg: '',
+      composerImg: "",
       workImg: "",
       workBlurb: "",
       wikiLink: "",
-      catNo: '',
-      date: '',
-      composer: ''
+      catNo: "",
+      date: "",
+      composer: "",
     };
   },
-  computed:{
-    workChanged(){
+  computed: {
+    workChanged() {
       return this.$config.work;
-    }
+    },
   },
   watch: {
     workChanged(newWork) {
       this.getWorkInfo(newWork);
-    }
+    },
   },
   methods: {
     getWorkInfo(work) {
-        this.loading = true;
-        const path = 'api/workinfo/' + work;
-        axios.get(path)
-          .then((res) => {
-            this.composer = res.data.info.composer;
-            this.workTitle = res.data.info.title;
-            this.workImg = res.data.info.search;
-            this.composerImg = 'https://storage.googleapis.com/composer-explorer.appspot.com/img/' + this.composer + '.jpg'
-            this.catNo = res.data.info.cat;
-            this.date = res.data.info.date;
-            this.wikiWork(this.composer + " " + this.workTitle + " " + this.catNo);
-          })
-          .catch((error) => {
-            this.loading = false;
-            console.error(error);
-
-          });
-      },
-    wikiWork(search_item){
+      this.loading = true;
+      const path = "api/workinfo/" + work;
+      axios
+        .get(path)
+        .then((res) => {
+          this.composer = res.data.info.composer;
+          this.workTitle = res.data.info.title;
+          this.workImg = res.data.info.search;
+          this.composerImg = "https://storage.googleapis.com/composer-explorer.appspot.com/img/" + this.composer + ".jpg";
+          this.catNo = res.data.info.cat;
+          this.date = res.data.info.date;
+          this.wikiWork(this.composer + " " + this.workTitle + " " + this.catNo);
+        })
+        .catch((error) => {
+          this.loading = false;
+          console.error(error);
+        });
+    },
+    wikiWork(search_item) {
       var url = "https://en.wikipedia.org/w/api.php";
       var params = {
-          action: "query",
-          list: "search",
-          srsearch: search_item,
-          srlimit: 1,
-          format: "json"
+        action: "query",
+        list: "search",
+        srsearch: search_item,
+        srlimit: 1,
+        format: "json",
       };
 
       url = url + "?origin=*";
-      Object.keys(params).forEach(function(key){url += "&" + key + "=" + params[key];});
+      Object.keys(params).forEach(function (key) {
+        url += "&" + key + "=" + params[key];
+      });
 
-      axios.get(url)
-          .then((res) => {
+      axios
+        .get(url)
+        .then((res) => {
+          // SECOND SEARCH
+          let pageid = "";
+          try {
+            pageid = res.data.query.search[0].pageid;
+          } catch (error) {
+            this.workBlurb = "Work not found on Wikipedia.";
+            this.pageTitle = null;
+            this.loading = false;
+            return error;
+          }
+          var url2 = "https://en.wikipedia.org/w/api.php";
+          var params2 = {
+            action: "query",
+            pageids: pageid,
+            prop: "extracts&exintro&explaintext",
+            redirects: 1,
+            format: "json",
+          };
 
-            // SECOND SEARCH
-            let pageid = '';
-            try{
-              pageid = res.data.query.search[0].pageid;
-            } catch(error){
-              this.workBlurb = "Work not found on Wikipedia.";
-              this.pageTitle = null;
+          url2 = url2 + "?origin=*";
+          Object.keys(params2).forEach(function (key) {
+            url2 += "&" + key + "=" + params2[key];
+          });
+
+          axios
+            .get(url2)
+            .then((res) => {
+              for (var id in res.data.query.pages) {
+                this.workBlurb = res.data.query.pages[id].extract;
+                this.pageTitle = res.data.query.pages[id].title;
+                let wikiurl = "https://en.wikipedia.org/wiki/" + this.pageTitle;
+                this.wikiLink = wikiurl;
+                this.loading = false;
+                break;
+              }
+            })
+            .catch((error) => {
               this.loading = false;
-              return(error);
-            }
-            var url2 = "https://en.wikipedia.org/w/api.php";
-            var params2 = {
-                action: "query",
-                pageids: pageid,
-                prop: "extracts&exintro&explaintext",
-                redirects: 1,
-                format: "json"
-            };
-
-            url2 = url2 + "?origin=*";
-            Object.keys(params2).forEach(function(key){url2 += "&" + key + "=" + params2[key];});
-
-          axios.get(url2)
-          .then((res) => {
-                      for (var id in res.data.query.pages) {
-                          this.workBlurb = res.data.query.pages[id].extract;
-                          this.pageTitle = res.data.query.pages[id].title;
-                          let wikiurl = "https://en.wikipedia.org/wiki/" + this.pageTitle;
-                          this.wikiLink = wikiurl;
-                          this.loading = false;
-                          break;
-                      }
-
-
-          })
-          .catch((error) => {
-            this.loading = false;
-            console.error(error);
-          });
-
-          })
-          .catch((error) => {
-            this.loading = false;
-            console.error(error);
-          });
+              console.error(error);
+            });
+        })
+        .catch((error) => {
+          this.loading = false;
+          console.error(error);
+        });
+    },
   },
-},
   created() {
     this.getWorkInfo(this.$config.work);
-
   },
 };
+
 </script>
 
 <style scoped>

@@ -1,74 +1,66 @@
 <template>
   <div>
-   <span class="likes" v-if="currentLikes">
-     <b-badge v-if="parseInt(currentLikes) == 1 ">{{ currentLikes }} Like</b-badge>
-     <b-badge v-if="parseInt(currentLikes) > 1 ">{{ currentLikes }} Likes</b-badge>
-   </span>
-     <span class="user-liked" v-if="userLikes">&nbsp;
-      <b-icon-heart-fill></b-icon-heart-fill>
+    <span class="likes" v-if="currentLikes">
+      <b-badge v-if="parseInt(currentLikes) == 1 ">{{ currentLikes }} Like</b-badge>
+      <b-badge v-if="parseInt(currentLikes) > 1 ">{{ currentLikes }} Likes</b-badge>
     </span>
+    <span class="user-liked" v-if="userLikes">&nbsp;<b-icon-heart-fill></b-icon-heart-fill></span>
     <span class="likes" v-if="!currentLikes">
-      <br>
+      <br />
     </span>
   </div>
 </template>
 
 <script>
-// Need to add logic for if user likes this album
-
-import {eventBus} from "@/main.js";
+import { eventBus } from "@/main.js";
 
 export default {
-  name: 'AlbumLikes',
+  name: "AlbumLikes",
   props: {
     album: Object,
     selectedAlbum: String,
-    likedAlbums: Array
+    likedAlbums: Array,
   },
   data() {
     return {
       currentLikes: this.album.likes,
-      userLikes: (this.likedAlbums.indexOf(this.album.id) > -1)
+      userLikes: this.likedAlbums.indexOf(this.album.id) > -1,
     };
   },
-  methods:{
-    detectLike(album_id){
-      //console.log(album_id);
-      if(album_id == this.album.id && this.userLikes){
-        //console.log(album_id, this.album.id, this.userLikes);
+  methods: {
+    detectLike(album_id) {
+      if (album_id == this.album.id && this.userLikes) {
         this.$view.like = true;
-      }
-      else if(album_id == this.album.id && !this.userLikes){
+      } else if (album_id == this.album.id && !this.userLikes) {
         this.$view.like = false;
-        //console.log(this.selectedAlbum, this.album.id, this.userLikes)
       } else if (album_id != this.album.id) {
-        //console.log("do nothing");
+        // pass
       }
     },
-    likeAlbum(){
-      if(this.selectedAlbum == this.album.id && !this.userLikes){
+    likeAlbum() {
+      if (this.selectedAlbum == this.album.id && !this.userLikes) {
         this.currentLikes = this.currentLikes + 1;
         this.userLikes = true;
       }
     },
-    unlikeAlbum(){
-      if(this.selectedAlbum == this.album.id && this.userLikes){
+    unlikeAlbum() {
+      if (this.selectedAlbum == this.album.id && this.userLikes) {
         this.currentLikes = this.currentLikes - 1;
         this.userLikes = false;
       }
-    }
+    },
   },
   created() {
-    eventBus.$on('fireLikeAlbum', this.likeAlbum);
-    eventBus.$on('fireUnlikeAlbum', this.unlikeAlbum);
-    eventBus.$on('fireAlbumData', this.detectLike);
+    eventBus.$on("fireLikeAlbum", this.likeAlbum);
+    eventBus.$on("fireUnlikeAlbum", this.unlikeAlbum);
+    eventBus.$on("fireAlbumData", this.detectLike);
   },
   beforeDestroy() {
-    eventBus.$off('fireLikeAlbum', this.likeAlbum);
-    eventBus.$off('fireUnlikeAlbum', this.unlikeAlbum);
-    eventBus.$off('fireAlbumData', this.detectLike);
-  }
-}
+    eventBus.$off("fireLikeAlbum", this.likeAlbum);
+    eventBus.$off("fireUnlikeAlbum", this.unlikeAlbum);
+    eventBus.$off("fireAlbumData", this.detectLike);
+  },
+};
 </script>
 
 <style scoped>
