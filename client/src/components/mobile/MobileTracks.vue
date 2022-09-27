@@ -1,30 +1,25 @@
 <template>
-<div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
-  <ol class="carousel-indicators" v-if="album.id">
-    <li data-target="carouselExampleIndicators" :class="{'active': trackMatch(track)}" :data-slide-to="track[1]" v-for="track in album.tracks" :key="track[1]" @click="playTracks(track[2])" v-show="album.tracks.length <= 12"></li>
-    <span class="album-track-display" v-show="album.tracks.length > 12 && trackIndex">Track {{trackIndex}} of {{album.tracks.length}}</span>
-  </ol>
-  <ol class="carousel-indicators" v-else> <!-- Dummy while loading -->
-  </ol>
-  <div class="carousel-inner">
-    <div class="carousel-item" :class="{'active': trackMatch(track)}" v-for="track in album.tracks" :key="track[1]">
-    <table>
-      <tr>
-        <td width="100%"
-            style="
-              white-space: nowrap;
-              text-overflow: ellipsis;
-              overflow: hidden;
-              max-width: 1px;
-            ">
-            <span v-if="genre == 'Opera' || genre == 'Stage Work' || genre == 'Ballet'">{{ track[0].substring(track[0].lastIndexOf(' Act ') + 1).trim() }}</span>
-            <span v-else>{{ track[0].substring(track[0].lastIndexOf(':') + 1) }}</span>
-        </td>
-      </tr>
-    </table>
+  <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+    <ol class="carousel-indicators" v-if="album.id">
+      <li data-target="carouselExampleIndicators" :class="{'active': trackMatch(track)}" :data-slide-to="track[1]" v-for="track in album.tracks" :key="track[1]" @click="playTracks(track[2])" v-show="album.tracks.length <= 12"></li>
+      <span class="album-track-display" v-show="album.tracks.length > 12 && trackIndex">Track {{trackIndex}} of {{album.tracks.length}}</span>
+    </ol>
+    <ol class="carousel-indicators" v-else>
+      <!-- Dummy while loading -->
+    </ol>
+    <div class="carousel-inner">
+      <div class="carousel-item" :class="{'active': trackMatch(track)}" v-for="track in album.tracks" :key="track[1]">
+        <table>
+          <tr>
+            <td width="100%" style="white-space: nowrap; text-overflow: ellipsis; overflow: hidden; max-width: 1px;">
+              <span v-if="genre == 'Opera' || genre == 'Stage Work' || genre == 'Ballet'">{{ track[0].substring(track[0].lastIndexOf(' Act ') + 1).trim() }}</span>
+              <span v-else>{{ track[0].substring(track[0].lastIndexOf(':') + 1) }}</span>
+            </td>
+          </tr>
+        </table>
+      </div>
     </div>
   </div>
-</div>
 </template>
 
 <script>
@@ -85,12 +80,6 @@ export default {
             return false;
         }
     },
-    // previousTrack(){
-    //     spotify.previousTrack(window.token);
-    // },
-    // nextTrack(){
-    //     spotify.nextTrack(window.token);
-    // },
     playTracks(tracks){
       let uriList = {}
       let jsonList = {}
@@ -117,7 +106,6 @@ export default {
       jsonList = JSON.stringify(uriList);
 
       spotify.playTracks(this.$auth.clientToken, this.$auth.deviceID, jsonList);
-      // this.selectedTrackNo = this.numTracks - uriList['uris'].length;
       },
     },
   created() {
@@ -128,24 +116,7 @@ export default {
         this.genre = this.$config.genre;
         this.album = album;
         this.title = this.$config.workTitle;
-        // if(window.token && window.device_id){
-        //   this.playTracks(album.tracks[0][2]);
-        //   this.stopMatch = false;
-        // }
-        // this.selectTrack(album.tracks[0][1]);
-        // this.numTracks = album.tracks.length;
-        // this.selectedTrackNo = 0;
     })
-    // eventBus.$on('fireNextTrack', () => {
-    //     if (this.selectedTrackNo < this.numTracks - 1) {
-    //       this.selectedTrackNo = this.selectedTrackNo + 1
-    //       this.selectTrack(this.album.tracks[this.selectedTrackNo][1]);
-    //     }
-    //     else{
-    //       eventBus.$emit('fireSetAlbum', this.album);
-    //     }
-
-    // })
     // eslint-disable-next-line
     eventBus.$on('firePlayerStateChanged', (track_data, position, duration, paused) => {
         let track = []
@@ -157,6 +128,7 @@ export default {
   },
 };
 </script>
+
 <style scoped>
 table{
   width: 100%;

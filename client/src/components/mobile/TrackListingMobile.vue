@@ -1,68 +1,28 @@
 <template>
-    <b-card no-body class="track-info-card shadow-sm">
-        <b-card-text class="info-card-text-tracks" ref="scroll-box">
-            <table>
-              <tr v-for="(track, index) in album.tracks"
-                  @click="selectTrack(track); playTracks(track[2]);" 
-                  :class="{'highlight-track': trackMatch(track)}"
-                  :id="track[1]"
-                  :key="track[1]"
-              >
-                <td>
-                  <b-avatar v-if="trackMatch(track)" variant="warning" size="40px" :text="(index + 1).toString()"></b-avatar>
-                  <b-avatar v-if="!trackMatch(track)" size="40px" :text="(index + 1).toString()"></b-avatar>
-                </td>
-                <td class="info-td">
-                  <a clss="artist-name">
-                    <span v-if="genre == 'Opera' || genre == 'Stage Work' || genre == 'Ballet'">{{ track[0].substring(track[0].lastIndexOf(' Act ') + 1).trim() }}</span>
-                    <span v-else>{{ track[0].substring(track[0].lastIndexOf(':') + 1) }}</span>
-                  </a><br />
-                </td>
-              </tr>
-            </table>
-        </b-card-text>
-    </b-card>
-
-
-
-<!--   <b-card-group deck>
-    <b-card no-body class="track-card" ref="scroll-box">
-      <b-card-text class="track-card-text">
-        <div class="centered-tracks">
-          <table class="track-table" cellspacing="0">
-            <tr
-              class="track-row"
-              v-for="track in album.tracks"
-              :id="track[1]"
-              :key="track[1]"
-              @click="selectTrack(track); playTracks(track[2]); "
-              :class="{'highlight-track': trackMatch(track)}"
-            >
-              <td
-                width="100%"
-                style="
-                  white-space: nowrap;
-                  text-overflow: ellipsis;
-                  overflow: hidden;
-                  max-width: 1px;
-                "
-              >
-              <b-icon icon="play-fill" aria-hidden="true"></b-icon>
+  <b-card no-body class="track-info-card shadow-sm">
+    <b-card-text class="info-card-text-tracks" ref="scroll-box">
+      <table>
+        <tr v-for="(track, index) in album.tracks" @click="selectTrack(track); playTracks(track[2]);" :class="{'highlight-track': trackMatch(track)}" :id="track[1]" :key="track[1]">
+          <td>
+            <b-avatar v-if="trackMatch(track)" variant="warning" size="40px" :text="(index + 1).toString()"></b-avatar>
+            <b-avatar v-if="!trackMatch(track)" size="40px" :text="(index + 1).toString()"></b-avatar>
+          </td>
+          <td class="info-td">
+            <a clss="artist-name">
               <span v-if="genre == 'Opera' || genre == 'Stage Work' || genre == 'Ballet'">{{ track[0].substring(track[0].lastIndexOf(' Act ') + 1).trim() }}</span>
               <span v-else>{{ track[0].substring(track[0].lastIndexOf(':') + 1) }}</span>
-              </td>
-            </tr>
-          </table>
-        </div>
-      </b-card-text>
-    </b-card>
-  </b-card-group> -->
+            </a>
+            <br />
+          </td>
+        </tr>
+      </table>
+    </b-card-text>
+  </b-card>
 </template>
 
 <script>
 import {eventBus} from "../../main.js";
 import spotify from '@/SpotifyFunctions.js'
-//import smoothscroll from 'smoothscroll-polyfill';
 
 export default {
   data() {
@@ -95,16 +55,6 @@ export default {
     },
     selectTrack(track){
         this.selectedTrack = track;
-
-        // smoothscroll.polyfill(); // for Safari smooth scrolling
-        // var trackId = track[1];
-        // var element = document.getElementById(trackId);
-        // var top = element.offsetTop;
-        // this.$refs['scroll-box'].scrollTo({
-        //                           top: top,
-        //                           left: 0,
-        //                           behavior: 'smooth'
-        //                         });
     },
     trackMatch(track){
         // match on IDs
@@ -146,7 +96,6 @@ export default {
       uriList['uris'] = cleanTracks.split(' ');
       jsonList = JSON.stringify(uriList);
       spotify.playTracks(this.$auth.clientToken, this.$auth.deviceID, jsonList);
-      // this.selectedTrackNo = this.numTracks - uriList['uris'].length;
       },
     },
   created() {
@@ -177,22 +126,22 @@ export default {
 </script>
 
 <style scoped>
-td{
+td {
   padding-bottom: 5px;
 }
-a{
+a {
   color: black;
   font-weight: 600;
   font-size: 14px;
 }
-a:hover{
+a:hover {
   cursor: pointer;
 }
-.heading-tr{
+.heading-tr {
   vertical-align: middle;
   height: 62px !important;
 }
-.heading-td{
+.heading-td {
   padding-left: 10px;
   font-size: 16px;
 }
@@ -202,87 +151,84 @@ a:hover{
 .m-5 {
   color: #343a40;
 }
-.born-died{
+.born-died {
   font-size: 13px !important;
   color: grey !important;
 }
-.track-info-card{
+.track-info-card {
   padding: 15px;
   padding-top: 15px !important;
   padding-bottom: 10px;
   background-color: 343a40 !important;
   border: none !important;
-
 }
-.info-td{
+.info-td {
   padding-left: 10px;
 }
 .highlight-track {
   color: var(--yellow) !important;
-
 }
-.disclaimer{
+.disclaimer {
   margin-bottom: 11px;
 }
-.card-title{
+.card-title {
   font-size: 16px;
-  height:  62px;
+  height: 62px;
 }
-.card-body{
+.card-body {
   background-color: white !important;
   --scroll-bar-bg-color: #f1f2f4;
 }
 
-.info-card-text-tracks{
+.info-card-text-tracks {
   font-size: 13px;
   line-height: 130%;
   overflow-y: scroll;
-/*  height: 190px;*/
   height: auto;
-  /*max-height: calc(var(--vh, 1vh) * 100 - 570px);*/
   padding-left: 2px;
 }
-table{
+table {
   margin-bottom: 6px;
 }
-.wiki-link{
+.wiki-link {
   font-style: italic;
   color: grey;
 }
-.open-in-spotify{
+.open-in-spotify {
   font-size: 12px;
 }
-.spotify-logo{
+.spotify-logo {
   width: auto;
   height: 20px;
 }
 
 /*scrollbars*/
- .info-card-text-tracks {
-        --scroll-bar-color: #d6d9db;
-        --scroll-bar-bg-color: #fff;
-    }
+.info-card-text-tracks {
+  --scroll-bar-color: #d6d9db;
+  --scroll-bar-bg-color: #fff;
+}
 
-    .info-card-text-tracks{
-        scrollbar-width: thin;
-        scrollbar-color: var(--scroll-bar-color) var(--scroll-bar-bg-color) !important;
-    }
+.info-card-text-tracks {
+  scrollbar-width: thin;
+  scrollbar-color: var(--scroll-bar-color) var(--scroll-bar-bg-color) !important;
+}
 
-    /* Works on Chrome, Edge, and Safari */
-    .info-card-text-tracks::-webkit-scrollbar {
-        width: 12px;
-        height: 12px;
-    }
+/* Works on Chrome, Edge, and Safari */
+.info-card-text-tracks::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
 
-    .info-card-text-tracks::-webkit-scrollbar-track {
-        background: var(--scroll-bar-bg-color) !important;
-    }
+.info-card-text-tracks::-webkit-scrollbar-track {
+  background: var(--scroll-bar-bg-color) !important;
+}
 
-    .info-card-text-tracks::-webkit-scrollbar-thumb {
-        background-color: var(--scroll-bar-color);
-        border-radius: 20px;
-        border: 3px solid var(--scroll-bar-bg-color)!important;
-    }
+.info-card-text-tracks::-webkit-scrollbar-thumb {
+  background-color: var(--scroll-bar-color);
+  border-radius: 20px;
+  border: 3px solid var(--scroll-bar-bg-color) !important;
+}
+
 
 </style>
 

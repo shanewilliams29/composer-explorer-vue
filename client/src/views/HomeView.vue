@@ -12,98 +12,99 @@
 </template>
 
 <script>
-import ColumnHeadings from '@/components/ColumnHeadings.vue'
-import ComposerList from '@/components/ComposerList.vue'
-import WorkList from '@/components/WorkList.vue'
-import AlbumList from '@/components/AlbumList.vue'
+import ColumnHeadings from "@/components/ColumnHeadings.vue";
+import ComposerList from "@/components/ComposerList.vue";
+import WorkList from "@/components/WorkList.vue";
+import AlbumList from "@/components/AlbumList.vue";
 
 export default {
-  name: 'HomeView',
+  name: "HomeView",
   components: {
     ColumnHeadings,
     ComposerList,
     WorkList,
     AlbumList,
   },
-  computed:{
-    albumSizeChanged(){
+  computed: {
+    albumSizeChanged() {
       return this.$config.albumSize;
-    }
+    },
   },
   watch: {
     albumSizeChanged(newSize) {
-        if(newSize == 'large'){
-            document.documentElement.style.setProperty('--flex', '0 0 400px');
-        } else {
-            document.documentElement.style.setProperty('--flex', '1');
-        }
-    }
+      if (newSize == "large") {
+        document.documentElement.style.setProperty("--flex", "0 0 400px");
+      } else {
+        document.documentElement.style.setProperty("--flex", "1");
+      }
+    },
   },
   beforeCreate() {
-    if( screen.width <= 760 ) {
-        window.location.replace('mobile');
+    if (screen.width <= 760) {
+      window.location.replace("mobile");
     }
     this.$view.mobile = false;
-    if(this.$config.albumSize == 'large'){
-        document.documentElement.style.setProperty('--flex', '0 0 400px');
+    if (this.$config.albumSize == "large") {
+      document.documentElement.style.setProperty("--flex", "0 0 400px");
     } else {
-        document.documentElement.style.setProperty('--flex', '1');
+      document.documentElement.style.setProperty("--flex", "1");
     }
   },
   created() {
     window.firstLoad = true; // prevent playback on first load
     this.$view.mode = null;
   },
-}
+};
 </script>
 
 <style>
-.display-list{
-    height: calc(100vh - var(--workingheight) - var(--panelheight));
-    padding-right: 12px;
-    padding-bottom: 5px;
-    overflow-y: scroll;
-    overflow-x: hidden;
+.display-list {
+  height: calc(100vh - var(--workingheight) - var(--panelheight));
+  padding-right: 12px;
+  padding-bottom: 5px;
+  overflow-y: scroll;
+  overflow-x: hidden;
 }
-.card-body{
-    padding: 0px !important;
+.card-body {
+  padding: 0px !important;
 }
 @media only screen and (min-width: 1000px) {
-    .last-col{
-        -ms-flex: var(--flex) !important;
-        flex: var(--flex) !important;
-    }
+  .last-col {
+    -ms-flex: var(--flex) !important;
+    flex: var(--flex) !important;
+  }
 }
-.extra-margin{
-    margin-right: 3.5px;
+.extra-margin {
+  margin-right: 3.5px;
 }
 /*scrollbars*/
- :root {
-        --scroll-bar-color: #c9cccf;
-        --scroll-bar-bg-color: #f1f2f4;
-    }
+:root {
+  --scroll-bar-color: #c9cccf;
+  --scroll-bar-bg-color: #f1f2f4;
+}
 
-    * {
-        scrollbar-width: thin;
-        scrollbar-color: var(--scroll-bar-color) var(--scroll-bar-bg-color);
-    }
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--scroll-bar-color) var(--scroll-bar-bg-color);
+}
 
-    /* Works on Chrome, Edge, and Safari */
-    *::-webkit-scrollbar {
-        width: 12px;
-        height: 12px;
-    }
+/* Works on Chrome, Edge, and Safari */
+*::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
 
-    *::-webkit-scrollbar-track {
-        background: var(--scroll-bar-bg-color);
-    }
+*::-webkit-scrollbar-track {
+  background: var(--scroll-bar-bg-color);
+}
 
-    *::-webkit-scrollbar-thumb {
-        background-color: var(--scroll-bar-color);
-        border-radius: 20px;
-        border: 3px solid var(--scroll-bar-bg-color);
-    }
+*::-webkit-scrollbar-thumb {
+  background-color: var(--scroll-bar-color);
+  border-radius: 20px;
+  border: 3px solid var(--scroll-bar-bg-color);
+}
 </style>
+
 <style scoped>
 >>> .highlight{
   background-color: var(--blue);

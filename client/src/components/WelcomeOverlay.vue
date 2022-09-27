@@ -1,44 +1,44 @@
 <template>
-  <div v-if="$view.banner && !$auth.clientToken && !$view.mobile" class="container-fluid ">
+  <div v-if="$view.banner && !$auth.clientToken && !$view.mobile" class="container-fluid">
     <div class="bg-text">
       <div id="welcome" class="jumbotron overlay">
         <div class="container">
           <h1>
-          <img :src="logoURL" class="d-inline-block align-top logo" alt="Composer Explorer" height="60px"/>
-        </h1>
-          <p class="lead">Welcome to your Classical Music Portal. Explore composers from the Medieval to the present. <br> Listen to works on <b>Spotify, made navigable for Classical music.</b></p>
+            <img :src="logoURL" class="d-inline-block align-top logo" alt="Composer Explorer" height="60px" />
+          </h1>
+          <p class="lead">
+            Welcome to your Classical Music Portal. Explore composers from the Medieval to the present. <br />
+            Listen to works on <b>Spotify, made navigable for Classical music.</b>
+          </p>
 
-            <div class="container">
-
-              <div class="row">
-                <div class="col-lg-4 col-md-4 d-flex align-items-stretch">
-                  <div class="icon-box">
-                    <div class="icon"><b-icon icon="search" aria-hidden="true"></b-icon></div>
-                    <h4>Explore</h4>
-                    <p>Discover new composers and new works by the composers you love. For the newcomer and the completionist.</p>
-                  </div>
+          <div class="container">
+            <div class="row">
+              <div class="col-lg-4 col-md-4 d-flex align-items-stretch">
+                <div class="icon-box">
+                  <div class="icon"><b-icon icon="search" aria-hidden="true"></b-icon></div>
+                  <h4>Explore</h4>
+                  <p>Discover new composers and new works by the composers you love. For the newcomer and the completionist.</p>
                 </div>
-
-                <div class="col-lg-4 col-md-4 d-flex align-items-stretch">
-                  <div class="icon-box">
-                    <div class="icon"><b-icon icon="music-note-beamed" aria-hidden="true"></b-icon></div>
-                    <h4>Play Music</h4>
-                    <p>Browse albums and connect with your Spotify account to play music and create radios.</p>
-                  </div>
-                </div>
-
-                <div class="col-lg-4 col-md-4 d-flex align-items-stretch">
-                  <div class="icon-box">
-                    <div class="icon"><b-icon icon="heart" aria-hidden="true"></b-icon></div>
-                    <h4>Engage</h4>
-                    <p>Discover new performers, and add works and performances to your favorites.</p>
-                  </div>
-                </div>
-
               </div>
 
+              <div class="col-lg-4 col-md-4 d-flex align-items-stretch">
+                <div class="icon-box">
+                  <div class="icon"><b-icon icon="music-note-beamed" aria-hidden="true"></b-icon></div>
+                  <h4>Play Music</h4>
+                  <p>Browse albums and connect with your Spotify account to play music and create radios.</p>
+                </div>
+              </div>
+
+              <div class="col-lg-4 col-md-4 d-flex align-items-stretch">
+                <div class="icon-box">
+                  <div class="icon"><b-icon icon="heart" aria-hidden="true"></b-icon></div>
+                  <h4>Engage</h4>
+                  <p>Discover new performers, and add works and performances to your favorites.</p>
+                </div>
+              </div>
             </div>
-  
+          </div>
+
           <a :href="spotifyURL" class="btn btn-success">Log in with Spotify</a> <button @click="hideBanner()" class="btn btn-secondary">Hide</button>
         </div>
       </div>

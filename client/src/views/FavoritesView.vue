@@ -12,49 +12,51 @@
 </template>
 
 <script>
-import ColumnHeadings from '@/components/ColumnHeadings.vue'
-import ComposerList from '@/components/ComposerList.vue'
-import WorkList from '@/components/WorkList.vue'
-import AlbumList from '@/components/AlbumList.vue'
+import ColumnHeadings from "@/components/ColumnHeadings.vue";
+import ComposerList from "@/components/ComposerList.vue";
+import WorkList from "@/components/WorkList.vue";
+import AlbumList from "@/components/AlbumList.vue";
 
 export default {
-  name: 'FavoritesView',
+  name: "FavoritesView",
   components: {
     ColumnHeadings,
     ComposerList,
     WorkList,
     AlbumList,
   },
-  computed:{
-    albumSizeChanged(){
+  computed: {
+    albumSizeChanged() {
       return this.$config.albumSize;
-    }
+    },
   },
   watch: {
     albumSizeChanged(newSize) {
-        if(newSize == 'large'){
-            document.documentElement.style.setProperty('--flex', '0 0 400px');
-        } else {
-            document.documentElement.style.setProperty('--flex', '1');
-        }
-    }
+      if (newSize == "large") {
+        document.documentElement.style.setProperty("--flex", "0 0 400px");
+      } else {
+        document.documentElement.style.setProperty("--flex", "1");
+      }
+    },
   },
   beforeCreate() {
-    if(this.$config.albumSize == 'large'){
-        document.documentElement.style.setProperty('--flex', '0 0 400px');
+    if (this.$config.albumSize == "large") {
+      document.documentElement.style.setProperty("--flex", "0 0 400px");
     } else {
-        document.documentElement.style.setProperty('--flex', '1');
+      document.documentElement.style.setProperty("--flex", "1");
     }
   },
   created() {
     window.firstLoad = false; // allow playback on first load
-    this.$view.mode = 'favorites';
+    this.$view.mode = "favorites";
   },
-}
+};
+
 </script>
+
 <style scoped>
 .display-list{
-    height: calc(100vh - var(--workingheightnoheader) - var(--panelheight)) !important;
+  height: calc(100vh - var(--workingheightnoheader) - var(--panelheight)) !important;
 }
 >>> .highlight{
   background-color: var(--red);

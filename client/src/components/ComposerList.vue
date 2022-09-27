@@ -41,9 +41,9 @@
 </template>
 
 <script>
-import axios from 'axios';
-import {eventBus} from "../main.js";
-import smoothscroll from 'smoothscroll-polyfill';
+import axios from "axios";
+import { eventBus } from "../main.js";
+import smoothscroll from "smoothscroll-polyfill";
 
 export default {
   data() {
@@ -54,170 +54,176 @@ export default {
       artist: "",
     };
   },
-  computed:{
-    composerChanged(){
+  computed: {
+    composerChanged() {
       return this.$config.composer;
-    }
+    },
   },
   watch: {
     composerChanged(newComposer) {
       this.scrollToComposer(newComposer);
-    }
+    },
   },
   methods: {
-    deathDate(date){
+    deathDate(date) {
       var year = new Date().getFullYear();
-      if(date > year){
+      if (date > year) {
         return "present";
       } else {
         return date;
       }
     },
-    scrollToComposer(composer){
+    scrollToComposer(composer) {
       var timeout = 0;
-      if (this.visibility){
+      if (this.visibility) {
         timeout = 0;
       } else {
         timeout = 1000;
       }
       smoothscroll.polyfill(); // for Safari smooth scrolling
-      setTimeout(() => {  var card = this.$refs[composer][0].offsetParent.offsetParent;
-                          var row = this.$refs[composer][0];
-                          var height = this.$refs[composer][0].offsetParent.offsetParent.offsetParent.offsetHeight / 2;
-                          var top = card.offsetTop + row.offsetTop - height + 100;
+      setTimeout(() => {
+        var card = this.$refs[composer][0].offsetParent.offsetParent;
+        var row = this.$refs[composer][0];
+        var height = this.$refs[composer][0].offsetParent.offsetParent.offsetParent.offsetHeight / 2;
+        var top = card.offsetTop + row.offsetTop - height + 100;
 
-                          var scrollBox = {};
-                          if(this.$view.mobile){
-                            scrollBox = this.$parent.$parent.$refs['scroll-box-comp'];
-                          } else {
-                            scrollBox = this.$parent.$refs['scroll-box-comp'];
-                          }
+        var scrollBox = {};
+        if (this.$view.mobile) {
+          scrollBox = this.$parent.$parent.$refs["scroll-box-comp"];
+        } else {
+          scrollBox = this.$parent.$refs["scroll-box-comp"];
+        }
 
-                          scrollBox.scrollTo({
-                                top: top,
-                                left: 0,
-                                behavior: 'smooth'
-                        })}, timeout);
+        scrollBox.scrollTo({
+          top: top,
+          left: 0,
+          behavior: "smooth",
+        });
+      }, timeout);
     },
     getComposers() {
       this.loading = true;
-      const path = 'api/composers';
-      axios.get(path)
+      const path = "api/composers";
+      axios
+        .get(path)
         .then((res) => {
           this.composers = res.data.composers;
-          this.loading=false;
-          this.visibility=true;
+          this.loading = false;
+          this.visibility = true;
           this.scrollToComposer(this.$config.composer);
         })
         .catch((error) => {
           // eslint-disable-next-line
           console.error(error);
-          this.loading=false;
+          this.loading = false;
         });
     },
     getFilteredComposers(item) {
       this.loading = true;
       if (item == "all" || item == "alphabet" || item == "romantic" || item == "20th" || item == "common") {
-        this.visibility=true; // change to false when there are a lot of composers
+        this.visibility = true; // change to false when there are a lot of composers
       } else {
-        this.visibility=true;
+        this.visibility = true;
       }
-      const path = 'api/composers?filter=' + item;
-      axios.get(path)
+      const path = "api/composers?filter=" + item;
+      axios
+        .get(path)
         .then((res) => {
           this.composers = res.data.composers;
-          if(this.$view.mode == 'radio'){
-            eventBus.$emit('fireRadioGenreList', res.data.genres);
+          if (this.$view.mode == "radio") {
+            eventBus.$emit("fireRadioGenreList", res.data.genres);
           }
-          this.loading=false;
+          this.loading = false;
         })
         .catch((error) => {
           // eslint-disable-next-line
           console.error(error);
-          this.loading=false;
+          this.loading = false;
         });
     },
     getSearchComposers(item) {
-      this.visibility=true
-      const path = 'api/composers?search=' + item;
-      axios.get(path)
+      this.visibility = true;
+      const path = "api/composers?search=" + item;
+      axios
+        .get(path)
         .then((res) => {
           this.composers = res.data.composers;
-          this.loading=false;
+          this.loading = false;
         })
         .catch((error) => {
           // eslint-disable-next-line
           console.error(error);
-          this.loading=false;
+          this.loading = false;
         });
     },
-    getArtistComposers(artist) { // performer mode, radio mode
-      this.artist = artist
+    getArtistComposers(artist) {
+      // performer mode, radio mode
+      this.artist = artist;
       this.loading = true;
-      this.visibility=true;
+      this.visibility = true;
       this.$config.artist = artist;
-      eventBus.$emit('fireClearWorks', artist);
-      eventBus.$emit('fireClearAlbums');
-      const path = 'api/artistcomposers/' + artist;
-      axios.get(path)
+      eventBus.$emit("fireClearWorks", artist);
+      eventBus.$emit("fireClearAlbums");
+      const path = "api/artistcomposers/" + artist;
+      axios
+        .get(path)
         .then((res) => {
           this.composers = res.data.composers;
-          this.loading=false;
-          if(this.$view.mode == 'radio'){
-            eventBus.$emit('fireRadioGenreList', res.data.genres);
+          this.loading = false;
+          if (this.$view.mode == "radio") {
+            eventBus.$emit("fireRadioGenreList", res.data.genres);
           }
-          // if(this.$route.query.artist){
-          //   this.$router.replace({'query': null}).catch(()=>{});
-          // }
         })
         .catch((error) => {
           // eslint-disable-next-line
           console.error(error);
-          this.loading=false;
+          this.loading = false;
         });
     },
     getWorks(composer) {
-      if (!this.$view.mode){
-        eventBus.$emit('fireComposers', composer);
-      } else if (this.$view.mode == 'performer'){
-        eventBus.$emit('fireArtistWorks', this.artist, composer);
-      } else if (this.$view.mode == 'favorites'){
-        eventBus.$emit('fireFavoriteWorks', composer);
+      if (!this.$view.mode) {
+        eventBus.$emit("fireComposers", composer);
+      } else if (this.$view.mode == "performer") {
+        eventBus.$emit("fireArtistWorks", this.artist, composer);
+      } else if (this.$view.mode == "favorites") {
+        eventBus.$emit("fireFavoriteWorks", composer);
       }
     },
-    selectRow(nameShort){
-      if (this.$view.mode != 'radio'){
+    selectRow(nameShort) {
+      if (this.$view.mode != "radio") {
         this.$config.composer = nameShort;
-        localStorage.setItem('config', JSON.stringify(this.$config));
+        localStorage.setItem("config", JSON.stringify(this.$config));
       }
     },
-    fireRadioSelect(type){
-      this.$view.favoritesAlbums = '';
+    fireRadioSelect(type) {
+      this.$view.favoritesAlbums = "";
       this.composers = [];
-      if(type == "composer"){
-      const path = 'api/composersradio';
-      axios.get(path)
-        .then((res) => {
-          eventBus.$emit('fireComposerListToRadio', res.data.composers);
-        })
-        .catch((error) => {
-          // eslint-disable-next-line
-          console.error(error);
-        });
+      if (type == "composer") {
+        const path = "api/composersradio";
+        axios
+          .get(path)
+          .then((res) => {
+            eventBus.$emit("fireComposerListToRadio", res.data.composers);
+          })
+          .catch((error) => {
+            // eslint-disable-next-line
+            console.error(error);
+          });
       }
-      if(type == "favorites"){
+      if (type == "favorites") {
         this.$view.favoritesAlbums = true;
         this.getFavoritesComposers();
       }
     },
     getFavoritesComposers() {
       this.loading = true;
-      const path = 'api/favoritescomposers';
-      axios.get(path)
+      const path = "api/favoritescomposers";
+      axios
+        .get(path)
         .then((res) => {
           this.composers = res.data.composers;
-          eventBus.$emit('fireRadioGenreList', res.data.genres);
-          this.visibility=true;
+          eventBus.$emit("fireRadioGenreList", res.data.genres);
+          this.visibility = true;
           this.loading = false;
         })
         .catch((error) => {
@@ -227,54 +233,57 @@ export default {
         });
     },
     getMultiComposers(composers) {
-      if (composers.length < 1){
-        this.composers = []
+      if (composers.length < 1) {
+        this.composers = [];
+      } else {
+        const path = "api/multicomposers";
+        axios
+          .post(path, composers)
+          .then((res) => {
+            this.composers = res.data.composers;
+            eventBus.$emit("fireRadioGenreList", res.data.genres);
+            this.visibility = true;
+          })
+          .catch((error) => {
+            // eslint-disable-next-line
+            console.error(error);
+          });
       }
-      else{
-      const path = 'api/multicomposers';
-      axios.post(path, composers)
-        .then((res) => {
-          this.composers = res.data.composers;
-          eventBus.$emit('fireRadioGenreList', res.data.genres);
-          this.visibility=true;
-        })
-        .catch((error) => {
-          // eslint-disable-next-line
-          console.error(error);
-        });
-      }
-    }
+    },
   },
   created() {
-    if (!this.$view.mode){ // dont get composers in performer or radio modes
+    if (!this.$view.mode) {
+      // dont get composers in performer or radio modes
       this.getComposers();
-      const config = JSON.parse(localStorage.getItem('config'));
+      const config = JSON.parse(localStorage.getItem("config"));
       this.$config.composer = config.composer;
     }
-    if (this.$view.mode && !this.$view.mobile) { // clear selected composer in other modes, except mobile
+    if (this.$view.mode && !this.$view.mobile) {
+      // clear selected composer in other modes, except mobile
       this.$config.composer = "";
     }
-    if (this.$view.mode == 'favorites'){
+    if (this.$view.mode == "favorites") {
       this.getFavoritesComposers();
     }
-    if (this.$route.query.artist){
+    if (this.$route.query.artist) {
       this.getArtistComposers(this.$route.query.artist);
     }
 
-    eventBus.$on('fireComposerFilter', this.getFilteredComposers);
-    eventBus.$on('fireComposerSearch', this.getSearchComposers);
-    eventBus.$on('fireArtistComposers', this.getArtistComposers);
-    eventBus.$on('fireRadioSelect', this.fireRadioSelect);
-    eventBus.$on('fireComposerSelectRadio', this.getMultiComposers);
+    eventBus.$on("fireComposerFilter", this.getFilteredComposers);
+    eventBus.$on("fireComposerSearch", this.getSearchComposers);
+    eventBus.$on("fireArtistComposers", this.getArtistComposers);
+    eventBus.$on("fireRadioSelect", this.fireRadioSelect);
+    eventBus.$on("fireComposerSelectRadio", this.getMultiComposers);
   },
   beforeDestroy() {
-    eventBus.$off('fireComposerFilter', this.getFilteredComposers);
-    eventBus.$off('fireComposerSearch', this.getSearchComposers);
-    eventBus.$off('fireArtistComposers', this.getArtistComposers);
-    eventBus.$off('fireRadioSelect', this.fireRadioSelect);
-    eventBus.$off('fireComposerSelectRadio', this.getMultiComposers);
-  }
+    eventBus.$off("fireComposerFilter", this.getFilteredComposers);
+    eventBus.$off("fireComposerSearch", this.getSearchComposers);
+    eventBus.$off("fireArtistComposers", this.getArtistComposers);
+    eventBus.$off("fireRadioSelect", this.fireRadioSelect);
+    eventBus.$off("fireComposerSelectRadio", this.getMultiComposers);
+  },
 };
+
 </script>
 
 <style scoped>

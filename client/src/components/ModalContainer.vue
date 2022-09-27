@@ -1,9 +1,9 @@
 <template>
   <div>
-        <SpotifyModal />
-        <AutoplayModal />
-        <NotPremiumModal />
-        <NotAvailableModal />
+    <SpotifyModal />
+    <AutoplayModal />
+    <NotPremiumModal />
+    <NotAvailableModal />
   </div>
 </template>
 

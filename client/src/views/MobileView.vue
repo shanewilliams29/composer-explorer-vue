@@ -1,69 +1,75 @@
 <template>
   <div id="home">
-  <div role="tablist">
-    <b-card no-body class="mb-1 mobile-card">
-      <b-card-header header-tag="header" class="p-1" role="tab" v-show="!$view.mobileKeyboard">
-        <b-button class="header-button" :disabled="composerDisabled" @click="composerToggle" block variant="secondary"><span class="heading-text">Composers</span><span class="mb-0 float-right"><b-icon-chevron-down></b-icon-chevron-down></span></b-button>
-      </b-card-header>
-      <b-collapse :visible="composerDisabled" id="accordion-1" accordion="my-accordion" role="tabpanel">
-        <b-card-body>
-          <b-col class="composer-list-mobile disable-scrollbars" ref="scroll-box-comp">
-            <ComposerHeading />
-            <ComposerList />
-          </b-col>
-        </b-card-body>
-      </b-collapse>
-    </b-card>
+    <div role="tablist">
+      <b-card no-body class="mb-1 mobile-card">
+        <b-card-header header-tag="header" class="p-1" role="tab" v-show="!$view.mobileKeyboard">
+          <b-button class="header-button" :disabled="composerDisabled" @click="composerToggle" block variant="secondary">
+            <span class="heading-text">Composers</span><span class="mb-0 float-right"><b-icon-chevron-down></b-icon-chevron-down></span>
+          </b-button>
+        </b-card-header>
+        <b-collapse :visible="composerDisabled" id="accordion-1" accordion="my-accordion" role="tabpanel">
+          <b-card-body>
+            <b-col class="composer-list-mobile disable-scrollbars" ref="scroll-box-comp">
+              <ComposerHeading />
+              <ComposerList />
+            </b-col>
+          </b-card-body>
+        </b-collapse>
+      </b-card>
 
-    <b-card no-body class="mb-1 mobile-card">
-      <b-card-header header-tag="header" class="p-1" role="tab" v-show="!$view.mobileKeyboard">
-        <b-button class="header-button" :disabled="workDisabled" block @click="workToggle" variant="secondary"><span class="heading-text">Works by {{ composer }}</span><span class="mb-0 float-right"><b-icon-chevron-down></b-icon-chevron-down></span></b-button>
-      </b-card-header>
-      <b-collapse :visible="workDisabled" id="accordion-2" accordion="my-accordion" role="tabpanel">
-        <b-card-body>
-          <b-col class="work-list-mobile disable-scrollbars" ref="scroll-box">
-            <WorkHeading />
-            <WorkList/>
-          </b-col>
-        </b-card-body>
-      </b-collapse>
-    </b-card>
+      <b-card no-body class="mb-1 mobile-card">
+        <b-card-header header-tag="header" class="p-1" role="tab" v-show="!$view.mobileKeyboard">
+          <b-button class="header-button" :disabled="workDisabled" block @click="workToggle" variant="secondary">
+            <span class="heading-text">Works by {{ composer }}</span><span class="mb-0 float-right"><b-icon-chevron-down></b-icon-chevron-down></span>
+          </b-button>
+        </b-card-header>
+        <b-collapse :visible="workDisabled" id="accordion-2" accordion="my-accordion" role="tabpanel">
+          <b-card-body>
+            <b-col class="work-list-mobile disable-scrollbars" ref="scroll-box">
+              <WorkHeading />
+              <WorkList />
+            </b-col>
+          </b-card-body>
+        </b-collapse>
+      </b-card>
 
-    <b-card no-body class="mb-1 mobile-card">
-      <b-card-header header-tag="header" class="p-1" role="tab" v-show="!$view.mobileKeyboard">
-        <b-button class="header-button last-button" :disabled="albumDisabled" @click="albumToggle" block variant="secondary"><span class="heading-text">{{ title }}</span><span class="mb-0 float-right"><b-icon-chevron-down></b-icon-chevron-down></span></b-button>
-      </b-card-header>
-      <b-collapse :visible="albumDisabled" id="accordion-3" accordion="my-accordion" role="tabpanel">
-        <b-card-body>
-          <b-col class="album-list-mobile disable-scrollbars">
-           <AlbumHeading />
-           <AlbumList/>
-          </b-col>
-        </b-card-body>
-      </b-collapse>
-    </b-card>
+      <b-card no-body class="mb-1 mobile-card">
+        <b-card-header header-tag="header" class="p-1" role="tab" v-show="!$view.mobileKeyboard">
+          <b-button class="header-button last-button" :disabled="albumDisabled" @click="albumToggle" block variant="secondary">
+            <span class="heading-text">{{ title }}</span><span class="mb-0 float-right"><b-icon-chevron-down></b-icon-chevron-down></span>
+          </b-button>
+        </b-card-header>
+        <b-collapse :visible="albumDisabled" id="accordion-3" accordion="my-accordion" role="tabpanel">
+          <b-card-body>
+            <b-col class="album-list-mobile disable-scrollbars">
+              <AlbumHeading />
+              <AlbumList />
+            </b-col>
+          </b-card-body>
+        </b-collapse>
+      </b-card>
+    </div>
   </div>
-  </div> 
 </template>
 
 <script>
-import ComposerList from '@/components/ComposerList.vue'
-import WorkList from '@/components/WorkList.vue'
-import AlbumList from '@/components/AlbumList.vue'
-import ComposerHeading from '@/components/subcomponents/ComposerHeading.vue'
-import WorkHeading from '@/components/subcomponents/WorkHeading.vue'
-import AlbumHeading from '@/components/subcomponents/AlbumHeading.vue'
-import {eventBus} from "../main.js";
+import ComposerList from "@/components/ComposerList.vue";
+import WorkList from "@/components/WorkList.vue";
+import AlbumList from "@/components/AlbumList.vue";
+import ComposerHeading from "@/components/subcomponents/ComposerHeading.vue";
+import WorkHeading from "@/components/subcomponents/WorkHeading.vue";
+import AlbumHeading from "@/components/subcomponents/AlbumHeading.vue";
+import { eventBus } from "../main.js";
 
 export default {
-  name: 'MobileView',
+  name: "MobileView",
   components: {
     ComposerList,
     WorkList,
     AlbumList,
     ComposerHeading,
     WorkHeading,
-    AlbumHeading
+    AlbumHeading,
   },
   data() {
     return {
@@ -74,28 +80,28 @@ export default {
       albumDisabled: false,
       initialWorksLoad: true,
       initialAlbumsLoad: true,
-      composerListKey: 0
+      composerListKey: 0,
     };
   },
   methods: {
-      composerToggle() {
-        this.composerDisabled = true;
-        this.workDisabled = false;
-        this.albumDisabled = false;
-      },
-      workToggle() {
-        this.composerDisabled = false;
-        this.workDisabled = true;
-        this.albumDisabled = false;
-        eventBus.$emit('fireWorkScroll', this.$config.genre); // for mobile
-      },
-      albumToggle() {
-        this.composerDisabled = false;
-        this.workDisabled = false;
-        this.albumDisabled = true;
-      },
+    composerToggle() {
+      this.composerDisabled = true;
+      this.workDisabled = false;
+      this.albumDisabled = false;
+    },
+    workToggle() {
+      this.composerDisabled = false;
+      this.workDisabled = true;
+      this.albumDisabled = false;
+      eventBus.$emit("fireWorkScroll", this.$config.genre); // for mobile
+    },
+    albumToggle() {
+      this.composerDisabled = false;
+      this.workDisabled = false;
+      this.albumDisabled = true;
+    },
   },
-  beforeCreate(){
+  beforeCreate() {
     this.$view.mobile = true;
   },
   created() {
@@ -103,49 +109,36 @@ export default {
     this.$view.shuffle = false;
 
     window.firstLoad = true; // prevent playback on first load
-    eventBus.$on('fireComposers', (composer) => {
-        this.composer = composer;
-        this.workToggle();
-    })
-    // eventBus.$on('fireWorksLoaded', () => {
-    //   if (this.initialWorksLoad != true){
-    //     this.workToggle();
-    //   } else{
-    //     this.initialWorksLoad = false;
-    //   }
-    // })
-    // eslint-disable-next-line
-    eventBus.$on('fireAlbums', () => {
-          this.title = this.$config.workTitle;
-          this.albumToggle();
-    })
-    eventBus.$on('fireAlbumsAndPlay', () => {
-          this.title = this.$config.workTitle;
-    })
-    // eslint-disable-next-line
-    // eventBus.$on('fireAlbumData', (work_id, title) => {
-    //     this.title = this.hold_title;
-    // })
+    eventBus.$on("fireComposers", (composer) => {
+      this.composer = composer;
+      this.workToggle();
+    });
+    eventBus.$on("fireAlbums", () => {
+      this.title = this.$config.workTitle;
+      this.albumToggle();
+    });
+    eventBus.$on("fireAlbumsAndPlay", () => {
+      this.title = this.$config.workTitle;
+    });
     let vh = window.innerHeight * 0.01;
-    document.documentElement.style.setProperty('--vh', `${vh}px`);
+    document.documentElement.style.setProperty("--vh", `${vh}px`);
 
-    window.addEventListener('resize', () => {
-
-
+    window.addEventListener("resize", () => {
       let vh = window.innerHeight * 0.01;
 
       // for mobile keyboard
-      if (window.innerHeight < 550){
+      if (window.innerHeight < 550) {
         this.$view.mobileKeyboard = true;
-        vh = vh + (300 * 0.01);
+        vh = vh + 300 * 0.01;
       } else {
         this.$view.mobileKeyboard = false;
       }
-      
-      document.documentElement.style.setProperty('--vh', `${vh}px`);
+
+      document.documentElement.style.setProperty("--vh", `${vh}px`);
     });
   },
-}
+};
+
 </script>
 
 <style>

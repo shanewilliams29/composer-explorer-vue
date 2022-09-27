@@ -1,33 +1,31 @@
 <template>
   <div>
-  <div class="container-fluid">
-    <b-row class="footer-row">
-      <b-col v-show="false" class="info-col">
-        <AlbumInfo />
-      </b-col>
-      <b-col>
+    <div class="container-fluid">
+      <b-row class="footer-row">
+        <b-col v-show="false" class="info-col">
+          <AlbumInfo />
+        </b-col>
+        <b-col>
           <b-button class="info-panel-button" @click="togglePanel()">
-          <span class="icon-inactive" v-if="!buttonActive"><b-icon-info-circle></b-icon-info-circle></span>
-          <span class="icon-active" v-if="buttonActive"><b-icon-info-circle></b-icon-info-circle></span>
-        </b-button>
-        <MobilePlayerControls />
-      </b-col>
-    </b-row>
+            <span class="icon-inactive" v-if="!buttonActive"><b-icon-info-circle></b-icon-info-circle></span>
+            <span class="icon-active" v-if="buttonActive"><b-icon-info-circle></b-icon-info-circle></span>
+          </b-button>
+          <MobilePlayerControls />
+        </b-col>
+      </b-row>
+    </div>
+    <div>
+      <Transition name="fade">
+        <img v-if="reveal" class="header-image" key="1" :src="image1" />
+      </Transition>
+      <Transition name="fade">
+        <img v-if="!reveal" class="header-image" key="2" :src="image2" />
+      </Transition>
+    </div>
+    <div class="fade-panel"></div>
   </div>
-
-<div>
-<Transition name="fade">
-  <img v-if="reveal" class="header-image" key="1" :src="image1">
- </Transition>
-<Transition name="fade">
-  <img v-if="!reveal" class="header-image" key="2" :src="image2">
- </Transition>
-</div>
-<div class="fade-panel">
-   
-</div>
-</div>
 </template>
+
 
 <script>
 import AlbumInfo from '@/components/subcomponents/AlbumInfo.vue'
@@ -103,15 +101,6 @@ export default {
 </script>
 
 <style scoped>
-/*.fade-panel {
-  position: fixed;
-  bottom: 0px;
-  height: 120px;
-  width: 100%;
-  background: rgb(0,0,0);
-  background: linear-gradient(0deg, rgba(0,0,0,1) 0%, rgba(52,58,64,1) 100%);
-  z-index: -10;
-}*/
 .header-image {
   mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 1.0) 0%, transparent 100%);
   position: absolute;
@@ -129,7 +118,6 @@ export default {
 .fade-enter, .fade-leave-to {
   opacity: 0;
 }
-
 .container-fluid {
   position: relative;
   background:  none;

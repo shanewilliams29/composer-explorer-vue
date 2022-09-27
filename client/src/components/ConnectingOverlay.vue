@@ -2,13 +2,11 @@
   <div v-if="$auth.clientToken && $view.showConnecting && $auth.clientToken != 'INVALID'">
     <div class="bg-text">
       <div id="connecting" class="jumbotron overlay">
-
-      <div class="spinner" v-show="true" role="status">
-      <b-spinner class="m-5"></b-spinner>
-    </div>
-          <p class="lead">Connecting to Spotify</p>
-
+        <div class="spinner" v-show="true" role="status">
+          <b-spinner class="m-5"></b-spinner>
         </div>
+        <p class="lead">Connecting to Spotify</p>
+      </div>
     </div>
   </div>
 </template>

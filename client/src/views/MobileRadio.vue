@@ -1,19 +1,17 @@
 <template>
   <div id="home">
-    <MobileRadioHeading/>
+    <MobileRadioHeading />
     <div class="container-fluid">
       <b-row>
-        <b-col v-show="false" class="display-list first-col" ref="scroll-box-comp"><ComposerList/></b-col>
+        <b-col v-show="false" class="display-list first-col" ref="scroll-box-comp"><ComposerList /></b-col>
         <b-col class="display-list disable-scrollbars work-list-radio-mobile" ref="scroll-box">
-                  <WorkList/>
+          <WorkList />
         </b-col>
-        <b-col v-show="false" class="display-list last-col extra-margin"><AlbumList/></b-col>
+        <b-col v-show="false" class="display-list last-col extra-margin"><AlbumList /></b-col>
       </b-row>
     </div>
   </div>
 </template>
-
-
 
 <script>
 import MobileRadioHeading from '@/components/mobile/MobileRadioHeading.vue'
@@ -67,12 +65,7 @@ export default {
 >>> .music-note{
   color: var(--green);
 }
-/* .playback-container{
-    padding: 13px;
-    padding-top: 3px !important;
-    padding-bottom: 0px;
-    font-size: 14px;
-  }*/
+
 .disable-scrollbars::-webkit-scrollbar {
   background: transparent; /* Chrome/Safari/Webkit */
   width: 0px;
@@ -82,12 +75,11 @@ export default {
   scrollbar-width: none; /* Firefox */
   -ms-overflow-style: none;  /* IE 10+ */
 }
-  .work-list-radio-mobile{
-    /*height: calc(100vh - 314px);*/
-    height: calc(var(--vh, 1vh) * 100 - 405px);
-    overflow-y: scroll;
-  }
-
+.work-list-radio-mobile{
+  /*height: calc(100vh - 314px);*/
+  height: calc(var(--vh, 1vh) * 100 - 405px);
+  overflow-y: scroll;
+}
 
 /*Text sizing for mobile*/
 >>> h6{

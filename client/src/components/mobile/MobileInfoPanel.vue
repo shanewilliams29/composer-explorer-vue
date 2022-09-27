@@ -32,13 +32,16 @@ export default {
 >>> a:hover{
   text-decoration: none !important;
 }
+
 .container-fluid {
-  background-color: #454d54;
   padding-bottom: 0px;
   border-radius: 0px;
+  background-color: rgb(52, 58, 64, 0.6);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  z-index: 1;
 }
 .footer-row {
-  /*height: calc(var(--vh, 1vh) * 100 - 314px + 8.5px);*/
   height: calc(var(--vh, 1vh) * 100 - var(--workingheight) + 114px);
   color: black;
   overflow-y: scroll;

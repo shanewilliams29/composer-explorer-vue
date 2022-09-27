@@ -1,21 +1,18 @@
 <template>
   <div>
     <vue-word-cloud
-      style="
-        height: calc(100vh - 244px - var(--panelheight));
-        width: 100%;
-      "
+      style="height: calc(100vh - 244px - var(--panelheight)); width: 100%;"
       :words="data"
       :color="([, , color]) => color == 0 ? '#343a40' : color == 1 ? '#54595f' : '#727981'"
       font-family="Roboto"
-      :font-size-ratio='0.2'
-      :spacing='0.1'
+      :font-size-ratio="0.2"
+      :spacing="0.1"
     >
-  <template slot-scope="{text}">
-    <div class="composer-name" @click="wordClick(text);">
-      {{ text }}
-    </div>
-  </template>
+      <template slot-scope="{text}">
+        <div class="composer-name" @click="wordClick(text);">
+          {{ text }}
+        </div>
+      </template>
     </vue-word-cloud>
   </div>
 </template>
