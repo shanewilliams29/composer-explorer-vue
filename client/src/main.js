@@ -1,18 +1,18 @@
-import Vue from 'vue'
-import App from './App.vue'
-import {BootstrapVue,IconsPlugin} from 'bootstrap-vue'
-import axios from 'axios'
-import VueTypeaheadBootstrap from 'vue-typeahead-bootstrap'
-import vSelect from 'vue-select'
-import InfiniteLoading from 'vue-infinite-loading'
-import VueLazyload from 'vue-lazyload'
-import vueDebounce from 'vue-debounce'
-import router from './router'
-import VueWordCloud from 'vuewordcloud';
+import Vue from "vue";
+import App from "./App.vue";
+import { BootstrapVue, IconsPlugin } from "bootstrap-vue";
+import axios from "axios";
+import VueTypeaheadBootstrap from "vue-typeahead-bootstrap";
+import vSelect from "vue-select";
+import InfiniteLoading from "vue-infinite-loading";
+import VueLazyload from "vue-lazyload";
+import vueDebounce from "vue-debounce";
+import router from "./router";
+import VueWordCloud from "vuewordcloud";
 
-import 'bootstrap/dist/css/bootstrap.css'
-import 'bootstrap-vue/dist/bootstrap-vue.css'
-import 'vue-select/dist/vue-select.css'
+import "bootstrap/dist/css/bootstrap.css";
+import "bootstrap-vue/dist/bootstrap-vue.css";
+import "vue-select/dist/vue-select.css";
 
 Vue.config.productionTip = false;
 axios.defaults.baseURL = process.env.VUE_APP_BASE_URL;
@@ -20,25 +20,24 @@ axios.defaults.baseURL = process.env.VUE_APP_BASE_URL;
 Vue.use(BootstrapVue);
 Vue.use(IconsPlugin);
 Vue.use(vueDebounce, {
-  defaultTime: '300ms'
-})
+  defaultTime: "300ms",
+});
 Vue.use(InfiniteLoading, {
   props: {
-    spinner: 'spiral',
+    spinner: "spiral",
     distance: 200,
   },
 });
-const loadimage = 'https://storage.googleapis.com/composer-explorer.appspot.com/assets/album_placeholder.png';
+const loadimage = "https://storage.googleapis.com/composer-explorer.appspot.com/assets/album_placeholder.png";
 Vue.use(VueLazyload, {
   preLoad: 2,
   error: loadimage,
   loading: loadimage,
-  attempt: 1
-})
+  attempt: 1,
+});
 
-
-Vue.component('vue-typeahead-bootstrap', VueTypeaheadBootstrap);
-Vue.component('v-select', vSelect);
+Vue.component("vue-typeahead-bootstrap", VueTypeaheadBootstrap);
+Vue.component("v-select", vSelect);
 Vue.component(VueWordCloud.name, VueWordCloud);
 
 export const eventBus = new Vue();
@@ -46,7 +45,7 @@ export const spotifyPlayer = new Vue();
 export const baseURL = process.env.VUE_APP_BASE_URL;
 export const staticURL = process.env.VUE_APP_STATIC_URL;
 
-let config = {}
+let config = {};
 const defaultConfig = {
   composer: "Beethoven",
   work: "BEETHOVEN00005",
@@ -57,12 +56,12 @@ const defaultConfig = {
   previousTracks: "spotify:track:6cUCckpdlqHJ5Ascf2uH2A spotify:track:1L0a0dpHaMWgAoEEvFfycT spotify:track:7ojkji0OYCOpl3UMy92gEf spotify:track:4IHaNEgvWUD63pMTWrclb2",
   trackNo: 0,
   album: "BEETHOVEN000056eOuqhCfrTPp1H0YbQ9PmL",
-  albumSize: 'small',
+  albumSize: "small",
   artist: null,
   albumData: {},
 };
 if (localStorage.getItem("config") !== null) {
-  config = JSON.parse(localStorage.getItem('config'));
+  config = JSON.parse(localStorage.getItem("config"));
 } else {
   config = defaultConfig;
 }
@@ -74,7 +73,7 @@ Vue.prototype.$auth = Vue.observable({
   clientToken: null,
   deviceID: null,
   knowledgeKey: null,
-  avatar: null
+  avatar: null,
 });
 
 Vue.prototype.$view = Vue.observable({
@@ -85,8 +84,8 @@ Vue.prototype.$view = Vue.observable({
   enableRadio: false,
   enableExport: false,
   randomAlbum: false,
-  favoritesAlbums: '',
-  radioTrackLimit: '6',
+  favoritesAlbums: "",
+  radioTrackLimit: "6",
   playlistTrackCount: null,
   playlistSuccess: false,
   playlistError: false,
@@ -95,10 +94,10 @@ Vue.prototype.$view = Vue.observable({
   mobile: false,
   mobileKeyboard: false,
   avatar: false,
-  showConnecting: true
+  showConnecting: true,
 });
 
 new Vue({
   router,
-  render: h => h(App)
-}).$mount('#app')
+  render: (h) => h(App),
+}).$mount("#app");
