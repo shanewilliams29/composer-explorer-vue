@@ -562,7 +562,10 @@ export default {
     text-align: center;
 }
 .m-5 {
-    color: #343a40;
+    color: #9da6af;
+}
+.m-4 {
+    color: #9da6af;
 }
 .card-deck {
     display: flex;
