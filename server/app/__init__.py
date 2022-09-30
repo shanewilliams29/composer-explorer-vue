@@ -6,22 +6,39 @@ from flask_mobility import Mobility
 from flask_caching import Cache
 from flask_login import LoginManager
 from flask_moment import Moment
-
-# instantiate the app
-app = Flask(__name__, static_folder='../dist', static_url_path='/', template_folder='templates')
-app.config.from_object(Config)
-
-db = SQLAlchemy(app)
-Mobility(app)
-cache = Cache(app)
-login = LoginManager(app)
-moment = Moment(app)
-
 from app.classes import SpotifyAPI
+
+db = SQLAlchemy()
+login = LoginManager()
+mobility = Mobility()
+cache = Cache()
+moment = Moment()
 sp = SpotifyAPI(Config.SPOTIFY_CLIENT_ID, Config.SPOTIFY_CLIENT_SECRET, Config.SPOTIFY_REDIRECT_URL)
 
-# enable CORS in development mode
-if Config.MODE == "DEVELOPMENT":
-    CORS(app, automatic_options=True, support_credentials=True)
 
-from app import routes, models, classes
+def create_app(config_class=Config):
+    app = Flask(__name__, static_folder='../dist', static_url_path='/', template_folder='templates')
+    app.config.from_object(config_class)
+
+    # enable CORS in development mode
+    if Config.MODE == "DEVELOPMENT":
+        CORS(app, automatic_options=True, support_credentials=True)
+
+    db.init_app(app)
+    login.init_app(app)
+    mobility.init_app(app)
+    cache.init_app(app)
+    moment.init_app(app)
+
+    from app.main import bp as main_bp
+    app.register_blueprint(main_bp)
+
+    from app.auth import bp as auth_bp
+    app.register_blueprint(auth_bp)
+
+    from app.api import bp as api_bp
+    app.register_blueprint(api_bp)
+
+    return app
+
+from app import models

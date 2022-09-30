@@ -1,9 +1,9 @@
-from app import app
 import json
 from google.cloud import storage
 import requests
 from PIL import Image
 import io
+from flask import current_app
 
 def prepare_composers(composer_list):
 
@@ -35,8 +35,8 @@ def prepare_composers(composer_list):
             'name_full': composer.name_full,
             'born': composer.born,
             'died': composer.died,
-            'flag': app.config['STATIC'] + 'flags/1x1/' + flag + '.svg',
-            'img': app.config['STATIC'] + 'img/' + composer.name_short + '.jpg',
+            'flag': current_app.config['STATIC'] + 'flags/1x1/' + flag + '.svg',
+            'img': current_app.config['STATIC'] + 'img/' + composer.name_short + '.jpg',
             'region': region_name,
             'color': era_color,
             'catalogued': composer.catalogued
@@ -198,7 +198,7 @@ def get_avatar(username, imgurl):
     blob.cache_control = 'public, max-age=0'
     blob.upload_from_string(img_byte_arr, content_type='image/jpeg')
 
-    return app.config['STATIC'] + 'avatars/{}.jpg'.format(username), 200
+    return current_app.config['STATIC'] + 'avatars/{}.jpg'.format(username), 200
 
 
 def upload_avatar(username, file):
@@ -221,4 +221,4 @@ def upload_avatar(username, file):
     blob.cache_control = 'public, max-age=0'
     blob.upload_from_string(img_byte_arr, content_type='image/jpeg')
 
-    return app.config['STATIC'] + 'avatars/{}.jpg'.format(username), 200
+    return current_app.config['STATIC'] + 'avatars/{}.jpg'.format(username), 200
