@@ -75,5 +75,3 @@ def user_list():
     onlinecheck = datetime.utcnow() - timedelta(minutes=5)
 
     return render_template("userlist.html", title='User List', onlinecheck=onlinecheck, users=users, usercount=usercount)
-
-

@@ -89,6 +89,7 @@ def login():
 
     if Config.MODE == "DEVELOPMENT":
         cache.set('token', session['spotify_token'])  # store in cache for dev
+        
     if session['mobile']:
         if Config.MODE == "DEVELOPMENT":
             return redirect('http://localhost:8080/mobile')

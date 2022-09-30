@@ -5,6 +5,7 @@ from PIL import Image
 import io
 from flask import current_app
 
+
 def prepare_composers(composer_list):
 
     # get era colours, flag icons, and proper region names
