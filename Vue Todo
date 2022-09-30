@@ -3,10 +3,11 @@ HIGH PRIORITY
 - Remember radio settings
 - What to do when performer album liked but not on main list due to compilation (ie. Yuja Wang Mend. 1)
 - Glitch where multiple players open? Start on new player > advances to next on old? Check work skipping.
-- Clean up code
+- Fix errors in console, smooth scrolling
+- Popular composers radio is slow
 
 LOW PRIORITY
-- Date for works after composer death (no date)
+- Date for works after composer death (no date) - See Bellini
 - Better shuffle playback
 - Composer tiers in radio mode
 - Show which users like work?
@@ -31,9 +32,11 @@ RELINKING
 COMPOSERS
 - Fix Monteverdi
 - CPE Bach or Bach, CPE (might break special case for algorithm)
+- Beethoven folk songs?
 
 PARKING LOT
-- Get artist IDs from Spotify?
+- Get artist IDs from Spotify?\
+	- Use for artists info
 - Spiders web beween performers
 - Playlist functionality
 - Youtube Version?
