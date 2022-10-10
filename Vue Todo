@@ -1,10 +1,10 @@
 HIGH PRIORITY
-- Remember radio settings
-- What to do when performer album liked but not on main list due to compilation (ie. Yuja Wang Mend. 1)
 - Fix errors in console, smooth scrolling
-- Patreon banner pushing content down
 
 LOW PRIORITY
+- What to do when performer album liked but not on main list due to compilation (ie. Yuja Wang Mend. 1)
+- Patreon banner pushing content down
+- Remember radio settings
 - Patreon mobile
 - Popular composers radio is slow
 - Date for works after composer death (no date) - See Bellini
@@ -21,6 +21,7 @@ LOW PRIORITY
 - Safari, side panel acts funky
 - Hide albums not avaialble in localstorage
 - Mobile: if choose different composer/work, the info panel is wrong, should show details of track playing
+- Next track (not found) if there is no next track?
 
 RELINKING
 - Track relinking, what to do if titles are different? Is titles best way to do this?
@@ -35,7 +36,7 @@ COMPOSERS
 - Beethoven folk songs?
 
 PARKING LOT
-- Get artist IDs from Spotify?\
+- Get artist IDs from Spotify?
 	- Use for artists info
 - Spiders web beween performers
 - Playlist functionality

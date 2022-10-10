@@ -1,5 +1,5 @@
 <template>
-	<div v-show="showBanner && !$view.mobile" class="patreon-banner">
+	<div v-show="false && !$view.mobile" class="patreon-banner">
 		<div class="container">
 			<p class="patreon">Help keep Composer Explorer online and ad-free. <a href="https://www.patreon.com/composerexplorer" target="_blank" class="patreon-link">Support us on Patreon! </a><a class="patreonclosebtn" @click="toggleBanner()">&times;</a></p>
 		</div>
