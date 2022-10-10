@@ -31,6 +31,7 @@ export default {
                 this.$auth.clientToken = res.data.client_token;
                 this.$auth.appToken = res.data.app_token;
                 this.$auth.userid = res.data.user_id;
+                this.$auth.patreon = res.data.patreon;
                 this.$auth.knowledgeKey = res.data.knowledge_api;
                 this.$auth.avatar = res.data.avatar;
                 // eslint-disable-next-line
@@ -127,6 +128,7 @@ export default {
                 this.$auth.appToken = res.data.app_token;
                 this.$auth.knowledgeKey = res.data.knowledge_api;
                 this.$auth.avatar = res.data.avatar;
+                this.$auth.patreon = res.data.patreon;
                 eventBus.$emit("notPremium");
                 this.$view.showConnecting = false;
               } else {
@@ -134,12 +136,14 @@ export default {
                 this.$auth.knowledgeKey = res.data.knowledge_api;
                 this.$view.banner = true;
                 this.$view.showConnecting = false;
+                this.$auth.patreon = true;
               }
             }
           })
           .catch((error) => {
             this.$auth.appToken = null;
             this.$auth.clientToken = null;
+            this.$auth.patreon = true;
             console.error(error);
             this.$view.showConnecting = false;
           });

@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    <PatreonBanner />
     <NavBar />
     <ConnectingOverlay />
     <WelcomeOverlay />
@@ -21,6 +22,7 @@
 </template>
 
 <script>
+import PatreonBanner from "@/components/subcomponents/PatreonBanner.vue";
 import ConnectingOverlay from "@/components/ConnectingOverlay.vue";
 import WelcomeOverlay from "@/components/WelcomeOverlay.vue";
 import SpotifyPlayer from "@/components/SpotifyPlayer.vue";
@@ -34,6 +36,7 @@ import MobileFooter from "@/components/mobile/MobileFooter.vue";
 
 export default {
   components: {
+    PatreonBanner,
     NavBar,
     WelcomeOverlay,
     ConnectingOverlay,

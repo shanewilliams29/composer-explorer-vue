@@ -118,13 +118,6 @@ def get_composers():
     search_list = []
     for composer in composer_list:
         search_list.append(composer.name_short)
-
-    # genres = db.session.query(WorkList.genre)\
-    #     .filter(WorkList.composer.in_(search_list)).order_by(WorkList.genre).distinct()
-
-    # genre_list = []
-    # for (item,) in genres:
-    #     genre_list.append(item)
     
     with open('app/static/genres.json') as f:
         genre_list = json.load(f)
@@ -186,7 +179,7 @@ def get_favoritescomposers():
     return response
 
 
-@bp.route('/api/multicomposers', methods=['POST'])
+@bp.route('/api/multicomposers', methods=['POST'])  # used in radio mode
 def get_multicomposers():
     # get composers
     composers = request.get_json()
@@ -208,22 +201,29 @@ def get_multicomposers():
     COMPOSERS = prepare_composers(composer_list)
     composers_by_region = group_composers_by_region(COMPOSERS)
 
-    # get genre list for these composers
-    # genres = db.session.query(WorkList.genre)\
-    #     .filter(WorkList.composer.in_(search_list)).order_by(WorkList.genre).distinct()
-
-    # genre_list = []
-    # for (item,) in genres:
-    #     genre_list.append(item)
-
+    # genre categories
     with open('app/static/genres.json') as f:
         genre_list = json.load(f)
-    genre_list = sorted(genre_list)
+    general_genre_list = sorted(genre_list)
+
+    # genres for these specific composers
+    genres = db.session.query(WorkList.genre)\
+        .filter(WorkList.composer.in_(search_list)).order_by(WorkList.genre).distinct()
+
+    composer_genre_list = []
+    for (item,) in genres:
+        composer_genre_list.append(item)
+
+    # match on general genre list
+    final_genre_list = []
+    for genre in general_genre_list:
+        if genre.lower() in ' '.join(composer_genre_list).lower():
+            final_genre_list.append(genre)
 
     # return response
     response_object = {'status': 'success'}
     response_object['composers'] = composers_by_region
-    response_object['genres'] = genre_list
+    response_object['genres'] = final_genre_list
     response = jsonify(response_object)
     return response
 

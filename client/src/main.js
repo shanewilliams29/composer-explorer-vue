@@ -74,6 +74,7 @@ Vue.prototype.$auth = Vue.observable({
   deviceID: null,
   knowledgeKey: null,
   avatar: null,
+  patreon: true,
 });
 
 Vue.prototype.$view = Vue.observable({

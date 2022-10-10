@@ -139,6 +139,7 @@ def get_token():
             response_object['user_id'] = current_user.username
             response_object['premium'] = session['premium']
             response_object['avatar'] = current_user.avatar(140)
+            response_object['patreon'] = current_user.patreon
         else:
             response_object['user_id'] = None
             response_object['premium'] = False
@@ -154,6 +155,17 @@ def get_token():
     response = jsonify(response_object)
     response.headers.add('Access-Control-Allow-Credentials', 'true')
     return response
+
+
+@ bp.route('/disable_patreon_link')
+@ login_required
+def disable_patreon_link():
+    if current_user.is_authenticated:
+        user = User.query.filter(User.id == current_user.id).first_or_404()
+        user.patreon = True
+        db.session.commit()
+        return redirect(url_for('main.index'))
+    return redirect(url_for('main.index'))
 
 
 @bp.route('/change_avatar', methods=['GET', 'POST'])

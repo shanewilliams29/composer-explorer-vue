@@ -17,6 +17,7 @@ favorites = db.Table('favorites',
                      db.Column('composer_id', db.Integer, db.ForeignKey('composer_list.id')),
                      db.Column('user_id', db.Integer, db.ForeignKey('user.id'))
                      )
+
 visits = db.Table('visits',
                   db.Column('work_id', db.String(24), db.ForeignKey('work_list.id')),
                   db.Column('user_id', db.Integer, db.ForeignKey('user.id'))
@@ -41,7 +42,6 @@ class User(UserMixin, db.Model):
     product = db.Column(db.String(64))
     forum_posts = db.relationship("ForumPost", backref="user")
     forum_comments = db.relationship("ForumComment", backref="user")
-
     followed = db.relationship(
         'User', secondary=followers,
         primaryjoin=(followers.c.follower_id == id),
@@ -279,6 +279,7 @@ class WorkList(db.Model):
     nickname: str
     search: str
     date: int
+    openopus: bool
 
     id = db.Column(db.String(24), primary_key=True)
     composer = db.Column(db.String(48))
@@ -291,6 +292,7 @@ class WorkList(db.Model):
     nickname = db.Column(db.String(512))
     search = db.Column(db.String(256))
     date = db.Column(db.Integer)
+    openopus = db.Column(db.Boolean)
     album_count = db.Column(db.Integer)
     albums = db.relationship("WorkAlbums", lazy='dynamic')
 

@@ -145,7 +145,7 @@ var spotify = {
     }).catch(function(error) {
       if (error.response.status == 401) {
         eventBus.$emit('notLoggedIn');
-      } else if (error.response.status == 404) {
+      } else if (error.response.status == 404 || error.response.status == 502){
         eventBus.$emit('notAvailable');
       } else {
         console.error(error);
