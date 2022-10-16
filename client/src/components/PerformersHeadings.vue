@@ -37,7 +37,7 @@
       <b-col class="last-col">
         <b-card class="heading-card albums-card">
           <b-form-group>
-            <vue-typeahead-bootstrap v-show="listLoading" v-model="query" placeholder="Loading..." class="mt-3 style-chooser performer-search" size="sm" />
+            <vue-typeahead-bootstrap v-show="listLoading" v-model="query" placeholder="Loading..." class="mt-3 style-chooser performer-search" size="sm" :data="[]"/>
             <vue-typeahead-bootstrap v-show="!listLoading" v-model="query" placeholder="Search for a performer" class="mt-3 style-chooser performer-search" @input="resetField" @hit="artistSearch" size="sm" :data="this.artistList" />
             <b-row class="flex-nowrap">
               <b-col style="padding-right: 0px;" cols="8">

@@ -2,6 +2,7 @@ HIGH PRIORITY
 - Fix errors in console, smooth scrolling
 
 LOW PRIORITY
+- Upload large file to change profile picture? - Move to Celery?
 - What to do when performer album liked but not on main list due to compilation (ie. Yuja Wang Mend. 1)
 - Patreon banner pushing content down
 - Remember radio settings
