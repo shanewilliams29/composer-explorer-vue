@@ -1,4 +1,4 @@
-Composer Explorer
+**Composer Explorer**
 
 Welcome to your Classical Music Portal. Explore composers from the Medieval to the present.
 Listen to works on Spotify, made navigable for Classical music.
