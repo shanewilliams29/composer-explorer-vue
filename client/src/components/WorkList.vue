@@ -73,7 +73,7 @@ import dingding from "../assets/dingding.mp3";
 
 export default {
   setup() {
-    const play = useSound(dingding, { volume: 0.5 });
+    const play = useSound(dingding, { volume: 0.3 });
 
     return {
       play,
