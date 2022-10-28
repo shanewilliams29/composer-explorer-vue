@@ -85,6 +85,8 @@
         </div>
       </b-sidebar>
     </div>
+    <div>
+    </div>
   </div>
 </template>
 
@@ -102,7 +104,22 @@ export default {
       spotifyURL: baseURL + "connect_spotify"
     };
   },
+  methods: {
+    makeToast() {
+      this.$bvToast.toast(`Get the App on Play Store`, {
+        href: 'https://play.google.com/store/apps/details?id=com.app.composerexplorer',
+        title: 'App available for Android',
+        toaster: 'b-toaster-bottom-full',
+        solid: true,
+        variant: 'warning',
+        autoHideDelay: 3600000
+      })
+    }
+  },
   created(){
+  if (this.$view.mobile) {
+    this.makeToast();
+  }
   var userAgent = window.navigator.userAgent.toLowerCase();
     if (userAgent.includes('wv')) {
       this.$view.avatar = false;

@@ -10,6 +10,7 @@
             <span class="icon-inactive" v-if="!buttonActive"><b-icon-info-circle></b-icon-info-circle></span>
             <span class="icon-active" v-if="buttonActive"><b-icon-info-circle></b-icon-info-circle></span>
           </b-button>
+          
           <MobilePlayerControls />
         </b-col>
       </b-row>
