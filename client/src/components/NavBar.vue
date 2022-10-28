@@ -129,10 +129,10 @@ export default {
     }
   },
   created(){
-  var apple = this.iOS();
+    var apple = this.iOS();
+    var userAgent = window.navigator.userAgent.toLowerCase();
 
-  var userAgent = window.navigator.userAgent.toLowerCase();
-    if (userAgent.includes('wv')) {
+    if (userAgent.includes('wv')) { // Webview (App)
       this.$view.avatar = false;
     } else {
       this.$view.avatar = true;
