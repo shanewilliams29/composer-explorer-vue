@@ -73,6 +73,8 @@
             ComposerExplorer.com is not associated with Spotify Technology SA. Artist, album and track records are retrieved through the Spotify search API and do not necessarily represent the full extent of the Spotify catalogue for a
             given work. No guarantee is made as to the accuracy of catalogued composer and work information, and use is recommended for recreational purposes only.
           </p>
+          <h6 v-if="!$view.mobile">GitHub</h6>
+          <p v-if="!$view.mobile">For feature requests and bug reports:  <a href="https://github.com/shanewilliams29/composer-explorer-vue/issues" target="_blank">GitHub</a>.</p>
           <h6>Contact</h6>
           <p v-if="!$view.mobile">For all inquiries, please contact: <a href="mailto:admin@composerexplorer.com">admin@composerexplorer.com</a></p>
           <p v-if="$view.mobile">For all inquiries, please contact: admin@composerexplorer.com</p>
