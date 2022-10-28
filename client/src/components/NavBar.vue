@@ -105,6 +105,18 @@ export default {
     };
   },
   methods: {
+    iOS() {
+      return [
+        'iPad Simulator',
+        'iPhone Simulator',
+        'iPod Simulator',
+        'iPad',
+        'iPhone',
+        'iPod'
+      ].includes(navigator.platform)
+      // iPad on iOS 13 detection
+      || (navigator.userAgent.includes("Mac") && "ontouchend" in document)
+    },
     makeToast() {
       this.$bvToast.toast(`Get the App on Play Store`, {
         href: 'https://play.google.com/store/apps/details?id=com.app.composerexplorer',
@@ -117,14 +129,16 @@ export default {
     }
   },
   created(){
-  if (this.$view.mobile) {
-    this.makeToast();
-  }
+  var apple = this.iOS();
+
   var userAgent = window.navigator.userAgent.toLowerCase();
     if (userAgent.includes('wv')) {
       this.$view.avatar = false;
     } else {
       this.$view.avatar = true;
+      if (this.$view.mobile && !apple) {
+        this.makeToast();
+      }
     }
   }
 }
