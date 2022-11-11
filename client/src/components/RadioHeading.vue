@@ -155,13 +155,13 @@ export default {
 
       periodSelectField: { value: "popular", text: "Most popular" },
       periodOptions: [
-        { value: "popular", text: "Most popular" },
+        // { value: "popular", text: "Most popular" },
         { value: "early", text: "Early" },
         { value: "baroque", text: "Baroque" },
         { value: "classical", text: "Classical" },
         { value: "romantic", text: "Romantic" },
         { value: "20th", text: "20th/21st Century" },
-        { value: "all", text: "All" },
+        // { value: "all", text: "All" },
       ],
 
       genreSelectField: [{ value: "all", text: "All Genres" }],
