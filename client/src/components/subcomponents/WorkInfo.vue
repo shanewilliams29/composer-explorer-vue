@@ -21,11 +21,13 @@
           <b-spinner class="m-5"></b-spinner>
         </div>
         <div v-show="!loading" style="white-space: pre-line;">
-          {{ workBlurb }}<br />
-          <a :href="wikiLink" target="_blank" class="wiki-link" v-if="pageTitle">
-            <br />
-            Read more on Wikipedia: {{pageTitle}}
-          </a>
+          <b-alert v-if="!workMatch" show variant="warning"><span style="font-size: 12px">Work page not found on Wikipedia. This page may be relevant.</span></b-alert> <span> <h6 v-if="!workMatch"><span v-if="pageTitle">{{pageTitle}}</span></h6></span>
+          <div>{{ workBlurb }}<br />
+            <a :href="wikiLink" target="_blank" class="wiki-link" v-if="pageTitle">
+              <br />
+              Read more on Wikipedia: {{pageTitle}}
+            </a>
+          </div>
         </div>
       </b-card-text>
     </b-card-body>
@@ -49,6 +51,7 @@ export default {
       catNo: "",
       date: "",
       composer: "",
+      workMatch: true
     };
   },
   computed: {
@@ -62,6 +65,25 @@ export default {
     },
   },
   methods: {
+    checkIfWorkMatches(opus, title, text){
+      if (opus) {
+        var num = opus.match(/\d+/);
+
+        let regex = new RegExp(`\\b${num}\\w?`);
+
+        if (text.search(regex) !== -1) {
+          return true;
+        } else {
+          return false;
+        }
+      } else {
+        if (text.toLowerCase().includes(title.toLowerCase())) {
+          return true;
+        } else {
+          return false;
+        }
+      }
+    },
     addLineBreaksToParagraph(paragraph){
       // Remove existing line breaks
       let unbrokenText = paragraph.replace(/\n/g, "");
@@ -95,7 +117,15 @@ export default {
           this.composerImg = "https://storage.googleapis.com/composer-explorer.appspot.com/img/" + this.composer + ".jpg";
           this.catNo = res.data.info.cat;
           this.date = res.data.info.date;
-          this.wikiWork(this.composer + " " + this.workTitle + " " + this.catNo);
+
+
+          if (this.catNo) {
+            var num = this.catNo.match(/\d+/);
+            this.wikiWork(this.composer + " OR " + num + " " + this.workTitle);
+          } else {
+            this.wikiWork(this.composer + " " + this.workTitle);
+          }
+
         })
         .catch((error) => {
           this.loading = false;
@@ -122,10 +152,27 @@ export default {
         .then((res) => {
           // SECOND SEARCH
           let pageid = "";
+          let matchCheck = false;
+          let resultsArray = res.data.query.search
+          console.log(search_item);
+          console.log(res.data.query);
           try {
-            pageid = res.data.query.search[0].pageid;
+            for (var i = 0; i < resultsArray.length; i++) {
+              matchCheck = this.checkIfWorkMatches(this.catNo, this.workTitle, resultsArray[i].snippet);
+              console.log(matchCheck);
+              if (matchCheck) {
+                break;
+              }
+            }
+            if (!matchCheck) {
+              i = 0;
+            }            
+            pageid = res.data.query.search[i].pageid;
+
+            
           } catch (error) {
             this.workBlurb = "Work not found on Wikipedia.";
+            this.workMatch = true;
             this.pageTitle = null;
             this.loading = false;
             return error;
@@ -148,7 +195,9 @@ export default {
             .get(url2)
             .then((res) => {
               for (var id in res.data.query.pages) {
-                this.workBlurb = this.addLineBreaksToParagraph(res.data.query.pages[id].extract);
+                let text = res.data.query.pages[id].extract;
+                this.workMatch = this.checkIfWorkMatches(this.catNo, this.workTitle, text);
+                this.workBlurb = this.addLineBreaksToParagraph(text);
                 this.pageTitle = res.data.query.pages[id].title;
                 let wikiurl = "https://en.wikipedia.org/wiki/" + this.pageTitle;
                 this.wikiLink = wikiurl;
@@ -175,6 +224,9 @@ export default {
 </script>
 
 <style scoped>
+.alert{
+  margin-bottom: 10px;
+}
 .info-td{
   padding-left: 10px;
   font-size: 16px;
