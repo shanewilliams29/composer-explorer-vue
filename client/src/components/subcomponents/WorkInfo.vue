@@ -81,7 +81,7 @@ export default {
         }
         result += sentences[i];
       }
-      return result;
+      return result + ".";
     },
     getWorkInfo(work) {
       this.loading = true;

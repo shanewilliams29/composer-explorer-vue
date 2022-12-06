@@ -74,7 +74,7 @@ export default {
         }
         result += sentences[i];
       }
-      return result;
+      return result + ".";
     },
     getComposerInfo(composer) {
       this.loading = true;
