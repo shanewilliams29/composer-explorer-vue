@@ -20,7 +20,7 @@
         <div class="spinner" v-show="loading" role="status">
           <b-spinner class="m-5"></b-spinner>
         </div>
-        <div v-show="!loading">
+        <div v-show="!loading" style="white-space: pre-line;">
           {{ workBlurb }}<br />
           <a :href="wikiLink" target="_blank" class="wiki-link" v-if="pageTitle">
             <br />
@@ -62,6 +62,27 @@ export default {
     },
   },
   methods: {
+    addLineBreaksToParagraph(paragraph){
+      // Remove existing line breaks
+      let unbrokenText = paragraph.replace(/\n/g, "");
+
+      // Split the text into an array of sentences
+      let sentences = unbrokenText.split(/(?<![A-Z])(?<!No)(?<!Op)[.]/);
+
+      // Initialize the result to the first sentence
+      let result = sentences[0]
+  
+      // Loop through the remaining sentences, adding line breaks every 3 sentences
+      for (let i = 1; i < sentences.length - 1; i++) {
+        if (i % 2 === 0) {
+          result += ".\n\n";
+        } else {
+          result += ". ";
+        }
+        result += sentences[i];
+      }
+      return result;
+    },
     getWorkInfo(work) {
       this.loading = true;
       const path = "api/workinfo/" + work;
@@ -127,7 +148,7 @@ export default {
             .get(url2)
             .then((res) => {
               for (var id in res.data.query.pages) {
-                this.workBlurb = res.data.query.pages[id].extract;
+                this.workBlurb = this.addLineBreaksToParagraph(res.data.query.pages[id].extract);
                 this.pageTitle = res.data.query.pages[id].title;
                 let wikiurl = "https://en.wikipedia.org/wiki/" + this.pageTitle;
                 this.wikiLink = wikiurl;

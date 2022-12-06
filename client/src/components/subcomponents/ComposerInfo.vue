@@ -21,8 +21,8 @@
       <div class="spinner" v-show="loading" role="status">
         <b-spinner class="m-5"></b-spinner>
       </div>
-      <div v-show="!loading">
-        {{ composer.introduction }}<br />
+      <div v-show="!loading" style="white-space: pre-line;">
+        {{ addLineBreaksToParagraph(composer.introduction) }}<br />
         <a :href="composer.pageurl" target="_blank" class="wiki-link">
           <br />
           Read more on Wikipedia
@@ -55,6 +55,27 @@ export default {
     },
   },
   methods: {
+    addLineBreaksToParagraph(paragraph){
+      // Remove existing line breaks
+      let unbrokenText = paragraph.replace(/\n/g, "");
+
+      // Split the text into an array of sentences
+      let sentences = unbrokenText.split(/(?<![A-Z])(?<!No)(?<!Op)[.]/);
+
+      // Initialize the result to the first sentence
+      let result = sentences[0]
+  
+      // Loop through the remaining sentences, adding line breaks every 3 sentences
+      for (let i = 1; i < sentences.length - 1; i++) {
+        if (i % 2 === 0) {
+          result += ".\n\n";
+        } else {
+          result += ". ";
+        }
+        result += sentences[i];
+      }
+      return result;
+    },
     getComposerInfo(composer) {
       this.loading = true;
       const path = "api/composerinfo/" + composer;
