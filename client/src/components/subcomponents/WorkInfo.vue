@@ -122,6 +122,7 @@ export default {
           if (this.catNo) {
             var num = this.catNo.match(/\d+/);
             this.wikiWork(this.composer + " OR " + num + " " + this.workTitle);
+
           } else {
             this.wikiWork(this.composer + " " + this.workTitle);
           }
@@ -154,12 +155,12 @@ export default {
           let pageid = "";
           let matchCheck = false;
           let resultsArray = res.data.query.search
-          console.log(search_item);
-          console.log(res.data.query);
+          //console.log(search_item);
+          //console.log(res.data.query);
           try {
             for (var i = 0; i < resultsArray.length; i++) {
               matchCheck = this.checkIfWorkMatches(this.catNo, this.workTitle, resultsArray[i].snippet);
-              console.log(matchCheck);
+              //console.log(matchCheck);
               if (matchCheck) {
                 break;
               }
