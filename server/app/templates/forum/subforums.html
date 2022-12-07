@@ -47,9 +47,9 @@
 <br>
    <div class="subforumlisting">
       {% if current_user.is_authenticated %}
-      Users online: {% set comma = joiner(", ") %}{% for user in users %}{{comma()}}<a href="/user/{{ user.username }}">{{user.display_name}}</a>{% endfor %}
+      Users online: {% set comma = joiner(", ") %}{% for user in users %}{{comma()}}{{user.display_name}}{% endfor %}
       {% else %}
-      Please <a href="/auth/login">log in</a> to post messages.
+      Please <a href="/connect_spotify">log in</a> to post messages.
       {% endif %}
    </div>
 
