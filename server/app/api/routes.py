@@ -327,7 +327,7 @@ def get_favoriteworks(name):
     return response
 
 
-@bp.route('/api/worksbygenre', methods=['POST'])  # used in radio mode for work list
+@bp.route('/api/worksbygenre', methods=['POST'])  # used in radio mode for populating work list
 def get_worksbygenre():
     # get selected genres
     payload = request.get_json()

@@ -90,34 +90,6 @@ class SpotifyAPI(object):
         return response
 
 
-class SortFilter(object):
-
-    def get_era_filter(self, period):
-        date_minmax = []
-
-        with open('app/static/eras_filter.json') as f:
-            periodArray = json.load(f)
-
-            for era in periodArray:
-                if era[0] == period:
-                    if era[0] == "romantic" or era[0] == "20th":
-                        date_minmax = [era[1], era[2], "region"]
-                        break
-                    else:
-                        date_minmax = [era[1], era[2], "birth"]
-                        break
-                elif period == "common":
-                    date_minmax = [1500, 1907, "region"]
-                elif period == "early":
-                    date_minmax = [1000, 1600, "birth"]
-                elif period == "all":
-                    date_minmax = [1000, 2051, "region"]
-                else:
-                    date_minmax = [1500, 2051, "region"]
-
-        return date_minmax
-
-
 class ChangeAvatar(FlaskForm):
     choice = RadioField('Select an option:', choices=[('remove', 'Remove photo'), ('restore', 'Restore Spotify photo'), ('upload', 'Upload image')], default='upload')
     link = StringField('Option 1: Paste URL to image', description='Must be a .jpg or .png file smaller than 5 MB.', validators=[Length(min=0, max=2064)])

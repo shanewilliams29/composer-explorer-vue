@@ -21,7 +21,7 @@
           <b-spinner class="m-5"></b-spinner>
         </div>
         <div v-show="!loading" style="white-space: pre-line;">
-          <b-alert v-if="!workMatch" show variant="warning"><span style="font-size: 12px">Work info not found on Wikipedia. This article info may be relevant.</span></b-alert> <span> <h6 v-if="!workMatch"><span v-if="pageTitle">{{pageTitle}}</span></h6></span>
+          <b-alert v-if="!workMatch" show variant="warning"><b-icon icon="exclamation-circle-fill" variant="warning"></b-icon><span style="font-size: 12px">&nbsp;This Wikipedia article is the most relevant found.</span></b-alert> <span> <h6 v-if="!workMatch"><span v-if="pageTitle">{{pageTitle}}</span></h6></span>
           <div>{{ workBlurb }}<br />
             <a :href="wikiLink" target="_blank" class="wiki-link" v-if="pageTitle">
               <br />
