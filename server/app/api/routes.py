@@ -2,11 +2,10 @@ from app import db, sp, cache
 from flask import jsonify, request, session, abort, current_app
 from flask_login import current_user, login_required
 from config import Config
-from app.functions import prepare_composers, group_composers_by_region
+from app.functions import prepare_composers, group_composers_by_region, group_composers_by_alphabet
 from app.functions import prepare_works
 from app.models import ComposerList, WorkList, WorkAlbums, AlbumLike, Artists
 from app.models import ArtistList, User
-from app.classes import SortFilter
 from sqlalchemy import func, text, or_
 from app.api import bp
 import json
@@ -14,17 +13,26 @@ import jsonpickle
 import random
 
 
-@bp.route('/api/composers', methods=['GET'])
+@bp.route('/api/composers', methods=['GET'])  # main composer list
 # @cache.cached(query_string=True)
 def get_composers():
-    # look for search item
+    # look for search term or filter term
     search_item = request.args.get('search')
     composer_filter = request.args.get('filter')
-    # get_genres = request.args.get('genres')
 
-    eras = ['common', 'early', 'baroque', 'classical', 'romantic', '20th']
+    eras = {
+        'common': (1500, 1907),
+        'early': (1000, 1600),
+        'baroque': (1550, 1725),
+        'classical': (1711, 1800),
+        'romantic': (1770, 1875),
+        '20th': (1850, 2051),
 
-    # retrieve composers from database
+    }
+    datemin = 0
+    datemax = 0
+
+    # first search for composers if search term is present
     if search_item:
         search = "%{}%".format(search_item)
         composer_list = ComposerList.query \
@@ -32,100 +40,69 @@ def get_composers():
             .order_by(ComposerList.region, ComposerList.born).all()
         if len(composer_list) < 1:
             response_object = {'status': 'success'}
-            response_object['composers'] = composer_list
+            response_object['composers'] = []
             response = jsonify(response_object)
             return response
 
+    # if no search, filter composers
     elif composer_filter:
-        if composer_filter == "women":
-            composer_list = ComposerList.query \
-                .filter(ComposerList.female == True) \
-                .order_by(ComposerList.region, ComposerList.born).all()
-        if composer_filter == "catalogued":
-            composer_list = db.session.query(ComposerList)\
-                .join(WorkList, ComposerList.name_short == WorkList.composer)\
-                .order_by(ComposerList.region, ComposerList.born).all()
-        if composer_filter == "all":
-            composer_list = db.session.query(ComposerList)\
-                .filter(ComposerList.catalogued == True) \
-                .order_by(ComposerList.region, ComposerList.born).all()
-        if composer_filter == "alphabet":
-            composer_list = db.session.query(ComposerList)\
-                .filter(ComposerList.catalogued == True) \
-                .order_by(ComposerList.name_short, ComposerList.born).all()
-        if composer_filter == "popular":
-            composer_list = db.session.query(ComposerList)\
-                .filter(ComposerList.tier == 1) \
-                .order_by(ComposerList.region, ComposerList.born).all()
-        if composer_filter == "tier2":
-            composer_list = db.session.query(ComposerList)\
-                .filter(ComposerList.tier == 2, ComposerList.catalogued == True) \
-                .order_by(ComposerList.region, ComposerList.born).all()
-        if composer_filter == "tier3":
-            composer_list = db.session.query(ComposerList)\
-                .filter(ComposerList.tier == 3) \
-                .order_by(ComposerList.region, ComposerList.born).all()
-        if composer_filter == "tier4":
-            composer_list = db.session.query(ComposerList)\
-                .filter(ComposerList.tier == None) \
-                .order_by(ComposerList.region, ComposerList.born).all()
-        if composer_filter in eras:
-            sortfilter = SortFilter()
-            date_minmax_sort = sortfilter.get_era_filter(composer_filter)
-            datemin = date_minmax_sort[0]
-            datemax = date_minmax_sort[1]
 
-            composer_list = ComposerList.query \
-                .filter(ComposerList.born >= datemin, ComposerList.born < datemax, ComposerList.catalogued == True) \
-                .order_by(ComposerList.region, ComposerList.born).all()
+        # get datemin and datemax for era filtering
+        if composer_filter in eras:
+            datemin, datemax = eras[composer_filter]
+
+        # define a dictionary that maps filter names to the corresponding query
+        filter_queries = {
+            'women': ComposerList.query.filter_by(female=True),
+            'catalogued': ComposerList.query.join(WorkList, ComposerList.name_short == WorkList.composer),
+            'all': ComposerList.query.filter_by(catalogued=True),
+            'alphabet': ComposerList.query.filter_by(catalogued=True).order_by(ComposerList.name_short),
+            'popular': ComposerList.query.filter_by(tier=1, catalogued=True),
+            'tier2': ComposerList.query.filter_by(tier=2, catalogued=True),
+            'tier3': ComposerList.query.filter_by(tier=3, catalogued=True),
+            'tier4': ComposerList.query.filter_by(tier=None, catalogued=True),
+            'common': ComposerList.query.filter(ComposerList.catalogued == True, ComposerList.born >= datemin, ComposerList.born < datemax),
+            'early': ComposerList.query.filter(ComposerList.catalogued == True, ComposerList.born >= datemin, ComposerList.born < datemax),
+            'baroque': ComposerList.query.filter(ComposerList.catalogued == True, ComposerList.born >= datemin, ComposerList.born < datemax),
+            'classical': ComposerList.query.filter(ComposerList.catalogued == True, ComposerList.born >= datemin, ComposerList.born < datemax),
+            'romantic': ComposerList.query.filter(ComposerList.catalogued == True, ComposerList.born >= datemin, ComposerList.born < datemax),
+            '20th': ComposerList.query.filter(ComposerList.catalogued == True, ComposerList.born >= datemin, ComposerList.born < datemax),
+        }
+
+        # retrieve the appropriate query based on the filter name and sort
+        query = filter_queries.get(composer_filter)
+        composer_list = query.order_by(ComposerList.region, ComposerList.born).all()
 
     else:
+        # default to Tier 1 composers
         composer_list = db.session.query(ComposerList)\
             .filter(ComposerList.tier == 1) \
             .order_by(ComposerList.region, ComposerList.born).all()
 
-    # prepare list for display
+    # prepare key info from list for JSON response
     COMPOSERS = prepare_composers(composer_list)
 
+    # group onto alphabet
     if composer_filter == "alphabet":
-        # group onto alphabet
-        composers_by_region = {}
-        composers_in_region = []
-        i = 0
-        prev_region = COMPOSERS[i]['name_short'][0].upper()
-
-        while i < len(COMPOSERS):
-            region = COMPOSERS[i]['name_short'][0].upper()
-            if region == prev_region:
-                composers_in_region.append(COMPOSERS[i])
-                i += 1
-                if i == len(COMPOSERS):
-                    composers_by_region[prev_region] = composers_in_region
-            else:
-                composers_by_region[prev_region] = composers_in_region
-                composers_in_region = []
-                composers_in_region.append(COMPOSERS[i])
-                prev_region = region
-                i += 1
-                if i == len(COMPOSERS):
-                    composers_by_region[prev_region] = composers_in_region
-
+        composers_by_region = group_composers_by_alphabet(COMPOSERS)
+    
+    # group onto regions
     else:
-        # group onto regions
         composers_by_region = group_composers_by_region(COMPOSERS)
 
-    # get genres (for radio)
-    search_list = []
+    # store list of composers in session for radio use
+    composer_name_list = []
     for composer in composer_list:
-        search_list.append(composer.name_short)
-    
+        composer_name_list.append(composer.name_short)
+
+    session['radio_composers'] = composer_name_list
+    if Config.MODE == "DEVELOPMENT":
+        cache.set('composers', composer_name_list)  # store in cache for dev server
+
+    # get genres (for radio)
     with open('app/static/genres.json') as f:
         genre_list = json.load(f)
     genre_list = sorted(genre_list)
-
-    session['radio_composers'] = search_list
-    if Config.MODE == "DEVELOPMENT":
-        cache.set('composers', search_list)  # store in cache for dev server
 
     # return response
     response_object = {'status': 'success'}
@@ -135,26 +112,19 @@ def get_composers():
     return response
 
 
-@bp.route('/api/favoritescomposers', methods=['GET'])
+@bp.route('/api/favoritescomposers', methods=['GET'])  # favorites mode composer list
 def get_favoritescomposers():
     if current_user.is_authenticated:
         user_id = current_user.id
     elif Config.MODE == 'DEVELOPMENT':
-        user_id = 85  # 85
+        user_id = 85  #85
     else:
         user_id = None
 
+    # get favorite composers from database
     composer_list = db.session.query(ComposerList).join(WorkAlbums).join(AlbumLike)\
         .filter(AlbumLike.user_id == user_id)\
         .order_by(ComposerList.region, ComposerList.born).all()
-
-    search_list = []
-    for composer in composer_list:
-        search_list.append(composer.name_short)
-
-    session['radio_composers'] = search_list
-    if Config.MODE == "DEVELOPMENT":
-        cache.set('composers', search_list)  # store in cache for dev server 
 
     if not composer_list:
         response_object = {'status': 'success'}
@@ -163,10 +133,20 @@ def get_favoritescomposers():
         response = jsonify(response_object)
         return response
 
+    # store list of composers in session for radio use
+    composer_name_list = []
+    for composer in composer_list:
+        composer_name_list.append(composer.name_short)
+
+    session['radio_composers'] = composer_name_list
+    if Config.MODE == "DEVELOPMENT":
+        cache.set('composers', composer_name_list)  # store in cache for dev server
+
     # prepare list for display
     COMPOSERS = prepare_composers(composer_list)
     composers_by_region = group_composers_by_region(COMPOSERS)
 
+    # get genres (for radio)
     with open('app/static/genres.json') as f:
         genre_list = json.load(f)
     genre_list = sorted(genre_list)
@@ -179,20 +159,20 @@ def get_favoritescomposers():
     return response
 
 
-@bp.route('/api/multicomposers', methods=['POST'])  # used in radio mode
+@bp.route('/api/multicomposers', methods=['POST'])  # used in radio mode composer multi-select
 def get_multicomposers():
-    # get composers
+    # get composers and put in list
     composers = request.get_json()
-
     search_list = []
     for composer in composers:
         search_list.append(composer['value'])
 
-    # store composers in session
+    # store list of composers in session for radio use
     session['radio_composers'] = search_list
     if Config.MODE == "DEVELOPMENT":
         cache.set('composers', search_list)
 
+    # get selected composers from database
     composer_list = db.session.query(ComposerList)\
         .filter(ComposerList.name_short.in_(search_list)) \
         .order_by(ComposerList.region, ComposerList.born).all()
@@ -201,7 +181,7 @@ def get_multicomposers():
     COMPOSERS = prepare_composers(composer_list)
     composers_by_region = group_composers_by_region(COMPOSERS)
 
-    # genre categories
+    # get genre categories
     with open('app/static/genres.json') as f:
         genre_list = json.load(f)
     general_genre_list = sorted(genre_list)
@@ -228,18 +208,16 @@ def get_multicomposers():
     return response
 
 
-@bp.route('/api/composersradio', methods=['GET'])
-@cache.cached()
+@bp.route('/api/composersradio', methods=['GET'])  # used by radio to populate composer multiselect
+#@cache.cached()
 def get_composersradio():
-    # look for search item
-
-    composer_list = db.session.query(ComposerList)\
+    composer_list = db.session.query(ComposerList.name_short)\
         .filter(ComposerList.catalogued == True) \
         .order_by(ComposerList.name_short).all()
 
     name_list = []
-    for composer in composer_list:
-        name_list.append(composer.name_short)
+    for (item,) in composer_list:
+        name_list.append(item)
 
     # return response
     response_object = {'status': 'success'}
@@ -248,14 +226,13 @@ def get_composersradio():
     return response
 
 
-@bp.route('/api/works/<name>', methods=['GET'])
-# @cache.cached(query_string=True)
+@bp.route('/api/works/<name>', methods=['GET'])  # main works list API
 def get_works(name):
-    filter_method = request.args.get('filter')
+    # get filter and search terms
     search = request.args.get('search')
+    filter_method = request.args.get('filter')
 
-    # old ordering: WorkList.order, WorkList.genre, WorkList.date, WorkList.cat, WorkList.id
-
+    # first filter based on search term if present
     if search:
         works_list = WorkList.query.filter_by(composer=name)\
             .order_by(WorkList.order, WorkList.genre, WorkList.id).all()
@@ -269,23 +246,26 @@ def get_works(name):
 
         works_list = return_list
 
+    # next filter on filter item if present
     elif filter_method:
         if filter_method == "recommended":
             works_list = WorkList.query.filter_by(composer=name, recommend=True).order_by(WorkList.order, WorkList.genre, WorkList.id).all()
         else:
             works_list = WorkList.query.filter_by(composer=name)\
                 .order_by(WorkList.order, WorkList.genre, WorkList.id).all()
+    
+    # default to recommended works if no search or filter present
     else:
         works_list = WorkList.query.filter_by(composer=name, recommend=True)\
             .order_by(WorkList.order, WorkList.genre, WorkList.id).all()
 
     if not works_list:
         response_object = {'status': 'success'}
-        response_object['works'] = works_list
+        response_object['works'] = []
         response = jsonify(response_object)
         return response
 
-    # get liked works
+    # get the user's liked works
     if current_user.is_authenticated:
         user_id = current_user.id
     elif Config.MODE == 'DEVELOPMENT':
@@ -294,27 +274,28 @@ def get_works(name):
         user_id = None
 
     if user_id:
-        liked_works = db.session.query(WorkList).join(WorkAlbums).join(AlbumLike)\
+        liked_works = db.session.query(WorkList.id).join(WorkAlbums).join(AlbumLike)\
             .filter(AlbumLike.user_id == user_id, WorkList.composer == name).all()
     else:
         liked_works = []
 
+    # create list of liked work ids
     liked_works_ids = []
-    for work in liked_works:
-        liked_works_ids.append(work.id)
+    for (item,) in liked_works:
+        liked_works_ids.append(item)
 
-    # generate works list
+    # generate works list for JSON response
     works_by_genre = prepare_works(works_list, liked_works_ids)
 
+    # return response
     response_object = {'status': 'success'}
-    response_object['works'] = works_by_genre
+    response_object['works'] = works_by_genre  # for display
     response_object['playlist'] = works_list  # for back and previous playing
     response = jsonify(response_object)
     return response
 
 
-@bp.route('/api/favoriteworks/<name>', methods=['GET'])
-# @cache.cached(query_string=True)
+@bp.route('/api/favoriteworks/<name>', methods=['GET'])  # used in favorites mode
 def get_favoriteworks(name):
 
     # get liked works
@@ -330,19 +311,15 @@ def get_favoriteworks(name):
 
     if not works_list:
         response_object = {'status': 'success'}
-        response_object['works'] = works_list
+        response_object['works'] = []
         response = jsonify(response_object)
         return response
 
-    liked_works = works_list
-
-    liked_works_ids = []
-    for work in liked_works:
-        liked_works_ids.append(work.id)
-
     # generate works list
+    liked_works_ids = [work.id for work in works_list]
     works_by_genre = prepare_works(works_list, liked_works_ids)
 
+    # return response
     response_object = {'status': 'success'}
     response_object['works'] = works_by_genre
     response_object['playlist'] = works_list  # for back and previous playing
@@ -350,9 +327,9 @@ def get_favoriteworks(name):
     return response
 
 
-@bp.route('/api/worksbygenre', methods=['POST'])  # used in radio mode
+@bp.route('/api/worksbygenre', methods=['POST'])  # used in radio mode for work list
 def get_worksbygenre():
-    # get genres
+    # get selected genres
     payload = request.get_json()
 
     search_list = []
@@ -364,7 +341,7 @@ def get_worksbygenre():
     artist_name = payload['artist']
     radio_type = payload['radio_type']
 
-    # get composers selected
+    # get composers selected from session
     if not session.get('radio_composers'):
         composer_list = cache.get('composers')   # for dev server testing
     else:
@@ -377,6 +354,7 @@ def get_worksbygenre():
         response = jsonify(response_object)
         return response
 
+    # all genres selected
     if search_list[0] == "all":
         if artist_name:
             if work_filter == 'recommended':
@@ -406,18 +384,12 @@ def get_worksbygenre():
                     .order_by(WorkList.genre, WorkList.id).all()
 
     else:
-
+        # genres selected. Filter on artist, genres, obscurity
         conditions = []
         for genre in search_list:
             conditions.append(WorkList.genre.ilike('%{}%'.format(genre)))
-
-        for genre in search_list:
             conditions.append(WorkList.search.ilike('%{}%'.format(genre)))
-
-        for genre in search_list:
             conditions.append(WorkList.title.ilike('%{}%'.format(genre)))
-
-        for genre in search_list:
             conditions.append(WorkList.nickname.ilike('%{}%'.format(genre)))
 
         if artist_name:
@@ -458,9 +430,9 @@ def get_worksbygenre():
         response = jsonify(response_object)
         return response
 
+    # further filter results by search term if present
     if search_term:
         return_list = []
-        # search filtering
         for work in works_list:
             search_string = str(work.genre) + str(work.cat) + str(work.suite) + str(work.title) + str(work.nickname) + str(work.search)
             if search_term.lower() in search_string.lower():
@@ -507,6 +479,7 @@ def get_worksbygenre():
     # generate works list
     works_by_genre = prepare_works(final_works, liked_works_ids)
 
+    # return response
     response_object = {'status': 'success'}
     response_object['works'] = works_by_genre
     response_object['playlist'] = final_works  # for back and previous playing
@@ -901,7 +874,7 @@ def like_action(album_id, action):
 
 
 @bp.route('/api/composerinfo/<composer>', methods=['GET'])
-@cache.cached(query_string=True)
+#@cache.cached(query_string=True)
 def get_composerinfo(composer):
     composer_info = db.session.query(ComposerList)\
         .filter(ComposerList.name_short == composer).first()
@@ -920,7 +893,7 @@ def get_composerinfo(composer):
 
 
 @bp.route('/api/workinfo/<work_id>', methods=['GET'])
-@cache.cached(query_string=True)
+#@cache.cached(query_string=True)
 def get_workinfo(work_id):
     work = db.session.query(WorkList)\
         .filter(WorkList.id == work_id).first()
@@ -1043,7 +1016,7 @@ def get_artistworks():
 
 
 @bp.route('/api/artistlist', methods=['GET'])
-@cache.cached()
+#@cache.cached()
 def get_artistlist():
     artists = db.session.query(ArtistList).first()
 
