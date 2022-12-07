@@ -1,0 +1,71 @@
+{% extends "base.html" %} {% block head %} {{super()}}
+<link rel="stylesheet" type="text/css" href="{{url_for('static', filename='forum.css')}}" />
+{% endblock %} {% block app_content %} {% include 'forum/_header.html' %}
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/forum">Forum</a></li>
+        <li class="breadcrumb-item" active><b>{{ subforum.title}}</b></li>
+        <li class="breadcrumb-item"><a class="new-post" href="/addpost?sub={{ subforum.id }}">Start a New Thread</a></li>
+    </ol>
+</nav>
+
+
+
+{% if posts %}
+{% for post in posts.items %}
+    <div class="what-we-do2">
+        <div class="post">
+            <table class="forum_table">
+                <tr>
+                    <td width="48px" style="vertical-align: middle;">
+                        {% if current_user.is_authenticated %}
+                            {% if current_user.already_viewed(post) %}
+                            <div class="icon-box">
+                                <div class="icon"><span class="glyphicon glyphicon-comment"></span></div>
+                            </div>
+                            {% else %}
+                            <div class="icon-box-highlight">
+                                <div class="icon"><span class="glyphicon glyphicon-comment"></span></div>
+                            </div>
+                            {% endif %}
+                        {% else %}
+                        <div class="icon-box">
+                            <div class="icon"><span class="glyphicon glyphicon-comment"></span></div>
+                        </div>
+                        {% endif %}
+                    </td>
+                    <td style="vertical-align: middle;">
+
+                        {% if current_user.is_authenticated %}
+                            {% if current_user.already_viewed(post) %}
+                            <div>
+                                <a class="subforumtitleold" href="/viewpost/{{ post.id }}">{{ post.title }}</a> <span class="pull-right">{{ post.comments | length }} {% if post.comments | length == 1 %} reply {% else %} replies {% endif %}</span>
+                            </div>
+                            {% else %}
+                            <div>
+                                <a class="subforumtitlenew" href="/viewpost/{{ post.id }}">{{ post.title }}</a> <span class="pull-right">{{ post.comments | length }} {% if post.comments | length == 1 %} reply {% else %} replies {% endif %}</span>
+                            </div>
+                            {% endif %}
+                        {% else %}
+                             <div>
+                                <a class="subforumtitlenew" href="/viewpost/{{ post.id }}">{{ post.title }}</a> <span class="pull-right">{{ post.comments | length }} {% if post.comments | length == 1 %} reply {% else %} replies {% endif %}</span>
+                            </div>
+                        {% endif %}
+                        <div class="postusername">
+                            <span class="hide-mobile">by {{post.user.display_name}}</span>
+                            <div class="date">
+                                <span class="pull-right hide-mobile"><a href="/viewpost/{{ post.id }}?page={{((post.comments | length ) / 20) |round(0, 'ceil') |int}}">Last post</a> {{ moment(post.last_comment_date).fromNow() }} by <a href="/user/{{post.last_comment_username}}">{{post.last_commenter}}</a></span>
+                            </div>
+                        <span class="show-mobile">by {{post.user.display_name}}<br><span style="color:#8d95a5"><a href="/viewpost/{{ post.id }}?page={{((post.comments | length ) / 20) |round(0, 'ceil') |int}}">Last post</a> {{ moment(post.last_comment_date).fromNow() }}<br></span></span>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    {% endfor %}
+{% endif %}
+<br>
+
+{% endblock %}

@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block head %}
+{{super()}}
+<link rel="stylesheet" type="text/css" href="{{url_for('static', filename='forum.css')}}">
+  <script src='https://cdn.tiny.cloud/1/b1vp5muwfe97rjrskv7ohe917tocrkyj6zfkp3uecpj6nu2w/tinymce/5/tinymce.min.js' referrerpolicy="origin">
+  </script>
+  <script>
+    tinymce.init({
+      selector: '#mytextarea',
+       plugins: 'autolink autosave',
+      height: 300,
+      autosave_ask_before_unload: true,
+      autosave_interval: "30s",
+      autosave_prefix: "{path}{query}-{id}-",
+      autosave_restore_when_empty: false,
+      autosave_retention: "2m",
+      menubar: 'none',
+      plugins : 'advlist link image lists paste',
+      paste_as_text: true,
+      toolbar: 'undo redo | bold italic underline forecolor blockquote removeformat | link image '
+
+    });
+
+    function quote(name, contents){
+      var element = $('#' + contents).find( "p" ).text()
+      tinyMCE.activeEditor.selection.setContent('<blockquote><b>' + name + '</b> wrote:<br>' + element + '</blockquote>');
+    }
+
+
+  </script>
+{% endblock %}
+
+{% block app_content %}
+{% include 'forum/_header.html' %}
+
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="/forum">Forum</a></li>
+    <li class="breadcrumb-item"><a href="/subforum/{{ subforum.id}}">{{ subforum.title}}</a></li>
+    <li class="breadcrumb-item" active><b>Start a New Thread</b></li>
+  </ol>
+</nav>
+
+<form action="action_post?sub={{ subforum.id }}" method="POST">
+    <label for="exampleFormControlInput1">Title</label>
+	<input class="form-control" type="text" placeholder="Title" name="title" required><br>
+    <label for="exampleFormControlTextarea1">Body</label>
+	<textarea class="form-control" id="mytextarea" name="content"></textarea><br>
+	<button type="submit" class="btn btn-primary">Submit</button>
+</form>
+
+{% endblock %}

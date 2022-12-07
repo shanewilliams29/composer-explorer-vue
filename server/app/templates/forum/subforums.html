@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block head %}
+{{super()}}
+<link rel="stylesheet" type="text/css" href="{{url_for('static', filename='forum.css')}}">
+{% endblock %}
+{% block app_content %}
+{% include 'forum/_header.html' %}
+<nav aria-label="breadcrumb">
+   <ol class="breadcrumb">
+      <li class="breadcrumb-item" active><b>Forum</b></a></li>
+   </ol>
+</nav>
+{% for subforum in subforums %}
+{% if not subforum.hidden %}
+<div class=what-we-do2>
+   <div class="subforumlisting">
+      <table class="forum_table">
+         <tr>
+            <td width="48px" style="vertical-align: middle;">
+               <div class="icon-box">
+                  <div class="icon"><span class="{{ subforum.icon }}"></span></div>
+               </div>
+            </td>
+            <td style="vertical-align: middle;">
+               <div class="subforumtitlenew">
+                  <a href="/subforum/{{ subforum.id }}">
+                  {{ subforum.title}}
+                  </a><span class="pull-right hide-mobile" style="color:#8d95a5">{{ subforum.num_posts }} posts in {{ subforum.num_threads }} threads</span>
+               </div>
+               {% if subforum.last_post.postdate %}
+               <span class="pull-right hide-mobile" style="color:#8d95a5">Last post {{ moment(subforum.last_post.postdate).fromNow()}}</span>
+               {% endif %}
+               <div class="subforumdesc">
+                  {{ subforum.description}}
+                  {% if subforum.last_post.postdate %}
+                  <br><span class="show-mobile" style="color:#8d95a5">{{ subforum.num_posts }} posts · {{ moment(subforum.last_post.postdate).fromNow()}}</span>
+                  {% endif %}
+               </div>
+
+            </td>
+         </tr>
+      </table>
+   </div>
+</div>
+{% endif %}
+{% endfor %}
+<br>
+   <div class="subforumlisting">
+      {% if current_user.is_authenticated %}
+      Users online: {% set comma = joiner(", ") %}{% for user in users %}{{comma()}}<a href="/user/{{ user.username }}">{{user.display_name}}</a>{% endfor %}
+      {% else %}
+      Please <a href="/auth/login">log in</a> to post messages.
+      {% endif %}
+   </div>
+
+{% endblock %}

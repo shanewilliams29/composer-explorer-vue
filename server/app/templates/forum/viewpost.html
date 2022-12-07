@@ -1,0 +1,166 @@
+{% extends "base.html" %}
+{% block head %}
+{{super()}}
+<link rel="stylesheet" type="text/css" href="{{url_for('static', filename='forum.css')}}">
+  <script src='https://cdn.tiny.cloud/1/b1vp5muwfe97rjrskv7ohe917tocrkyj6zfkp3uecpj6nu2w/tinymce/5/tinymce.min.js' referrerpolicy="origin">
+  </script>
+  <script>
+    tinymce.init({
+      selector: '#mytextarea',
+       plugins: 'autolink autosave',
+    	height: 300,
+      autosave_ask_before_unload: true,
+	  	autosave_interval: "30s",
+	  	autosave_prefix: "{path}{query}-{id}-",
+	  	autosave_restore_when_empty: false,
+	  	autosave_retention: "2m",
+      menubar: 'none',
+      plugins : 'advlist link image lists paste',
+      paste_as_text: true,
+      toolbar: 'undo redo | bold italic underline forecolor blockquote removeformat | link image '
+
+    });
+
+    tinymce.init({
+      selector: '#editarea',
+       plugins: 'autolink autosave',
+      height: 300,
+      autosave_ask_before_unload: true,
+      autosave_interval: "30s",
+      autosave_prefix: "{path}{query}-{id}-",
+      autosave_restore_when_empty: false,
+      autosave_retention: "2m",
+      menubar: 'none',
+      plugins : 'advlist link image lists paste',
+      paste_as_text: true,
+      toolbar: 'undo redo | bold italic underline forecolor blockquote removeformat | link image '
+
+    });
+
+    function quote(name, contents){
+      var element = $('#' + contents).find( "p" ).text();
+    	tinyMCE.get("mytextarea").selection.setContent('<blockquote><b>' + name + '</b> wrote:<br>' + element + '</blockquote>');
+    }
+
+      function edit(type, id, contents){
+      $('#edit-modal').modal('show');
+      $('#comment_id').val(id);
+      if (type == "comment"){
+        $('#editform').attr('action', '/edit_comment?post={{ post.id }}&page={{ request.args.get("page") or 1 }}')
+      }
+      if (type == "post"){
+        $('#editform').attr('action', '/edit_post?post={{ post.id }}&page={{ request.args.get("page") or 1 }}')
+      }
+
+      tinyMCE.get("editarea").setContent(contents);
+    }
+
+
+  </script>
+{% endblock %}
+
+{% block app_content %}
+{% include 'forum/_header.html' %}
+
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="/forum">Forum</a></li>
+    <li class="breadcrumb-item"><a href="/subforum/{{ post.subforum.id}}">{{ post.subforum.title}}</a></li>
+    <li class="breadcrumb-item" active><b>{{ post.title}}</b></li>
+
+  </ol>
+</nav>
+{%if comments.page == 1 %}
+<div class="post">
+  <table class="forum_table">
+    <tr>
+        <td width="43px" style="vertical-align: top;">
+            
+            <img class="forum_avatar" src="{{ post.user.avatar(30)}}" />
+            
+        </td>
+        <td style="vertical-align: top;">
+            <b><p>
+            {{ post.user.display_name }}</b>
+            {% if current_user.is_authenticated %}{% if current_user.username != post.user.username%}&nbsp;<a style="color:#8d95a5" href="#mytextarea" onclick="quote('{{ post.user.display_name }}','{{ post.id }}')">Quote</a>{% endif %}{% endif %}
+            {% if current_user.is_authenticated %}{% if current_user.username == post.user.username%}&nbsp;<a style="color:#8d95a5" href="#mytextarea" onclick='edit("post","{{ post.id }}",{{ post.content|tojson }})'>Edit</a>{% endif %}{% endif %}
+            {% if current_user.is_authenticated %}{% if current_user.admin %}<a class="pull-right" href="/delete_forum_thread/{{post.id}}" style="color:#8d95a5">&nbsp;X</a>{% endif %}{% endif %}<span class="pull-right" style="color:#8d95a5">{{ moment(post.postdate).fromNow()}}</span></p>
+            <div class="comment_text" id="{{ post.id }}" style="white-space: pre-line;">{{ post.content|safe }}</div>
+        </td>
+    </tr>
+</table>
+</div>
+{% endif %}
+
+{%if comments%}
+{% for comment in comments.items %}
+<div class="post">
+	<table class="forum_table">
+    <tr>
+        <td width="43px" style="vertical-align: top;">
+            
+              <img class="forum_avatar" src="{{ comment.user.avatar(30)}}" />
+            
+        </td>
+        <td style="vertical-align: top;">
+            <b><p>
+            {{ comment.user.display_name }}</b>
+            {% if current_user.is_authenticated %}{% if current_user.username != comment.user.username%}&nbsp;<a style="color:#8d95a5" href="#mytextarea" onclick="quote('{{ comment.user.display_name }}','{{ comment.id }}')">Quote</a>{% endif %}{% endif %}
+            {% if current_user.is_authenticated %}{% if current_user.username == comment.user.username%}&nbsp;<a style="color:#8d95a5" href="#mytextarea" onclick='edit("comment","{{ comment.id }}",{{ comment.content|tojson }})'>Edit</a>{% endif %}{% endif %}
+            {% if current_user.is_authenticated %}{% if current_user.admin %}<a class="pull-right" href="/delete_forum_comment/{{comment.id}}" style="color:#8d95a5">&nbsp;X</a>{% endif %}{% endif %}<span class="pull-right" style="color:#8d95a5">{{ moment(comment.postdate).fromNow()}}</span></p></p>
+
+            <div class="comment_text" id="{{ comment.id }}" style="white-space: pre-line;">{{ comment.content|safe }}</div>
+        </td>
+    </tr>
+</table>
+</div>
+{% endfor %}
+{% endif %}
+<div class="right" style="text-align: right;">
+<br>
+</div>
+{% if current_user.is_authenticated %}
+<div>
+<form action="/action_comment?post={{ post.id }}&page={{comments.pages}}" method="POST">
+  <div class="form-group">
+    <label for="exampleFormControlTextarea1">Post Reply</label>
+    <textarea class="form-control" id="mytextarea" name="content" rows="6"></textarea>
+  </div>
+  <button type="submit" value="Comment" class="btn btn-primary">Submit</button>
+</form>
+</div>
+<br><br><br>
+{% else %}
+   <div class="subforumlisting">
+      Please <a href="/auth/login">log in</a> to reply.
+   </div>
+  {% endif %}
+
+<div class="modal fade" id="edit-modal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Edit Post</h5>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id="editform" action="" method="POST">
+          <div class="form-group">
+            <textarea class="form-control" id="editarea" name="content" rows="6"></textarea>
+            <input type="hidden" id="comment_id" name="comment_id" value="" />
+          </div>
+      </div>
+      <div class="modal-footer">
+        <button type="submit" value="Comment" class="btn btn-primary">Submit</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+
+
+{% endblock %}
+
+

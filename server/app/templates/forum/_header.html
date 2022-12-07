@@ -1,0 +1,57 @@
+<style>
+.container .jumbotron {
+    position: relative;
+    background: url("https://storage.googleapis.com/composer-explorer.appspot.com/headers/Orchestral.jpg") no-repeat center center;
+    background-size: cover;
+    color: white;
+    border-radius: 0px
+    border-radius: 6px ;
+
+}
+.jumbotron > .overlay {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-image: linear-gradient(to bottom left, rgb(52,58,64, 0.4), rgb(52,58,64, 1));
+/*    background-color: rgb(52,58,64, 0.80);*/
+    z-index: 1;
+    border-radius: 6px ;
+}
+
+.jumbotron > .inner {
+    position: relative;
+    z-index: 2;
+}
+
+body{
+    background: #f1f2f4;
+}
+
+.rcorners{
+  border-radius: 6px;
+  background: #fff;
+  border: 1px solid #d4d7dd;
+  padding: 20px;
+  padding-bottom: 0px;
+  margin-bottom: 10px;
+}
+
+</style>
+
+<div class="jumbotron">
+    <div class="overlay"></div>
+    <div class="inner">
+    <h1>Forum</h1>
+    <h3></h3>
+</div>
+</div>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+{% if messages %}
+     {% for category, message in messages %}
+    <div class="alert alert-{{category}}" role="alert">{{ message }}</div>
+    {% endfor %}
+{% endif %}
+{% endwith %}

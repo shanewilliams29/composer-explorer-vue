@@ -67,6 +67,11 @@ def custom_css():
     return send_from_directory('static', 'custom.css')
 
 
+@bp.route("/forum.css")
+def forum_css():
+    return send_from_directory('static', 'forum.css')
+
+
 @bp.route('/html/user_list')
 def user_list():
 
