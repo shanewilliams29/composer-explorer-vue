@@ -20,6 +20,8 @@ def create_app(config_class=Config):
     app = Flask(__name__, static_folder='../dist', static_url_path='/', template_folder='templates')
     app.config.from_object(config_class)
 
+    app.jinja_env.add_extension('jinja2.ext.do')
+
     # enable CORS in development mode
     if Config.MODE == "DEVELOPMENT":
         CORS(app, automatic_options=True, support_credentials=True)

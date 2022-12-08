@@ -117,7 +117,7 @@
 {% endfor %}
 {% endif %}
 <div class="right" style="text-align: right;">
-<br>
+{{ render_pagination(comments) }}
 </div>
 {% if current_user.is_authenticated %}
 <div>

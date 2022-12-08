@@ -3,7 +3,7 @@
    additionally passing on all keyword_arguments (may overwrite existing ones)
  #}
 {%- with kargs = base.copy() -%}
-{%- kargs.update(kwargs) -%}
+{%- do kargs.update(kwargs) -%}
 {{url_for(endpoint, **kargs)}}
 {%- endwith %}
 {%- endmacro %}
@@ -18,7 +18,7 @@
                            )
 -%}
 {% with url_args = {} %}
-{%- url_args.update(request.view_args if not endpoint else {}),
+{%- do url_args.update(request.view_args if not endpoint else {}),
        url_args.update(request.args if not endpoint else {}),
        url_args.update(args) -%}
 {% with endpoint = endpoint or request.endpoint %}

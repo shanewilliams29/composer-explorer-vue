@@ -82,15 +82,15 @@ def viewpost(post_id):
     return render_template("forum/viewpost.html", post=post, comments=comments, title=post.title)
 
 
-@ login_required
 @ bp.route('/action_comment', methods=['POST', 'GET'])
+@ login_required
 def comment():
     page = int(request.args.get("page", 1))
     post_id = int(request.args.get("post"))
     post = ForumPost.query.filter(ForumPost.id == post_id).first()
     if not post:
         flash("That post does not exist!", "danger")
-        return redirect(url_for("forum"))
+        return redirect(url_for("forum.forum"))
     content = request.form['content']
     postdate = datetime.datetime.utcnow()
     comment = ForumComment(content, postdate)
@@ -104,15 +104,15 @@ def comment():
     return redirect("/viewpost/" + str(post_id) + "?page=" + str(page))
 
 
-@ login_required
 @ bp.route('/edit_post', methods=['POST', 'GET'])
+@ login_required
 def edit_post():
     page = int(request.args.get("page", 1))
     post_id = int(request.args.get("post"))
     post = ForumPost.query.filter(ForumPost.id == post_id).first()
     if not post:
         flash("That post does not exist!", "danger")
-        return redirect(url_for("forum"))
+        return redirect(url_for("forum.forum"))
 
     content = request.form['content']
 
@@ -126,15 +126,16 @@ def edit_post():
     return redirect("/viewpost/" + str(post_id))
 
 
-@ login_required
+
 @ bp.route('/edit_comment', methods=['POST', 'GET'])
+@ login_required
 def edit_comment():
     page = int(request.args.get("page", 1))
     post_id = int(request.args.get("post"))
     post = ForumPost.query.filter(ForumPost.id == post_id).first()
     if not post:
         flash("That post does not exist!", "danger")
-        return redirect(url_for("forum"))
+        return redirect(url_for("forum.forum"))
     comment_id = request.form['comment_id']
     content = request.form['content']
 
