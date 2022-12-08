@@ -6,7 +6,9 @@
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="/forum">Forum</a></li>
         <li class="breadcrumb-item" active><b>{{ subforum.title}}</b></li>
+        {% if current_user.is_authenticated %}
         <li class="breadcrumb-item"><a class="new-post" href="/addpost?sub={{ subforum.id }}">Start a New Thread</a></li>
+        {% endif %}
     </ol>
 </nav>
 
