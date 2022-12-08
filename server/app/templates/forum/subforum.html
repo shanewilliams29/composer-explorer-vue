@@ -57,7 +57,7 @@
                         <div class="postusername">
                             <span class="hide-mobile">by {{post.user.display_name}}</span>
                             <div class="date">
-                                <span class="pull-right hide-mobile"><a href="/viewpost/{{ post.id }}?page={{((post.comments | length ) / 20) |round(0, 'ceil') |int}}">Last post</a> {{ moment(post.last_comment_date).fromNow() }} by <a href="/user/{{post.last_comment_username}}">{{post.last_commenter}}</a></span>
+                                <span class="pull-right hide-mobile"><a href="/viewpost/{{ post.id }}?page={{((post.comments | length ) / 20) |round(0, 'ceil') |int}}">Last post</a> {{ moment(post.last_comment_date).fromNow() }} by {{post.last_commenter}}</span>
                             </div>
                         <span class="show-mobile">by {{post.user.display_name}}<br><span style="color:#8d95a5"><a href="/viewpost/{{ post.id }}?page={{((post.comments | length ) / 20) |round(0, 'ceil') |int}}">Last post</a> {{ moment(post.last_comment_date).fromNow() }}<br></span></span>
                         </div>
