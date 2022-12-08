@@ -8,6 +8,7 @@ from app.models import ComposerList, WorkList, WorkAlbums, AlbumLike, Artists
 from app.models import ArtistList, User
 from sqlalchemy import func, text, or_
 from app.api import bp
+from unidecode import unidecode
 import json
 import jsonpickle
 import random
@@ -241,7 +242,7 @@ def get_works(name):
 
         for work in works_list:
             search_string = str(work.genre) + str(work.cat) + str(work.suite) + str(work.title) + str(work.nickname) + str(work.search)
-            if search.lower() in search_string.lower():
+            if search.lower() in unidecode(search_string.lower()):
                 return_list.append(work)
 
         works_list = return_list
