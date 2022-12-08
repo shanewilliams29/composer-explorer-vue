@@ -15,6 +15,7 @@
             <b-nav-item id="performer" :active='$route.name == "performers"' @click="$router.push('/performers')"><b-icon-person-lines-fill></b-icon-person-lines-fill>&nbsp;&nbsp;Performers</b-nav-item>
             <b-nav-item v-if="$auth.clientToken" id="favorites" :active='$route.name == "favorites"' @click="$router.push('/favorites')"> <b-icon-heart></b-icon-heart>&nbsp;&nbsp;Favorites</b-nav-item>
             <b-nav-item id="radio" :active='$route.name == "radio"' @click="$router.push('/radio')"> <img :src="radioImgURL" class="radio-img" height="22px" />&nbsp;&nbsp;Radio</b-nav-item>
+            <b-nav-item id="forum" href="/forum" target="_blank"> <b-icon-chat-right-text></b-icon-chat-right-text>&nbsp;&nbsp;Forum</b-nav-item>
           </b-nav>
         </div>
         <b-navbar-nav class="ml-auto" v-if="!$auth.clientToken">
@@ -36,7 +37,6 @@
             <template #button-content>
               <b-avatar href="#" :src="$auth.avatar"></b-avatar>
             </template>
-            <b-dropdown-item v-if="!$view.mobile" href="/forum" target="_blank">Discussion Forum</b-dropdown-item>
             <b-dropdown-item v-if="!$view.mobile" href="/change_avatar">Change Avatar</b-dropdown-item>
             <b-dropdown-item href="/log_out">Log out</b-dropdown-item>
           </b-dropdown>

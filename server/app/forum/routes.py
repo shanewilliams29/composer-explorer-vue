@@ -1,11 +1,10 @@
-from flask import *
+from flask import render_template, request, url_for, flash, redirect
 import datetime
-from sqlalchemy import *
+from sqlalchemy import func
 from app.models import ForumPost, Subforum, ForumComment, User
 from flask_login import current_user, login_required
 from app import db
 from app.forum import bp
-from app.forum.classes import ForumStatistics
 
 
 @bp.route('/forum')
@@ -39,7 +38,6 @@ def forum():
 
     # get online users
     onlinecheck = datetime.datetime.utcnow() - datetime.timedelta(minutes=5)
-    # users = User.query.order_by(User.last_seen.desc()).all()
     users = db.session.query(User).filter(User.last_seen > onlinecheck).order_by(User.last_seen.desc()).all()
 
     return render_template("forum/subforums.html", users=users, subforums=subforums, title="Forum")
@@ -117,7 +115,6 @@ def edit_post():
         return redirect(url_for("forum"))
 
     content = request.form['content']
-    postdate = datetime.datetime.utcnow()
 
     if not current_user.id == post.user_id:
         flash("That is not your post to edit!", "danger")
@@ -140,7 +137,7 @@ def edit_comment():
         return redirect(url_for("forum"))
     comment_id = request.form['comment_id']
     content = request.form['content']
-    postdate = datetime.datetime.utcnow()
+
     comment = ForumComment.query.filter(ForumComment.id == comment_id).first()
     if not comment:
         flash("That comment does not exist!", "danger")
@@ -149,11 +146,6 @@ def edit_comment():
         flash("That is not your comment to edit!", "danger")
         return redirect(url_for("forum.forum"))
     comment.content = content
-    # current_user.forum_comments.append(comment)
-    # post.last_commenter = current_user.display_name
-    # post.last_comment_username = current_user.username
-    # post.last_comment_date = datetime.datetime.utcnow()
-    # post.comments.append(comment)
     db.session.commit()
     flash("Your comment has been edited.", "info")
     return redirect("/viewpost/" + str(post_id) + "?page=" + str(page))
