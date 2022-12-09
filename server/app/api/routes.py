@@ -407,6 +407,7 @@ def get_worksbygenre():
         user_id = None
 
     liked_works = query.join(WorkAlbums).join(AlbumLike)\
+        .order_by(WorkList.genre, WorkList.id)\
         .filter(AlbumLike.user_id == user_id).all()
 
     if radio_type == "favorites" and user_id:
@@ -513,8 +514,11 @@ def exportplaylist():
         query_filter = filter_map.get(work_filter)
         query = query.filter(query_filter)
 
-        # filter out unnecessary albums
-        query = query.filter(WorkList.album_count > 0, WorkAlbums.hidden != True, WorkAlbums.album_type != "compilation", WorkAlbums.work_track_count <= limit)
+        # filter out favorites or limited albums
+        if radio_type == 'favorites': 
+            query = query.filter(AlbumLike.user_id == user_id, WorkList.album_count > 0, WorkAlbums.hidden != True)
+        else:
+            query = query.filter(WorkList.album_count > 0, WorkAlbums.hidden != True, WorkAlbums.album_type != "compilation", WorkAlbums.work_track_count <= limit)
 
         # order the query results
         query = query.outerjoin(AlbumLike)\
