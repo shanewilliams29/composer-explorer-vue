@@ -259,7 +259,7 @@ class ArtistAlbums(db.Model):
 class Artists(db.Model):
 
     id = db.Column(db.String(128), primary_key=True)
-    name = db.Column(db.String(256))
+    name = db.Column(db.String(256), index=True)
     workid = db.Column(db.String(24), db.ForeignKey('work_list.id'))
     album_id = db.Column(db.String(46), db.ForeignKey('work_albums.id'))
     composer = db.Column(db.String(48))
