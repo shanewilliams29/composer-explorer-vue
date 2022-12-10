@@ -469,6 +469,7 @@ def exportplaylist():
         composer_list = session['radio_composers']
         user_id = current_user.id
 
+    # build the database query
     if prefetch:
 
         # create the base query
@@ -504,7 +505,7 @@ def exportplaylist():
             conditions2.append(WorkList.cat.ilike('%{}%'.format(search_term)))
             query = query.filter(or_(*conditions2))
 
-        # filter the query based on the work filter value
+        # filter the query based on the work obscurity filter value
         filter_map = {
             "all": WorkList.album_count > 0,
             "recommended": WorkList.recommend == True,
@@ -523,18 +524,18 @@ def exportplaylist():
         # order the query results
         query = query.outerjoin(AlbumLike)\
             .group_by(WorkAlbums.id)\
-            .order_by(WorkList.genre, WorkList.id, func.count(AlbumLike.id).desc(), WorkAlbums.score.desc())
+            .order_by(WorkList.genre, WorkList.id, func.count(AlbumLike.id).desc(), WorkAlbums.score.desc())\
 
-        # execute
-        sql = query.statement.compile(compile_kwargs={"literal_binds": True})
-        # explain = db.session.execute(f'EXPLAIN {sql}').all()
-        print(sql)
+        # make subquery
+        t = query.subquery('t')
 
-        # album_list = query.all()
-        # print("DONE GETTING LIST")
+        query = db.session.query(t).group_by(t.c.workid)
 
-        #album_list = db.session.execute(query).fetchall()
+        # execute the query
         album_list = query.all()
+        print(len(list(album_list)))
+        sql = query.statement.compile(compile_kwargs={"literal_binds": True})
+        print(sql)
 
         if not album_list:
             abort(404)
@@ -542,7 +543,7 @@ def exportplaylist():
         # get only one album for each work, either best or random
 
         def select_album(albums):
-            # Select either the best or a random album from the given list
+            # Select either the best (first) or a random album from the given list
             if random_album:
                 return random.choice(albums)
             else:
