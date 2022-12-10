@@ -472,7 +472,7 @@ def exportplaylist():
     if prefetch:
 
         # create the base query
-        query = db.session.query(WorkAlbums)
+        query = db.session.query(WorkAlbums.workid, WorkAlbums.data)
 
         # filter the query based on the composer list
         query = query.filter(WorkList.composer.in_(composer_list))
@@ -530,48 +530,50 @@ def exportplaylist():
         # explain = db.session.execute(f'EXPLAIN {sql}').all()
         print(sql)
 
+        # album_list = query.all()
+        # print("DONE GETTING LIST")
+
+        #album_list = db.session.execute(query).fetchall()
         album_list = query.all()
 
         if not album_list:
             abort(404)
 
-        hold_albums = []
-        best_albums = []
-        prev_album_workid = ""
-        for album in album_list:
-            if album.workid == prev_album_workid:
-                if random_album:  # for randomizing albums
-                    hold_albums.append(album)
-                else:
-                    pass
+        # get only one album for each work, either best or random
+
+        def select_album(albums):
+            # Select either the best or a random album from the given list
+            if random_album:
+                return random.choice(albums)
             else:
-                if random_album and len(best_albums) > 0 and len(hold_albums) > 0:
-                    integer = random.randint(0, len(hold_albums) - 1)  # replace with random
-                    best_albums[-1] = hold_albums[integer]
-                    hold_albums = []
+                return albums[0]
 
-                # if search_term:  # search filter screening
-                #     search_string = str(tup[0].work.genre) + str(tup[0].work.cat) + str(tup[0].work.suite) + str(tup[0].work.title) + str(tup[0].work.nickname) + str(tup[0].work.search)
-                #     if search_term.lower() in search_string.lower():
-                #         best_albums.append(tup[0])
-                #         prev_album_workid = tup[0].workid
-                else:
-                    best_albums.append(album)
-                    prev_album_workid = album.workid
+        # Initialize an empty set to store the unique work ids that have been processed
+        processed_works = set()
 
-        # last replacement
-        if random_album and len(best_albums) > 0 and len(hold_albums) > 0:
-            integer = random.randint(0, len(hold_albums) - 1)  # replace with random
-            best_albums[-1] = hold_albums[integer]
-    
+        # Initialize an empty dict to store the albums for each work
+        work_albums = {}
+
+        for album in album_list:
+            work_id = album.workid
+            if work_id not in processed_works:
+                # If this is the first album for this work, add it to the dict
+                work_albums[work_id] = [album]
+                processed_works.add(work_id)
+            else:
+                # If this is not the first album for this work, add it to the list of albums for this work
+                work_albums[work_id].append(album)
+
+        # Select the best or a random album for each work and add it to the list of selected albums
+        selected_albums = [select_album(albums) for albums in work_albums.values()]
+
+        # Get album tracks
         tracklist = []
-        for album in best_albums:
+        for album in selected_albums:
             album = json.loads(album.data)
 
             for track in album['tracks']:
                 tracklist.append(track[1])
-
-        print("DONE")
 
         cache.set('tracks', tracklist)
 
