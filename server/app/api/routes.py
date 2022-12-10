@@ -528,7 +528,6 @@ def exportplaylist():
 
         # make subquery
         t = query.subquery('t')
-
         query = db.session.query(t).group_by(t.c.workid)
 
         # execute the query
@@ -540,37 +539,9 @@ def exportplaylist():
         if not album_list:
             abort(404)
 
-        # get only one album for each work, either best or random
-
-        def select_album(albums):
-            # Select either the best (first) or a random album from the given list
-            if random_album:
-                return random.choice(albums)
-            else:
-                return albums[0]
-
-        # Initialize an empty set to store the unique work ids that have been processed
-        processed_works = set()
-
-        # Initialize an empty dict to store the albums for each work
-        work_albums = {}
-
-        for album in album_list:
-            work_id = album.workid
-            if work_id not in processed_works:
-                # If this is the first album for this work, add it to the dict
-                work_albums[work_id] = [album]
-                processed_works.add(work_id)
-            else:
-                # If this is not the first album for this work, add it to the list of albums for this work
-                work_albums[work_id].append(album)
-
-        # Select the best or a random album for each work and add it to the list of selected albums
-        selected_albums = [select_album(albums) for albums in work_albums.values()]
-
         # Get album tracks
         tracklist = []
-        for album in selected_albums:
+        for album in album_list:
             album = json.loads(album.data)
 
             for track in album['tracks']:
