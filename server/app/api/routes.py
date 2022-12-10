@@ -521,19 +521,22 @@ def exportplaylist():
         else:
             query = query.filter(WorkList.album_count > 0, WorkAlbums.hidden != True, WorkAlbums.album_type != "compilation", WorkAlbums.work_track_count <= limit)
 
-        # order the query results
-        query = query.outerjoin(AlbumLike)\
-            .group_by(WorkAlbums.id)\
-            .order_by(WorkList.genre, WorkList.id, func.count(AlbumLike.id).desc(), WorkAlbums.score.desc())\
+        # order the query results either randomly or top album for each work
+        query = query.outerjoin(AlbumLike).group_by(WorkAlbums.id)
 
-        # make subquery
+        if random_album:
+            query = query.order_by(WorkList.genre, WorkList.id, func.random())
+        else:
+            query = query.order_by(WorkList.genre, WorkList.id, func.count(AlbumLike.id).desc(), WorkAlbums.score.desc())
+
+        # make subquery and get first album of each work
         t = query.subquery('t')
         query = db.session.query(t).group_by(t.c.workid)
 
         # execute the query
         album_list = query.all()
         print(len(list(album_list)))
-        sql = query.statement.compile(compile_kwargs={"literal_binds": True})
+        sql = query.statement.compile()
         print(sql)
 
         if not album_list:
@@ -556,7 +559,6 @@ def exportplaylist():
         return response
 
     # submit to Spotify
-
     if Config.MODE == "DEVELOPMENT":
         session['spotify_token'] = cache.get('token')  # store in cache for dev
         user_id = '12173954849'
@@ -568,9 +570,10 @@ def exportplaylist():
     try:
         response = sp.create_playlist(name, user_id)
         playlist_id = response.json()['id']
-    except:
+    except Exception:
         return response.json()
 
+    # send in batches of 50 tracks to Spotify
     i = 0
     k = 0
     uristring = ""
@@ -587,27 +590,8 @@ def exportplaylist():
         else:
             track = "spotify:track:" + track + ","
             uristring = uristring + track
-            #print(str(i) + " " + str(k) + " " + str(len(tracklist)))
 
     return response.json()
-
-    # if search_term:
-    #     return_list = []
-    #     # search filtering
-    #     for work in works_list:
-    #         search_string = str(work.genre) + str(work.cat) + str(work.suite) + str(work.title) + str(work.nickname) + str(work.search)
-    #         if search_term.lower() in search_string.lower():
-    #             return_list.append(work)
-
-    #     if not return_list:
-    #         response_object = {'status': 'success'}
-    #         response_object['works'] = return_list
-    #         response = jsonify(response_object)
-    #         return response
-    #     else:
-    #         works_list = return_list
-
-    # need playlist
 
 
 @bp.route('/api/albums/<work_id>', methods=['GET'])
