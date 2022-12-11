@@ -1,9 +1,12 @@
 <template>
   <div>
-    <b-card class="shadow-sm" v-for="album in albums" :key="album.id" :id="album.id" no-body header-tag="header" :class="{'highlight': (album.id == selectedAlbum)}">
+    <b-card class="shadow-sm" v-for="album in albums" :key="album.id" :id="album.id" no-body header-tag="header" :class="{'highlight': (album.id == selectedAlbum)}" @mouseover="showCover = album.id" @mouseleave="showCover = false">
+      <div class="popup" v-if="showCover == album.id">
+        <img :src="album.img_big" />
+      </div>
       <div class="row">
         <b-col cols="auto" class="album_columns">
-          <img class="album-img-small" @click="$parent.selectRow(album.id); $parent.getAlbumData(album.id);" v-lazy="album.album_img" />
+          <img class="album-img-small" @click="$parent.selectRow(album.id); $parent.getAlbumData(album.id);" v-lazy="album.album_img"/>
         </b-col>
         <b-col class="album_text_columns">
           <b-card-text>
@@ -57,6 +60,7 @@ export default {
   },
   data() {
     return {
+      showCover: false,
       spotifyLogoURLWhite: staticURL + "Spotify_Icon_RGB_White.png",
       spotifyLogoURLBlack: staticURL + "Spotify_Icon_RGB_Black.png",
     };
@@ -65,6 +69,14 @@ export default {
 </script>
 
 <style scoped>
+.popup{
+  position: fixed; 
+  top: 50%; 
+  left: 33%; 
+  transform: translate(-50%, -50%);
+  z-index: 9999;
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+}
 .album-img-small{
   border-top-left-radius: 0.25rem;
   border-bottom-left-radius: 0.25rem;

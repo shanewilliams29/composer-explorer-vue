@@ -7,13 +7,13 @@ from app.functions import prepare_works
 from app.models import ComposerList, WorkList, WorkAlbums, AlbumLike, Artists
 from app.models import ArtistList, User
 from sqlalchemy import func, text, or_, and_
-from sqlalchemy.orm import aliased
 from app.api import bp
 from unidecode import unidecode
 import json
 import jsonpickle
 import random
 import re
+import string
 
 
 @bp.route('/api/composers', methods=['GET'])  # main composer list
@@ -469,7 +469,7 @@ def exportplaylist():
         composer_list = session['radio_composers']
         user_id = current_user.id
 
-    # build the database query
+    # build the database query while user types in playlist name
     if prefetch:
 
         # create the base query
@@ -535,9 +535,6 @@ def exportplaylist():
 
         # execute the query
         album_list = query.all()
-        print(len(list(album_list)))
-        sql = query.statement.compile()
-        print(sql)
 
         if not album_list:
             abort(404)
@@ -552,13 +549,14 @@ def exportplaylist():
 
         cache.set('tracks', tracklist)
 
+        # return response
         response_object = {'status': 'success'}
         response_object['track_count'] = len(tracklist)
         response = jsonify(response_object)
 
         return response
 
-    # submit to Spotify
+    # submit to Spotify when user presses submit
     if Config.MODE == "DEVELOPMENT":
         session['spotify_token'] = cache.get('token')  # store in cache for dev
         user_id = '12173954849'
@@ -594,85 +592,85 @@ def exportplaylist():
     return response.json()
 
 
-@bp.route('/api/albums/<work_id>', methods=['GET'])
+@bp.route('/api/albums/<work_id>', methods=['GET'])  # retrieves albums for a given work
 def get_albums(work_id):
     page = request.args.get('page', 1, type=int)
 
     # get filter and search arguments
-    artistselect = request.args.get('artist')
+    artist_name = request.args.get('artist')
     sort = request.args.get('sort')
     limit = request.args.get('limit', default=100)
     favorites = request.args.get('favorites', default=None)
-    search = None
 
-    if artistselect:
-        search = "%{}%".format(artistselect)
+    # base query
+    query = db.session.query(WorkAlbums.id,
+                             WorkAlbums.workid, 
+                             WorkAlbums.hidden, 
+                             WorkAlbums.work_track_count, 
+                             WorkAlbums.album_type, 
+                             WorkAlbums.score, 
+                             WorkAlbums.data, 
+                             WorkAlbums.img, 
+                             WorkAlbums.track_count,
+                             WorkAlbums.label,
+                             WorkAlbums.composer,
+                             func.count(AlbumLike.id).label('total'))\
+        .outerjoin(AlbumLike).group_by(WorkAlbums.id)
 
-    if search:
-        albums = db.session.query(WorkAlbums, func.count(AlbumLike.id).label('total')) \
-            .filter(WorkAlbums.workid == work_id, WorkAlbums.hidden != True, WorkAlbums.artists.ilike(search), WorkAlbums.work_track_count <= limit, WorkAlbums.album_type != "compilation") \
-            .outerjoin(AlbumLike).group_by(WorkAlbums) \
-            .order_by(text('total DESC'), WorkAlbums.score.desc()).paginate(1, 1000, False)
+    # filter by criteria
+    query = query.filter(WorkAlbums.workid == work_id, 
+                         WorkAlbums.hidden != True, 
+                         WorkAlbums.work_track_count <= limit, 
+                         WorkAlbums.album_type != "compilation")  # allow compilation if no results?
 
-        if not albums.items:  # return complilation albums if no results
-            albums = db.session.query(WorkAlbums, func.count(AlbumLike.id).label('total')) \
-                .filter(WorkAlbums.workid == work_id, WorkAlbums.hidden != True, WorkAlbums.artists.ilike(search), WorkAlbums.work_track_count <= limit) \
-                .outerjoin(AlbumLike).group_by(WorkAlbums) \
-                .order_by(text('total DESC'), WorkAlbums.score.desc()).paginate(1, 1000, False)
+    # filter by artist, if present
+    if artist_name:
+        query = query.join(Artists).filter(Artists.name == artist_name)
 
-    elif not favorites:
-        albums = db.session.query(WorkAlbums, func.count(AlbumLike.id).label('total')) \
-            .filter(WorkAlbums.workid == work_id, WorkAlbums.hidden != True, WorkAlbums.album_type != "compilation", WorkAlbums.work_track_count <= limit)\
-            .outerjoin(AlbumLike).group_by(WorkAlbums) \
-            .order_by(text('total DESC'), WorkAlbums.score.desc()).paginate(1, 1000, False)
-
-        if not albums.items:  # return complilation albums if no results
-            albums = db.session.query(WorkAlbums, func.count(AlbumLike.id).label('total')) \
-                .filter(WorkAlbums.workid == work_id, WorkAlbums.hidden != True, WorkAlbums.work_track_count <= limit)\
-                .outerjoin(AlbumLike).group_by(WorkAlbums) \
-                .order_by(text('total DESC'), WorkAlbums.score.desc()).paginate(1, 1000, False)
-
-    else:  # user favorites albums, for radio mode
+    # filter by user favorites, if present
+    if favorites:
         if current_user.is_authenticated:
             user_id = current_user.id
         elif Config.MODE == 'DEVELOPMENT':
             user_id = 85
         else:
             user_id = None
+        query = query.filter(AlbumLike.user_id == user_id)
 
-        albums = db.session.query(WorkAlbums, func.count(AlbumLike.id).label('total')) \
-            .join(AlbumLike).group_by(WorkAlbums) \
-            .filter(WorkAlbums.workid == work_id, AlbumLike.user_id == user_id)\
-            .order_by(text('total DESC'), WorkAlbums.score.desc()).paginate(1, 1000, False)
+    # sort the results
+    query = query.order_by(text('total DESC'), WorkAlbums.score.desc())
 
-    if not albums.items:
+    # execute the query
+    albums = query.all()
+
+    if not albums:
         response_object = {'status': 'error'}
         response_object['albums'] = []
         response = jsonify(response_object)
         return response
 
     # artist list
-    work_artists = db.session.query(Artists, func.count(Artists.count).label('total')) \
+    work_artists = db.session.query(Artists.name, func.count(Artists.count).label('total')) \
         .filter(Artists.workid == work_id).group_by(Artists.name) \
         .order_by(text('total DESC'), Artists.name).all()
 
+    # put artist list in dictionary
     artist_list = {}
+    artist_list.update(work_artists)
 
-    for artist in work_artists:
-        artist_list[artist[0].name] = artist[1]
-
+    # decode JSON album data and prepare JSON
     album_list = []
-    duplicates_list = []
+    duplicates_set = set()
     match_string = ""
 
-    for tup in albums.items:
-        item = jsonpickle.decode(tup[0].data)
-        item['likes'] = tup[1]
-        item['id'] = tup[0].id
-        item['img_big'] = tup[0].img
-        item['label'] = tup[0].label
-        item['track_count'] = tup[0].track_count
-        item['composer'] = tup[0].composer
+    for album in albums:
+        item = json.loads(album.data)
+        item['likes'] = album.total
+        item['id'] = album.id
+        item['img_big'] = album.img
+        item['label'] = album.label
+        item['track_count'] = album.track_count
+        item['composer'] = album.composer
 
         # de-rate newer, crappy albums
         if item['track_count']:
@@ -680,16 +678,19 @@ def get_albums(work_id):
                 item['score'] = item['score'] / 4
 
         # filter out repeat albums
-        artists_string = ''.join(sorted(item['artists'].strip()))  # put alphabetically
-        if search:  # return more repeat results for performer filter
+        artists_string = "".join(sorted(re.sub(r'[^\w\s]', '', item['artists']).replace(" ", "").strip()))
+
+        if artist_name:  # return more repeat results for performer filter (allow distinct years)
             match_string = artists_string + str(item['release_date'])
         else:  # return more unique artists otherwise
             match_string = artists_string
 
-        if match_string in duplicates_list:
-            continue
+        # do not include in album list if duplicate, unless it has favorites
+        if match_string in duplicates_set:
+            if(album.total == 0):
+                continue
         else:
-            duplicates_list.append(match_string)
+            duplicates_set.add(match_string)
         # add to album list
         album_list.append(item)
 
@@ -713,20 +714,19 @@ def get_albums(work_id):
     search = "%{}%".format(work_id)
 
     if current_user.is_authenticated:
-        albumlikes = db.session.query(AlbumLike)\
+        albumlikes = db.session.query(AlbumLike.album_id)\
             .filter(AlbumLike.user_id == current_user.id, 
                     AlbumLike.album_id.ilike(search)).all()
     elif Config.MODE == 'DEVELOPMENT':
-        albumlikes = db.session.query(AlbumLike)\
+        albumlikes = db.session.query(AlbumLike.album_id)\
             .filter(AlbumLike.user_id == '85', 
                     AlbumLike.album_id.ilike(search)).all()
     else:
         albumlikes = []
 
-    liked_albums = []
-    for album in albumlikes:
-        liked_albums.append(album.album_id)
+    liked_albums = [album.album_id for album in albumlikes]
 
+    # return response
     response_object = {'status': 'success'}
     response_object['albums'] = sorted_list
     response_object['artists'] = artist_list
