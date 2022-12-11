@@ -1,7 +1,8 @@
 <template>
   <div>
-    <b-card class="shadow-sm" v-for="album in albums" :key="album.id" :id="album.id" no-body header-tag="header" :class="{'highlight': (album.id == selectedAlbum)}" @mouseover="showCover = album.id" @mouseleave="showCover = false">
+    <b-card class="shadow-sm" v-for="album in albums" :key="album.id" :id="album.id" no-body header-tag="header" :class="{'highlight': (album.id == selectedAlbum)}">
     <Transition name="fade">
+      <div v-if="!$view.mobile">
       <div class="popup" v-show="showCover == album.id">
         <img class="album-cover" :src="album.img_big" />
         <div class="image-caption">
@@ -9,8 +10,9 @@
         <span v-if="album.minor_artists" style="color: gray !important; font-size: 12px;">{{ album.minor_artists }}</span>
       </div>
       </div>
+      </div>
       </Transition>
-      <div class="row">
+      <div class="row" @mouseover="showCover = album.id" @mouseleave="showCover = false">
         <b-col cols="auto" class="album_columns">
           <img class="album-img-small" @click="$parent.selectRow(album.id); $parent.getAlbumData(album.id);" v-lazy="album.album_img"/>
         </b-col>
