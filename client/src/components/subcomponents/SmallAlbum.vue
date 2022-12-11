@@ -1,9 +1,15 @@
 <template>
   <div>
     <b-card class="shadow-sm" v-for="album in albums" :key="album.id" :id="album.id" no-body header-tag="header" :class="{'highlight': (album.id == selectedAlbum)}" @mouseover="showCover = album.id" @mouseleave="showCover = false">
-      <div class="popup" v-if="showCover == album.id">
-        <img :src="album.img_big" />
+    <Transition name="fade">
+      <div class="popup" v-show="showCover == album.id">
+        <img class="album-cover" :src="album.img_big" />
+        <div class="image-caption">
+        <span style="color: black !important; font-weight: 600; font-size: 13px;">{{ album.artists }} </span><br>
+        <span v-if="album.minor_artists" style="color: gray !important; font-size: 12px;">{{ album.minor_artists }}</span>
       </div>
+      </div>
+      </Transition>
       <div class="row">
         <b-col cols="auto" class="album_columns">
           <img class="album-img-small" @click="$parent.selectRow(album.id); $parent.getAlbumData(album.id);" v-lazy="album.album_img"/>
@@ -69,13 +75,35 @@ export default {
 </script>
 
 <style scoped>
+.fade-enter-active,
+.fade-leave-active {
+  transition: all 0.15s;
+}
+.fade-enter{
+  opacity: 0;
+}
+.fade-leave-to {
+  opacity: 0;
+}
 .popup{
+  max-width: calc(100vh - var(--workingheight) - var(--panelheight));
+  line-height: 17px;
+  padding: 0px;
+  background-color: white;
   position: fixed; 
   top: 50%; 
   left: 33%; 
   transform: translate(-50%, -50%);
   z-index: 9999;
   box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+}
+.image-caption{
+  width: 100%;
+  padding: 10px;
+}
+.album-cover {
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+    width: 100%;
 }
 .album-img-small{
   border-top-left-radius: 0.25rem;
@@ -150,4 +178,5 @@ header.card-header {
 >>> .badge {
   margin-bottom: 0px !important;
 }
+
 </style>
