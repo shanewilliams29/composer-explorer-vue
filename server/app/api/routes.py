@@ -619,12 +619,7 @@ def get_albums(work_id):
     # filter by criteria
     query = query.filter(WorkAlbums.workid == work_id, 
                          WorkAlbums.hidden != True, 
-                         WorkAlbums.work_track_count <= limit, 
-                         WorkAlbums.album_type != "compilation")  # allow compilation if no results?
-
-    # filter by artist, if present
-    if artist_name:
-        query = query.join(Artists).filter(Artists.name == artist_name)
+                         WorkAlbums.work_track_count <= limit)
 
     # filter by user favorites, if present
     if favorites:
@@ -636,8 +631,22 @@ def get_albums(work_id):
             user_id = None
         query = query.filter(AlbumLike.user_id == user_id)
 
+    # make subquery
+    t = query.subquery('t')
+    query = db.session.query(t)
+
+    # filter by artist, if present. Allow compilation albums if artist mode
+    if artist_name:
+        query = query.join(Artists).filter(Artists.name == artist_name)
+    elif favorites:  
+        # allow compilation albums in user favorites
+        pass
+    else:
+        # disallow compilation albums unless user favorited
+        query = query.filter(or_(t.c.album_type != "compilation", t.c.total > 0))
+
     # sort the results
-    query = query.order_by(text('total DESC'), WorkAlbums.score.desc())
+    query = query.order_by(t.c.total.desc(), t.c.total.desc())
 
     # execute the query
     albums = query.all()
@@ -651,7 +660,7 @@ def get_albums(work_id):
     # artist list
     work_artists = db.session.query(Artists.name, func.count(Artists.count).label('total')) \
         .filter(Artists.workid == work_id).group_by(Artists.name) \
-        .order_by(text('total DESC'), Artists.name).all()
+        .order_by(text('total DESC'), Artists.name).all()  # hidden or compilation???
 
     # put artist list in dictionary
     artist_list = {}

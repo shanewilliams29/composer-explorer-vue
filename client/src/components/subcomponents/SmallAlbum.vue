@@ -6,7 +6,8 @@
       <div class="popup" v-show="showCover == album.id">
         <img class="album-cover" :src="album.img_big" />
         <div class="image-caption">
-        <span style="color: black !important; font-weight: 600; font-size: 13px;">{{ album.artists }} </span><br>
+        <span style="color: black !important; font-weight: 600; font-size: 13px;">{{ album.artists }}</span><br>
+        <!-- <span style="color: black !important; font-size: 13px;"> ℗ {{ album.release_date }} · {{ album.label }}</span><br> -->
         <span v-if="album.minor_artists" style="color: gray !important; font-size: 12px;">{{ album.minor_artists }}</span>
       </div>
       </div>
@@ -89,7 +90,7 @@ export default {
 }
 .popup{
   max-width: calc(100vh - var(--workingheight) - var(--panelheight));
-  line-height: 17px;
+  line-height: 16px;
   padding: 0px;
   background-color: white;
   position: fixed; 
@@ -101,7 +102,7 @@ export default {
 }
 .image-caption{
   width: 100%;
-  padding: 10px;
+  padding: 8px;
 }
 .album-cover {
     box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
