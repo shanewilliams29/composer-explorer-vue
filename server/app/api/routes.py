@@ -30,7 +30,6 @@ def get_composers():
         'classical': (1711, 1800),
         'romantic': (1770, 1875),
         '20th': (1850, 2051),
-
     }
     datemin = 0
     datemax = 0
@@ -694,6 +693,16 @@ def get_albums(work_id):
         # add to album list
         album_list.append(item)
 
+        # order so that conductor before orchestra
+        orchestra_list = ['baroque', 'augsburger', 'antiqua', 'milano', 'quartet', 'orchest', 'philharm', 'symphony', 'concert', 'chamber', 'academy', 'staats', 'consort', 'symphoniker', 'covent garden', 'choir', 'akademie', 'stuttgart', 'llscher']
+        two_artists = item['artists'].split(', ')
+
+        for term in orchestra_list:
+            if term.lower() in two_artists[0].lower():
+                two_artists.reverse()
+                item['artists'] = ", ".join(two_artists)
+                break
+        
     if sort == 'dateascending':
         sorted_list = sorted(album_list, key=lambda d: d['release_date'])
     elif sort == 'datedescending':
