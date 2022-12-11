@@ -89,7 +89,7 @@ export default {
   opacity: 0;
 }
 .popup{
-  max-width: calc(100vh - var(--workingheight) - var(--panelheight));
+  max-width: calc(100vh - var(--workingheight));
   line-height: 16px;
   padding: 0px;
   background-color: white;
