@@ -3,7 +3,7 @@
     <b-card class="shadow-sm" v-for="album in albums" :key="album.id" :id="album.id" no-body header-tag="header" :class="{'highlight': (album.id == selectedAlbum)}">
     <Transition name="fade">
       <div v-if="!$view.mobile && !$view.banner">
-      <div class="popup" v-show="showCover == album.id">
+      <div class="popup" v-if="showCover == album.id">
         <img class="album-cover" :src="album.img_big" />
         <div class="image-caption">
         <span style="color: black !important; font-weight: 600; font-size: 13px;">{{ album.artists }}</span><br>
