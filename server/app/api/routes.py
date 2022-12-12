@@ -685,7 +685,6 @@ def get_albums(work_id):
 
         # filter out repeat albums
         artists_string = "".join(sorted(re.sub(r'[^\w\s]', '', item['artists']).replace(" ", "").lower()))
-        print(artists_string)
 
         if artist_name:  # return more repeat results for performer filter (allow distinct years)
             match_string = artists_string + str(item['release_date'])
@@ -962,7 +961,6 @@ def get_topartists():
             item[1] = artist[1]
             item[2] = random.randint(0, 2)
             artist_list.append(item)
-            print(item[0] + " " + str(item[1]))
         flag = False
 
     response = jsonify(artist_list)
