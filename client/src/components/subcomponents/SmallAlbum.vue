@@ -2,7 +2,7 @@
   <div>
     <b-card class="shadow-sm" v-for="album in albums" :key="album.id" :id="album.id" no-body header-tag="header" :class="{'highlight': (album.id == selectedAlbum)}">
     <Transition name="fade">
-      <div v-if="!$view.mobile">
+      <div v-if="!$view.mobile && !$view.banner">
       <div class="popup" v-show="showCover == album.id">
         <img class="album-cover" :src="album.img_big" />
         <div class="image-caption">

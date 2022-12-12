@@ -823,7 +823,7 @@ def get_workinfo(work_id):
 
 
 @bp.route('/api/albuminfo/<album_id>', methods=['GET'])
-# @cache.cached(query_string=True)
+@cache.cached(query_string=True)
 def get_albuminfo(album_id):
     album = db.session.query(WorkAlbums)\
         .filter(WorkAlbums.id == album_id)\
