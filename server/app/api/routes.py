@@ -10,10 +10,8 @@ from sqlalchemy import func, text, or_, and_
 from app.api import bp
 from unidecode import unidecode
 import json
-import jsonpickle
 import random
 import re
-import string
 
 
 @bp.route('/api/composers', methods=['GET'])  # main composer list
