@@ -17,7 +17,7 @@ import string
 
 
 @bp.route('/api/composers', methods=['GET'])  # main composer list
-# @cache.cached(query_string=True)
+@cache.cached(query_string=True)
 def get_composers():
     # look for search term or filter term
     search_item = request.args.get('search')
@@ -101,7 +101,7 @@ def get_composers():
     if Config.MODE == "DEVELOPMENT":
         cache.set('composers', composer_name_list)  # store in cache for dev server
 
-    # get genres (for radio)
+    # get genres list (for radio)
     with open('app/static/genres.json') as f:
         genre_list = json.load(f)
     genre_list = sorted(genre_list)
@@ -211,7 +211,7 @@ def get_multicomposers():
 
 
 @bp.route('/api/composersradio', methods=['GET'])  # used by radio to populate composer multiselect
-#@cache.cached()
+@cache.cached()
 def get_composersradio():
     composer_list = db.session.query(ComposerList.name_short)\
         .filter(ComposerList.catalogued == True) \
@@ -442,7 +442,7 @@ def get_worksbygenre():
 
 
 @bp.route('/api/exportplaylist', methods=['POST'])  # used in radio mode
-# @login_required
+@login_required
 def exportplaylist():
     # get genres
     payload = request.get_json()
@@ -788,7 +788,7 @@ def like_action(album_id, action):
 
 
 @bp.route('/api/composerinfo/<composer>', methods=['GET'])
-#@cache.cached(query_string=True)
+@cache.cached(query_string=True)
 def get_composerinfo(composer):
     composer_info = db.session.query(ComposerList)\
         .filter(ComposerList.name_short == composer).first()
@@ -807,7 +807,7 @@ def get_composerinfo(composer):
 
 
 @bp.route('/api/workinfo/<work_id>', methods=['GET'])
-#@cache.cached(query_string=True)
+@cache.cached(query_string=True)
 def get_workinfo(work_id):
     work = db.session.query(WorkList)\
         .filter(WorkList.id == work_id).first()
@@ -826,13 +826,13 @@ def get_workinfo(work_id):
 
 
 @bp.route('/api/albuminfo/<album_id>', methods=['GET'])
+@cache.cached(query_string=True)
 def get_albuminfo(album_id):
     album = db.session.query(WorkAlbums)\
         .filter(WorkAlbums.id == album_id)\
         .first()
-    # return jsonpickle.encode(album)
 
-    album_details = jsonpickle.decode(album.data)
+    album_details = json.loads(album.data)
 
     ALBUM = {
         'id': album.id,
@@ -853,8 +853,8 @@ def get_albuminfo(album_id):
     return response
 
 
-@bp.route('/api/artistcomposers/<artist_name>', methods=['GET'])
-# @cache.cached(query_string=True)
+@bp.route('/api/artistcomposers/<artist_name>', methods=['GET'])  # for performer mode composers
+@cache.cached(query_string=True)
 def get_artistcomposers(artist_name):
 
     composers = db.session.query(ComposerList).join(Artists, ComposerList.name_short == Artists.composer)\
@@ -886,7 +886,7 @@ def get_artistcomposers(artist_name):
     return response
 
 
-@bp.route('/api/artistworks', methods=['GET'])
+@bp.route('/api/artistworks', methods=['GET'])  # for performer mode works
 def get_artistworks():
     artist_name = request.args.get('artist')
     composer_name = request.args.get('composer')
@@ -924,13 +924,13 @@ def get_artistworks():
 
     response_object = {'status': 'success'}
     response_object['works'] = works_by_genre
-    response_object['playlist'] = works_list  # for back and previous playing
+    response_object['playlist'] = works_list
     response = jsonify(response_object)
     return response
 
 
-@bp.route('/api/artistlist', methods=['GET'])
-#@cache.cached()
+@bp.route('/api/artistlist', methods=['GET'])  # artist list for performer view
+@cache.cached()
 def get_artistlist():
     artists = db.session.query(ArtistList).first()
 
@@ -942,12 +942,9 @@ def get_artistlist():
     return response
 
 
-@bp.route('/api/topartists', methods=['GET'])  # used to build json list, not accessible
+@bp.route('/api/topartists', methods=['GET'])  # used to build json list for word cloud
+@login_required
 def get_topartists():
-    # albums = db.session.query(WorkAlbums, func.count(AlbumLike.id).label('total')) \
-    #     .join(AlbumLike).group_by(WorkAlbums) \
-    #     .order_by(text('total DESC'), WorkAlbums.score.desc()).paginate(1, 100, False)
-
     artists = db.session.query(Artists, func.count(Artists.id).label('total'))\
         .group_by(Artists.name).order_by(text('total DESC')).paginate(1, 160, False)
 
@@ -972,13 +969,3 @@ def get_topartists():
 
     response = jsonify(artist_list)
     return response
-
-    # ranking = []
-    # this_rank = 1
-    # ranking.append(this_rank)
-    # for i in range(1, len(artist_list)):
-    #     if artist_list[i]['recordings'] == artist_list[i - 1]['recordings']:
-    #         ranking.append(this_rank)
-    #     else:
-    #         this_rank += 1
-    #         ranking.append(this_rank)
