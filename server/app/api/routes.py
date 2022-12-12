@@ -823,7 +823,7 @@ def get_workinfo(work_id):
 
 
 @bp.route('/api/albuminfo/<album_id>', methods=['GET'])
-@cache.cached(query_string=True)
+# @cache.cached(query_string=True)
 def get_albuminfo(album_id):
     album = db.session.query(WorkAlbums)\
         .filter(WorkAlbums.id == album_id)\
@@ -843,6 +843,16 @@ def get_albuminfo(album_id):
         'tracks': album_details['tracks'],
         'track_count': album_details['track_count']
     }
+
+    # order so that conductor before orchestra
+    orchestra_list = ['baroque', 'augsburger', 'antiqua', 'milano', 'quartet', 'orchest', 'philharm', 'symphony', 'concert', 'chamber', 'academy', 'staats', 'consort', 'symphoniker', 'covent garden', 'choir', 'akademie', 'stuttgart', 'llscher']
+    two_artists = ALBUM['artists'].split(', ')
+
+    for term in orchestra_list:
+        if term.lower() in two_artists[0].lower():
+            two_artists.reverse()
+            ALBUM['artists'] = ", ".join(two_artists)
+            break
 
     response_object = {'status': 'success'}
     response_object['album'] = ALBUM
