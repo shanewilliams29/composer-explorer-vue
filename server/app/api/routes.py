@@ -15,7 +15,7 @@ import re
 
 
 @bp.route('/api/composers', methods=['GET'])  # main composer list
-@cache.cached(query_string=True)
+# @cache.cached(query_string=True)
 def get_composers():
     # look for search term or filter term
     search_item = request.args.get('search')
@@ -387,6 +387,8 @@ def get_worksbygenre():
 
     # order the query results by genre and id
     works_list = query.order_by(WorkList.genre, WorkList.id).all()
+
+    print(len(works_list))
 
     if not works_list:
         response_object = {'status': 'success'}

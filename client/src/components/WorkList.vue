@@ -22,17 +22,18 @@
       <span v-show="!loading && works.length < 1 && $view.mode == 'radio'" class="col no-works-found">
         <div class="m-4">{{ message }}</div>
       </span>
+
       <b-card-group deck v-if="!loading && works">
         <b-card v-for="(genre, index) in works" :key="index" :ref="index" no-body header-tag="header" class="shadow-sm">
           <div class="#header" v-b-toggle="index.replace(/\s/g, '')">
             <h6 class="m-2 mb-0">
-              <span :class="{'music-note': (index == $config.genre)} && false">{{ index }}&nbsp;&nbsp;</span>
-              <span v-if="index == $config.genre && false" class="music-note float-middle"><b-icon-volume-up-fill></b-icon-volume-up-fill></span>
-              <span class="mb-0 float-right when-opened"><b-icon-chevron-up></b-icon-chevron-up></span><span class="mb-0 float-right when-closed"><b-icon-chevron-down></b-icon-chevron-down></span>
+              <span :class="{'music-note': (index == $config.genre && $view.mode == 'radio')}">{{ index }}&nbsp;&nbsp;</span>
+              <span v-if="index == $config.genre && $view.mode == 'radio'" class="music-note float-middle"><b-icon-volume-up-fill></b-icon-volume-up-fill></span>
+              <span v-if="$view.mode != 'radio'" class="mb-0 float-right when-opened"><b-icon-chevron-up></b-icon-chevron-up></span><span v-if="$view.mode != 'radio'" class="mb-0 float-right when-closed"><b-icon-chevron-down></b-icon-chevron-down></span>
             </h6>
           </div>
           <b-collapse :visible="visibility || index == $config.genre" :id="index.replace(/\s/g, '')">
-            <b-card-text>
+            <b-card-text v-if="visibility || $view.mode != 'radio'">
               <table cellspacing="0" class="works-table">
                 <tr
                   v-for="(work, index) in genre"
@@ -103,6 +104,7 @@ export default {
       axios
         .get(path)
         .then((res) => {
+          console.log(res);
           this.works = res.data.works;
           this.playlist = res.data.playlist;
           this.visibility = true;
@@ -237,6 +239,7 @@ export default {
         axios
           .post(path, payload)
           .then((res) => {
+            console.log(res);
             this.loading = false;
             this.works = res.data.works;
             this.playlist = res.data.playlist;
@@ -379,16 +382,22 @@ export default {
       if (this.visibility) {
         timeout = 0;
       } else {
-        timeout = 1000;
+        timeout = 0;
       }
       smoothscroll.polyfill(); // for Safari smooth scrolling
       setTimeout(() => {
         try {
           var card = this.$refs[genre][0];
-          var row = this.$refs[this.selectedWork][0];
           var height = this.$refs[genre][0].offsetParent.offsetHeight / 2;
-          var top = card.offsetTop + row.offsetTop - height + 100;
 
+          var top = ""
+          if (this.visibility){
+            var row = this.$refs[this.selectedWork][0];
+            top = card.offsetTop + row.offsetTop - height + 100;
+          } else {
+            top = card.offsetTop - height + 100;
+          }
+          
           var scrollBox = {};
           if (this.$route.name == "mobile") {
             scrollBox = this.$parent.$parent.$refs["scroll-box"];
