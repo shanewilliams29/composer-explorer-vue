@@ -25,15 +25,15 @@
 
       <b-card-group deck v-if="!loading && works">
         <b-card v-for="(genre, index) in works" :key="index" :ref="index" no-body header-tag="header" class="shadow-sm">
-          <div class="#header" v-b-toggle="index.replace(/\s/g, '')">
+          <div class="header" @click="toggleOpen(index);">
             <h6 class="m-2 mb-0">
-              <span :class="{'music-note': (index == $config.genre && $view.mode == 'radio')}">{{ index }}&nbsp;&nbsp;</span>
-              <span v-if="index == $config.genre && $view.mode == 'radio'" class="music-note float-middle"><b-icon-volume-up-fill></b-icon-volume-up-fill></span>
-              <span v-if="$view.mode != 'radio'" class="mb-0 float-right when-opened"><b-icon-chevron-up></b-icon-chevron-up></span><span v-if="$view.mode != 'radio'" class="mb-0 float-right when-closed"><b-icon-chevron-down></b-icon-chevron-down></span>
+              <span>{{ index }}&nbsp;&nbsp;</span>
+              <span v-if="!visibility && index == $config.genre" class="mb-0 float-right when-opened"><b-icon-chevron-up></b-icon-chevron-up></span>
+              <span v-if="!visibility && index != $config.genre" class="mb-0 float-right when-closed"><b-icon-chevron-down></b-icon-chevron-down></span>
             </h6>
           </div>
           <b-collapse :visible="visibility || index == $config.genre" :id="index.replace(/\s/g, '')">
-            <b-card-text v-if="visibility || $view.mode != 'radio'">
+            <b-card-text v-if="visibility || index == $config.genre">
               <table cellspacing="0" class="works-table">
                 <tr
                   v-for="(work, index) in genre"
@@ -372,6 +372,44 @@ export default {
         eventBus.$emit("fireAlbumsAndPlay", workId, this.$config.artist);
       }
     },
+    toggleOpen(genre) {
+      console.log(genre);
+      console.log(this.$config.genre);
+      if (genre == this.$config.genre){
+        this.$config.genre = null;
+      } else {
+        this.$config.genre = genre;
+      }
+      localStorage.setItem("config", JSON.stringify(this.$config));
+      // var timeout = 0;
+      // if (this.visibility) {
+      //   timeout = 0;
+      // } else {
+      //   timeout = 500;
+      // }
+      // smoothscroll.polyfill(); // for Safari smooth scrolling
+      // setTimeout(() => {
+      //   try {
+      //     var card = this.$refs[genre][0];
+      //     var height = this.$refs[genre][0].offsetParent.offsetHeight / 2;
+      //     var top = card.offsetTop - height + 100;
+          
+      //     var scrollBox = {};
+      //     if (this.$route.name == "mobile") {
+      //       scrollBox = this.$parent.$parent.$refs["scroll-box"];
+      //     } else {
+      //       scrollBox = this.$parent.$refs["scroll-box"];
+      //     }
+      //     scrollBox.scrollTo({
+      //       top: top,
+      //       left: 0,
+      //       behavior: "smooth",
+      //     });
+      //   } catch {
+      //     //pass
+      //   }
+      // }, timeout);
+    },
     selectRow(workid) {
       this.selectedWork = workid;
     },
@@ -382,21 +420,23 @@ export default {
       if (this.visibility) {
         timeout = 0;
       } else {
-        timeout = 0;
+        timeout = 500;
       }
       smoothscroll.polyfill(); // for Safari smooth scrolling
       setTimeout(() => {
         try {
           var card = this.$refs[genre][0];
+          var row = this.$refs[this.selectedWork][0];
           var height = this.$refs[genre][0].offsetParent.offsetHeight / 2;
+          var top = card.offsetTop + row.offsetTop - height + 100;
 
-          var top = ""
-          if (this.visibility){
-            var row = this.$refs[this.selectedWork][0];
-            top = card.offsetTop + row.offsetTop - height + 100;
-          } else {
-            top = card.offsetTop - height + 100;
-          }
+          // var top = ""
+          // if (this.visibility){
+          //   var row = this.$refs[this.selectedWork][0];
+          //   top = card.offsetTop + row.offsetTop - height + 100;
+          // } else {
+          //   top = card.offsetTop - height + 100;
+          // }
           
           var scrollBox = {};
           if (this.$route.name == "mobile") {
@@ -549,7 +589,7 @@ export default {
 
 </script>
 
-<style scoped>
+<style scoped>\
 .collapsed .when-closed {
     display: show;
 }
@@ -642,14 +682,20 @@ tr:hover {
 .no-albums:hover {
     cursor: default !important;
 }
-header.card-header {
+.header{
+  cursor: pointer;
+}
+.header:hover {
+    cursor: pointer;
+}
+.header.card-header {
     background-color: #fff;
     border: none;
     padding-left: 10px;
     padding-bottom: 0px;
     cursor: pointer;
 }
-header.card-header:hover {
+.header.card-header:hover {
     cursor: pointer;
 }
 .mb-0 {
