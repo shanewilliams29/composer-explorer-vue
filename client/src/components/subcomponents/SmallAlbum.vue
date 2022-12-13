@@ -15,7 +15,7 @@
       </Transition>
       <div class="row" @mouseover="showCover = album.id" @mouseleave="showCover = false">
         <b-col cols="auto" class="album_columns">
-          <img class="album-img-small" @click="$parent.selectRow(album.id); $parent.getAlbumData(album.id);" v-lazy="album.album_img"/>
+          <img class="album-img-small" @click="$parent.selectRow(album.id); $parent.getAlbumData(album.id);" v-lazy="album.img_big"/>
         </b-col>
         <b-col class="album_text_columns">
           <b-card-text>

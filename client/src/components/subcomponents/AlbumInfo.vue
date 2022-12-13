@@ -2,7 +2,7 @@
   <b-card no-body bg-variant="dark" v-show="!loading">
     <b-row no-gutters>
       <b-col cols="12" md="auto" class="album-cover-col">
-        <b-card-img :src="album.album_img" alt="Album Cover" class="rounded-0"></b-card-img>
+        <b-card-img :src="album.img_big" alt="Album Cover" class="rounded-0"></b-card-img>
       </b-col>
       <b-col>
         <b-card-body class="info-card-body">

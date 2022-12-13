@@ -5,8 +5,8 @@
         <table v-if="album.release_date">
           <tr class="heading-tr">
             <td>
-              <b-avatar square size="60px" :src="album.images[1].url" v-if="$view.mobile"></b-avatar>
-              <b-avatar square size="60px" :src="album.images[1].url" v-if="!$view.mobile"></b-avatar>
+              <b-avatar square size="60px" :src="album.images[0].url" v-if="$view.mobile"></b-avatar>
+              <b-avatar square size="60px" :src="album.images[0].url" v-if="!$view.mobile"></b-avatar>
             </td>
             <td class="heading-td">
               {{ album.name }}<br />
