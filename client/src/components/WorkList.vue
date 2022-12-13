@@ -32,7 +32,7 @@
               <span v-if="!visibility && index != $config.genre" class="mb-0 float-right when-closed"><b-icon-chevron-down></b-icon-chevron-down></span>
             </h6>
           </div>
-          <b-collapse :visible="visibility || index == $config.genre" :id="index.replace(/\s/g, '')">
+          <b-collapse @shown="onShown(index)" :visible="visibility || index == $config.genre" :id="index.replace(/\s/g, '')">
             <b-card-text v-if="visibility || index == $config.genre">
               <table cellspacing="0" class="works-table">
                 <tr
@@ -215,6 +215,35 @@ export default {
           });
       }
     },
+    onShown(genre){
+      var timeout = 0;
+
+      smoothscroll.polyfill(); // for Safari smooth scrolling
+      setTimeout(() => {
+        try {
+          //var card = this.$refs[genre][0];
+          var card = this.$refs[genre][0]
+          console.log(card);
+          //var height = this.$refs[genre][0].offsetParent.offsetHeight / 2;
+          //var top = card.offsetTop - height + 100;
+          var top = card.offsetTop - 5
+          
+          var scrollBox = {};
+          if (this.$route.name == "mobile") {
+            scrollBox = this.$parent.$parent.$refs["scroll-box"];
+          } else {
+            scrollBox = this.$parent.$refs["scroll-box"];
+          }
+          scrollBox.scrollTo({
+            top: top,
+            left: 0,
+            behavior: "smooth",
+          });
+        } catch {
+          //pass
+        }
+      }, timeout);
+  },
     getGenreWorks(genres, filter, search, artist, radioType) {
       // used in radio mode
       if (genres.length < 1) {
@@ -381,34 +410,7 @@ export default {
         this.$config.genre = genre;
       }
       localStorage.setItem("config", JSON.stringify(this.$config));
-      // var timeout = 0;
-      // if (this.visibility) {
-      //   timeout = 0;
-      // } else {
-      //   timeout = 500;
-      // }
-      // smoothscroll.polyfill(); // for Safari smooth scrolling
-      // setTimeout(() => {
-      //   try {
-      //     var card = this.$refs[genre][0];
-      //     var height = this.$refs[genre][0].offsetParent.offsetHeight / 2;
-      //     var top = card.offsetTop - height + 100;
-          
-      //     var scrollBox = {};
-      //     if (this.$route.name == "mobile") {
-      //       scrollBox = this.$parent.$parent.$refs["scroll-box"];
-      //     } else {
-      //       scrollBox = this.$parent.$refs["scroll-box"];
-      //     }
-      //     scrollBox.scrollTo({
-      //       top: top,
-      //       left: 0,
-      //       behavior: "smooth",
-      //     });
-      //   } catch {
-      //     //pass
-      //   }
-      // }, timeout);
+      
     },
     selectRow(workid) {
       this.selectedWork = workid;
