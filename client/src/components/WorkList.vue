@@ -90,6 +90,7 @@ export default {
       loading: false,
       selectedWork: null,
       visibility: true,
+      supressGenreScroll: false,
       message: "Select from the options above to create your own customized radio",
     };
   },
@@ -104,7 +105,6 @@ export default {
       axios
         .get(path)
         .then((res) => {
-          console.log(res);
           this.works = res.data.works;
           this.playlist = res.data.playlist;
           this.visibility = true;
@@ -216,16 +216,13 @@ export default {
       }
     },
     onShown(genre){
-      var timeout = 0;
-
+     // scrolling animation for when collapsible expanded
+    if (!this.supressGenreScroll){
+     var timeout = 0;
       smoothscroll.polyfill(); // for Safari smooth scrolling
       setTimeout(() => {
         try {
-          //var card = this.$refs[genre][0];
           var card = this.$refs[genre][0]
-          console.log(card);
-          //var height = this.$refs[genre][0].offsetParent.offsetHeight / 2;
-          //var top = card.offsetTop - height + 100;
           var top = card.offsetTop - 5
           
           var scrollBox = {};
@@ -243,6 +240,7 @@ export default {
           //pass
         }
       }, timeout);
+    }
   },
     getGenreWorks(genres, filter, search, artist, radioType) {
       // used in radio mode
@@ -268,7 +266,6 @@ export default {
         axios
           .post(path, payload)
           .then((res) => {
-            console.log(res);
             this.loading = false;
             this.works = res.data.works;
             this.playlist = res.data.playlist;
@@ -402,8 +399,6 @@ export default {
       }
     },
     toggleOpen(genre) {
-      console.log(genre);
-      console.log(this.$config.genre);
       if (genre == this.$config.genre){
         this.$config.genre = null;
       } else {
@@ -424,7 +419,7 @@ export default {
       } else {
         timeout = 500;
       }
-      smoothscroll.polyfill(); // for Safari smooth scrolling
+      smoothscroll.polyfill(); // for Safari smooth scrolling, update, fighting with open trigger?
       setTimeout(() => {
         try {
           var card = this.$refs[genre][0];
@@ -462,8 +457,10 @@ export default {
       this.loading = true;
       if (item == "all") {
         this.visibility = false;
+        this.supressGenreScroll = false;
       } else {
         this.visibility = true;
+        this.supressGenreScroll = true;
       }
       const path = "api/works/" + this.$config.composer + "?filter=" + item;
       axios
@@ -478,7 +475,21 @@ export default {
           this.loading = false;
         });
     },
+    scrollToTop(){
+          var scrollBox = {};
+          if (this.$route.name == "mobile") {
+            scrollBox = this.$parent.$parent.$refs["scroll-box"];
+          } else {
+            scrollBox = this.$parent.$refs["scroll-box"];
+          }
+          scrollBox.scrollTo({
+            top: 0,
+            left: 0,
+          });
+    },
     getSearchWorks(item) {
+      this.scrollToTop();
+      this.supressGenreScroll = true;
       this.filterItem = null;
       this.searchItem = item;
       const path = "api/works/" + this.$config.composer + "?search=" + item;
