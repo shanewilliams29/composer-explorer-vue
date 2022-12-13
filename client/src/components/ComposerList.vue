@@ -74,6 +74,7 @@ export default {
       }
     },
     scrollToComposer(composer) {
+      if(this.$view.mode == 'radio'){ // scroll in radio mode to work
       var timeout = 0;
       if (this.visibility) {
         timeout = 0;
@@ -100,6 +101,7 @@ export default {
           behavior: "smooth",
         });
       }, timeout);
+    }
     },
     getComposers() {
       this.loading = true;

@@ -217,9 +217,11 @@ export default {
     },
     onShown(genre){
      // scrolling animation for when collapsible expanded
-    if (!this.supressGenreScroll){
-     var timeout = 0;
-      smoothscroll.polyfill(); // for Safari smooth scrolling
+    var timeout = 0;
+    smoothscroll.polyfill(); // for Safari smooth scrolling
+
+    if ((!this.supressGenreScroll) && (this.$view.mode != 'radio')){
+
       setTimeout(() => {
         try {
           var card = this.$refs[genre][0]
@@ -240,6 +242,29 @@ export default {
           //pass
         }
       }, timeout);
+    } else if ((this.$view.mode == 'radio')) {
+            setTimeout(() => {
+              try {
+                var card = this.$refs[genre][0];
+                var row = this.$refs[this.selectedWork][0];
+                var height = this.$refs[genre][0].offsetParent.offsetHeight / 2;
+                var top = card.offsetTop + row.offsetTop - height + 100;
+                
+                var scrollBox = {};
+                if (this.$route.name == "mobile") {
+                  scrollBox = this.$parent.$parent.$refs["scroll-box"];
+                } else {
+                  scrollBox = this.$parent.$refs["scroll-box"];
+                }
+                scrollBox.scrollTo({
+                  top: top,
+                  left: 0,
+                  behavior: "smooth",
+                });
+              } catch {
+                //pass
+              }
+            }, timeout);       
     }
   },
     getGenreWorks(genres, filter, search, artist, radioType) {
@@ -413,43 +438,6 @@ export default {
     setGenre(genre) {
       this.$config.genre = genre;
       localStorage.setItem("config", JSON.stringify(this.$config));
-      var timeout = 0;
-      if (this.visibility) {
-        timeout = 0;
-      } else {
-        timeout = 500;
-      }
-      smoothscroll.polyfill(); // for Safari smooth scrolling, update, fighting with open trigger?
-      setTimeout(() => {
-        try {
-          var card = this.$refs[genre][0];
-          var row = this.$refs[this.selectedWork][0];
-          var height = this.$refs[genre][0].offsetParent.offsetHeight / 2;
-          var top = card.offsetTop + row.offsetTop - height + 100;
-
-          // var top = ""
-          // if (this.visibility){
-          //   var row = this.$refs[this.selectedWork][0];
-          //   top = card.offsetTop + row.offsetTop - height + 100;
-          // } else {
-          //   top = card.offsetTop - height + 100;
-          // }
-          
-          var scrollBox = {};
-          if (this.$route.name == "mobile") {
-            scrollBox = this.$parent.$parent.$refs["scroll-box"];
-          } else {
-            scrollBox = this.$parent.$refs["scroll-box"];
-          }
-          scrollBox.scrollTo({
-            top: top,
-            left: 0,
-            behavior: "smooth",
-          });
-        } catch {
-          //pass
-        }
-      }, timeout);
     },
     getFilteredWorks(item) {
       this.filterItem = item;
