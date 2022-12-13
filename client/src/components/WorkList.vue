@@ -90,7 +90,6 @@ export default {
       loading: false,
       selectedWork: null,
       visibility: true,
-      supressGenreScroll: false,
       message: "Select from the options above to create your own customized radio",
     };
   },
@@ -215,12 +214,12 @@ export default {
           });
       }
     },
-    onShown(genre){
+    scrollToPanel(genre){
      // scrolling animation for when collapsible expanded
     var timeout = 0;
     smoothscroll.polyfill(); // for Safari smooth scrolling
 
-    if ((!this.supressGenreScroll) && (this.$view.mode != 'radio')){
+    if (!this.visibility){ //scroll to genre
 
       setTimeout(() => {
         try {
@@ -242,7 +241,7 @@ export default {
           //pass
         }
       }, timeout);
-    } else if ((this.$view.mode == 'radio')) {
+    } else if (this.visibility){ // scroll to work
             setTimeout(() => {
               try {
                 var card = this.$refs[genre][0];
@@ -265,7 +264,10 @@ export default {
                 //pass
               }
             }, timeout);       
-    }
+        }
+    },
+    onShown(genre){
+      this.scrollToPanel(genre);
   },
     getGenreWorks(genres, filter, search, artist, radioType) {
       // used in radio mode
@@ -438,6 +440,9 @@ export default {
     setGenre(genre) {
       this.$config.genre = genre;
       localStorage.setItem("config", JSON.stringify(this.$config));
+      if(!this.searchItem){
+        this.scrollToPanel(genre);
+      }
     },
     getFilteredWorks(item) {
       this.filterItem = item;
@@ -445,10 +450,8 @@ export default {
       this.loading = true;
       if (item == "all") {
         this.visibility = false;
-        this.supressGenreScroll = false;
       } else {
         this.visibility = true;
-        this.supressGenreScroll = true;
       }
       const path = "api/works/" + this.$config.composer + "?filter=" + item;
       axios
@@ -477,7 +480,6 @@ export default {
     },
     getSearchWorks(item) {
       this.scrollToTop();
-      this.supressGenreScroll = true;
       this.filterItem = null;
       this.searchItem = item;
       const path = "api/works/" + this.$config.composer + "?search=" + item;
