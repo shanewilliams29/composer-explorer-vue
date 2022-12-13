@@ -275,8 +275,11 @@ export default {
     },
     onShown(genre){
       if(this.searchItem != ''){
-        console.log(this.searchItem);
-        this.scrollToPanel(genre);
+        if(this.$view.mode == 'radio'){
+          this.scrollToWork(genre);
+        } else{
+          this.scrollToPanel(genre);
+        }
       }
   },
     getGenreWorks(genres, filter, search, artist, radioType) {
