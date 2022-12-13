@@ -214,34 +214,12 @@ export default {
           });
       }
     },
-    scrollToPanel(genre){
+    scrollToWork(genre){
      // scrolling animation for when collapsible expanded
     var timeout = 0;
     smoothscroll.polyfill(); // for Safari smooth scrolling
 
-    if (!this.visibility){ //scroll to genre
-
-      setTimeout(() => {
-        try {
-          var card = this.$refs[genre][0]
-          var top = card.offsetTop - 5
-          
-          var scrollBox = {};
-          if (this.$route.name == "mobile") {
-            scrollBox = this.$parent.$parent.$refs["scroll-box"];
-          } else {
-            scrollBox = this.$parent.$refs["scroll-box"];
-          }
-          scrollBox.scrollTo({
-            top: top,
-            left: 0,
-            behavior: "smooth",
-          });
-        } catch {
-          //pass
-        }
-      }, timeout);
-    } else if (this.visibility){ // scroll to work
+    // scroll to work
             setTimeout(() => {
               try {
                 var card = this.$refs[genre][0];
@@ -264,10 +242,42 @@ export default {
                 //pass
               }
             }, timeout);       
+        
+
+    //   else { //scroll to genre
+
+    },
+    scrollToPanel(genre){
+     // scrolling animation for when collapsible expanded
+    var timeout = 0;
+    smoothscroll.polyfill(); // for Safari smooth scrolling
+
+     setTimeout(() => {
+        try {
+          var card = this.$refs[genre][0]
+          var top = card.offsetTop - 5
+          
+          var scrollBox = {};
+          if (this.$route.name == "mobile") {
+            scrollBox = this.$parent.$parent.$refs["scroll-box"];
+          } else {
+            scrollBox = this.$parent.$refs["scroll-box"];
+          }
+          scrollBox.scrollTo({
+            top: top,
+            left: 0,
+            behavior: "smooth",
+          });
+        } catch {
+          //pass
         }
+      }, timeout);
     },
     onShown(genre){
-      this.scrollToPanel(genre);
+      if(this.searchItem != ''){
+        console.log(this.searchItem);
+        this.scrollToPanel(genre);
+      }
   },
     getGenreWorks(genres, filter, search, artist, radioType) {
       // used in radio mode
@@ -440,9 +450,7 @@ export default {
     setGenre(genre) {
       this.$config.genre = genre;
       localStorage.setItem("config", JSON.stringify(this.$config));
-      if(!this.searchItem){
-        this.scrollToPanel(genre);
-      }
+      this.scrollToWork(genre);
     },
     getFilteredWorks(item) {
       this.filterItem = item;
