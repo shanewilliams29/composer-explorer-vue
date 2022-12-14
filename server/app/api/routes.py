@@ -577,22 +577,14 @@ def exportplaylist():
         return response.json()
 
     # send in batches of 50 tracks to Spotify
-    i = 0
-    k = 0
     uristring = ""
-    for track in tracklist:
-        i += 1
-        k += 1
-
-        if i == 50 or k == len(tracklist):
-            track = "spotify:track:" + track + ","
-            uristring = uristring + track
+    response = None
+    for k, track in enumerate(tracklist):
+        track = "spotify:track:" + track + ","
+        uristring = uristring + track
+        if (k + 1) % 50 == 0 or k == len(tracklist) - 1:
             response = sp.add_to_playlist(playlist_id, uristring)
-            i = 0
             uristring = ""
-        else:
-            track = "spotify:track:" + track + ","
-            uristring = uristring + track
 
     return response.json()
 
