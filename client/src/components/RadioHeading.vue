@@ -118,7 +118,7 @@
         </b-form-group>
       </b-col>
     </b-row>
-    <PlaylistModal />
+    <PlaylistModal @submit="exportSpotify"/>
   </div>
 </template>
 

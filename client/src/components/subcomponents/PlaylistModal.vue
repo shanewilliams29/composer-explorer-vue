@@ -47,7 +47,7 @@ export default {
   },
   methods: {
     onSubmit() {
-      this.$parent.exportSpotify(this.form.name);
+      this.$emit('submit', this.form.name)
       this.formShow = false;
       this.spinnerShow = true;
     },
