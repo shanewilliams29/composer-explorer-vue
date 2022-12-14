@@ -539,9 +539,6 @@ def exportplaylist():
         # execute the query
         album_list = query.all()
 
-        sql = query.statement.compile(compile_kwargs={"literal_binds": True})
-        print(sql)
-
         if not album_list:
             abort(404)
 
@@ -649,9 +646,6 @@ def get_albums(work_id):
 
     # execute the query
     albums = query.all()
-
-    sql = query.statement.compile(compile_kwargs={"literal_binds": True})
-    print(sql)
 
     if not albums:
         response_object = {'status': 'error'}
