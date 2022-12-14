@@ -21,7 +21,7 @@
 
 <script>
 import axios from "axios";
-import { eventBus } from "../../main.js";
+import { eventBus } from "@/main.js";
 
 export default {
   data() {
@@ -43,7 +43,7 @@ export default {
           this.$config.albumData = res.data.album;
           localStorage.setItem("config", JSON.stringify(this.$config));
           eventBus.$emit("fireSetAlbum", res.data.album);
-          this.album = res.data.album; // Change to local file
+          this.album = res.data.album;
           this.composer = this.$config.composer;
           this.loading = false;
         })

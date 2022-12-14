@@ -5,8 +5,7 @@
         <table v-if="album.release_date">
           <tr class="heading-tr">
             <td>
-              <b-avatar square size="60px" :src="album.images[0].url" v-if="$view.mobile"></b-avatar>
-              <b-avatar square size="60px" :src="album.images[0].url" v-if="!$view.mobile"></b-avatar>
+              <b-avatar square size="60px" :src="album.images[0].url"></b-avatar>
             </td>
             <td class="heading-td">
               {{ album.name }}<br />
@@ -41,7 +40,7 @@
 
 <script>
 import axios from "axios";
-import { eventBus } from "../../main.js";
+import { eventBus } from "@/main.js";
 import spotify from "@/SpotifyFunctions.js";
 
 export default {
@@ -55,7 +54,7 @@ export default {
   },
   methods: {
     getPersonInfo(person) {
-      const path = "https://kgsearch.googleapis.com/v1/entities:search?indent=true&types=Person&types=MusicGroup&query=" + person + " Music&limit=50&key=" + this.$auth.knowledgeKey;
+    const path = `https://kgsearch.googleapis.com/v1/entities:search?indent=true&types=Person&types=MusicGroup&query=${person} Music&limit=50&key=${this.$auth.knowledgeKey}`
       axios({
         method: "get",
         url: path,
@@ -63,31 +62,42 @@ export default {
         .then((res) => {
           let imageUrl = "";
           let description = "";
+          let list = res.data.itemListElement;
           this.loading = false;
-          if (res.data.itemListElement[0] != null) {
-            for (var i = 0; i < res.data.itemListElement.length; i++) {
+
+          if (list[0] != null) {
+            for (var i = 0; i < list.length; i++) {
+
               var personMatch = person.replace("Sir", "").replace("Dame", "").trim();
-              if (res.data.itemListElement[i].result.name.includes(personMatch)) {
+              if (list[i].result.name.includes(personMatch)) {
                 let rank = 0;
-                if ("image" in res.data.itemListElement[i].result) {
-                  imageUrl = res.data.itemListElement[i].result.image.contentUrl;
+
+                if ("image" in list[i].result) {
+                  imageUrl = list[i].result.image.contentUrl;
                   rank = rank + 1;
                 } else {
                   imageUrl = "";
                 }
-                if ("description" in res.data.itemListElement[i].result) {
-                  description = res.data.itemListElement[i].result.description;
+
+                if ("description" in list[i].result) {
+                  description = list[i].result.description;
                   rank = rank + 1;
+                  if (description.toLowerCase().includes('conductor')) {
+                    rank = rank + 10;
+                  }
                 } else {
                   description = "";
                 }
+
                 this.results.push([person, description, imageUrl, rank]);
                 this.results.sort(function (a, b) {
                   return b[3] - a[3];
                 });
+
                 break;
               }
-              if (i == res.data.itemListElement.length - 1) {
+
+              if (i == list.length - 1) {
                 this.results.push([person, "", "", -1]);
                 this.results.sort(function (a, b) {
                   return b[3] - a[3];
@@ -101,14 +111,14 @@ export default {
             });
           }
         })
-        .catch((error) => {
-          console.error(error);
-          this.loading = false;
-          this.results.push([person, "", "", -1]);
-          this.results.sort(function (a, b) {
-            return b[3] - a[3];
-          });
+      .catch((error) => {
+        console.error(error);
+        this.loading = false;
+        this.results.push([person, "", "", -1]);
+        this.results.sort(function (a, b) {
+          return b[3] - a[3];
         });
+      });
     },
     getArtistComposers(artist) {
       if (!this.$view.mobile) {
@@ -122,36 +132,15 @@ export default {
     setSpotifyAlbum(album) {
       this.album = album;
     },
-    getSpotifyArtistIDs(album) {
-      // not used
-      let artistsList = album.artists;
-      let artistIDsString = "";
-      for (var i = 0; i < artistsList.length; i++) {
-        if (i == 0) {
-          artistIDsString = artistsList[i]["id"];
-        } else {
-          artistIDsString = artistIDsString + "," + artistsList[i]["id"];
-        }
-      }
-      spotify.getSpotifyArtists(this.$auth.appToken, artistIDsString.trim());
-    },
     getSpotifyAlbumData(album) {
-      // database album object
+      // retrieves data from Spotify. 'album' is database album object
       this.loading = true;
       this.results = [];
       this.artists = album.all_artists.split(", ");
       let album_id = album.album_uri.substring(album.album_uri.lastIndexOf(":") + 1);
       spotify.getSpotifyAlbum(this.$auth.appToken, album_id);
       this.artists.forEach((element) => this.getPersonInfo(element));
-    },
-    setSpotifyArtistsData(artistList) {
-      //not used
-      this.results = [];
-      for (var i = 0; i < artistList.length; i++) {
-        this.results.push([artistList[i]["name"], "", artistList[i]["images"][1]["url"], 0]);
-      }
-      this.loading = false;
-    },
+    }
   },
   created() {
     this.getSpotifyAlbumData(this.$config.albumData);
@@ -203,7 +192,6 @@ a:hover {
 .info-td {
   padding-left: 10px;
 }
-
 .disclaimer {
   margin-bottom: 11px;
 }
@@ -215,7 +203,6 @@ a:hover {
   background-color: white !important;
   --scroll-bar-bg-color: #f1f2f4;
 }
-
 .info-card-text {
   font-size: 13px;
   line-height: 130%;
@@ -243,7 +230,6 @@ table {
   --scroll-bar-color: #d6d9db;
   --scroll-bar-bg-color: #fff;
 }
-
 .info-card-text {
   scrollbar-width: thin;
   scrollbar-color: var(--scroll-bar-color) var(--scroll-bar-bg-color) !important;
@@ -254,11 +240,9 @@ table {
   width: 12px;
   height: 12px;
 }
-
 .info-card-text::-webkit-scrollbar-track {
   background: var(--scroll-bar-bg-color) !important;
 }
-
 .info-card-text::-webkit-scrollbar-thumb {
   background-color: var(--scroll-bar-color);
   border-radius: 20px;

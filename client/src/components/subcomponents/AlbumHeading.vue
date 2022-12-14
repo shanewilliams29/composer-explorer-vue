@@ -4,10 +4,10 @@
       <v-select v-model="albumFilterField" label="text" :options="albumOptions" @input="albumFilter()" :clearable="false" :autoscroll="false" :components="{OpenIndicator}" class="mt-3 performer-search"></v-select>
       <b-row class="flex-nowrap">
         <b-col style="padding-right: 0px;" cols="8">
-          <v-select v-model="albumSortField" label="text" :options="albumSortOptions" @input="albumFilter()" :clearable="false" class="mt-3 style-chooser" :searchable="false"></v-select>
+          <v-select v-model="albumSortField" label="text" :options="albumSortOptions" @input="albumFilter()" :clearable="false" class="mt-3 filter-select" :searchable="false"></v-select>
         </b-col>
         <b-col style="padding-left: 5px;" cols="4">
-          <v-select v-model="albumSizeField" label="text" :options="albumSizeOptions" @input="albumSize()" :clearable="false" class="mt-3 style-chooser" :searchable="false"></v-select>
+          <v-select v-model="albumSizeField" label="text" :options="albumSizeOptions" @input="albumSize()" :clearable="false" class="mt-3 filter-select" :searchable="false"></v-select>
         </b-col>
       </b-row>
     </b-form-group>
@@ -20,7 +20,6 @@ import { eventBus } from "@/main.js";
 export default {
   data() {
     return {
-      artistList: [],
       OpenIndicator: {
         render: (createElement) => createElement("span", ""),
       },
@@ -48,31 +47,23 @@ export default {
       return capitalized;
     },
     albumFilter() {
-      if (this.albumFilterField.value == "allartists") {
-        eventBus.$emit("fireAlbums", this.$config.work, "", this.albumSortField.value);
-      } else {
-        eventBus.$emit("fireAlbums", this.$config.work, this.albumFilterField.value, this.albumSortField.value);
-      }
+      eventBus.$emit("fireAlbums", this.$config.work, 
+        this.albumFilterField.value === "allartists" ? "" : this.albumFilterField.value,
+        this.albumSortField.value
+      );
     },
     albumSize() {
-      if (this.albumSizeField.value == "large") {
-        this.$config.albumSize = "large";
-        localStorage.setItem("config", JSON.stringify(this.$config));
-      } else {
-        this.$config.albumSize = "small";
-        localStorage.setItem("config", JSON.stringify(this.$config));
-      }
+      this.$config.albumSize = this.albumSizeField.value === "large" ? "large" : "small";
+      localStorage.setItem("config", JSON.stringify(this.$config));
     },
     newWork() {
       this.albumFilterField = { value: "allartists", text: "All performers" };
       this.albumSortField = { value: "recommended", text: "Recommended sorting" };
     },
     createArtistList(artistList) {
-      this.artistList = [];
       this.albumOptions = [{ value: "allartists", text: "All performers" }];
       for (var key in artistList) {
         this.albumOptions.push({ value: key, text: key });
-        this.artistList.push(key);
       }
     },
   },
@@ -85,7 +76,6 @@ export default {
     eventBus.$off("fireArtistList", this.createArtistList);
   },
 };
-
 </script>
 
 <style scoped>
@@ -108,7 +98,7 @@ export default {
 .col {
   padding: 0px;
 }
-.style-chooser {
+.filter-select {
   margin-top: 5px !important;
   font-size: 14px;
   fill: white;

@@ -2,7 +2,7 @@
   <b-card class="heading-card composer-card">
     <b-form-group>
       <b-form-input v-model="composerSearchForm" v-debounce="composerSearch" type="text" @focus="onComposerFocus()" placeholder="Search composers" size="sm" autocomplete="off"></b-form-input>
-      <v-select v-model="composerFilterForm" label="text" :options="composerOptions" @input="composerFilter()" :clearable="false" class="mt-3 style-chooser" :searchable="false"></v-select>
+      <v-select v-model="composerFilterForm" label="text" :options="composerOptions" @input="composerFilter()" :clearable="false" class="mt-3 composer-select" :searchable="false"></v-select>
     </b-form-group>
   </b-card>
 </template>
@@ -37,8 +37,8 @@ export default {
     },
     composerSearch() {
       eventBus.$emit("fireComposerSearch", this.composerSearchForm);
-      if (this.composerSearchForm != "") {
-        this.composerFilterForm = 'Search results for "' + this.composerSearchForm + '"';
+      if (this.composerSearchForm) {
+        this.composerFilterForm = `Search results for "${this.composerSearchForm}"`;
       } else {
         this.composerFilterForm = { value: "popular", text: "Most popular" };
       }
@@ -48,7 +48,7 @@ export default {
       this.composerSearchForm = "";
       eventBus.$emit("fireComposerSearch", "");
     },
-  },
+  }
 };
 </script>
 
@@ -72,7 +72,7 @@ export default {
 .col {
   padding: 0px;
 }
-.style-chooser {
+.composer-select {
   margin-top: 5px !important;
   font-size: 14px;
   fill: white;

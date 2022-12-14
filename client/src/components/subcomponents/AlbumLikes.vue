@@ -1,8 +1,7 @@
 <template>
   <div>
     <span class="likes" v-if="currentLikes">
-      <b-badge v-if="parseInt(currentLikes) == 1 ">{{ currentLikes }} Like</b-badge>
-      <b-badge v-if="parseInt(currentLikes) > 1 ">{{ currentLikes }} Likes</b-badge>
+      <b-badge>{{ currentLikes }} Like{{ currentLikes > 1 ? 's' : '' }}</b-badge>
     </span>
     <span class="user-liked" v-if="userLikes">&nbsp;<b-icon-heart-fill></b-icon-heart-fill></span>
     <span class="likes" v-if="!currentLikes">
@@ -24,18 +23,13 @@ export default {
   data() {
     return {
       currentLikes: this.album.likes,
-      userLikes: this.likedAlbums.indexOf(this.album.id) > -1,
+      userLikes: this.likedAlbums.includes(this.album.id),
     };
   },
   methods: {
     detectLike(album_id) {
-      if (album_id == this.album.id && this.userLikes) {
-        this.$view.like = true;
-      } else if (album_id == this.album.id && !this.userLikes) {
-        this.$view.like = false;
-      } else if (album_id != this.album.id) {
-        // pass
-      }
+      if (album_id != this.album.id) return;
+      this.$view.like = this.userLikes;
     },
     likeAlbum() {
       if (this.selectedAlbum == this.album.id && !this.userLikes) {

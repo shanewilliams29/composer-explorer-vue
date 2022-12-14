@@ -12,7 +12,9 @@
           </td>
           <td class="info-td">
             {{ composer.name_full }}<br />
-            <span class="born-died">{{ composer.born }} - {{ composer.died }}</span>
+            <span class="born-died">
+              {{ composer.born }} - {{ composer.died > 2049 ? 'present' : composer.died }}
+            </span>
           </td>
         </tr>
       </table>
@@ -22,7 +24,7 @@
         <b-spinner class="m-5"></b-spinner>
       </div>
       <div v-show="!loading" style="white-space: pre-line;">
-        {{ addLineBreaksToParagraph(composer.introduction) }}<br />
+        {{ addLineBreaks(composer.introduction) }}<br />
         <a :href="composer.pageurl" target="_blank" class="wiki-link">
           <br />
           Read more on Wikipedia
@@ -34,6 +36,7 @@
 
 <script>
 import axios from "axios";
+import {addLineBreaksToParagraph} from "@/HelperFunctions.js"
 
 export default {
   data() {
@@ -49,40 +52,14 @@ export default {
   },
   watch: {
     composerChanged(newComposer) {
-      if (newComposer != "") {
+      if (newComposer) {
         this.getComposerInfo(newComposer);
       }
     },
   },
   methods: {
-    addLineBreaksToParagraph(paragraph){
-      // Remove existing line breaks
-      let unbrokenText = paragraph.replace(/\n/g, "");
-
-      var isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
-
-      if (isSafari) { // Cant's use lookbehind regex in Safari
-        return unbrokenText;
-      
-      } else {
-        // Split the text into an array of sentences
-        let regex = "/(?<![A-Z])(?<!No)(?<!Op)[.]/"
-        let sentences = unbrokenText.split(eval(regex));
-        
-        // Initialize the result to the first sentence
-        let result = sentences[0]
-      
-        // Loop through the remaining sentences, adding line breaks every 2 sentences
-        for (let i = 1; i < sentences.length - 1; i++) {
-          if (i % 2 === 0) {
-            result += ".\n\n";
-          } else {
-            result += ". ";
-          }
-          result += sentences[i];
-        }
-        return result + ".";
-      }
+    addLineBreaks(paragraph){
+      return addLineBreaksToParagraph(paragraph);
     },
     getComposerInfo(composer) {
       this.loading = true;

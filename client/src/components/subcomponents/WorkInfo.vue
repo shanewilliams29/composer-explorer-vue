@@ -37,6 +37,7 @@
 
 <script>
 import axios from "axios";
+import {addLineBreaksToParagraph} from "@/HelperFunctions.js"
 
 export default {
   data() {
@@ -72,35 +73,6 @@ export default {
         return regex.test(text);
       } else {
         return text.toLowerCase().includes(title.toLowerCase());
-      }
-    },
-    addLineBreaksToParagraph(paragraph){
-      // Remove existing line breaks
-      let unbrokenText = paragraph.replace(/\n/g, "");
-
-      var isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
-
-      if (isSafari) { // Cant's use lookbehind regex in Safari
-        return unbrokenText;
-      
-      } else {
-        // Split the text into an array of sentences
-        let regex = "/(?<![A-Z])(?<!No)(?<!Op)[.]/"
-        let sentences = unbrokenText.split(eval(regex));
-        
-        // Initialize the result to the first sentence
-        let result = sentences[0]
-      
-        // Loop through the remaining sentences, adding line breaks every 2 sentences
-        for (let i = 1; i < sentences.length - 1; i++) {
-          if (i % 2 === 0) {
-            result += ".\n\n";
-          } else {
-            result += ". ";
-          }
-          result += sentences[i];
-        }
-        return result + ".";
       }
     },
     getWorkInfo(work) {
@@ -196,7 +168,7 @@ export default {
               for (var id in res.data.query.pages) {
                 let text = res.data.query.pages[id].extract;
                 this.workMatch = this.checkIfWorkMatches(this.catNo, this.workTitle, text);
-                this.workBlurb = this.addLineBreaksToParagraph(text);
+                this.workBlurb = addLineBreaksToParagraph(text);
                 this.pageTitle = res.data.query.pages[id].title;
                 let wikiurl = "https://en.wikipedia.org/wiki/" + this.pageTitle;
                 this.wikiLink = wikiurl;
