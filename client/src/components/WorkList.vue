@@ -365,12 +365,8 @@ export default {
             }
           })
           .catch((error) => {
-            if (prefetch) {
-              this.$view.playlistError = "Too many tracks selected";
-            } else {
               this.$view.playlistError = error;
-            }
-            this.$view.playlistSuccess = false;
+              this.$view.playlistSuccess = false;
           });
       }
     },

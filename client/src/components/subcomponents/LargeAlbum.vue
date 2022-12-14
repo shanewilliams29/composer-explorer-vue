@@ -3,16 +3,16 @@
     <b-card class="shadow-sm" v-for="album in albums" :key="album.id" :id="album.id" no-body header-tag="header" :class="{'highlight': (album.id == selectedAlbum)}">
       <div class="row">
         <b-col class="album_columns">
-          <div class="album-titles" @click="$parent.selectRow(album.id); $parent.getAlbumData(album.id);">
+          <div class="album-titles" @click="$emit('selectAlbum', album.id); $emit('getAlbum', album.id);">
             <span style="color: black; font-weight: 600;">{{ album.artists }}</span><br />
             <span>℗ {{ album.release_date }}</span>
             <br />
             <span v-if="album.minor_artists" style="color: grey; font-size: 12px !important;">{{ album.minor_artists }}</span>
           </div>
-          <div v-if="album.img_big" @click="$parent.selectRow(album.id); $parent.getAlbumData(album.id);">
+          <div v-if="album.img_big" @click="$emit('selectAlbum', album.id); $emit('getAlbum', album.id);">
             <img class="album-cover" height="auto" v-lazy="album.img_big" />
           </div>
-          <div v-else @click="$parent.selectRow(album.id); $parent.getAlbumData(album.id);"><img class="album-cover" height="auto" v-lazy="album.album_img" /></div>
+          <div v-else @click="$emit('selectAlbum', album.id); $emit('getAlbum', album.id);"><img class="album-cover" height="auto" v-lazy="album.album_img" /></div>
           <div class="row">
             <b-col class="col likes-col" cols="4">
               <AlbumLikes v-bind:likedAlbums="likedAlbums" v-bind:album="album" v-bind:selectedAlbum="selectedAlbum" />

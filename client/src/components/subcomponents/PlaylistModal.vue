@@ -7,7 +7,6 @@
       <div class="m-2 text-center">
         <h4>Export this radio as a Spotify playlist</h4>
         <div>&nbsp;</div>
-
         <b-spinner v-if="spinnerShow && !$view.playlistSuccess && !$view.playlistError" label="Large Spinner"></b-spinner>
         <div v-if="$view.playlistError" style="color: darkred;">
           Sorry, we encounted the following error:<br />
@@ -34,6 +33,7 @@
 
 <script>
 import { staticURL } from "@/main.js";
+
 export default {
   data() {
     return {

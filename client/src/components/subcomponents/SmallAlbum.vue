@@ -1,25 +1,30 @@
 <template>
   <div>
     <b-card class="shadow-sm" v-for="album in albums" :key="album.id" :id="album.id" no-body header-tag="header" :class="{'highlight': (album.id == selectedAlbum)}">
-    <Transition name="fade">
-      <div v-if="!$view.mobile && !$view.banner">
-      <div class="popup" v-if="showCover == album.id">
-        <img class="album-cover" :src="album.img_big" />
-        <div class="image-caption">
-        <span style="color: black !important; font-weight: 600; font-size: 13px;">{{ album.artists }}</span><br>
-        <!-- <span style="color: black !important; font-size: 13px;"> ℗ {{ album.release_date }} · {{ album.label }}</span><br> -->
-        <span v-if="album.minor_artists" style="color: gray !important; font-size: 12px;">{{ album.minor_artists }}</span>
-      </div>
-      </div>
-      </div>
+      <!-- ALBUM POPUP -->
+      <Transition name="fade">
+        <div v-if="!$view.mobile && !$view.banner">
+          <div class="popup" v-if="showCover == album.id">
+            <img class="album-cover" :src="album.img_big" />
+            <div class="image-caption">
+              <span style="color: black !important; font-weight: 600; font-size: 13px;">{{ album.artists }}</span><br />
+              <!-- <span style="color: black !important; font-size: 13px;"> ℗ {{ album.release_date }} · {{ album.label }}</span><br> -->
+              <span v-if="album.minor_artists" style="color: gray !important; font-size: 12px;">{{ album.minor_artists }}</span>
+            </div>
+          </div>
+        </div>
       </Transition>
+      <!-- ALBUM ITEM PANEL -->
       <div class="row" @mouseover="showCover = album.id" @mouseleave="showCover = false">
         <b-col cols="auto" class="album_columns">
-          <img class="album-img-small" @click="$parent.selectRow(album.id); $parent.getAlbumData(album.id);" v-lazy="album.img_big"/>
+          <img class="album-img-small" 
+            @click="$emit('selectAlbum', album.id); $emit('getAlbum', album.id);" 
+            v-lazy="album.img_big" />
         </b-col>
         <b-col class="album_text_columns">
           <b-card-text>
-            <table cellspacing="0" @click="$parent.selectRow(album.id); $parent.getAlbumData(album.id);">
+            <table cellspacing="0" 
+              @click="$emit('selectAlbum', album.id); $emit('getAlbum', album.id);">
               <tr>
                 <td width="100%" style="white-space: nowrap; text-overflow: ellipsis; overflow: hidden; max-width: 1px;">
                   <span style="color: black; font-weight: 600; font-size: 13px;">{{ album.artists }} </span>

@@ -442,8 +442,14 @@ def get_worksbygenre():
 
 
 @bp.route('/api/exportplaylist', methods=['POST'])  # used in radio mode
-@login_required
 def exportplaylist():
+    if current_user.is_authenticated:
+        user_id = current_user.id
+    elif Config.MODE == 'DEVELOPMENT':
+        user_id = 85  # 85
+    else:
+        abort(401)
+
     # get genres
     payload = request.get_json()
 
