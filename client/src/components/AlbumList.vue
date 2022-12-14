@@ -4,15 +4,28 @@
       <b-spinner class="m-5"></b-spinner>
     </div>
     <div class="row">
-      <span v-show="!loading && albums.length < 1 && !this.$view.mode" class="m-4 col no-albums-found">
+      <span v-show="!loading && albums.length < 1 && !this.$view.mode" 
+        class="m-4 col no-albums-found">
         No albums found.
       </span>
     </div>
     <div v-if="albums">
       <div class="row">
         <b-card-group deck v-show="!loading">
-          <LargeAlbum v-if="$config.albumSize == 'large' || $view.mode == 'radio'" v-bind:albums="albums" v-bind:selectedAlbum="selectedAlbum" v-bind:likedAlbums="likedAlbums" @selectAlbum="selectRow" @getAlbum="getAlbumData"/>
-          <SmallAlbum v-else v-bind:albums="albums" v-bind:selectedAlbum="selectedAlbum" v-bind:likedAlbums="likedAlbums" @selectAlbum="selectRow" @getAlbum="getAlbumData"/>
+          <LargeAlbum 
+            v-if="$config.albumSize == 'large' || $view.mode == 'radio'" 
+            :albums="albums" 
+            :selectedAlbum="selectedAlbum" 
+            :likedAlbums="likedAlbums" 
+            @selectAlbum="selectRow" 
+            @getAlbum="getAlbumData"/>
+          <SmallAlbum 
+            v-else 
+            :albums="albums" 
+            :selectedAlbum="selectedAlbum" 
+            :likedAlbums="likedAlbums" 
+            @selectAlbum="selectRow" 
+            @getAlbum="getAlbumData"/>
           <infinite-loading spinner="spiral" :identifier="infiniteId" @infinite="infiniteHandler">
             <div slot="no-more"></div>
             <div slot="no-results"></div>

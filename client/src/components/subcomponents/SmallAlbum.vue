@@ -50,9 +50,9 @@
                 <td width="100%" class="td-style">
                   <span class="album-likes-class">
                     <AlbumLikes 
-                      v-bind:likedAlbums="likedAlbums" 
-                      v-bind:album="album" 
-                      v-bind:selectedAlbum="selectedAlbum" />
+                      :likedAlbums="likedAlbums" 
+                      :album="album" 
+                      :selectedAlbum="selectedAlbum" />
                   </span>
                 </td>
               </tr>
