@@ -19,10 +19,10 @@
             </b-col>
             <b-col class="col footer" cols="8">
               <div v-if="album.id == selectedAlbum">
-                <a target="_blank" :href="'https://open.spotify.com/album/' + album.album_id"><span class="open-in">Open in&nbsp; </span><img class="spotify-logo" width="70px" :src="spotifyLogoURLWhite" /></a>
+                <a target="_blank" :href="`https://open.spotify.com/album/${album.album_id}`"><span class="open-in">Open in&nbsp; </span><img class="spotify-logo" width="70px" :src="spotifyLogoURLWhite" /></a>
               </div>
               <div v-else>
-                <a target="_blank" :href="'https://open.spotify.com/album/' + album.album_id"><img class="spotify-logo" width="70px" :src="spotifyLogoURLBlack" /></a>
+                <a target="_blank" :href="`https://open.spotify.com/album/${album.album_id}`"><img class="spotify-logo" width="70px" :src="spotifyLogoURLBlack" /></a>
               </div>
             </b-col>
           </div>

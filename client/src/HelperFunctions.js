@@ -5,7 +5,7 @@ export function addLineBreaksToParagraph(paragraph){
   let isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
 
   if (isSafari) { // Cant's use lookbehind regex in Safari
-    return unbrokenText;
+    return paragraph;
 
   } else {
     // Split the text into an array of sentences

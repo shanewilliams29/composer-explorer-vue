@@ -2,24 +2,55 @@
   <b-container class="playback-container">
     <b-row class="buttons-row">
       <b-col class="text-center text-nowrap">
-        <b-button class="playback-button gray" id="shuffle-play" v-show="!$view.shuffle" @click="shufflePlayback()"><b-icon-shuffle></b-icon-shuffle></b-button>
-        <b-button class="playback-button" id="shuffle-play" v-show="$view.shuffle" @click="shufflePlayback()"><b-icon-shuffle variant="warning"></b-icon-shuffle></b-button>
-        <b-button class="playback-button" id="previous-work-button" @click="previousWork()"><b-icon-arrow-left-circle></b-icon-arrow-left-circle></b-button>
-        <b-button class="playback-button" id="back-button" @click="back()"><b-icon-skip-start-fill></b-icon-skip-start-fill></b-button>
-        <!-- Play button function is handled in the SpotifyPlayer.vue listener -->
-        <b-button class="playback-button" id="play-button" v-show="!playing"><b-icon-play-fill></b-icon-play-fill></b-button>
-        <b-button class="playback-button" id="pause-button" v-show="playing" @click="pause()"><b-icon-pause-fill></b-icon-pause-fill></b-button>
-        <b-button class="playback-button" id="forward-button" @click="next()"><b-icon-skip-end-fill></b-icon-skip-end-fill></b-button>
-        <b-button class="playback-button" id="next-work-button" @click="nextWorkNoDebounce()"><b-icon-arrow-right-circle></b-icon-arrow-right-circle></b-button>
-        <b-button class="playback-button gray" id="like-work-button" v-show="!$view.like" @click="toggleLike()"><b-icon-heart></b-icon-heart></b-button>
-        <b-button class="playback-button red" id="unlike-work-button" v-show="$view.like" @click="toggleLike()"><b-icon-heart-fill></b-icon-heart-fill></b-button>
+        <b-button class="playback-button gray" id="shuffle-play-false" v-show="!$view.shuffle" 
+          @click="shufflePlayback()">
+          <b-icon-shuffle></b-icon-shuffle>
+        </b-button>
+        <b-button class="playback-button" id="shuffle-play-true" v-show="$view.shuffle" 
+          @click="shufflePlayback()">
+          <b-icon-shuffle variant="warning"></b-icon-shuffle>
+        </b-button>
+        <b-button class="playback-button" id="previous-work-button" 
+          @click="previousWork()">
+          <b-icon-arrow-left-circle></b-icon-arrow-left-circle>
+        </b-button>
+        <b-button class="playback-button" id="back-button" 
+          @click="back()">
+          <b-icon-skip-start-fill></b-icon-skip-start-fill>
+        </b-button>
+        <b-button class="playback-button" id="play-button" v-show="!playing">
+          <!-- Play button function is handled in the SpotifyPlayer.vue listener -->
+          <b-icon-play-fill></b-icon-play-fill>
+        </b-button>
+        <b-button class="playback-button" id="pause-button" v-show="playing" 
+          @click="pause()">
+          <b-icon-pause-fill></b-icon-pause-fill>
+        </b-button>
+        <b-button class="playback-button" id="forward-button" 
+          @click="next()">
+          <b-icon-skip-end-fill></b-icon-skip-end-fill>
+        </b-button>
+        <b-button class="playback-button" id="next-work-button" 
+          @click="nextWorkNoDebounce()">
+          <b-icon-arrow-right-circle></b-icon-arrow-right-circle>
+        </b-button>
+        <b-button class="playback-button gray" id="like-work-button" v-show="!$view.like" 
+          @click="toggleLike()">
+          <b-icon-heart></b-icon-heart>
+        </b-button>
+        <b-button class="playback-button red" id="unlike-work-button" v-show="$view.like" 
+          @click="toggleLike()">
+          <b-icon-heart-fill></b-icon-heart-fill>
+        </b-button>
       </b-col>
     </b-row>
     <b-row class="seekbar-row">
       <b-col class="text-center">
         <table class="seekbar-table" width="100%">
           <tr>
-            <td class="footertable" width="10%"><div class="time" id="time-progress">{{ display_progress }}</div></td>
+            <td class="footertable" width="10%">
+              <div class="time" id="time-progress">{{ display_progress }}</div>
+            </td>
             <td class="footertable" width="80%">
               <div class="slidecontainer">
                 <b-form-input
@@ -35,7 +66,9 @@
                 ></b-form-input>
               </div>
             </td>
-            <td class="footertable" width="10%"><div class="time" id="time-duration">{{ display_duration }}</div></td>
+            <td class="footertable" width="10%">
+              <div class="time" id="time-duration">{{ display_duration }}</div>
+            </td>
           </tr>
         </table>
       </b-col>
@@ -45,12 +78,13 @@
 
 <script>
 import spotify from "@/SpotifyFunctions.js";
-import { eventBus } from "../../main.js";
+import {eventBus} from "../../main.js";
 import axios from "axios";
 
 const debouncedNext = debounce(() => fireNextWork());
 let allowNext = false;
 
+// Debounces the given function
 function debounce(func, timeout = 2000) {
   let timer;
   return (...args) => {
@@ -61,6 +95,7 @@ function debounce(func, timeout = 2000) {
   };
 }
 
+// Advances playback to the next work in the playlist
 function fireNextWork() {
   if (allowNext) {
     allowNext = false;
@@ -84,6 +119,7 @@ export default {
   },
   methods: {
     play() {
+      // Not used. Play button function is handled in the SpotifyPlayer.vue listener
       spotify.pressPlay(this.$auth.clientToken, this.$auth.deviceID);
     },
     pause() {
@@ -101,6 +137,7 @@ export default {
         var smushTracks = this.$config.previousTracks.replace(/\s/g, "");
         var cleanTracks = smushTracks.replaceAll("spotify", " spotify").trim();
 
+        // send track list to Spotify
         uriList["uris"] = cleanTracks.split(" ");
         jsonList = JSON.stringify(uriList);
         spotify.playTracks(this.$auth.clientToken, this.$auth.deviceID, jsonList);
@@ -148,7 +185,6 @@ export default {
     startTimer() {
       this.suspend = false;
     },
-
     delayStartTimer() {
       this.suspend = true;
       setTimeout(this.startTimer, this.delay);
@@ -167,7 +203,7 @@ export default {
       this.$view.shuffle = !this.$view.shuffle;
     },
     likeDatabase(albumID, action) {
-      const path = "api/like/" + albumID + "/" + action;
+      const path = `api/like/${albumID}/${action}`;
       axios
         .get(path)
         // eslint-disable-next-line
@@ -200,33 +236,41 @@ export default {
       }
     });
 
+    // Receives data from Spotify API with current playback data upon a player state change
     eventBus.$on("firePlayerStateChanged", (track_data, position, duration, paused) => {
-      //console.log(position, + ' ' + duration +" " +paused);
+      
       if (position == 0 && !paused) {
         // can delay timer here if glitchy
         this.playing = true;
         this.startTimer();
         this.setPlayback(0, duration);
+
       } else if (position == 0 && paused && allowNext) {
-        // Advance to next work when play stops current work
-        // Spotify API spams function with requests when changing track, debounce function
+        // Advance to next work when play stops after current work complete
+        // Spotify API spams function with requests when changing track, therefore function is debounced
         this.nextWork();
+
       } else if (position > 0 && position < 3000 && !paused) {
         // used to need this, Spotify changed behavior to not need it though?
         allowNext = true;
         this.playing = true;
         this.startTimer();
+
       } else {
         this.playing = !paused;
+
         if (position > 0) {
           // prevent firefox crash
           allowNext = true;
         }
+
         if (this.playing == true) {
           this.startTimer();
+
         } else {
           this.suspend = true;
         }
+
         this.setPlayback(position, duration);
       }
       // update previousTracks
@@ -250,14 +294,16 @@ export default {
     });
   },
   mounted() {
+    // Drives the playback progress bar
     setInterval(this.playbackTimer, 1000);
   },
 };
 
 </script>
 
-<style scoped>.playback-container {
-  /*top padding set in App.vue*/
+<style scoped>
+.playback-container {
+  /* top padding set in App.vue, adjusted in desktop vs mobile view */
   padding: 13px;
   padding-bottom: 0px;
   font-size: 14px;
