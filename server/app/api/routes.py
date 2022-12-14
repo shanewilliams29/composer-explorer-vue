@@ -388,8 +388,6 @@ def get_worksbygenre():
     # order the query results by genre and id
     works_list = query.order_by(WorkList.genre, WorkList.id).all()
 
-    print(len(works_list))
-
     if not works_list:
         response_object = {'status': 'success'}
         response_object['works'] = []
@@ -514,7 +512,7 @@ def exportplaylist():
         filter_map = {
             "all": WorkList.album_count > 0,
             "recommended": WorkList.recommend == True,
-            "obscure": and_(or_(WorkList.recommend == None, WorkList.recommend != True), WorkList.album_count > 0)
+            "obscure": or_(WorkList.recommend == None, WorkList.recommend != True)
         }
 
         query_filter = filter_map.get(work_filter)
@@ -532,7 +530,7 @@ def exportplaylist():
         if random_album:
             query = query.order_by(WorkList.genre, WorkList.id, func.random())
         else:
-            query = query.order_by(WorkList.genre, WorkList.id, func.count(AlbumLike.id).desc(), WorkAlbums.score.desc())
+            query = query.order_by(WorkList.genre, WorkList.id, func.count(AlbumLike.id).desc(), WorkAlbums.album_type, WorkAlbums.score.desc())
 
         # make subquery and get first album of each work
         t = query.subquery('t')
@@ -540,6 +538,9 @@ def exportplaylist():
 
         # execute the query
         album_list = query.all()
+
+        sql = query.statement.compile(compile_kwargs={"literal_binds": True})
+        print(sql)
 
         if not album_list:
             abort(404)
@@ -643,11 +644,14 @@ def get_albums(work_id):
         # disallow compilation albums unless user favorited
         query = query.filter(or_(t.c.album_type != "compilation", t.c.total > 0))
 
-    # sort the results
-    query = query.order_by(t.c.total.desc(), t.c.total.desc())
+    # sort the results. Album type sort rates albums ahead of compilations and singles
+    query = query.order_by(t.c.total.desc(), t.c.album_type, t.c.score.desc())
 
     # execute the query
     albums = query.all()
+
+    sql = query.statement.compile(compile_kwargs={"literal_binds": True})
+    print(sql)
 
     if not albums:
         response_object = {'status': 'error'}
@@ -683,7 +687,7 @@ def get_albums(work_id):
             if item['track_count'] > 50 and int(item['release_date'][0:4]) > 2019:
                 item['score'] = item['score'] / 4
 
-        # filter out repeat albums
+        # # filter out repeat albums
         artists_string = "".join(sorted(re.sub(r'[^\w\s]', '', item['artists']).replace(" ", "").lower()))
 
         if artist_name:  # return more repeat results for performer filter (allow distinct years)
