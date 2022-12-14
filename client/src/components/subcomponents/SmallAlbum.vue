@@ -1,15 +1,21 @@
 <template>
   <div>
-    <b-card class="shadow-sm" v-for="album in albums" :key="album.id" :id="album.id" no-body header-tag="header" :class="{'highlight': (album.id == selectedAlbum)}">
+    <b-card 
+      class="shadow-sm" 
+      v-for="album in albums" 
+      :key="album.id" 
+      :id="album.id" 
+      no-body 
+      header-tag="header" 
+      :class="{'highlight': (album.id == selectedAlbum)}">
       <!-- ALBUM POPUP -->
       <Transition name="fade">
         <div v-if="!$view.mobile && !$view.banner">
           <div class="popup" v-if="showCover == album.id">
             <img class="album-cover" :src="album.img_big" />
             <div class="image-caption">
-              <span style="color: black !important; font-weight: 600; font-size: 13px;">{{ album.artists }}</span><br />
-              <!-- <span style="color: black !important; font-size: 13px;"> ℗ {{ album.release_date }} · {{ album.label }}</span><br> -->
-              <span v-if="album.minor_artists" style="color: gray !important; font-size: 12px;">{{ album.minor_artists }}</span>
+              <span class="album-major-artists">{{ album.artists }}</span><br />
+              <span v-if="album.minor_artists" class="album-minor-artists">{{ album.minor_artists }}</span>
             </div>
           </div>
         </div>
@@ -26,30 +32,46 @@
             <table cellspacing="0" 
               @click="$emit('selectAlbum', album.id); $emit('getAlbum', album.id);">
               <tr>
-                <td width="100%" style="white-space: nowrap; text-overflow: ellipsis; overflow: hidden; max-width: 1px;">
-                  <span style="color: black; font-weight: 600; font-size: 13px;">{{ album.artists }} </span>
+                <td width="100%" class="td-style">
+                  <span class="album-major-artists selected">
+                    {{ album.artists }}
+                  </span>
                 </td>
               </tr>
               <tr>
-                <td width="100%" style="white-space: nowrap; text-overflow: ellipsis; overflow: hidden; max-width: 1px;">
-                  <span v-if="album.minor_artists" style="color: gray; font-size: 12px;">{{ album.minor_artists }}</span>
+                <td width="100%" class="td-style">
+                  <span v-if="album.minor_artists" class="album-minor-artists selected">
+                    {{ album.minor_artists }}
+                  </span>
                   <span v-else><br /></span>
                 </td>
               </tr>
               <tr>
-                <td width="100%" style="white-space: nowrap; text-overflow: ellipsis; overflow: hidden; max-width: 1px;">
-                  <span class="album-likes-class"> <AlbumLikes v-bind:likedAlbums="likedAlbums" v-bind:album="album" v-bind:selectedAlbum="selectedAlbum" /></span>
+                <td width="100%" class="td-style">
+                  <span class="album-likes-class">
+                    <AlbumLikes 
+                      v-bind:likedAlbums="likedAlbums" 
+                      v-bind:album="album" 
+                      v-bind:selectedAlbum="selectedAlbum" />
+                  </span>
                 </td>
               </tr>
               <tr>
-                <td width="100%" style="white-space: nowrap; text-overflow: ellipsis; overflow: hidden; max-width: 1px;"><span class="label">℗ {{ album.release_date }}</span><span class="label"> · {{ album.label }}</span></td>
+                <td width="100%" class="td-style">
+                  <span class="label">℗ {{ album.release_date }}</span>
+                  <span class="label"> · {{ album.label }}</span>
+                </td>
               </tr>
             </table>
             <div v-if="album.id == selectedAlbum">
-              <a target="_blank" :href="'https://open.spotify.com/album/' + album.album_id"><img class="spotify-icon" width="21px" :src="spotifyLogoURLWhite" /></a>
+              <a target="_blank" :href="'https://open.spotify.com/album/' + album.album_id">
+                <img class="spotify-icon" width="21px" :src="spotifyLogoURLWhite" />
+              </a>
             </div>
             <div v-else>
-              <a target="_blank" :href="'https://open.spotify.com/album/' + album.album_id"><img class="spotify-icon" width="21px" :src="spotifyLogoURLBlack" /></a>
+              <a target="_blank" :href="'https://open.spotify.com/album/' + album.album_id">
+                <img class="spotify-icon" width="21px" :src="spotifyLogoURLBlack" />
+              </a>
             </div>
           </b-card-text>
         </b-col>
@@ -57,6 +79,7 @@
     </b-card>
   </div>
 </template>
+
 
 <script>
 import { staticURL } from "@/main.js";
@@ -92,6 +115,21 @@ export default {
 }
 .fade-leave-to {
   opacity: 0;
+}
+.td-style{
+  white-space: nowrap; 
+  text-overflow: ellipsis; 
+  overflow: hidden; 
+  max-width: 1px;
+}
+.album-major-artists{
+  color: black; 
+  font-weight: 600; 
+  font-size: 13px;
+}
+.album-minor-artists{
+  color: gray; 
+  font-size: 12px;
 }
 .popup{
   max-width: calc(100vh - var(--workingheight));
@@ -171,10 +209,10 @@ header.card-header {
 .card:hover {
   cursor: pointer;
 }
-.highlight {
+.highlight .selected{
   color: white !important;
 }
-.highlight span {
+.highlight .label {
   color: white !important;
 }
 .album_columns {
