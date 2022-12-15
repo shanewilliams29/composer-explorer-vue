@@ -135,17 +135,26 @@ export default {
   max-width: calc(100vh - var(--workingheight));
   line-height: 16px;
   padding: 0px;
-  background-color: white;
   position: fixed; 
   top: 50%; 
   left: 33%; 
   transform: translate(-50%, -50%);
-  z-index: 9999;
   box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+  background-color: #343a40;
+  z-index: 9999;
+}
+.popup >>> .album-major-artists {
+  color: white !important;
+}
+.popup >>> .album-minor-artists {
+  color: lightgray !important;
 }
 .image-caption{
   width: 100%;
-  padding: 8px;
+  padding-top: 9px;
+  padding-bottom: 10px;
+  padding-left: 10px;
+  padding-right: 10px;
 }
 .album-cover {
     box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
