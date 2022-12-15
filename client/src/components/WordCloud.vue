@@ -28,7 +28,7 @@ export default {
   },
   methods:{
     wordClick(word){
-      eventBus.$emit('fireArtistComposers', word);
+      eventBus.$emit('requestComposersForArtist', word);
     }
   },
   created() {

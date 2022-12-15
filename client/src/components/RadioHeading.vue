@@ -221,9 +221,9 @@ export default {
     radioTypeSelect() {
       // reset everything on radio type change
       this.$router.replace({ query: null });
-      eventBus.$emit("fireRadioSelect", this.radioTypeField.value);
-      eventBus.$emit("fireClearWorks");
-      eventBus.$emit("fireClearAlbums");
+      eventBus.$emit("requestRadioComposersMultiselectDropdownList", this.radioTypeField.value);
+      eventBus.$emit("clearWorksList");
+      eventBus.$emit("clearAlbumsList");
       this.query = null;
       this.$config.artist = null;
       this.$config.genre = null;
@@ -246,7 +246,7 @@ export default {
         this.$config.composer = null;
         this.radioTypeSelect(); // clears works and albums
       } else {
-        eventBus.$emit("fireComposerSelectRadio", this.composerSelectField);
+        eventBus.$emit("requestComposersFromRadioMultiselect", this.composerSelectField);
       }
     },
     makeGenreList(genreList) {
@@ -262,7 +262,7 @@ export default {
       eventBus.$emit("fireGenreSelectRadio", this.genreSelectField, this.workFilterField.value, this.workSearchField, this.query, this.radioTypeField.value);
     },
     periodSelect() {
-      eventBus.$emit("fireComposerFilter", this.periodSelectField.value);
+      eventBus.$emit("requestComposersFromFilter", this.periodSelectField.value);
     },
     genreSelect() {
       if (this.genreSelectField.length > 1) {
@@ -295,7 +295,7 @@ export default {
     },
     artistSearch(artist) {
       this.$config.artist = artist;
-      eventBus.$emit("fireArtistComposers", artist);
+      eventBus.$emit("requestComposersForArtist", artist);
     },
     prepareForExport() {
       eventBus.$emit("firePlaylistExport", this.query, this.radioTypeField.value, this.genreSelectField, this.workFilterField.value, this.workSearchField, this.limitFilterField.value, true, "dummyname");
@@ -317,21 +317,21 @@ export default {
     this.$view.radioPlaying = false;
     this.$view.enableRadio = false;
     this.$view.enableExport = false;
-    eventBus.$on("fireComposerListToRadio", this.makeComposerDropdown);
-    eventBus.$on("fireRadioGenreList", this.makeGenreList);
+    eventBus.$on("submitComposerListToRadio", this.makeComposerDropdown);
+    eventBus.$on("sendGenreListToRadio", this.makeGenreList);
   },
   mounted() {
     if (this.$route.query.artist) {
       this.radioTypeField = { value: "performer", text: "Performer Radio" };
       this.query = this.$route.query.artist;
-      eventBus.$emit("fireRadioSelect", "performer");
+      eventBus.$emit("requestRadioComposersMultiselectDropdownList", "performer");
     } else {
-      eventBus.$emit("fireRadioSelect", "composer");
+      eventBus.$emit("requestRadioComposersMultiselectDropdownList", "composer");
     }
   },
   beforeDestroy() {
-    eventBus.$off("fireComposerListToRadio", this.makeComposerDropdown);
-    eventBus.$off("fireRadioGenreList", this.makeGenreList);
+    eventBus.$off("submitComposerListToRadio", this.makeComposerDropdown);
+    eventBus.$off("sendGenreListToRadio", this.makeGenreList);
   },
 };
 </script>

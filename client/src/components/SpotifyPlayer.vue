@@ -69,7 +69,7 @@ export default {
                     this.reload = false;
                   } else {
                     // NEXT ALBUM IF ERROR PERSISTS (Spotify Album not found, 404)
-                    eventBus.$emit("fireNextAlbum");
+                    eventBus.$emit("advanceToNextAlbum");
                     console.log("NEXT ALBUM");
                     eventBus.$emit("fireNotFoundModal");
                     this.reload = true;

@@ -58,17 +58,17 @@ export default {
   },
   created() {
     this.loading = true;
-    eventBus.$on("fireAlbumData", this.getAlbumInfo);
-    eventBus.$on("fireAlbums", this.holdTitle);
-    eventBus.$on("fireFavoritesAlbums", this.holdTitle);
-    eventBus.$on("fireAlbumsAndPlay", this.holdTitle);
+    eventBus.$on("requestAlbumData", this.getAlbumInfo);
+    eventBus.$on("requestAlbums", this.holdTitle);
+    eventBus.$on("requestFavoritesAlbums", this.holdTitle);
+    eventBus.$on("requestAlbumsAndPlay", this.holdTitle);
     eventBus.$on("fireArtistAlbums", this.holdTitle);
   },
   beforeDestroy() {
-    eventBus.$off("fireAlbumData", this.getAlbumInfo);
-    eventBus.$off("fireAlbums", this.holdTitle);
-    eventBus.$off("fireFavoritesAlbums", this.holdTitle);
-    eventBus.$off("fireAlbumsAndPlay", this.holdTitle);
+    eventBus.$off("requestAlbumData", this.getAlbumInfo);
+    eventBus.$off("requestAlbums", this.holdTitle);
+    eventBus.$off("requestFavoritesAlbums", this.holdTitle);
+    eventBus.$off("requestAlbumsAndPlay", this.holdTitle);
     eventBus.$off("fireArtistAlbums", this.holdTitle);
   },
 };

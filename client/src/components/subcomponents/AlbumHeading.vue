@@ -47,7 +47,7 @@ export default {
       return capitalized;
     },
     albumFilter() {
-      eventBus.$emit("fireAlbums", this.$config.work, 
+      eventBus.$emit("requestAlbums", this.$config.work, 
         this.albumFilterField.value === "allartists" ? "" : this.albumFilterField.value,
         this.albumSortField.value
       );
@@ -69,11 +69,11 @@ export default {
   },
   created() {
     eventBus.$on("changeWork", this.newWork);
-    eventBus.$on("fireArtistList", this.createArtistList);
+    eventBus.$on("sendArtistList", this.createArtistList);
   },
   beforeDestroy() {
     eventBus.$off("changeWork", this.newWork);
-    eventBus.$off("fireArtistList", this.createArtistList);
+    eventBus.$off("sendArtistList", this.createArtistList);
   },
 };
 </script>

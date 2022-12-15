@@ -123,6 +123,7 @@ export default {
         format: "json",
       };
 
+      // Build URL with parameters
       url = url + "?origin=*";
       Object.keys(params).forEach(function (key) {
         url += "&" + key + "=" + params[key];
@@ -173,6 +174,7 @@ export default {
           };
           url2 = url2 + "?origin=*";
 
+          // Build URL with parameters
           Object.keys(params2).forEach(function (key) {
             url2 += "&" + key + "=" + params2[key];
           });

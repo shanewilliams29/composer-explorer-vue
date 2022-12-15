@@ -63,10 +63,10 @@ export default {
     },
   },
   created() {
-    eventBus.$on("fireComposers", this.newComposer);
+    eventBus.$on("requestWorksList", this.newComposer);
   },
   beforeDestroy() {
-    eventBus.$off("fireComposers", this.newComposer);
+    eventBus.$off("requestWorksList", this.newComposer);
   },
 };
 </script>

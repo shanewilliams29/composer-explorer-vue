@@ -66,8 +66,11 @@ if (localStorage.getItem("config") !== null) {
   config = defaultConfig;
 }
 export const startTracks = config.playTracks; // used in initial startup play button press
+
+// config stores configuration data in localstorage between sessions
 Vue.prototype.$config = Vue.observable(config);
 
+// auth stores user data, not saved between sessions
 Vue.prototype.$auth = Vue.observable({
   appToken: null,
   clientToken: null,
@@ -77,9 +80,10 @@ Vue.prototype.$auth = Vue.observable({
   patreon: true,
 });
 
+// view stores view configuration, not saved betwen sessions
 Vue.prototype.$view = Vue.observable({
-  banner: false,
-  mode: null,
+  banner: false, // welcome banner
+  mode: null, // null (browse) / performer / favorites / radio
   shuffle: false,
   radioPlaying: false,
   enableRadio: false,
@@ -91,7 +95,7 @@ Vue.prototype.$view = Vue.observable({
   playlistSuccess: false,
   playlistError: false,
   panelVisible: false,
-  like: false,
+  like: false, // for heart in playback bar
   mobile: false,
   mobileKeyboard: false,
   avatar: false,

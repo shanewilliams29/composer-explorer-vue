@@ -117,7 +117,7 @@ export default {
       return capitalized;
     },
     artistSearch(artist) {
-      eventBus.$emit("fireArtistComposers", artist);
+      eventBus.$emit("requestComposersForArtist", artist);
     },
     resetField(input) {
       if (!input) {
@@ -127,7 +127,7 @@ export default {
       }
     },
     albumFilter() {
-      eventBus.$emit("fireAlbums", this.$config.work, this.query, this.albumSortField.value);
+      eventBus.$emit("requestAlbums", this.$config.work, this.query, this.albumSortField.value);
     },
     resetAlbumSort() {
       this.albumSortField = { value: "recommended", text: "Recommended sorting" };
@@ -218,11 +218,11 @@ export default {
       this.$config.artist = this.$route.query.artist;
     }
     eventBus.$on("fireArtistAlbums", this.resetAlbumSort);
-    eventBus.$on("fireArtistComposers", this.setArtistField);
+    eventBus.$on("requestComposersForArtist", this.setArtistField);
   },
   beforeDestroy() {
     eventBus.$off("fireArtistAlbums", this.resetAlbumSort);
-    eventBus.$off("fireArtistComposers", this.setArtistField);
+    eventBus.$off("requestComposersForArtist", this.setArtistField);
   },
 };
 </script>

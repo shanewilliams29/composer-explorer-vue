@@ -4,29 +4,48 @@
       <b-spinner class="m-5"></b-spinner>
     </div>
     <div class="row">
-      <span class="m-4 col no-composers-found" v-show="!loading && composers.length < 1 && !$view.mode">No composers found.</span>
+      <span class="m-4 col no-composers-found" v-show="!loading && composers.length < 1 && !$view.mode">
+        No composers found.
+      </span>
       <b-card-group deck v-show="!loading">
         <b-card v-for="(region, index) in composers" :key="index" no-body header-tag="header" class="shadow-sm">
           <div class="#header" v-b-toggle="index.replace(/\s/g, '')">
             <h6 class="m-2 mb-0">
-              {{ index }}<span class="mb-0 float-right when-opened"><b-icon-chevron-up></b-icon-chevron-up></span><span class="mb-0 float-right when-closed"><b-icon-chevron-down></b-icon-chevron-down></span>
+              {{ index }}
+              <span class="mb-0 float-right when-opened">
+                <b-icon-chevron-up></b-icon-chevron-up>
+              </span>
+              <span class="mb-0 float-right when-closed">
+                <b-icon-chevron-down></b-icon-chevron-down>
+              </span>
             </h6>
           </div>
           <b-collapse :visible="visibility" :id="index.replace(/\s/g, '')">
             <b-card-text>
               <table cellspacing="0">
-                <tr v-for="composer in region" :key="composer.id" :ref="composer.name_short" @click="selectRow(composer.name_short); getWorks(composer.name_short);" :class="[{'cursor': ($view.mode != 'radio')}, {'highlight': (composer.name_short == $config.composer)}]">
-                  <td width="2%" :style="{border: 'solid 0px !important', backgroundColor:composer.color, opacity: 0.66}"></td>
+                <tr
+                  v-for="composer in region"
+                  :key="composer.id"
+                  :ref="composer.name_short"
+                  @click="selectRow(composer.name_short); getWorks(composer.name_short);"
+                  :class="[{'cursor': ($view.mode != 'radio')}, 
+                          {'highlight': (composer.name_short == $config.composer)}]"
+                >
+                  <td width="2%" 
+                    :style="{border: 'solid 0px !important', 
+                            backgroundColor:composer.color, 
+                            opacity: 0.66}">
+                  </td>
                   <td width="2%"></td>
                   <td width="12%" style="white-space: nowrap;">
                     <img class="composer-img" :src="composer.flag" height="20" width="20" />
                     <img class="composer-img" :src="composer.img" height="20" width="20" />
                   </td>
-                  <td class="composer-name" width="50%" style="white-space: nowrap; text-overflow: ellipsis; overflow: hidden; max-width: 1px;">
+                  <td width="50%" class="composer-name td-style">
                     <span v-if="composer.catalogued">{{ composer.name_full }}</span>
                     <span v-else style="color: gray;">{{ composer.name_full }}</span>
                   </td>
-                  <td width="25%" style="white-space: nowrap; text-overflow: ellipsis; max-width: 1px; text-align: right;">
+                  <td width="25%" class="td-style" style="text-align: right;">
                     <span v-if="composer.catalogued">{{ composer.born }} - {{ deathDate(composer.died) }}</span>
                     <span v-else style="color: gray;">{{ composer.born }} - {{ deathDate(composer.died) }}</span>
                   </td>
@@ -42,7 +61,7 @@
 
 <script>
 import axios from "axios";
-import { eventBus } from "../main.js";
+import { eventBus } from "@/main.js";
 import smoothscroll from "smoothscroll-polyfill";
 
 export default {
@@ -50,7 +69,7 @@ export default {
     return {
       composers: [],
       loading: false,
-      visibility: true,
+      visibility: true, // determines whether panels open or closed initially
       artist: "",
     };
   },
@@ -66,7 +85,8 @@ export default {
   },
   methods: {
     deathDate(date) {
-      var year = new Date().getFullYear();
+      // living composer death date stored as 2050 in database
+      const year = new Date().getFullYear();
       if (date > year) {
         return "present";
       } else {
@@ -74,21 +94,24 @@ export default {
       }
     },
     scrollToComposer(composer) {
-
+      // scrolls to selected composer
       var timeout = 0;
       if (this.visibility) {
         timeout = 0;
       } else {
         timeout = 1000;
       }
-      smoothscroll.polyfill(); // for Safari smooth scrolling
-      setTimeout(() => {
-        var card = this.$refs[composer][0].offsetParent.offsetParent;
-        var row = this.$refs[composer][0];
-        var height = this.$refs[composer][0].offsetParent.offsetParent.offsetParent.offsetHeight / 2;
-        var top = card.offsetTop + row.offsetTop - height + 100;
 
-        var scrollBox = {};
+      smoothscroll.polyfill(); // for Safari smooth scrolling
+      
+      setTimeout(() => {
+
+        const card = this.$refs[composer][0].offsetParent.offsetParent;
+        const row = this.$refs[composer][0];
+        const height = this.$refs[composer][0].offsetParent.offsetParent.offsetParent.offsetHeight / 2;
+        const top = card.offsetTop + row.offsetTop - height + 100;
+
+        let scrollBox = {};
         if (this.$view.mobile) {
           scrollBox = this.$parent.$parent.$refs["scroll-box-comp"];
         } else {
@@ -100,17 +123,21 @@ export default {
           left: 0,
           behavior: "smooth",
         });
+
       }, timeout);
     },
     getComposers() {
+      // populates composer list initially
       this.loading = true;
+
       const path = "api/composers";
       axios
         .get(path)
         .then((res) => {
           this.composers = res.data.composers;
-          this.loading = false;
           this.visibility = true;
+          this.loading = false;
+          
           this.scrollToComposer(this.$config.composer);
         })
         .catch((error) => {
@@ -120,21 +147,24 @@ export default {
         });
     },
     getFilteredComposers(item) {
+      // populates composer list with filters
       this.loading = true;
       if (item == "all" || item == "alphabet" || item == "romantic" || item == "20th" || item == "common") {
         this.visibility = true; // change to false when there are a lot of composers
       } else {
         this.visibility = true;
       }
+
       const path = "api/composers?filter=" + item;
       axios
         .get(path)
         .then((res) => {
           this.composers = res.data.composers;
-          if (this.$view.mode == "radio") {
-            eventBus.$emit("fireRadioGenreList", res.data.genres);
-          }
           this.loading = false;
+          
+          if (this.$view.mode == "radio") {
+            eventBus.$emit("sendGenreListToRadio", res.data.genres);
+          }
         })
         .catch((error) => {
           // eslint-disable-next-line
@@ -143,6 +173,7 @@ export default {
         });
     },
     getSearchComposers(item) {
+      // populates composer list with search item
       this.visibility = true;
       const path = "api/composers?search=" + item;
       axios
@@ -158,21 +189,24 @@ export default {
         });
     },
     getArtistComposers(artist) {
-      // performer mode, radio mode
-      this.artist = artist;
+      // populates composer list for a performer (used in performer and radio modes)
       this.loading = true;
+      this.artist = artist;
       this.visibility = true;
       this.$config.artist = artist;
-      eventBus.$emit("fireClearWorks", artist);
-      eventBus.$emit("fireClearAlbums");
+
+      eventBus.$emit("clearWorksList", artist);
+      eventBus.$emit("clearAlbumsList");
+
       const path = "api/artistcomposers/" + artist;
       axios
         .get(path)
         .then((res) => {
           this.composers = res.data.composers;
           this.loading = false;
+
           if (this.$view.mode == "radio") {
-            eventBus.$emit("fireRadioGenreList", res.data.genres);
+            eventBus.$emit("sendGenreListToRadio", res.data.genres);
           }
         })
         .catch((error) => {
@@ -182,12 +216,13 @@ export default {
         });
     },
     getWorks(composer) {
+      // requests works list for a composer
       if (!this.$view.mode) {
-        eventBus.$emit("fireComposers", composer);
+        eventBus.$emit("requestWorksList", composer);
       } else if (this.$view.mode == "performer") {
-        eventBus.$emit("fireArtistWorks", this.artist, composer);
+        eventBus.$emit("requestWorksListForArtist", this.artist, composer);
       } else if (this.$view.mode == "favorites") {
-        eventBus.$emit("fireFavoriteWorks", composer);
+        eventBus.$emit("requestWorksListForFavorites", composer);
       }
     },
     selectRow(nameShort) {
@@ -196,36 +231,40 @@ export default {
         localStorage.setItem("config", JSON.stringify(this.$config));
       }
     },
-    fireRadioSelect(type) {
+    getRadioComposersMultiselectList(type) {
+      // Gets list for radio composers multiselect dropdown
       this.$view.favoritesAlbums = "";
       this.composers = [];
+
       if (type == "composer") {
         const path = "api/composersradio";
         axios
           .get(path)
           .then((res) => {
-            eventBus.$emit("fireComposerListToRadio", res.data.composers);
+            eventBus.$emit("submitComposerListToRadio", res.data.composers);
           })
           .catch((error) => {
             // eslint-disable-next-line
             console.error(error);
           });
       }
-      if (type == "favorites") {
+      if (type == "favorites") { // Get favorites composer list if favorites
         this.$view.favoritesAlbums = true;
         this.getFavoritesComposers();
       }
     },
     getFavoritesComposers() {
       this.loading = true;
+
       const path = "api/favoritescomposers";
       axios
         .get(path)
         .then((res) => {
           this.composers = res.data.composers;
-          eventBus.$emit("fireRadioGenreList", res.data.genres);
           this.visibility = true;
           this.loading = false;
+
+          eventBus.$emit("sendGenreListToRadio", res.data.genres);
         })
         .catch((error) => {
           // eslint-disable-next-line
@@ -234,6 +273,7 @@ export default {
         });
     },
     getMultiComposers(composers) {
+      // gets specified composers (used in radio mode composer multiselect)
       if (composers.length < 1) {
         this.composers = [];
       } else {
@@ -242,7 +282,7 @@ export default {
           .post(path, composers)
           .then((res) => {
             this.composers = res.data.composers;
-            eventBus.$emit("fireRadioGenreList", res.data.genres);
+            eventBus.$emit("sendGenreListToRadio", res.data.genres);
             this.visibility = true;
           })
           .catch((error) => {
@@ -253,35 +293,37 @@ export default {
     },
   },
   created() {
-    if (!this.$view.mode) {
-      // dont get composers in performer or radio modes
+    if (!this.$view.mode) { // dont get composers in performer or radio modes
       this.getComposers();
       const config = JSON.parse(localStorage.getItem("config"));
       this.$config.composer = config.composer;
     }
+
     if (this.$view.mode && !this.$view.mobile) {
-      // clear selected composer in other modes, except mobile
+      // clear selected composer in other modes, except for mobile
       this.$config.composer = "";
     }
+
     if (this.$view.mode == "favorites") {
       this.getFavoritesComposers();
     }
+    
     if (this.$route.query.artist) {
       this.getArtistComposers(this.$route.query.artist);
     }
 
-    eventBus.$on("fireComposerFilter", this.getFilteredComposers);
-    eventBus.$on("fireComposerSearch", this.getSearchComposers);
-    eventBus.$on("fireArtistComposers", this.getArtistComposers);
-    eventBus.$on("fireRadioSelect", this.fireRadioSelect);
-    eventBus.$on("fireComposerSelectRadio", this.getMultiComposers);
+    eventBus.$on("requestComposersFromFilter", this.getFilteredComposers);
+    eventBus.$on("requestComposersFromSearch", this.getSearchComposers);
+    eventBus.$on("requestComposersForArtist", this.getArtistComposers);
+    eventBus.$on("requestRadioComposersMultiselectDropdownList", this.getRadioComposersMultiselectList);
+    eventBus.$on("requestComposersFromRadioMultiselect", this.getMultiComposers);
   },
   beforeDestroy() {
-    eventBus.$off("fireComposerFilter", this.getFilteredComposers);
-    eventBus.$off("fireComposerSearch", this.getSearchComposers);
-    eventBus.$off("fireArtistComposers", this.getArtistComposers);
-    eventBus.$off("fireRadioSelect", this.fireRadioSelect);
-    eventBus.$off("fireComposerSelectRadio", this.getMultiComposers);
+    eventBus.$off("requestComposersFromFilter", this.getFilteredComposers);
+    eventBus.$off("requestComposersFromSearch", this.getSearchComposers);
+    eventBus.$off("requestComposersForArtist", this.getArtistComposers);
+    eventBus.$off("requestRadioComposersMultiselectDropdownList", this.getRadioComposersMultiselectList);
+    eventBus.$off("requestComposersFromRadioMultiselect", this.getMultiComposers);
   },
 };
 
@@ -317,6 +359,12 @@ export default {
 }
 .card {
   width: 100%;
+}
+.td-style{
+  white-space: nowrap; 
+  text-overflow: ellipsis; 
+  overflow: hidden; 
+  max-width: 1px;
 }
 td {
   padding: 1px;

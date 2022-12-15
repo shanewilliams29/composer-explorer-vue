@@ -109,15 +109,15 @@ export default {
     this.$view.shuffle = false;
 
     window.firstLoad = true; // prevent playback on first load
-    eventBus.$on("fireComposers", (composer) => {
+    eventBus.$on("requestWorksList", (composer) => {
       this.composer = composer;
       this.workToggle();
     });
-    eventBus.$on("fireAlbums", () => {
+    eventBus.$on("requestAlbums", () => {
       this.title = this.$config.workTitle;
       this.albumToggle();
     });
-    eventBus.$on("fireAlbumsAndPlay", () => {
+    eventBus.$on("requestAlbumsAndPlay", () => {
       this.title = this.$config.workTitle;
     });
     let vh = window.innerHeight * 0.01;

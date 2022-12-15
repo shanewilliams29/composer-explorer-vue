@@ -32,11 +32,11 @@ export default {
   },
   methods: {
     composerFilter() {
-      eventBus.$emit("fireComposerFilter", this.composerFilterForm.value);
+      eventBus.$emit("requestComposersFromFilter", this.composerFilterForm.value);
       this.composerSearchForm = "";
     },
     composerSearch() {
-      eventBus.$emit("fireComposerSearch", this.composerSearchForm);
+      eventBus.$emit("requestComposersFromSearch", this.composerSearchForm);
       if (this.composerSearchForm) {
         this.composerFilterForm = `Search results for "${this.composerSearchForm}"`;
       } else {
@@ -46,7 +46,7 @@ export default {
     onComposerFocus() {
       this.composerFilterForm = { value: "popular", text: "Most popular" };
       this.composerSearchForm = "";
-      eventBus.$emit("fireComposerSearch", "");
+      eventBus.$emit("requestComposersFromSearch", "");
     },
   }
 };

@@ -286,7 +286,7 @@ export default {
       // used in radio mode
       if (genres.length < 1) {
         // no works
-        eventBus.$emit("fireClearAlbums");
+        eventBus.$emit("clearAlbumsList");
         this.loading = false;
         this.$view.radioPlaying = false;
         this.$view.enableRadio = false;
@@ -397,19 +397,19 @@ export default {
       eventBus.$emit("changeWork");
       if (!this.$view.mode) {
         // standard compsoer mode
-        eventBus.$emit("fireAlbums", workId);
+        eventBus.$emit("requestAlbums", workId);
       } else if (this.$view.mode == "performer") {
         // performer mode
-        eventBus.$emit("fireAlbums", workId, this.$config.artist);
+        eventBus.$emit("requestAlbums", workId, this.$config.artist);
       } else if (this.$view.mode == "favorites") {
         // favorites mode
-        eventBus.$emit("fireFavoritesAlbums", workId);
+        eventBus.$emit("requestFavoritesAlbums", workId);
       } else {
         // radio mode, play automatically
         if (this.$config.artist) {
-          eventBus.$emit("fireAlbumsAndPlay", workId, this.$config.artist);
+          eventBus.$emit("requestAlbumsAndPlay", workId, this.$config.artist);
         } else {
-          eventBus.$emit("fireAlbumsAndPlay", workId);
+          eventBus.$emit("requestAlbumsAndPlay", workId);
         }
         this.$view.radioPlaying = true;
       }
@@ -422,16 +422,16 @@ export default {
 
       if (this.$view.mode != "performer") {
         if (this.$config.artist && this.$view.mode == "radio") {
-          eventBus.$emit("fireAlbumsAndPlay", workId, this.$config.artist);
+          eventBus.$emit("requestAlbumsAndPlay", workId, this.$config.artist);
         } else if (this.$view.mode == "favorites") {
           // favorites mode
           this.$view.favoritesAlbums = true;
-          eventBus.$emit("fireAlbumsAndPlay", workId);
+          eventBus.$emit("requestAlbumsAndPlay", workId);
         } else {
-          eventBus.$emit("fireAlbumsAndPlay", workId);
+          eventBus.$emit("requestAlbumsAndPlay", workId);
         }
       } else {
-        eventBus.$emit("fireAlbumsAndPlay", workId, this.$config.artist);
+        eventBus.$emit("requestAlbumsAndPlay", workId, this.$config.artist);
       }
     },
     toggleOpen(genre) {
@@ -503,12 +503,12 @@ export default {
           this.loading = false;
         });
     },
-    fireComposers(composer) {
+    requestWorksList(composer) {
       this.getWorks(composer);
       this.$config.composer = composer;
       localStorage.setItem("config", JSON.stringify(this.$config));
     },
-    fireClearWorks(artist) {
+    clearWorksList(artist) {
       this.$config.artist = artist;
       this.works = [];
       this.message = "Select from the options above to create your own customized radio";
@@ -568,31 +568,31 @@ export default {
       this.getWorks(this.$config.composer);
       this.selectRow(this.$config.work);
     }
-    eventBus.$on("fireComposers", this.fireComposers);
-    eventBus.$on("fireArtistWorks", this.getArtistWorks);
+    eventBus.$on("requestWorksList", this.requestWorksList);
+    eventBus.$on("requestWorksListForArtist", this.getArtistWorks);
     eventBus.$on("fireWorkFilter", this.getFilteredWorks);
     eventBus.$on("fireWorkSearch", this.getSearchWorks);
-    eventBus.$on("fireClearWorks", this.fireClearWorks);
+    eventBus.$on("clearWorksList", this.clearWorksList);
     eventBus.$on("fireGenreSelectRadio", this.getGenreWorks);
     eventBus.$on("fireNextWork", this.nextWork);
     eventBus.$on("firePreviousWork", this.previousWork);
     eventBus.$on("firePlaylistExport", this.preparePlaylist);
     eventBus.$on("fireRefreshWorks", this.refreshWorks);
-    eventBus.$on("fireFavoriteWorks", this.getFavoriteWorks);
+    eventBus.$on("requestWorksListForFavorites", this.getFavoriteWorks);
     eventBus.$on("fireWorkScroll", this.setGenre);
   },
   beforeDestroy() {
-    eventBus.$off("fireComposers", this.fireComposers);
-    eventBus.$off("fireArtistWorks", this.getArtistWorks);
+    eventBus.$off("requestWorksList", this.requestWorksList);
+    eventBus.$off("requestWorksListForArtist", this.getArtistWorks);
     eventBus.$off("fireWorkFilter", this.getFilteredWorks);
     eventBus.$off("fireWorkSearch", this.getSearchWorks);
-    eventBus.$off("fireClearWorks", this.fireClearWorks);
+    eventBus.$off("clearWorksList", this.clearWorksList);
     eventBus.$off("fireGenreSelectRadio", this.getGenreWorks);
     eventBus.$off("fireNextWork", this.nextWork);
     eventBus.$off("firePreviousWork", this.previousWork);
     eventBus.$off("firePlaylistExport", this.preparePlaylist);
     eventBus.$off("fireRefreshWorks", this.refreshWorks);
-    eventBus.$off("fireFavoriteWorks", this.getFavoriteWorks);
+    eventBus.$off("requestWorksListForFavorites", this.getFavoriteWorks);
     eventBus.$off("fireWorkScroll", this.setGenre);
   },
 };

@@ -47,12 +47,12 @@ export default {
   created() {
     eventBus.$on("fireLikeAlbum", this.likeAlbum);
     eventBus.$on("fireUnlikeAlbum", this.unlikeAlbum);
-    eventBus.$on("fireAlbumData", this.detectLike);
+    eventBus.$on("requestAlbumData", this.detectLike);
   },
   beforeDestroy() {
     eventBus.$off("fireLikeAlbum", this.likeAlbum);
     eventBus.$off("fireUnlikeAlbum", this.unlikeAlbum);
-    eventBus.$off("fireAlbumData", this.detectLike);
+    eventBus.$off("requestAlbumData", this.detectLike);
   },
 };
 </script>

@@ -43,7 +43,9 @@
 import LargeAlbum from "@/components/subcomponents/LargeAlbum.vue";
 import SmallAlbum from "@/components/subcomponents/SmallAlbum.vue";
 import axios from "axios";
-import { eventBus } from "../main.js";
+import { eventBus } from "@/main.js";
+import { randomIntFromInterval } from "@/HelperFunctions.js";
+
 
 export default {
   components: {
@@ -67,6 +69,7 @@ export default {
   methods: {
     getAlbums(id, artist, sort) {
       this.changeAlbums();
+
       this.workId = id;
       if (artist) {
         this.artistName = artist;
@@ -79,16 +82,19 @@ export default {
         sort = "";
       }
       this.loading = true;
+
       const path = "api/albums/" + id + "?artist=" + artist + "&sort=" + sort;
       axios
         .get(path)
         .then((res) => {
+          this.loading = false;
           this.$config.composer = res.data.composer;
-          localStorage.setItem("config", JSON.stringify(this.$config));
           this.albums = res.data.albums;
           this.likedAlbums = res.data.liked_albums;
-          eventBus.$emit("fireArtistList", res.data.artists);
-          this.loading = false;
+          localStorage.setItem("config", JSON.stringify(this.$config));
+          
+          eventBus.$emit("sendArtistList", res.data.artists);
+          
         })
         .catch((error) => {
           console.error(error);
@@ -97,33 +103,33 @@ export default {
     },
     getFavoritesAlbums(id) {
       this.changeAlbums();
+
       this.workId = id;
       this.loading = true;
+
       const path = "api/albums/" + id + "?favorites=true";
       axios
         .get(path)
         .then((res) => {
+          this.loading = false;
           this.$config.composer = res.data.composer;
-          localStorage.setItem("config", JSON.stringify(this.$config));
           this.albums = res.data.albums;
           this.likedAlbums = res.data.liked_albums;
-          eventBus.$emit("fireArtistList", res.data.artists);
-          this.loading = false;
+
+          localStorage.setItem("config", JSON.stringify(this.$config));
+
+          eventBus.$emit("sendArtistList", res.data.artists);
         })
         .catch((error) => {
           console.error(error);
           this.loading = false;
         });
     },
-    // gets albums and begins playback of first (for next and previous buttons)
-    // used in Autoplay and the radio
+    // gets albums and begins playback of the first album immediately
+    // used in Autoplay, the radio, and next/previous playback buttons
     getAlbumsAndPlay(id, artist, sort) {
-      function randomIntFromInterval(min, max) {
-        // min and max included
-        return Math.floor(Math.random() * (max - min + 1) + min);
-      }
-
       this.changeAlbums();
+
       this.workId = id;
       if (artist) {
         this.artistName = artist;
@@ -136,49 +142,61 @@ export default {
         sort = "";
       }
       this.loading = true;
+      
+      let path = "api/albums/" + id + "?artist=" + artist + "&sort=" + sort;
+      const favorites = this.$view.favoritesAlbums;
+      const limit = this.$view.radioTrackLimit;
 
-      var path = "";
-      var favorites = this.$view.favoritesAlbums;
       if (this.$view.mode == "radio") {
-        var limit = this.$view.radioTrackLimit;
-        path = "api/albums/" + id + "?artist=" + artist + "&sort=" + sort + "&limit=" + limit + "&favorites=" + favorites;
-      } else if (this.$view.mode == "favorites") {
-        path = "api/albums/" + id + "?artist=" + artist + "&sort=" + sort + "&favorites=" + favorites;
-      } else {
-        path = "api/albums/" + id + "?artist=" + artist + "&sort=" + sort;
+        path = path + "&limit=" + limit + "&favorites=" + favorites;
       }
+
+      if (this.$view.mode == "favorites") {
+        path = path + "&favorites=" + favorites;
+      }
+
       axios
         .get(path)
         .then((res) => {
+          // If no albums for this work, advance to next work
           if (res.data.albums.length < 1) {
             this.$bvToast.show("no-tracks-toast");
+
             setTimeout(() => {
               eventBus.$emit("fireNextWork");
               this.$bvToast.hide("no-tracks-toast");
-            }, 2000); // Bypass and continue to next work)
+            }, 2000);
+
           } else {
             if (this.$view.mode == "radio") {
-              // only one album in radiomode unless favorites
+              // display only one album in radio mode unless in favorites radio
               if (this.$view.randomAlbum) {
                 const rndInt = randomIntFromInterval(0, res.data.albums.length - 1);
                 this.albums = [res.data.albums[rndInt]];
+
               } else if (!this.$view.favoritesAlbums) {
                 this.albums = [res.data.albums[0]];
+
               } else {
                 this.albums = res.data.albums;
               }
+
             } else {
               this.albums = res.data.albums;
             }
+
             this.loading = false;
-            this.selectRow(this.albums[0].id); // select first row on work selection
-            this.$config.album = this.albums[0].id;
             this.likedAlbums = res.data.liked_albums;
-            this.determineHeart(this.$config.album); //needed for first load as fireAlbumData misses
+            this.$config.album = this.albums[0].id;
             this.$config.composer = res.data.composer;
+
             localStorage.setItem("config", JSON.stringify(this.$config));
-            eventBus.$emit("fireArtistList", res.data.artists);
-            eventBus.$emit("fireAlbumData", this.albums[0].id);
+
+            this.selectRow(this.albums[0].id); // select first row
+            this.determineHeart(this.$config.album); //needed for first load as requestAlbumData misses
+
+            eventBus.$emit("sendArtistList", res.data.artists);
+            eventBus.$emit("requestAlbumData", this.albums[0].id);
           }
         })
         .catch((error) => {
@@ -189,20 +207,23 @@ export default {
     // loads from localstorage on initial startup
     initialGetAlbums(id) {
       this.changeAlbums();
+
       this.workId = id;
       this.loading = true;
+
       const path = "api/albums/" + id;
       axios
         .get(path)
         .then((res) => {
           this.albums = res.data.albums;
-          eventBus.artists = res.data.artists;
           this.likedAlbums = res.data.liked_albums;
           this.loading = false;
+
           this.selectRow(this.$config.album);
-          this.determineHeart(this.$config.album); //necessary for first load only, misses fireAlbumData
-          eventBus.$emit("fireAlbumData", this.$config.album);
-          eventBus.$emit("fireArtistList", res.data.artists);
+          this.determineHeart(this.$config.album);
+
+          eventBus.$emit("requestAlbumData", this.$config.album);
+          eventBus.$emit("sendArtistList", res.data.artists);
         })
         .catch((error) => {
           console.error(error);
@@ -210,14 +231,15 @@ export default {
         });
     },
     getAlbumData(albumId) {
-      eventBus.$emit("fireAlbumData", albumId);
       this.$config.album = albumId;
       localStorage.setItem("config", JSON.stringify(this.$config));
+
+      eventBus.$emit("requestAlbumData", albumId);
     },
-    selectRow(album) {
-      this.selectedAlbum = album;
+    selectRow(albumID) {
+      this.selectedAlbum = albumID;
       for (let i = 0; i < this.albums.length; i++) {
-        if (this.albums[i].id == album) {
+        if (this.albums[i].id == albumID) {
           this.currentAlbum = i;
           break;
         }
@@ -234,8 +256,8 @@ export default {
       }
     },
     infiniteHandler($state) {
-      if (this.$view.mode) {
-        $state.complete();
+      if (this.$view.mode) { 
+        $state.complete(); // only used in Browse mode ($view.mode = null)
       } else {
         const path = "api/albums/" + this.workId + "?artist=" + this.artistName + "&sort=" + this.sort + "&page=" + this.page;
         axios.get(path).then(({ data }) => {
@@ -250,6 +272,7 @@ export default {
       }
     },
     changeAlbums() {
+      // reset these upon album change
       this.artistName = "";
       this.sort = "";
       this.page = 2;
@@ -257,32 +280,37 @@ export default {
       this.infiniteId += 1;
     },
     playNextAlbum() {
+      // advances to next album when the current album can't be played
       this.currentAlbum += 1;
+
       if (this.currentAlbum >= this.albums.length) {
         eventBus.$emit("fireNextWork");
       }
-      this.selectRow(this.albums[this.currentAlbum].id); // select first row on work selection
+
+      this.selectRow(this.albums[this.currentAlbum].id);
+      
       this.$config.album = this.albums[this.currentAlbum].id;
-      eventBus.$emit("fireAlbumData", this.albums[this.currentAlbum].id);
+      localStorage.setItem("config", JSON.stringify(this.$config));
+      
+      eventBus.$emit("requestAlbumData", this.albums[this.currentAlbum].id);
     },
   },
   created() {
-    if (!this.$view.mode) {
-      // dont get albums in radio or performer mode
+    if (!this.$view.mode) { // only get albums in Browse ($view.mode = null) mode
       this.initialGetAlbums(this.$config.work);
     }
-    eventBus.$on("fireAlbums", this.getAlbums);
-    eventBus.$on("fireAlbumsAndPlay", this.getAlbumsAndPlay);
-    eventBus.$on("fireFavoritesAlbums", this.getFavoritesAlbums);
-    eventBus.$on("fireClearAlbums", this.clearAlbums);
-    eventBus.$on("fireNextAlbum", this.playNextAlbum);
+    eventBus.$on("requestAlbums", this.getAlbums);
+    eventBus.$on("requestAlbumsAndPlay", this.getAlbumsAndPlay);
+    eventBus.$on("requestFavoritesAlbums", this.getFavoritesAlbums);
+    eventBus.$on("clearAlbumsList", this.clearAlbums);
+    eventBus.$on("advanceToNextAlbum", this.playNextAlbum);
   },
   beforeDestroy() {
-    eventBus.$off("fireAlbums", this.getAlbums);
-    eventBus.$off("fireAlbumsAndPlay", this.getAlbumsAndPlay);
-    eventBus.$off("fireFavoritesAlbums", this.getFavoritesAlbums);
-    eventBus.$off("fireClearAlbums", this.clearAlbums);
-    eventBus.$off("fireNextAlbum", this.playNextAlbum);
+    eventBus.$off("requestAlbums", this.getAlbums);
+    eventBus.$off("requestAlbumsAndPlay", this.getAlbumsAndPlay);
+    eventBus.$off("requestFavoritesAlbums", this.getFavoritesAlbums);
+    eventBus.$off("clearAlbumsList", this.clearAlbums);
+    eventBus.$off("advanceToNextAlbum", this.playNextAlbum);
   },
 };
 

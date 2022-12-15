@@ -122,7 +122,7 @@ export default {
     },
     getArtistComposers(artist) {
       if (!this.$view.mobile) {
-        eventBus.$emit("fireArtistComposers", artist);
+        eventBus.$emit("requestComposersForArtist", artist);
         this.$config.artist = artist;
         if (this.$route.name != "performers") {
           this.$router.push("/performers?artist=" + artist);

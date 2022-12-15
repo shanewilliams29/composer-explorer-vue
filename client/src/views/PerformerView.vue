@@ -54,7 +54,7 @@ export default {
   },
   created() {
     window.firstLoad = false; // allow playback on first load for performer view
-    eventBus.$on('fireArtistComposers', this.hideCloud);
+    eventBus.$on('requestComposersForArtist', this.hideCloud);
     eventBus.$on('clearPerformers', this.unhideCloud);
     this.$view.mode = 'performer';
     if (this.$route.query.artist){
