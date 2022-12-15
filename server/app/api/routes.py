@@ -830,6 +830,7 @@ def get_albuminfo(album_id):
     album_details = json.loads(album.data)
 
     ALBUM = {
+        'composer': album.composer,
         'id': album.id,
         'album_img': album_details['album_img'],
         'img_big': album.img,

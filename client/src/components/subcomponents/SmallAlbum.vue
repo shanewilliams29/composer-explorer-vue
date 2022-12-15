@@ -151,7 +151,7 @@ export default {
 }
 .image-caption{
   width: 100%;
-  padding-top: 9px;
+  padding-top: 8.5px;
   padding-bottom: 10px;
   padding-left: 10px;
   padding-right: 10px;
@@ -166,7 +166,6 @@ export default {
   width: 72px; 
   height: 100%;
 }
-
 .spotify-icon{
   position: absolute;
   right: 20px;
@@ -233,5 +232,4 @@ header.card-header {
 >>> .badge {
   margin-bottom: 0px !important;
 }
-
 </style>
