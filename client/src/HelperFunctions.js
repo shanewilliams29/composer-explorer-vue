@@ -1,4 +1,8 @@
 export function addLineBreaksToParagraph(paragraph){
+
+  if(!paragraph){
+    return '';
+  }
   // Remove existing line breaks
   let unbrokenText = paragraph.replace(/\n/g, "");
 

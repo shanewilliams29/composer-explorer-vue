@@ -1,8 +1,24 @@
 <template>
   <b-card class="heading-card work-card">
     <b-form-group>
-      <b-form-input v-model="workSearchField" v-debounce="workSearch" type="text" @focus="onWorkFocus()" :placeholder="workSearchPlaceholder" size="sm" autocomplete="off"></b-form-input>
-      <v-select v-model="workFilterField" label="text" :options="workOptions" @input="workFilter()" :clearable="false" class="mt-3 style-chooser" :searchable="false"></v-select>
+      <b-form-input 
+        v-model="workSearchField" 
+        v-debounce="workSearch" 
+        type="text" 
+        @focus="onWorkFocus()" 
+        :placeholder="workSearchPlaceholder" 
+        size="sm" 
+        autocomplete="off">
+      </b-form-input>
+      <v-select 
+        v-model="workFilterField" 
+        label="text" 
+        :options="workOptions" 
+        @input="workFilter()" 
+        :clearable="false" 
+        class="mt-3 work-select" 
+        :searchable="false">
+      </v-select>
     </b-form-group>
   </b-card>
 </template>
@@ -75,7 +91,7 @@ export default {
 .col {
   padding: 0px;
 }
-.style-chooser {
+.work-select {
   margin-top: 5px !important;
   font-size: 14px;
   fill: white;

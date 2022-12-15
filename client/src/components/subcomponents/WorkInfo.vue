@@ -11,7 +11,8 @@
             <td class="info-td">
               <span class="composer-name" v-if="$view.mobile">{{ composer }}<br /></span>
               {{ workTitle }}<br />
-              <span v-if="catNo" class="born-died">{{ catNo }}</span><span v-else class="born-died"><span v-if="date">{{date}}</span></span>
+              <span v-if="catNo" class="born-died">{{ catNo }}</span>
+              <span v-else class="born-died"><span v-if="date">{{date}}</span></span>
             </td>
           </tr>
         </table>
@@ -21,8 +22,11 @@
           <b-spinner class="m-5"></b-spinner>
         </div>
         <div v-show="!loading" style="white-space: pre-line;">
-          <b-alert v-if="!workMatch" show variant="warning"><b-icon icon="exclamation-circle-fill" variant="warning"></b-icon><span style="font-size: 12px">&nbsp;This Wikipedia article is the most relevant found.</span></b-alert> <span> <h6 v-if="!workMatch"><span v-if="pageTitle">{{pageTitle}}</span></h6></span>
-          <div>{{ workBlurb }}<br />
+          <b-alert v-if="!workMatch" show variant="warning">
+            <b-icon icon="exclamation-circle-fill" variant="warning"></b-icon>
+            <span style="font-size: 12px">&nbsp;This Wikipedia article is the most relevant found.</span></b-alert>
+            <span><h6 v-if="!workMatch"><span v-if="pageTitle">{{pageTitle}}</span></h6></span>
+            <div>{{ workBlurb }}<br />
             <a :href="wikiLink" target="_blank" class="wiki-link" v-if="pageTitle">
               <br />
               Read more on Wikipedia: {{pageTitle}}
@@ -68,13 +72,17 @@ export default {
   methods: {
     checkIfWorkMatches(opus, title, text) {
       if (opus) {
-        const num = opus.match(/\d+/);
-        const regex = new RegExp(`\\b${num}\\w?`);
-        return regex.test(text);
+        const num = opus.match(/\d+/)[0];
+        const cat = opus.match(/\D+/)[0].trim();
+        const regex_num = new RegExp(`\\b${num}\\w?`);
+        const regex_cat = new RegExp(`\\b${cat}\\w?`);
+        return (regex_num.test(text) && regex_cat.test(text));
       } else {
         return text.toLowerCase().includes(title.toLowerCase());
       }
     },
+
+    // Retrieve work data from database
     getWorkInfo(work) {
       this.loading = true;
       const path = "api/workinfo/" + work;
@@ -84,17 +92,15 @@ export default {
           this.composer = res.data.info.composer;
           this.workTitle = res.data.info.title;
           this.workImg = res.data.info.search;
-          this.composerImg = "https://storage.googleapis.com/composer-explorer.appspot.com/img/" + this.composer + ".jpg";
+          this.composerImg = `https://storage.googleapis.com/composer-explorer.appspot.com/img/${this.composer}.jpg`;
           this.catNo = res.data.info.cat;
           this.date = res.data.info.date;
 
-
           if (this.catNo) {
             var num = this.catNo.match(/\d+/);
-            this.wikiWork(this.composer + " OR " + num + " " + this.workTitle);
-
+            this.wikiWork(`${this.composer} OR ${num} ${this.workTitle}`)
           } else {
-            this.wikiWork(this.composer + " " + this.workTitle);
+            this.wikiWork(`${this.composer} ${this.workTitle}`);
           }
 
         })
@@ -103,9 +109,13 @@ export default {
           console.error(error);
         });
     },
+
+    // Retrieve work info from Wikipedia
     wikiWork(search_item) {
-      var url = "https://en.wikipedia.org/w/api.php";
-      var params = {
+
+      // FIRST SEARCH WIKIPEDIA FOR WORK AND GET PAGE ID
+      let url = "https://en.wikipedia.org/w/api.php";
+      let params = {
         action: "query",
         list: "search",
         srsearch: search_item,
@@ -121,25 +131,28 @@ export default {
       axios
         .get(url)
         .then((res) => {
-          // SECOND SEARCH
           let pageid = "";
           let matchCheck = false;
           let resultsArray = res.data.query.search
-          //console.log(search_item);
-          //console.log(res.data.query);
+
           try {
+            // Loop through array of article search results and try to match article with work
             for (var i = 0; i < resultsArray.length; i++) {
               matchCheck = this.checkIfWorkMatches(this.catNo, this.workTitle, resultsArray[i].snippet);
-              //console.log(matchCheck);
+
+              // Exit if match
               if (matchCheck) {
                 break;
               }
             }
+
+            // Return first article if no match
             if (!matchCheck) {
               i = 0;
-            }            
-            pageid = res.data.query.search[i].pageid;
+            }     
 
+            // Retrieve relevant wikipedia page ID
+            pageid = res.data.query.search[i].pageid;
             
           } catch (error) {
             this.workBlurb = "Work not found on Wikipedia.";
@@ -148,6 +161,8 @@ export default {
             this.loading = false;
             return error;
           }
+
+          // SECONDLY RETRIEVE DATA FROM WIKIPEDIA ARTICLE USING PAGE ID
           var url2 = "https://en.wikipedia.org/w/api.php";
           var params2 = {
             action: "query",
@@ -156,8 +171,8 @@ export default {
             redirects: 1,
             format: "json",
           };
-
           url2 = url2 + "?origin=*";
+
           Object.keys(params2).forEach(function (key) {
             url2 += "&" + key + "=" + params2[key];
           });
@@ -165,6 +180,8 @@ export default {
           axios
             .get(url2)
             .then((res) => {
+
+              // Retrieve Wikipedia information
               for (var id in res.data.query.pages) {
                 let text = res.data.query.pages[id].extract;
                 this.workMatch = this.checkIfWorkMatches(this.catNo, this.workTitle, text);
@@ -218,13 +235,11 @@ export default {
   padding-bottom: 10px;
   background-color: white !important;
   border: none !important;
-
 }
 .card-title{
   font-size: 16px;
 }
 .card-body{
-
   background-color: white !important;
 }
 .info-card-text{
