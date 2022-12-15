@@ -4,25 +4,9 @@
       <b-spinner class="m-5"></b-spinner>
     </div>
     <div class="row">
-      <span v-show="!loading && works.length < 1 && $view.mode == 'favorites'" class="col no-works-found">
-        <div class="m-4">Access your favorite works and performances here</div>
-      </span>
-      <span v-show="!loading && works.length < 1 && !$view.mode && $config.composer" class="col no-works-found">
-        <div class="m-4">No works found for {{ $config.composer }}</div>
-      </span>
-      <span v-show="!loading && works.length < 1 && !$view.mode && !$config.composer" class="col no-works-found">
-        <div class="m-4">Select a composer to view works</div>
-      </span>
-      <span v-show="!loading && works.length < 1 && $view.mode == 'performer' && $config.artist" class="col no-works-found">
-        <div class="m-4">Select a composer to view performances by {{ $config.artist }}</div>
-      </span>
-      <span v-show="!loading && works.length < 1 && $view.mode == 'performer' && !$config.artist" class="col no-works-found">
-        <div class="m-4"></div>
-      </span>
-      <span v-show="!loading && works.length < 1 && $view.mode == 'radio'" class="col no-works-found">
+      <span v-show="noWorks()" class="col no-works-found">
         <div class="m-4">{{ message }}</div>
       </span>
-
       <b-card-group deck v-if="!loading && works">
         <b-card v-for="(genre, index) in works" :key="index" :ref="index" no-body header-tag="header" class="shadow-sm">
           <div class="header" @click="toggleOpen(index);">
@@ -94,6 +78,35 @@ export default {
     };
   },
   methods: {
+
+    // Select from the options above to create your own customized radio
+
+    noWorks(){
+      if(!this.loading && this.works.length < 1 ){
+
+        if(!this.$view.mode && !this.$config.composer){
+          this.message = `Select a composer to view works`;
+        }
+
+        if(!this.$view.mode && this.$config.composer){
+          this.message = `No works found for ${this.$config.composer}`;
+        }
+
+        if(this.$view.mode == 'performer' && this.$config.artist){
+          this.message = `Select a composer to view performances by ${this.$config.artist}`;
+        }
+
+        if(this.$view.mode == 'performer' && !this.$config.artist){
+          this.message = ``;
+        }
+
+        if(this.$view.mode == 'favorites'){
+          this.message = `Access your favorite works and performances here`;
+        }
+        return true;
+      } 
+      return false;
+    },
     getWorks(composer) {
       // standard mode
       this.searchItem = null;
