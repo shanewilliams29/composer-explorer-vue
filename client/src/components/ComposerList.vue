@@ -8,10 +8,15 @@
         No composers found.
       </span>
       <b-card-group deck v-show="!loading">
-        <b-card v-for="(region, index) in composers" :key="index" no-body header-tag="header" class="shadow-sm">
-          <div class="#header" v-b-toggle="index.replace(/\s/g, '')">
+        <b-card 
+          v-for="(region, regionName) in composers" 
+          :key="regionName" 
+          no-body 
+          header-tag="header" 
+          class="shadow-sm">
+          <div class="#header" v-b-toggle="regionName.replace(/\s/g, '')">
             <h6 class="m-2 mb-0">
-              {{ index }}
+              {{ regionName }}
               <span class="mb-0 float-right when-opened">
                 <b-icon-chevron-up></b-icon-chevron-up>
               </span>
@@ -20,7 +25,7 @@
               </span>
             </h6>
           </div>
-          <b-collapse :visible="visibility" :id="index.replace(/\s/g, '')">
+          <b-collapse :visible="visibility" :id="regionName.replace(/\s/g, '')">
             <b-card-text>
               <table cellspacing="0">
                 <tr
@@ -307,7 +312,7 @@ export default {
     if (this.$view.mode == "favorites") {
       this.getFavoritesComposers();
     }
-    
+
     if (this.$route.query.artist) {
       this.getArtistComposers(this.$route.query.artist);
     }

@@ -13,7 +13,7 @@ import AutoplayModal from './subcomponents/AutoplayModal.vue'
 import NotPremiumModal from './subcomponents/NotPremiumModal.vue'
 import NotAvailableModal from './subcomponents/NotAvailableModal.vue'
 
-import {eventBus} from "../main.js";
+import {eventBus} from "@/main.js";
 
 export default {
   components: {
