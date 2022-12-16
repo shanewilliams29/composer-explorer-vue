@@ -1,3 +1,5 @@
+import axios from "axios";
+
 export function addLineBreaksToParagraph(paragraph){
 
   if(!paragraph){
@@ -36,3 +38,77 @@ export function randomIntFromInterval(min, max) {
   // min and max included
   return Math.floor(Math.random() * (max - min + 1) + min);
 }
+
+export function getPeopleInfoFromGoogle(person, peopleList, authKey) {
+    const path = `https://kgsearch.googleapis.com/v1/entities:search?indent=true&types=Person&types=MusicGroup&query=${person} Music&limit=50&key=${authKey}`
+      axios({
+        method: "get",
+        url: path,
+      })
+        .then((res) => {
+          let imageUrl = "";
+          let description = "";
+          let wikiLink = "";
+          let list = res.data.itemListElement;
+
+          if (list[0] != null) {
+            for (var i = 0; i < list.length; i++) {
+
+              var personMatch = person.replace("Sir", "").replace("Dame", "").trim();
+              if (list[i].result.name.includes(personMatch)) {
+                let rank = 0;
+
+                if ("image" in list[i].result) {
+                  imageUrl = list[i].result.image.contentUrl;
+                  rank = rank + 1;
+                } else {
+                  imageUrl = "";
+                }
+
+                if ("description" in list[i].result) {
+                  description = list[i].result.description;
+                  rank = rank + 1;
+                  if (description.toLowerCase().includes('conductor')) {
+                    rank = rank + 10;
+                  }
+                } else {
+                  description = "";
+                }
+
+                if ("url" in res.data.itemListElement[i].result.detailedDescription) {
+                  wikiLink = res.data.itemListElement[i].result.detailedDescription.url;
+                  rank = rank + 1;
+                } else {
+                  wikiLink = null;
+                }
+
+                peopleList.push([person, description, imageUrl, rank, wikiLink]);
+                peopleList.sort(function (a, b) {
+                  return b[3] - a[3];
+                });
+
+                break;
+              }
+
+              if (i == list.length - 1) {
+                peopleList.push([person, "", "", -1, ""]);
+                peopleList.sort(function (a, b) {
+                  return b[3] - a[3];
+                });
+              }
+            }
+          } else {
+            peopleList.push([person, "", "", -1, ""]);
+            peopleList.sort(function (a, b) {
+              return b[3] - a[3];
+            });
+          }
+        })
+      .catch((error) => {
+        console.error(error);
+        peopleList.push([person, "", "", -1, ""]);
+        peopleList.sort(function (a, b) {
+          return b[3] - a[3];
+        });
+      });
+    }

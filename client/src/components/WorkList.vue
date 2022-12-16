@@ -78,28 +78,20 @@ export default {
     };
   },
   methods: {
-
-    // Select from the options above to create your own customized radio
-
     noWorks(){
       if(!this.loading && this.works.length < 1 ){
-
         if(!this.$view.mode && !this.$config.composer){
           this.message = `Select a composer to view works`;
         }
-
         if(!this.$view.mode && this.$config.composer){
-          this.message = `No works found for ${this.$config.composer}`;
+          this.message = `No works found for ${this.$config.composer} (yet!)`;
         }
-
         if(this.$view.mode == 'performer' && this.$config.artist){
           this.message = `Select a composer to view performances by ${this.$config.artist}`;
         }
-
         if(this.$view.mode == 'performer' && !this.$config.artist){
           this.message = ``;
         }
-
         if(this.$view.mode == 'favorites'){
           this.message = `Access your favorite works and performances here`;
         }

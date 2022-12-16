@@ -21,7 +21,7 @@
           <b-spinner class="m-5"></b-spinner>
         </div>
         <div v-for="result in results" :key="result[0]">
-          <table v-show="!loading">
+          <table>
             <tr>
               <td>
                 <b-avatar size="40px" :src="result[2]"></b-avatar>
@@ -39,87 +39,19 @@
 </template>
 
 <script>
-import axios from "axios";
 import { eventBus } from "@/main.js";
 import spotify from "@/SpotifyFunctions.js";
+import {getPeopleInfoFromGoogle} from "@/HelperFunctions.js" 
 
 export default {
   data() {
     return {
-      loading: true,
       artists: [],
       results: [],
       album: {},
     };
   },
   methods: {
-    getPersonInfo(person) {
-    const path = `https://kgsearch.googleapis.com/v1/entities:search?indent=true&types=Person&types=MusicGroup&query=${person} Music&limit=50&key=${this.$auth.knowledgeKey}`
-      axios({
-        method: "get",
-        url: path,
-      })
-        .then((res) => {
-          let imageUrl = "";
-          let description = "";
-          let list = res.data.itemListElement;
-          this.loading = false;
-
-          if (list[0] != null) {
-            for (var i = 0; i < list.length; i++) {
-
-              var personMatch = person.replace("Sir", "").replace("Dame", "").trim();
-              if (list[i].result.name.includes(personMatch)) {
-                let rank = 0;
-
-                if ("image" in list[i].result) {
-                  imageUrl = list[i].result.image.contentUrl;
-                  rank = rank + 1;
-                } else {
-                  imageUrl = "";
-                }
-
-                if ("description" in list[i].result) {
-                  description = list[i].result.description;
-                  rank = rank + 1;
-                  if (description.toLowerCase().includes('conductor')) {
-                    rank = rank + 10;
-                  }
-                } else {
-                  description = "";
-                }
-
-                this.results.push([person, description, imageUrl, rank]);
-                this.results.sort(function (a, b) {
-                  return b[3] - a[3];
-                });
-
-                break;
-              }
-
-              if (i == list.length - 1) {
-                this.results.push([person, "", "", -1]);
-                this.results.sort(function (a, b) {
-                  return b[3] - a[3];
-                });
-              }
-            }
-          } else {
-            this.results.push([person, "", "", -1]);
-            this.results.sort(function (a, b) {
-              return b[3] - a[3];
-            });
-          }
-        })
-      .catch((error) => {
-        console.error(error);
-        this.loading = false;
-        this.results.push([person, "", "", -1]);
-        this.results.sort(function (a, b) {
-          return b[3] - a[3];
-        });
-      });
-    },
     getArtistComposers(artist) {
       if (!this.$view.mobile) {
         eventBus.$emit("requestComposersForArtist", artist);
@@ -134,12 +66,11 @@ export default {
     },
     getSpotifyAlbumData(album) {
       // retrieves data from Spotify. 'album' is database album object
-      this.loading = true;
       this.results = [];
       this.artists = album.all_artists.split(", ");
       let album_id = album.album_uri.substring(album.album_uri.lastIndexOf(":") + 1);
       spotify.getSpotifyAlbum(this.$auth.appToken, album_id);
-      this.artists.forEach((element) => this.getPersonInfo(element));
+      this.artists.forEach((element) => getPeopleInfoFromGoogle(element, this.results, this.$auth.knowledgeKey));
     }
   },
   created() {

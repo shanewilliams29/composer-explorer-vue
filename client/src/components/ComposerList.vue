@@ -89,14 +89,10 @@ export default {
     },
   },
   methods: {
-    deathDate(date) {
+    deathDate(yearOfDeath) {
       // living composer death date stored as 2050 in database
-      const year = new Date().getFullYear();
-      if (date > year) {
-        return "present";
-      } else {
-        return date;
-      }
+      const currentYear = new Date().getFullYear();
+      return currentYear < yearOfDeath ? "present" : yearOfDeath;
     },
     scrollToComposer(composer) {
       // scrolls to selected composer

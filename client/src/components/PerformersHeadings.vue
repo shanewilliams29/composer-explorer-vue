@@ -3,15 +3,12 @@
     <b-row class="flex-nowrap">
       <b-col class="text-center">
         <div class="vertical-centered">
-          <div class="spinner" v-show="loading" role="status">
-            <b-spinner></b-spinner>
-          </div>
-          <div class="no-results" v-if="!results[0] && !loading">
+          <div class="no-results" v-if="!results[0]">
             <table class="dummy-table">
               Search for a performer to view composers and works they perform
             </table>
           </div>
-          <table v-if="results && !loading">
+          <table v-if="results">
             <tr class="tr-performer" v-for="result in results" :key="result[0]">
               <td>
                 <b-avatar class="avatar" size="64px" :src="result[2]"></b-avatar>
@@ -20,13 +17,18 @@
                 <span class="artist-name">{{ result[0] }}&nbsp;</span><br />
                 <span class="artist-job">{{result[1]}}</span>
 
-                <span v-if="wikiLink" class="wiki-link">
-                  &nbsp;&nbsp;<a :href="wikiLink" target="_blank"><b-icon icon="info-circle-fill" aria-hidden="true"></b-icon> Wikipedia</a>&nbsp;&nbsp;
+                <span v-if="result[3]" class="wiki-link">
+                  &nbsp;&nbsp;<a :href="result[3]" target="_blank">
+                    <b-icon icon="info-circle-fill" aria-hidden="true"></b-icon> Wikipedia</a>&nbsp;&nbsp;
                 </span>
 
-                <span @mouseover="hover = true" @mouseleave="hover = false" @click="goToAristRadio(result[0])" class="radio-link">
-                  <img v-if="hover" :src="radioWhiteUrl" class="radio-link" height="14px" />
-                  <img v-else :src="radioGrayURL" class="radio-link" height="14px" />
+                <span 
+                  @mouseover="hover = true" 
+                  @mouseleave="hover = false" 
+                  @click="goToAristRadio(result[0])" 
+                  class="radio-link">
+                  <img v-if="hover" :src="radioWhiteUrl" class="radio-link-img" height="14px" />
+                  <img v-else :src="radioGrayURL" class="radio-link-img" height="14px" />
                   <a>&nbsp;Radio</a>
                 </span>
               </td>
@@ -37,14 +39,44 @@
       <b-col class="last-col">
         <b-card class="heading-card albums-card">
           <b-form-group>
-            <vue-typeahead-bootstrap v-show="listLoading" v-model="query" placeholder="Loading..." class="mt-3 style-chooser performer-search" size="sm" :data="[]"/>
-            <vue-typeahead-bootstrap v-show="!listLoading" v-model="query" placeholder="Search for a performer" class="mt-3 style-chooser performer-search" @input="resetField" @hit="artistSearch" size="sm" :data="this.artistList" />
+            <vue-typeahead-bootstrap 
+              v-show="listLoading" 
+              v-model="query" 
+              placeholder="Loading..." 
+              class="mt-3 select-box performer-search" 
+              size="sm" 
+              :data="[]"/>
+            <vue-typeahead-bootstrap 
+              v-show="!listLoading" 
+              v-model="query" 
+              placeholder="Search for a performer" 
+              class="mt-3 select-box performer-search" 
+              @input="resetField" 
+              @hit="artistSearch" 
+              size="sm" 
+              :data="this.artistList" />
             <b-row class="flex-nowrap">
               <b-col style="padding-right: 0px;" cols="8">
-                <v-select v-model="albumSortField" label="text" :options="albumSortOptions" @input="albumFilter()" :clearable="false" class="mt-3 style-chooser" :searchable="false"></v-select>
+                <v-select 
+                  v-model="albumSortField" 
+                  label="text" 
+                  :options="albumSortOptions" 
+                  @input="albumFilter()" 
+                  :clearable="false" 
+                  class="mt-3 select-box" 
+                  :searchable="false">
+                  </v-select>
               </b-col>
               <b-col style="padding-left: 5px;" cols="4">
-                <v-select v-model="albumSizeField" label="text" :options="albumSizeOptions" @input="albumSize()" :clearable="false" class="mt-3 style-chooser" :searchable="false"></v-select>
+                <v-select 
+                  v-model="albumSizeField" 
+                  label="text" 
+                  :options="albumSizeOptions" 
+                  @input="albumSize()" 
+                  :clearable="false" 
+                  class="mt-3 select-box" 
+                  :searchable="false">
+                </v-select>
               </b-col>
             </b-row>
           </b-form-group>
@@ -57,7 +89,8 @@
 
 <script>
 import axios from "axios";
-import { eventBus, staticURL } from "../main.js";
+import { eventBus, staticURL } from "@/main.js";
+import {getPeopleInfoFromGoogle} from "@/HelperFunctions.js" 
 
 export default {
   data() {
@@ -68,7 +101,6 @@ export default {
       wikiLink: null,
       query: "",
       artistList: [],
-      loading: false,
       listLoading: false,
 
       albumSortField: { value: "recommended", text: "Recommended sorting" },
@@ -93,7 +125,8 @@ export default {
   watch: {
     apiKeyGot() {
       if (this.$route.query.artist) {
-        this.getPersonInfo(this.$route.query.artist);
+        this.results = []
+        getPeopleInfoFromGoogle(this.$route.query.artist, this.results, this.$auth.knowledgeKey);
       }
     },
   },
@@ -133,79 +166,17 @@ export default {
       this.albumSortField = { value: "recommended", text: "Recommended sorting" };
     },
     setArtistField(artist) {
-      this.getPersonInfo(artist);
+      this.results = []
+      getPeopleInfoFromGoogle(artist, this.results, this.$auth.knowledgeKey);
       this.$router.push("/performers?artist=" + artist);
       this.query = artist;
     },
     albumSize() {
-      if (this.albumSizeField.value == "large") {
-        this.$config.albumSize = "large";
-        localStorage.setItem("config", JSON.stringify(this.$config));
-      } else {
-        this.$config.albumSize = "small";
-        localStorage.setItem("config", JSON.stringify(this.$config));
-      }
+      this.$config.albumSize = this.albumSizeField.value === "large" ? "large" : "small";
     },
     goToAristRadio(artist) {
       this.$config.artist = artist;
       this.$router.push("/radio?artist=" + artist);
-    },
-    getPersonInfo(person) {
-      this.loading = true;
-      this.results = [];
-      const key = this.$auth.knowledgeKey;
-      const path = "https://kgsearch.googleapis.com/v1/entities:search?indent=true&types=Person&types=MusicGroup&query=" + person + " Music&limit=50&key=" + key;
-      axios({
-        method: "get",
-        url: path,
-      })
-        .then((res) => {
-          this.loading = false;
-          let imageUrl = "";
-          let description = "";
-          //this.loading = false;
-          if (res.data.itemListElement[0] != null) {
-            for (var i = 0; i < res.data.itemListElement.length; i++) {
-              var personMatch = person.replace("Sir", "").replace("Dame", "").trim();
-              if (res.data.itemListElement[i].result.name.includes(personMatch)) {
-                let rank = 0;
-                if ("image" in res.data.itemListElement[i].result) {
-                  imageUrl = res.data.itemListElement[i].result.image.contentUrl;
-                  rank = rank + 1;
-                } else {
-                  imageUrl = "";
-                }
-                if ("description" in res.data.itemListElement[i].result) {
-                  description = res.data.itemListElement[i].result.description;
-                  rank = rank + 1;
-                } else {
-                  description = "";
-                }
-                if ("url" in res.data.itemListElement[i].result.detailedDescription) {
-                  this.wikiLink = res.data.itemListElement[i].result.detailedDescription.url;
-                  rank = rank + 1;
-                } else {
-                  this.wikiLink = null;
-                }
-                this.results.push([person, description, imageUrl, rank]);
-                break;
-              }
-              if (i == res.data.itemListElement.length - 1) {
-                this.results.push([person, "", "", -1]);
-                this.wikiLink = null;
-              }
-            }
-          } else {
-            this.wikiLink = null;
-            this.results.push([person, "", "", -1]);
-          }
-        })
-        .catch((error) => {
-          console.error(error);
-          this.wikiLink = null;
-          this.results.push([person, "", "", -1]);
-          this.loading = false;
-        });
     },
   },
   created() {
@@ -213,9 +184,11 @@ export default {
     this.getArtistList();
     if (this.$route.query.artist) {
       this.artistSearch(this.$route.query.artist);
-      this.getPersonInfo(this.$route.query.artist);
       this.query = this.$route.query.artist;
       this.$config.artist = this.$route.query.artist;
+      if (this.$auth.knowledgeKey) {
+        getPeopleInfoFromGoogle(this.$route.query.artist, this.results, this.$auth.knowledgeKey);
+      }
     }
     eventBus.$on("fireArtistAlbums", this.resetAlbumSort);
     eventBus.$on("requestComposersForArtist", this.setArtistField);
@@ -292,7 +265,7 @@ table {
   font-size: 12px;
   text-decoration: none;
 }
-.radio-link a:hover{
+.radio-link >>> img, a:hover{
   color: white !important;
   cursor: pointer;
 }
@@ -339,7 +312,7 @@ table {
 .col {
   padding: 0px;
 }
-.style-chooser {
+.select-box {
   margin-top: 5px !important;
   font-size: 14px;
   fill: white;
