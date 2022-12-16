@@ -22,6 +22,7 @@
 </template>
 
 <script>
+import axios from 'axios';
 import PatreonBanner from "@/components/subcomponents/PatreonBanner.vue";
 import ConnectingOverlay from "@/components/ConnectingOverlay.vue";
 import WelcomeOverlay from "@/components/WelcomeOverlay.vue";
@@ -68,6 +69,33 @@ export default {
         }, 300);
       }
     },
+    getArtistList() {
+      this.$lists.artistList = []
+      // Gets list of all artists for
+      const path = "api/artistlist";
+      axios
+        .get(path)
+        .then((res) => {
+          this.$lists.artistList = JSON.parse(res.data.artists);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    },
+    getComposerList() {
+      // Gets list for radio composers multiselect dropdown
+      this.$lists.composerList = []
+      const path = "api/composersradio";
+      axios
+        .get(path)
+        .then((res) => {
+          this.$lists.composerList = res.data.composers;
+        })
+        .catch((error) => {
+          // eslint-disable-next-line
+          console.error(error);
+        });
+    },
   },
   beforeCreate() {
     if (this.$route.name == "mobile" || this.$route.name == "mobileradio") {
@@ -86,6 +114,10 @@ export default {
     document.documentElement.style.setProperty("--panelheight", `0px`);
     this.$view.panelVisible = false;
   },
+  mounted(){
+    this.getArtistList();
+    this.getComposerList();
+  }
 };
 
 </script>

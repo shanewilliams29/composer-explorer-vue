@@ -40,21 +40,21 @@
         <b-card class="heading-card albums-card">
           <b-form-group>
             <vue-typeahead-bootstrap 
-              v-show="listLoading" 
+              v-show="$lists.artistList.length < 1" 
               v-model="query" 
               placeholder="Loading..." 
               class="mt-3 select-box performer-search" 
               size="sm" 
               :data="[]"/>
             <vue-typeahead-bootstrap 
-              v-show="!listLoading" 
+              v-show="$lists.artistList.length > 0" 
               v-model="query" 
               placeholder="Search for a performer" 
               class="mt-3 select-box performer-search" 
               @input="resetField" 
               @hit="artistSearch" 
               size="sm" 
-              :data="this.artistList" />
+              :data="$lists.artistList" />
             <b-row class="flex-nowrap">
               <b-col style="padding-right: 0px;" cols="8">
                 <v-select 
@@ -88,7 +88,6 @@
 
 
 <script>
-import axios from "axios";
 import { eventBus, staticURL } from "@/main.js";
 import {getPeopleInfoFromGoogle} from "@/HelperFunctions.js" 
 
@@ -100,7 +99,6 @@ export default {
       hover: false,
       wikiLink: null,
       query: "",
-      artistList: [],
       listLoading: false,
 
       albumSortField: { value: "recommended", text: "Recommended sorting" },
@@ -131,20 +129,6 @@ export default {
     },
   },
   methods: {
-    getArtistList() {
-      this.listLoading = true;
-      const path = "api/artistlist";
-      axios
-        .get(path)
-        .then((res) => {
-          this.artistList = JSON.parse(res.data.artists);
-          this.listLoading = false;
-        })
-        .catch((error) => {
-          console.error(error);
-          this.listLoading = false;
-        });
-    },
     capitalize(string) {
       let capitalized = string[0].toUpperCase() + string.substring(1);
       return capitalized;
@@ -181,7 +165,6 @@ export default {
   },
   created() {
     this.$config.artist = null;
-    this.getArtistList();
     if (this.$route.query.artist) {
       this.artistSearch(this.$route.query.artist);
       this.query = this.$route.query.artist;

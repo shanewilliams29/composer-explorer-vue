@@ -30,12 +30,12 @@
             ></v-select>
             <vue-typeahead-bootstrap 
               v-if="radioTypeField.value == 'performer'" 
-              v-model="query" 
+              v-model="artistSelect" 
               placeholder="Search for a performer" 
               class="mt-3 selector performer-search" 
               @hit="artistSearch" 
               size="sm" 
-              :data="this.artistList" />
+              :data="$lists.artistList" />
           </b-form-group>
         </div>
       </b-col>
@@ -86,10 +86,10 @@
             <b-col class="col-padding-right">
               <v-select 
                 v-if="!$view.favoritesAlbums" 
-                v-model="performerFilterField" 
+                v-model="performanceFilterField" 
                 label="text" 
-                :options="performerOptions" 
-                @input="performerFilter()" 
+                :options="performanceOptions" 
+                @input="performanceFilter()" 
                 :clearable="false" 
                 class="mt-3 selector" 
                 :searchable="false"></v-select>
@@ -138,7 +138,6 @@
 
 
 <script>
-import axios from "axios";
 import { eventBus } from "@/main.js";
 import spotify from "@/SpotifyFunctions.js";
 import PlaylistModal from "./subcomponents/PlaylistModal.vue";
@@ -150,8 +149,7 @@ export default {
   data() {
     return {
       allowClear: true,
-      artistList: [],
-      query: null,
+      artistSelect: null,
       title: "",
       OpenIndicator: {
         render: (createElement) => createElement("span", ""),
@@ -190,8 +188,8 @@ export default {
         { value: "all", text: "All works" },
       ],
 
-      performerFilterField: { value: "topartists", text: "Top performance" },
-      performerOptions: [
+      performanceFilterField: { value: "topartists", text: "Top performance" },
+      performanceOptions: [
         { value: "topartists", text: "Top performance" },
         { value: "randomartists", text: "Random performance" },
       ],
@@ -209,18 +207,17 @@ export default {
       ],
     };
   },
-  methods: {
-    getArtistList() {
-      const path = "api/artistlist";
-      axios
-        .get(path)
-        .then((res) => {
-          this.artistList = JSON.parse(res.data.artists);
-        })
-        .catch((error) => {
-          console.error(error);
-        });
+  computed: {
+    gotComposerList() {
+      return this.$lists.composerList;
     },
+  },
+  watch: {
+    gotComposerList() {
+      this.makeComposerDropdown(this.$lists.composerList);
+    },
+  },
+  methods: {
     toggleRadio() {
       if (this.$view.enableRadio) {
         this.$view.radioPlaying = !this.$view.radioPlaying;
@@ -234,10 +231,8 @@ export default {
     },
     radioTypeSelect() {
       this.$view.favoritesAlbums = "";
-      if(this.radioTypeField.value == 'composer'){
-        this.getRadioComposersMultiselectList();
-      }
-       if(this.radioTypeField.value == 'favorites'){
+
+      if(this.radioTypeField.value == 'favorites'){
         this.$view.favoritesAlbums = true;
         eventBus.$emit("requestFavoritesComposers");
       }
@@ -248,7 +243,7 @@ export default {
 
       // reset everything on radio type change
       this.$router.replace({ query: null });
-      this.query = null;
+      this.artistSelect = null;
       this.$config.artist = null;
       this.$config.genre = null;
       this.$view.radioPlaying = false;
@@ -259,19 +254,6 @@ export default {
       this.genreOptions =[];
       this.workSearchField = "";
       this.workFilterField = { value: "recommended", text: "Recommended works" };
-    },
-    getRadioComposersMultiselectList() {
-      // Gets list for radio composers multiselect dropdown
-      const path = "api/composersradio";
-      axios
-        .get(path)
-        .then((res) => {
-          this.makeComposerDropdown(res.data.composers);
-        })
-        .catch((error) => {
-          // eslint-disable-next-line
-          console.error(error);
-        });
     },
     makeComposerDropdown(composers) {
       this.composerOptions = [];
@@ -297,14 +279,14 @@ export default {
       for (const genre of genreList) {
         this.genreOptions.push({ value: genre, text: genre });
       }
-      eventBus.$emit("requestWorksForRadio", this.genreSelectField, this.workFilterField.value, this.workSearchField, this.query, this.radioTypeField.value);
+      eventBus.$emit("requestWorksForRadio", this.genreSelectField, this.workFilterField.value, this.workSearchField, this.artistSelect, this.radioTypeField.value);
     },
     periodSelect() {
       eventBus.$emit("requestComposersFromFilter", this.periodSelectField.value);
     },
     genreSelect() {
       if (this.genreSelectField.length > 1) {
-        // removes All Genres from multiselect
+        // removes All Genres from multiselect upon genre selection
         var newList = this.genreSelectField.filter((item) => item.value !== "all");
         this.genreSelectField = newList;
         this.allowClear = false;
@@ -316,16 +298,16 @@ export default {
       } else {
         this.allowClear = false;
       }
-      eventBus.$emit("requestWorksForRadio", this.genreSelectField, this.workFilterField.value, this.workSearchField, this.query, this.radioTypeField.value);
+      eventBus.$emit("requestWorksForRadio", this.genreSelectField, this.workFilterField.value, this.workSearchField, this.artistSelect, this.radioTypeField.value);
     },
     workSearch() {
-      eventBus.$emit("requestWorksForRadio", this.genreSelectField, this.workFilterField.value, this.workSearchField, this.query, this.radioTypeField.value);
+      eventBus.$emit("requestWorksForRadio", this.genreSelectField, this.workFilterField.value, this.workSearchField, this.artistSelect, this.radioTypeField.value);
     },
     limitFilter() {
       this.$view.radioTrackLimit = this.limitFilterField.value;
     },
-    performerFilter() {
-      if (this.performerFilterField.value == "randomartists") {
+    performanceFilter() {
+      if (this.performanceFilterField.value == "randomartists") {
         this.$view.randomAlbum = true;
       } else {
         this.$view.randomAlbum = false;
@@ -336,16 +318,18 @@ export default {
       eventBus.$emit("requestComposersForArtist", artist);
     },
     prepareForExport() {
-      eventBus.$emit("firePlaylistExport", this.query, this.radioTypeField.value, this.genreSelectField, this.workFilterField.value, this.workSearchField, this.limitFilterField.value, true, "dummyname");
+      eventBus.$emit("firePlaylistExport", this.artistSelect, this.radioTypeField.value, this.genreSelectField, this.workFilterField.value, this.workSearchField, this.limitFilterField.value, true, "dummyname");
       this.$view.playlistError = false;
       this.$view.playlistSuccess = false;
     },
     exportSpotify(name) {
-      eventBus.$emit("firePlaylistExport", this.query, this.radioTypeField.value, this.genreSelectField, this.workFilterField.value, this.workSearchField, this.limitFilterField.value, false, name);
+      eventBus.$emit("firePlaylistExport", this.artistSelect, this.radioTypeField.value, this.genreSelectField, this.workFilterField.value, this.workSearchField, this.limitFilterField.value, false, name);
     },
   },
   created() {
-    this.getArtistList();
+    if(this.$lists.composerList.length > 0){
+      this.makeComposerDropdown(this.$lists.composerList);
+    }
     this.$config.genre = null;
     if (this.$route.query.artist) {
       this.$config.artist = this.$route.query.artist;
@@ -360,9 +344,7 @@ export default {
   mounted() {
     if (this.$route.query.artist) {
       this.radioTypeField = { value: "performer", text: "Performer Radio" };
-      this.query = this.$route.query.artist;
-    } else {
-      this.getRadioComposersMultiselectList();
+      this.artistSelect = this.$route.query.artist;
     }
   },
   beforeDestroy() {
