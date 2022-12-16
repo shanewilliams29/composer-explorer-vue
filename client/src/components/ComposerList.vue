@@ -246,7 +246,9 @@ export default {
           this.visibility = true;
           this.loading = false;
 
-          eventBus.$emit("sendGenreListToRadio", res.data.genres);
+          if (this.$view.mode == "radio") {
+            eventBus.$emit("sendGenreListToRadio", res.data.genres);
+          }
         })
         .catch((error) => {
           // eslint-disable-next-line

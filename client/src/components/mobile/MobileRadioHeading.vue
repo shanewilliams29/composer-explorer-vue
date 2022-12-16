@@ -255,7 +255,7 @@ export default {
       for (const genre of genreList) {
         this.genreOptions.push({ value: genre, text: genre });
       }
-      eventBus.$emit("fireGenreSelectRadio", this.genreSelectField, this.workFilterField.value, this.workSearchField, this.query, this.radioTypeField.value);
+      eventBus.$emit("requestWorksForRadio", this.genreSelectField, this.workFilterField.value, this.workSearchField, this.query, this.radioTypeField.value);
     },
     periodSelect() {
       eventBus.$emit("requestComposersFromFilter", this.periodSelectField.value);
@@ -274,10 +274,10 @@ export default {
       } else {
         this.allowClear = false;
       }
-      eventBus.$emit("fireGenreSelectRadio", this.genreSelectField, this.workFilterField.value, this.workSearchField, this.query, this.radioTypeField.value);
+      eventBus.$emit("requestWorksForRadio", this.genreSelectField, this.workFilterField.value, this.workSearchField, this.query, this.radioTypeField.value);
     },
     workSearch() {
-      eventBus.$emit("fireGenreSelectRadio", this.genreSelectField, this.workFilterField.value, this.workSearchField, this.query, this.radioTypeField.value);
+      eventBus.$emit("requestWorksForRadio", this.genreSelectField, this.workFilterField.value, this.workSearchField, this.query, this.radioTypeField.value);
     },
     limitFilter() {
       this.$view.radioTrackLimit = this.limitFilterField.value;

@@ -241,7 +241,7 @@ export default {
         this.$view.favoritesAlbums = true;
         eventBus.$emit("requestFavoritesComposers");
       }
-      //eventBus.$emit("requestRadioComposersMultiselectDropdownList", this.radioTypeField.value);
+
       eventBus.$emit("clearComposersList");
       eventBus.$emit("clearWorksList");
       eventBus.$emit("clearAlbumsList");
@@ -256,6 +256,7 @@ export default {
       this.$view.enableExport = false;
       this.composerSelectField = "";
       this.genreSelectField = [{ value: "all", text: "All Genres" }];
+      this.genreOptions =[];
       this.workSearchField = "";
       this.workFilterField = { value: "recommended", text: "Recommended works" };
     },
@@ -280,8 +281,8 @@ export default {
     },
     composerSelect() {
       if (this.composerSelectField < 1) {
-        this.$config.composer = null;
-        this.radioTypeSelect(); // clears works and albums
+        this.$config.composer = '';
+        this.radioTypeSelect(); // resets everything
       } else {
         eventBus.$emit("requestComposersFromRadioMultiselect", this.composerSelectField);
       }
@@ -296,7 +297,7 @@ export default {
       for (const genre of genreList) {
         this.genreOptions.push({ value: genre, text: genre });
       }
-      eventBus.$emit("fireGenreSelectRadio", this.genreSelectField, this.workFilterField.value, this.workSearchField, this.query, this.radioTypeField.value);
+      eventBus.$emit("requestWorksForRadio", this.genreSelectField, this.workFilterField.value, this.workSearchField, this.query, this.radioTypeField.value);
     },
     periodSelect() {
       eventBus.$emit("requestComposersFromFilter", this.periodSelectField.value);
@@ -315,10 +316,10 @@ export default {
       } else {
         this.allowClear = false;
       }
-      eventBus.$emit("fireGenreSelectRadio", this.genreSelectField, this.workFilterField.value, this.workSearchField, this.query, this.radioTypeField.value);
+      eventBus.$emit("requestWorksForRadio", this.genreSelectField, this.workFilterField.value, this.workSearchField, this.query, this.radioTypeField.value);
     },
     workSearch() {
-      eventBus.$emit("fireGenreSelectRadio", this.genreSelectField, this.workFilterField.value, this.workSearchField, this.query, this.radioTypeField.value);
+      eventBus.$emit("requestWorksForRadio", this.genreSelectField, this.workFilterField.value, this.workSearchField, this.query, this.radioTypeField.value);
     },
     limitFilter() {
       this.$view.radioTrackLimit = this.limitFilterField.value;

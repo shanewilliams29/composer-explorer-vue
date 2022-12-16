@@ -287,8 +287,7 @@ export default {
         }
       }
   },
-    getGenreWorks(genres, filter, search, artist, radioType) {
-      // used in radio mode
+    getRadioWorks(genres, filter, search, artist, radioType) {
       if (genres.length < 1) {
         // no works
         eventBus.$emit("clearAlbumsList");
@@ -307,7 +306,7 @@ export default {
           radio_type: radioType,
         };
         this.radioPayload = payload;
-        const path = "api/worksbygenre";
+        const path = "api/radioworks";
         axios
           .post(path, payload)
           .then((res) => {
@@ -578,7 +577,7 @@ export default {
     eventBus.$on("fireWorkFilter", this.getFilteredWorks);
     eventBus.$on("fireWorkSearch", this.getSearchWorks);
     eventBus.$on("clearWorksList", this.clearWorksList);
-    eventBus.$on("fireGenreSelectRadio", this.getGenreWorks);
+    eventBus.$on("requestWorksForRadio", this.getRadioWorks);
     eventBus.$on("fireNextWork", this.nextWork);
     eventBus.$on("firePreviousWork", this.previousWork);
     eventBus.$on("firePlaylistExport", this.preparePlaylist);
@@ -592,7 +591,7 @@ export default {
     eventBus.$off("fireWorkFilter", this.getFilteredWorks);
     eventBus.$off("fireWorkSearch", this.getSearchWorks);
     eventBus.$off("clearWorksList", this.clearWorksList);
-    eventBus.$off("fireGenreSelectRadio", this.getGenreWorks);
+    eventBus.$off("requestWorksForRadio", this.getRadioWorks);
     eventBus.$off("fireNextWork", this.nextWork);
     eventBus.$off("firePreviousWork", this.previousWork);
     eventBus.$off("firePlaylistExport", this.preparePlaylist);
