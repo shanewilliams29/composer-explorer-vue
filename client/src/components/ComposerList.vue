@@ -232,27 +232,8 @@ export default {
         localStorage.setItem("config", JSON.stringify(this.$config));
       }
     },
-    getRadioComposersMultiselectList(type) {
-      // Gets list for radio composers multiselect dropdown
-      this.$view.favoritesAlbums = "";
+    clearComposers() {
       this.composers = [];
-
-      if (type == "composer") {
-        const path = "api/composersradio";
-        axios
-          .get(path)
-          .then((res) => {
-            eventBus.$emit("submitComposerListToRadio", res.data.composers);
-          })
-          .catch((error) => {
-            // eslint-disable-next-line
-            console.error(error);
-          });
-      }
-      if (type == "favorites") { // Get favorites composer list if favorites
-        this.$view.favoritesAlbums = true;
-        this.getFavoritesComposers();
-      }
     },
     getFavoritesComposers() {
       this.loading = true;
@@ -316,15 +297,17 @@ export default {
     eventBus.$on("requestComposersFromFilter", this.getFilteredComposers);
     eventBus.$on("requestComposersFromSearch", this.getSearchComposers);
     eventBus.$on("requestComposersForArtist", this.getArtistComposers);
-    eventBus.$on("requestRadioComposersMultiselectDropdownList", this.getRadioComposersMultiselectList);
+    eventBus.$on("requestFavoritesComposers", this.getFavoritesComposers);
     eventBus.$on("requestComposersFromRadioMultiselect", this.getMultiComposers);
+    eventBus.$on("clearComposersList", this.clearComposers);
   },
   beforeDestroy() {
     eventBus.$off("requestComposersFromFilter", this.getFilteredComposers);
     eventBus.$off("requestComposersFromSearch", this.getSearchComposers);
     eventBus.$off("requestComposersForArtist", this.getArtistComposers);
-    eventBus.$off("requestRadioComposersMultiselectDropdownList", this.getRadioComposersMultiselectList);
+    eventBus.$off("requestFavoritesComposers", this.getFavoritesComposers);
     eventBus.$off("requestComposersFromRadioMultiselect", this.getMultiComposers);
+    eventBus.$off("clearComposersList", this.clearComposers);
   },
 };
 

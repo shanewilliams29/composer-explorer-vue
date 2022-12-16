@@ -233,11 +233,21 @@ export default {
       }
     },
     radioTypeSelect() {
-      // reset everything on radio type change
-      this.$router.replace({ query: null });
-      eventBus.$emit("requestRadioComposersMultiselectDropdownList", this.radioTypeField.value);
+      this.$view.favoritesAlbums = "";
+      if(this.radioTypeField.value == 'composer'){
+        this.getRadioComposersMultiselectList();
+      }
+       if(this.radioTypeField.value == 'favorites'){
+        this.$view.favoritesAlbums = true;
+        eventBus.$emit("requestFavoritesComposers");
+      }
+      //eventBus.$emit("requestRadioComposersMultiselectDropdownList", this.radioTypeField.value);
+      eventBus.$emit("clearComposersList");
       eventBus.$emit("clearWorksList");
       eventBus.$emit("clearAlbumsList");
+
+      // reset everything on radio type change
+      this.$router.replace({ query: null });
       this.query = null;
       this.$config.artist = null;
       this.$config.genre = null;
@@ -248,6 +258,19 @@ export default {
       this.genreSelectField = [{ value: "all", text: "All Genres" }];
       this.workSearchField = "";
       this.workFilterField = { value: "recommended", text: "Recommended works" };
+    },
+    getRadioComposersMultiselectList() {
+      // Gets list for radio composers multiselect dropdown
+      const path = "api/composersradio";
+      axios
+        .get(path)
+        .then((res) => {
+          this.makeComposerDropdown(res.data.composers);
+        })
+        .catch((error) => {
+          // eslint-disable-next-line
+          console.error(error);
+        });
     },
     makeComposerDropdown(composers) {
       this.composerOptions = [];
@@ -331,20 +354,17 @@ export default {
     this.$view.radioPlaying = false;
     this.$view.enableRadio = false;
     this.$view.enableExport = false;
-    eventBus.$on("submitComposerListToRadio", this.makeComposerDropdown);
     eventBus.$on("sendGenreListToRadio", this.makeGenreList);
   },
   mounted() {
     if (this.$route.query.artist) {
       this.radioTypeField = { value: "performer", text: "Performer Radio" };
       this.query = this.$route.query.artist;
-      eventBus.$emit("requestRadioComposersMultiselectDropdownList", "performer");
     } else {
-      eventBus.$emit("requestRadioComposersMultiselectDropdownList", "composer");
+      this.getRadioComposersMultiselectList();
     }
   },
   beforeDestroy() {
-    eventBus.$off("submitComposerListToRadio", this.makeComposerDropdown);
     eventBus.$off("sendGenreListToRadio", this.makeGenreList);
   },
 };
