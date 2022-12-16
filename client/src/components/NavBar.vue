@@ -179,7 +179,7 @@ img {
   background-color: var(--dark-gray) !important;
 }
 .navbar-items a {
-  color: var(--white) !important;
+  color: var(--my-white) !important;
 }
 .menu-button a {
   padding-right: 0px !important;

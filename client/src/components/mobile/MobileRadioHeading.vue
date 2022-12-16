@@ -336,7 +336,7 @@ export default {
 <style scoped>
 .container-fluid{
   background-color: var(--medium-gray);
-  color: #3b4047;
+  color: var(--search-gray);
 }
 .form-group{
   margin-bottom: 5px;
@@ -434,17 +434,17 @@ input{
 }
 >>> {
   --vs-font-size: 14px;
-  --vs-controls-color: var(--white);
-  --vs-border-color: #3b4047;
+  --vs-controls-color: var(--my-white);
+  --vs-border-color: var(--search-gray);
   --vs-border-width: 1px;
-  --vs-selected-bg: #3b4047;
-  --vs-selected-color: var(--white);
-  --vs-search-input-color: var(--white);
+  --vs-selected-bg: var(--search-gray);
+  --vs-selected-color: var(--my-white);
+  --vs-search-input-color: var(--my-white);
 }
 .performer-search{
   margin-top: 5px !important;
   font-size: 14px;
-  background-color: #3b4047 !important;
+  background-color: var(--search-gray) !important;
   height: 31px;
   border: none;
   border-radius: 4px;
@@ -470,8 +470,8 @@ input{
 }
 /*.custom-select{
 
-  border: solid 1px #3b4047;
-  color: var(--white);
+  border: solid 1px var(--search-gray);
+  color: var(--my-white);
     background: url("data:image/svg+xml,<svg height='10px' width='10px' viewBox='0 0 16 16' fill='white' xmlns='http://www.w3.org/2000/svg'><path d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/></svg>") no-repeat;
     background-position: calc(100% - 0.75rem) center !important;
     -moz-appearance:none !important;

@@ -136,7 +136,7 @@ table{
   margin-bottom: 5px;
 }
 td{
-  color: var(--white);
+  color: var(--my-white);
   padding-left: 50px;
   padding-right: 50px;
   text-align: center;

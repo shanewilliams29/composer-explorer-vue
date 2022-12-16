@@ -104,12 +104,12 @@ export default {
   overflow: hidden;
 }
 >>> {
-  --vs-controls-color: var(--white);
-  --vs-border-color: #3b4047;
+  --vs-controls-color: var(--my-white);
+  --vs-border-color: var(--search-gray);
   --vs-border-width: 1px;
-  --vs-selected-bg: #3b4047;
-  --vs-selected-color: var(--white);
+  --vs-selected-bg: var(--search-gray);
+  --vs-selected-color: var(--my-white);
   --vs-line-height: 1;
-  --vs-search-input-color: var(--white);
+  --vs-search-input-color: var(--my-white);
 }
 </style>

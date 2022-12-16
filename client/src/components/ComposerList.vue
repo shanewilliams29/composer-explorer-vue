@@ -384,7 +384,7 @@ table {
 }
 .highlight td {
   border-top: 0px solid var(--medium-light-gray);
-  color: var(--white) !important;
+  color: var(--my-white) !important;
 }
 .cursor {
   cursor: pointer;
@@ -409,7 +409,7 @@ table {
   object-fit: cover;
 }
 header.card-header {
-  background-color: var(--white);
+  background-color: var(--my-white);
   border: none;
   padding-left: 10px;
   padding-bottom: 0px;
@@ -428,7 +428,7 @@ header.card-header:hover {
     color: #9da6af;
 }
 .card {
-  background-color: var(--white);
+  background-color: var(--my-white);
   border: none;
   margin-top: 5px;
 }

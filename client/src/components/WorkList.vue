@@ -659,10 +659,10 @@ table {
 .highlight td {
     border-top: 0px solid var(--medium-light-gray);
     background-color: var(--highlight-color);
-    color: var(--white) !important;
+    color: var(--my-white) !important;
 }
 .highlight span {
-    color: var(--white) !important;
+    color: var(--my-white) !important;
 }
 tr:hover {
     cursor: pointer;
@@ -704,7 +704,7 @@ tr:hover {
     cursor: pointer;
 }
 .header.card-header {
-    background-color: var(--white);
+    background-color: var(--my-white);
     border: none;
     padding-left: 10px;
     padding-bottom: 0px;
@@ -718,7 +718,7 @@ tr:hover {
     font-weight: bold;
 }
 .card {
-    background-color: var(--white);
+    background-color: var(--my-white);
     border: none;
     margin-top: 5px;
 }
@@ -727,7 +727,7 @@ tr:hover {
     padding-right: 5px;
 }
 .badge {
-    color: var(--white);
+    color: var(--my-white);
     background-color: rgb(52, 58, 64, 0.7);
     border-radius: 7px;
 }

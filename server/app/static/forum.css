@@ -1,6 +1,6 @@
 .subforumlisting{
   border-radius: 6px;
-  background: var(--white);
+  background: var(--my-white);
   border: 1px solid #d4d7dd;
   padding: 20px;
   margin-bottom: 10px;
@@ -19,7 +19,7 @@
 
 .post{
   border-radius: 0px;
-  background: var(--white);
+  background: var(--my-white);
   border: 1px solid #d4d7dd;
   padding: 20px;
   margin-bottom: -2px;
@@ -27,7 +27,7 @@
 
 .title{
   border-radius: 0px;
-  background: var(--white);
+  background: var(--my-white);
   border: 1px solid #d4d7dd;
   padding: 20px;
   margin-bottom: -2px;

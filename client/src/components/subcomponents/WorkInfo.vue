@@ -235,14 +235,14 @@ export default {
 .composer-info-card{
   padding: 15px;
   padding-bottom: 10px;
-  background-color: var(--white) !important;
+  background-color: var(--my-white) !important;
   border: none !important;
 }
 .card-title{
   font-size: 16px;
 }
 .card-body{
-  background-color: var(--white) !important;
+  background-color: var(--my-white) !important;
 }
 .info-card-text{
   font-size: 13px;
@@ -259,7 +259,7 @@ export default {
 /*scrollbars*/
  .info-card-text {
         --scroll-bar-color: var(--scroll-color-light);
-        --scroll-bar-bg-color: var(--white);
+        --scroll-bar-bg-color: var(--my-white);
     }
 
     .info-card-text{

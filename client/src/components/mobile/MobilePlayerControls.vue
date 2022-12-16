@@ -310,13 +310,13 @@ input[type="range"]::-webkit-slider-thumb {
   -webkit-appearance: none; /* Override default look */
   appearance: none;
   margin-top: -3px; /* Centers thumb on the track */
-  background-color: var(--white);
+  background-color: var(--my-white);
   height: 0px;
   width: 0px;
 }
 input[type="range"]::-moz-range-thumb {
   border: none; /*Removes extra border that FF applies*/
-  background-color: var(--white);
+  background-color: var(--my-white);
   height: 0px;
   width: 0px;
 }

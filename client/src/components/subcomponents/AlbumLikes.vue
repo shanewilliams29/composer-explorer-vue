@@ -60,19 +60,19 @@ export default {
 <style scoped>
 .badge {
   vertical-align: middle;
-  color: var(--white) !important;
+  color: var(--my-white) !important;
   background-color: darkgoldenrod;
   margin-bottom: 2.5px;
   border-radius: 7px;
 }
 .highlight .badge {
   color: #000 !important;
-  background-color: var(--white);
+  background-color: var(--my-white);
 }
 .user-liked{
   color: darkgoldenrod !important;
 }
 .highlight .user-liked{
-  color: var(--white) !important;
+  color: var(--my-white) !important;
 }
 </style>

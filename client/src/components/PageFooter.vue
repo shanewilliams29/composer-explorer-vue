@@ -55,7 +55,7 @@ export default {
 }
 .footer-row {
   height: 100px;
-  color: var(--white);
+  color: var(--my-white);
 }
 .col {
   padding: 0px;

@@ -144,7 +144,7 @@ export default {
   z-index: 9999;
 }
 .popup >>> .album-major-artists {
-  color: var(--white) !important;
+  color: var(--my-white) !important;
 }
 .popup >>> .album-minor-artists {
   color: var(--medium-light-gray) !important;
@@ -204,13 +204,13 @@ table {
   height: 70px;
 }
 header.card-header {
-  background-color: var(--white);
+  background-color: var(--my-white);
   border: none;
   padding-left: 10px;
   padding-bottom: 0px;
 }
 .card {
-  background-color: var(--white);
+  background-color: var(--my-white);
   border: none;
   margin-top: 5px;
 }
@@ -218,10 +218,10 @@ header.card-header {
   cursor: pointer;
 }
 .highlight .selected{
-  color: var(--white) !important;
+  color: var(--my-white) !important;
 }
 .highlight .label {
-  color: var(--white) !important;
+  color: var(--my-white) !important;
 }
 .album_columns {
   padding-right: 3px;

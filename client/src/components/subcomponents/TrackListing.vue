@@ -159,7 +159,7 @@ export default {
 }
 .track-row:hover {
   cursor: pointer;
-  color: var(--white);
+  color: var(--my-white);
 }
 .highlight-track {
   color: #ffc107 !important;

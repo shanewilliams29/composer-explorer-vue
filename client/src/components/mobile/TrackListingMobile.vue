@@ -176,7 +176,7 @@ a:hover {
   height: 62px;
 }
 .card-body {
-  background-color: var(--white) !important;
+  background-color: var(--my-white) !important;
   --scroll-bar-bg-color: var(--light-gray);
 }
 
@@ -205,7 +205,7 @@ table {
 /*scrollbars*/
 .info-card-text-tracks {
   --scroll-bar-color: var(--scroll-color-light);
-  --scroll-bar-bg-color: var(--white);
+  --scroll-bar-bg-color: var(--my-white);
 }
 
 .info-card-text-tracks {
@@ -258,7 +258,7 @@ table {
 }
 .track-row:hover {
   cursor: pointer;
-  color: var(--white);
+  color: var(--my-white);
 }
 .highlight-track {
   color: #ffc107 !important;

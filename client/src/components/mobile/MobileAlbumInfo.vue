@@ -29,7 +29,7 @@
   width: 100%;
   overflow-x: hidden;
   height: 100px;
-  color: var(--white) !important;
+  color: var(--my-white) !important;
 }
 .card{
   background: none !important;

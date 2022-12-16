@@ -31,9 +31,9 @@ export default {
 
 <style>
 .form-control {
-  background-color: #3b4047 !important;
+  background-color: var(--search-gray) !important;
   border: none !important;
-  color: var(--white) !important;
+  color: var(--my-white) !important;
 }
 .heading-card {
   padding-bottom: 0px;
@@ -59,7 +59,7 @@ export default {
 <style scoped>
 .container-fluid {
   background-color: var(--medium-gray);
-  color: #3b4047;
+  color: var(--search-gray);
 }
 .last-col {
   margin-right: 5px;

@@ -202,9 +202,9 @@ export default {
 
 <style>
 .form-control {
-  background-color: #3b4047 !important;
+  background-color: var(--search-gray) !important;
   border: none !important;
-  color: var(--white) !important;
+  color: var(--my-white) !important;
 }
 ::-webkit-input-placeholder {
   /* Chrome/Opera/Safari */
@@ -229,7 +229,7 @@ export default {
 }
   .container-fluid {
   background-color: var(--medium-gray);
-  color: #3b4047;
+  color: var(--search-gray);
 }
 .vertical-centered{
   height: 78px;
@@ -249,7 +249,7 @@ table {
 }
 .artist-name{
   font-size: 20px;
-  color: var(--white);
+  color: var(--my-white);
 }
 .artist-job{
   color: var(--medium-light-gray);
@@ -266,11 +266,11 @@ table {
   text-decoration: none;
 }
 .radio-link >>> img, a:hover{
-  color: var(--white) !important;
+  color: var(--my-white) !important;
   cursor: pointer;
 }
 .wiki-link a:hover{
-  color: var(--white);
+  color: var(--my-white);
   cursor: pointer;
 }
 .no-results{
@@ -325,18 +325,18 @@ table {
   overflow: hidden;
 }
 >>> {
-  --vs-controls-color: var(--white);
-  --vs-border-color: #3b4047;
+  --vs-controls-color: var(--my-white);
+  --vs-border-color: var(--search-gray);
   --vs-border-width: 1px;
-  --vs-selected-bg: #3b4047;
-  --vs-selected-color: var(--white);
+  --vs-selected-bg: var(--search-gray);
+  --vs-selected-color: var(--my-white);
   --vs-line-height: 1;
-  --vs-search-input-color: var(--white);
+  --vs-search-input-color: var(--my-white);
 }
 .performer-search {
   margin-top: 1.3px !important;
   font-size: 14px;
-  background-color: #3b4047 !important;
+  background-color: var(--search-gray) !important;
   height: 31px;
   border: none;
   border-radius: 4px;

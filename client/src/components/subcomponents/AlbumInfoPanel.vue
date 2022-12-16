@@ -117,7 +117,7 @@ a:hover {
 .album-info-card {
   padding: 15px;
   padding-bottom: 10px;
-  background-color: var(--white) !important;
+  background-color: var(--my-white) !important;
   border: none !important;
 }
 .info-td {
@@ -131,7 +131,7 @@ a:hover {
   height: 62px;
 }
 .card-body {
-  background-color: var(--white) !important;
+  background-color: var(--my-white) !important;
   --scroll-bar-bg-color: var(--light-gray);
 }
 .info-card-text {
@@ -159,7 +159,7 @@ table {
 /*scrollbars*/
 .info-card-text {
   --scroll-bar-color: var(--scroll-color-light);
-  --scroll-bar-bg-color: var(--white);
+  --scroll-bar-bg-color: var(--my-white);
 }
 .info-card-text {
   scrollbar-width: thin;

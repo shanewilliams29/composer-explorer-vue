@@ -130,7 +130,7 @@ export default {
   padding-right: 0px;
 }
 .footer-row {
-  color: var(--white);
+  color: var(--my-white);
   z-index: 10;
   opacity: 1;
 }
@@ -157,7 +157,7 @@ export default {
    box-shadow: none;
 }
 .icon-inactive{
-  color: var(--white) !important;
+  color: var(--my-white) !important;
 }
 .icon-active{
   color: var(--yellow) !important;

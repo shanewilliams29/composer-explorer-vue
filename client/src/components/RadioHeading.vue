@@ -4,7 +4,7 @@
       <b-col>
         <div>
           <b-form-group>
-            <v-select v-model="radioTypeField" label="text" :options="radioTypeOptions" @input="radioTypeSelect()" :clearable="false" class="mt-3 style-chooser" :searchable="false"></v-select>
+            <v-select v-model="radioTypeField" label="text" :options="radioTypeOptions" @input="radioTypeSelect()" :clearable="false" class="mt-3 selector" :searchable="false"></v-select>
             <v-select
               multiple
               v-if="radioTypeField.value == 'composer'"
@@ -14,7 +14,7 @@
               @input="composerSelect()"
               placeholder="Select composers"
               :clearable="true"
-              class="mt-3 style-chooser allow-wrap"
+              class="mt-3 selector allow-wrap"
               :searchable="true"
             ></v-select>
             <v-select
@@ -25,14 +25,14 @@
               @input="periodSelect()"
               placeholder="Select period/era"
               :clearable="false"
-              class="mt-3 style-chooser allow-wrap"
+              class="mt-3 selector allow-wrap"
               :searchable="false"
             ></v-select>
             <vue-typeahead-bootstrap 
               v-if="radioTypeField.value == 'performer'" 
               v-model="query" 
               placeholder="Search for a performer" 
-              class="mt-3 style-chooser performer-search" 
+              class="mt-3 selector performer-search" 
               @hit="artistSearch" 
               size="sm" 
               :data="this.artistList" />
@@ -52,7 +52,7 @@
               @input="genreSelect()"
               placeholder="Select genres"
               :clearable="false"
-              class="mt-3 style-chooser allow-wrap"
+              class="mt-3 selector allow-wrap"
               :searchable="true"
             ></v-select>
           </b-col>
@@ -63,7 +63,8 @@
                 v-model="workSearchField" 
                 v-debounce="workSearch" 
                 placeholder="Search filter" 
-                size="sm"></b-form-input>
+                size="sm">
+              </b-form-input>
             </b-col>
             <b-col class="col-padding-left">
               <v-select 
@@ -72,8 +73,9 @@
                 :options="workOptions" 
                 @input="genreSelect()" 
                 :clearable="false" 
-                class="mt-3 style-chooser" 
-                :searchable="false"></v-select>
+                class="mt-3 selector" 
+                :searchable="false"
+              ></v-select>
             </b-col>
           </b-row>
         </b-form-group>
@@ -89,7 +91,7 @@
                 :options="performerOptions" 
                 @input="performerFilter()" 
                 :clearable="false" 
-                class="mt-3 style-chooser" 
+                class="mt-3 selector" 
                 :searchable="false"></v-select>
             </b-col>
             <b-col class="col-padding-left">
@@ -100,19 +102,31 @@
                 :options="limitOptions" 
                 @input="limitFilter()" 
                 :clearable="false" 
-                class="mt-3 style-chooser" 
+                class="mt-3 selector" 
                 :searchable="false"></v-select>
             </b-col>
           </b-row>
           <b-row class="sub-row flex-nowrap">
             <b-col cols="9" class="col-padding-right">
-              <b-button class="radio-button-off" size="sm" v-if="!$view.radioPlaying && $view.enableRadio && $auth.clientToken" @click="toggleRadio()" block>Radio Off</b-button>
-              <b-button class="radio-button-off-disabled" size="sm" v-if="!$view.radioPlaying && !$view.enableRadio || !$auth.clientToken" @click="toggleRadio()" disabled block>Radio Off</b-button>
-              <b-button class="radio-button-on" size="sm" v-if="$view.radioPlaying && $auth.clientToken" @click="toggleRadio()" block variant="warning">Radio On</b-button>
+              <b-button class="radio-button-off" size="sm" 
+                v-if="!$view.radioPlaying && $view.enableRadio && $auth.clientToken" 
+                @click="toggleRadio()" block>Radio Off</b-button>
+              <b-button class="radio-button-off-disabled" size="sm" 
+                v-if="!$view.radioPlaying && !$view.enableRadio || !$auth.clientToken" 
+                @click="toggleRadio()" disabled block>Radio Off</b-button>
+              <b-button class="radio-button-on" size="sm" 
+                v-if="$view.radioPlaying && $auth.clientToken" 
+                @click="toggleRadio()" block variant="warning">Radio On</b-button>
             </b-col>
             <b-col cols="3" class="col-padding-left">
-              <b-button v-if="$view.enableExport && $auth.clientToken" class="spotify-export-button" size="sm" @click="prepareForExport()" block variant="success">Export</b-button>
-              <b-button v-else class="spotify-export-button-disabled" size="sm" block variant="success" disabled>Export</b-button>
+              <b-button 
+                v-if="$view.enableExport && $auth.clientToken" 
+                class="spotify-export-button" size="sm" 
+                @click="prepareForExport()" block variant="success">Export</b-button>
+              <b-button 
+                v-else 
+                class="spotify-export-button-disabled" size="sm" 
+                block variant="success" disabled>Export</b-button>
             </b-col>
           </b-row>
         </b-form-group>
@@ -125,7 +139,7 @@
 
 <script>
 import axios from "axios";
-import { eventBus } from "../main.js";
+import { eventBus } from "@/main.js";
 import spotify from "@/SpotifyFunctions.js";
 import PlaylistModal from "./subcomponents/PlaylistModal.vue";
 
@@ -339,7 +353,7 @@ export default {
 <style scoped>
 .container-fluid{
   background-color: var(--medium-gray);
-  color: #3b4047;
+  color: var(--search-gray);
 }
 .form-group{
   margin-bottom: 5px;
@@ -413,7 +427,7 @@ export default {
   padding: 0px;
   padding-left: 5px;
 }
-.style-chooser{
+.selector{
   margin-top: 5px !important;
   font-size: 14px !important;
   fill: white;
@@ -433,17 +447,17 @@ input{
 }
 >>> {
   --vs-font-size: 14px;
-  --vs-controls-color: var(--white);
-  --vs-border-color: #3b4047;
+  --vs-controls-color: var(--my-white);
+  --vs-border-color: var(--search-gray);
   --vs-border-width: 1px;
-  --vs-selected-bg: #3b4047;
-  --vs-selected-color: var(--white);
-  --vs-search-input-color: var(--white);
+  --vs-selected-bg: var(--search-gray);
+  --vs-selected-color: var(--my-white);
+  --vs-search-input-color: var(--my-white);
 }
 .performer-search{
   margin-top: 5px !important;
   font-size: 14px;
-  background-color: #3b4047 !important;
+  background-color: var(--search-gray) !important;
   height: 31px;
   border: none;
   border-radius: 4px;
