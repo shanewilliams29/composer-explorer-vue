@@ -46,7 +46,7 @@
                     <img class="composer-img" :src="composer.flag" height="20" width="20" />
                     <img class="composer-img" :src="composer.img" height="20" width="20" />
                   </td>
-                  <td width="50%" class="composer-name td-style">
+                  <td width="50%" class="composer-name td-style" style="overflow: hidden;">
                     <span v-if="composer.catalogued">{{ composer.name_full }}</span>
                     <span v-else style="color: gray;">{{ composer.name_full }}</span>
                   </td>
@@ -364,7 +364,6 @@ export default {
 .td-style{
   white-space: nowrap; 
   text-overflow: ellipsis; 
-  overflow: hidden; 
   max-width: 1px;
 }
 td {
