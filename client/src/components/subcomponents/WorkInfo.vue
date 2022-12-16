@@ -226,7 +226,7 @@ export default {
   text-align: center;
 }
 .m-5 {
-  color: #343a40;
+  color: var(--dark-gray);
 }
 .born-died{
   font-size: 15px !important;
@@ -235,14 +235,14 @@ export default {
 .composer-info-card{
   padding: 15px;
   padding-bottom: 10px;
-  background-color: white !important;
+  background-color: var(--white) !important;
   border: none !important;
 }
 .card-title{
   font-size: 16px;
 }
 .card-body{
-  background-color: white !important;
+  background-color: var(--white) !important;
 }
 .info-card-text{
   font-size: 13px;
@@ -258,8 +258,8 @@ export default {
 
 /*scrollbars*/
  .info-card-text {
-        --scroll-bar-color: #d6d9db;
-        --scroll-bar-bg-color: #fff;
+        --scroll-bar-color: var(--scroll-color-light);
+        --scroll-bar-bg-color: var(--white);
     }
 
     .info-card-text{

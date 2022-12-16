@@ -79,8 +79,8 @@ export default {
 }
 /*scrollbars*/
 :root {
-  --scroll-bar-color: #c9cccf;
-  --scroll-bar-bg-color: #f1f2f4;
+  --scroll-bar-color: var(--scroll-color);
+  --scroll-bar-bg-color: var(--light-gray);
 }
 
 * {

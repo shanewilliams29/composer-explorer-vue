@@ -303,7 +303,7 @@ export default {
 
 <style scoped>
 .playback-container {
-  /* top padding set in App.vue, adjusted in desktop vs mobile view */
+  padding-top: var(--playerpadding) !important;
   padding: 13px;
   padding-bottom: 0px;
   font-size: 14px;
@@ -350,13 +350,13 @@ input[type="range"]::-webkit-slider-thumb {
   -webkit-appearance: none; /* Override default look */
   appearance: none;
   margin-top: -3px; /* Centers thumb on the track */
-  background-color: #fff;
+  background-color: var(--white);
   height: 0px;
   width: 0px;
 }
 input[type="range"]::-moz-range-thumb {
   border: none; /*Removes extra border that FF applies*/
-  background-color: #fff;
+  background-color: var(--white);
   height: 0px;
   width: 0px;
 }
@@ -385,7 +385,7 @@ input[type="range"]::-moz-range-progress {
 }
 
 .btn-secondary {
-  background-color: #343a40 !important;
+  background-color: var(--dark-gray) !important;
 }
 .btn:hover {
   background-color: #484e53 !important;
@@ -395,8 +395,11 @@ input[type="range"]::-moz-range-progress {
   outline: none !important;
   box-shadow: none !important;
 }
+.playback-button{
+  color: var(--white);
+}
 .gray {
-  color: darkgray !important;
+  color: var(--medium-dark-gray) !important;
 }
 .red {
   color: var(--red) !important;

@@ -1,5 +1,5 @@
 <template>
-  <b-card no-body bg-variant="dark" v-show="!loading">
+  <b-card no-body v-show="!loading">
     <b-row no-gutters>
       <b-col cols="12" md="auto" class="album-cover-col">
         <b-card-img :src="album.img_big" alt="Album Cover" class="rounded-0"></b-card-img>
@@ -10,7 +10,7 @@
             <div class="centered album-data">
               <span>{{composer}}</span>
               <span style="font-weight: bold;">{{title}}</span>
-              <span style="font-style: italic; color: darkgray; font-size: 13px;">{{album.artists}}</span>
+              <span style="font-style: italic; color: var(--medium-dark-gray); font-size: 13px;">{{album.artists}}</span>
             </div>
           </b-card-text>
         </b-card-body>
@@ -79,7 +79,7 @@ export default {
   padding-right: 0px;
 }
 .info-card-body {
-  background: none !important;
+  background: var(--dark-gray) !important;
   border: 0px;
   width: 100%;
   overflow-x: hidden;

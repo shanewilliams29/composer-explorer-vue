@@ -68,14 +68,14 @@ export default {
 >>> .composer-info-card{
   padding: 15px;
   padding-bottom: 0px;
-  background-color: white !important;
+  background-color: var(--white) !important;
   border: none !important;
   width: 100%;
 }
 >>> .album-info-card{
   padding: 15px;
   padding-bottom: 5px;
-  background-color: white !important;
+  background-color: var(--white) !important;
   border: none !important;
   width: 100%;
 }
@@ -88,7 +88,7 @@ export default {
 >>> .track-info-card{
   padding: 15px;
   padding-bottom: 5px;
-  background-color: white !important;
+  background-color: var(--white) !important;
   border: none !important;
   width: 100%;
 }

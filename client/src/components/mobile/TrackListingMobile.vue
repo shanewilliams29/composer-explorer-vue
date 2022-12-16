@@ -149,7 +149,7 @@ a:hover {
   text-align: center;
 }
 .m-5 {
-  color: #343a40;
+  color: var(--dark-gray);
 }
 .born-died {
   font-size: 13px !important;
@@ -176,8 +176,8 @@ a:hover {
   height: 62px;
 }
 .card-body {
-  background-color: white !important;
-  --scroll-bar-bg-color: #f1f2f4;
+  background-color: var(--white) !important;
+  --scroll-bar-bg-color: var(--light-gray);
 }
 
 .info-card-text-tracks {
@@ -204,8 +204,8 @@ table {
 
 /*scrollbars*/
 .info-card-text-tracks {
-  --scroll-bar-color: #d6d9db;
-  --scroll-bar-bg-color: #fff;
+  --scroll-bar-color: var(--scroll-color-light);
+  --scroll-bar-bg-color: var(--white);
 }
 
 .info-card-text-tracks {
@@ -251,14 +251,14 @@ table {
   line-height: 155%;
 }
 .track-card-text {
-  color: lightgray;
+  color: var(--medium-light-gray);
   padding-top: 6px;
   padding-bottom: 0px;
   padding-right: 10px;
 }
 .track-row:hover {
   cursor: pointer;
-  color: white;
+  color: var(--white);
 }
 .highlight-track {
   color: #ffc107 !important;
@@ -266,7 +266,7 @@ table {
 
 /*scrollbars*/
  .track-card {
-        --scroll-bar-color: lightgray;
+        --scroll-bar-color: var(--medium-light-gray);
         --scroll-bar-bg-color: #454d54;
     }
 

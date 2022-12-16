@@ -78,15 +78,15 @@ a:hover {
 }
 .card {
     width: 100%;
-    background-color: #fff;
+    background-color: var(--white);
     border: none;
     margin-top: 5px;
 }
 .highlight {
-    color: white;
+    color: var(--white);
 }
 .highlight span {
-    color: white !important;
+    color: var(--white) !important;
 }
 .album_columns {
     padding-right: 0px;
@@ -125,14 +125,14 @@ a:hover {
 }
 .badge {
     vertical-align: middle;
-    color: #fff !important;
+    color: var(--white) !important;
     background-color: goldenrod;
     margin-bottom: 2.5px;
     border-radius: 7px;
 }
 .highlight .badge {
     color: #000 !important;
-    background-color: #fff;
+    background-color: var(--white);
 }
 .likes-col {
     padding-left: 20px;

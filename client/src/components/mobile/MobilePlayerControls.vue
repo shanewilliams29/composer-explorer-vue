@@ -263,7 +263,7 @@ export default {
 </script>
 <style scoped>
 .playback-container {
-  /*top padding set in App.vue*/
+  padding-top: var(--playerpadding) !important;
   padding: 13px;
   padding-bottom: 0px;
   font-size: 14px;
@@ -310,13 +310,13 @@ input[type="range"]::-webkit-slider-thumb {
   -webkit-appearance: none; /* Override default look */
   appearance: none;
   margin-top: -3px; /* Centers thumb on the track */
-  background-color: #fff;
+  background-color: var(--white);
   height: 0px;
   width: 0px;
 }
 input[type="range"]::-moz-range-thumb {
   border: none; /*Removes extra border that FF applies*/
-  background-color: #fff;
+  background-color: var(--white);
   height: 0px;
   width: 0px;
 }
@@ -359,7 +359,7 @@ input[type="range"]::-moz-range-progress {
   box-shadow: none !important;
 }
 .gray {
-  color: darkgray !important;
+  color: var(--medium-dark-gray) !important;
 }
 .red {
   color: var(--red) !important;

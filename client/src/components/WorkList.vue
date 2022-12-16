@@ -642,7 +642,7 @@ export default {
 td {
     padding: 1px;
     vertical-align: middle;
-    border-top: 1px dotted lightgray;
+    border-top: 1px dotted var(--medium-light-gray);
 }
 tr {
     border-bottom: 0px;
@@ -657,12 +657,12 @@ table {
 }
 
 .highlight td {
-    border-top: 0px solid lightgray;
+    border-top: 0px solid var(--medium-light-gray);
     background-color: var(--highlight-color);
-    color: white !important;
+    color: var(--white) !important;
 }
 .highlight span {
-    color: white !important;
+    color: var(--white) !important;
 }
 tr:hover {
     cursor: pointer;
@@ -704,7 +704,7 @@ tr:hover {
     cursor: pointer;
 }
 .header.card-header {
-    background-color: #fff;
+    background-color: var(--white);
     border: none;
     padding-left: 10px;
     padding-bottom: 0px;
@@ -718,7 +718,7 @@ tr:hover {
     font-weight: bold;
 }
 .card {
-    background-color: #fff;
+    background-color: var(--white);
     border: none;
     margin-top: 5px;
 }
@@ -727,7 +727,7 @@ tr:hover {
     padding-right: 5px;
 }
 .badge {
-    color: #fff;
+    color: var(--white);
     background-color: rgb(52, 58, 64, 0.7);
     border-radius: 7px;
 }

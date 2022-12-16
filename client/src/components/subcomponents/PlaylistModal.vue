@@ -70,6 +70,6 @@ export default {
 }
 input{
   color: #000 !important;
-  background-color: #f1f2f4 !important;
+  background-color: var(--light-gray) !important;
 }
 </style>

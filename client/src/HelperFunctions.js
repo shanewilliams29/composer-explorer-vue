@@ -39,6 +39,7 @@ export function randomIntFromInterval(min, max) {
   return Math.floor(Math.random() * (max - min + 1) + min);
 }
 
+// Gets person info from Google API and adds to peopleList
 export function getPeopleInfoFromGoogle(person, peopleList, authKey) {
     const path = `https://kgsearch.googleapis.com/v1/entities:search?indent=true&types=Person&types=MusicGroup&query=${person} Music&limit=50&key=${authKey}`
       axios({
@@ -77,7 +78,6 @@ export function getPeopleInfoFromGoogle(person, peopleList, authKey) {
 
                 if ("url" in res.data.itemListElement[i].result.detailedDescription) {
                   wikiLink = res.data.itemListElement[i].result.detailedDescription.url;
-                  rank = rank + 1;
                 } else {
                   wikiLink = null;
                 }

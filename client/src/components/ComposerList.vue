@@ -369,7 +369,7 @@ export default {
 td {
   padding: 1px;
   vertical-align: middle;
-  border-top: 1px dotted lightgray;
+  border-top: 1px dotted var(--medium-light-gray);
 }
 tr {
   border-bottom: 0px;
@@ -383,8 +383,8 @@ table {
   padding-bottom: 2px;
 }
 .highlight td {
-  border-top: 0px solid lightgray;
-  color: white !important;
+  border-top: 0px solid var(--medium-light-gray);
+  color: var(--white) !important;
 }
 .cursor {
   cursor: pointer;
@@ -409,7 +409,7 @@ table {
   object-fit: cover;
 }
 header.card-header {
-  background-color: #fff;
+  background-color: var(--white);
   border: none;
   padding-left: 10px;
   padding-bottom: 0px;
@@ -428,7 +428,7 @@ header.card-header:hover {
     color: #9da6af;
 }
 .card {
-  background-color: #fff;
+  background-color: var(--white);
   border: none;
   margin-top: 5px;
 }

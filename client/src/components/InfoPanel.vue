@@ -30,7 +30,7 @@ export default {
 
 <style scoped>
 .container-fluid {
-  background-color: #f1f2f4;
+  background-color: var(--light-gray);
   padding-bottom: 0px;
   border-radius: 0px;
 }

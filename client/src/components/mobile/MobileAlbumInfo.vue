@@ -10,7 +10,7 @@
             <div class="centered album-data">
               <span>{{$config.composer}}</span>
               <span style="font-weight: bold;">{{$config.workTitle}}</span>
-              <span style="color: darkgray; font-size: 13px;">{{$config.albumData.artists}}</span>
+              <span style="color: var(--medium-dark-gray); font-size: 13px;">{{$config.albumData.artists}}</span>
             </div>
           </b-card-text>
         </b-card-body>
@@ -29,7 +29,7 @@
   width: 100%;
   overflow-x: hidden;
   height: 100px;
-  color: white !important;
+  color: var(--white) !important;
 }
 .card{
   background: none !important;

@@ -108,7 +108,7 @@ a:hover {
   text-align: center;
 }
 .m-5 {
-  color: #343a40;
+  color: var(--dark-gray);
 }
 .born-died {
   font-size: 13px !important;
@@ -117,7 +117,7 @@ a:hover {
 .album-info-card {
   padding: 15px;
   padding-bottom: 10px;
-  background-color: white !important;
+  background-color: var(--white) !important;
   border: none !important;
 }
 .info-td {
@@ -131,8 +131,8 @@ a:hover {
   height: 62px;
 }
 .card-body {
-  background-color: white !important;
-  --scroll-bar-bg-color: #f1f2f4;
+  background-color: var(--white) !important;
+  --scroll-bar-bg-color: var(--light-gray);
 }
 .info-card-text {
   font-size: 13px;
@@ -158,8 +158,8 @@ table {
 
 /*scrollbars*/
 .info-card-text {
-  --scroll-bar-color: #d6d9db;
-  --scroll-bar-bg-color: #fff;
+  --scroll-bar-color: var(--scroll-color-light);
+  --scroll-bar-bg-color: var(--white);
 }
 .info-card-text {
   scrollbar-width: thin;

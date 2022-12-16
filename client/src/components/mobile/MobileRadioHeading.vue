@@ -335,7 +335,7 @@ export default {
 
 <style scoped>
 .container-fluid{
-  background-color: #54595f;
+  background-color: var(--medium-gray);
   color: #3b4047;
 }
 .form-group{
@@ -366,7 +366,7 @@ export default {
 .radio-button-off-disabled{
   margin-top: 5px;
   border: 1px solid darkgoldenrod !important;
-  background-color: #54595f !important;
+  background-color: var(--medium-gray) !important;
   height: 31px;
 }
 .radio-button-off:hover{
@@ -390,7 +390,7 @@ export default {
 .spotify-export-button-disabled{
   margin-top: 5px;
   height: 31px;
-  background-color: #54595f !important;
+  background-color: var(--medium-gray) !important;
   border: 1px solid var(--green) !important;
 }
 .spotify-export-button:hover{
@@ -434,12 +434,12 @@ input{
 }
 >>> {
   --vs-font-size: 14px;
-  --vs-controls-color: #fff;
+  --vs-controls-color: var(--white);
   --vs-border-color: #3b4047;
   --vs-border-width: 1px;
   --vs-selected-bg: #3b4047;
-  --vs-selected-color: #fff;
-  --vs-search-input-color: #fff;
+  --vs-selected-color: var(--white);
+  --vs-search-input-color: var(--white);
 }
 .performer-search{
   margin-top: 5px !important;
@@ -455,7 +455,7 @@ input{
 .work-search-field{
   margin-top: 5px;
   height: 31px;
-  border: 1px solid #343a40 !important;
+  border: 1px solid var(--dark-gray) !important;
 }
 .col-padding-right{
   padding-left: 0px;
@@ -471,7 +471,7 @@ input{
 /*.custom-select{
 
   border: solid 1px #3b4047;
-  color: white;
+  color: var(--white);
     background: url("data:image/svg+xml,<svg height='10px' width='10px' viewBox='0 0 16 16' fill='white' xmlns='http://www.w3.org/2000/svg'><path d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/></svg>") no-repeat;
     background-position: calc(100% - 0.75rem) center !important;
     -moz-appearance:none !important;

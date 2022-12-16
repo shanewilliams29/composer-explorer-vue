@@ -1,0 +1,14 @@
+html, body {
+  height: 100% !important;
+  max-height: -webkit-fill-available !important;
+  background: #93989f !important;
+ 
+  --dark-gray: #343a40;
+  --medium-dark-gray: darkgray;
+  --medium-gray: #54595f;
+  --medium-light-gray: lightgray;
+  --light-gray: #f1f2f4;
+  --white: #fff;
+  --scroll-color: #c9cccf;
+  --scroll-color-light: #d6d9db;
+}

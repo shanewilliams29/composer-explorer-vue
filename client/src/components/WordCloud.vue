@@ -3,7 +3,7 @@
     <vue-word-cloud
       style="height: calc(100vh - 244px - var(--panelheight)); width: 100%;"
       :words="data"
-      :color="([, , color]) => color == 0 ? '#343a40' : color == 1 ? '#54595f' : '#727981'"
+      :color="([, , color]) => color == 0 ? 'var(--dark-gray)' : color == 1 ? 'var(--medium-gray)' : '#727981'"
       font-family="Roboto"
       :font-size-ratio="0.2"
       :spacing="0.1"

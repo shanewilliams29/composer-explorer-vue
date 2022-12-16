@@ -206,7 +206,7 @@ export default {
 
 <style scoped>
   >>> .card{
-    color: #343a40;
+    color: var(--dark-gray);
   }
   >>> .composer-card{
     margin-left: -15px;
@@ -232,19 +232,19 @@ export default {
     font-weight: 500;
   }
   .heading-card{
-    background: #54595f !important;
+    background: var(--medium-gray) !important;
     padding-top:  10px;
     padding-right: 5px;
     margin-right: -15px;
     border-radius: 0px;
   }
   .card-body{
-    background: #54595f !important;
+    background: var(--medium-gray) !important;
     padding: 0px !important;
   }
 
   .btn-secondary{
-    background-color: #343a40 !important;
+    background-color: var(--dark-gray) !important;
     text-align: middle;
   }
 /*  .btn-secondary:hover{
@@ -263,12 +263,12 @@ export default {
   }
   .header-button{
     border-radius: 0px !important;
-    border-top: solid 2px #54595f !important;
+    border-top: solid 2px var(--medium-gray) !important;
       outline: none !important;
       box-shadow: none !important;
   }
   .last-button{
-/*    border-bottom: solid 2px #54595f !important;*/
+/*    border-bottom: solid 2px var(--medium-gray) !important;*/
   }
   .p-1{
     padding: 0px !important;

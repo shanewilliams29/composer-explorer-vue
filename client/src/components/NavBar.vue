@@ -176,10 +176,10 @@ img {
   margin-left: 0px;
 }
 .navbar.navbar-dark.bg-dark {
-  background-color: #343a40 !important;
+  background-color: var(--dark-gray) !important;
 }
 .navbar-items a {
-  color: white !important;
+  color: var(--white) !important;
 }
 .menu-button a {
   padding-right: 0px !important;

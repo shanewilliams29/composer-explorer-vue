@@ -111,13 +111,13 @@ export default {
   overflow: hidden;
 }
 >>> {
-  --vs-controls-color: #fff;
+  --vs-controls-color: var(--white);
   --vs-border-color: #3b4047;
   --vs-border-width: 1px;
   --vs-selected-bg: #3b4047;
-  --vs-selected-color: #fff;
+  --vs-selected-color: var(--white);
   --vs-line-height: 1;
-  --vs-search-input-color: #fff;
+  --vs-search-input-color: var(--white);
 }
 .performer-search {
   margin-top: 0px !important;

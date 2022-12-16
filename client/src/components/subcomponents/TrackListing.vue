@@ -152,14 +152,14 @@ export default {
   line-height: 155%;
 }
 .track-card-text {
-  color: lightgray;
+  color: var(--medium-light-gray);
   padding-top: 6px;
   padding-bottom: 0px;
   padding-right: 10px;
 }
 .track-row:hover {
   cursor: pointer;
-  color: white;
+  color: var(--white);
 }
 .highlight-track {
   color: #ffc107 !important;
@@ -167,7 +167,7 @@ export default {
 
 /*scrollbars*/
 .track-card {
-  --scroll-bar-color: lightgray;
+  --scroll-bar-color: var(--medium-light-gray);
   --scroll-bar-bg-color: #454d54;
 }
 

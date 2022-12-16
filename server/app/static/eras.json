@@ -3,7 +3,7 @@
     "Medieval",
     1000,
     1500,
-    "#343a40"
+    "var(--dark-gray)"
   ],
   [
     "Renissance",
@@ -33,12 +33,12 @@
     "20th/21st Century",
     1900,
     2100,
-    "#343a40"
+    "var(--dark-gray)"
   ],
   [
     "",
     2100,
     2300,
-    "#343a40"
+    "var(--dark-gray)"
   ]
 ]

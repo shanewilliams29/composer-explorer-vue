@@ -33,7 +33,7 @@ export default {
 .form-control {
   background-color: #3b4047 !important;
   border: none !important;
-  color: white !important;
+  color: var(--white) !important;
 }
 .heading-card {
   padding-bottom: 0px;
@@ -58,7 +58,7 @@ export default {
 </style>
 <style scoped>
 .container-fluid {
-  background-color: #54595f;
+  background-color: var(--medium-gray);
   color: #3b4047;
 }
 .last-col {

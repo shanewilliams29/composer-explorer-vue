@@ -136,18 +136,18 @@ table{
   margin-bottom: 5px;
 }
 td{
-  color: white;
+  color: var(--white);
   padding-left: 50px;
   padding-right: 50px;
   text-align: center;
   vertical-align: middle;
 }
 .album-track-display{
-  color: lightgray;
+  color: var(--medium-light-gray);
   font-size: 14px;
 }
 .carousel{
-  border-top: solid 2px #54595f !important;
+  border-top: solid 2px var(--medium-gray) !important;
 }
 .carousel-inner{
   width:100%;

@@ -42,7 +42,7 @@ export default {
   position: fixed;
   left: 50%;
   transform: translateX(-50%);
-  background-color: #343a40;
+  background-color: var(--dark-gray);
   padding-bottom: 0px;
   border-radius: 0px;
 }
@@ -55,7 +55,7 @@ export default {
 }
 .footer-row {
   height: 100px;
-  color: white;
+  color: var(--white);
 }
 .col {
   padding: 0px;

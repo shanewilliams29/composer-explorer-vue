@@ -88,7 +88,7 @@ img{
   margin: 5px;
 }
 .bg-text {
-  color: white;
+  color: var(--white);
   position: absolute;
   top: 50%;
   left: 50%;

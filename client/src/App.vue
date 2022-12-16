@@ -75,13 +75,13 @@ export default {
       document.documentElement.style.setProperty("--playerpadding", `0px`);
       document.documentElement.style.setProperty("--workingheight", `310px`);
       document.documentElement.style.setProperty("--workingheightnoheader", `194px`);
-      document.documentElement.style.setProperty("--appbackgroundcolor", `#343a40`);
+      document.documentElement.style.setProperty("--appbackgroundcolor", `var(--dark-gray)`);
     } else {
       this.$view.mobile = false;
       document.documentElement.style.setProperty("--playerpadding", `21.5px`);
       document.documentElement.style.setProperty("--workingheight", `244px`);
       document.documentElement.style.setProperty("--workingheightnoheader", `183px`);
-      document.documentElement.style.setProperty("--appbackgroundcolor", `#f1f2f4`);
+      document.documentElement.style.setProperty("--appbackgroundcolor", `var(--light-gray)`);
     }
     document.documentElement.style.setProperty("--panelheight", `0px`);
     this.$view.panelVisible = false;
@@ -91,12 +91,10 @@ export default {
 </script>
 
 <style>
-html,
-body {
-  height: 100% !important;
-  max-height: -webkit-fill-available !important;
-  background: #93989f !important;
-}
+  @import '@/assets/styles.css';
+</style>
+
+<style scoped>
 #app {
   height: 100% !important;
   width: 100% !important;
@@ -114,7 +112,6 @@ body {
   height: 200px !important;
   background: none;
 }
-
 .info-panel {
   position: fixed;
   bottom: 100px;
@@ -135,8 +132,5 @@ body {
 .fadeHeight-leave-to {
   opacity: 0;
   max-height: 0px;
-}
-.playback-container{
-  padding-top: var(--playerpadding) !important;
 }
 </style>

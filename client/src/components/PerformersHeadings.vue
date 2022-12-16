@@ -204,7 +204,7 @@ export default {
 .form-control {
   background-color: #3b4047 !important;
   border: none !important;
-  color: white !important;
+  color: var(--white) !important;
 }
 ::-webkit-input-placeholder {
   /* Chrome/Opera/Safari */
@@ -228,7 +228,7 @@ export default {
   color: grey;
 }
   .container-fluid {
-  background-color: #54595f;
+  background-color: var(--medium-gray);
   color: #3b4047;
 }
 .vertical-centered{
@@ -249,33 +249,33 @@ table {
 }
 .artist-name{
   font-size: 20px;
-  color: white;
+  color: var(--white);
 }
 .artist-job{
-  color: lightgray;
+  color: var(--medium-light-gray);
   font-size: 16px;
 }
 .wiki-link a{
-  color: darkgray;
+  color: var(--medium-dark-gray);
   font-size: 12px;
   text-decoration: none;
 }
 .radio-link a{
-  color: darkgray !important;
+  color: var(--medium-dark-gray) !important;
   font-size: 12px;
   text-decoration: none;
 }
 .radio-link >>> img, a:hover{
-  color: white !important;
+  color: var(--white) !important;
   cursor: pointer;
 }
 .wiki-link a:hover{
-  color: white;
+  color: var(--white);
   cursor: pointer;
 }
 .no-results{
   font-size: 16px;
-  color: lightgray;
+  color: var(--medium-light-gray);
 }
 .avatar{
   margin-right: 10px;
@@ -325,13 +325,13 @@ table {
   overflow: hidden;
 }
 >>> {
-  --vs-controls-color: #fff;
+  --vs-controls-color: var(--white);
   --vs-border-color: #3b4047;
   --vs-border-width: 1px;
   --vs-selected-bg: #3b4047;
-  --vs-selected-color: #fff;
+  --vs-selected-color: var(--white);
   --vs-line-height: 1;
-  --vs-search-input-color: #fff;
+  --vs-search-input-color: var(--white);
 }
 .performer-search {
   margin-top: 1.3px !important;
