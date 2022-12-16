@@ -17,8 +17,8 @@
                 <span class="artist-name">{{ result[0] }}&nbsp;</span><br />
                 <span class="artist-job">{{result[1]}}</span>
 
-                <span v-if="result[3]" class="wiki-link">
-                  &nbsp;&nbsp;<a :href="result[3]" target="_blank">
+                <span v-if="result[4]" class="wiki-link">
+                  &nbsp;&nbsp;<a :href="result[4]" target="_blank">
                     <b-icon icon="info-circle-fill" aria-hidden="true"></b-icon> Wikipedia</a>&nbsp;&nbsp;
                 </span>
 

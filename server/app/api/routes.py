@@ -861,7 +861,6 @@ def get_albuminfo(album_id):
 
 
 @bp.route('/api/artistcomposers/<artist_name>', methods=['GET'])  # for performer mode composers
-@cache.cached(query_string=True)
 def get_artistcomposers(artist_name):
 
     composers = db.session.query(ComposerList).join(Artists, ComposerList.name_short == Artists.composer)\
