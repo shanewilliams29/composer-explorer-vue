@@ -149,14 +149,14 @@ export default {
 
       if (this.$view.mode == "radio") {
         if (favorites) { // no track limit in favorites mode
-          path = path + "&favorites=" + favorites;
+          path = path + "&favorites=true";
         } else {
-          path = path + "&limit=" + limit + "&favorites=" + favorites;
+          path = path + "&limit=" + limit;
         }
       }
 
       if (this.$view.mode == "favorites") {
-        path = path + "&favorites=" + favorites;
+        path = path + "&favorites=true";
       }
 
       axios

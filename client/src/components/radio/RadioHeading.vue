@@ -230,7 +230,7 @@ export default {
       }
     },
     radioTypeSelect() {
-      this.$view.favoritesAlbums = "";
+      this.$view.favoritesAlbums = false;
 
       if(this.radioTypeField.value == 'favorites'){
         this.$view.favoritesAlbums = true;

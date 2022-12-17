@@ -96,7 +96,7 @@ Vue.prototype.$view = Vue.observable({
   enableRadio: false,
   enableExport: false,
   randomAlbum: false,
-  favoritesAlbums: "",
+  favoritesAlbums: false,
   radioTrackLimit: "6",
   playlistTrackCount: null,
   playlistSuccess: false,
