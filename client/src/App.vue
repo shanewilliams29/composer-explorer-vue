@@ -71,7 +71,7 @@ export default {
     },
     getArtistList() {
       this.$lists.artistList = []
-      // Gets list of all artists for
+      // Gets list of all artists for performer typeahead
       const path = "api/artistlist";
       axios
         .get(path)

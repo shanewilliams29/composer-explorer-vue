@@ -1,3 +1,16 @@
+html {
+  --dark-gray: #343a40;
+  --search-gray: #343a40;
+  --old-search-gray: #3b4047;
+  --medium-dark-gray: darkgray;
+  --medium-gray: #54595f;
+  --medium-light-gray: lightgray;
+  --light-gray: #f1f2f4;
+  --my-white: #fff;
+  --scroll-color: #c9cccf;
+  --scroll-color-light: #d6d9db;
+}
+
 .subforumlisting{
   border-radius: 6px;
   background: var(--my-white);

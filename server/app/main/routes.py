@@ -72,7 +72,7 @@ def forum_css():
     return send_from_directory('static', 'forum.css')
 
 
-@bp.route('/html/user_list')
+@bp.route('/user_list')
 def user_list():
 
     users = User.query.order_by(User.last_seen.desc()).all()

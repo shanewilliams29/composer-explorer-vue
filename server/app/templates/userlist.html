@@ -1,57 +1,80 @@
+{% extends "base.html" %}
+
+{% block app_content %}
+
 <style>
-.rcorners{
+.container .jumbotron {
+  position: relative;
+  background: url("https://storage.googleapis.com/composer-explorer.appspot.com/headers/Choral.jpg") no-repeat center center;
+  background-size: cover;
+  color: white;
+  border-radius: 0px;
   border-radius: 6px;
-  background: var(--my-white);
+}
+.jumbotron>.overlay {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-image: linear-gradient(to bottom left, rgb(52, 58, 64, 0.4), rgb(52, 58, 64, 1));
+  z-index: 1;
+  border-radius: 6px;
+}
+.jumbotron>.inner {
+  position: relative;
+  z-index: 2;
+}
+body {
+  background: #f1f2f4;
+}
+.rcorners {
+  border-radius: 6px;
+  background: #fff;
   border: 1px solid #d4d7dd;
-  padding: 5px;
+  padding: 15px;
   padding-bottom: 0px;
-  margin-bottom: 5px;
+  margin-bottom: 10px;
   height: auto;
-}
-.user-list-img {
-  height: 70px;
-  object-fit: cover;
-  width: 70px;
-  border-radius: 50%;
-}
-.table{
-    margin-bottom: 0px !important;
-}
-h1 {
-    margin-top: 15px;
 }
 </style>
 
-<h1>User List</h1>
+<div class="jumbotron">
+  <div class="overlay"></div>
+  <div class="inner">
+  <h1>User List</h1>
+  <h3></h3>
+</div>
+</div>
 
-<p>{{usercount}} users total, sorted by date last seen:</p>
-
+<div class="container">
+  <p>{{usercount}} users total, sorted by date last seen:</p>
+</div>
 
 {% for user in users %}
 
-  <div class="rcorners">
-    <table class="table table-borderless table-condensed">
-       <tr>
-          <td width="85px">
-             <img class ="user-list-img" src="{{ user.avatar(140) }}" />
-          </td>
-          <td style="vertical-align:middle;">
-             <b>{{ user.display_name }}</b>
-             {% if user.admin %}<span style="color:goldenrod;">Admin</span>{% endif %}
-          {% if user.last_seen %}
-             {% if user.last_seen > onlinecheck %}
-             <span style="color:green;"><br><b>Online</b></span>
-             {% else %}
-             <br>Last seen {{ moment(user.last_seen).fromNow()}}<br>
-             {% endif %}
-          {% endif %}
-          </td>
-       </tr>
-    </table>
-  </div>
-{% endfor %}
+<div class="rcorners">
+  <table class="table table-borderless table-condensed">
+    <tr>
+      <td width="85px">
+        <img class="user-list-img" src="{{ user.avatar(48) }}" />
+      </td>
+      <td style="vertical-align: middle;">
+        <b>{{ user.display_name }}</b>
+        {% if user.admin %}<span style="color: goldenrod;">Admin</span>{% endif %} {% if user.last_seen %} {% if user.last_seen > onlinecheck %} <span style="color: green;"><b>⚫ Online</b></span><br />
+        {% if user.page_viewing %} Viewing {{ user.page_viewing | safe }} <br />
+        {% endif %} {% else %}
+        <br />
+        Last seen {{ moment(user.last_seen).fromNow()}}<br />
+        {% endif %} {% endif %}
+      </td>
+    </tr>
+  </table>
 </div>
 
+{% endfor %}
+
+{% endblock %}
 
 
 
