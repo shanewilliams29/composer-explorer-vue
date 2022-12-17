@@ -11,9 +11,9 @@
       <!-- ALBUM POPUP -->
       <Transition name="fade">
         <div v-if="!$view.mobile && !$view.banner">
-          <div class="popup" v-if="showCover == album.id">
-            <img class="album-cover" :src="album.img_big" />
-            <div class="image-caption">
+          <div class="popup" v-show="showCover == album.id">
+            <img class="album-cover" :ref="album.id" :src="album.img_big" />
+            <div class="image-caption" :ref="'C'+album.id">
               <span class="album-major-artists">{{ album.artists }}</span><br />
               <span v-if="album.minor_artists" class="album-minor-artists">{{ album.minor_artists }}</span>
             </div>
@@ -102,6 +102,24 @@ export default {
       spotifyLogoURLBlack: staticURL + "Spotify_Icon_RGB_Black.png",
     };
   },
+  computed: {
+    showAlbum() {
+      return this.showCover;
+    },
+  },
+  watch: {
+    showAlbum(newAlbum) {
+      if (newAlbum){
+        setTimeout(() => { 
+          const imageWidth = this.$refs[newAlbum][0].width;
+          const captionHeight = this.$refs["C" + newAlbum][0].clientHeight;
+          document.documentElement.style.setProperty("--captionheight", captionHeight + 'px');
+          document.documentElement.style.setProperty("--imagewidth", imageWidth + 'px');
+          console.log(captionHeight); 
+        }, 1);
+      }
+    },
+  }
 };
 </script>
 
@@ -132,11 +150,11 @@ export default {
   font-size: 12px;
 }
 .popup{
-  max-width: calc(100vh - var(--workingheight));
+  max-width: var(--imagewidth);
   line-height: 16px;
   padding: 0px;
   position: fixed; 
-  top: 50%; 
+  top: calc(50% + 22.1px); 
   left: 33%; 
   transform: translate(-50%, -50%);
   box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
@@ -151,14 +169,21 @@ export default {
 }
 .image-caption{
   width: 100%;
+  height: auto;
   padding-top: 8.5px;
   padding-bottom: 10px;
   padding-left: 10px;
   padding-right: 10px;
+  position: relative;
+  bottom: 0px;
+  left: 0px;
+  z-index: 1;
 }
 .album-cover {
     box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
-    width: 100%;
+    max-height: calc(85vh - 244.2px);
+    max-width: 50vw;
+
 }
 .album-img-small{
   border-top-left-radius: 0.25rem;
