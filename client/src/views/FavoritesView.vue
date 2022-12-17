@@ -1,6 +1,6 @@
 <template>
   <div id="home">
-    <ColumnHeadings/>
+    <BrowseHeading/>
     <div class="container-fluid">
       <b-row>
         <b-col class="display-list first-col" ref="scroll-box-comp"><ComposerList/></b-col>
@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import ColumnHeadings from "@/components/browse/ColumnHeadings.vue";
+import BrowseHeading from "@/components/browse/BrowseHeading.vue";
 import ComposerList from "@/components/composers/ComposerList.vue";
 import WorkList from "@/components/works/WorkList.vue";
 import AlbumList from "@/components/albums/AlbumList.vue";
@@ -20,7 +20,7 @@ import AlbumList from "@/components/albums/AlbumList.vue";
 export default {
   name: "FavoritesView",
   components: {
-    ColumnHeadings,
+    BrowseHeading,
     ComposerList,
     WorkList,
     AlbumList,

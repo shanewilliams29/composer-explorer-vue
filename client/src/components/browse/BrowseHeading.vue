@@ -20,7 +20,7 @@ import WorkHeading from '@/components/works/WorkHeading.vue'
 import AlbumHeading from '@/components/albums/AlbumHeading.vue'
 
 export default {
-  name: 'ColumnHeadings',
+  name: 'BrowseHeading',
   components: {
     ComposerHeading,
     WorkHeading,
