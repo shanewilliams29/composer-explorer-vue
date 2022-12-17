@@ -27,7 +27,7 @@ import PatreonBanner from "@/components/modals/PatreonBanner.vue";
 import ConnectingOverlay from "@/components/modals/ConnectingOverlay.vue";
 import WelcomeOverlay from "@/components/modals/WelcomeOverlay.vue";
 import SpotifyPlayer from "@/components/global/SpotifyPlayer.vue";
-import InfoPanel from "@/components/modals/InfoPanel.vue";
+import InfoPanel from "@/components/global/InfoPanel.vue";
 import PageFooter from "@/components/global/PageFooter.vue";
 import NavBar from "@/components/global/NavBar.vue";
 import ModalContainer from "@/components/modals/ModalContainer.vue";
