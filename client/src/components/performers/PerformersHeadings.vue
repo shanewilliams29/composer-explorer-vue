@@ -308,6 +308,7 @@ table {
   overflow: hidden;
 }
 >>> {
+  --vs-search-input-bg: none;
   --vs-controls-color: var(--my-white);
   --vs-border-color: var(--search-gray);
   --vs-border-width: 1px;

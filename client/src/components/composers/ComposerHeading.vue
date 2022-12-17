@@ -75,7 +75,7 @@ export default {
 .composer-select {
   margin-top: 5px !important;
   font-size: 14px;
-  fill: white;
+  fill: yellow;
 }
 >>> .vs__selected-options {
   flex-wrap: nowrap;
@@ -85,6 +85,7 @@ export default {
   overflow: hidden;
 }
 >>> {
+  --vs-search-input-bg: none;
   --vs-controls-color: var(--my-white);
   --vs-border-color: var(--search-gray);
   --vs-border-width: 1px;

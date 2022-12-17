@@ -450,6 +450,7 @@ input{
   font-size: 14px !important;
 }
 >>> {
+  --vs-search-input-bg: none;
   --vs-font-size: 14px;
   --vs-controls-color: var(--my-white);
   --vs-border-color: var(--search-gray);
