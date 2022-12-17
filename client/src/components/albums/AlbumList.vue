@@ -148,7 +148,11 @@ export default {
       const limit = this.$view.radioTrackLimit;
 
       if (this.$view.mode == "radio") {
-        path = path + "&limit=" + limit + "&favorites=" + favorites;
+        if (favorites) { // no track limit in favorites mode
+          path = path + "&favorites=" + favorites;
+        } else {
+          path = path + "&limit=" + limit + "&favorites=" + favorites;
+        }
       }
 
       if (this.$view.mode == "favorites") {
