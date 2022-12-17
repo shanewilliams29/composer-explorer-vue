@@ -8,34 +8,52 @@
         <div class="m-4">{{ message }}</div>
       </span>
       <b-card-group deck v-if="!loading && works">
-        <b-card v-for="(genre, index) in works" :key="index" :ref="index" no-body header-tag="header" class="shadow-sm">
-          <div class="header" @click="toggleOpen(index);">
+        <b-card v-for="(genre, genreName) in works" 
+          :key="genreName" 
+          :ref="genreName" 
+          no-body 
+          header-tag="header" 
+          class="shadow-sm">
+          <div class="header" @click="toggleOpen(genreName);">
             <h6 class="m-2 mb-0">
-              <span>{{ index }}&nbsp;&nbsp;</span>
-              <span v-if="!visibility && index == $config.genre" class="mb-0 float-right when-opened"><b-icon-chevron-up></b-icon-chevron-up></span>
-              <span v-if="!visibility && index != $config.genre" class="mb-0 float-right when-closed"><b-icon-chevron-down></b-icon-chevron-down></span>
+              <span>{{ genreName }}&nbsp;&nbsp;</span>
+              <span v-if="!visibility && genreName == $config.genre" class="mb-0 float-right when-opened"> <b-icon-chevron-up></b-icon-chevron-up></span>
+              <span v-if="!visibility && genreName != $config.genre" class="mb-0 float-right when-closed"> <b-icon-chevron-down></b-icon-chevron-down></span>
             </h6>
           </div>
-          <b-collapse @shown="onShown(index)" :visible="visibility || index == $config.genre" :id="index.replace(/\s/g, '')">
-            <b-card-text v-if="visibility || index == $config.genre">
+          <b-collapse 
+            @shown="onShown(genreName)" 
+            :visible="visibility || genreName == $config.genre" 
+            :id="genreName.replace(/\s/g, '')">
+            <b-card-text v-if="visibility || genreName == $config.genre">
               <table cellspacing="0" class="works-table">
                 <tr
-                  v-for="(work, index) in genre"
+                  v-for="(work, genreName) in genre"
                   :ref="work.id"
                   :key="work.id"
-                  :id="index"
+                  :id="genreName"
                   @click="selectRow(work.id); getAlbums(work.id, work.title); setGenre(work.genre);"
                   :class="{'highlight': (work.id == selectedWork), 'no-albums': (work.album_count == 0)}"
                 >
                   <td width="17%">
                     <span style="white-space: nowrap; color: darkred;">
-                      <span v-if="work.cat">{{ work.cat }}&nbsp;&nbsp;</span><span v-else><span v-if="work.date">{{ work.date }}</span><span v-else>-</span></span>
+                      <span v-if="work.cat">{{ work.cat }}&nbsp;&nbsp;</span>
+                      <span v-else>
+                        <span v-if="work.date">{{ work.date }}</span>
+                        <span v-else>-</span>
+                      </span>
                     </span>
                   </td>
-                  <td width="78%" style="white-space: nowrap; text-overflow: ellipsis; overflow: hidden; max-width: 1px;"><span>{{ work.title }}</span><span v-if="work.nickname" style="color: gray;"> · {{ work.nickname }}</span></td>
+                  <td width="78%" class="td-style">
+                    <span>{{ work.title }}</span>
+                    <span v-if="work.nickname" style="color: gray;"> · {{ work.nickname }}</span>
+                  </td>
                   <td width="5%" style="text-align: right;">
                     <span class="heart-number" style="white-space: nowrap;">
-                      <span style="color: rgb(52, 58, 64, 0.7); font-size: 12px;" v-if="work.liked"><b-icon-heart-fill></b-icon-heart-fill>&nbsp;</span> <b-badge>{{ work.album_count }}</b-badge>
+                      <span v-if="work.liked" style="color: rgb(52, 58, 64, 0.7); font-size: 12px;">
+                        <b-icon-heart-fill></b-icon-heart-fill>&nbsp;
+                      </span> 
+                      <b-badge>{{ work.album_count }}</b-badge>
                     </span>
                   </td>
                 </tr>
@@ -48,10 +66,10 @@
   </div>
 </template>
 
-
 <script>
 import axios from "axios";
 import { eventBus } from "@/main.js";
+import { randomIntFromInterval } from "@/HelperFunctions.js";
 import smoothscroll from "smoothscroll-polyfill";
 
 export default {
@@ -91,11 +109,12 @@ export default {
       return false;
     },
     getWorks(composer) {
-      // standard mode
+      // browse mode
       this.searchItem = null;
       this.filterItem = null;
       this.loading = true;
       this.$config.composer = composer;
+      
       const path = "api/works/" + composer;
       axios
         .get(path)
@@ -105,7 +124,6 @@ export default {
           this.visibility = true;
           this.loading = false;
           this.setGenre(this.$config.genre);
-          eventBus.$emit("fireWorksLoaded"); // for mobile
         })
         .catch((error) => {
           console.error(error);
@@ -118,6 +136,7 @@ export default {
       this.filterItem = null;
       this.loading = true;
       this.$config.composer = composer;
+      
       const path = "api/favoriteworks/" + composer;
       axios
         .get(path)
@@ -210,50 +229,43 @@ export default {
           });
       }
     },
-    scrollToWork(genre){
-     // scrolling animation for when collapsible expanded
-    var timeout = 0;
-    smoothscroll.polyfill(); // for Safari smooth scrolling
+    scrollToWork(genre) {
+      // scrolling animation for when collapsible expanded
+      const timeout = 0;
+      smoothscroll.polyfill(); // for Safari smooth scrolling
 
-    // scroll to work
-            setTimeout(() => {
-              try {
-                var card = this.$refs[genre][0];
-                var row = this.$refs[this.selectedWork][0];
-                var height = this.$refs[genre][0].offsetParent.offsetHeight / 2;
-                var top = card.offsetTop + row.offsetTop - height + 100;
-                
-                var scrollBox = {};
-                if (this.$route.name == "mobile") {
-                  scrollBox = this.$parent.$parent.$refs["scroll-box"];
-                } else {
-                  scrollBox = this.$parent.$refs["scroll-box"];
-                }
-                scrollBox.scrollTo({
-                  top: top,
-                  left: 0,
-                  behavior: "smooth",
-                });
-              } catch {
-                //pass
-              }
-            }, timeout);       
-        
-
-    //   else { //scroll to genre
-
-    },
-    scrollToPanel(genre){
-     // scrolling animation for when collapsible expanded
-    var timeout = 0;
-    smoothscroll.polyfill(); // for Safari smooth scrolling
-
-     setTimeout(() => {
+      setTimeout(() => {
         try {
-          var card = this.$refs[genre][0]
-          var top = card.offsetTop - 5
-          
-          var scrollBox = {};
+          const card = this.$refs[genre][0];
+          const row = this.$refs[this.selectedWork][0];
+          const height = this.$refs[genre][0].offsetParent.offsetHeight / 2;
+          const top = card.offsetTop + row.offsetTop - height + 100;
+          let scrollBox = {};
+          if (this.$route.name == "mobile") {
+            scrollBox = this.$parent.$parent.$refs["scroll-box"];
+          } else {
+            scrollBox = this.$parent.$refs["scroll-box"];
+          }
+          scrollBox.scrollTo({
+            top: top,
+            left: 0,
+            behavior: "smooth",
+          });
+        } catch {
+          //pass
+        }
+      }, timeout);
+    },
+    scrollToPanel(genre) {
+      // scrolling animation for when collapsible expanded
+      const timeout = 0;
+      smoothscroll.polyfill(); // for Safari smooth scrolling
+      
+      setTimeout(() => {
+        try {
+          const card = this.$refs[genre][0]
+          const top = card.offsetTop - 5
+          let scrollBox = {};
           if (this.$route.name == "mobile") {
             scrollBox = this.$parent.$parent.$refs["scroll-box"];
           } else {
@@ -277,17 +289,20 @@ export default {
           this.scrollToPanel(genre);
         }
       }
-  },
+    },
     getRadioWorks(genres, filter, search, artist, radioType) {
       if (genres.length < 1) {
-        // no works
-        eventBus.$emit("clearAlbumsList");
+        // clear works and albums on no genre selected
         this.loading = false;
         this.$view.radioPlaying = false;
         this.$view.enableRadio = false;
         this.$view.enableExport = false;
         this.works = [];
+
+        eventBus.$emit("clearAlbumsList");
+      
       } else {
+        // retrieve specified works
         this.loading = true;
         const payload = {
           genres: genres,
@@ -297,6 +312,7 @@ export default {
           radio_type: radioType,
         };
         this.radioPayload = payload;
+        
         const path = "api/radioworks";
         axios
           .post(path, payload)
@@ -304,14 +320,19 @@ export default {
             this.loading = false;
             this.works = res.data.works;
             this.playlist = res.data.playlist;
+
+            // collapse cards if too many works and disable playlist export
             if (this.playlist.length > 300) {
               this.visibility = false;
               this.$view.enableRadio = true;
               this.$view.enableExport = false;
+
+            // no works
             } else if (this.playlist.length < 1) {
               this.$view.enableExport = false;
               this.$view.enableRadio = false;
               this.message = 'No works found for selection. Try different genres, and selecting "All works"';
+
             } else {
               this.visibility = true;
               this.$view.enableExport = true;
@@ -328,10 +349,11 @@ export default {
       }
     },
     preparePlaylist(performer, radioType, genres, filter, search, limit, prefetch, name) {
-      // used in radio mode to export to Spotify
+      // used in radio mode to export playlist to Spotify
       if (!genres) {
         // no works
         alert("No works are selected!");
+
       } else {
         this.$bvModal.show("playlist-modal");
         const payload = {
@@ -351,9 +373,11 @@ export default {
           .then((res) => {
             if (prefetch) {
               this.$view.playlistTrackCount = res.data.track_count;
+
             } else if ("error" in res.data) {
               this.$view.playlistError = res.data.error.message;
               this.$view.playlistSuccess = false;
+
             } else {
               this.$view.playlistSuccess = true;
               this.$view.playlistError = false;
@@ -366,11 +390,12 @@ export default {
       }
     },
     getArtistWorks(artist, composer) {
-      // used in Performer mode
+      // used in performer mode
       this.loading = true;
       this.$config.artist = artist;
       this.$config.composer = composer;
       localStorage.setItem("config", JSON.stringify(this.$config));
+
       const path = "api/artistworks?artist=" + artist + "&composer=" + composer;
       axios
         .get(path)
@@ -389,23 +414,30 @@ export default {
       this.$config.work = workId;
       this.$config.workTitle = title;
       localStorage.setItem("config", JSON.stringify(this.$config));
+
       eventBus.$emit("changeWork");
+
       if (!this.$view.mode) {
-        // standard compsoer mode
+        // browse mode
         eventBus.$emit("requestAlbums", workId);
+
       } else if (this.$view.mode == "performer") {
         // performer mode
         eventBus.$emit("requestAlbums", workId, this.$config.artist);
+
       } else if (this.$view.mode == "favorites") {
         // favorites mode
         eventBus.$emit("requestFavoritesAlbums", workId);
+
       } else {
         // radio mode, play automatically
         if (this.$config.artist) {
           eventBus.$emit("requestAlbumsAndPlay", workId, this.$config.artist);
+
         } else {
           eventBus.$emit("requestAlbumsAndPlay", workId);
         }
+
         this.$view.radioPlaying = true;
       }
     },
@@ -413,27 +445,23 @@ export default {
       this.$config.work = workId;
       this.$config.workTitle = title;
       localStorage.setItem("config", JSON.stringify(this.$config));
+
       eventBus.$emit("changeWork");
 
-      if (this.$view.mode != "performer") {
-        if (this.$config.artist && this.$view.mode == "radio") {
-          eventBus.$emit("requestAlbumsAndPlay", workId, this.$config.artist);
-        } else if (this.$view.mode == "favorites") {
-          // favorites mode
-          this.$view.favoritesAlbums = true;
-          eventBus.$emit("requestAlbumsAndPlay", workId);
-        } else {
-          eventBus.$emit("requestAlbumsAndPlay", workId);
-        }
-      } else {
+      if ((this.$view.mode == "performer") || (this.$config.artist && this.$view.mode == "radio")) {
+        // performer mode or radio performer mode
         eventBus.$emit("requestAlbumsAndPlay", workId, this.$config.artist);
+
+      } else {
+        // browse, favorites or standard radio mode
+        eventBus.$emit("requestAlbumsAndPlay", workId);
       }
     },
     toggleOpen(genre) {
       if (genre == this.$config.genre){
-        this.$config.genre = null;
+        this.$config.genre = null; // closes the panel
       } else {
-        this.$config.genre = genre;
+        this.$config.genre = genre; // opens the panel
       }
       localStorage.setItem("config", JSON.stringify(this.$config));
       
@@ -468,22 +496,23 @@ export default {
           this.loading = false;
         });
     },
-    scrollToTop(){
-          var scrollBox = {};
-          if (this.$route.name == "mobile") {
-            scrollBox = this.$parent.$parent.$refs["scroll-box"];
-          } else {
-            scrollBox = this.$parent.$refs["scroll-box"];
-          }
-          scrollBox.scrollTo({
-            top: 0,
-            left: 0,
-          });
+    scrollToTop() {
+      let scrollBox = {};
+      if (this.$route.name == "mobile") {
+        scrollBox = this.$parent.$parent.$refs["scroll-box"];
+      } else {
+        scrollBox = this.$parent.$refs["scroll-box"];
+      }
+      scrollBox.scrollTo({
+        top: 0,
+        left: 0,
+      });
     },
     getSearchWorks(item) {
       this.scrollToTop();
       this.filterItem = null;
       this.searchItem = item;
+
       const path = "api/works/" + this.$config.composer + "?search=" + item;
       axios
         .get(path)
@@ -503,18 +532,19 @@ export default {
       this.$config.composer = composer;
       localStorage.setItem("config", JSON.stringify(this.$config));
     },
-    clearWorksList(artist) {
-      this.$config.artist = artist;
+    clearWorksList() {
       this.works = [];
       this.message = "Select from the options above to create your own customized radio";
     },
     nextWork() {
       eventBus.$emit("changeWork");
-      if (this.$view.shuffle) {
+
+      if (this.$view.shuffle) { //allows you to jump one work back
         this.$config.previousWork = this.$config.work;
         this.$config.previousGenre = this.$config.genre;
         this.$config.previousWorkTitle = this.$config.workTitle;
         this.playRandomWork();
+
       } else {
         for (var i = 0; i < this.playlist.length; i++) {
           if (this.playlist[i]["id"] == this.selectedWork && i !== this.playlist.length - 1) {
@@ -528,10 +558,12 @@ export default {
     },
     previousWork() {
       eventBus.$emit("changeWork");
-      if (this.$view.shuffle) {
-        this.selectRow(this.$config.previousWork); //allows you to jump one back
+
+      if (this.$view.shuffle) { //allows you to jump one work back
+        this.selectRow(this.$config.previousWork); 
         this.setGenre(this.$config.previousGenre);
         this.getAlbumsAndPlay(this.$config.previousWork, this.$config.previousWorkTitle);
+
       } else {
         for (var i = 0; i < this.playlist.length; i++) {
           if (this.playlist[i]["id"] == this.selectedWork && i !== 0) {
@@ -545,10 +577,7 @@ export default {
     },
     playRandomWork() {
       eventBus.$emit("changeWork");
-      function randomIntFromInterval(min, max) {
-        // min and max included
-        return Math.floor(Math.random() * (max - min + 1) + min);
-      }
+
       const rndInt = randomIntFromInterval(0, this.playlist.length - 1);
       this.selectRow(this.playlist[rndInt]["id"]);
       this.setGenre(this.playlist[rndInt]["genre"]);
@@ -557,7 +586,7 @@ export default {
   },
   created() {
     if (!this.$view.mode) {
-      // dont get works in radio mode or artist mode
+      // only get works in browse mode
       this.getWorks(this.$config.composer);
       this.selectRow(this.$config.work);
     }
@@ -609,6 +638,12 @@ export default {
     -webkit-transition: none !important;
     transition: none !important;
     display: none;
+}
+.td-style{
+  white-space: nowrap; 
+  text-overflow: ellipsis; 
+  overflow: hidden; 
+  max-width: 1px;
 }
 .spinner {
     text-align: center;

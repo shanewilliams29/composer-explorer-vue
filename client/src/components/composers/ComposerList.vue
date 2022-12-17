@@ -196,7 +196,7 @@ export default {
       this.visibility = true;
       this.$config.artist = artist;
 
-      eventBus.$emit("clearWorksList", artist);
+      eventBus.$emit("clearWorksList");
       eventBus.$emit("clearAlbumsList");
 
       const path = "api/artistcomposers/" + artist;
