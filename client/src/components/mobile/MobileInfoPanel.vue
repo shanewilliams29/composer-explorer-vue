@@ -15,9 +15,9 @@
 </template>
 
 <script>
-import WorkInfo from '@/components/subcomponents/WorkInfo.vue';
-import AlbumInfoPanel from '@/components/subcomponents/AlbumInfoPanel.vue';
-import TrackListingMobile from '@/components/mobile/TrackListingMobile.vue'
+import WorkInfo from '@/components/works/WorkInfo.vue';
+import AlbumInfoPanel from '@/components/albums/AlbumInfoPanel.vue';
+import TrackListingMobile from './TrackListingMobile.vue'
 
 export default {
   components: {

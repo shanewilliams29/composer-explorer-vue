@@ -51,10 +51,10 @@
 
 <script>
 import axios from "axios";
-import { eventBus } from "../main.js";
+import { eventBus } from "@/main.js";
 import smoothscroll from "smoothscroll-polyfill";
 import { useSound } from "@vueuse/sound";
-import dingding from "../assets/dingding.mp3";
+import dingding from "@/assets/dingding.mp3";
 
 export default {
   setup() {

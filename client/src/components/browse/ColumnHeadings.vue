@@ -15,9 +15,9 @@
 </template>
 
 <script>
-import ComposerHeading from '@/components/subcomponents/ComposerHeading.vue'
-import WorkHeading from '@/components/subcomponents/WorkHeading.vue'
-import AlbumHeading from '@/components/subcomponents/AlbumHeading.vue'
+import ComposerHeading from '@/components/composers/ComposerHeading.vue'
+import WorkHeading from '@/components/works/WorkHeading.vue'
+import AlbumHeading from '@/components/albums/AlbumHeading.vue'
 
 export default {
   name: 'ColumnHeadings',

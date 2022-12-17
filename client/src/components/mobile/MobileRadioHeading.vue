@@ -124,7 +124,7 @@
 import axios from "axios";
 import { eventBus } from "@/main.js";
 import spotify from "@/SpotifyFunctions.js";
-import PlaylistModal from "@/components/subcomponents/PlaylistModal.vue";
+import PlaylistModal from "@/components/modals/PlaylistModal.vue";
 
 export default {
   components: {

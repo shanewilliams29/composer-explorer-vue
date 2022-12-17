@@ -41,7 +41,7 @@
 
 <script>
 import axios from "axios";
-import {addLineBreaksToParagraph} from "@/HelperFunctions.js"
+import { addLineBreaksToParagraph } from "@/HelperFunctions.js"
 
 export default {
   data() {

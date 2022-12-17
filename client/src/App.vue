@@ -23,14 +23,14 @@
 
 <script>
 import axios from 'axios';
-import PatreonBanner from "@/components/subcomponents/PatreonBanner.vue";
-import ConnectingOverlay from "@/components/ConnectingOverlay.vue";
-import WelcomeOverlay from "@/components/WelcomeOverlay.vue";
-import SpotifyPlayer from "@/components/SpotifyPlayer.vue";
-import InfoPanel from "@/components/InfoPanel.vue";
-import PageFooter from "@/components/PageFooter.vue";
-import NavBar from "@/components/NavBar.vue";
-import ModalContainer from "@/components/ModalContainer.vue";
+import PatreonBanner from "@/components/modals/PatreonBanner.vue";
+import ConnectingOverlay from "@/components/modals/ConnectingOverlay.vue";
+import WelcomeOverlay from "@/components/modals/WelcomeOverlay.vue";
+import SpotifyPlayer from "@/components/global/SpotifyPlayer.vue";
+import InfoPanel from "@/components/modals/InfoPanel.vue";
+import PageFooter from "@/components/global/PageFooter.vue";
+import NavBar from "@/components/global/NavBar.vue";
+import ModalContainer from "@/components/modals/ModalContainer.vue";
 import MobileInfoPanel from "@/components/mobile/MobileInfoPanel.vue";
 import MobileTracks from "@/components/mobile/MobileTracks.vue";
 import MobileFooter from "@/components/mobile/MobileFooter.vue";

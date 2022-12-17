@@ -78,7 +78,7 @@
 
 <script>
 import spotify from "@/SpotifyFunctions.js";
-import {eventBus} from "../../main.js";
+import {eventBus} from "@/main.js";
 import axios from "axios";
 
 const debouncedNext = debounce(() => fireNextWork());

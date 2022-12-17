@@ -80,7 +80,7 @@ Vue.prototype.$auth = Vue.observable({
   patreon: true,
 });
 
-// stores lists to download only once
+// stores lists to download from server only once at startup
 Vue.prototype.$lists = Vue.observable({
   artistList: [],
   composerList: [],

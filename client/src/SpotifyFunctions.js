@@ -1,6 +1,6 @@
 import axios from 'axios';
-import {eventBus} from "./main.js";
-import {startTracks} from "./main.js";
+import {eventBus} from "@/main.js";
+import {startTracks} from "@/main.js";
 
 var spotify = {
   getSpotifyAlbum(token, album) {

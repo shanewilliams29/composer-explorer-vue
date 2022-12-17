@@ -35,7 +35,7 @@
 
 <script>
 import {staticURL} from "@/main.js";
-import AlbumLikes from '@/components/subcomponents/AlbumLikes.vue';
+import AlbumLikes from './AlbumLikes.vue';
 
 export default {
   components: {

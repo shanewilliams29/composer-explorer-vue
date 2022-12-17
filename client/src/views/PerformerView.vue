@@ -15,11 +15,11 @@
 </template>
 
 <script>
-import PerformersHeadings from '@/components/PerformersHeadings.vue'
-import ComposerList from '@/components/ComposerList.vue'
-import WorkList from '@/components/WorkList.vue'
-import AlbumList from '@/components/AlbumList.vue'
-import WordCloud from '@/components/WordCloud.vue'
+import PerformersHeadings from '@/components/performers/PerformersHeadings.vue'
+import ComposerList from "@/components/composers/ComposerList.vue";
+import WorkList from "@/components/works/WorkList.vue";
+import AlbumList from "@/components/albums/AlbumList.vue";
+import WordCloud from '@/components/performers/WordCloud.vue';
 
 import {eventBus} from "../main.js";
 

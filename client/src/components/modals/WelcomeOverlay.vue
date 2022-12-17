@@ -47,7 +47,7 @@
 </template>
 
 <script>
-import {baseURL, staticURL} from "../main.js";
+import {baseURL, staticURL} from "@/main.js";
 
 export default {
   name: 'NavBar',

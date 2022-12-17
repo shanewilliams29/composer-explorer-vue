@@ -40,8 +40,8 @@
 </template>
 
 <script>
-import LargeAlbum from "@/components/subcomponents/LargeAlbum.vue";
-import SmallAlbum from "@/components/subcomponents/SmallAlbum.vue";
+import LargeAlbum from "./LargeAlbum.vue";
+import SmallAlbum from "./SmallAlbum.vue";
 import axios from "axios";
 import { eventBus } from "@/main.js";
 import { randomIntFromInterval } from "@/HelperFunctions.js";

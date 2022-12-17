@@ -15,9 +15,9 @@
 
 <script>
 import MobileRadioHeading from '@/components/mobile/MobileRadioHeading.vue'
-import ComposerList from '@/components/ComposerList.vue'
-import WorkList from '@/components/WorkList.vue'
-import AlbumList from '@/components/AlbumList.vue'
+import ComposerList from "@/components/composers/ComposerList.vue";
+import WorkList from "@/components/works/WorkList.vue";
+import AlbumList from "@/components/albums/AlbumList.vue";
 
 export default {
   name: 'MobileRadio',

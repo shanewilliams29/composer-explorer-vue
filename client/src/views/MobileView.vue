@@ -53,13 +53,13 @@
 </template>
 
 <script>
-import ComposerList from "@/components/ComposerList.vue";
-import WorkList from "@/components/WorkList.vue";
-import AlbumList from "@/components/AlbumList.vue";
-import ComposerHeading from "@/components/subcomponents/ComposerHeading.vue";
-import WorkHeading from "@/components/subcomponents/WorkHeading.vue";
-import AlbumHeading from "@/components/subcomponents/AlbumHeading.vue";
-import { eventBus } from "../main.js";
+import ComposerList from "@/components/composers/ComposerList.vue";
+import WorkList from "@/components/works/WorkList.vue";
+import AlbumList from "@/components/albums/AlbumList.vue";
+import ComposerHeading from "@/components/composers/ComposerHeading.vue";
+import WorkHeading from "@/components/works/WorkHeading.vue";
+import AlbumHeading from "@/components/albums/AlbumHeading.vue";
+import { eventBus } from "@/main.js";
 
 export default {
   name: "MobileView",

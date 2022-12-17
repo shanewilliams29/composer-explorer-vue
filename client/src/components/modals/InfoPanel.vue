@@ -15,9 +15,9 @@
 </template>
 
 <script>
-import ComposerInfo from '@/components/subcomponents/ComposerInfo.vue';
-import WorkInfo from '@/components/subcomponents/WorkInfo.vue';
-import AlbumInfoPanel from '@/components/subcomponents/AlbumInfoPanel.vue';
+import ComposerInfo from '@/components/composers/ComposerInfo.vue';
+import WorkInfo from '@/components/works/WorkInfo.vue';
+import AlbumInfoPanel from '@/components/albums/AlbumInfoPanel.vue';
 
 export default {
   components: {

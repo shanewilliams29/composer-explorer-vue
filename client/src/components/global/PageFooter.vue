@@ -18,9 +18,9 @@
 </template>
 
 <script>
-import AlbumInfo from './subcomponents/AlbumInfo.vue'
-import PlayerControls from './subcomponents/PlayerControls.vue'
-import TrackListing from './subcomponents/TrackListing.vue'
+import AlbumInfo from '@/components/albums/AlbumInfo.vue'
+import PlayerControls from './PlayerControls.vue'
+import TrackListing from '@/components/albums/TrackListing.vue'
 
 export default {
   components: {

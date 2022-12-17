@@ -29,8 +29,8 @@
 
 
 <script>
-import AlbumInfo from '@/components/subcomponents/AlbumInfo.vue'
-import MobilePlayerControls from '@/components/mobile/MobilePlayerControls.vue'
+import AlbumInfo from '@/components/albums/AlbumInfo.vue'
+import MobilePlayerControls from './MobilePlayerControls.vue'
 import {eventBus} from "@/main.js";
 
 export default {

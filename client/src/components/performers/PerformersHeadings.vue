@@ -89,7 +89,7 @@
 
 <script>
 import { eventBus, staticURL } from "@/main.js";
-import {getPeopleInfoFromGoogle} from "@/HelperFunctions.js" 
+import { getPeopleInfoFromGoogle } from "@/HelperFunctions.js" 
 
 export default {
   data() {
