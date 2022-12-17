@@ -1,6 +1,6 @@
 <template>
   <div id="home">
-    <BrowseHeading/>
+    <FavoritesHeading/>
     <div class="container-fluid">
       <b-row>
         <b-col class="display-list first-col" ref="scroll-box-comp"><ComposerList/></b-col>
@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import BrowseHeading from "@/components/browse/BrowseHeading.vue";
+import FavoritesHeading from "@/components/favorites/FavoritesHeading.vue";
 import ComposerList from "@/components/composers/ComposerList.vue";
 import WorkList from "@/components/works/WorkList.vue";
 import AlbumList from "@/components/albums/AlbumList.vue";
@@ -20,7 +20,7 @@ import AlbumList from "@/components/albums/AlbumList.vue";
 export default {
   name: "FavoritesView",
   components: {
-    BrowseHeading,
+    FavoritesHeading,
     ComposerList,
     WorkList,
     AlbumList,
@@ -56,7 +56,7 @@ export default {
 
 <style scoped>
 .display-list{
-  height: calc(100vh - var(--workingheightnoheader) - var(--panelheight)) !important;
+  height: calc(100vh - var(--workingheight) - var(--panelheight)) !important;
 }
 >>> .highlight{
   background-color: var(--red);

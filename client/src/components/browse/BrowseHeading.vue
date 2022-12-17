@@ -1,5 +1,5 @@
 <template>
-  <div v-if="$view.mode != 'favorites'" class="container-fluid">
+  <div class="container-fluid">
     <b-row class="flex-nowrap">
       <b-col>
         <ComposerHeading />

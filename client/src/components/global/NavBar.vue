@@ -37,6 +37,7 @@
             <template #button-content>
               <b-avatar href="#" :src="$auth.avatar"></b-avatar>
             </template>
+            <b-dropdown-item v-if="!$view.mobile" href="/change_display_name">Change Display Name</b-dropdown-item>
             <b-dropdown-item v-if="!$view.mobile" href="/change_avatar">Change Avatar</b-dropdown-item>
             <b-dropdown-item href="/log_out">Log out</b-dropdown-item>
           </b-dropdown>

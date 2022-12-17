@@ -1,8 +1,6 @@
-{% from 'bootstrap4/form.html' import render_form %} {% extends "base.html" %} {% block head %} {{super()}}
-<link rel="stylesheet" type="text/css" href="{{url_for('static', filename='forum.css')}}" />
-{% endblock %} {% block app_content %}
+{% from 'bootstrap4/form.html' import render_form %} {% extends "base.html" %} {% block head %} {{super()}} {% endblock %} {% block app_content %}
 <div class="container">
-  <h1>Change Profile Picture</h1>
+  <h1>Change Display Name</h1>
 
   {% with messages = get_flashed_messages(with_categories=true) %} {% if messages %} {% for category, message in messages %}
   <div class="alert alert-{{category}}" role="alert">{{ message }}</div>
@@ -17,7 +15,3 @@
   <a href="/">Cancel</a>
 </div>
 {% endblock %}
-
-
-
-

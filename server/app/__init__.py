@@ -6,13 +6,15 @@ from flask_mobility import Mobility
 from flask_caching import Cache
 from flask_login import LoginManager
 from flask_moment import Moment
-from app.classes import SpotifyAPI
+from app.spotify import SpotifyAPI
+from flask_bootstrap import Bootstrap4
 
 db = SQLAlchemy()
 login = LoginManager()
 mobility = Mobility()
 cache = Cache()
 moment = Moment()
+bootstrap = Bootstrap4()
 sp = SpotifyAPI(Config.SPOTIFY_CLIENT_ID, Config.SPOTIFY_CLIENT_SECRET, Config.SPOTIFY_REDIRECT_URL)
 
 
@@ -31,6 +33,7 @@ def create_app(config_class=Config):
     mobility.init_app(app)
     cache.init_app(app)
     moment.init_app(app)
+    bootstrap.init_app(app)
 
     from app.main import bp as main_bp
     app.register_blueprint(main_bp)

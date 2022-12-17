@@ -31,6 +31,7 @@ export default {
                 this.$auth.clientToken = res.data.client_token;
                 this.$auth.appToken = res.data.app_token;
                 this.$auth.userid = res.data.user_id;
+                this.$auth.displayName = res.data.display_name;
                 this.$auth.patreon = res.data.patreon;
                 this.$auth.knowledgeKey = res.data.knowledge_api;
                 this.$auth.avatar = res.data.avatar;

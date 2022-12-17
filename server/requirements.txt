@@ -1,3 +1,4 @@
+Bootstrap-Flask==2.2.0
 cachelib==0.6.0
 cachetools==5.1.0
 certifi==2021.10.8

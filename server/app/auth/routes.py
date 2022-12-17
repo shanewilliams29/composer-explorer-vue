@@ -5,7 +5,7 @@ from config import Config
 from app.functions import get_avatar, upload_avatar
 from app.auth import bp
 from app.models import User
-from app.classes import ChangeAvatar
+from app.classes import ChangeAvatar, EditProfileForm
 from datetime import datetime, timedelta, timezone
 import random
 
@@ -137,6 +137,7 @@ def get_token():
         response_object['knowledge_api'] = Config.GOOGLE_KNOWLEDGE_GRAPH_API_KEY
         if current_user.is_authenticated:
             response_object['user_id'] = current_user.username
+            response_object['display_name'] = current_user.display_name
             response_object['premium'] = session['premium']
             response_object['avatar'] = current_user.avatar(140)
             response_object['patreon'] = current_user.patreon
@@ -215,3 +216,17 @@ def change_avatar():
         return redirect(url_for('main.index'))
     return render_template('change_avatar.html', title='Change Profile Picture',
                            form=form)
+
+
+@bp.route('/change_display_name', methods=['GET', 'POST'])
+@login_required
+def change_display_name():
+    form = EditProfileForm(current_user.username)
+    if form.validate_on_submit():
+        current_user.display_name = form.display_name.data
+        db.session.commit()
+        return redirect('/')
+    elif request.method == 'GET':
+        form.display_name.data = current_user.display_name
+    return render_template('edit_profile.html', title='Edit Profile', form=form)
+ 

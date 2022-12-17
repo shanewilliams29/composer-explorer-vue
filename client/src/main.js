@@ -78,6 +78,7 @@ Vue.prototype.$auth = Vue.observable({
   knowledgeKey: null,
   avatar: null,
   patreon: true,
+  displayName: null
 });
 
 // stores lists to download from server only once at startup
