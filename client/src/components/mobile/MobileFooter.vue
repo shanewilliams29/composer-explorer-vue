@@ -29,7 +29,7 @@
 
 
 <script>
-import AlbumInfo from '@/components/albums/AlbumInfo.vue'
+import AlbumInfo from '@/components/playback/AlbumInfo.vue'
 import MobilePlayerControls from './MobilePlayerControls.vue'
 import {eventBus} from "@/main.js";
 
