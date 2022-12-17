@@ -33,7 +33,7 @@ MarkupSafe==2.1.1
 mccabe==0.6.1
 packaging==21.3
 Pillow==9.3.0
-protobuf==3.20.1
+protobuf==4.21.12
 pyasn1==0.4.8
 pyasn1-modules==0.2.8
 pycodestyle==2.8.0
