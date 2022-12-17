@@ -339,6 +339,7 @@ export default {
     this.$view.radioPlaying = false;
     this.$view.enableRadio = false;
     this.$view.enableExport = false;
+    this.$view.favoritesAlbums = false;
     
     eventBus.$on("sendGenreListToRadio", this.makeGenreList);
   },
