@@ -11,9 +11,9 @@
       <!-- ALBUM POPUP -->
       <Transition name="fade">
         <div v-if="!$view.mobile && !$view.banner">
-          <div class="popup" v-show="showCover == album.id">
+          <div class="popup" :class="{'reveal': (showAlbum == album.id)}">
             <img class="album-cover" :ref="album.id" :src="album.img_big" />
-            <div class="image-caption" :ref="'C'+album.id">
+            <div class="image-caption">
               <span class="album-major-artists">{{ album.artists }}</span><br />
               <span v-if="album.minor_artists" class="album-minor-artists">{{ album.minor_artists }}</span>
             </div>
@@ -104,21 +104,17 @@ export default {
   },
   computed: {
     showAlbum() {
-      return this.showCover;
-    },
-  },
-  watch: {
-    showAlbum(newAlbum) {
-      if (newAlbum){
-        setTimeout(() => { 
-          const imageWidth = this.$refs[newAlbum][0].width;
-          const captionHeight = this.$refs["C" + newAlbum][0].clientHeight;
-          document.documentElement.style.setProperty("--captionheight", captionHeight + 'px');
-          document.documentElement.style.setProperty("--imagewidth", imageWidth + 'px');
-          console.log(captionHeight); 
-        }, 1);
+      if(this.showCover){
+        const imageWidth = this.$refs[this.showCover][0].width;
+        if (imageWidth == 0){
+          return false;
+        }
+        document.documentElement.style.setProperty("--imagewidth", imageWidth + 'px');
+        return this.showCover;
+      } else {
+        return false;
       }
-    },
+    }
   }
 };
 </script>
@@ -149,12 +145,16 @@ export default {
   color: gray; 
   font-size: 12px;
 }
+.reveal{
+  visibility: visible !important;
+}
 .popup{
-  max-width: var(--imagewidth);
+  visibility: hidden;
+  max-width: calc(var(--imagewidth));
   line-height: 16px;
   padding: 0px;
   position: fixed; 
-  top: calc(50% + 22.1px); 
+  top: calc(50% + 22.1px);
   left: 33%; 
   transform: translate(-50%, -50%);
   box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
@@ -167,23 +167,18 @@ export default {
 .popup >>> .album-minor-artists {
   color: var(--medium-light-gray) !important;
 }
+.album-cover {
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+  max-height: calc(80vh - var(--workingheight));
+  max-width: 50vw;
+}
 .image-caption{
+  visibility: inherit;
   width: 100%;
-  height: auto;
   padding-top: 8.5px;
   padding-bottom: 10px;
   padding-left: 10px;
   padding-right: 10px;
-  position: relative;
-  bottom: 0px;
-  left: 0px;
-  z-index: 1;
-}
-.album-cover {
-    box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
-    max-height: calc(85vh - 244.2px);
-    max-width: 50vw;
-
 }
 .album-img-small{
   border-top-left-radius: 0.25rem;
