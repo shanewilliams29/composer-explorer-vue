@@ -4,7 +4,7 @@
       <b-col class="last-col">
         <div>
           <b-form-group>
-            <v-select v-model="radioTypeField" label="text" :options="radioTypeOptions" @input="radioTypeSelect()" :clearable="false" class="mt-3 style-chooser" :searchable="false"></v-select>
+            <v-select v-model="radioTypeField" label="text" :options="radioTypeOptions" @input="radioTypeSelect()" :clearable="false" class="mt-3 selector" :searchable="false"></v-select>
             <v-select
               multiple
               v-if="radioTypeField.value == 'composer'"
@@ -14,7 +14,7 @@
               @input="composerSelect()"
               placeholder="Select composers"
               :clearable="true"
-              class="mt-3 style-chooser allow-wrap"
+              class="mt-3 selector allow-wrap"
               :searchable="true"
             ></v-select>
             <v-select
@@ -25,16 +25,16 @@
               @input="periodSelect()"
               placeholder="Select period/era"
               :clearable="false"
-              class="mt-3 style-chooser allow-wrap"
+              class="mt-3 selector allow-wrap"
               :searchable="false"
             ></v-select>
             <v-select
               v-if="radioTypeField.value == 'favorites'"
               placeholder="No futher options for favorites radio"
-              class="mt-3 style-chooser allow-wrap"
+              class="mt-3 selector allow-wrap"
               disabled
             ></v-select>
-            <vue-typeahead-bootstrap v-if="radioTypeField.value == 'performer'" v-model="artistSelect" placeholder="Search for a performer" class="mt-3 style-chooser performer-search" @hit="artistSearch" size="sm" :data="$lists.artistList" />
+            <vue-typeahead-bootstrap v-if="radioTypeField.value == 'performer'" v-model="artistSelect" placeholder="Search for a performer" class="mt-3 selector performer-search" @hit="artistSearch" size="sm" :data="$lists.artistList" />
           </b-form-group>
         </div>
       </b-col>
@@ -53,7 +53,7 @@
               @input="genreSelect()"
               placeholder="Select genres"
               :clearable="false"
-              class="mt-3 style-chooser allow-wrap"
+              class="mt-3 selector allow-wrap"
               :searchable="true"
             ></v-select>
           </b-col>
@@ -73,7 +73,7 @@
                 :options="workOptions" 
                 @input="genreSelect()" 
                 :clearable="false" 
-                class="mt-3 style-chooser" 
+                class="mt-3 selector" 
                 :searchable="false"></v-select>
             </b-col>
           </b-row>
@@ -92,7 +92,7 @@
                 :options="performanceOptions" 
                 @input="performanceFilter()" 
                 :clearable="false" 
-                class="mt-3 style-chooser" 
+                class="mt-3 selector" 
                 :searchable="false"></v-select>
             </b-col>
             <b-col class="col-padding-left">
@@ -103,7 +103,7 @@
                 :options="limitOptions" 
                 @input="limitFilter()" 
                 :clearable="false" 
-                class="mt-3 style-chooser" 
+                class="mt-3 selector" 
                 :searchable="false"></v-select>
             </b-col>
           </b-row>
@@ -154,7 +154,7 @@ export default {
       composerSelectField: null,
       composerOptions: [],
 
-      periodSelectField: { value: "popular", text: "Most popular" },
+      periodSelectField: null,
       periodOptions: [
         // { value: "popular", text: "Most popular" },
         { value: "early", text: "Early" },
@@ -231,7 +231,9 @@ export default {
       eventBus.$emit("clearAlbumsList");
 
       // reset everything on radio type change
-      this.$router.replace({ query: null });
+      if (this.$route.query.artist){
+        this.$router.replace({ query: null });
+      }
       this.artistSelect = null;
       this.$config.artist = null;
       this.$config.genre = null;
@@ -271,7 +273,9 @@ export default {
       eventBus.$emit("requestWorksForRadio", this.genreSelectField, this.workFilterField.value, this.workSearchField, this.artistSelect, this.radioTypeField.value);
     },
     periodSelect() {
-      eventBus.$emit("requestComposersFromFilter", this.periodSelectField.value);
+      if (this.periodSelectField) {
+        eventBus.$emit("requestComposersFromFilter", this.periodSelectField.value);
+      }
     },
     genreSelect() {
       if (this.genreSelectField.length > 1) {
@@ -423,13 +427,10 @@ export default {
   padding: 0px;
   padding-left: 5px;
 }
-.style-chooser{
+.selector{
   margin-top: 5px !important;
   font-size: 14px !important;
   fill: white;
-}
-.headings-row{
-
 }
 >>> .vs__selected-options{
   flex-wrap: nowrap;
@@ -485,16 +486,4 @@ input{
 .col-no-padding-left{
   padding-left: 0px;
 }
-/*.custom-select{
-
-  border: solid 1px var(--search-gray);
-  color: var(--my-white);
-    background: url("data:image/svg+xml,<svg height='10px' width='10px' viewBox='0 0 16 16' fill='white' xmlns='http://www.w3.org/2000/svg'><path d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/></svg>") no-repeat;
-    background-position: calc(100% - 0.75rem) center !important;
-    -moz-appearance:none !important;
-    -webkit-appearance: none !important;
-    appearance: none !important;
-    padding-right: 2rem !important;
-}*/
-
 </style>

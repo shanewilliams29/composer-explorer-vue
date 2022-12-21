@@ -165,7 +165,7 @@ export default {
       composerSelectField: null,
       composerOptions: [],
 
-      periodSelectField: { value: "popular", text: "Most popular" },
+      periodSelectField: null,
       periodOptions: [
         // { value: "popular", text: "Most popular" },
         { value: "early", text: "Early" },
@@ -242,7 +242,9 @@ export default {
       eventBus.$emit("clearAlbumsList");
 
       // reset everything on radio type change
-      this.$router.replace({ query: null });
+      if (this.$route.query.artist){
+        this.$router.replace({ query: null });
+      }
       this.artistSelect = null;
       this.$config.artist = null;
       this.$config.genre = null;
@@ -282,7 +284,9 @@ export default {
       eventBus.$emit("requestWorksForRadio", this.genreSelectField, this.workFilterField.value, this.workSearchField, this.artistSelect, this.radioTypeField.value);
     },
     periodSelect() {
-      eventBus.$emit("requestComposersFromFilter", this.periodSelectField.value);
+      if (this.periodSelectField) {
+        eventBus.$emit("requestComposersFromFilter", this.periodSelectField.value);
+      }
     },
     genreSelect() {
       if (this.genreSelectField.length > 1) {
