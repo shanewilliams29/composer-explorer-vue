@@ -78,11 +78,11 @@ export default {
 .work-list-radio-mobile{
   /*height: calc(100vh - 314px);*/
   background-color: var(--medium-gray);
-  height: calc(var(--vh, 1vh) * 100 - 390px);
+  height: calc(var(--vh, 1vh) * 100 - 405px);
   overflow-y: scroll;
 }
 
-/*Text sizing for mobile*/
+/* Text sizing for mobile */
 >>> h6{
   font-size: 16px !important;
 }

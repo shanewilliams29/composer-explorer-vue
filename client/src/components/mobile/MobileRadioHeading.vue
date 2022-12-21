@@ -28,7 +28,13 @@
               class="mt-3 style-chooser allow-wrap"
               :searchable="false"
             ></v-select>
-            <vue-typeahead-bootstrap v-if="radioTypeField.value == 'performer'" v-model="query" placeholder="Search for a performer" class="mt-3 style-chooser performer-search" @hit="artistSearch" size="sm" :data="this.artistList" />
+            <v-select
+              v-if="radioTypeField.value == 'favorites'"
+              placeholder="No futher options for favorites radio"
+              class="mt-3 style-chooser allow-wrap"
+              disabled
+            ></v-select>
+            <vue-typeahead-bootstrap v-if="radioTypeField.value == 'performer'" v-model="artistSelect" placeholder="Search for a performer" class="mt-3 style-chooser performer-search" @hit="artistSearch" size="sm" :data="$lists.artistList" />
           </b-form-group>
         </div>
       </b-col>
@@ -339,6 +345,7 @@ export default {
 </script>
 
 <style scoped>
+/*NOTE: Text sizes overriden in MobileRadio.vue */
 .container-fluid{
   background-color: var(--medium-gray);
   color: var(--search-gray);
@@ -439,14 +446,18 @@ input{
 }
 >>> {
   --vs-search-input-bg: none;
+  --vs-font-size: 14px;
   --vs-controls-color: var(--my-white);
   --vs-border-color: var(--search-gray);
   --vs-border-width: 1px;
   --vs-selected-bg: var(--search-gray);
   --vs-selected-color: var(--my-white);
-  --vs-line-height: 1;
   --vs-search-input-color: var(--my-white);
 }
+>>> {
+    --vs-disabled-bg: none;
+}
+
 .performer-search{
   margin-top: 5px !important;
   font-size: 14px;
