@@ -87,10 +87,10 @@
             <b-col class="col-padding-right">
               <v-select 
                 v-if="!$view.favoritesAlbums" 
-                v-model="performerFilterField" 
+                v-model="performanceFilterField" 
                 label="text" 
-                :options="performerOptions" 
-                @input="performerFilter()" 
+                :options="performanceOptions" 
+                @input="performanceFilter()" 
                 :clearable="false" 
                 class="mt-3 style-chooser" 
                 :searchable="false"></v-select>
