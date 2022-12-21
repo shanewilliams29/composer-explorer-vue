@@ -18,12 +18,14 @@
             <b-nav-item id="forum" href="/forum" target="_blank"> <b-icon-chat-right-text></b-icon-chat-right-text>&nbsp;&nbsp;Forum</b-nav-item>
           </b-nav>
         </div>
+
         <b-navbar-nav class="ml-auto" v-if="!$auth.clientToken">
           <b-button v-if="$view.avatar" right variant="success" class="spotify-button" :href="spotifyURL">
             <img :src="spotifyLogoURL" class="" alt="Spotify" height="28px" />
           </b-button>
           <b-nav-item class="menu-button" right v-b-toggle.sidebar-right><b-icon-three-dots-vertical></b-icon-three-dots-vertical></b-nav-item>
         </b-navbar-nav>
+
         <b-navbar-nav class="ml-auto" v-if="$auth.clientToken">
           <b-nav pills class="navbar-items">
             <b-nav-item v-if="$view.mobile && ($route.name != 'mobileradio')" id="radio" :active='$route.name == "mobileradio"' @click="$router.push('/mobileradio')">
@@ -33,6 +35,7 @@
               <img :src="radioImgURL" class="radio-img" height="22px" />&nbsp;&nbsp;Radio
             </b-nav-item>
           </b-nav>
+
           <b-dropdown v-if="$view.avatar" class="avatar-button" right no-caret>
             <template #button-content>
               <b-avatar href="#" :src="$auth.avatar"></b-avatar>
@@ -46,6 +49,7 @@
         </b-navbar-nav>
       </b-navbar>
     </div>
+    
     <div>
       <b-sidebar id="sidebar-right" title="" backdrop-variant="dark" width="350px" backdrop right shadow>
         <div class="px-3 py-0 sidebar-text">

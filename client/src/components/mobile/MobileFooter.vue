@@ -10,8 +10,7 @@
             <span class="icon-inactive" v-if="!buttonActive"><b-icon-info-circle></b-icon-info-circle></span>
             <span class="icon-active" v-if="buttonActive"><b-icon-info-circle></b-icon-info-circle></span>
           </b-button>
-          
-          <MobilePlayerControls />
+          <PlayerControls />
         </b-col>
       </b-row>
     </div>
@@ -30,22 +29,22 @@
 
 <script>
 import AlbumInfo from '@/components/playback/AlbumInfo.vue'
-import MobilePlayerControls from './MobilePlayerControls.vue'
+import PlayerControls from '@/components/playback/PlayerControls.vue'
 import {eventBus} from "@/main.js";
 
 export default {
   components: {
     AlbumInfo,
-    MobilePlayerControls,
+    PlayerControls,
   },
   data() {
     return {
       buttonActive: false,
       genreTitle: this.$config.genre,
-      defaultImage: "https://storage.googleapis.com/composer-explorer.appspot.com/headers/Symphony.jpg",
+      defaultImage: "https://storage.googleapis.com/composer-explorer.appspot.com/headers/Orchestral.jpg",
       imgLink: "https://storage.googleapis.com/composer-explorer.appspot.com/headers/" + encodeURIComponent(this.$config.genre) + ".jpg",
-      image1: "https://storage.googleapis.com/composer-explorer.appspot.com/headers/Symphony.jpg",
-      image2: "https://storage.googleapis.com/composer-explorer.appspot.com/headers/Symphony.jpg",
+      image1: "https://storage.googleapis.com/composer-explorer.appspot.com/headers/Orchestral.jpg",
+      image2: "https://storage.googleapis.com/composer-explorer.appspot.com/headers/Orchestral.jpg",
       reveal: false
     };
   },

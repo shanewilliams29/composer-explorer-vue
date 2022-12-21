@@ -1,48 +1,8 @@
 <template>
   <b-container class="playback-container">
     <b-row class="buttons-row">
-      <b-col class="text-center text-nowrap">
-        <b-button class="playback-button gray" id="shuffle-play-false" v-show="!$view.shuffle" 
-          @click="shufflePlayback()">
-          <b-icon-shuffle></b-icon-shuffle>
-        </b-button>
-        <b-button class="playback-button" id="shuffle-play-true" v-show="$view.shuffle" 
-          @click="shufflePlayback()">
-          <b-icon-shuffle variant="warning"></b-icon-shuffle>
-        </b-button>
-        <b-button class="playback-button" id="previous-work-button" 
-          @click="previousWork()">
-          <b-icon-arrow-left-circle></b-icon-arrow-left-circle>
-        </b-button>
-        <b-button class="playback-button" id="back-button" 
-          @click="back()">
-          <b-icon-skip-start-fill></b-icon-skip-start-fill>
-        </b-button>
-        <b-button class="playback-button" id="play-button" v-show="!playing">
-          <!-- Play button function is handled in the SpotifyPlayer.vue listener -->
-          <b-icon-play-fill></b-icon-play-fill>
-        </b-button>
-        <b-button class="playback-button" id="pause-button" v-show="playing" 
-          @click="pause()">
-          <b-icon-pause-fill></b-icon-pause-fill>
-        </b-button>
-        <b-button class="playback-button" id="forward-button" 
-          @click="next()">
-          <b-icon-skip-end-fill></b-icon-skip-end-fill>
-        </b-button>
-        <b-button class="playback-button" id="next-work-button" 
-          @click="nextWorkNoDebounce()">
-          <b-icon-arrow-right-circle></b-icon-arrow-right-circle>
-        </b-button>
-        <b-button class="playback-button gray" id="like-work-button" v-show="!$view.like" 
-          @click="toggleLike()">
-          <b-icon-heart></b-icon-heart>
-        </b-button>
-        <b-button class="playback-button red" id="unlike-work-button" v-show="$view.like" 
-          @click="toggleLike()">
-          <b-icon-heart-fill></b-icon-heart-fill>
-        </b-button>
-      </b-col>
+      <PlayerButtons v-if="!$view.mobile"/>
+      <MobilePlayerButtons v-else/>
     </b-row>
     <b-row class="seekbar-row">
       <b-col class="text-center">
@@ -77,6 +37,8 @@
 </template>
 
 <script>
+import PlayerButtons from './PlayerButtons.vue'
+import MobilePlayerButtons from '@/components/mobile/MobilePlayerButtons.vue'
 import spotify from "@/SpotifyFunctions.js";
 import {eventBus} from "@/main.js";
 import axios from "axios";
@@ -104,6 +66,10 @@ function fireNextWork() {
 }
 
 export default {
+  components: {
+    PlayerButtons,
+    MobilePlayerButtons
+  },
   data() {
     return {
       token: "",
@@ -201,6 +167,10 @@ export default {
     },
     shufflePlayback() {
       this.$view.shuffle = !this.$view.shuffle;
+    },
+    playRandom() {
+      this.$view.shuffle = true;
+      this.nextWorkNoDebounce();
     },
     likeDatabase(albumID, action) {
       const path = `api/like/${albumID}/${action}`;
@@ -382,37 +352,5 @@ input[type="range"]:focus {
 input[type="range"]::-moz-range-progress {
   background-color: #ffc107;
   height: 6px;
-}
-
-.btn-secondary {
-  background-color: var(--dark-gray) !important;
-}
-.btn:hover {
-  background-color: #484e53 !important;
-}
-.btn {
-  border: none !important;
-  outline: none !important;
-  box-shadow: none !important;
-}
-.playback-button{
-  color: var(--my-white);
-}
-.gray {
-  color: var(--medium-dark-gray) !important;
-}
-.red {
-  color: var(--red) !important;
-}
-.btn:focus,
-.btn:active:focus,
-.btn.active:focus,
-.btn.focus,
-.btn:active.focus,
-.btn.active.focus {
-  border: none !important;
-  outline: none !important;
-  box-shadow: none !important;
-  background-color: none !important;
 }
 </style>

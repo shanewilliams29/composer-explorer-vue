@@ -36,9 +36,7 @@ export default {
 .container-fluid {
   padding-bottom: 0px;
   border-radius: 0px;
-  background-color: rgb(52, 58, 64, 0.6);
-  -webkit-backdrop-filter: blur(8px);
-  backdrop-filter: blur(8px);
+  background-color: rgb(52, 58, 64, 0.9);
   z-index: 1;
 }
 .footer-row {

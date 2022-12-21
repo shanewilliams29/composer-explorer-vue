@@ -78,7 +78,7 @@ export default {
 .work-list-radio-mobile{
   /*height: calc(100vh - 314px);*/
   background-color: var(--medium-gray);
-  height: calc(var(--vh, 1vh) * 100 - 405px);
+  height: calc(var(--vh, 1vh) * 100 - 390px);
   overflow-y: scroll;
 }
 
