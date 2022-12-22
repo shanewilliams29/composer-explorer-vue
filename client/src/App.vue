@@ -2,19 +2,27 @@
   <div id="app">
     <PatreonBanner />
     <NavBar />
+
     <ConnectingOverlay />
     <WelcomeOverlay />
-    <router-view />
     <SpotifyPlayer />
     <ModalContainer />
+
+    <router-view />
+
     <Transition name="fadeHeight">
-      <div class="info-panel" v-show="showPanel"><InfoPanel /></div>
+      <div class="info-panel" v-if="showPanel && !$view.mobile">
+        <InfoPanel/>
+      </div>
     </Transition>
-    <div v-if="!$view.mobile">
-      <PageFooter :showPanel="showPanel" @togglePanel="togglePanel"/>
-    </div>
+    <PageFooter v-if="!$view.mobile" :showPanel="showPanel" @togglePanel="togglePanel"/>
+
     <div id="footer" v-if="$view.mobile" v-show="!$view.mobileKeyboard">
-      <div class="info-panel-mobile" v-show="showPanel"><MobileInfoPanel /></div>
+      <Transition name="fadeHeight2">
+        <div class="info-panel-mobile" v-show="showPanel">
+          <MobileInfoPanel :showPanel="childShowPanel"/>
+        </div>
+      </Transition>
       <MobileTracks />
       <MobileFooter @togglePanel="togglePanel"/>
     </div>
@@ -52,21 +60,22 @@ export default {
   data() {
     return {
       showPanel: false,
+      childShowPanel: false
     };
   },
   methods: {
     togglePanel() {
       this.showPanel = !this.showPanel;
+      this.childShowPanel = true;
       if (this.showPanel) {
-        this.$view.panelVisible = true;
         setTimeout(() => {
           document.documentElement.style.setProperty("--panelheight", `300px`);
-        }, 300);
+        }, 500);
       } else {
         document.documentElement.style.setProperty("--panelheight", `0px`);
         setTimeout(() => {
-          this.$view.panelVisible = false; // Delay to allow animation
-        }, 300);
+          this.childShowPanel = false;
+        }, 500); // Delay for animation
       }
     },
     getArtistList() {
@@ -112,7 +121,6 @@ export default {
       document.documentElement.style.setProperty("--appbackgroundcolor", `var(--light-gray)`);
     }
     document.documentElement.style.setProperty("--panelheight", `0px`);
-    this.$view.panelVisible = false;
   },
   mounted(){
     this.getArtistList();
@@ -143,6 +151,7 @@ export default {
 #footer {
   height: 200px !important;
   background: none;
+  z-index: 1000;
 }
 .info-panel {
   position: fixed;
@@ -153,16 +162,26 @@ export default {
   position: fixed;
   bottom: 130px;
   width: 100%;
-  z-index: 1000;
 }
 .fadeHeight-enter-active,
 .fadeHeight-leave-active {
-  transition: all 0.3s;
+  transition: all 0.5s;
   max-height: 300px;
 }
 .fadeHeight-enter,
 .fadeHeight-leave-to {
   opacity: 0;
   max-height: 0px;
+}
+.fadeHeight2-enter-active,
+.fadeHeight2-leave-active {
+  transition: all 0.5s;
+  max-height: calc(100vh - 66px);
+}
+.fadeHeight2-enter,
+.fadeHeight2-leave-to {
+  opacity: 0;
+  max-height: 0px;
+  bottom: 130px;
 }
 </style>

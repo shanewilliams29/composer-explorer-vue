@@ -1,14 +1,14 @@
 <template>
   <div v-if="$view.mobile" class="container-fluid">
     <div class="footer-row disable-scrollbars">
-      <b-row v-if="$view.panelVisible" class="info-row work-info">
+      <b-row v-if="showPanel" class="info-row work-info">
         <WorkInfo />
       </b-row>
-      <b-row v-if="$view.panelVisible" class="info-row">
+      <b-row v-if="showPanel" class="info-row">
         <AlbumInfoPanel />
       </b-row>
       <b-row class="info-row">
-        <TrackListingMobile />
+        <TrackListingMobile :showPanel = "showPanel"/>
       </b-row>
     </div>
   </div>
@@ -24,6 +24,9 @@ export default {
     WorkInfo,
     AlbumInfoPanel,
     TrackListingMobile
+  },
+  props: {
+    showPanel: Boolean
   }
 };
 </script>

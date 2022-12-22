@@ -1,5 +1,5 @@
 <template>
-  <div v-if="$view.panelVisible && !$view.mobile" class="container-fluid">
+  <div class="container-fluid">
     <b-row class="footer-row">
       <b-col class="info-col">
         <ComposerInfo />
@@ -24,7 +24,7 @@ export default {
     ComposerInfo,
     WorkInfo,
     AlbumInfoPanel
-  },
+  }
 };
 </script>
 

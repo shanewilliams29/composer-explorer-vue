@@ -35,9 +35,12 @@ import { trackMixin } from "@/components/playback/TrackListing.js"
 
 export default {
   mixins: [trackMixin],
+  props: {
+    showPanel: Boolean
+  },
   computed:{
     panelShow(){
-      return this.$view.panelVisible;
+      return this.showPanel;
     }
   },
   watch: {
