@@ -1,5 +1,6 @@
 <template>
-  <div id="home">
+  <div id="home" >
+    <div v-if="$view.mobile">
     <MobileRadioHeading />
     <div class="container-fluid">
       <b-row>
@@ -10,6 +11,7 @@
         <b-col v-show="false" class="display-list last-col extra-margin"><AlbumList /></b-col>
       </b-row>
     </div>
+  </div>
   </div>
 </template>
 
