@@ -11,7 +11,7 @@
       <div class="info-panel" v-show="showPanel"><InfoPanel /></div>
     </Transition>
     <div v-if="!$view.mobile">
-      <PageFooter @togglePanel="togglePanel"/>
+      <PageFooter :showPanel="showPanel" @togglePanel="togglePanel"/>
     </div>
     <div id="footer" v-if="$view.mobile" v-show="!$view.mobileKeyboard">
       <div class="info-panel-mobile" v-show="showPanel"><MobileInfoPanel /></div>
