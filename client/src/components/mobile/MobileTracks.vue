@@ -1,19 +1,35 @@
 <template>
-  <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+  <div id="carouselIndicatorsID" class="carousel slide" data-ride="carousel">
     <ol class="carousel-indicators" v-if="album.id">
-      <li data-target="carouselExampleIndicators" :class="{'active': trackMatch(track)}" :data-slide-to="track[1]" v-for="track in album.tracks" :key="track[1]" @click="playTracks(track[2])" v-show="album.tracks.length <= 12"></li>
-      <span class="album-track-display" v-show="album.tracks.length > 12 && trackIndex">Track {{trackIndex}} of {{album.tracks.length}}</span>
+      <li data-target="carouselIndicatorsID" 
+        :class="{'active': trackMatch(track)}" 
+        :data-slide-to="track[1]" 
+        v-for="track in album.tracks" 
+        :key="track[1]" 
+        @click="playTracks(track[2])" 
+        v-show="album.tracks.length <= 12">
+      </li>
+      <span class="album-track-display" 
+        v-show="album.tracks.length > 12 && trackIndex">Track {{trackIndex}} of {{album.tracks.length}}
+      </span>
     </ol>
     <ol class="carousel-indicators" v-else>
       <!-- Dummy while loading -->
     </ol>
     <div class="carousel-inner">
-      <div class="carousel-item" :class="{'active': trackMatch(track)}" v-for="track in album.tracks" :key="track[1]">
+      <div class="carousel-item" 
+        :class="{'active': trackMatch(track)}" 
+        v-for="track in album.tracks" 
+        :key="track[1]">
         <table>
           <tr>
-            <td width="100%" style="white-space: nowrap; text-overflow: ellipsis; overflow: hidden; max-width: 1px;">
-              <span v-if="genre == 'Opera' || genre == 'Stage Work' || genre == 'Ballet'">{{ track[0].substring(track[0].lastIndexOf(' Act ') + 1).trim() }}</span>
-              <span v-else>{{ track[0].substring(track[0].lastIndexOf(':') + 1) }}</span>
+            <td width="100%" class="td-style">
+              <span v-if="genre == 'Opera' || genre == 'Stage Work' || genre == 'Ballet'">
+                {{ track[0].substring(track[0].lastIndexOf(' Act ') + 1).trim() }}
+              </span>
+              <span v-else>
+                {{ track[0].substring(track[0].lastIndexOf(':') + 1) }}
+              </span>
             </td>
           </tr>
         </table>
@@ -30,32 +46,20 @@ export default {
   data() {
     return {
       album: {},
-      title: "",
       genre:"",
       selectedTrack: "Track",
       selectedTrackNo : "",
       numTracks: "",
-      loading: true,
-      slide: 0,
-      sliding: null,
       stopMatch: false // necessary in case album has multiple tracks with the same name (would select them all)
     };
   },
   computed: {
     trackIndex() {
-      var tracks = this.album.tracks;
+      const tracks = this.album.tracks;
+      const selectedTrackId = this.selectedTrack[1];
 
-      for (var i = 0; i < tracks.length; i++) {
-        var matchTrack = tracks[i][1];
-        // console.log(matchTrack);
-        // console.log(this.selectedTrack[1]);
-        if (matchTrack == this.selectedTrack[1]){
-          return i + 1;
-        } else {
-          continue;
-        }
-      }
-      return null;
+      const index = tracks.findIndex(track => track[1] === selectedTrackId);
+      return index !== -1 ? index + 1 : null;
     }
   },
   methods: {
@@ -67,55 +71,61 @@ export default {
         this.selectedTrack = track;
     },
     trackMatch(track){
-
-        // match on IDs
+        // match on track ID
         if (this.selectedTrack[1] == track[1]){
             this.stopMatch = true;
             return true;
 
-        //match on name
+        //match on track name if ID match not found (Spotify redirected track for licensing purposes)
         } else if (this.strFix(this.selectedTrack[0]) == this.strFix(track[0]) && this.stopMatch == false){
             return true;
         } else {
             return false;
         }
     },
-    playTracks(tracks){
-      let uriList = {}
-      let jsonList = {}
-      let selectedTrack = tracks.split(' ')[0];
-      let allTracks = this.$config.allTracks.split(' ');
+    playTracks(tracks) {
+      let uriList = {};
+      let jsonList = {};
+      let selectedTrack = tracks.split(" ")[0];
+      let allTracks = this.$config.allTracks.split(" ");
 
       let index = allTracks.indexOf(selectedTrack);
       let previousTracks = "";
 
       if (index == 0) {
-          previousTracks = this.$config.allTracks;
+        previousTracks = this.$config.allTracks;
       } else {
         for (var i = index - 1; i < allTracks.length; i++) {
           previousTracks = previousTracks + " " + allTracks[i];
         }
       }
-
       this.$config.previousTracks = previousTracks.trim();
-
       this.$config.playTracks = tracks;
-      localStorage.setItem('config', JSON.stringify(this.$config));
+      localStorage.setItem("config", JSON.stringify(this.$config));
 
-      uriList['uris'] = tracks.split(' ');
+      // ensure no unnecessary whitespace in track list (gives spotify erors):
+      var smushTracks = tracks.replace(/\s/g, "");
+      var cleanTracks = smushTracks.replaceAll("spotify", " spotify").trim();
+
+      uriList["uris"] = cleanTracks.split(" ");
       jsonList = JSON.stringify(uriList);
-
       spotify.playTracks(this.$auth.clientToken, this.$auth.deviceID, jsonList);
-      },
-    },
+    }
+  },
   created() {
     eventBus.$on('fireSetAlbum', (album) => {
+        this.genre = this.$config.genre;
         this.$config.allTracks = album.tracks[0][2];
         this.$config.playTracks = album.tracks[0][2];
         localStorage.setItem('config', JSON.stringify(this.$config));
-        this.genre = this.$config.genre;
+
         this.album = album;
-        this.title = this.$config.workTitle;
+        if(this.$auth.clientToken && this.$auth.deviceID && !window.firstLoad){
+          this.playTracks(album.tracks[0][2]);
+          this.stopMatch = false;
+        } else {
+          window.firstLoad = false;
+        }
     })
     // eslint-disable-next-line
     eventBus.$on('firePlayerStateChanged', (track_data, position, duration, paused) => {
@@ -141,6 +151,12 @@ td{
   padding-right: 50px;
   text-align: center;
   vertical-align: middle;
+}
+.td-style{
+  white-space: nowrap; 
+  text-overflow: ellipsis; 
+  overflow: hidden; 
+  max-width: 1px;
 }
 .album-track-display{
   color: var(--medium-light-gray);

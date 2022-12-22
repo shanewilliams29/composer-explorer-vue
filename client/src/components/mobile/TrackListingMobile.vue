@@ -2,15 +2,24 @@
   <b-card no-body class="track-info-card shadow-sm">
     <b-card-text class="info-card-text-tracks" ref="scroll-box">
       <table>
-        <tr v-for="(track, index) in album.tracks" @click="selectTrack(track); playTracks(track[2]);" :class="{'highlight-track': trackMatch(track)}" :id="track[1]" :key="track[1]">
+        <tr v-for="(track, index) in album.tracks" 
+          @click="selectTrack(track); playTracks(track[2]);" 
+          :class="{'highlight-track': trackMatch(track)}" 
+          :id="track[1]" 
+          :key="track[1]">
           <td>
-            <b-avatar v-if="trackMatch(track)" variant="warning" size="40px" :text="(index + 1).toString()"></b-avatar>
-            <b-avatar v-if="!trackMatch(track)" size="40px" :text="(index + 1).toString()"></b-avatar>
+            <b-avatar v-if="trackMatch(track)" variant="warning" size="40px" :text="(index + 1).toString()">
+            </b-avatar>
+            <b-avatar v-if="!trackMatch(track)" size="40px" :text="(index + 1).toString()">
+            </b-avatar>
           </td>
           <td class="info-td">
             <a clss="artist-name">
-              <span v-if="genre == 'Opera' || genre == 'Stage Work' || genre == 'Ballet'">{{ track[0].substring(track[0].lastIndexOf(' Act ') + 1).trim() }}</span>
-              <span v-else>{{ track[0].substring(track[0].lastIndexOf(':') + 1) }}</span>
+              <span v-if="genre == 'Opera' || genre == 'Stage Work' || genre == 'Ballet'">
+                {{ track[0].substring(track[0].lastIndexOf(' Act ') + 1).trim() }}</span>
+              <span v-else>
+                {{ track[0].substring(track[0].lastIndexOf(':') + 1) }}
+              </span>
             </a>
             <br />
           </td>
@@ -96,22 +105,12 @@ export default {
       uriList['uris'] = cleanTracks.split(' ');
       jsonList = JSON.stringify(uriList);
       spotify.playTracks(this.$auth.clientToken, this.$auth.deviceID, jsonList);
-      },
+      }
     },
   created() {
     eventBus.$on('fireSetAlbum', (album) => {
         this.genre = this.$config.genre;
-        this.$config.allTracks = album.tracks[0][2];
-        this.$config.playTracks = album.tracks[0][2];
-        localStorage.setItem('config', JSON.stringify(this.$config));
-
         this.album = album;
-        if(this.$auth.clientToken && this.$auth.deviceID && !window.firstLoad){
-          this.playTracks(album.tracks[0][2]);
-          this.stopMatch = false;
-        } else {
-          window.firstLoad = false;
-        }
     })
     // eslint-disable-next-line
     eventBus.$on('firePlayerStateChanged', (track_data, position, duration, paused) => {
@@ -121,7 +120,7 @@ export default {
         this.selectTrack(track);
         this.stopMatch = false;
     })
-  },
+  }
 };
 </script>
 
