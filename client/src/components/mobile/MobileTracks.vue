@@ -39,20 +39,11 @@
 </template>
 
 <script>
-import {eventBus} from "@/main.js";
-import spotify from '@/SpotifyFunctions.js'
+import { eventBus } from "@/main.js";
+import { trackMixin } from "@/components/playback/TrackListing.js"
 
 export default {
-  data() {
-    return {
-      album: {},
-      genre:"",
-      selectedTrack: "Track",
-      selectedTrackNo : "",
-      numTracks: "",
-      stopMatch: false // necessary in case album has multiple tracks with the same name (would select them all)
-    };
-  },
+  mixins: [trackMixin],
   computed: {
     trackIndex() {
       const tracks = this.album.tracks;
@@ -63,77 +54,23 @@ export default {
     }
   },
   methods: {
-    strFix(item){
-      let fixed = item.replace(/[^A-Z0-9]+/ig, "");
-      return fixed;
-    },
     selectTrack(track){
         this.selectedTrack = track;
-    },
-    trackMatch(track){
-        // match on track ID
-        if (this.selectedTrack[1] == track[1]){
-            this.stopMatch = true;
-            return true;
-
-        //match on track name if ID match not found (Spotify redirected track for licensing purposes)
-        } else if (this.strFix(this.selectedTrack[0]) == this.strFix(track[0]) && this.stopMatch == false){
-            return true;
-        } else {
-            return false;
-        }
-    },
-    playTracks(tracks) {
-      let uriList = {};
-      let jsonList = {};
-      let selectedTrack = tracks.split(" ")[0];
-      let allTracks = this.$config.allTracks.split(" ");
-
-      let index = allTracks.indexOf(selectedTrack);
-      let previousTracks = "";
-
-      if (index == 0) {
-        previousTracks = this.$config.allTracks;
-      } else {
-        for (var i = index - 1; i < allTracks.length; i++) {
-          previousTracks = previousTracks + " " + allTracks[i];
-        }
-      }
-      this.$config.previousTracks = previousTracks.trim();
-      this.$config.playTracks = tracks;
-      localStorage.setItem("config", JSON.stringify(this.$config));
-
-      // ensure no unnecessary whitespace in track list (gives spotify erors):
-      var smushTracks = tracks.replace(/\s/g, "");
-      var cleanTracks = smushTracks.replaceAll("spotify", " spotify").trim();
-
-      uriList["uris"] = cleanTracks.split(" ");
-      jsonList = JSON.stringify(uriList);
-      spotify.playTracks(this.$auth.clientToken, this.$auth.deviceID, jsonList);
     }
   },
   created() {
     eventBus.$on('fireSetAlbum', (album) => {
-        this.genre = this.$config.genre;
-        this.$config.allTracks = album.tracks[0][2];
-        this.$config.playTracks = album.tracks[0][2];
-        localStorage.setItem('config', JSON.stringify(this.$config));
+      this.genre = this.$config.genre;
+      this.$config.allTracks = album.tracks[0][2];
+      this.$config.playTracks = album.tracks[0][2];
+      localStorage.setItem('config', JSON.stringify(this.$config));
 
-        this.album = album;
-        if(this.$auth.clientToken && this.$auth.deviceID && !window.firstLoad){
-          this.playTracks(album.tracks[0][2]);
-          this.stopMatch = false;
-        } else {
-          window.firstLoad = false;
-        }
-    })
-    // eslint-disable-next-line
-    eventBus.$on('firePlayerStateChanged', (track_data, position, duration, paused) => {
-        let track = []
-        track[1] = track_data['id'];
-        track[0] = track_data['name'];
-        this.selectTrack(track);
-        this.stopMatch = false;
+      this.album = album;
+      if(this.$auth.clientToken && this.$auth.deviceID && !window.firstLoad){
+        this.playTracks(album.tracks[0][2]);
+      } else {
+        window.firstLoad = false;
+      }
     })
   },
 };
