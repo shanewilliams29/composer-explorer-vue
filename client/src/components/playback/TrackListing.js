@@ -1,7 +1,6 @@
 import { eventBus } from "@/main.js";
 import spotify from "@/SpotifyFunctions.js";
 
-
 export const trackMixin = {
   data() {
     return {

@@ -5,7 +5,7 @@
         <AlbumInfo />
       </b-col>
       <b-col>
-        <b-button class="info-panel-button" @click="togglePanel()" variant="warning">
+        <b-button class="info-panel-button" @click="$emit('togglePanel')" variant="warning">
           <span v-if="!$parent.showPanel"><b-icon-chevron-up></b-icon-chevron-up></span><span v-else><b-icon-chevron-down></b-icon-chevron-down></span> INFO PANEL
         </b-button>
         <PlayerControls />
@@ -27,11 +27,6 @@ export default {
     AlbumInfo,
     PlayerControls,
     TrackListing,
-  },
-  methods:{
-    togglePanel(){
-      this.$parent.togglePanel();
-    }
   }
 };
 </script>

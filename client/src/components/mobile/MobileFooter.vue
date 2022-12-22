@@ -6,7 +6,7 @@
           <AlbumInfo />
         </b-col>
         <b-col>
-          <b-button class="info-panel-button" @click="togglePanel()">
+          <b-button class="info-panel-button" @click="togglePanel();">
             <span class="icon-inactive" v-if="!buttonActive"><b-icon-info-circle></b-icon-info-circle></span>
             <span class="icon-active" v-if="buttonActive"><b-icon-info-circle></b-icon-info-circle></span>
           </b-button>
@@ -69,7 +69,7 @@ export default {
   },
   methods:{
     togglePanel(){
-      this.$parent.togglePanel();
+      this.$emit('togglePanel'); 
       this.buttonActive = !this.buttonActive;
     },
     updatePic(){

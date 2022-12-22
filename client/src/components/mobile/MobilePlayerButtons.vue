@@ -1,3 +1,4 @@
+<!-- Parent is PlayerControls.vue -->
 <template>  
   <b-col class="text-center text-nowrap">
     <b-button class="playback-button gray" id="shuffle-play" 
