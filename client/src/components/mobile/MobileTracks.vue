@@ -174,9 +174,9 @@ td{
   text-align: center;
 }
 .carousel-item{
-        transition: -webkit-transform .6s ease;
-        transition: transform .6s ease;
-        transition: transform .6s ease,-webkit-transform .6s ease;
+  transition: -webkit-transform .6s ease;
+  transition: transform .6s ease;
+  transition: transform .6s ease,-webkit-transform .6s ease;
   }
 .carousel-item >>> span{
   font-size: 16px !important;

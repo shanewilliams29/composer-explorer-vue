@@ -38,7 +38,6 @@ export default {
       selectedTrackNo: "",
       numTracks: "",
       genre: "",
-      stopMatch: false, // necessary in case album has multiple tracks with the same name (would select them all)
     };
   },
   methods: {
@@ -61,11 +60,10 @@ export default {
     trackMatch(track) {
       // match on IDs
       if (this.selectedTrack[1] == track[1]) {
-        this.stopMatch = true;
         return true;
 
         //match on name if IDs are not valid (Spotify redirected track for licensing purposes)
-      } else if (this.strFix(this.selectedTrack[0]) == this.strFix(track[0]) && this.stopMatch == false) {
+      } else if (this.strFix(this.selectedTrack[0]) == this.strFix(track[0])) {
         return true;
       } else {
         return false;
@@ -110,7 +108,6 @@ export default {
       this.album = album;
       if (this.$auth.clientToken && this.$auth.deviceID && !window.firstLoad) {
         this.playTracks(album.tracks[0][2]);
-        this.stopMatch = false;
       } else {
         window.firstLoad = false;
       }
@@ -121,7 +118,6 @@ export default {
       track[1] = track_data["id"];
       track[0] = track_data["name"];
       this.selectTrack(track);
-      this.stopMatch = false;
     });
   },
 };

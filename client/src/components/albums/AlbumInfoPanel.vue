@@ -17,9 +17,6 @@
         </table>
       </b-card-title>
       <b-card-text class="info-card-text">
-        <div class="spinner" v-show="loading" role="status">
-          <b-spinner class="m-5"></b-spinner>
-        </div>
         <div v-for="result in results" :key="result[0]">
           <table>
             <tr>
