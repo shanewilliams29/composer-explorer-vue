@@ -23,11 +23,21 @@ export default {
   watch: {
     patreonChanged(patreonStatus) {
       this.showBanner = !patreonStatus;
+      // if(this.showBanner){
+      //   document.documentElement.style.setProperty("--workingheight", `279px`);
+      // } else {
+      //   document.documentElement.style.setProperty("--workingheight", `244px`);
+      // }
     },
   },
   methods: {
     toggleBanner() {
       this.showBanner = !this.showBanner;
+      // if(this.showBanner){
+      //   document.documentElement.style.setProperty("--workingheight", `279px`);
+      // } else {
+      //   document.documentElement.style.setProperty("--workingheight", `244px`);
+      // }
     },
   },
 };

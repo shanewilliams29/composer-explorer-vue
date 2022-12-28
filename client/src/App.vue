@@ -111,13 +111,11 @@ export default {
       this.$view.mobile = true;
       document.documentElement.style.setProperty("--playerpadding", `0px`);
       document.documentElement.style.setProperty("--workingheight", `310px`);
-      document.documentElement.style.setProperty("--workingheightnoheader", `194px`);
       document.documentElement.style.setProperty("--appbackgroundcolor", `var(--dark-gray)`);
     } else {
       this.$view.mobile = false;
       document.documentElement.style.setProperty("--playerpadding", `21.5px`);
       document.documentElement.style.setProperty("--workingheight", `244px`);
-      document.documentElement.style.setProperty("--workingheightnoheader", `183px`);
       document.documentElement.style.setProperty("--appbackgroundcolor", `var(--light-gray)`);
     }
     document.documentElement.style.setProperty("--panelheight", `0px`);
