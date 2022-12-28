@@ -5,8 +5,9 @@
 
     <ConnectingOverlay />
     <WelcomeOverlay />
-    <SpotifyPlayer />
     <ModalContainer />
+
+    <SpotifyPlayer />
 
     <router-view />
 
@@ -70,7 +71,7 @@ export default {
       if (this.showPanel) {
         setTimeout(() => {
           document.documentElement.style.setProperty("--panelheight", `300px`);
-        }, 500);
+        }, 500); // Delay for animation
       } else {
         document.documentElement.style.setProperty("--panelheight", `0px`);
         setTimeout(() => {
@@ -101,7 +102,6 @@ export default {
           this.$lists.composerList = res.data.composers;
         })
         .catch((error) => {
-          // eslint-disable-next-line
           console.error(error);
         });
     },

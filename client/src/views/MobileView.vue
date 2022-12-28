@@ -141,69 +141,6 @@ export default {
 
 </script>
 
-<style>
-  .composer-list-mobile{
-    /*height: calc(100vh - 314px);*/
-    height: calc(var(--vh, 1vh) * 100 - var(--workingheight));
-    overflow-y: scroll;
-  }
-  .composer-list-mobile .composer-img{
-    /*height: calc(100vh - 314px);*/
-      height:  25px;
-      width: 25px;
-  }
-  .composer-list-mobile .card{
-    margin-bottom: 0px !important;
-  }
-  .composer-list-mobile table td{
-    padding-top: 4px;
-    padding-bottom: 4px;
-    vertical-align: middle;
-  }
-  .composer-list-mobile .composer-name{
-    padding-left: 3px;
-  }
-  .work-list-mobile{
-    /*height: calc(100vh - 314px);*/
-    height: calc(var(--vh, 1vh) * 100 - var(--workingheight));
-    overflow-y: scroll;
-  }
-  .work-list-mobile .card{
-    margin-bottom: 0px !important;
-  }
-  .work-list-mobile table td{
-    padding-top: 5px;
-    padding-bottom: 5px;
-  }
-  .album-list-mobile{
-    /*height: calc(100vh - 314px);*/
-    height: calc(var(--vh, 1vh) * 100 - var(--workingheight));
-    overflow-y: scroll;
-    overflow-x: hidden;
-  }
-  .album-list-mobile .card{
-    margin-bottom: 0px !important;
-  }
-  .album-list-mobile .card{
-    margin-bottom: 0px !important;
-  }
-  .album-list-mobile .albums-card{
-  padding-top: 0px !important;
-  margin-top: -3.5px !important;
-}
-
-  #footer{
-    height: 124px;
-    overflow-x: hidden;
-    overflow-y: hidden;
-  }
-
-  #footer table{
-    font-size: 14px !important;
-    line-height: 130%;
-  }
-</style>
-
 <style scoped>
   >>> .card{
     color: var(--dark-gray);

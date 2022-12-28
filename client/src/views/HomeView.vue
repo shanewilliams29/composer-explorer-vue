@@ -57,54 +57,6 @@ export default {
 };
 </script>
 
-<style>
-.display-list {
-  height: calc(100vh - var(--workingheight) - var(--panelheight));
-  padding-right: 12px;
-  padding-bottom: 5px;
-  overflow-y: scroll;
-  overflow-x: hidden;
-}
-.card-body {
-  padding: 0px !important;
-}
-@media only screen and (min-width: 1000px) {
-  .last-col {
-    -ms-flex: var(--flex) !important;
-    flex: var(--flex) !important;
-  }
-}
-.extra-margin {
-  margin-right: 3.5px;
-}
-/*scrollbars*/
-:root {
-  --scroll-bar-color: var(--scroll-color);
-  --scroll-bar-bg-color: var(--light-gray);
-}
-
-* {
-  scrollbar-width: thin;
-  scrollbar-color: var(--scroll-bar-color) var(--scroll-bar-bg-color);
-}
-
-/* Works on Chrome, Edge, and Safari */
-*::-webkit-scrollbar {
-  width: 12px;
-  height: 12px;
-}
-
-*::-webkit-scrollbar-track {
-  background: var(--scroll-bar-bg-color);
-}
-
-*::-webkit-scrollbar-thumb {
-  background-color: var(--scroll-bar-color);
-  border-radius: 20px;
-  border: 3px solid var(--scroll-bar-bg-color);
-}
-</style>
-
 <style scoped>
 >>> .highlight{
   background-color: var(--blue);

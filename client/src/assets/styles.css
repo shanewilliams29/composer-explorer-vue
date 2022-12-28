@@ -16,3 +16,106 @@ html {
   --scroll-color: #c9cccf;
   --scroll-color-light: #d6d9db;
 }
+
+/* DESKTOP STYLES */
+
+.display-list {
+  height: calc(100vh - var(--workingheight) - var(--panelheight));
+  padding-right: 12px;
+  padding-bottom: 5px;
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+.card-body {
+  padding: 0px !important;
+}
+@media only screen and (min-width: 1000px) {
+  .last-col {
+    -ms-flex: var(--flex) !important;
+    flex: var(--flex) !important;
+  }
+}
+.extra-margin {
+  margin-right: 3.5px;
+}
+
+/*scrollbars*/
+:root {
+  --scroll-bar-color: var(--scroll-color);
+  --scroll-bar-bg-color: var(--light-gray);
+}
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--scroll-bar-color) var(--scroll-bar-bg-color);
+}
+
+/* Works on Chrome, Edge, and Safari */
+*::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+*::-webkit-scrollbar-track {
+  background: var(--scroll-bar-bg-color);
+}
+*::-webkit-scrollbar-thumb {
+  background-color: var(--scroll-bar-color);
+  border-radius: 20px;
+  border: 3px solid var(--scroll-bar-bg-color);
+}
+
+/* MOBILE STYLES */
+
+.composer-list-mobile{
+  height: calc(var(--vh, 1vh) * 100 - var(--workingheight));
+  overflow-y: scroll;
+}
+.composer-list-mobile .composer-img{
+  height:  25px;
+  width: 25px;
+}
+.composer-list-mobile .card{
+  margin-bottom: 0px !important;
+}
+.composer-list-mobile table td{
+  padding-top: 4px;
+  padding-bottom: 4px;
+  vertical-align: middle;
+}
+.composer-list-mobile .composer-name{
+  padding-left: 3px;
+}
+.work-list-mobile{
+  height: calc(var(--vh, 1vh) * 100 - var(--workingheight));
+  overflow-y: scroll;
+}
+.work-list-mobile .card{
+  margin-bottom: 0px !important;
+}
+.work-list-mobile table td{
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+.album-list-mobile{
+  height: calc(var(--vh, 1vh) * 100 - var(--workingheight));
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+.album-list-mobile .card{
+  margin-bottom: 0px !important;
+}
+.album-list-mobile .card{
+  margin-bottom: 0px !important;
+}
+.album-list-mobile .albums-card{
+  padding-top: 0px !important;
+  margin-top: -3.5px !important;
+}
+#footer{
+  height: 124px;
+  overflow-x: hidden;
+  overflow-y: hidden;
+}
+#footer table{
+  font-size: 14px !important;
+  line-height: 130%;
+}
