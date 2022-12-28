@@ -57,6 +57,9 @@ export default {
 }
 </script>
 
+<style scoped src="./MobileOverrideStyles.css">
+</style>
+
 <style scoped>
 >>> .highlight{
   background-color: var(--green);
@@ -78,74 +81,8 @@ export default {
   -ms-overflow-style: none;  /* IE 10+ */
 }
 .work-list-radio-mobile{
-  /*height: calc(100vh - 314px);*/
   background-color: var(--medium-gray);
   height: calc(var(--vh, 1vh) * 100 - 405px);
   overflow-y: scroll;
 }
-
-/* Text sizing for mobile */
->>> h6{
-  font-size: 16px !important;
-}
->>> input{
-  font-size: 16px !important;
-}
->>> .performer-search{
-  height: 34.4px !important;
-}
->>> .card{
-  margin-bottom: 0px !important;
-}
->>> .heading-text{
-  font-size: 16px !important;
-}
->>> .form-control-sm{
-  font-size: 16px !important;
-}
->>> .vs__selected{
-  font-size: 16px !important;
-}
->>> .vs__search{
-  font-size: 16px !important;
-}
->>> .style-chooser {
-  font-size: 16px !important;
-}
->>> .performer-search {
-  font-size: 16px !important;
-}
->>> .performer-search >>> {
-  font-size: 16px !important;
-  --vs-font-size: 16px;
-}
->>> .btn{
-  font-size: 16px !important;
-}
->>> .cursor span{
-  font-size: 16px !important;
-}
->>> .works-table span{
-  font-size: 16px !important;
-}
->>> .works-table .heart-number span{
-  font-size: 12px !important;
-}
->>> .album_text_columns span{
-  font-size: 14px !important;
-}
->>> .album_text_columns .album-likes-class .likes span{
-  font-size: 12px !important;
-}
->>> .album_text_columns .album-likes-class .user-liked span{
-  font-size: 14px !important;
-}
->>> .album_text_columns .label{
-  font-size: 12px !important;
-}
->>> .album-titles {
-  font-size: 14px !important;
-}
-
-
 </style>
