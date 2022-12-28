@@ -145,80 +145,64 @@ export default {
 </style>
 
 <style scoped>
-
-  >>> .card{
-    color: var(--dark-gray);
-  }
-  >>> .composer-card{
-    margin-left: -15px;
-    margin-right: -10px;
-  }
-  >>> .work-card{
-    margin-left: -15px;
-    margin-right: -10px;
-  }
-  >>> .albums-card{
-    margin-left: -15px;
-    margin-right: -10px;
-    padding-top: 8.5px !important;
-  }
-/* .playback-container{
-    padding: 13px;
-    padding-top: 3px !important;
-    padding-bottom: 0px;
-    font-size: 14px;
-  }*/
-  .heading-text{
-    padding-left: 20px;
-    font-weight: 500;
-  }
-  .heading-card{
-    background: var(--medium-gray) !important;
-    padding-top:  10px;
-    padding-right: 5px;
-    margin-right: -15px;
-    border-radius: 0px;
-  }
-  .card-body{
-    background: var(--medium-gray) !important;
-    padding: 0px !important;
-  }
-
-  .btn-secondary{
-    background-color: var(--dark-gray) !important;
-    text-align: middle;
-  }
-/*  .btn-secondary:hover{
-    background-color: #717579 !important;
-  }*/
-
-  .btn.disabled, .btn:disabled {
-    opacity: 1;
+>>> .card{
+  color: var(--dark-gray);
 }
-
-  .card-header{
-    border: 0px !important;
-  }
-  .btn{
-    border:  0px;
-  }
-  .header-button{
-    border-radius: 0px !important;
-    border-top: solid 2px var(--medium-gray) !important;
-      outline: none !important;
-      box-shadow: none !important;
-  }
-  .last-button{
-/*    border-bottom: solid 2px var(--medium-gray) !important;*/
-  }
-  .p-1{
-    padding: 0px !important;
-    border-radius: 0px !important;
-  }
-  .mb-1{
-    border: none;
-    margin: 0px !important;
-  }
+>>> .composer-card{
+  margin-left: -15px;
+  margin-right: -10px;
+}
+>>> .work-card{
+  margin-left: -15px;
+  margin-right: -10px;
+}
+>>> .albums-card{
+  margin-left: -15px;
+  margin-right: -10px;
+  padding-top: 8.5px !important;
+}
+.heading-text{
+  padding-left: 20px;
+  font-weight: 500;
+}
+.heading-card{
+  background: var(--medium-gray) !important;
+  padding-top:  10px;
+  padding-right: 5px;
+  margin-right: -15px;
+  border-radius: 0px;
+}
+.card-body{
+  background: var(--medium-gray) !important;
+  padding: 0px !important;
+}
+.btn-secondary{
+  background-color: var(--dark-gray) !important;
+  text-align: middle;
+}
+.btn.disabled, .btn:disabled {
+  opacity: 1;
+}
+.card-header{
+  border: 0px !important;
+}
+.btn{
+  border:  0px;
+}
+.header-button{
+  border-radius: 0px !important;
+  border-top: solid 2px var(--medium-gray) !important;
+    outline: none !important;
+    box-shadow: none !important;
+}
+.p-1{
+  padding: 0px !important;
+  border-radius: 0px !important;
+}
+.mb-1{
+  border: none;
+  margin: 0px !important;
+}
 >>> .highlight{
   background-color: var(--blue);
 }
@@ -228,12 +212,10 @@ export default {
 >>> .music-note{
   color: var(--blue);
 }
-
 .disable-scrollbars::-webkit-scrollbar {
   background: transparent; /* Chrome/Safari/Webkit */
   width: 0px;
 }
-    
 .disable-scrollbars {
   scrollbar-width: none; /* Firefox */
   -ms-overflow-style: none;  /* IE 10+ */
