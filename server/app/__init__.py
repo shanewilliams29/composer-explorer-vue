@@ -9,6 +9,8 @@ from flask_moment import Moment
 from app.spotify import SpotifyAPI
 from flask_bootstrap import Bootstrap4
 from flask_migrate import Migrate
+from google.cloud import logging
+
 
 db = SQLAlchemy()
 login = LoginManager()
@@ -17,6 +19,7 @@ cache = Cache()
 moment = Moment()
 bootstrap = Bootstrap4()
 migrate = Migrate()
+log = logging.Client()
 sp = SpotifyAPI(Config.SPOTIFY_CLIENT_ID, Config.SPOTIFY_CLIENT_SECRET, Config.SPOTIFY_REDIRECT_URL)
 
 
@@ -49,6 +52,9 @@ def create_app(config_class=Config):
 
     from app.forum import bp as forum_bp
     app.register_blueprint(forum_bp)
+
+    from app.cron import bp as cron_bp
+    app.register_blueprint(cron_bp)
 
     return app
 

@@ -3,6 +3,7 @@ import six
 import base64
 import requests
 import urllib.parse
+from datetime import datetime, timedelta
 
 
 class SpotifyAPI(object):
@@ -83,4 +84,55 @@ class SpotifyAPI(object):
             'Authorization': 'Bearer {}'.format(session['spotify_token']),
         }
         response = requests.get('https://api.spotify.com/v1/me', headers=headers)
+        return response
+
+    def search(self, search_string):
+        headers = {
+            'Authorization': 'Bearer {}'.format(session['app_token']),
+        }
+        params = (
+            ('q', search_string),
+            ('type', 'track'),
+            ('limit', '50'),
+        )
+        response = requests.get('https://api.spotify.com/v1/search', headers=headers, params=params)
+        return response
+
+    def get_more_results(self, resultslist, nexturl, time, _id):
+        stoptime = datetime.now() + timedelta(seconds=time)
+        while nexturl and datetime.now() < stoptime:
+            headers = {
+                'Authorization': 'Bearer {}'.format(session['app_token']),
+            }
+            response = requests.get(nexturl, headers=headers)
+            results = response.json()
+            try:
+                nexturl = results['tracks']['next']
+            except:
+                if results['error']['status'] == 429:
+                    resultslist = "429"
+                    return resultslist
+                break
+            resultslist.append(results)
+        return resultslist
+
+    def get_album(self, albumid):
+        headers = {
+            'Authorization': 'Bearer {}'.format(session['app_token']),
+        }
+        response = requests.get('https://api.spotify.com/v1/albums/' + albumid, headers=headers)
+        return response
+
+    def get_albums(self, albumids):
+        headers = {
+            'Authorization': 'Bearer {}'.format(session['app_token']),
+        }
+        response = requests.get('https://api.spotify.com/v1/albums?ids=' + albumids, headers=headers)
+        return response
+
+    def get_more_album(self, url):
+        headers = {
+            'Authorization': 'Bearer {}'.format(session['app_token']),
+        }
+        response = requests.get(url, headers=headers)
         return response
