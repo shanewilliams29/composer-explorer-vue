@@ -2,6 +2,7 @@
 node_modules
 dist
 venv
+migrations
 cache
 __pycache__
 .gcloudignore

@@ -4,6 +4,7 @@ from app import db, login
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
 from dataclasses import dataclass
+from sqlalchemy.dialects.mysql import MEDIUMTEXT, LONGTEXT
 
 favorites = db.Table('favorites',
                      db.Column('composer_id', db.Integer, db.ForeignKey('composer_list.id')),
@@ -244,14 +245,14 @@ class WorkList(db.Model):
 class Spotify(db.Model):
     id = db.Column(db.String(24), primary_key=True)
     composer = db.Column(db.String(48))
-    results = db.Column(db.Text)
+    results = db.Column(MEDIUMTEXT)
     updated = db.Column(db.DateTime, default=datetime.utcnow)
 
 
 # Used in old site
 class ArtistAlbums(db.Model):
     id = db.Column(db.String(24), primary_key=True)
-    results = db.Column(db.Text)
+    results = db.Column(MEDIUMTEXT)
     artists = db.Column(db.Text)
     updated = db.Column(db.DateTime, default=datetime.utcnow)
 
@@ -277,7 +278,7 @@ class WorkAlbums(db.Model):
     composer = db.Column(db.String(255), db.ForeignKey('composer_list.name_short'))
     score = db.Column(db.Float)
     artists = db.Column(db.Text)
-    data = db.Column(db.Text)
+    data = db.Column(MEDIUMTEXT)
     hidden = db.Column(db.Boolean, default=False)
     filled = db.Column(db.Boolean, default=False)
     spotify_data = db.Column(db.Text)
@@ -372,5 +373,5 @@ class ComposerCron(db.Model):
 
 class ArtistList(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    content = db.Column(db.Text)
+    content = db.Column(LONGTEXT)
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
