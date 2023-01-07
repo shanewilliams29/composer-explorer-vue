@@ -307,7 +307,8 @@ def get_favoriteworks(name):
         user_id = None
 
     works_list = db.session.query(WorkList).join(WorkAlbums).join(AlbumLike)\
-        .filter(AlbumLike.user_id == user_id, WorkList.composer == name).all()
+        .filter(AlbumLike.user_id == user_id, WorkList.composer == name)\
+        .order_by(WorkList.order, WorkList.genre, WorkList.id).all()
 
     if not works_list:
         response_object = {'status': 'success'}
@@ -317,12 +318,12 @@ def get_favoriteworks(name):
 
     # generate works list
     liked_works_ids = [work.id for work in works_list]
-    works_by_genre = prepare_works(works_list, liked_works_ids)
+    works_by_genre, playlist = prepare_works(works_list, liked_works_ids)
 
     # return response
     response_object = {'status': 'success'}
     response_object['works'] = works_by_genre
-    response_object['playlist'] = works_list  # for back and previous playing
+    response_object['playlist'] = playlist  # for back and previous playing
     response = jsonify(response_object)
     return response
 
@@ -429,12 +430,12 @@ def get_radioworks():
             works_list = return_list
 
     # generate works list
-    works_by_genre = prepare_works(works_list, liked_works_ids)
+    works_by_genre, playlist = prepare_works(works_list, liked_works_ids)
 
     # return response
     response_object = {'status': 'success'}
     response_object['works'] = works_by_genre
-    response_object['playlist'] = works_list  # for back and previous playing
+    response_object['playlist'] = playlist  # for back and previous playing
     response = jsonify(response_object)
     return response
 
@@ -921,16 +922,16 @@ def get_artistworks():
     else:
         liked_albums = []
 
-    liked_works = []
+    liked_works_ids = []
     for album in liked_albums:
-        liked_works.append(album.workid)
+        liked_works_ids.append(album.workid)
 
     # generate works list
-    works_by_genre = prepare_works(works_list, liked_works)
+    works_by_genre, playlist = prepare_works(works_list, liked_works_ids)
 
     response_object = {'status': 'success'}
     response_object['works'] = works_by_genre
-    response_object['playlist'] = works_list
+    response_object['playlist'] = playlist
     response = jsonify(response_object)
     return response
 

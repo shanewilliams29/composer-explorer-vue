@@ -84,7 +84,7 @@ export const radioMixin = {
       }
       if (this.$view.radioPlaying) {
         this.$view.shuffle = true;
-        eventBus.$emit("fireNextWork");
+        eventBus.$emit("fireRandomWork");
       } else {
         spotify.pauseTrack(this.$auth.clientToken);
       }

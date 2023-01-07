@@ -80,6 +80,7 @@ export default {
       filterItem: null,
       radioPayload: {},
       playlist: [],
+      shufflePlaylist: [],
       loading: false,
       selectedWork: null,
       visibility: true,
@@ -121,6 +122,7 @@ export default {
         .then((res) => {
           this.works = res.data.works;
           this.playlist = res.data.playlist;
+          this.shufflePlaylist = [...this.playlist].sort((a, b) => a.shuffle - b.shuffle);
           this.visibility = true;
           this.loading = false;
           this.setGenre(this.$config.genre);
@@ -143,6 +145,7 @@ export default {
         .then((res) => {
           this.works = res.data.works;
           this.playlist = res.data.playlist;
+          this.shufflePlaylist = [...this.playlist].sort((a, b) => a.shuffle - b.shuffle);
           this.visibility = true;
           this.loading = false;
           this.setGenre(this.$config.genre);
@@ -320,6 +323,7 @@ export default {
             this.loading = false;
             this.works = res.data.works;
             this.playlist = res.data.playlist;
+            this.shufflePlaylist = [...this.playlist].sort((a, b) => a.shuffle - b.shuffle);
 
             // collapse cards if too many works and disable playlist export
             if (this.playlist.length > 300) {
@@ -402,6 +406,7 @@ export default {
         .then((res) => {
           this.works = res.data.works;
           this.playlist = res.data.playlist;
+          this.shufflePlaylist = [...this.playlist].sort((a, b) => a.shuffle - b.shuffle);
           this.visibility = true;
           this.loading = false;
         })
@@ -489,6 +494,7 @@ export default {
         .then((res) => {
           this.works = res.data.works;
           this.playlist = res.data.playlist;
+          this.shufflePlaylist = [...this.playlist].sort((a, b) => a.shuffle - b.shuffle);
           this.loading = false;
         })
         .catch((error) => {
@@ -519,6 +525,7 @@ export default {
         .then((res) => {
           this.works = res.data.works;
           this.playlist = res.data.playlist;
+          this.shufflePlaylist = [...this.playlist].sort((a, b) => a.shuffle - b.shuffle);
           this.visibility = true;
           this.loading = false;
         })
@@ -539,18 +546,28 @@ export default {
     nextWork() {
       eventBus.$emit("changeWork");
 
-      if (this.$view.shuffle) { //allows you to jump one work back
-        this.$config.previousWork = this.$config.work;
-        this.$config.previousGenre = this.$config.genre;
-        this.$config.previousWorkTitle = this.$config.workTitle;
-        this.playRandomWork();
+      if (this.$view.shuffle) {
+
+        for (var i = 0; i < this.shufflePlaylist.length; i++) {
+          if (this.shufflePlaylist[i]["id"] == this.selectedWork && i !== this.shufflePlaylist.length - 1) {
+            this.selectRow(this.shufflePlaylist[i + 1]["id"]);
+            this.setGenre(this.shufflePlaylist[i + 1]["genre"]);
+            this.getAlbumsAndPlay(this.shufflePlaylist[i + 1]["id"], this.shufflePlaylist[i + 1]["title"]);
+            break;
+          } else if (this.shufflePlaylist[i]["id"] == this.selectedWork && i === this.shufflePlaylist.length - 1){
+            this.selectRow(this.shufflePlaylist[0]["id"]);
+            this.setGenre(this.shufflePlaylist[0]["genre"]);
+            this.getAlbumsAndPlay(this.shufflePlaylist[0]["id"], this.shufflePlaylist[0]["title"]);
+            break;
+          }
+        }
 
       } else {
-        for (var i = 0; i < this.playlist.length; i++) {
-          if (this.playlist[i]["id"] == this.selectedWork && i !== this.playlist.length - 1) {
-            this.selectRow(this.playlist[i + 1]["id"]);
-            this.setGenre(this.playlist[i + 1]["genre"]);
-            this.getAlbumsAndPlay(this.playlist[i + 1]["id"], this.playlist[i + 1]["title"]);
+        for (var j = 0; j < this.playlist.length; j++) {
+          if (this.playlist[j]["id"] == this.selectedWork && j !== this.playlist.length - 1) {
+            this.selectRow(this.playlist[j + 1]["id"]);
+            this.setGenre(this.playlist[j + 1]["genre"]);
+            this.getAlbumsAndPlay(this.playlist[j + 1]["id"], this.playlist[j + 1]["title"]);
             break;
           }
         }
@@ -559,17 +576,27 @@ export default {
     previousWork() {
       eventBus.$emit("changeWork");
 
-      if (this.$view.shuffle) { //allows you to jump one work back
-        this.selectRow(this.$config.previousWork); 
-        this.setGenre(this.$config.previousGenre);
-        this.getAlbumsAndPlay(this.$config.previousWork, this.$config.previousWorkTitle);
+      if (this.$view.shuffle) {
+        for (var i = 0; i < this.shufflePlaylist.length; i++) {
+          if (this.shufflePlaylist[i]["id"] == this.selectedWork && i !== 0) {
+            this.selectRow(this.shufflePlaylist[i - 1]["id"]);
+            this.setGenre(this.shufflePlaylist[i - 1]["genre"]);
+            this.getAlbumsAndPlay(this.shufflePlaylist[i - 1]["id"], this.shufflePlaylist[i - 1]["title"]);
+            break;
+          } else if (this.shufflePlaylist[i]["id"] == this.selectedWork && i === 0){
+            this.selectRow(this.shufflePlaylist[this.shufflePlaylist.length - 1]["id"]);
+            this.setGenre(this.shufflePlaylist[this.shufflePlaylist.length - 1]["genre"]);
+            this.getAlbumsAndPlay(this.shufflePlaylist[this.shufflePlaylist.length - 1]["id"], this.shufflePlaylist[this.shufflePlaylist.length - 1]["title"]);
+            break;
+          }
+        }
 
       } else {
-        for (var i = 0; i < this.playlist.length; i++) {
-          if (this.playlist[i]["id"] == this.selectedWork && i !== 0) {
-            this.selectRow(this.playlist[i - 1]["id"]);
-            this.setGenre(this.playlist[i - 1]["genre"]);
-            this.getAlbumsAndPlay(this.playlist[i - 1]["id"], this.playlist[i - 1]["title"]);
+        for (var j = 0; j < this.playlist.length; j++) {
+          if (this.playlist[j]["id"] == this.selectedWork && j !== 0) {
+            this.selectRow(this.playlist[j - 1]["id"]);
+            this.setGenre(this.playlist[j - 1]["genre"]);
+            this.getAlbumsAndPlay(this.playlist[j - 1]["id"], this.playlist[j - 1]["title"]);
             break;
           }
         }
@@ -597,6 +624,7 @@ export default {
     eventBus.$on("clearWorksList", this.clearWorksList);
     eventBus.$on("requestWorksForRadio", this.getRadioWorks);
     eventBus.$on("fireNextWork", this.nextWork);
+    eventBus.$on("fireRandomWork", this.playRandomWork);
     eventBus.$on("firePreviousWork", this.previousWork);
     eventBus.$on("firePlaylistExport", this.preparePlaylist);
     eventBus.$on("fireRefreshWorks", this.refreshWorks);
@@ -611,6 +639,7 @@ export default {
     eventBus.$off("clearWorksList", this.clearWorksList);
     eventBus.$off("requestWorksForRadio", this.getRadioWorks);
     eventBus.$off("fireNextWork", this.nextWork);
+    eventBus.$off("fireRandomWork", this.playRandomWork);
     eventBus.$off("firePreviousWork", this.previousWork);
     eventBus.$off("firePlaylistExport", this.preparePlaylist);
     eventBus.$off("fireRefreshWorks", this.refreshWorks);
