@@ -5,6 +5,7 @@ from PIL import Image
 import io
 from flask import current_app
 from collections import defaultdict
+import random
 
 
 def prepare_composers(composer_list):
@@ -70,11 +71,14 @@ def group_composers_by_alphabet(COMPOSERS):
 
 def prepare_works(works_list, liked_list):
     WORKS = []
+    PLAYLIST = []
+    
     i = 0
     for work in works_list:
 
         info = {
             'index': i,
+            'shuffle': random.randint(0, 1000),
             'id': work.id,
             'composer': work.composer,
             'genre': work.genre,
@@ -92,6 +96,7 @@ def prepare_works(works_list, liked_list):
             info['liked'] = None
 
         WORKS.append(info)
+        PLAYLIST.append(info)
         i += 1
 
     # group onto genres
@@ -101,7 +106,7 @@ def prepare_works(works_list, liked_list):
         genre = work['genre']
         works_by_genre[genre].append(work)
 
-    return works_by_genre
+    return works_by_genre, PLAYLIST
 
 
 def get_avatar(username, imgurl):

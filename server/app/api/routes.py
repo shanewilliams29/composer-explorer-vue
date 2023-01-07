@@ -285,12 +285,12 @@ def get_works(name):
         liked_works_ids.append(item)
 
     # generate works list for JSON response
-    works_by_genre = prepare_works(works_list, liked_works_ids)
+    works_by_genre, playlist = prepare_works(works_list, liked_works_ids)
 
     # return response
     response_object = {'status': 'success'}
     response_object['works'] = works_by_genre  # for display
-    response_object['playlist'] = works_list  # for back and previous playing
+    response_object['playlist'] = playlist  # for back and previous playing
     response = jsonify(response_object)
     return response
 
