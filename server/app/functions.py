@@ -112,7 +112,7 @@ def get_avatar(username, imgurl):
         return "Error: Invalid URL specified.", 403
     try:
         filetype = response.headers['content-type']
-        filesize = float(response.headers['content-length']) / 5242880
+        filesize = float(response.headers['content-length']) / 1048576
     except:
         return "Error: Invalid image link.", 403
 
@@ -120,7 +120,7 @@ def get_avatar(username, imgurl):
         return "Error: Link is not to a .jpg or .png file", 403
 
     if filesize > 5:
-        return "Error: Image size is too large. Max size is 5 MB.", 403
+        return "Error: Image file size is too large. Max size is 5 MB.", 403
 
     client = storage.Client(project='composer-explorer')
     bucket = client.get_bucket('composer-explorer.appspot.com')
@@ -145,11 +145,12 @@ def upload_avatar(username, file):
     client = storage.Client(project='composer-explorer')
     bucket = client.get_bucket('composer-explorer.appspot.com')
     blob = bucket.blob('avatars/{}.jpg'.format(username))
-
+    
     try:
         image = Image.open(file)
     except:
         return "Error: Invalid or no image file specified.", 403
+
     image.thumbnail((200, 200))
     image = image.convert('RGB')
 

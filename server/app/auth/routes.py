@@ -218,6 +218,12 @@ def change_avatar():
                            form=form)
 
 
+@bp.app_errorhandler(413)
+def request_entity_too_large(error):
+    flash("Error: Image file size is too large. Max size is 5 MB.", 'danger')
+    return redirect(url_for('auth.change_avatar'))
+
+
 @bp.route('/change_display_name', methods=['GET', 'POST'])
 @login_required
 def change_display_name():
