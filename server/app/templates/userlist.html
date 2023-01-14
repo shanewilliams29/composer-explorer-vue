@@ -61,11 +61,13 @@ body {
       </td>
       <td style="vertical-align: middle;">
         <b>{{ user.display_name }}</b>
-        {% if user.admin %}<span style="color: goldenrod;">Admin</span>{% endif %} {% if user.last_seen %} {% if user.last_seen > onlinecheck %} <span style="color: green;"><b>⚫ Online</b></span><br />
-        {% endif %} {% else %}
+        {% if user.admin %}<span style="color: goldenrod;">Admin</span>{% endif %} 
+        {% if user.last_seen %} 
+          {% if user.last_seen > onlinecheck %} <span style="color: green;"><b>⚫ Online</b></span><br />
+        {% else %}
         <br />
         Last seen {{ moment(user.last_seen).fromNow()}}<br />
-        {% endif %} {% endif %}
+        {% endif %}{% endif %} 
       </td>
     </tr>
   </table>
