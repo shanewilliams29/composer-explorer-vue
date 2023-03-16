@@ -16,6 +16,10 @@ def forum():
     posts = db.session.query(func.count(ForumComment.id)).outerjoin(ForumPost).group_by(ForumPost.subforum_id).all()
     num_posts = [value for (value,) in posts]
 
+    if current_user.is_authenticated:
+        current_user.last_message_read_time = datetime.datetime.utcnow()
+        db.session.commit()
+
     i = 0
     for subforum in subforums:
         try:

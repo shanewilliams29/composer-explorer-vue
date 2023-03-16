@@ -15,7 +15,7 @@
             <b-nav-item id="performer" :active='$route.name == "performers"' @click="$router.push('/performers')"><b-icon-person-lines-fill></b-icon-person-lines-fill>&nbsp;&nbsp;Performers</b-nav-item>
             <b-nav-item v-if="$auth.clientToken" id="favorites" :active='$route.name == "favorites"' @click="$router.push('/favorites')"> <b-icon-heart></b-icon-heart>&nbsp;&nbsp;Favorites</b-nav-item>
             <b-nav-item id="radio" :active='$route.name == "radio"' @click="$router.push('/radio')"> <img :src="radioImgURL" class="radio-img" height="22px" />&nbsp;&nbsp;Radio</b-nav-item>
-            <b-nav-item id="forum" href="/forum" target="_blank"> <b-icon-chat-right-text></b-icon-chat-right-text>&nbsp;&nbsp;Forum</b-nav-item>
+            <b-nav-item id="forum" href="/forum" target="_blank"> <b-icon-chat-right-text></b-icon-chat-right-text>&nbsp;&nbsp;Forum&nbsp;<b-badge>{{ unreadPosts }}</b-badge></b-nav-item>
           </b-nav>
         </div>
 
@@ -98,6 +98,7 @@
 
 <script>
 import {baseURL, staticURL} from "@/main.js";
+import axios from "axios";
 
 export default {
   name: 'NavBar',
@@ -106,7 +107,8 @@ export default {
       radioImgURL: staticURL + 'radio.svg',
       spotifyLogoURL: staticURL + 'Spotify_Logo_RGB_White.png',
       logoURL: staticURL + 'logo.png',
-      spotifyURL: baseURL + "connect_spotify"
+      spotifyURL: baseURL + "connect_spotify",
+      unreadPosts: null
     };
   },
   methods: {
@@ -131,11 +133,24 @@ export default {
         variant: 'warning',
         autoHideDelay: 3600000
       })
-    }
+    },
+    getUnreadPosts() {
+      this.loading = true;
+      const path = "api/userdata";
+      axios
+        .get(path)
+        .then((res) => {
+          this.unreadPosts = res.data.new_posts;
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    },
   },
   created(){
     var apple = this.iOS();
     var userAgent = window.navigator.userAgent.toLowerCase();
+    this.getUnreadPosts();
 
     if (userAgent.includes('wv')) { // Webview (App)
       this.$view.avatar = false;

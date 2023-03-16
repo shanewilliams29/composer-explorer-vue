@@ -112,6 +112,14 @@ class User(UserMixin, db.Model):
         return Message.query.filter_by(recipient=self).filter(
             Message.timestamp > last_read_time).count()
 
+    def new_posts(self):
+        last_read_time = self.last_message_read_time or datetime(1900, 1, 1)
+        post_count = ForumPost.query.filter(
+            ForumPost.postdate > last_read_time, ForumPost.subforum_id != 10).count()
+        comment_count = db.session.query(ForumComment).join(ForumPost).filter(
+            ForumComment.postdate > last_read_time, ForumPost.subforum_id != 10).count()
+        return post_count + comment_count
+
     def view_post(self, post):
         view = Views.query.filter(Views.user_id == self.id, Views.post_id == post.id).first()
         if view:

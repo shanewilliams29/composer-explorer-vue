@@ -13,6 +13,21 @@ import json
 import random
 import re
 
+@bp.route('/api/userdata', methods=['GET'])  # main composer list
+def get_userdata():
+    if current_user.is_authenticated:
+        new_posts = current_user.new_posts()
+    elif Config.MODE == 'DEVELOPMENT':
+        user_id = 85  # 85
+        user = db.session.query(User).filter_by(id=user_id).first()
+        new_posts = user.new_posts()
+    else:
+        new_posts = None
+
+    response_object = {'status': 'success'}
+    response_object['new_posts'] = new_posts
+    response = jsonify(response_object)
+    return response
 
 @bp.route('/api/composers', methods=['GET'])  # main composer list
 # @cache.cached(query_string=True)
