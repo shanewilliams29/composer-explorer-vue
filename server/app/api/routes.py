@@ -17,6 +17,8 @@ import re
 def get_userdata():
     if current_user.is_authenticated:
         new_posts = current_user.new_posts()
+        if new_posts < 1:
+            new_posts = None
     elif Config.MODE == 'DEVELOPMENT':
         user_id = 85  # 85
         user = db.session.query(User).filter_by(id=user_id).first()
