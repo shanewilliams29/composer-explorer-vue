@@ -111,6 +111,16 @@ export default {
       unreadPosts: null
     };
   },
+  computed: {
+    clientToken() {
+      return this.$auth.clientToken;
+    },
+  },
+  watch: {
+    clientToken() {
+      this.getUnreadPosts()
+    },
+  },
   methods: {
     iOS() {
       return [
@@ -135,22 +145,23 @@ export default {
       })
     },
     getUnreadPosts() {
-      this.loading = true;
-      const path = "api/userdata";
-      axios
-        .get(path)
-        .then((res) => {
-          this.unreadPosts = res.data.new_posts;
-        })
-        .catch((error) => {
-          console.error(error);
-        });
+      if(this.$auth.clientToken){
+        const path = "api/userdata";
+        axios
+          .get(path)
+          .then((res) => {
+            this.unreadPosts = res.data.new_posts;
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+        }
     },
   },
   created(){
     var apple = this.iOS();
     var userAgent = window.navigator.userAgent.toLowerCase();
-    this.getUnreadPosts();
+    //this.getUnreadPosts();
 
     if (userAgent.includes('wv')) { // Webview (App)
       this.$view.avatar = false;
@@ -160,7 +171,11 @@ export default {
         this.makeToast();
       }
     }
-  }
+  },
+  mounted() {
+    // Periodically checks for new forum posts
+    setInterval(this.getUnreadPosts, 10000);
+  },
 }
 </script>
 
