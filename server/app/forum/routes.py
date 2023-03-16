@@ -50,6 +50,10 @@ def forum():
 @ bp.route('/subforum/<subforum_id>')
 def subforum(subforum_id):
 
+    if current_user.is_authenticated:
+        current_user.last_message_read_time = datetime.datetime.utcnow()
+        db.session.commit()
+
     page = int(request.args.get("page", 1))
     subforum = Subforum.query.filter(Subforum.id == subforum_id).first_or_404()
     posts = db.session.query(ForumPost).filter(ForumPost.subforum_id == subforum_id).order_by(ForumPost.last_comment_date.desc()).paginate(page, 20, False)
@@ -72,6 +76,10 @@ def addpost():
 
 @ bp.route('/viewpost/<post_id>')
 def viewpost(post_id):
+    if current_user.is_authenticated:
+        current_user.last_message_read_time = datetime.datetime.utcnow()
+        db.session.commit()
+        
     page = int(request.args.get("page", 1))
     post = ForumPost.query.filter(ForumPost.id == post_id).first()
     if not post:

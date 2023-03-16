@@ -21,6 +21,8 @@ def get_userdata():
         user_id = 85  # 85
         user = db.session.query(User).filter_by(id=user_id).first()
         new_posts = user.new_posts()
+        if new_posts < 1:
+            new_posts = None
     else:
         new_posts = None
 
