@@ -56,11 +56,6 @@ def login():
     except Exception:
         abort(403)
 
-    if info['product'] == "premium":
-        session['premium'] = True
-    else:
-        session['premium'] = False
-
     user = User.query.filter_by(username=username).first()
     if user is None:
         display_name = info['display_name']
@@ -80,12 +75,18 @@ def login():
                     display_name=display_name, 
                     img=image, 
                     country=info['country'],
-                    product=info['product'])
+                    product=info['product'],
+                    refresh_token=session['refresh_token'])
         user.set_password(username)
         db.session.add(user)
         db.session.commit()
-        login_user(user)
-    login_user(user)
+        login_user(user, remember=True, duration=timedelta(days=30))
+
+    user.product = info['product']
+    user.refresh_token = session['refresh_token']
+    db.session.commit()
+
+    login_user(user, remember=True, duration=timedelta(days=30))
 
     if Config.MODE == "DEVELOPMENT":
         cache.set('token', session['spotify_token'])  # store in cache for dev
@@ -117,28 +118,36 @@ def log_out():
 @bp.route('/api/get_token')
 def get_token():
 
-    if session['spotify_token'] or session['app_token']:
+    if current_user.is_authenticated:
+        session['refresh_token'] = current_user.refresh_token
+    else:
+        session['refresh_token'] = None
+    
+    if session['refresh_token'] or session['app_token']:
 
         # token expiry and refresh
         if session['app_token_expire_time'] < datetime.now((timezone.utc)):
             session['app_token'] = sp.client_authorize()
             session['app_token_expire_time'] = ((datetime.now((timezone.utc)) 
                                                 + timedelta(minutes=0)))  # always get new token when called
-        if session['spotify_token']:
-            if session['spotify_token_expire_time'] \
-                    < datetime.now((timezone.utc)):
-                session['spotify_token'] = sp.refresh_token()
-                session['spotify_token_expire_time'] \
-                    = datetime.now((timezone.utc)) + timedelta(minutes=0)  # always get new token when called
+        if session['refresh_token']:
+            # if session['spotify_token_expire_time'] \
+            #         < datetime.now((timezone.utc)):
+            session['spotify_token'] = sp.refresh_token()
+            session['spotify_token_expire_time'] \
+                = datetime.now((timezone.utc)) + timedelta(minutes=0)  # always get new token when called
 
         response_object = {'status': 'success'}
         response_object['client_token'] = session['spotify_token']
         response_object['app_token'] = session['app_token']
         response_object['knowledge_api'] = Config.GOOGLE_KNOWLEDGE_GRAPH_API_KEY
         if current_user.is_authenticated:
+            if current_user.product =="premium":
+                response_object['premium'] = True
+            else:
+                response_object['premium'] = False
             response_object['user_id'] = current_user.username
             response_object['display_name'] = current_user.display_name
-            response_object['premium'] = session['premium']
             response_object['avatar'] = current_user.avatar(140)
             response_object['patreon'] = current_user.patreon
         else:

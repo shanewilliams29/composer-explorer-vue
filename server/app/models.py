@@ -44,6 +44,7 @@ class User(UserMixin, db.Model):
                                         foreign_keys='Message.recipient_id',
                                         backref='recipient', lazy='dynamic')
     last_message_read_time = db.Column(db.DateTime)
+    refresh_token = db.Column(db.String(1024))
 
     def __repr__(self):
         return '<User {}>'.format(self.username)
