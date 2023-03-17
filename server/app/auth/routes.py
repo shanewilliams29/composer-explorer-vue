@@ -1,5 +1,5 @@
 from app import db, sp, cache
-from flask import jsonify, request, redirect, session, render_template, abort, flash, url_for
+from flask import jsonify, request, redirect, session, render_template, abort, flash, url_for, Response
 from flask_login import login_user, logout_user, current_user, login_required
 from config import Config
 from app.functions import get_avatar, upload_avatar
@@ -8,6 +8,7 @@ from app.models import User
 from app.classes import ChangeAvatar, EditProfileForm
 from datetime import datetime, timedelta, timezone
 import random
+import json
 
 
 @bp.route('/connect_spotify')
@@ -116,6 +117,10 @@ def log_out():
 @bp.route('/api/get_token')
 def get_token():
     session['app_token'] = sp.client_authorize()
+    if session['app_token'] == "INVALID":
+        msg = "Error with Spotify app token authorization"
+        error = json.dumps({'error': msg})
+        return Response(error, status=400, mimetype='application/json')
 
     if current_user.is_authenticated:
         session['refresh_token'] = current_user.refresh_token
@@ -125,13 +130,9 @@ def get_token():
         session['spotify_token'] = None
 
     if session['spotify_token'] == "INVALID":
-        response_object = {
-            'status': 'error',
-            'info': 'Problem with token, Spotify not authorized.'
-        }
-        response = jsonify(response_object)
-        response.headers.add('Access-Control-Allow-Credentials', 'true')
-        return response        
+        msg = "Error with Spotify client token authorization"
+        error = json.dumps({'error': msg})
+        return Response(error, status=400, mimetype='application/json')
 
     response_object = {'status': 'success'}
     response_object['app_token'] = session['app_token']

@@ -143,10 +143,11 @@ export default {
             }
           })
           .catch((error) => {
+            console.error(error);
             this.$auth.appToken = null;
             this.$auth.clientToken = null;
             this.$auth.patreon = true;
-            console.error(error);
+            this.$view.banner = true;
             this.$view.showConnecting = false;
           });
       };
