@@ -42,8 +42,6 @@ def login():
 
     session['spotify_token'] = response.json()['access_token']
     session['refresh_token'] = response.json()['refresh_token']
-    session['spotify_token_expire_time'] = (datetime.now((timezone.utc)) 
-                                            + timedelta(minutes=0))  # always get new token when called
 
     response = sp.get_user()
     try:
@@ -117,46 +115,48 @@ def log_out():
 
 @bp.route('/api/get_token')
 def get_token():
+    session['app_token'] = sp.client_authorize()
 
     if current_user.is_authenticated:
         session['refresh_token'] = current_user.refresh_token
+        session['spotify_token'] = sp.refresh_token()
     else:
         session['refresh_token'] = None
-    
-    if session['refresh_token'] or session['app_token']:
+        session['spotify_token'] = None
 
-        # token expiry and refresh
-        if session['app_token_expire_time'] < datetime.now((timezone.utc)):
-            session['app_token'] = sp.client_authorize()
-            session['app_token_expire_time'] = ((datetime.now((timezone.utc)) 
-                                                + timedelta(minutes=0)))  # always get new token when called
-        if session['refresh_token']:
-            # if session['spotify_token_expire_time'] \
-            #         < datetime.now((timezone.utc)):
-            session['spotify_token'] = sp.refresh_token()
-            session['spotify_token_expire_time'] \
-                = datetime.now((timezone.utc)) + timedelta(minutes=0)  # always get new token when called
-
-        response_object = {'status': 'success'}
-        response_object['client_token'] = session['spotify_token']
-        response_object['app_token'] = session['app_token']
-        response_object['knowledge_api'] = Config.GOOGLE_KNOWLEDGE_GRAPH_API_KEY
-        if current_user.is_authenticated:
-            if current_user.product =="premium":
-                response_object['premium'] = True
-            else:
-                response_object['premium'] = False
-            response_object['user_id'] = current_user.username
-            response_object['display_name'] = current_user.display_name
-            response_object['avatar'] = current_user.avatar(140)
-            response_object['patreon'] = current_user.patreon
-        else:
-            response_object['user_id'] = None
-            response_object['premium'] = False
-            response_object['avatar'] = None
+    if session['spotify_token'] == "INVALID":
+        response_object = {
+            'status': 'error',
+            'info': 'Problem with token, Spotify not authorized.'
+        }
         response = jsonify(response_object)
         response.headers.add('Access-Control-Allow-Credentials', 'true')
-        return response
+        return response        
+
+    response_object = {'status': 'success'}
+    response_object['app_token'] = session['app_token']
+    response_object['client_token'] = session['spotify_token']
+    response_object['knowledge_api'] = Config.GOOGLE_KNOWLEDGE_GRAPH_API_KEY
+
+    if current_user.is_authenticated:
+        if current_user.product =="premium":
+            response_object['premium'] = True
+        else:
+            response_object['premium'] = False
+
+        response_object['user_id'] = current_user.username
+        response_object['display_name'] = current_user.display_name
+        response_object['avatar'] = current_user.avatar(140)
+        response_object['patreon'] = current_user.patreon
+    else:
+        response_object['user_id'] = None
+        response_object['display_name'] = None
+        response_object['premium'] = False
+        response_object['avatar'] = None
+        response_object['patreon'] = False
+    response = jsonify(response_object)
+    response.headers.add('Access-Control-Allow-Credentials', 'true')
+    return response
 
     response_object = {
         'status': 'error',
