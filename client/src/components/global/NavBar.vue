@@ -174,7 +174,7 @@ export default {
   },
   mounted() {
     // Periodically checks for new forum posts
-    setInterval(this.getUnreadPosts, 10000);
+    setInterval(this.getUnreadPosts, 60000);
   },
 }
 </script>
