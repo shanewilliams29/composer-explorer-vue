@@ -5,6 +5,7 @@ venv
 migrations
 cache
 scripts
+misc
 __pycache__
 .gcloudignore
 app.yaml
