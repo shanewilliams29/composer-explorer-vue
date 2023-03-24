@@ -34,7 +34,7 @@ class User(UserMixin, db.Model):
     product = db.Column(db.String(64))
     forum_posts = db.relationship("ForumPost", backref="user", lazy='dynamic')
     forum_comments = db.relationship("ForumComment", backref="user", lazy='dynamic')
-    favorited = db.relationship("ComposerList", secondary=favorites, lazy='dynamic')
+    favorited = db.relationship("ComposerList", secondary=favorites, back_populates="favorites", lazy='dynamic')
     visited = db.relationship("WorkList", secondary=visits, backref='user', lazy='dynamic')
     liked = db.relationship('AlbumLike', foreign_keys='AlbumLike.user_id', backref='user', lazy='dynamic')
     messages_sent = db.relationship('Message',
@@ -211,7 +211,7 @@ class ComposerList(db.Model):
     general = db.Column(db.Boolean)
     view = db.Column(db.Integer)
     preview_music = db.Column(db.String(255))
-    favorites = db.relationship("User", secondary=favorites, lazy='dynamic')
+    favorites = db.relationship("User", secondary=favorites, back_populates="favorited", lazy='dynamic')
 
     def __repr__(self):
         return '<Composer {}>'.format(self.name_full)
@@ -245,7 +245,7 @@ class WorkList(db.Model):
     date = db.Column(db.Integer)
     openopus = db.Column(db.Boolean)
     album_count = db.Column(db.Integer)
-    albums = db.relationship("WorkAlbums", lazy='dynamic')
+    albums = db.relationship("WorkAlbums", back_populates="work", lazy='dynamic')
 
     def __repr__(self):
         return '<{}>'.format(self.title)
@@ -298,7 +298,7 @@ class WorkAlbums(db.Model):
     work_track_count = db.Column(db.Integer)
     album_type = db.Column(db.String(255))
     likes = db.relationship('AlbumLike', backref='album', lazy='dynamic', passive_deletes=True)
-    work = db.relationship("WorkList")
+    work = db.relationship("WorkList", back_populates="albums")
 
     def __repr__(self):
         return '<{}>'.format(self.id)
