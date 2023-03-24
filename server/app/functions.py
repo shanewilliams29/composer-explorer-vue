@@ -1,5 +1,5 @@
 import json
-from google.cloud import storage
+from app import storage_client
 import requests
 from PIL import Image
 import io
@@ -127,7 +127,7 @@ def get_avatar(username, imgurl):
     if filesize > 5:
         return "Error: Image file size is too large. Max size is 5 MB.", 403
 
-    client = storage.Client(project='composer-explorer')
+    client = storage_client
     bucket = client.get_bucket('composer-explorer.appspot.com')
     blob = bucket.blob('avatars/{}.jpg'.format(username))
 
@@ -147,7 +147,7 @@ def get_avatar(username, imgurl):
 
 def upload_avatar(username, file):
 
-    client = storage.Client(project='composer-explorer')
+    client = storage_client
     bucket = client.get_bucket('composer-explorer.appspot.com')
     blob = bucket.blob('avatars/{}.jpg'.format(username))
     

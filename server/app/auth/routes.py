@@ -6,7 +6,7 @@ from app.functions import get_avatar, upload_avatar
 from app.auth import bp
 from app.models import User
 from app.classes import ChangeAvatar, EditProfileForm
-from datetime import datetime, timedelta, timezone
+from datetime import timedelta
 import random
 import json
 

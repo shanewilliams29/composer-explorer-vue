@@ -368,7 +368,6 @@ class ForumComment(db.Model):
         self.postdate = postdate
 
 
-#  used in old site
 class Views(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))

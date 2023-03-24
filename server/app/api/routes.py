@@ -1,4 +1,4 @@
-from app import db, sp, cache
+from app import db, sp, cache, storage_client
 from flask import jsonify, request, session, abort, current_app
 from flask_login import current_user, login_required
 from config import Config
@@ -9,6 +9,7 @@ from app.models import ArtistList, User
 from sqlalchemy import func, text, or_, and_
 from app.api import bp
 from unidecode import unidecode
+from google.cloud import storage
 import json
 import random
 import re
@@ -822,17 +823,27 @@ def get_composerinfo(composer):
 
 
 @bp.route('/api/workinfo/<work_id>', methods=['GET'])
-@cache.cached(query_string=True)
+# @cache.cached(query_string=True)
 def get_workinfo(work_id):
     work = db.session.query(WorkList)\
         .filter(WorkList.id == work_id).first()
 
     if work.genre == "Opera" or work.genre == "Stage Work" or work.genre == "Ballet":
-        work.search = current_app.config['STATIC'] + 'headers/' + work.title + '.jpg'  # use for image
+        file_name = 'headers/' + work.title + '.jpg'  # use for image
     elif "piano concerto" in work.title.lower():
-        work.search = current_app.config['STATIC'] + 'headers/' + 'pianoconcerto' + '.jpg'
+        file_name = 'headers/' + 'pianoconcerto' + '.jpg'
     else:
-        work.search = current_app.config['STATIC'] + 'headers/' + work.genre.split()[0] + '.jpg'  # use for image
+        file_name = 'headers/' + work.genre.split()[0] + '.jpg'  # use for image
+
+    def file_exists():
+        bucket = storage_client.get_bucket('composer-explorer.appspot.com')
+        blob = bucket.blob(file_name)
+        return blob.exists()
+
+    if file_exists():
+        work.search = current_app.config['STATIC'] + file_name
+    else:
+        work.search = current_app.config['STATIC'] + 'headers/' + 'Orchestral' + '.jpg'
 
     response_object = {'status': 'success'}
     response_object['info'] = work
