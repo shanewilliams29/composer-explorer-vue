@@ -52,8 +52,6 @@ def omnisearch():
         except ValueError:
             search_words.append(item)
 
-    print(search_words)
-    print(search_nums)
     # first search for composers if search term is present
     # create the base query
 
@@ -74,16 +72,14 @@ def omnisearch():
         composers = prepare_composers(composer_list)
 
     # search for works
-    if len(composers) == 1:
-        works_list = WorkList.query.filter_by(composer=composers[0]['name_short']).order_by(WorkList.album_count.desc()).all()
-    else:
-        works_list = WorkList.query.order_by(WorkList.album_count.desc()).all()
+    # if len(composers) == 1:
+    #     works_list = WorkList.query.filter_by(composer=composers[0]['name_short']).order_by(WorkList.album_count.desc()).all()
+    works_list = WorkList.query.order_by(WorkList.album_count.desc()).all()
     
     return_works = []
     i = 0
     for work in works_list:
         search_string = str(work.composer) + str(work.genre) + str(work.cat) + str(work.suite) + str(work.title) + str(work.nickname) + str(work.search)
-        print(search_string)
         j = 0
         for word in search_words:
             if word.lower() in unidecode(search_string.lower()):
@@ -93,7 +89,6 @@ def omnisearch():
             match = re.search(pattern, search_string)
             if match:
                 j += 1
-        # print(search_string + " - " + str(j))
         if j == len(search_terms):
             return_works.append(work)
             i += 1

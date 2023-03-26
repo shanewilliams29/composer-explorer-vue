@@ -20,7 +20,7 @@
         </div>
 
           <b-navbar-nav class="search-nav">
-            <b-form-input class="omnisearch" v-model="omniSearchInput" v-debounce="omniSearch" type="search" placeholder="Search composers, works, performers" autocomplete="off"></b-form-input>
+            <b-form-input class="omnisearch" v-model="omniSearchInput" v-debounce:1000ms="omniSearch" type="search" placeholder="Search composers, works, performers" autocomplete="off"></b-form-input>
           </b-navbar-nav>
 
         <b-navbar-nav class="ml-auto" v-if="!$auth.clientToken">
@@ -54,11 +54,12 @@
       </b-navbar>
     </div>
 
-    <div id="search-results" v-if="viewSearchResults">
+    <div id="search-results" v-show="viewSearchResults">
       <b-card class="album-info-card shadow-sm">
-        <!-- <h6 v-if="composers.length == 0">No search results.</h6> -->
+
+        <b-card-body id="composers" class="card-body">
+        <h6 v-if="composers.length + works.length + results.length == 0">No search results.</h6>
         <h6 v-if="composers.length > 0">Composers</h6>
-        <b-card-body class="card-body">
           <b-card-text class="info-card-text">
             <div v-for="composer in composers" :key="composer['id']">
               <table>
@@ -75,8 +76,9 @@
             </div>
           </b-card-text>
         </b-card-body>
+
+        <b-card-body id="works" class="card-body">
         <h6 v-if="works.length > 0">Works</h6>
-        <b-card-body class="card-body">
           <b-card-text class="info-card-text">
             <div v-for="work in works" :key="work['id']">
               <table>
@@ -95,8 +97,9 @@
             </div>
           </b-card-text>
         </b-card-body>
+
+        <b-card-body id="performers" class="card-body">
         <h6 v-if="results.length > 0">Performers</h6>
-        <b-card-body class="card-body">
           <b-card-text class="info-card-text">
             <div v-for="result in results" :key="result[0]">
               <table>
@@ -251,6 +254,13 @@ export default {
     },
     getOmniSearch(item) {
       const path = "api/omnisearch?search=" + item;
+      
+      let wordsArray = item.split(" ");
+      let worksFirst = false;
+      if(wordsArray.length > 1){
+        worksFirst = true;
+      }
+
       axios
         .get(path)
         .then((res) => {
@@ -260,7 +270,21 @@ export default {
           this.results = [];
           this.artists.forEach((element) => getPeopleInfoFromGoogle(element, this.results, this.$auth.knowledgeKey));
           // Object.keys(this.artists).forEach((key) => getPeopleInfoFromGoogle(this.artists[key]['name'], this.results, this.$auth.knowledgeKey));
+
           this.viewSearchResults = true;
+
+          var content = "";
+          var parent = "";
+
+          if (worksFirst){
+            content = document.getElementById('works');
+            parent = content.parentNode;
+            parent.insertBefore(content, parent.firstChild);
+          } else {
+            content = document.getElementById('composers');
+            parent = content.parentNode;
+            parent.insertBefore(content, parent.firstChild);
+          }
         })
         .catch((error) => {
           // eslint-disable-next-line
