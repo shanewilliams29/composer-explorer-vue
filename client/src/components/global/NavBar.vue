@@ -85,7 +85,8 @@
                     <b-avatar size="40px" :src="workImgUrl(work['genre'])"></b-avatar>
                   </td>
                   <td class="info-td">
-                    <a class="artist-name">{{ work['title'] }}</a><br />
+                    <a v-if="work['nickname']" class="artist-name">{{ work['title'] }} • {{ work['nickname']}}</a>
+                    <a v-else class="artist-name">{{ work['title'] }}</a><br />
                     <span v-if="work['cat']" class="born-died">{{ work['composer']}} • {{ work['cat']}}</span>
                     <span v-else class="born-died">{{ work['composer']}}</span>
                   </td>

@@ -60,12 +60,11 @@ def omnisearch():
     if search_words:
         query = db.session.query(ComposerList)
 
-        # filter the query based on the genre list
         conditions = []
         for word in search_words:
             conditions.append(ComposerList.name_norm.ilike('%{}%'.format(word)))
         
-        composer_list = query.filter(or_(*conditions)).order_by(ComposerList.born).limit(10).all()  
+        composer_list = query.filter(or_(*conditions)).limit(10).all()  
     else:
         composer_list = [] 
     
@@ -84,6 +83,7 @@ def omnisearch():
     i = 0
     for work in works_list:
         search_string = str(work.composer) + str(work.genre) + str(work.cat) + str(work.suite) + str(work.title) + str(work.nickname) + str(work.search)
+        print(search_string)
         j = 0
         for word in search_words:
             if word.lower() in unidecode(search_string.lower()):
