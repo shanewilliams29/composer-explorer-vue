@@ -56,14 +56,18 @@ def omnisearch():
     print(search_nums)
     # first search for composers if search term is present
     # create the base query
-    query = db.session.query(ComposerList)
 
-    # filter the query based on the genre list
-    conditions = []
-    for word in search_words:
-        conditions.append(ComposerList.name_norm.ilike('%{}%'.format(word)))
-    
-    composer_list = query.filter(or_(*conditions)).order_by(ComposerList.born).limit(10).all()       
+    if search_words:
+        query = db.session.query(ComposerList)
+
+        # filter the query based on the genre list
+        conditions = []
+        for word in search_words:
+            conditions.append(ComposerList.name_norm.ilike('%{}%'.format(word)))
+        
+        composer_list = query.filter(or_(*conditions)).order_by(ComposerList.born).limit(10).all()  
+    else:
+        composer_list = [] 
     
     if len(composer_list) < 1:
         composers = []

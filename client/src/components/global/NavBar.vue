@@ -186,11 +186,19 @@ export default {
   computed: {
     clientToken() {
       return this.$auth.clientToken;
-    }
+    },
+    searchInput() {
+      return this.omniSearchInput;
+    },
   },
   watch: {
     clientToken() {
       this.getUnreadPosts()
+    },
+    searchInput(searchInput) {
+      if (searchInput == ""){
+        this.viewSearchResults = false;
+      }
     },
   },
   methods: {
