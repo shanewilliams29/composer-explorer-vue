@@ -94,18 +94,18 @@
             </div>
           </b-card-text>
         </b-card-body>
-        <h6 v-if="performers.length > 0">Performers</h6>
+        <h6 v-if="results.length > 0">Performers</h6>
         <b-card-body class="card-body">
           <b-card-text class="info-card-text">
-            <div v-for="performer in performers" :key="performer['id']">
+            <div v-for="result in results" :key="result[0]">
               <table>
                 <tr>
                   <td>
-                    <b-avatar size="40px" :src="performer['img']"></b-avatar>
+                    <b-avatar size="40px" :src="result[2]"></b-avatar>
                   </td>
                   <td class="info-td">
-                    <a class="artist-name">{{ performer['name'] }}</a><br />
-                    <span v-if="performer['bio']" class="born-died">{{ performer['bio']}}</span>
+                    <a class="artist-name">{{ result[0] }}</a><br />
+                    <span class="born-died">{{ result[1] }}</span>
                   </td>
                 </tr>
               </table>
@@ -164,6 +164,7 @@
 <script>
 import {baseURL, staticURL} from "@/main.js";
 import axios from "axios";
+import {getPeopleInfoFromGoogle} from "@/HelperFunctions.js" 
 
 export default {
   name: 'NavBar',
@@ -178,7 +179,8 @@ export default {
       viewSearchResults: false,
       composers: [],
       works: [],
-      performers: []
+      artists: [],
+      results: []
     };
   },
   computed: {
@@ -245,7 +247,8 @@ export default {
         .then((res) => {
           this.composers = res.data.composers;
           this.works = res.data.works;
-          this.performers = res.data.artists;
+          this.artists = res.data.artists;
+          Object.keys(this.artists).forEach((key) => getPeopleInfoFromGoogle(this.artists[key]['name'], this.results, this.$auth.knowledgeKey));
           this.viewSearchResults = true;
         })
         .catch((error) => {
@@ -389,5 +392,8 @@ input[type="search"]::-webkit-search-cancel-button {
 }
 table {
   margin-bottom: 6px;
+}
+h6{
+  padding-top: 5px;
 }
 </style>
