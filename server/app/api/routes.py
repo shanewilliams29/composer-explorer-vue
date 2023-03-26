@@ -9,10 +9,10 @@ from app.models import ArtistList, User
 from sqlalchemy import func, text, or_, and_
 from app.api import bp
 from unidecode import unidecode
-from google.cloud import storage
 import json
 import random
 import re
+
 
 @bp.route('/api/userdata', methods=['GET'])  # main composer list
 def get_userdata():
@@ -33,6 +33,7 @@ def get_userdata():
     response_object['new_posts'] = new_posts
     response = jsonify(response_object)
     return response
+
 
 @bp.route('/api/composers', methods=['GET'])  # main composer list
 # @cache.cached(query_string=True)

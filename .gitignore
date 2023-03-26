@@ -6,6 +6,7 @@ migrations
 cache
 scripts
 misc
+other
 __pycache__
 .gcloudignore
 app.yaml

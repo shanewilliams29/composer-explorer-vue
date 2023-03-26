@@ -94,4 +94,8 @@ export default {
   --vs-line-height: 1;
   --vs-search-input-color: var(--my-white);
 }
+.form-control:focus{
+  box-shadow: none; 
+  -webkit-box-shadow: none;
+} 
 </style>

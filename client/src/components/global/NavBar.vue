@@ -10,7 +10,7 @@
         </b-navbar-brand>
 
         <div v-if="!$view.mobile">
-          <b-nav pills class="navbar-items">
+          <b-nav pills class="navbar-items buttons-nav">
             <b-nav-item id="home" :active='$route.path == "/"' @click="$router.push('/')"><b-icon-music-note-list></b-icon-music-note-list>&nbsp;&nbsp;Browse</b-nav-item>
             <b-nav-item id="performer" :active='$route.name == "performers"' @click="$router.push('/performers')"><b-icon-person-lines-fill></b-icon-person-lines-fill>&nbsp;&nbsp;Performers</b-nav-item>
             <b-nav-item v-if="$auth.clientToken" id="favorites" :active='$route.name == "favorites"' @click="$router.push('/favorites')"> <b-icon-heart></b-icon-heart>&nbsp;&nbsp;Favorites</b-nav-item>
@@ -18,6 +18,10 @@
             <b-nav-item id="forum" href="/forum" target="_blank"> <b-icon-chat-right-text></b-icon-chat-right-text>&nbsp;&nbsp;Forum&nbsp;<b-badge>{{ unreadPosts }}</b-badge></b-nav-item>
           </b-nav>
         </div>
+
+          <b-navbar-nav class="search-nav">
+            <b-form-input right class="omnisearch" type="search" placeholder="Search composers, works, performers"></b-form-input>
+          </b-navbar-nav>
 
         <b-navbar-nav class="ml-auto" v-if="!$auth.clientToken">
           <b-button v-if="$view.avatar" right variant="success" class="spotify-button" :href="spotifyURL">
@@ -213,6 +217,9 @@ img {
 .navbar.navbar-dark.bg-dark {
   background-color: var(--dark-gray) !important;
 }
+.buttons-nav{
+  min-width: 600px !important;
+}
 .navbar-items a {
   color: var(--my-white) !important;
 }
@@ -227,5 +234,23 @@ img {
   padding: 0px !important;
   background: transparent !important;
   margin-left: 5px;
+}
+.search-nav{
+  width: 100% !important;
+}
+.omnisearch{
+  background-color: var(--medium-gray) !important;
+  width: 100% !important;
+  margin-right: 10px;
+}
+.form-control:focus{
+  box-shadow: none; 
+  -webkit-box-shadow: none;
+}
+input[type="search"]::-webkit-search-cancel-button {
+  -webkit-appearance: none;
+   height: 13px;
+   width: 13px;
+   background: url("data:image/svg+xml;charset=UTF-8,%3csvg viewPort='0 0 12 12' version='1.1' xmlns='http://www.w3.org/2000/svg'%3e%3cline x1='1' y1='11' x2='11' y2='1' stroke='white' stroke-width='2'/%3e%3cline x1='1' y1='1' x2='11' y2='11' stroke='white' stroke-width='2'/%3e%3c/svg%3e");
 }
 </style>

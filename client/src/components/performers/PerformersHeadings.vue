@@ -206,7 +206,7 @@ export default {
   color: #9ea4ae !important;
 }
 </style><style scoped>
-  .spinner {
+.spinner {
   text-align: center;
   color: grey;
 }
