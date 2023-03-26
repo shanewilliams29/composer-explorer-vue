@@ -56,7 +56,7 @@
 
     <div id="search-results" v-if="viewSearchResults">
       <b-card class="album-info-card shadow-sm">
-        <h6 v-if="composers.length == 0">No search results.</h6>
+        <!-- <h6 v-if="composers.length == 0">No search results.</h6> -->
         <h6 v-if="composers.length > 0">Composers</h6>
         <b-card-body class="card-body">
           <b-card-text class="info-card-text">
@@ -248,7 +248,9 @@ export default {
           this.composers = res.data.composers;
           this.works = res.data.works;
           this.artists = res.data.artists;
-          Object.keys(this.artists).forEach((key) => getPeopleInfoFromGoogle(this.artists[key]['name'], this.results, this.$auth.knowledgeKey));
+          this.results = [];
+          this.artists.forEach((element) => getPeopleInfoFromGoogle(element, this.results, this.$auth.knowledgeKey));
+          // Object.keys(this.artists).forEach((key) => getPeopleInfoFromGoogle(this.artists[key]['name'], this.results, this.$auth.knowledgeKey));
           this.viewSearchResults = true;
         })
         .catch((error) => {

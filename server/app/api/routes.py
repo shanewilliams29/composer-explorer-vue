@@ -40,42 +40,83 @@ def get_userdata():
 def omnisearch():
     # look for search term or filter term
     search_item = request.args.get('search')
+    search_terms = search_item.split()
 
+    search_words= []
+    search_nums = []
+
+    for item in search_terms:
+        try:
+            integer = int(item)
+            search_nums.append(integer)
+        except ValueError:
+            search_words.append(item)
+
+    print(search_words)
+    print(search_nums)
     # first search for composers if search term is present
-    if search_item:
-        search = "%{}%".format(search_item)
-        composer_list = ComposerList.query \
-            .filter(ComposerList.name_norm.ilike(search)) \
-            .order_by(ComposerList.region, ComposerList.born).limit(20).all()
-        if len(composer_list) < 1:
-            response_object = {'status': 'success'}
-            response_object['composers'] = []
-            response = jsonify(response_object)
-            return response
+    # create the base query
+    query = db.session.query(ComposerList)
+
+    # filter the query based on the genre list
+    conditions = []
+    for word in search_words:
+        conditions.append(ComposerList.name_norm.ilike('%{}%'.format(word)))
+    
+    composer_list = query.filter(or_(*conditions)).order_by(ComposerList.born).limit(10).all()       
+    
+    if len(composer_list) < 1:
+        composers = []
+    else:
+        composers = prepare_composers(composer_list)
 
     # search for works
-    if search_item:
-        works_list = WorkList.query.filter_by(composer=search_item)\
-            .order_by(WorkList.album_count.desc()).limit(20).all()
+    if len(composers) == 1:
+        works_list = WorkList.query.filter_by(composer=composers[0]['name_short']).order_by(WorkList.album_count.desc()).all()
+    else:
+        works_list = WorkList.query.order_by(WorkList.album_count.desc()).all()
+    
+    return_works = []
+    i = 0
+    for work in works_list:
+        search_string = str(work.composer) + str(work.genre) + str(work.cat) + str(work.suite) + str(work.title) + str(work.nickname) + str(work.search)
+        j = 0
+        for word in search_words:
+            if word.lower() in unidecode(search_string.lower()):
+                j += 1
+        for num in search_nums:
+            pattern = r'(?<!\d)' + str(num) + r'(?!\d)'
+            match = re.search(pattern, search_string)
+            if match:
+                j += 1
+        # print(search_string + " - " + str(j))
+        if j == len(search_terms):
+            return_works.append(work)
+            i += 1
+        if i > 10:
+            break
 
     # search for artists
-    if search_item:
-        artist_list = Artists.query.filter_by(composer=search_item).limit(20).all()
-        # return_list = []
+    artists = db.session.query(ArtistList).first()
+    artist_list = json.loads(artists.content)
 
-        # for work in works_list:
-        #     search_string = str(work.genre) + str(work.cat) + str(work.suite) + str(work.title) + str(work.nickname) + str(work.search)
-        #     if search.lower() in unidecode(search_string.lower()):
-        #         return_list.append(work)
+    return_list = []
+    i = 0
+    for artist in artist_list:
+        search_string = search_item
+        if search_string.lower() in unidecode(artist.lower()):
+            return_list.append(artist.strip())
+            i += 1
+        if i > 10:
+            break
 
     # prepare key info from list for JSON response
-    composers = prepare_composers(composer_list)
-
+   
     # return response
     response_object = {'status': 'success'}
     response_object['composers'] = composers
-    response_object['works'] = works_list
-    response_object['artists'] = artist_list
+    response_object['works'] = return_works
+    response_object['artists'] = return_list
     response = jsonify(response_object)
     return response
 
