@@ -84,7 +84,7 @@
               <table>
                 <tr>
                   <td>
-                    <b-avatar size="40px" :src="workImgUrl(work['genre'])"></b-avatar>
+                    <b-avatar size="40px" :src="workImgUrl(work['genre'], work['title'])"></b-avatar>
                   </td>
                   <td class="info-td">
                     <a v-if="work['nickname']" class="artist-name">{{ work['title'] }} • {{ work['nickname']}}</a>
@@ -228,8 +228,13 @@ export default {
         autoHideDelay: 3600000
       })
     },
-    workImgUrl(genre) {
-      const url = 'https://storage.googleapis.com/composer-explorer.appspot.com/headers/' + genre + '.jpg';
+    workImgUrl(genre, title) {
+      let url = "";
+      if(genre == 'Opera' || genre == 'Stage Work' || genre == 'Ballet'){
+        url = 'https://storage.googleapis.com/composer-explorer.appspot.com/headers/' + title + '.jpg';
+      } else {
+        url = 'https://storage.googleapis.com/composer-explorer.appspot.com/headers/' + genre + '.jpg';
+      }
       return url;
     },
     getUnreadPosts() {

@@ -59,8 +59,9 @@ def omnisearch():
         query = db.session.query(ComposerList)
 
         conditions = []
+        conditions.append(ComposerList.name_norm.like('{}'.format(search_words)))
         for word in search_words:
-            conditions.append(ComposerList.name_norm.ilike('%{}%'.format(word)))
+            conditions.append(ComposerList.name_short.like('{}%'.format(word)))
         
         composer_list = query.filter(or_(*conditions)).limit(10).all()  
     else:
@@ -95,7 +96,7 @@ def omnisearch():
         if i > 10:
             break
 
-    # search for artists
+    # search for artists, use the one already downloaded?
     artists = db.session.query(ArtistList).first()
     artist_list = json.loads(artists.content)
 
