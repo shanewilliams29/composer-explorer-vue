@@ -266,7 +266,14 @@ class ArtistAlbums(db.Model):
     updated = db.Column(db.DateTime, default=datetime.utcnow)
 
 
+@dataclass
 class Artists(db.Model):
+    id: str
+    name: str
+    workid: str
+    album_id: float
+    composer: str
+    count: str
 
     id = db.Column(db.String(128), primary_key=True)
     name = db.Column(db.String(256), index=True)

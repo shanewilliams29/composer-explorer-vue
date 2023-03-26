@@ -20,7 +20,7 @@
         </div>
 
           <b-navbar-nav class="search-nav">
-            <b-form-input right class="omnisearch" type="search" placeholder="Search composers, works, performers"></b-form-input>
+            <b-form-input class="omnisearch" v-model="omniSearchInput" v-debounce="omniSearch" type="search" placeholder="Search composers, works, performers" autocomplete="off"></b-form-input>
           </b-navbar-nav>
 
         <b-navbar-nav class="ml-auto" v-if="!$auth.clientToken">
@@ -52,6 +52,67 @@
           <b-nav-item class="menu-button" right v-b-toggle.sidebar-right><b-icon-three-dots-vertical></b-icon-three-dots-vertical></b-nav-item>
         </b-navbar-nav>
       </b-navbar>
+    </div>
+
+    <div id="search-results" v-if="viewSearchResults">
+      <b-card class="album-info-card shadow-sm">
+        <h6 v-if="composers.length == 0">No search results.</h6>
+        <h6 v-if="composers.length > 0">Composers</h6>
+        <b-card-body class="card-body">
+          <b-card-text class="info-card-text">
+            <div v-for="composer in composers" :key="composer['id']">
+              <table>
+                <tr>
+                  <td>
+                    <b-avatar size="40px" :src="composer['img']"></b-avatar>
+                  </td>
+                  <td class="info-td">
+                    <a class="artist-name">{{ composer['name_full'] }}</a><br />
+                    <span class="born-died">{{ composer['born']}} - {{ composer['died']}}</span>
+                  </td>
+                </tr>
+              </table>
+            </div>
+          </b-card-text>
+        </b-card-body>
+        <h6 v-if="works.length > 0">Works</h6>
+        <b-card-body class="card-body">
+          <b-card-text class="info-card-text">
+            <div v-for="work in works" :key="work['id']">
+              <table>
+                <tr>
+                  <td>
+                    <b-avatar size="40px" :src="workImgUrl(work['genre'])"></b-avatar>
+                  </td>
+                  <td class="info-td">
+                    <a class="artist-name">{{ work['title'] }}</a><br />
+                    <span v-if="work['cat']" class="born-died">{{ work['composer']}} • {{ work['cat']}}</span>
+                    <span v-else class="born-died">{{ work['composer']}}</span>
+                  </td>
+                </tr>
+              </table>
+            </div>
+          </b-card-text>
+        </b-card-body>
+        <h6 v-if="performers.length > 0">Performers</h6>
+        <b-card-body class="card-body">
+          <b-card-text class="info-card-text">
+            <div v-for="performer in performers" :key="performer['id']">
+              <table>
+                <tr>
+                  <td>
+                    <b-avatar size="40px" :src="performer['img']"></b-avatar>
+                  </td>
+                  <td class="info-td">
+                    <a class="artist-name">{{ performer['name'] }}</a><br />
+                    <span v-if="performer['bio']" class="born-died">{{ performer['bio']}}</span>
+                  </td>
+                </tr>
+              </table>
+            </div>
+          </b-card-text>
+        </b-card-body>
+      </b-card>
     </div>
     
     <div>
@@ -112,13 +173,18 @@ export default {
       spotifyLogoURL: staticURL + 'Spotify_Logo_RGB_White.png',
       logoURL: staticURL + 'logo.png',
       spotifyURL: baseURL + "connect_spotify",
-      unreadPosts: null
+      unreadPosts: null,
+      omniSearchInput: null,
+      viewSearchResults: false,
+      composers: [],
+      works: [],
+      performers: []
     };
   },
   computed: {
     clientToken() {
       return this.$auth.clientToken;
-    },
+    }
   },
   watch: {
     clientToken() {
@@ -148,6 +214,10 @@ export default {
         autoHideDelay: 3600000
       })
     },
+    workImgUrl(genre) {
+      const url = 'https://storage.googleapis.com/composer-explorer.appspot.com/headers/' + genre + '.jpg';
+      return url;
+    },
     getUnreadPosts() {
       if(this.$auth.clientToken){
         const path = "api/userdata";
@@ -160,6 +230,29 @@ export default {
             console.error(error);
           });
         }
+    },
+    omniSearch() {
+      if (this.omniSearchInput !== ""){
+        this.getOmniSearch(this.omniSearchInput);
+      } else {
+        this.viewSearchResults = false;
+      }
+    },
+    getOmniSearch(item) {
+      const path = "api/omnisearch?search=" + item;
+      axios
+        .get(path)
+        .then((res) => {
+          this.composers = res.data.composers;
+          this.works = res.data.works;
+          this.performers = res.data.artists;
+          this.viewSearchResults = true;
+        })
+        .catch((error) => {
+          // eslint-disable-next-line
+          console.error(error);
+          this.viewSearchResults = true;
+        });
     },
   },
   created(){
@@ -252,5 +345,49 @@ input[type="search"]::-webkit-search-cancel-button {
    height: 13px;
    width: 13px;
    background: url("data:image/svg+xml;charset=UTF-8,%3csvg viewPort='0 0 12 12' version='1.1' xmlns='http://www.w3.org/2000/svg'%3e%3cline x1='1' y1='11' x2='11' y2='1' stroke='white' stroke-width='2'/%3e%3cline x1='1' y1='1' x2='11' y2='11' stroke='white' stroke-width='2'/%3e%3c/svg%3e");
+}
+#search-results{
+  position: absolute;
+  top: 66px;
+  left: calc(165.3px + 600px);
+  z-index: 9999;
+  width: calc(100% - 165.3px - 600px - 5px);
+}
+.album-info-card {
+  padding: 15px;
+  padding-bottom: 10px;
+  background-color: var(--my-white) !important;
+  border: none !important;
+}
+.card-body {
+  background-color: var(--my-white) !important;
+  --scroll-bar-bg-color: var(--light-gray);
+}
+.info-card-text {
+  font-size: 13px;
+  line-height: 130%;
+  overflow-y: scroll;
+  max-height: 190px;
+  padding-left: 2px;
+}
+.info-td {
+  padding-left: 10px;
+}
+.born-died {
+  font-size: 13px !important;
+  color: grey !important;
+}
+.artist-name {
+  color: black !important;
+  font-weight: 600;
+  font-size: 14px;
+}
+.artist-name:hover {
+  color: black !important;
+  text-decoration: underline !important;
+  cursor: pointer;
+}
+table {
+  margin-bottom: 6px;
 }
 </style>

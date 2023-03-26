@@ -24,7 +24,7 @@
                 <b-avatar size="40px" :src="result[2]"></b-avatar>
               </td>
               <td class="info-td">
-                <a clss="artist-name" @click="getArtistComposers(result[0])">{{ result[0] }}</a><br />
+                <a class="artist-name" @click="getArtistComposers(result[0])">{{ result[0] }}</a><br />
                 <span class="born-died">{{result[1]}}</span>
               </td>
             </tr>

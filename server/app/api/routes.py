@@ -35,6 +35,51 @@ def get_userdata():
     return response
 
 
+@bp.route('/api/omnisearch', methods=['GET'])  # main composer list
+# @cache.cached(query_string=True)
+def omnisearch():
+    # look for search term or filter term
+    search_item = request.args.get('search')
+
+    # first search for composers if search term is present
+    if search_item:
+        search = "%{}%".format(search_item)
+        composer_list = ComposerList.query \
+            .filter(ComposerList.name_norm.ilike(search)) \
+            .order_by(ComposerList.region, ComposerList.born).limit(20).all()
+        if len(composer_list) < 1:
+            response_object = {'status': 'success'}
+            response_object['composers'] = []
+            response = jsonify(response_object)
+            return response
+
+    # search for works
+    if search_item:
+        works_list = WorkList.query.filter_by(composer=search_item)\
+            .order_by(WorkList.album_count.desc()).limit(20).all()
+
+    # search for artists
+    if search_item:
+        artist_list = Artists.query.filter_by(composer=search_item).limit(20).all()
+        # return_list = []
+
+        # for work in works_list:
+        #     search_string = str(work.genre) + str(work.cat) + str(work.suite) + str(work.title) + str(work.nickname) + str(work.search)
+        #     if search.lower() in unidecode(search_string.lower()):
+        #         return_list.append(work)
+
+    # prepare key info from list for JSON response
+    composers = prepare_composers(composer_list)
+
+    # return response
+    response_object = {'status': 'success'}
+    response_object['composers'] = composers
+    response_object['works'] = works_list
+    response_object['artists'] = artist_list
+    response = jsonify(response_object)
+    return response
+
+
 @bp.route('/api/composers', methods=['GET'])  # main composer list
 # @cache.cached(query_string=True)
 def get_composers():
