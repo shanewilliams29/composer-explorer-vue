@@ -20,7 +20,7 @@
         </div>
 
           <b-navbar-nav class="search-nav">
-            <b-form-input class="omnisearch" v-model="omniSearchInput" v-debounce:1000ms="omniSearch" type="search" placeholder="Search composers, works, performers" autocomplete="off"></b-form-input>
+            <b-form-input class="omnisearch" size="sm" v-model="omniSearchInput" v-debounce:750ms="omniSearch" type="search" placeholder="Search all composers, works, performers" autocomplete="off"></b-form-input>
           </b-navbar-nav>
 
         <b-navbar-nav class="ml-auto" v-if="!$auth.clientToken">
@@ -54,11 +54,18 @@
       </b-navbar>
     </div>
 
+    <Transition name="fade">
     <div id="search-results" v-show="viewSearchResults">
       <b-card class="album-info-card shadow-sm">
+      
+      <div class="spinner" v-show="loading" role="status">
+        <b-spinner class="m-5"></b-spinner>
+        </div>
+        <div v-show="!loading">
+          <h6 v-if="composers.length + works.length + results.length == 0">No search results.</h6>
+        </div>
 
-        <b-card-body id="composers" class="card-body">
-        <h6 v-if="composers.length + works.length + results.length == 0">No search results.</h6>
+        <b-card-body v-show="!loading" id="composers" class="card-body">
         <h6 v-if="composers.length > 0">Composers</h6>
           <b-card-text class="info-card-text">
             <div v-for="composer in composers" :key="composer['id']">
@@ -77,7 +84,7 @@
           </b-card-text>
         </b-card-body>
 
-        <b-card-body id="works" class="card-body">
+        <b-card-body v-show="!loading" id="works" class="card-body">
         <h6 v-if="works.length > 0">Works</h6>
           <b-card-text class="info-card-text">
             <div v-for="work in works" :key="work['id']">
@@ -98,7 +105,7 @@
           </b-card-text>
         </b-card-body>
 
-        <b-card-body id="performers" class="card-body">
+        <b-card-body v-show="!loading" id="performers" class="card-body">
         <h6 v-if="results.length > 0">Performers</h6>
           <b-card-text class="info-card-text">
             <div v-for="result in results" :key="result[0]">
@@ -118,6 +125,7 @@
         </b-card-body>
       </b-card>
     </div>
+    </transition>
     
     <div>
       <b-sidebar id="sidebar-right" title="" backdrop-variant="dark" width="350px" backdrop right shadow>
@@ -184,7 +192,8 @@ export default {
       composers: [],
       works: [],
       artists: [],
-      results: []
+      results: [],
+      loading: false
     };
   },
   computed: {
@@ -258,6 +267,9 @@ export default {
       }
     },
     getOmniSearch(item) {
+      this.loading = true;
+      this.viewSearchResults = true;
+
       const path = "api/omnisearch?search=" + item;
       
       let wordsArray = item.split(" ");
@@ -269,6 +281,7 @@ export default {
       axios
         .get(path)
         .then((res) => {
+          this.loading = false;
           this.composers = res.data.composers;
           this.works = res.data.works;
           this.artists = res.data.artists;
@@ -276,7 +289,7 @@ export default {
           this.artists.forEach((element) => getPeopleInfoFromGoogle(element, this.results, this.$auth.knowledgeKey));
           // Object.keys(this.artists).forEach((key) => getPeopleInfoFromGoogle(this.artists[key]['name'], this.results, this.$auth.knowledgeKey));
 
-          this.viewSearchResults = true;
+          
 
           var content = "";
           var parent = "";
@@ -294,6 +307,7 @@ export default {
         .catch((error) => {
           // eslint-disable-next-line
           console.error(error);
+          this.loading = false;
           this.viewSearchResults = true;
         });
     },
@@ -320,6 +334,12 @@ export default {
 </script>
 
 <style scoped>
+.fade-enter-active, .fade-leave-active {
+  transition: opacity 0.3s;
+}
+.fade-enter, .fade-leave-to {
+  opacity: 0;
+}
 #home .active{
   background-color: var(--blue);
 }
@@ -391,10 +411,17 @@ input[type="search"]::-webkit-search-cancel-button {
 }
 #search-results{
   position: absolute;
-  top: 66px;
+  top: 60px;
   left: calc(165.3px + 600px);
   z-index: 9999;
   width: calc(100% - 165.3px - 600px - 5px);
+  box-shadow: rgba(0, 0, 0, 0.07) 0px 1px 2px, rgba(0, 0, 0, 0.07) 0px 2px 4px, rgba(0, 0, 0, 0.07) 0px 4px 8px, rgba(0, 0, 0, 0.07) 0px 8px 16px, rgba(0, 0, 0, 0.07) 0px 16px 32px, rgba(0, 0, 0, 0.07) 0px 32px 64px;
+}
+.spinner {
+  text-align: center;
+}
+.m-5 {
+    color: #9da6af;
 }
 .album-info-card {
   padding: 15px;
@@ -430,6 +457,31 @@ input[type="search"]::-webkit-search-cancel-button {
   text-decoration: underline !important;
   cursor: pointer;
 }
+
+/*scrollbars*/
+.info-card-text {
+  --scroll-bar-color: var(--scroll-color-light);
+  --scroll-bar-bg-color: var(--my-white);
+}
+.info-card-text {
+  scrollbar-width: thin;
+  scrollbar-color: var(--scroll-bar-color) var(--scroll-bar-bg-color) !important;
+}
+
+/* Works on Chrome, Edge, and Safari */
+.info-card-text::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+.info-card-text::-webkit-scrollbar-track {
+  background: var(--scroll-bar-bg-color) !important;
+}
+.info-card-text::-webkit-scrollbar-thumb {
+  background-color: var(--scroll-bar-color);
+  border-radius: 20px;
+  border: 3px solid var(--scroll-bar-bg-color) !important;
+}
+
 table {
   margin-bottom: 6px;
 }
