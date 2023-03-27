@@ -203,6 +203,9 @@ export default {
     searchInput() {
       return this.omniSearchInput;
     },
+    item_length: function () {
+      return this.results.length;
+    }
   },
   watch: {
     clientToken() {
@@ -213,6 +216,15 @@ export default {
         this.viewSearchResults = false;
       }
     },
+    results: {
+      handler: function () {
+        // turn off loading when people results array is fully populated
+        if (this.results.length == this.artists.length){
+          this.loading = false;
+        }
+      },
+      deep: true
+    }
   },
   methods: {
     iOS() {
@@ -281,15 +293,13 @@ export default {
       axios
         .get(path)
         .then((res) => {
-          this.loading = false;
+          
           this.composers = res.data.composers;
           this.works = res.data.works;
           this.artists = res.data.artists;
           this.results = [];
           this.artists.forEach((element) => getPeopleInfoFromGoogle(element, this.results, this.$auth.knowledgeKey));
           // Object.keys(this.artists).forEach((key) => getPeopleInfoFromGoogle(this.artists[key]['name'], this.results, this.$auth.knowledgeKey));
-
-          
 
           var content = "";
           var parent = "";
