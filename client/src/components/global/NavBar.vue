@@ -234,7 +234,7 @@ export default {
     },
     searchInput(searchInput) {
       if (searchInput == ""){
-        //this.viewSearchResults = false;
+        this.viewSearchResults = false;
       }
     },
     menuOpen(menuOpen) {
