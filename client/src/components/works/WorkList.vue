@@ -614,6 +614,7 @@ export default {
     getOmniSearchWork(work) {
       eventBus.$emit("changeWork");
       this.selectRow(work.id);
+      this.getAlbumsAndPlay(work.id, work.title);
       //this.setGenre(this.playlist[rndInt]["genre"]);
       //this.getAlbumsAndPlay(this.playlist[rndInt]["id"], this.playlist[rndInt]["title"]);
     },
