@@ -61,12 +61,18 @@ export default {
       this.workSearchField = "";
       this.workFilterField = { value: "recommended", text: "Recommended works" };
     },
+    setWorkOmniSearch(){
+      this.workFilterField = { value: "all", text: "All works" };
+      this.workFilter();
+    }
   },
   created() {
     eventBus.$on("requestWorksList", this.newComposer);
+    eventBus.$on("fireWorkOmniSearch", this.setWorkOmniSearch);
   },
   beforeDestroy() {
     eventBus.$off("requestWorksList", this.newComposer);
+    eventBus.$off("fireWorkOmniSearch", this.setWorkOmniSearch);
   },
 };
 </script>

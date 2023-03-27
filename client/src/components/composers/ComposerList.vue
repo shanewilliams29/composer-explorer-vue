@@ -162,6 +162,7 @@ export default {
         .then((res) => {
           this.composers = res.data.composers;
           this.loading = false;
+          this.scrollToComposer(this.$config.composer);
           
           if (this.$view.mode == "radio") {
             eventBus.$emit("sendGenreListToRadio", res.data.genres);

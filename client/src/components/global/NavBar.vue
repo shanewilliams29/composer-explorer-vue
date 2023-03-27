@@ -105,8 +105,8 @@
                     <b-avatar size="40px" :src="workImgUrl(work['genre'], work['title'])"></b-avatar>
                   </td>
                   <td class="info-td">
-                    <a v-if="work['nickname']" class="artist-name">{{ work['title'] }} • {{ work['nickname']}}</a>
-                    <a v-else class="artist-name">{{ work['title'] }}</a><br />
+                    <a v-if="work['nickname']" @click="getSearchWork(work)" class="artist-name">{{ work['title'] }} • {{ work['nickname']}}</a>
+                    <a v-else @click="getSearchWork(work)" class="artist-name">{{ work['title'] }}</a><br />
                     <span v-if="work['cat']" class="born-died">{{ work['composer']}} • {{ work['cat']}}</span>
                     <span v-else class="born-died">{{ work['composer']}}</span>
                   </td>
@@ -352,6 +352,24 @@ export default {
     },
     getComposer(composerShort, composerFull) {
         eventBus.$emit("fireComposerOmniSearch", composerShort, composerFull);
+        eventBus.$emit("requestWorksList", composerShort);
+        eventBus.$emit("clearAlbumsList", composerShort);
+        eventBus.$emit("sendArtistList", []);
+
+        this.viewSearchResults = false;
+        if (this.$route.name != "home") {
+          this.$router.push("/");
+        }
+    },
+    getSearchWork(work) {
+        this.$config.composer = work.composer;
+        this.$config.work = work.id;
+        this.$config.genre = work.genre;
+        eventBus.$emit("fireWorkOmniSearch", work);
+        console.log(this.$config.work)
+        console.log(this.$config.genre)
+
+        // eventBus.$emit("requestWorksList", composer);
         this.viewSearchResults = false;
         if (this.$route.name != "home") {
           this.$router.push("/");

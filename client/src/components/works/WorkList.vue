@@ -495,6 +495,7 @@ export default {
           this.works = res.data.works;
           this.playlist = res.data.playlist;
           this.shufflePlaylist = [...this.playlist].sort((a, b) => a.shuffle - b.shuffle);
+          this.setGenre(this.$config.genre);
           this.loading = false;
         })
         .catch((error) => {
@@ -610,6 +611,12 @@ export default {
       this.setGenre(this.playlist[rndInt]["genre"]);
       this.getAlbumsAndPlay(this.playlist[rndInt]["id"], this.playlist[rndInt]["title"]);
     },
+    getOmniSearchWork(work) {
+      eventBus.$emit("changeWork");
+      this.selectRow(work.id);
+      //this.setGenre(this.playlist[rndInt]["genre"]);
+      //this.getAlbumsAndPlay(this.playlist[rndInt]["id"], this.playlist[rndInt]["title"]);
+    },
   },
   created() {
     if (!this.$view.mode) {
@@ -630,6 +637,7 @@ export default {
     eventBus.$on("fireRefreshWorks", this.refreshWorks);
     eventBus.$on("requestWorksListForFavorites", this.getFavoriteWorks);
     eventBus.$on("fireWorkScroll", this.setGenre);
+    eventBus.$on("fireWorkOmniSearch", this.getOmniSearchWork);
   },
   beforeDestroy() {
     eventBus.$off("requestWorksList", this.requestWorksList);
@@ -645,6 +653,7 @@ export default {
     eventBus.$off("fireRefreshWorks", this.refreshWorks);
     eventBus.$off("requestWorksListForFavorites", this.getFavoriteWorks);
     eventBus.$off("fireWorkScroll", this.setGenre);
+    eventBus.$off("fireWorkOmniSearch", this.getOmniSearchWork);
   },
 };
 

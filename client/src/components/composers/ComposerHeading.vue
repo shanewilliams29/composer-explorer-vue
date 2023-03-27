@@ -50,19 +50,26 @@ export default {
       this.composerSearchForm = "";
       eventBus.$emit("requestComposersFromSearch", "");
     },
-    setSearchComposer(composerShort, composerFull){
-      this.composerSearchForm = composerFull;
-      this.composerSearch();
-      eventBus.$emit("requestWorksList", composerShort);
-      eventBus.$emit("clearAlbumsList", composerShort);
-      eventBus.$emit("sendArtistList", []);
+    // eslint-disable-next-line
+    setComposerOmniSearch(composerShort, composerFull){
+      // this.composerSearchForm = composerFull;
+      // this.composerSearch();
+      this.composerFilterForm = { value: "all", text: "All - by region" };
+      this.composerFilter();
+      this.$config.composer = composerShort;
+    },
+    setWorkOmniSearch(){
+      this.composerFilterForm = { value: "all", text: "All - by region" };
+      this.composerFilter();
     }
   },
   created() {
-    eventBus.$on("fireComposerOmniSearch", this.setSearchComposer);
+    eventBus.$on("fireComposerOmniSearch", this.setComposerOmniSearch);
+    eventBus.$on("fireWorkOmniSearch", this.setWorkOmniSearch);
   },
   beforeDestroy() {
-    eventBus.$off("fireComposerOmniSearch", this.setSearchComposer);
+    eventBus.$off("fireComposerOmniSearch", this.setComposerOmniSearch);
+    eventBus.$off("fireWorkOmniSearch", this.setWorkOmniSearch);
   },
 };
 </script>
