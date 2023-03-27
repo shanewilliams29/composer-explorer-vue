@@ -7,6 +7,7 @@ from app.cron.classes import GroupAlbums, SmartAlbums
 from app.models import WorkList, Spotify, WorkAlbums, Artists, ComposerCron, ArtistList, ComposerList
 from app.cron.functions import search_spotify_and_save, search_album
 import json
+from sqlalchemy import func, text
 
 bp = Blueprint('cron', __name__)
 
@@ -209,8 +210,8 @@ def refreshalbums(name):
     logger.log_text(message, severity="NOTICE")
 
 
-# @ bp.cli.command()
-# @ click.argument("name")
+@ bp.cli.command()
+@ click.argument("name")
 def cleanup(name):
     # delete albums with no tracks.
     db.session.query(WorkAlbums).filter(WorkAlbums.composer == name, WorkAlbums.score == 0).delete()
@@ -229,12 +230,21 @@ def cleanup(name):
     db.session.commit()
 
     # regenerate artists list
+    i = 0
     composers = []
-    for value in db.session.query(Artists.name).order_by(Artists.name).distinct():
+    
+    # artists = db.session.query(Artists.name, Artists.count).group_by(Artists.name).order_by(Artists.name).all():
+    artists = db.session.query(Artists.name, func.count(Artists.id).label('total'))\
+        .group_by(Artists.name).order_by(text('total DESC')).all()
+
+    for value in artists:
         composers.append(value[0])
+        if i < 100:
+            print(value[0] + " " + str(value[1]))
+        i += 1
 
     artist_list = db.session.query(ArtistList).first()
-    artist_list.content = json.dumps(composers, ensure_ascii=False)
+    artist_list.content = json.dumps(composers, ensure_ascii=False, sort_keys=False)
     artist_list.timestamp = datetime.utcnow()
     db.session.commit()
 

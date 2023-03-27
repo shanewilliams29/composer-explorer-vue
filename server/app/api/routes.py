@@ -100,11 +100,22 @@ def omnisearch():
     artists = db.session.query(ArtistList).first()
     artist_list = json.loads(artists.content)
 
+    # return_list = []
+    # i = 0
+    # for artist in artist_list:
+    #     search_string = search_item
+    #     if search_string.lower() in unidecode(artist.lower()):
+    #         return_list.append(artist.strip())
+    #         i += 1
+    #     if i > 10:
+    #         break
+
     return_list = []
     i = 0
     for artist in artist_list:
-        search_string = search_item
-        if search_string.lower() in unidecode(artist.lower()):
+        pattern = r"\b" + search_item.lower() + r"\w*"
+        match = re.search(pattern, unidecode(artist.lower()))
+        if match:
             return_list.append(artist.strip())
             i += 1
         if i > 10:
@@ -1054,7 +1065,7 @@ def get_artistworks():
 
 
 @bp.route('/api/artistlist', methods=['GET'])  # artist list for performer view
-@cache.cached()
+#@cache.cached()
 def get_artistlist():
     artists = db.session.query(ArtistList).first()
 
