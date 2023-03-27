@@ -54,13 +54,17 @@ export default {
     setComposerOmniSearch(composerShort, composerFull){
       // this.composerSearchForm = composerFull;
       // this.composerSearch();
-      this.composerFilterForm = { value: "all", text: "All - by region" };
-      this.composerFilter();
+      if(this.composerFilterForm.value != 'all'){
+        this.composerFilterForm = { value: "all", text: "All - by region" };
+        this.composerFilter();
+      }
       this.$config.composer = composerShort;
     },
     setWorkOmniSearch(){
-      this.composerFilterForm = { value: "all", text: "All - by region" };
-      this.composerFilter();
+      if(this.composerFilterForm.value != 'all'){
+        this.composerFilterForm = { value: "all", text: "All - by region" };
+        this.composerFilter();
+      }
     }
   },
   created() {

@@ -355,6 +355,8 @@ export default {
         eventBus.$emit("requestWorksList", composerShort);
         eventBus.$emit("clearAlbumsList", composerShort);
         eventBus.$emit("sendArtistList", []);
+        // this.$config.work = '';
+        // this.$config.genre = '';
 
         this.viewSearchResults = false;
         if (this.$route.name != "home") {
@@ -362,12 +364,7 @@ export default {
         }
     },
     getSearchWork(work) {
-        this.$config.composer = work.composer;
-        this.$config.work = work.id;
-        this.$config.genre = work.genre;
         eventBus.$emit("fireWorkOmniSearch", work);
-        console.log(this.$config.work)
-        console.log(this.$config.genre)
 
         // eventBus.$emit("requestWorksList", composer);
         this.viewSearchResults = false;

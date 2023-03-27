@@ -61,9 +61,21 @@ export default {
       this.workSearchField = "";
       this.workFilterField = { value: "recommended", text: "Recommended works" };
     },
-    setWorkOmniSearch(){
-      this.workFilterField = { value: "all", text: "All works" };
-      this.workFilter();
+    setWorkOmniSearch(work){
+      if(this.workFilterField.value != 'all' || this.$config.composer != work.composer){
+        this.workFilterField = { value: "all", text: "All works" };
+        this.workSearchPlaceholder = "Search works by " + work.composer;
+        this.$config.composer = work.composer;
+        this.$config.work = work.id;
+        this.$config.genre = work.genre;
+        this.workFilter();
+      } else {
+        this.$config.composer = work.composer;
+        this.$config.work = work.id;
+        this.$config.genre = work.genre;
+        eventBus.$emit("fireWorkScroll", work.genre);
+      }
+
     }
   },
   created() {

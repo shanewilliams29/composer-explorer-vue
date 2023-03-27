@@ -289,7 +289,8 @@ export default {
         if(this.$view.mode == 'radio'){
           this.scrollToWork(genre);
         } else{
-          this.scrollToPanel(genre);
+          this.scrollToWork(genre);
+          // this.scrollToPanel(genre);
         }
       }
     },
