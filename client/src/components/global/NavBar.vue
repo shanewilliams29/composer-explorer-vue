@@ -20,7 +20,11 @@
         </div>
 
           <b-navbar-nav class="search-nav">
-            <b-form-input class="omnisearch" size="sm" v-model="omniSearchInput" v-debounce:750ms="omniSearch" type="search" placeholder="Search all composers, works, performers" autocomplete="off"></b-form-input>
+            <div class="search-icon">
+            <b-icon-search></b-icon-search>
+            </div>
+            
+            <b-form-input class="omnisearch" size="sm" v-model="omniSearchInput" v-debounce:750ms="omniSearch" type="search" placeholder="Search composers, works, performers" autocomplete="off"></b-form-input>
           </b-navbar-nav>
 
         <b-navbar-nav class="ml-auto" v-if="!$auth.clientToken">
@@ -401,17 +405,27 @@ img {
   background: transparent !important;
   margin-left: 5px;
 }
+.search-icon{
+  position: absolute;
+  top: 21px;
+  left: calc(165.3px + 600px + 18px);
+  color: white;
+}
 .search-nav{
   width: 100% !important;
 }
 .omnisearch{
   background-color: var(--medium-gray) !important;
   width: 100% !important;
-  margin-right: 10px;
+  margin-right: 30px;
+  margin-left: 10px;
 }
 .form-control:focus{
   box-shadow: none; 
   -webkit-box-shadow: none;
+}
+input[type="search"]{
+  padding-left: 31px !important;
 }
 input[type="search"]::-webkit-search-cancel-button {
   -webkit-appearance: none;
@@ -422,9 +436,9 @@ input[type="search"]::-webkit-search-cancel-button {
 #search-results{
   position: absolute;
   top: 60px;
-  left: calc(165.3px + 600px);
+  left: calc(165.3px + 600px + 10px);
   z-index: 9999;
-  width: calc(100% - 165.3px - 600px - 5px);
+  width: calc(100% - 165.3px - 600px - 15px);
   box-shadow: rgba(0, 0, 0, 0.07) 0px 1px 2px, rgba(0, 0, 0, 0.07) 0px 2px 4px, rgba(0, 0, 0, 0.07) 0px 4px 8px, rgba(0, 0, 0, 0.07) 0px 8px 16px, rgba(0, 0, 0, 0.07) 0px 16px 32px, rgba(0, 0, 0, 0.07) 0px 32px 64px;
 }
 .spinner {
