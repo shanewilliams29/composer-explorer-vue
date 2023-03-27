@@ -63,7 +63,7 @@ def omnisearch():
         for word in search_words:
             conditions.append(ComposerList.name_short.like('{}%'.format(word)))
         
-        composer_list = query.filter(or_(*conditions)).limit(10).all()  
+        composer_list = query.filter(or_(*conditions), ComposerList.catalogued == True).limit(10).all()  
     else:
         composer_list = [] 
     
@@ -75,7 +75,7 @@ def omnisearch():
     # search for works
     # if len(composers) == 1:
     #     works_list = WorkList.query.filter_by(composer=composers[0]['name_short']).order_by(WorkList.album_count.desc()).all()
-    works_list = WorkList.query.order_by(WorkList.album_count.desc()).all()
+    works_list = WorkList.query.filter(WorkList.album_count > 0).order_by(WorkList.album_count.desc()).all()
     
     return_works = []
     i = 0
