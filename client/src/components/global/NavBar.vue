@@ -1,4 +1,5 @@
 <template>
+  <div>
   <div v-show="!$view.mobileKeyboard">
     <div class="container-fluid">
       <b-navbar type="dark" variant="dark">
@@ -24,7 +25,7 @@
             <b-icon-search></b-icon-search>
             </div>
             
-            <b-form-input class="omnisearch" size="sm" v-model="omniSearchInput" v-debounce:750ms="omniSearch" type="search" placeholder="Search composers, works, performers" autocomplete="off"></b-form-input>
+            <b-form-input id="search-form" class="omnisearch" size="sm" v-model="omniSearchInput" v-debounce:750ms="omniSearch" type="search" placeholder="Search composers, works, performers" autocomplete="off"></b-form-input>
           </b-navbar-nav>
 
         <b-navbar-nav class="ml-auto" v-if="!$auth.clientToken">
@@ -59,15 +60,21 @@
     </div>
 
     <Transition name="fade">
-    <div id="search-results" v-show="viewSearchResults">
+      <div v-show="viewSearchResults && !firstLoad" class="overlay" id="overlay"></div>
+    </Transition>
+
+    <Transition name="fade">
+    <div id="search-results" v-show="viewSearchResults && !firstLoad">
       <b-card class="album-info-card shadow-sm">
       
       <div class="spinner" v-show="loading" role="status">
         <b-spinner class="m-5"></b-spinner>
         </div>
-        <div v-show="!loading">
-          <h6 v-if="composers.length + works.length + results.length == 0">No search results.</h6>
-        </div>
+
+          <div v-show="!loading && !firstLoad">
+            <h6 v-if="composers.length + works.length + results.length == 0">No search results.</h6>
+          </div>
+
 
         <b-card-body v-show="!loading" id="composers" class="card-body">
         <h6 v-if="composers.length > 0">Composers</h6>
@@ -174,6 +181,7 @@
     <div>
     </div>
   </div>
+</div>
 </template>
 
 
@@ -197,7 +205,8 @@ export default {
       works: [],
       artists: [],
       results: [],
-      loading: false
+      loading: false,
+      firstLoad: true
     };
   },
   computed: {
@@ -209,7 +218,15 @@ export default {
     },
     item_length: function () {
       return this.results.length;
-    }
+    },
+    // menuOpen() {
+    //   if (!this.firstLoad) {
+    //     return this.viewSearchResults;
+    //   } else {
+    //     return false;
+    //   }
+      
+    // },
   },
   watch: {
     clientToken() {
@@ -217,7 +234,13 @@ export default {
     },
     searchInput(searchInput) {
       if (searchInput == ""){
-        this.viewSearchResults = false;
+        //this.viewSearchResults = false;
+      }
+    },
+    menuOpen(menuOpen) {
+      if(menuOpen == true){
+        const overlay = document.getElementById('overlay');
+        overlay.style.display = 'block';
       }
     },
     results: {
@@ -279,12 +302,13 @@ export default {
       if (this.omniSearchInput !== ""){
         this.getOmniSearch(this.omniSearchInput);
       } else {
-        this.viewSearchResults = false;
+        //this.viewSearchResults = false;
       }
     },
     getOmniSearch(item) {
       this.loading = true;
       this.viewSearchResults = true;
+      this.firstLoad = false;
 
       const path = "api/omnisearch?search=" + item;
       
@@ -329,6 +353,7 @@ export default {
   created(){
     var apple = this.iOS();
     var userAgent = window.navigator.userAgent.toLowerCase();
+
     //this.getUnreadPosts();
 
     if (userAgent.includes('wv')) { // Webview (App)
@@ -343,6 +368,32 @@ export default {
   mounted() {
     // Periodically checks for new forum posts
     setInterval(this.getUnreadPosts, 60000);
+    const inputForm = document.getElementById("search-form");
+
+    // inputForm.addEventListener("click", () => {
+    //   this.viewSearchResults = true;
+    // });
+
+    // // Close the popup when the user clicks outside of it
+    // document.addEventListener("click", (event) => {
+    //   const isClickInsidePopup = popup.contains(event.target);
+    //   const isClickInsideForm = inputForm.contains(event.target);
+    //   if (!isClickInsidePopup && !isClickInsideForm) {
+    //     this.viewSearchResults = false;
+    //   }
+    // });
+    const overlay = document.getElementById('overlay');
+
+    inputForm.addEventListener('click', () => {
+      this.viewSearchResults = true;
+      // overlay.style.display = 'block';
+    });
+
+    overlay.addEventListener('click', () => {
+      this.viewSearchResults = false;
+      //overlay.style.display = 'none';
+    });
+
   },
 }
 </script>
@@ -354,6 +405,16 @@ export default {
 .fade-enter, .fade-leave-to {
   opacity: 0;
 }
+     .overlay {
+            display: block;
+            position: absolute;
+            top: 66;
+            left: 0;
+            width: 100%;
+            height: calc(100% - 66px);
+            background: rgba(52, 58, 64, 0.5);
+            z-index: 10;
+        }
 #home .active{
   background-color: var(--blue);
 }
@@ -448,7 +509,9 @@ input[type="search"]::-webkit-search-cancel-button {
     color: #9da6af;
 }
 .album-info-card {
-  padding: 15px;
+  padding-left: 15px;
+  padding-right: 15px;
+  padding-top: 8px;
   padding-bottom: 10px;
   background-color: var(--my-white) !important;
   border: none !important;
