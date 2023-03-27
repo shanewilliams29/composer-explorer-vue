@@ -86,7 +86,7 @@
                     <b-avatar size="40px" :src="composer['img']"></b-avatar>
                   </td>
                   <td class="info-td">
-                    <a class="artist-name">{{ composer['name_full'] }}</a><br />
+                    <a class="artist-name" @click="getComposer(composer['name_short'], composer['name_full'])">{{ composer['name_full'] }}</a><br />
                     <span class="born-died">{{ composer['born']}} - {{ composer['died']}}</span>
                   </td>
                 </tr>
@@ -126,7 +126,7 @@
                     <b-avatar size="40px" :src="result[2]"></b-avatar>
                   </td>
                   <td class="info-td">
-                    <a class="artist-name">{{ result[0] }}</a><br />
+                    <a class="artist-name" @click="getArtistComposers(result[0])">{{ result[0] }}</a><br />
                     <span class="born-died">{{ result[1] }}</span>
                   </td>
                 </tr>
@@ -189,6 +189,7 @@
 import {baseURL, staticURL} from "@/main.js";
 import axios from "axios";
 import {getPeopleInfoFromGoogle} from "@/HelperFunctions.js" 
+import { eventBus } from "@/main.js";
 
 export default {
   name: 'NavBar',
@@ -348,6 +349,23 @@ export default {
           this.loading = false;
           this.viewSearchResults = true;
         });
+    },
+    getComposer(composerShort, composerFull) {
+        eventBus.$emit("fireComposerOmniSearch", composerShort, composerFull);
+        this.viewSearchResults = false;
+        if (this.$route.name != "home") {
+          this.$router.push("/");
+        }
+    },
+    getArtistComposers(artist) {
+      if (!this.$view.mobile) {
+        eventBus.$emit("requestComposersForArtist", artist);
+        this.$config.artist = artist;
+        this.viewSearchResults = false;
+        if (this.$route.name != "performers") {
+          this.$router.push("/performers?artist=" + artist);
+        }
+      }
     },
   },
   created(){

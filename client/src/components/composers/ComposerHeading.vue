@@ -50,7 +50,20 @@ export default {
       this.composerSearchForm = "";
       eventBus.$emit("requestComposersFromSearch", "");
     },
-  }
+    setSearchComposer(composerShort, composerFull){
+      this.composerSearchForm = composerFull;
+      this.composerSearch();
+      eventBus.$emit("requestWorksList", composerShort);
+      eventBus.$emit("clearAlbumsList", composerShort);
+      eventBus.$emit("sendArtistList", []);
+    }
+  },
+  created() {
+    eventBus.$on("fireComposerOmniSearch", this.setSearchComposer);
+  },
+  beforeDestroy() {
+    eventBus.$off("fireComposerOmniSearch", this.setSearchComposer);
+  },
 };
 </script>
 

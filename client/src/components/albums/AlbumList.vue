@@ -4,7 +4,11 @@
       <b-spinner class="m-5"></b-spinner>
     </div>
     <div class="row">
-      <span v-show="!loading && albums.length < 1 && !this.$view.mode" 
+      <span v-show="!loading && albums.length < 1 && !this.$view.mode && this.message" 
+        class="m-4 col no-albums-found">
+        {{ message }}
+      </span>
+      <span v-show="!loading && albums.length < 1 && !this.$view.mode && !this.message" 
         class="m-4 col no-albums-found">
         No albums found.
       </span>
@@ -64,6 +68,7 @@ export default {
       sort: "",
       infiniteId: +new Date(),
       currentAlbum: 0,
+      message: ""
     };
   },
   methods: {
@@ -91,6 +96,7 @@ export default {
           this.$config.composer = res.data.composer;
           this.albums = res.data.albums;
           this.likedAlbums = res.data.liked_albums;
+          this.message = "";
           localStorage.setItem("config", JSON.stringify(this.$config));
           
           eventBus.$emit("sendArtistList", res.data.artists);
@@ -115,7 +121,7 @@ export default {
           this.$config.composer = res.data.composer;
           this.albums = res.data.albums;
           this.likedAlbums = res.data.liked_albums;
-
+          this.message = "";
           localStorage.setItem("config", JSON.stringify(this.$config));
 
           eventBus.$emit("sendArtistList", res.data.artists);
@@ -162,6 +168,7 @@ export default {
       axios
         .get(path)
         .then((res) => {
+          this.message = "";
           // If no albums for this work, advance to next work
           if (res.data.albums.length < 1) {
             this.$bvToast.show("no-tracks-toast");
@@ -214,6 +221,7 @@ export default {
 
       this.workId = id;
       this.loading = true;
+      this.message = "";
 
       const path = "api/albums/" + id;
       axios
@@ -251,6 +259,7 @@ export default {
     },
     clearAlbums() {
       this.albums = [];
+      this.message = "Select a work to view albums."
     },
     determineHeart(albumId) {
       if (this.likedAlbums.includes(albumId)) {
