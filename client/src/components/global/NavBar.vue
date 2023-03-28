@@ -247,8 +247,9 @@ export default {
     results: {
       handler: function () {
         // turn off loading when people results array is fully populated
-        if (this.results.length == this.artists.length){
-          //this.loading = false;
+        if (this.results.length == this.artists.length && this.artists.length > 0){
+          this.loading = false;
+          this.removeComposers(this.composers);
         }
       },
       deep: true
@@ -306,16 +307,29 @@ export default {
         //this.viewSearchResults = false;
       }
     },
+    removeComposers(composers) {
+      for(let i = 0; i < composers.length; i++) {
+          let composerName = composers[i]['name_full'];
+          for (var j = this.results.length - 1; j >= 0; j--) {
+           if (this.results[j][0] === composerName) {
+            this.results.splice(j, 1);
+           }
+          }
+      }
+    },
     getOmniSearch(item) {
       this.loading = true;
       this.viewSearchResults = true;
       this.firstLoad = false;
+      this.composers = [];
+      this.works = [];
+      this.artists = [];
+      this.results = [];
 
       function removeAccents(text) {
         return text.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
       }
-      this.artists = [];
-      this.results = [];
+
       let i = 0;
       let pattern = new RegExp("\\b" + item.toLowerCase() + "\\w*");
 
@@ -346,6 +360,7 @@ export default {
           this.composers = res.data.composers;
           this.works = res.data.works;
           this.loading = false;
+          this.removeComposers(this.composers);
           // this.artists = res.data.artists;
 
           // Object.keys(this.artists).forEach((key) => getPeopleInfoFromGoogle(this.artists[key]['name'], this.results, this.$auth.knowledgeKey));
@@ -368,6 +383,7 @@ export default {
           console.error(error);
           this.loading = false;
           this.viewSearchResults = true;
+          this.ajax_waiting = false;
         });
     },
     getComposer(composerShort, composerFull) {

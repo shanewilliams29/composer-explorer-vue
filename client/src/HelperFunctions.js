@@ -82,10 +82,10 @@ export function getPeopleInfoFromGoogle(person, peopleList, authKey) {
                   wikiLink = null;
                 }
 
-                peopleList.push([person, description, imageUrl, rank, wikiLink]);
-                peopleList.sort(function (a, b) {
+                  peopleList.push([person, description, imageUrl, rank, wikiLink]);
+                    peopleList.sort(function (a, b) {
                   return b[3] - a[3];
-                });
+                  });
 
                 break;
               }
