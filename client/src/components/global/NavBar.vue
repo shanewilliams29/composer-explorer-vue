@@ -20,7 +20,8 @@
           </b-nav>
         </div>
 
-          <b-navbar-nav class="search-nav">
+
+          <b-navbar-nav v-if="!$view.mobile" class="search-nav">
             <div class="search-icon">
             <b-icon-search></b-icon-search>
             </div>
