@@ -309,7 +309,7 @@ export default {
     },
   },
   created() {
-    if (!this.$view.mode) { // only get albums in Browse ($view.mode = null) mode
+    if (!this.$view.mode && !this.$route.query.search) { // only get albums in Browse ($view.mode = null) mode
       this.initialGetAlbums(this.$config.work);
     }
     eventBus.$on("requestAlbums", this.getAlbums);

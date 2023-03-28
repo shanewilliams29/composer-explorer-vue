@@ -86,7 +86,7 @@
                     <b-avatar size="40px" :src="composer['img']"></b-avatar>
                   </td>
                   <td class="info-td">
-                    <a class="artist-name" @click="getComposer(composer['name_short'], composer['name_full'])">{{ composer['name_full'] }}</a><br />
+                    <a class="artist-name" @click="getComposer(composer)">{{ composer['name_full'] }}</a><br />
                     <span class="born-died">{{ composer['born']}} - {{ composer['died']}}</span>
                   </td>
                 </tr>
@@ -386,27 +386,31 @@ export default {
           this.ajax_waiting = false;
         });
     },
-    getComposer(composerShort, composerFull) {
-        eventBus.$emit("fireComposerOmniSearch", composerShort, composerFull);
-        eventBus.$emit("requestWorksList", composerShort);
-        eventBus.$emit("clearAlbumsList", composerShort);
-        eventBus.$emit("sendArtistList", []);
-        // this.$config.work = '';
-        // this.$config.genre = '';
-
+    getComposer(composer) {
         this.viewSearchResults = false;
+        let delay = 0;
         if (this.$route.name != "home") {
-          this.$router.push("/");
+          delay = 200;
+          this.$router.push("/?search=" + composer.name_short);
         }
+        setTimeout(function(){
+          eventBus.$emit("fireComposerOmniSearch", composer.name_short, composer.name_full);
+          eventBus.$emit("requestWorksList", composer.name_short);
+          eventBus.$emit("clearAlbumsList", composer.name_short);
+          eventBus.$emit("sendArtistList", []);
+        }, delay);
     },
     getSearchWork(work) {
-        eventBus.$emit("fireWorkOmniSearch", work);
-
-        // eventBus.$emit("requestWorksList", composer);
         this.viewSearchResults = false;
+
+        let delay = 0;
         if (this.$route.name != "home") {
-          this.$router.push("/");
+          delay = 200;
+          this.$router.push("/?search=" + work.id);
         }
+        setTimeout(function(){
+          eventBus.$emit("fireWorkOmniSearch", work);
+        }, delay);
     },
     getArtistComposers(artist) {
       if (!this.$view.mobile) {

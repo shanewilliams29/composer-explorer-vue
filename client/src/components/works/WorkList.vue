@@ -621,7 +621,7 @@ export default {
     },
   },
   created() {
-    if (!this.$view.mode) {
+    if (!this.$view.mode && !this.$route.query.search) {
       // only get works in browse mode
       this.getWorks(this.$config.composer);
       this.selectRow(this.$config.work);

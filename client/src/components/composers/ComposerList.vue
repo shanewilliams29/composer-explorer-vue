@@ -278,10 +278,14 @@ export default {
     },
   },
   created() {
-    if (!this.$view.mode) { // dont get composers in performer or radio modes
+    if (!this.$view.mode && !this.$route.query.search) { // dont get composers in performer or radio modes or if omnisearch present
       this.getComposers();
       const config = JSON.parse(localStorage.getItem("config"));
       this.$config.composer = config.composer;
+    } else if (!this.$route.query.artist){ // remove query parameters unless on performer page
+        setTimeout(() => {
+          this.$router.replace({'query': null});
+        }, 1000);
     }
 
     if (this.$view.mode && !this.$view.mobile) {
