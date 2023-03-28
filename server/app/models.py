@@ -244,7 +244,7 @@ class WorkList(db.Model):
     search = db.Column(db.String(256))
     date = db.Column(db.Integer)
     openopus = db.Column(db.Boolean)
-    album_count = db.Column(db.Integer)
+    album_count = db.Column(db.Integer, index=True)
     albums = db.relationship("WorkAlbums", back_populates="work", lazy='dynamic')
 
     def __repr__(self):

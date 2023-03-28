@@ -20,13 +20,12 @@
           </b-nav>
         </div>
 
-
           <b-navbar-nav v-if="!$view.mobile" class="search-nav">
             <div class="search-icon">
             <b-icon-search></b-icon-search>
             </div>
             
-            <b-form-input id="search-form" class="omnisearch" size="sm" v-model="omniSearchInput" v-debounce:750ms="omniSearch" type="search" placeholder="Search composers, works, performers" autocomplete="off"></b-form-input>
+            <b-form-input id="search-form" class="omnisearch" size="sm" v-model="omniSearchInput" v-debounce:500ms="omniSearch" type="search" placeholder="Search composers, works, performers" autocomplete="off"></b-form-input>
           </b-navbar-nav>
 
         <b-navbar-nav class="ml-auto" v-if="!$auth.clientToken">
@@ -249,7 +248,7 @@ export default {
       handler: function () {
         // turn off loading when people results array is fully populated
         if (this.results.length == this.artists.length){
-          this.loading = false;
+          //this.loading = false;
         }
       },
       deep: true
@@ -312,6 +311,27 @@ export default {
       this.viewSearchResults = true;
       this.firstLoad = false;
 
+      function removeAccents(text) {
+        return text.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+      }
+      this.artists = [];
+      this.results = [];
+      let i = 0;
+      let pattern = new RegExp("\\b" + item.toLowerCase() + "\\w*");
+
+      for (let artist of this.$lists.artistList) {
+        let match = pattern.exec(removeAccents(artist.toLowerCase()));
+        if (match) {
+            this.artists.push(artist.trim());
+          i++;
+        }
+        if (i > 10) {
+          break;
+        }
+      }
+
+      this.artists.forEach((element) => getPeopleInfoFromGoogle(element, this.results, this.$auth.knowledgeKey));
+
       const path = "api/omnisearch?search=" + item;
       
       let wordsArray = item.split(" ");
@@ -323,12 +343,11 @@ export default {
       axios
         .get(path)
         .then((res) => {
-          
           this.composers = res.data.composers;
           this.works = res.data.works;
-          this.artists = res.data.artists;
-          this.results = [];
-          this.artists.forEach((element) => getPeopleInfoFromGoogle(element, this.results, this.$auth.knowledgeKey));
+          this.loading = false;
+          // this.artists = res.data.artists;
+
           // Object.keys(this.artists).forEach((key) => getPeopleInfoFromGoogle(this.artists[key]['name'], this.results, this.$auth.knowledgeKey));
 
           var content = "";

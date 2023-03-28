@@ -12,6 +12,7 @@ from unidecode import unidecode
 import json
 import random
 import re
+import time
 
 
 @bp.route('/api/userdata', methods=['GET'])  # main composer list
@@ -36,32 +37,26 @@ def get_userdata():
 
 
 @bp.route('/api/omnisearch', methods=['GET'])  # main composer list
-# @cache.cached(query_string=True)
 def omnisearch():
+    # Start the timer
+    start_time = time.time()
+
     # look for search term or filter term
     search_item = request.args.get('search')
     search_terms = search_item.split()
 
-    search_words= []
-    search_nums = []
+    search_words = [term for term in search_terms if not term.isdigit()]
+    search_nums = [int(term) for term in search_terms if term.isdigit()]
 
-    for item in search_terms:
-        try:
-            integer = int(item)
-            search_nums.append(integer)
-        except ValueError:
-            search_words.append(item)
-
-    # first search for composers if search term is present
-    # create the base query
-
+    # first search for composers if word search term is present
     if search_words:
         query = db.session.query(ComposerList)
 
         conditions = []
-        conditions.append(ComposerList.name_norm.like('{}'.format(search_words)))
         for word in search_words:
-            conditions.append(ComposerList.name_short.like('{}%'.format(word)))
+            conditions.append(ComposerList.name_norm.ilike('{}%'.format(word)))
+        for word in search_words:
+            conditions.append(ComposerList.name_short.ilike('{}%'.format(word)))
         
         composer_list = query.filter(or_(*conditions), ComposerList.catalogued == True).limit(10).all()  
     else:
@@ -73,10 +68,16 @@ def omnisearch():
         composers = prepare_composers(composer_list)
 
     # search for works
-    # if len(composers) == 1:
-    #     works_list = WorkList.query.filter_by(composer=composers[0]['name_short']).order_by(WorkList.album_count.desc()).all()
-    works_list = WorkList.query.filter(WorkList.album_count > 0).order_by(WorkList.album_count.desc()).all()
-    
+    # filter by composers if relevant
+    conditions = []
+    composer_array = []
+    if composers:
+        for composer in composers:
+            composer_array.append(composer['name_full'])
+            conditions.append(WorkList.composer == composer['name_short'])
+
+    works_list = WorkList.query.filter(or_(*conditions), WorkList.album_count > 0).order_by(WorkList.album_count.desc()).all()
+ 
     return_works = []
     i = 0
     for work in works_list:
@@ -96,38 +97,35 @@ def omnisearch():
         if i > 10:
             break
 
-    # search for artists, use the one already downloaded?
-    artists = db.session.query(ArtistList).first()
-    artist_list = json.loads(artists.content)
+    # moved to javascript
+    # artists = db.session.query(ArtistList).first()
+    # artist_list = json.loads(artists.content)
 
     # return_list = []
     # i = 0
+    # pattern = r"\b" + search_item.lower() + r"\w*"
     # for artist in artist_list:
-    #     search_string = search_item
-    #     if search_string.lower() in unidecode(artist.lower()):
-    #         return_list.append(artist.strip())
+    #     match = re.search(pattern, unidecode(artist.lower()))
+    #     if match:
+    #         if artist not in composer_array: # remove composers from performers list
+    #             return_list.append(artist.strip())
     #         i += 1
     #     if i > 10:
     #         break
 
-    return_list = []
-    i = 0
-    for artist in artist_list:
-        pattern = r"\b" + search_item.lower() + r"\w*"
-        match = re.search(pattern, unidecode(artist.lower()))
-        if match:
-            return_list.append(artist.strip())
-            i += 1
-        if i > 10:
-            break
+    # Calculate the time taken
+    end_time = time.time()
+    time_taken = end_time - start_time
 
-    # prepare key info from list for JSON response
+    # Print the time taken
+    print('Time taken:', time_taken)
    
     # return response
     response_object = {'status': 'success'}
     response_object['composers'] = composers
     response_object['works'] = return_works
-    response_object['artists'] = return_list
+    # response_object['artists'] = return_list
+    response_object['query_time'] = time_taken
     response = jsonify(response_object)
     return response
 
