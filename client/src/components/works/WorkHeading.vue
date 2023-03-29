@@ -39,6 +39,17 @@ export default {
     };
   },
   methods: {
+    workRecommended(recommended){
+      const workOptionsList = {
+        'recommended': { value: "recommended", text: "Recommended works" }, 
+        'all': { value: "all", text: "All works" }
+      }
+      if (recommended){
+        return workOptionsList['recommended'];
+      } else {
+        return workOptionsList['all'];
+      }
+    },
     workFilter() {
       eventBus.$emit("fireWorkFilter", this.workFilterField.value);
       this.workSearchField = "";
@@ -68,17 +79,21 @@ export default {
         this.$config.composer = work.composer;
         this.$config.work = work.id;
         this.$config.genre = work.genre;
+        localStorage.setItem("config", JSON.stringify(this.$config));
         this.workFilter();
       } else {
         this.$config.composer = work.composer;
         this.$config.work = work.id;
         this.$config.genre = work.genre;
+        localStorage.setItem("config", JSON.stringify(this.$config));
         eventBus.$emit("fireWorkScroll", work.genre);
       }
 
     }
   },
   created() {
+    this.workFilterField = this.workRecommended(this.$config.workRecommended);
+    alert(this.$config.workRecommended);
     eventBus.$on("requestWorksList", this.newComposer);
     eventBus.$on("fireWorkOmniSearch", this.setWorkOmniSearch);
   },

@@ -51,6 +51,7 @@ const defaultConfig = {
   tier: 1,
   work: "BEETHOVEN00005",
   workTitle: "Symphony No. 5 in C minor",
+  workRecommended: 1,
   genre: "Symphony",
   playTracks: "spotify:track:6cUCckpdlqHJ5Ascf2uH2A spotify:track:1L0a0dpHaMWgAoEEvFfycT spotify:track:7ojkji0OYCOpl3UMy92gEf spotify:track:4IHaNEgvWUD63pMTWrclb2",
   allTracks: "spotify:track:6cUCckpdlqHJ5Ascf2uH2A spotify:track:1L0a0dpHaMWgAoEEvFfycT spotify:track:7ojkji0OYCOpl3UMy92gEf spotify:track:4IHaNEgvWUD63pMTWrclb2",

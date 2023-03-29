@@ -32,7 +32,7 @@
                   :ref="work.id"
                   :key="work.id"
                   :id="genreName"
-                  @click="selectRow(work.id); getAlbums(work.id, work.title); setGenre(work.genre);"
+                  @click="selectRow(work); getAlbums(work.id, work.title); setGenre(work.genre);"
                   :class="{'highlight': (work.id == selectedWork), 'no-albums': (work.album_count == 0)}"
                 >
                   <td width="17%">
@@ -472,8 +472,10 @@ export default {
       localStorage.setItem("config", JSON.stringify(this.$config));
       
     },
-    selectRow(workid) {
-      this.selectedWork = workid;
+    selectRow(work) {
+      this.selectedWork = work.id;
+      this.$config.workRecommended = work.recommend;
+      localStorage.setItem("config", JSON.stringify(this.$config));
     },
     setGenre(genre) {
       this.$config.genre = genre;

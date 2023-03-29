@@ -68,6 +68,7 @@ export default {
         this.composerFilter();
       }
       this.$config.composer = composerShort;
+      localStorage.setItem("config", JSON.stringify(this.$config));
     },
     setWorkOmniSearch(){
       if(this.composerFilterForm.value != 'all'){
