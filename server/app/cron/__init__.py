@@ -210,8 +210,8 @@ def refreshalbums(name):
     logger.log_text(message, severity="NOTICE")
 
 
-@ bp.cli.command()
-@ click.argument("name")
+# @ bp.cli.command()
+# @ click.argument("name")
 def cleanup(name):
     # delete albums with no tracks.
     db.session.query(WorkAlbums).filter(WorkAlbums.composer == name, WorkAlbums.score == 0).delete()

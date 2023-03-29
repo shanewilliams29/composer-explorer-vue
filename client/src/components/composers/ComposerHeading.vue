@@ -15,13 +15,13 @@ import { eventBus } from "@/main.js";
 export default {
   data() {
     return {
-      composerFilterForm: { value: "popular", text: "Most popular" },
+      composerFilterForm: { value: 1, text: "Most popular" },
       composerSearchForm: null,
       composerOptions: [
-        { value: "popular", text: "Most popular" },
-        { value: "tier2", text: "Less popular" },
-        // { value: 'tier3', text: 'More obscure' },
-        // { value: 'tier4', text: 'Quite obscure' },
+        { value: 1, text: "Most popular" },
+        { value: 2, text: "Less popular" },
+        // { value: 3, text: 'More obscure' },
+        // { value: 4, text: 'Quite obscure' },
         { value: "early", text: "Early" },
         { value: "baroque", text: "Baroque" },
         { value: "classical", text: "Classical" },
@@ -33,6 +33,15 @@ export default {
     };
   },
   methods: {
+    getOption(tier){
+      const tierOptions = {
+        1: { value: 1, text: "Most popular" }, 
+        2: { value: 2, text: "Less popular" }, 
+        3: { value: 3, text: 'More obscure' },
+        4: { value: 4, text: 'Quite obscure' }
+      }
+      return tierOptions[tier];
+    },
     composerFilter() {
       eventBus.$emit("requestComposersFromFilter", this.composerFilterForm.value);
       this.composerSearchForm = "";
@@ -42,11 +51,11 @@ export default {
       if (this.composerSearchForm) {
         this.composerFilterForm = `Search results for "${this.composerSearchForm}"`;
       } else {
-        this.composerFilterForm = { value: "popular", text: "Most popular" };
+        this.composerFilterForm = { value: 1, text: "Most popular" };
       }
     },
     onComposerFocus() {
-      this.composerFilterForm = { value: "popular", text: "Most popular" };
+      this.composerFilterForm = { value: 1, text: "Most popular" };
       this.composerSearchForm = "";
       eventBus.$emit("requestComposersFromSearch", "");
     },
@@ -68,6 +77,7 @@ export default {
     }
   },
   created() {
+    this.composerFilterForm = this.getOption(this.$config.tier);
     eventBus.$on("fireComposerOmniSearch", this.setComposerOmniSearch);
     eventBus.$on("fireWorkOmniSearch", this.setWorkOmniSearch);
   },

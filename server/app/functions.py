@@ -42,7 +42,8 @@ def prepare_composers(composer_list):
             'img': current_app.config['STATIC'] + 'img/' + composer.name_short + '.jpg',
             'region': region_name,
             'color': era_color,
-            'catalogued': composer.catalogued
+            'catalogued': composer.catalogued,
+            'tier': composer.tier
         }
         COMPOSERS.append(info)
 

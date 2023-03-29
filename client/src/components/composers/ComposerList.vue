@@ -32,7 +32,7 @@
                   v-for="composer in region"
                   :key="composer.id"
                   :ref="composer.name_short"
-                  @click="selectRow(composer.name_short); getWorks(composer.name_short);"
+                  @click="selectRow(composer); getWorks(composer.name_short);"
                   :class="[{'cursor': ($view.mode != 'radio')}, 
                           {'highlight': (composer.name_short == $config.composer)}]"
                 >
@@ -131,7 +131,7 @@ export default {
       // populates composer list initially
       this.loading = true;
 
-      const path = "api/composers";
+      const path = "api/composers?filter=" + this.$config.tier;
       axios
         .get(path)
         .then((res) => {
@@ -227,9 +227,10 @@ export default {
         eventBus.$emit("requestWorksListForFavorites", composer);
       }
     },
-    selectRow(nameShort) {
+    selectRow(composer) {
       if (this.$view.mode != "radio") {
-        this.$config.composer = nameShort;
+        this.$config.composer = composer.name_short;
+        this.$config.tier = composer.tier;
         localStorage.setItem("config", JSON.stringify(this.$config));
       }
     },

@@ -48,6 +48,7 @@ export const staticURL = process.env.VUE_APP_STATIC_URL;
 let config = {};
 const defaultConfig = {
   composer: "Beethoven",
+  tier: 1,
   work: "BEETHOVEN00005",
   workTitle: "Symphony No. 5 in C minor",
   genre: "Symphony",
