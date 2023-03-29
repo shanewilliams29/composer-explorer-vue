@@ -93,7 +93,6 @@ export default {
   },
   created() {
     this.workFilterField = this.workRecommended(this.$config.workRecommended);
-    alert(this.$config.workRecommended);
     eventBus.$on("requestWorksList", this.newComposer);
     eventBus.$on("fireWorkOmniSearch", this.setWorkOmniSearch);
   },

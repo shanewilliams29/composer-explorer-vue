@@ -32,7 +32,7 @@
                   :ref="work.id"
                   :key="work.id"
                   :id="genreName"
-                  @click="selectRow(work); getAlbums(work.id, work.title); setGenre(work.genre);"
+                  @click="selectRow(work.id); setRecommended(work.recommend); getAlbums(work.id, work.title); setGenre(work.genre);"
                   :class="{'highlight': (work.id == selectedWork), 'no-albums': (work.album_count == 0)}"
                 >
                   <td width="17%">
@@ -472,9 +472,11 @@ export default {
       localStorage.setItem("config", JSON.stringify(this.$config));
       
     },
-    selectRow(work) {
-      this.selectedWork = work.id;
-      this.$config.workRecommended = work.recommend;
+    selectRow(workId) {
+      this.selectedWork = workId;
+    },
+    setRecommended(workRecommended){
+      this.$config.workRecommended = workRecommended;
       localStorage.setItem("config", JSON.stringify(this.$config));
     },
     setGenre(genre) {
@@ -625,7 +627,11 @@ export default {
   created() {
     if (!this.$view.mode && !this.$route.query.search) {
       // only get works in browse mode
-      this.getWorks(this.$config.composer);
+      if(this.$config.workRecommended){
+        this.getFilteredWorks('recommended');
+      } else {
+        this.getFilteredWorks('all');
+      }
       this.selectRow(this.$config.work);
     }
     eventBus.$on("requestWorksList", this.requestWorksList);
