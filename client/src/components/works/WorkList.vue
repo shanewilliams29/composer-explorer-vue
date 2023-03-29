@@ -476,7 +476,6 @@ export default {
       this.selectedWork = workId;
     },
     setRecommended(workRecommended){
-      alert(workRecommended);
       this.$config.workRecommended = workRecommended;
       localStorage.setItem("config", JSON.stringify(this.$config));
     },

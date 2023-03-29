@@ -44,7 +44,7 @@ export default {
         'recommended': { value: "recommended", text: "Recommended works" }, 
         'all': { value: "all", text: "All works" }
       }
-      if (recommended){
+      if (recommended == 1){
         return workOptionsList['recommended'];
       } else {
         return workOptionsList['all'];

@@ -93,7 +93,8 @@ export default {
         .get(path)
         .then((res) => {
           this.loading = false;
-          this.$config.composer = res.data.composer;
+          this.$config.composer = res.data.composer[0].name_short;
+          this.$config.tier = res.data.composer[0].tier;
           this.albums = res.data.albums;
           this.likedAlbums = res.data.liked_albums;
           this.message = "";
@@ -118,7 +119,8 @@ export default {
         .get(path)
         .then((res) => {
           this.loading = false;
-          this.$config.composer = res.data.composer;
+          this.$config.composer = res.data.composer[0].name_short;
+          this.$config.tier = res.data.composer[0].tier;
           this.albums = res.data.albums;
           this.likedAlbums = res.data.liked_albums;
           this.message = "";
@@ -199,8 +201,8 @@ export default {
             this.loading = false;
             this.likedAlbums = res.data.liked_albums;
             this.$config.album = this.albums[0].id;
-            this.$config.composer = res.data.composer;
-
+            this.$config.composer = res.data.composer[0].name_short;
+            this.$config.tier = res.data.composer[0].tier;
             localStorage.setItem("config", JSON.stringify(this.$config));
 
             this.selectRow(this.albums[0].id); // select first row

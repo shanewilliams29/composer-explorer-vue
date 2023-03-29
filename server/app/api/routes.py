@@ -861,9 +861,13 @@ def get_albums(work_id):
     response_object = {'status': 'success'}
     response_object['albums'] = sorted_list
     response_object['artists'] = artist_list
-    if sorted_list:
-        response_object['composer'] = sorted_list[0]['composer']
     response_object['liked_albums'] = liked_albums
+
+    if sorted_list:
+        composer = ComposerList.query.filter_by(name_short=sorted_list[0]['composer']).first()
+        return_composer = prepare_composers([composer])
+        response_object['composer'] = return_composer
+
     response = jsonify(response_object)
     return response
 
