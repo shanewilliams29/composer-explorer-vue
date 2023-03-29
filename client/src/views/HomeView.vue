@@ -51,7 +51,15 @@ export default {
     }
   },
   created() {
-    window.firstLoad = true; // prevent playback on first load
+    // remove query parameters for landing from search on another page
+    if (this.$route.query.search) {
+      window.firstLoad = false; // allow playback on first load from another page
+        setTimeout(() => {
+          this.$router.replace({'query': null});
+        }, 1000);
+    } else {
+      window.firstLoad = true; // prevent playback on first load
+    }
     this.$view.mode = null;
   },
 };

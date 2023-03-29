@@ -56,7 +56,6 @@ export default {
       this.$config.allTracks = album.tracks[0][2];
       this.$config.playTracks = album.tracks[0][2];
       localStorage.setItem("config", JSON.stringify(this.$config));
-
       this.album = album;
       if (this.$auth.clientToken && this.$auth.deviceID && !window.firstLoad) {
         this.playTracks(album.tracks[0][2]);
