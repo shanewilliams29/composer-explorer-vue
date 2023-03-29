@@ -394,7 +394,7 @@ export default {
           this.$router.push("/?search=" + composer.name_short);
         }
         setTimeout(function(){
-          eventBus.$emit("fireComposerOmniSearch", composer.name_short, composer.name_full);
+          eventBus.$emit("fireComposerOmniSearch", composer);
           eventBus.$emit("requestWorksList", composer.name_short);
           eventBus.$emit("clearAlbumsList", composer.name_short);
           eventBus.$emit("sendArtistList", []);

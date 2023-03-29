@@ -59,15 +59,13 @@ export default {
       this.composerSearchForm = "";
       eventBus.$emit("requestComposersFromSearch", "");
     },
-    // eslint-disable-next-line
-    setComposerOmniSearch(composerShort, composerFull){
-      // this.composerSearchForm = composerFull;
-      // this.composerSearch();
+    setComposerOmniSearch(composer){
       if(this.composerFilterForm.value != 'all'){
         this.composerFilterForm = { value: "all", text: "All - by region" };
         this.composerFilter();
       }
-      this.$config.composer = composerShort;
+      this.$config.composer = composer.name_short;
+      this.$config.tier = composer.tier;
       localStorage.setItem("config", JSON.stringify(this.$config));
     },
     setWorkOmniSearch(){

@@ -476,6 +476,7 @@ export default {
       this.selectedWork = workId;
     },
     setRecommended(workRecommended){
+      alert(workRecommended);
       this.$config.workRecommended = workRecommended;
       localStorage.setItem("config", JSON.stringify(this.$config));
     },
@@ -557,11 +558,13 @@ export default {
         for (var i = 0; i < this.shufflePlaylist.length; i++) {
           if (this.shufflePlaylist[i]["id"] == this.selectedWork && i !== this.shufflePlaylist.length - 1) {
             this.selectRow(this.shufflePlaylist[i + 1]["id"]);
+            this.setRecommended(this.shufflePlaylist[i + 1]["recommend"]);
             this.setGenre(this.shufflePlaylist[i + 1]["genre"]);
             this.getAlbumsAndPlay(this.shufflePlaylist[i + 1]["id"], this.shufflePlaylist[i + 1]["title"]);
             break;
           } else if (this.shufflePlaylist[i]["id"] == this.selectedWork && i === this.shufflePlaylist.length - 1){
             this.selectRow(this.shufflePlaylist[0]["id"]);
+            this.setRecommended(this.shufflePlaylist[0]["recommend"]);
             this.setGenre(this.shufflePlaylist[0]["genre"]);
             this.getAlbumsAndPlay(this.shufflePlaylist[0]["id"], this.shufflePlaylist[0]["title"]);
             break;
@@ -572,6 +575,7 @@ export default {
         for (var j = 0; j < this.playlist.length; j++) {
           if (this.playlist[j]["id"] == this.selectedWork && j !== this.playlist.length - 1) {
             this.selectRow(this.playlist[j + 1]["id"]);
+            this.setRecommended(this.shufflePlaylist[j + 1]["recommend"]);
             this.setGenre(this.playlist[j + 1]["genre"]);
             this.getAlbumsAndPlay(this.playlist[j + 1]["id"], this.playlist[j + 1]["title"]);
             break;
@@ -586,11 +590,13 @@ export default {
         for (var i = 0; i < this.shufflePlaylist.length; i++) {
           if (this.shufflePlaylist[i]["id"] == this.selectedWork && i !== 0) {
             this.selectRow(this.shufflePlaylist[i - 1]["id"]);
+            this.setRecommended(this.shufflePlaylist[i - 1]["recommend"]);
             this.setGenre(this.shufflePlaylist[i - 1]["genre"]);
             this.getAlbumsAndPlay(this.shufflePlaylist[i - 1]["id"], this.shufflePlaylist[i - 1]["title"]);
             break;
           } else if (this.shufflePlaylist[i]["id"] == this.selectedWork && i === 0){
             this.selectRow(this.shufflePlaylist[this.shufflePlaylist.length - 1]["id"]);
+            this.setRecommended(this.shufflePlaylist[i - 1]["recommend"]);
             this.setGenre(this.shufflePlaylist[this.shufflePlaylist.length - 1]["genre"]);
             this.getAlbumsAndPlay(this.shufflePlaylist[this.shufflePlaylist.length - 1]["id"], this.shufflePlaylist[this.shufflePlaylist.length - 1]["title"]);
             break;
@@ -601,6 +607,7 @@ export default {
         for (var j = 0; j < this.playlist.length; j++) {
           if (this.playlist[j]["id"] == this.selectedWork && j !== 0) {
             this.selectRow(this.playlist[j - 1]["id"]);
+            this.setRecommended(this.shufflePlaylist[j - 1]["recommend"]);
             this.setGenre(this.playlist[j - 1]["genre"]);
             this.getAlbumsAndPlay(this.playlist[j - 1]["id"], this.playlist[j - 1]["title"]);
             break;
@@ -613,21 +620,22 @@ export default {
 
       const rndInt = randomIntFromInterval(0, this.playlist.length - 1);
       this.selectRow(this.playlist[rndInt]["id"]);
+      this.setRecommended(this.playlist[rndInt]["recommend"]);
       this.setGenre(this.playlist[rndInt]["genre"]);
       this.getAlbumsAndPlay(this.playlist[rndInt]["id"], this.playlist[rndInt]["title"]);
     },
     getOmniSearchWork(work) {
       eventBus.$emit("changeWork");
       this.selectRow(work.id);
+      this.setRecommended(work.recommend);
+      this.setGenre(work.genre);
       this.getAlbumsAndPlay(work.id, work.title);
-      //this.setGenre(this.playlist[rndInt]["genre"]);
-      //this.getAlbumsAndPlay(this.playlist[rndInt]["id"], this.playlist[rndInt]["title"]);
     },
   },
   created() {
     if (!this.$view.mode && !this.$route.query.search) {
       // only get works in browse mode
-      if(this.$config.workRecommended){
+      if(this.$config.workRecommended == 1){
         this.getFilteredWorks('recommended');
       } else {
         this.getFilteredWorks('all');
