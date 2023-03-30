@@ -350,17 +350,44 @@ def get_works(name):
 
     # first filter based on search term if present
     if search:
-        works_list = WorkList.query.filter_by(composer=name)\
+        search_terms = search.split()
+
+        search_words = [term for term in search_terms if not term.isdigit()]
+        search_nums = [int(term) for term in search_terms if term.isdigit()]
+
+        works_list = WorkList.query.filter(WorkList.composer == name, WorkList.album_count > 0)\
             .order_by(WorkList.order, WorkList.genre, WorkList.id).all()
-
+     
         return_list = []
-
         for work in works_list:
-            search_string = str(work.genre) + str(work.cat) + str(work.suite) + str(work.title) + str(work.nickname) + str(work.search)
-            if search.lower() in unidecode(search_string.lower()):
+            search_string = str(work.composer) + str(work.genre) + str(work.cat) + str(work.suite) + str(work.title) + str(work.nickname) + str(work.search)
+            j = 0
+            for word in search_words:
+                if word.lower() in unidecode(search_string.lower()):
+                    j += 1
+            for num in search_nums:
+                pattern = r'(?<!\d)' + str(num) + r'(?!\d)'
+                match = re.search(pattern, search_string)
+                if match:
+                    j += 1
+            if j == len(search_terms):
                 return_list.append(work)
 
         works_list = return_list
+
+    # first filter based on search term if present
+    # if search:
+    #     works_list = WorkList.query.filter_by(composer=name)\
+    #         .order_by(WorkList.order, WorkList.genre, WorkList.id).all()
+
+    #     return_list = []
+
+    #     for work in works_list:
+    #         search_string = str(work.genre) + str(work.cat) + str(work.suite) + str(work.title) + str(work.nickname) + str(work.search)
+    #         if search.lower() in unidecode(search_string.lower()):
+    #             return_list.append(work)
+
+    #     works_list = return_list
 
     # next filter on filter item if present
     elif filter_method:
