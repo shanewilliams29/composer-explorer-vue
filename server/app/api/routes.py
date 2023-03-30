@@ -367,7 +367,7 @@ def get_works(name):
         if filter_method == "recommended":
             works_list = WorkList.query.filter_by(composer=name, recommend=True).order_by(WorkList.order, WorkList.genre, WorkList.id).all()
         else:
-            works_list = WorkList.query.filter_by(composer=name)\
+            works_list = WorkList.query.filter(WorkList.composer == name, WorkList.album_count > 0)\
                 .order_by(WorkList.order, WorkList.genre, WorkList.id).all()
     
     # default to recommended works if no search or filter present
