@@ -136,3 +136,17 @@ class SpotifyAPI(object):
         }
         response = requests.get(url, headers=headers)
         return response
+
+    def get_artists(self, artistids):
+        headers = {
+            'Authorization': 'Bearer {}'.format(session['app_token']),
+        }
+        response = requests.get('https://api.spotify.com/v1/artists?ids=' + artistids, headers=headers)
+        return response
+
+    def get_tracks(self, trackids):
+        headers = {
+            'Authorization': 'Bearer {}'.format(session['app_token']),
+        }
+        response = requests.get('https://api.spotify.com/v1/tracks?ids=' + trackids, headers=headers)
+        return response

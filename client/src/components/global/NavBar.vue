@@ -522,7 +522,7 @@ img {
   background-color: var(--dark-gray) !important;
 }
 .buttons-nav{
-  min-width: 600px !important;
+  min-width: 620px !important;
 }
 .navbar-items a {
   color: var(--my-white) !important;
@@ -542,7 +542,7 @@ img {
 .search-icon{
   position: absolute;
   top: 21px;
-  left: calc(165.3px + 600px + 18px);
+  left: calc(165.3px + 600px + 38px);
   color: white;
 }
 .search-nav{

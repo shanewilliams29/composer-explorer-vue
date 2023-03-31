@@ -11,6 +11,11 @@ favorites = db.Table('favorites',
                      db.Column('user_id', db.Integer, db.ForeignKey('user.id'))
                      )
 
+performer_albums = db.Table('performer_albums',
+                            db.Column('performer_id', db.String(48), db.ForeignKey('performers.id')),
+                            db.Column('album_id', db.String(46), db.ForeignKey('work_albums.id'))
+                            )
+
 visits = db.Table('visits',
                   db.Column('work_id', db.String(24), db.ForeignKey('work_list.id')),
                   db.Column('user_id', db.Integer, db.ForeignKey('user.id'))
@@ -274,6 +279,8 @@ class Artists(db.Model):
     album_id: float
     composer: str
     count: str
+    spotify_id: str
+    spotify_img: str
 
     id = db.Column(db.String(128), primary_key=True)
     name = db.Column(db.String(256), index=True)
@@ -282,9 +289,42 @@ class Artists(db.Model):
     composer = db.Column(db.String(48))
     work = db.relationship("WorkList")
     count = db.Column(db.Integer)
+    spotify_id = db.Column(db.String(48))
+    spotify_img = db.Column(db.String(128))
 
     def __repr__(self):
         return '<{}>'.format(self.name)
+
+
+@dataclass
+class Performers(db.Model):
+    id: str
+    name: str
+    img: str
+
+    id = db.Column(db.String(48), primary_key=True)
+    name = db.Column(db.String(256), index=True)
+    img = db.Column(db.String(128))
+    albums = db.relationship("WorkAlbums", secondary=performer_albums, back_populates="performers", lazy='dynamic')
+
+    def __repr__(self):
+        return '<{}>'.format(self.name)
+
+    def add_album(self, album):
+
+        count = db.session.query(performer_albums).filter(
+            performer_albums.c.performer_id == self.id,
+            performer_albums.c.album_id == album.id).count()
+
+        if count < 1:
+            self.albums.append(album)
+
+# class PerformerAlbums(db.Model):
+#     __tablename__ = 'performer_albums'
+#     id = db.Column(db.Integer, primary_key=True)
+#     performer_id = db.Column(db.String(48), db.ForeignKey('performers.id'))
+#     work_id = db.Column(db.String(24), db.ForeignKey('work_list.id'))
+#     album_id = db.Column(db.String(46), db.ForeignKey('work_albums.id'))
 
 
 class WorkAlbums(db.Model):
@@ -297,6 +337,7 @@ class WorkAlbums(db.Model):
     data = db.Column(MEDIUMTEXT)
     hidden = db.Column(db.Boolean, default=False)
     filled = db.Column(db.Boolean, default=False)
+    got_artists = db.Column(db.Boolean, default=False)
     spotify_data = db.Column(db.Text)
     img = db.Column(db.Text)
     label = db.Column(db.String(1024))
@@ -306,6 +347,7 @@ class WorkAlbums(db.Model):
     album_type = db.Column(db.String(255))
     likes = db.relationship('AlbumLike', backref='album', lazy='dynamic', passive_deletes=True)
     work = db.relationship("WorkList", back_populates="albums")
+    performers = db.relationship("Performers", secondary=performer_albums, back_populates="albums", lazy='dynamic')
 
     def __repr__(self):
         return '<{}>'.format(self.id)

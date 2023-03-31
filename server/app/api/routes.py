@@ -987,6 +987,10 @@ def get_albuminfo(album_id):
 
     album_details = json.loads(album.data)
 
+    artists = db.session.query(Artists)\
+        .filter(Artists.album_id == album_id)\
+        .all()
+
     ALBUM = {
         'composer': album.composer,
         'id': album.id,
@@ -999,7 +1003,8 @@ def get_albuminfo(album_id):
         'minor_artists': album_details['minor_artists'],
         'release_date': album_details['release_date'],
         'tracks': album_details['tracks'],
-        'track_count': album_details['track_count']
+        'track_count': album_details['track_count'],
+        'artist_details': artists
     }
 
     # order so that conductor before orchestra

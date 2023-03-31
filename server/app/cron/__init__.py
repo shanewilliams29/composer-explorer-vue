@@ -4,15 +4,210 @@ import click
 from app import db, log, sp
 from datetime import datetime, timedelta
 from app.cron.classes import GroupAlbums, SmartAlbums
-from app.models import WorkList, Spotify, WorkAlbums, Artists, ComposerCron, ArtistList, ComposerList
+from app.models import WorkList, Spotify, WorkAlbums, Artists, ComposerCron, ArtistList, ComposerList, Performers
 from app.cron.functions import search_spotify_and_save, search_album
 import json
-from sqlalchemy import func, text
+from sqlalchemy import func, text, or_
 
 bp = Blueprint('cron', __name__)
 
 log_name = "cron-log"
 logger = log.logger(log_name)
+
+
+# Fill artist table with information from Spotify
+@bp.cli.command()
+@click.argument("name")
+def fillperformerdata(name):
+    error_count = 0
+    start_time = datetime.utcnow()
+    ctx = current_app.test_request_context()
+    ctx.push()
+
+    # get spotify token
+    if not session.get('app_token'):
+        session['app_token'] = sp.client_authorize()
+        session['app_token_expire_time'] = datetime.now() + timedelta(minutes=59)
+
+    # get artists for tracks from Spotify
+    albums = db.session.query(WorkAlbums)\
+        .filter(WorkAlbums.composer == name, or_(WorkAlbums.got_artists == None, WorkAlbums.got_artists != True)).all()
+
+    track_list = []
+    for album in albums:
+        data = json.loads(album.data)
+        for track in data['tracks']:
+            info_dict = {
+                'track_id': track[1],
+                'album_id': album.id,
+                'work_id': album.workid
+            }
+            track_list.append(info_dict)
+
+    print(str(len(track_list)) + " tracks found.")
+
+    k = 0
+    j = 0
+    while k < len(track_list):
+
+        # token expiry and refreshing
+        if session['app_token_expire_time'] < datetime.now():
+            session['app_token'] = sp.client_authorize()
+            session['app_token_expire_time'] = datetime.now() + timedelta(minutes=59)
+        
+        i = 0
+        id_fetch_list = []
+
+        while i < 50 and k < len(track_list):
+            id_fetch_list.append(track_list[k]['track_id'])
+            i += 1
+            k += 1
+
+        id_string = ','.join(id_fetch_list)
+
+        response = sp.get_tracks(id_string)
+        results = response.json()
+
+        if results.get('error'):
+            print('FAILED TO RETRIEVE SPOTIFY INFO')
+            break  
+            
+        m = 0
+        while m < len(results['tracks']):
+            try:
+                track_list[j]['artists'] = results['tracks'][m]['artists']
+            except:
+                print("ERROR: " + str(track_list[j]['track_id']))
+                error_count += 1
+                pass
+
+            j += 1
+            m += 1
+
+        print("Completed " + str(k) + " of " + str(len(track_list)))
+
+    print("Data retrieved for Spotify Successfully")
+
+    # add artist ids to database
+
+    i = 1
+    k = 1
+    for track in track_list:
+        if i == 50 or k == len(track_list):
+            db.session.commit()
+            print("Completed " + str(k) + " of " + str(len(track_list)))
+            i = 1
+            k += 1
+        else:
+            for artist in track['artists']:
+                new_entry = Performers(
+                    id=artist['id'],
+                    name=artist['name'])
+                db.session.merge(new_entry)
+            i += 1
+            k += 1
+    # finish
+    ctx.pop()
+    end_time = datetime.utcnow()
+    elapsed_time = end_time - start_time
+    minutes = divmod(elapsed_time.total_seconds(), 60)
+
+    message = "Artist Spotify info data fill complete for " + name + ", " + str(error_count) + " unresolved errors. Took " + str(minutes[0]) + " minutes, " + str(minutes[1]) + " seconds."
+    print(message)
+
+
+# OLD Fill artist details with information from Spotify
+@bp.cli.command()
+@click.argument("name")
+def spotifyfillartistinfo(name):
+    start_time = datetime.utcnow()
+    ctx = current_app.test_request_context()
+    ctx.push()
+
+    # get spotify token
+    if not session.get('app_token'):
+        session['app_token'] = sp.client_authorize()
+        session['app_token_expire_time'] = datetime.now() + timedelta(minutes=59)
+
+    # # FIRST GET SPOTIFY ARTISTS IDS
+
+    # # get Artist list
+    # artists = db.session.query(Artists, WorkAlbums.spotify_data)\
+    #     .join(WorkAlbums)\
+    #     .filter(Artists.composer == name).all()
+
+    # for artist, spotify_data in artists:
+
+    #     data = json.loads(spotify_data)
+    #     for item in data:
+    #         if item['name'] == artist.name:
+    #             artist.spotify_id = item['id']
+    #             break
+
+    # db.session.commit()
+
+    # THEN GET SPOTIFY ARTIST PICTURES
+
+    artists = db.session.query(Artists)\
+        .filter(Artists.composer == name).all()
+
+    artist_list = []
+    for artist in artists:
+        if artist.spotify_id:
+            artist_list.append(artist)
+
+    k = 0
+    j = 0
+
+    error_count = 0
+
+    while k < len(artist_list):
+
+        i = 0
+        id_fetch_list = []
+
+        # token expiry and refreshing
+        if session['app_token_expire_time'] < datetime.now():
+            session['app_token'] = sp.client_authorize()
+            session['app_token_expire_time'] = datetime.now() + timedelta(minutes=59)
+
+        while i < 50 and k < len(artist_list):
+            id_fetch_list.append(artist_list[k].spotify_id)
+            i += 1
+            k += 1
+
+        id_string = ','.join(id_fetch_list)
+
+        response = sp.get_artists(id_string)
+        results = response.json()
+
+        if results.get('error'):
+            print('FAIL')
+            error_count += 1
+            continue
+
+        m = 0
+        while m < len(results['artists']):
+            try:
+                artist_list[j].spotify_img = results['artists'][m]['images'][0]['url']
+            except:
+                print("ERROR: " + str(artist_list[j]))
+                pass
+
+            j += 1
+            m += 1
+
+        db.session.commit()
+        print("Completed " + str(k) + " of " + str(len(artist_list)))
+
+    # finish
+    ctx.pop()
+    end_time = datetime.utcnow()
+    elapsed_time = end_time - start_time
+    minutes = divmod(elapsed_time.total_seconds(), 60)
+
+    message = "Artist Spotify info data fill complete for " + name + ", " + str(error_count) + " unresolved errors. Took " + str(minutes[0]) + " minutes, " + str(minutes[1]) + " seconds."
+    print(message)
 
 # # Inital Spotify search and fill for Albums and Artists
 # @bp.cli.command()
@@ -532,7 +727,7 @@ def spotifypull(name):
         j = 0
         for album in album_list:
             try:
-                album.spotify_data = json.dumps(results['albums'][j]['artists'])
+                # album.spotify_data = json.dumps(results['albums'][j]['artists'])
                 album.title = results['albums'][j]['name']
                 album.label = results['albums'][j]['label']
                 album.track_count = results['albums'][j]['total_tracks']

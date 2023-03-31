@@ -112,3 +112,93 @@ export function getPeopleInfoFromGoogle(person, peopleList, authKey) {
         });
       });
     }
+
+
+// Gets person info from Google API and adds to peopleList
+export function getArtistDetails(personDict, peopleList, authKey) {
+    const person = personDict['name'];
+    const spotifyImg = personDict['spotify_img'];
+    const path = `https://kgsearch.googleapis.com/v1/entities:search?indent=true&types=Person&types=MusicGroup&query=${person} Music&limit=50&key=${authKey}`
+    console.log(personDict);
+      axios({
+        method: "get",
+        url: path,
+      })
+        .then((res) => {
+          let imageUrl = "";
+          let description = "";
+          let wikiLink = "";
+          let list = res.data.itemListElement;
+
+          if (list[0] != null) {
+            for (var i = 0; i < list.length; i++) {
+
+              var personMatch = person.replace("Sir", "").replace("Dame", "").trim();
+              if (list[i].result.name.includes(personMatch)) {
+                let rank = 0;
+
+                if ("image" in list[i].result) {
+                  imageUrl = list[i].result.image.contentUrl;
+                  rank = rank + 2;
+                  console.log('GOOGLE IMAGE');
+                } else if (spotifyImg){
+                  imageUrl = spotifyImg;
+                  console.log('SPOTIFY IMAGE');
+                  rank = rank + 1;
+                } else {
+                  imageUrl = "";
+                  console.log('NO IMAGE');
+                }
+
+                if ("description" in list[i].result) {
+                  description = list[i].result.description;
+                  rank = rank + 1;
+                  if (description.toLowerCase().includes('conductor')) {
+                    rank = rank + 10;
+                  }
+                } else {
+                  description = "";
+                }
+
+                try {
+                  if ("url" in res.data.itemListElement[i].result.detailedDescription) {
+                    wikiLink = res.data.itemListElement[i].result.detailedDescription.url;
+                  } else {
+                    wikiLink = null;
+                  }
+                }
+                catch(err) {
+                  wikiLink = null;
+                }
+
+
+                  peopleList.push([person, description, imageUrl, rank, wikiLink]);
+                    peopleList.sort(function (a, b) {
+                  return b[3] - a[3];
+                  });
+
+                break;
+              }
+
+              if (i == list.length - 1) {
+                peopleList.push([person, "", "", -1, ""]);
+                peopleList.sort(function (a, b) {
+                  return b[3] - a[3];
+                });
+              }
+            }
+          } else {
+            peopleList.push([person, "", "", -1, ""]);
+            peopleList.sort(function (a, b) {
+              return b[3] - a[3];
+            });
+          }
+        })
+      .catch((error) => {
+        console.error(error);
+        peopleList.push([person, "", "", -1, ""]);
+        peopleList.sort(function (a, b) {
+          return b[3] - a[3];
+        });
+      });
+    }

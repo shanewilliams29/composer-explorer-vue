@@ -38,7 +38,8 @@
 <script>
 import { eventBus } from "@/main.js";
 import spotify from "@/SpotifyFunctions.js";
-import {getPeopleInfoFromGoogle} from "@/HelperFunctions.js" 
+// import {getPeopleInfoFromGoogle} from "@/HelperFunctions.js" 
+import {getArtistDetails} from "@/HelperFunctions.js" 
 
 export default {
   data() {
@@ -64,10 +65,14 @@ export default {
     getSpotifyAlbumData(album) {
       // retrieves data from Spotify. 'album' is database album object
       this.results = [];
-      this.artists = album.all_artists.split(", ");
+      
+      // this.artists = album.all_artists.split(", ");
+      this.artists = album.artist_details
       let album_id = album.album_uri.substring(album.album_uri.lastIndexOf(":") + 1);
       spotify.getSpotifyAlbum(this.$auth.appToken, album_id);
-      this.artists.forEach((element) => getPeopleInfoFromGoogle(element, this.results, this.$auth.knowledgeKey));
+      this.artists.forEach((element) => getArtistDetails(element, this.results, this.$auth.knowledgeKey));
+      // this.artists.forEach((element) => getPeopleInfoFromGoogle(element, this.results, this.$auth.knowledgeKey));
+
     }
   },
   created() {
