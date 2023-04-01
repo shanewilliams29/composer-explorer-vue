@@ -29,83 +29,120 @@ def fillperformerdata(name):
         session['app_token'] = sp.client_authorize()
         session['app_token_expire_time'] = datetime.now() + timedelta(minutes=59)
 
-    # get artists for tracks from Spotify
+    # get albums for processing
     albums = db.session.query(WorkAlbums)\
         .filter(WorkAlbums.composer == name, or_(WorkAlbums.got_artists == None, WorkAlbums.got_artists != True)).all()
 
-    track_list = []
+    all_album_list = []
     for album in albums:
-        data = json.loads(album.data)
-        for track in data['tracks']:
-            info_dict = {
-                'track_id': track[1],
-                'album_id': album.id,
-                'work_id': album.workid
-            }
-            track_list.append(info_dict)
-
-    print(str(len(track_list)) + " tracks found.")
-
-    k = 0
-    j = 0
-    while k < len(track_list):
-
-        # token expiry and refreshing
-        if session['app_token_expire_time'] < datetime.now():
-            session['app_token'] = sp.client_authorize()
-            session['app_token_expire_time'] = datetime.now() + timedelta(minutes=59)
+        album_dict = {'album': album, 
+                      'album_id': album.id, 
+                      'work_id': album.workid, 
+                      'tracks': [], 
+                      'artists': []}
         
-        i = 0
-        id_fetch_list = []
+        data = json.loads(album.data)
+        
+        for track in data['tracks']:
+            album_dict['tracks'].append(track[1])
+        
+        all_album_list.append(album_dict)
 
-        while i < 50 and k < len(track_list):
-            id_fetch_list.append(track_list[k]['track_id'])
-            i += 1
-            k += 1
+    print(str(len(all_album_list)) + " albums found.")
 
-        id_string = ','.join(id_fetch_list)
+    for p in range(0, len(all_album_list), 50):
+        
+        # retrieve tracks from Spotify
+        errors = True
+        while errors:
+            errors = False
+            album_list = all_album_list[p:p+50]
+            k = 0
 
-        response = sp.get_tracks(id_string)
-        results = response.json()
+            while k < len(album_list):
 
-        if results.get('error'):
-            print('FAILED TO RETRIEVE SPOTIFY INFO')
-            break  
-            
-        m = 0
-        while m < len(results['tracks']):
-            try:
-                track_list[j]['artists'] = results['tracks'][m]['artists']
-            except:
-                print("ERROR: " + str(track_list[j]['track_id']))
-                error_count += 1
-                pass
+                if album_list[k]['artists']:
+                    k += 1
+                    continue
 
-            j += 1
-            m += 1
+                # token expiry and refreshing
+                if session['app_token_expire_time'] < datetime.now():
+                    session['app_token'] = sp.client_authorize()
+                    session['app_token_expire_time'] = datetime.now() + timedelta(minutes=59)
 
-        print("Completed " + str(k) + " of " + str(len(track_list)))
+                id_fetch_list = []
+                track_num = len(album_list[k]['tracks'])
 
-    print("Data retrieved for Spotify Successfully")
+                for n in range(0, track_num, 50):
+                    current_batch = album_list[k]['tracks'][n:n+50]
+                    id_fetch_list.extend(current_batch)
 
-    # add artist ids to database
+                results = []
 
-    i = 1
-    k = 1
-    for track in track_list:
-        if i == 50 or k == len(track_list):
-            db.session.commit()
-            print("Completed " + str(k) + " of " + str(len(track_list)))
-            i = 1
-            k += 1
-        else:
-            for artist in track['artists']:
-                new_entry = Performers(
-                    id=artist['id'],
-                    name=artist['name'])
-                db.session.merge(new_entry)
-            i += 1
-            k += 1
+                for i in range(0, len(id_fetch_list), 50):
+                    current_batch = id_fetch_list[i:i+50]
+                    id_string = ','.join(current_batch)
+                    
+                    # Send a request to the Spotify API
+                    response = sp.get_tracks(id_string)
+                    batch_results = response.json()
+
+                    if batch_results.get('error'):
+                        print("ERROR " + str(batch_results.get('error')))
+                        if int(batch_results.get('error')['status']) == 429:
+                            errors = True
+                            continue
+                        else:
+                            exit()
+                    else:
+                        results.extend(batch_results['tracks'])
+
+                m = 0
+                while m < len(results):
+                    try:
+                        album_list[k]['artists'] = results[m]['artists']
+                    except:
+                        print("ERROR")
+                        error_count += 1
+                        pass
+
+                    m += 1
+
+                k += 1
+                print("Fetched " + str(k + p) + " of " + str(len(all_album_list)))
+
+        print("Data retrieved from Spotify Successfully")
+
+        # Store artists in Performers table
+        existing_artists = {artist.id: artist for artist in Performers.query.all()}
+
+        for k, album in enumerate(album_list):
+
+            for artist in album['artists']:
+                # Fetch the existing artist
+                existing_artist = existing_artists.get(artist['id'])
+
+                if existing_artist:
+                    # Update the existing artist's album list
+                    existing_artist.add_album(album['album'])
+                else:
+                    # Add a new artist entry
+                    new_entry = Performers(
+                        id=artist['id'],
+                        name=artist['name'])
+                    new_entry.add_album(album['album'])
+                    existing_artists[new_entry.id] = new_entry
+                    db.session.merge(new_entry)
+
+            album['album'].got_artists = True
+
+            # Commit after every 10 albums or the last album
+            if (k + 1) % 10 == 0 or k == len(album_list) - 1:
+                db.session.commit()
+                print("Stored " + str(k + 1 + p) + " of " + str(len(all_album_list)))
+
+        print("Data stored in database successfully")
+
     # finish
     ctx.pop()
     end_time = datetime.utcnow()

@@ -311,12 +311,7 @@ class Performers(db.Model):
         return '<{}>'.format(self.name)
 
     def add_album(self, album):
-
-        count = db.session.query(performer_albums).filter(
-            performer_albums.c.performer_id == self.id,
-            performer_albums.c.album_id == album.id).count()
-
-        if count < 1:
+        if album not in self.albums:
             self.albums.append(album)
 
 # class PerformerAlbums(db.Model):
