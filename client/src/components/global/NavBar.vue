@@ -570,9 +570,9 @@ input[type="search"]::-webkit-search-cancel-button {
 #search-results{
   position: absolute;
   top: 60px;
-  left: calc(165.3px + 600px + 10px);
+  left: calc(165.3px + 600px + 30px);
   z-index: 9999;
-  width: calc(100% - 165.3px - 600px - 15px);
+  width: calc(100% - 165.3px - 600px - 35px);
   box-shadow: rgba(0, 0, 0, 0.07) 0px 1px 2px, rgba(0, 0, 0, 0.07) 0px 2px 4px, rgba(0, 0, 0, 0.07) 0px 4px 8px, rgba(0, 0, 0, 0.07) 0px 8px 16px, rgba(0, 0, 0, 0.07) 0px 16px 32px, rgba(0, 0, 0, 0.07) 0px 32px 64px;
 }
 .spinner {
