@@ -981,11 +981,14 @@ def get_workinfo(work_id):
 @bp.route('/api/albuminfo/<album_id>', methods=['GET'])
 # @cache.cached(query_string=True)
 def get_albuminfo(album_id):
-    album = db.session.query(WorkAlbums)\
+    result = db.session.query(WorkAlbums, ComposerList.name_full)\
+        .join(ComposerList)\
         .filter(WorkAlbums.id == album_id)\
-        .first()
+        .all()
 
-    album_details = json.loads(album.data)
+    for album, composer_name in result:
+        album_details = json.loads(album.data)
+        composer_name = composer_name
 
     artists = Performers.query.join(performer_albums).join(WorkAlbums)\
         .filter(WorkAlbums.id == album_id).all()
@@ -994,6 +997,11 @@ def get_albuminfo(album_id):
         artists = db.session.query(Artists)\
                 .filter(Artists.album_id == album_id)\
                 .all()
+
+    if len(artists) > 1:
+        for artist in artists:
+            if artist.name == composer_name:
+                artists.remove(artist)
 
     ALBUM = {
         'composer': album.composer,
