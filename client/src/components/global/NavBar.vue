@@ -188,7 +188,7 @@
 <script>
 import {baseURL, staticURL} from "@/main.js";
 import axios from "axios";
-import {getPeopleInfoFromGoogle} from "@/HelperFunctions.js" 
+import {getArtistDetails} from "@/HelperFunctions.js" 
 import { eventBus } from "@/main.js";
 
 export default {
@@ -333,10 +333,10 @@ export default {
       let i = 0;
       let pattern = new RegExp("\\b" + item.toLowerCase() + "\\w*");
 
-      for (let artist of this.$lists.artistList) {
-        let match = pattern.exec(removeAccents(artist.toLowerCase()));
+      for (let artist of this.$lists.artistDict) {
+        let match = pattern.exec(removeAccents(artist.name.toLowerCase()));
         if (match) {
-            this.artists.push(artist.trim());
+            this.artists.push(artist);
           i++;
         }
         if (i > 10) {
@@ -344,7 +344,7 @@ export default {
         }
       }
 
-      this.artists.forEach((element) => getPeopleInfoFromGoogle(element, this.results, this.$auth.knowledgeKey));
+      this.artists.forEach((element) => getArtistDetails(element, this.results, this.$auth.knowledgeKey));
 
       const path = "api/omnisearch?search=" + item;
       
