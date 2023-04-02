@@ -100,13 +100,25 @@ def fillperformerdata(name):
                 m = 0
                 while m < len(results):
                     try:
-                        album_list[k]['artists'] = results[m]['artists']
+                        album_list[k]['artists'].extend(results[m]['artists'])
                     except:
                         print("ERROR")
                         error_count += 1
                         pass
 
                     m += 1
+
+                # Use a set to keep track of the ids we've already seen
+                seen_ids = set()
+
+                # Create a new list of entries without duplicates
+                unique_entries = []
+                for entry in album_list[k]['artists']:
+                    if entry['id'] not in seen_ids:
+                        unique_entries.append(entry)
+                        seen_ids.add(entry['id'])
+
+                album_list[k]['artists'] = unique_entries
 
                 k += 1
                 print("Fetched " + str(k + p) + " of " + str(len(all_album_list)))
@@ -141,8 +153,22 @@ def fillperformerdata(name):
                 db.session.commit()
                 print("Stored " + str(k + 1 + p) + " of " + str(len(all_album_list)))
 
-        print("Data stored in database successfully")
+        current_time = datetime.utcnow()
+        elapsed_time = current_time - start_time
+        elapsed_minutes = divmod(elapsed_time.total_seconds(), 60)
 
+        total = len(all_album_list)
+        completed = k + 1 + p
+        remaining = total - completed
+
+        item_per_second = (completed / elapsed_time.total_seconds())
+        remaining_time = remaining * (1 / item_per_second)
+        remaining_minutes = divmod(remaining_time, 60)
+
+        print("Data stored in database successfully.")
+        print("Time taken: " + str(elapsed_minutes[0]) + " minutes, " + str(elapsed_minutes[1]) + " seconds.")
+        print("Remaining time: " + str(remaining_minutes[0]) + " minutes, " + str(remaining_minutes[1]) + " seconds.")
+    
     # finish
     ctx.pop()
     end_time = datetime.utcnow()
@@ -150,6 +176,79 @@ def fillperformerdata(name):
     minutes = divmod(elapsed_time.total_seconds(), 60)
 
     message = "Artist Spotify info data fill complete for " + name + ", " + str(error_count) + " unresolved errors. Took " + str(minutes[0]) + " minutes, " + str(minutes[1]) + " seconds."
+    print(message)
+
+
+# OLD Fill artist details with information from Spotify
+@bp.cli.command()
+def getspotifyartistimg():
+    start_time = datetime.utcnow()
+    ctx = current_app.test_request_context()
+    ctx.push()
+
+    # get spotify token
+    if not session.get('app_token'):
+        session['app_token'] = sp.client_authorize()
+        session['app_token_expire_time'] = datetime.now() + timedelta(minutes=59)
+
+    artists = db.session.query(Performers)\
+        .filter(Performers.img == None).all()
+
+    artist_list = []
+    for artist in artists:
+        artist_list.append(artist)
+
+    k = 0
+    j = 0
+
+    error_count = 0
+
+    while k < len(artist_list):
+
+        i = 0
+        id_fetch_list = []
+
+        # token expiry and refreshing
+        if session['app_token_expire_time'] < datetime.now():
+            session['app_token'] = sp.client_authorize()
+            session['app_token_expire_time'] = datetime.now() + timedelta(minutes=59)
+
+        while i < 50 and k < len(artist_list):
+            id_fetch_list.append(artist_list[k].id)
+            i += 1
+            k += 1
+
+        id_string = ','.join(id_fetch_list)
+
+        response = sp.get_artists(id_string)
+        results = response.json()
+
+        if results.get('error'):
+            print('FAIL')
+            error_count += 1
+            continue
+
+        m = 0
+        while m < len(results['artists']):
+            try:
+                artist_list[j].img = results['artists'][m]['images'][0]['url']
+            except:
+                print("ERROR: " + str(artist_list[j]))
+                pass
+
+            j += 1
+            m += 1
+
+        db.session.commit()
+        print("Completed " + str(k) + " of " + str(len(artist_list)))
+
+    # finish
+    ctx.pop()
+    end_time = datetime.utcnow()
+    elapsed_time = end_time - start_time
+    minutes = divmod(elapsed_time.total_seconds(), 60)
+
+    message = "Artist Spotify img fetch complete. " + str(error_count) + " unresolved errors. Took " + str(minutes[0]) + " minutes, " + str(minutes[1]) + " seconds."
     print(message)
 
 

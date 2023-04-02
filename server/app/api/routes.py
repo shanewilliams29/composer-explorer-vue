@@ -4,7 +4,7 @@ from flask_login import current_user, login_required
 from config import Config
 from app.functions import prepare_composers, group_composers_by_region, group_composers_by_alphabet
 from app.functions import prepare_works
-from app.models import ComposerList, WorkList, WorkAlbums, AlbumLike, Artists
+from app.models import ComposerList, WorkList, WorkAlbums, AlbumLike, Artists, Performers, performer_albums
 from app.models import ArtistList, User
 from sqlalchemy import func, text, or_, and_
 from app.api import bp
@@ -987,9 +987,13 @@ def get_albuminfo(album_id):
 
     album_details = json.loads(album.data)
 
-    artists = db.session.query(Artists)\
-        .filter(Artists.album_id == album_id)\
-        .all()
+    artists = Performers.query.join(performer_albums).join(WorkAlbums)\
+        .filter(WorkAlbums.id == album_id).all()
+
+    if not artists:
+        artists = db.session.query(Artists)\
+                .filter(Artists.album_id == album_id)\
+                .all()
 
     ALBUM = {
         'composer': album.composer,
@@ -1004,7 +1008,7 @@ def get_albuminfo(album_id):
         'release_date': album_details['release_date'],
         'tracks': album_details['tracks'],
         'track_count': album_details['track_count'],
-        'artist_details': artists
+        'artist_details': artists,
     }
 
     # order so that conductor before orchestra

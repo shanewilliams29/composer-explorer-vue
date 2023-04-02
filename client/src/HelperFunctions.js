@@ -116,8 +116,14 @@ export function getPeopleInfoFromGoogle(person, peopleList, authKey) {
 
 // Gets person info from Google API and adds to peopleList
 export function getArtistDetails(personDict, peopleList, authKey) {
-    const person = personDict['name'];
-    const spotifyImg = personDict['spotify_img'];
+      const person = personDict['name'];
+      let spotifyImg = ""
+      if ('img' in personDict) {
+        spotifyImg = personDict['img'];
+      } else {
+        spotifyImg = personDict['spotify_img'];
+      }
+    
     const path = `https://kgsearch.googleapis.com/v1/entities:search?indent=true&types=Person&types=MusicGroup&query=${person} Music&limit=50&key=${authKey}`
     console.log(personDict);
       axios({

@@ -311,8 +311,8 @@ class Performers(db.Model):
         return '<{}>'.format(self.name)
 
     def add_album(self, album):
-        if album not in self.albums:
-            self.albums.append(album)
+        #if album not in self.albums:
+        self.albums.append(album)
 
 # class PerformerAlbums(db.Model):
 #     __tablename__ = 'performer_albums'
