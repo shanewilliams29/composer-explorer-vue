@@ -11,7 +11,7 @@
           <table v-if="results">
             <tr class="tr-performer" v-for="result in results" :key="result[0]">
               <td>
-                <b-avatar class="avatar" size="64px" :src="result[2]"></b-avatar>
+                <b-avatar class="avatar" size="64px" :src="img"></b-avatar>
               </td>
               <td class="td-text">
                 <span class="artist-name">{{ result[0] }}&nbsp;</span><br />
@@ -113,11 +113,15 @@ export default {
         { value: "small", text: "Small" },
       ],
       results: [],
+      img: ""
     };
   },
   computed: {
     apiKeyGot() {
       return this.$auth.knowledgeKey;
+    },
+  artistDictGot() {
+      return this.$lists.artistDict;
     },
   },
   watch: {
@@ -127,13 +131,28 @@ export default {
         getPeopleInfoFromGoogle(this.$route.query.artist, this.results, this.$auth.knowledgeKey);
       }
     },
+    artistDictGot() {
+      if (this.$route.query.artist) { 
+        this.getArtistPic(this.$route.query.artist);
+      }
+    },
   },
   methods: {
+    getArtistPic(artistName){
+         for (let i = 0; i < this.$lists.artistDict.length; i++) {
+            let artist = this.$lists.artistDict[i];
+            if (artist.name == artistName){
+              this.img = artist.img
+              break;
+            }
+          }
+      },
     capitalize(string) {
       let capitalized = string[0].toUpperCase() + string.substring(1);
       return capitalized;
     },
     artistSearch(artist) {
+      this.getArtistPic(artist);
       eventBus.$emit("requestComposersForArtist", artist);
     },
     resetField(input) {
@@ -150,7 +169,8 @@ export default {
       this.albumSortField = { value: "recommended", text: "Recommended sorting" };
     },
     setArtistField(artist) {
-      this.results = []
+      this.results = [];
+      this.getArtistPic(artist);
       getPeopleInfoFromGoogle(artist, this.results, this.$auth.knowledgeKey);
       this.$router.push("/performers?artist=" + artist);
       this.query = artist;

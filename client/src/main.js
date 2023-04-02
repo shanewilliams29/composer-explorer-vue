@@ -85,6 +85,7 @@ Vue.prototype.$auth = Vue.observable({
 
 // stores lists to download from server only once at startup
 Vue.prototype.$lists = Vue.observable({
+  artistDict: [],
   artistList: [],
   composerList: [],
 });

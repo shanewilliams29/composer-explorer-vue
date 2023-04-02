@@ -125,7 +125,6 @@ export function getArtistDetails(personDict, peopleList, authKey) {
       }
     
     const path = `https://kgsearch.googleapis.com/v1/entities:search?indent=true&types=Person&types=MusicGroup&query=${person} Music&limit=50&key=${authKey}`
-    console.log(personDict);
       axios({
         method: "get",
         url: path,
@@ -143,23 +142,22 @@ export function getArtistDetails(personDict, peopleList, authKey) {
               if (list[i].result.name.includes(personMatch)) {
                 let rank = 0;
 
-                if ("image" in list[i].result) {
+                if (spotifyImg != "NA"){
+                    imageUrl = spotifyImg;
+                    rank = rank + 1;
+
+                } else if ("image" in list[i].result) {
                   imageUrl = list[i].result.image.contentUrl;
-                  rank = rank + 2;
-                  console.log('GOOGLE IMAGE');
-                } else if (spotifyImg){
-                  imageUrl = spotifyImg;
-                  console.log('SPOTIFY IMAGE');
                   rank = rank + 1;
+       
                 } else {
                   imageUrl = "";
-                  console.log('NO IMAGE');
                 }
 
                 if ("description" in list[i].result) {
                   description = list[i].result.description;
                   rank = rank + 1;
-                  if (description.toLowerCase().includes('conductor')) {
+                  if (description.toLowerCase().includes('conductor') || description.toLowerCase().includes('composer')) {
                     rank = rank + 10;
                   }
                 } else {

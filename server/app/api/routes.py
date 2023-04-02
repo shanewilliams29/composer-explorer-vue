@@ -990,14 +990,17 @@ def get_albuminfo(album_id):
         album_details = json.loads(album.data)
         composer_name = composer_name
 
+    # query new artist table first
     artists = Performers.query.join(performer_albums).join(WorkAlbums)\
         .filter(WorkAlbums.id == album_id).all()
 
+    # retrive from old artist table if no record in new
     if not artists:
         artists = db.session.query(Artists)\
                 .filter(Artists.album_id == album_id)\
                 .all()
 
+    # remove composer from artist list
     if len(artists) > 1:
         for artist in artists:
             if artist.name == composer_name:
@@ -1113,9 +1116,33 @@ def get_artistworks():
 @bp.route('/api/artistlist', methods=['GET'])  # artist list for performer view
 #@cache.cached()
 def get_artistlist():
-    artists = db.session.query(ArtistList).first()
+    # artists = db.session.query(ArtistList).first()
+    # artist_list = artists.content
 
-    artist_list = artists.content
+    # response_object = {'status': 'success'}
+    # response_object['artists'] = artist_list
+    # response = jsonify(response_object)
+    # return response
+
+    i = 0
+    artist_list = []
+
+    artists = db.session.query(Performers.name, Performers.img, func.count(Performers.id).label('total'))\
+        .join(performer_albums)\
+        .group_by(Performers.id).order_by(text('total DESC')).all()
+
+    composers = db.session.query(ComposerList.name_full).all()
+
+    composer_names = set(composer for (composer,) in composers)
+    print(composer_names)
+
+    # remove composers and bad results
+    for artist, img, count in artists:
+        if artist not in composer_names and "/" not in artist:
+            artist_list.append({'name': artist, 'img': img})
+        # if i < 100:
+        #     print(item[0] + " " + str(item[1]))
+        # i += 1
 
     response_object = {'status': 'success'}
     response_object['artists'] = artist_list

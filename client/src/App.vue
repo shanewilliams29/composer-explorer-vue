@@ -81,12 +81,17 @@ export default {
     },
     getArtistList() {
       this.$lists.artistList = []
-      // Gets list of all artists for performer typeahead
+      // Gets list of all artists for performer typeahead and search
       const path = "api/artistlist";
       axios
         .get(path)
         .then((res) => {
-          this.$lists.artistList = JSON.parse(res.data.artists);
+          this.$lists.artistDict = res.data.artists
+          for (let i = 0; i < res.data.artists.length; i++) {
+            let artist = res.data.artists[i];
+            let artistName = artist.name; 
+            this.$lists.artistList.push(artistName)
+          }
         })
         .catch((error) => {
           console.error(error);
