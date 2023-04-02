@@ -15,9 +15,39 @@ log_name = "cron-log"
 logger = log.logger(log_name)
 
 
+@ bp.cli.command()
+def autoperformerfill():
+
+    while True:
+
+        composer_to_fill = db.session.query(ComposerCron).first()
+
+        fillperformerdata(composer_to_fill.id)
+        getspotifyartistimg()
+        print("Completed " + str(composer_to_fill.id) + "!")
+
+        indexed_composers = []
+        for value in db.session.query(WorkList.composer).distinct():
+            str(indexed_composers.append(value[0]))
+
+        for composer in indexed_composers:
+            if composer == composer_to_fill.id:
+                index = indexed_composers.index(composer)
+
+                if index == len(indexed_composers) - 1:
+                    next_index = 0
+                else:
+                    next_index = index + 1
+
+                next_composer = indexed_composers[next_index]
+                composer_to_fill.id = next_composer
+                db.session.commit()
+                break
+
+
 # FILL PERFORMER TABLES WITH ARTISTS INFO FROM SPOTIFY
-@bp.cli.command()
-@click.argument("name")
+# @bp.cli.command()
+# @click.argument("name")
 def fillperformerdata(name):
     error_count = 0
     start_time = datetime.utcnow()
@@ -186,7 +216,7 @@ def fillperformerdata(name):
 
 
 # FILL PERFORMER TABLE WITH IMAGES FROM SPOTIFY
-@bp.cli.command()
+# @bp.cli.command()
 def getspotifyartistimg():
     start_time = datetime.utcnow()
     ctx = current_app.test_request_context()
