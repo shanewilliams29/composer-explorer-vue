@@ -62,17 +62,31 @@ export default {
     setSpotifyAlbum(album) {
       this.album = album;
     },
+    fixArtists(artists){
+      // Fixes string of artists that are wrong in Spotify (Meier/Barenboim/Bohm as one artist)
+       for (let i = 0; i < artists.length; i++) {
+          if (artists[i].name.indexOf("/") !== -1) {
+            let fixedArtists = artists[i].name.split("/");
+            let artistDictList = fixedArtists.map(function(artistName) {
+              return { name: artistName , img: "NA"};
+            });
+            artists.splice(i, 1);
+            artists.push(...artistDictList);
+          }
+        }
+        let uniqueList = artists.filter((dict, index, self) =>
+            index === self.findIndex((d) => d.name === dict.name)
+        );
+        return uniqueList;
+      },
     getSpotifyAlbumData(album) {
       // retrieves data from Spotify. 'album' is database album object
       this.results = [];
-      
-      // this.artists = album.all_artists.split(", ");
-      this.artists = album.artist_details
+      this.artists = album.artist_details;
+      this.artists = this.fixArtists(this.artists);
       let album_id = album.album_uri.substring(album.album_uri.lastIndexOf(":") + 1);
       spotify.getSpotifyAlbum(this.$auth.appToken, album_id);
       this.artists.forEach((element) => getArtistDetails(element, this.results, this.$auth.knowledgeKey));
-      // this.artists.forEach((element) => getPeopleInfoFromGoogle(element, this.results, this.$auth.knowledgeKey));
-
     }
   },
   created() {

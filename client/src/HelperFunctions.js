@@ -142,7 +142,7 @@ export function getArtistDetails(personDict, peopleList, authKey) {
               if (list[i].result.name.includes(personMatch)) {
                 let rank = 0;
 
-                if (spotifyImg != "NA"){
+                if ((spotifyImg != "NA") && (spotifyImg != null)){
                     imageUrl = spotifyImg;
                     rank = rank + 1;
 
