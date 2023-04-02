@@ -361,9 +361,6 @@ export default {
           this.works = res.data.works;
           this.loading = false;
           this.removeComposers(this.composers);
-          // this.artists = res.data.artists;
-
-          // Object.keys(this.artists).forEach((key) => getPeopleInfoFromGoogle(this.artists[key]['name'], this.results, this.$auth.knowledgeKey));
 
           var content = "";
           var parent = "";

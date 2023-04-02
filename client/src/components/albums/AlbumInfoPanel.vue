@@ -38,7 +38,6 @@
 <script>
 import { eventBus } from "@/main.js";
 import spotify from "@/SpotifyFunctions.js";
-// import {getPeopleInfoFromGoogle} from "@/HelperFunctions.js" 
 import {getArtistDetails} from "@/HelperFunctions.js" 
 
 export default {
@@ -63,7 +62,7 @@ export default {
       this.album = album;
     },
     fixArtists(artists){
-      // Fixes string of artists that are wrong in Spotify (Meier/Barenboim/Bohm as one artist)
+      // Fixes string of artists that are wrong in Spotify (ie. Meier/Barenboim/Bohm as one artist)
        for (let i = 0; i < artists.length; i++) {
           if (artists[i].name.indexOf("/") !== -1) {
             let fixedArtists = artists[i].name.split("/");

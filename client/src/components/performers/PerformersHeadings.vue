@@ -89,7 +89,7 @@
 
 <script>
 import { eventBus, staticURL } from "@/main.js";
-import { getPeopleInfoFromGoogle } from "@/HelperFunctions.js" 
+import { getArtistDetails } from "@/HelperFunctions.js" 
 
 export default {
   data() {
@@ -128,7 +128,8 @@ export default {
     apiKeyGot() {
       if (this.$route.query.artist) {
         this.results = []
-        getPeopleInfoFromGoogle(this.$route.query.artist, this.results, this.$auth.knowledgeKey);
+        let artistDict = {name: this.$route.query.artist, img: "NA"};
+        getArtistDetails(artistDict, this.results, this.$auth.knowledgeKey);
       }
     },
     artistDictGot() {
@@ -171,7 +172,8 @@ export default {
     setArtistField(artist) {
       this.results = [];
       this.getArtistPic(artist);
-      getPeopleInfoFromGoogle(artist, this.results, this.$auth.knowledgeKey);
+      let artistDict = {name: artist, img: "NA"};
+      getArtistDetails(artistDict, this.results, this.$auth.knowledgeKey);
       this.$router.push("/performers?artist=" + artist);
       this.query = artist;
     },
@@ -190,7 +192,8 @@ export default {
       this.query = this.$route.query.artist;
       this.$config.artist = this.$route.query.artist;
       if (this.$auth.knowledgeKey) {
-        getPeopleInfoFromGoogle(this.$route.query.artist, this.results, this.$auth.knowledgeKey);
+        let artistDict = {name: this.$route.query.artist, img: "NA"};
+        getArtistDetails(artistDict, this.results, this.$auth.knowledgeKey);
       }
     }
     eventBus.$on("fireArtistAlbums", this.resetAlbumSort);
