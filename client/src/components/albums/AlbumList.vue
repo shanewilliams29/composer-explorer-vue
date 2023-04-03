@@ -263,6 +263,7 @@ export default {
     playAlbumHop(albumId) {
       if(this.newWork){
         this.$view.progress = 0;
+        this.$view.trackIndex = 0;
         this.newWork = false;
       }
       this.$config.album = albumId;
