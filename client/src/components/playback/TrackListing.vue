@@ -28,10 +28,32 @@
 import { trackMixin } from "./TrackListing.js"
 import smoothscroll from "smoothscroll-polyfill";
 import { eventBus } from "@/main.js";
+import spotify from "@/SpotifyFunctions.js"; 
 
 export default {
+  data() {
+    return {
+      progress: 0,
+    };
+  },
   mixins: [trackMixin],
+  computed: {
+    durationChanged() {
+      return this.$view.duration;
+    },
+  },
+  watch: {
+    durationChanged() {
+      this.seektoDuration(this.progress);
+    },
+  },
   methods: {
+    seektoDuration(progress){
+      let progress_rounded = Math.round(progress)
+      if (progress > 0){
+        spotify.seekToPosition(this.$auth.clientToken, progress_rounded)
+      }
+    },
     selectTrack(track) {
       this.selectedTrack = track;
       smoothscroll.polyfill(); // for Safari smooth scrolling
@@ -52,13 +74,29 @@ export default {
   },
   created() {
     eventBus.$on("fireSetAlbum", (album) => {
+      this.progress = 0;
       this.genre = this.$config.genre;
       this.$config.allTracks = album.tracks[0][2];
       this.$config.playTracks = album.tracks[0][2];
       localStorage.setItem("config", JSON.stringify(this.$config));
       this.album = album;
       if (this.$auth.clientToken && this.$auth.deviceID && !window.firstLoad) {
-        this.playTracks(album.tracks[0][2]);
+        this.playTracks(album.tracks[0][2], 0);
+      } else {
+        window.firstLoad = false;
+      }
+    });
+    eventBus.$on("fireSetAlbumHopper", (album, track_no, percent_progress) => {
+      this.progress = this.$view.duration * percent_progress;
+      this.genre = this.$config.genre;
+      this.$config.allTracks = album.tracks[0][2];
+      this.$config.playTracks = album.tracks[track_no][2];
+      localStorage.setItem("config", JSON.stringify(this.$config));
+      this.album = album;
+      if (this.$auth.clientToken && this.$auth.deviceID && !window.firstLoad) {
+        this.playTracks(album.tracks[track_no][2], this.progress);
+        
+
       } else {
         window.firstLoad = false;
       }

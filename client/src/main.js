@@ -110,6 +110,8 @@ Vue.prototype.$view = Vue.observable({
   mobileKeyboard: false,
   avatar: false,
   showConnecting: true,
+  duration: 0,
+  trackIndex: 0
 });
 
 new Vue({

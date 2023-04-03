@@ -309,6 +309,24 @@ export default {
       
       eventBus.$emit("requestAlbumData", this.albums[this.currentAlbum].id);
     },
+      playTimeHop(progress, duration) {
+      // advances to next album when the current album can't be played
+      this.currentAlbum += 1;
+
+      if (this.currentAlbum >= this.albums.length) {
+        return null;
+      }
+
+      this.selectRow(this.albums[this.currentAlbum].id);
+      
+      this.$config.album = this.albums[this.currentAlbum].id;
+      localStorage.setItem("config", JSON.stringify(this.$config));
+
+      let track_no = this.$view.trackIndex;
+      let percent_progress = progress / duration;
+      
+      eventBus.$emit("requestAlbumDataHopper", this.albums[this.currentAlbum].id, track_no, percent_progress);
+    },
   },
   created() {
     if (!this.$view.mode && !this.$route.query.search) { // only get albums in Browse ($view.mode = null) mode
@@ -319,6 +337,7 @@ export default {
     eventBus.$on("requestFavoritesAlbums", this.getFavoritesAlbums);
     eventBus.$on("clearAlbumsList", this.clearAlbums);
     eventBus.$on("advanceToNextAlbum", this.playNextAlbum);
+    eventBus.$on("fireTimeHopperForward", this.playTimeHop);
   },
   beforeDestroy() {
     eventBus.$off("requestAlbums", this.getAlbums);
@@ -326,6 +345,7 @@ export default {
     eventBus.$off("requestFavoritesAlbums", this.getFavoritesAlbums);
     eventBus.$off("clearAlbumsList", this.clearAlbums);
     eventBus.$off("advanceToNextAlbum", this.playNextAlbum);
+    eventBus.$off("fireTimeHopperForward", this.playTimeHop);
   },
 };
 

@@ -29,7 +29,7 @@
       <b-icon-skip-end-fill></b-icon-skip-end-fill>
     </b-button>
     <b-button class="playback-button" id="next-work-button" 
-      @click="$parent.nextWorkNoDebounce()">
+      @click="$parent.timeHopperForward()">
       <b-icon-arrow-right-circle></b-icon-arrow-right-circle>
     </b-button>
     <b-button class="playback-button gray" id="like-work-button" v-show="!$view.like" 

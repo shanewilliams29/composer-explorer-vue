@@ -44,6 +44,8 @@ import {eventBus} from "@/main.js";
 import axios from "axios";
 
 const debouncedNext = debounce(() => fireNextWork());
+const debouncedSetDuration = immediateDebounce((duration, vm) => setDuration(duration, vm));
+
 let allowNext = false;
 
 // Debounces the given function
@@ -57,12 +59,39 @@ function debounce(func, timeout = 2000) {
   };
 }
 
+// Debounces the given function, but fires immediately on call
+function immediateDebounce(func, timeout = 2000) {
+  let timer;
+  let immediateExecution = true;
+
+  return (...args) => {
+    const executeFunction = () => {
+      func.apply(this, args);
+      timer = null;
+    };
+
+    if (immediateExecution) {
+      immediateExecution = false;
+      executeFunction();
+    }
+
+    clearTimeout(timer);
+    timer = setTimeout(() => {
+      immediateExecution = true;
+    }, timeout);
+  };
+}
+
 // Advances playback to the next work in the playlist
 function fireNextWork() {
   if (allowNext) {
     allowNext = false;
     eventBus.$emit("fireNextWork");
   }
+}
+
+function setDuration(duration, vm) {
+  vm.$view.duration = duration;
 }
 
 export default {
@@ -90,6 +119,9 @@ export default {
     },
     pause() {
       spotify.pauseTrack(this.$auth.clientToken);
+    },
+    timeHopperForward() {
+      eventBus.$emit("fireTimeHopperForward", this.progress, this.duration);
     },
     back() {
       if (this.progress > 2000) {
@@ -208,6 +240,7 @@ export default {
 
     // Receives data from Spotify API with current playback data upon a player state change
     eventBus.$on("firePlayerStateChanged", (track_data, position, duration, paused) => {
+        debouncedSetDuration(duration, this);
       
       if (position == 0 && !paused) {
         // can delay timer here if glitchy

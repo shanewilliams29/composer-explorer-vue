@@ -28,13 +28,14 @@ export const trackMixin = {
         return false;
       }
     },
-    playTracks(tracks) {
+    playTracks(tracks, progress) {
       let uriList = {};
       let jsonList = {};
       let selectedTrack = tracks.split(" ")[0];
       let allTracks = this.$config.allTracks.split(" ");
 
       let index = allTracks.indexOf(selectedTrack);
+      this.$view.trackIndex = index;
       let previousTracks = "";
 
       if (index == 0) {
@@ -53,6 +54,7 @@ export const trackMixin = {
       let cleanTracks = smushTracks.replaceAll("spotify", " spotify").trim();
 
       uriList["uris"] = cleanTracks.split(" ");
+      uriList["position_ms"] = progress;
       jsonList = JSON.stringify(uriList);
       spotify.playTracks(this.$auth.clientToken, this.$auth.deviceID, jsonList);
     },

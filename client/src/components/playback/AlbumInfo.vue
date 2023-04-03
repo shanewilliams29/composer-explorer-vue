@@ -52,6 +52,25 @@ export default {
           this.loading = false;
         });
     },
+    getAlbumInfoHopper(album_id, track_no, percent_progress) {
+      this.title = this.hold_title;
+      this.loading = true;
+      const path = "api/albuminfo/" + album_id;
+      axios
+        .get(path)
+        .then((res) => {
+          this.$config.albumData = res.data.album;
+          localStorage.setItem("config", JSON.stringify(this.$config));
+          eventBus.$emit("fireSetAlbumHopper", res.data.album, track_no, percent_progress);
+          this.album = res.data.album;
+          this.composer = res.data.album.composer;
+          this.loading = false;
+        })
+        .catch((error) => {
+          console.error(error);
+          this.loading = false;
+        });
+    },
     holdTitle() {
       this.hold_title = this.$config.workTitle;
     },
@@ -59,6 +78,7 @@ export default {
   created() {
     this.loading = true;
     eventBus.$on("requestAlbumData", this.getAlbumInfo);
+    eventBus.$on("requestAlbumDataHopper", this.getAlbumInfoHopper);
     eventBus.$on("requestAlbums", this.holdTitle);
     eventBus.$on("requestFavoritesAlbums", this.holdTitle);
     eventBus.$on("requestAlbumsAndPlay", this.holdTitle);
@@ -66,6 +86,7 @@ export default {
   },
   beforeDestroy() {
     eventBus.$off("requestAlbumData", this.getAlbumInfo);
+    eventBus.$off("requestAlbumDataHopper", this.getAlbumInfoHopper);
     eventBus.$off("requestAlbums", this.holdTitle);
     eventBus.$off("requestFavoritesAlbums", this.holdTitle);
     eventBus.$off("requestAlbumsAndPlay", this.holdTitle);
