@@ -138,7 +138,7 @@ export default {
   },
   methods: {
     getArtistPicAndJob(artistName){
-          this.results = []
+        this.results = []
          for (let i = 0; i < this.$lists.artistDict.length; i++) {
             let artist = this.$lists.artistDict[i];
             if (artist.name == artistName){
@@ -188,10 +188,6 @@ export default {
       this.artistSearch(this.$route.query.artist);
       this.query = this.$route.query.artist;
       this.$config.artist = this.$route.query.artist;
-      if (this.$auth.knowledgeKey) {
-        let artistDict = {name: this.$route.query.artist, img: "NA"};
-        getArtistDetails(artistDict, this.results, this.$auth.knowledgeKey);
-      }
     }
     eventBus.$on("fireArtistAlbums", this.resetAlbumSort);
     eventBus.$on("requestComposersForArtist", this.setArtistField);
