@@ -65,6 +65,12 @@ export function getArtistDetails(personDict, peopleList, authKey) {
     imageUrl = spotifyImg;
     rank = rank + 1;
   }
+  if(description != null){
+    if (description.toLowerCase().includes('conductor')) {
+      rank = rank + 20;
+    }
+  }
+
   const path = `https://kgsearch.googleapis.com/v1/entities:search?indent=true&types=Person&types=MusicGroup&query=${person} Music&limit=50&key=${authKey}`
   axios({
     method: "get",
@@ -89,8 +95,10 @@ export function getArtistDetails(personDict, peopleList, authKey) {
             description = list[i].result.description;
             rank = rank + 1;
           }
-          if (description.toLowerCase().includes('conductor') || description.toLowerCase().includes('composer')) {
-            rank = rank + 20;
+          if(description != null){
+            if (description.toLowerCase().includes('conductor')) {
+              rank = rank + 20;
+            }
           }
           rank = rank + matchOrchestra(person, description);
           try {
