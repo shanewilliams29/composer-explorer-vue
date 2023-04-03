@@ -1142,8 +1142,9 @@ def get_artistlist():
     i = 0
     artist_list = []
 
-    artists = db.session.query(Performers.name, Performers.img, func.count(Performers.id).label('total'))\
+    artists = db.session.query(Performers.name, Performers.img, Performers.description, func.count(Performers.id).label('total'))\
         .join(performer_albums)\
+        .filter(or_(Performers.hidden == False, Performers.hidden == None))\
         .group_by(Performers.id).order_by(text('total DESC')).all()
 
     composers = db.session.query(ComposerList.name_full).all()
@@ -1151,9 +1152,9 @@ def get_artistlist():
     composer_names = set(composer for (composer,) in composers)
 
     # remove composers and bad results
-    for artist, img, count in artists:
+    for artist, img, description, count in artists:
         if artist not in composer_names and "/" not in artist:
-            artist_list.append({'name': artist, 'img': img})
+            artist_list.append({'name': artist, 'img': img, 'description': description})
         # if i < 100:
         #     print(item[0] + " " + str(item[1]))
         # i += 1

@@ -37,8 +37,7 @@ function matchOrchestra(name, description) {
   if (description == null) {
     description = "";
   }
-  const orchestra_list = ['baroque', 'augsburger', 'antiqua', 'milano', 'quartet', 'orchest', 'philharm', 'symphony', 'concert', 'chamber', 'anonymous', 'academy', 'staats', 'consort', 'symphoniker', 'covent garden', 'choir', 'akademie', 'stuttgart', 'llscher']
-  console.log(name, description);
+  const orchestra_list = ['baroque', 'augsburger', 'antiqua', 'milano', 'quartet', 'orchest', 'philharm', 'symphony', 'concert', 'chamber', 'anonymous', 'academy', 'staats', 'consort', 'symphoniker', 'covent garden', 'akademie', 'stuttgart', 'llscher']
   for (var j = 0; j < orchestra_list.length; j++) {
     const regex = new RegExp(orchestra_list[j], 'i');
     if (regex.test(name.toLowerCase())) {

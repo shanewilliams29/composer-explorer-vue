@@ -307,6 +307,7 @@ class Performers(db.Model):
     name = db.Column(db.String(256), index=True)
     img = db.Column(db.String(128))
     description = db.Column(db.String(256))
+    hidden = db.Column(db.Boolean, default=False)
     albums = db.relationship("WorkAlbums", secondary=performer_albums, back_populates="performers", lazy='dynamic')
 
     def __repr__(self):

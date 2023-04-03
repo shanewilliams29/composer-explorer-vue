@@ -15,7 +15,7 @@
               </td>
               <td class="td-text">
                 <span class="artist-name">{{ result[0] }}&nbsp;</span><br />
-                <span class="artist-job">{{result[1]}}</span>
+                <span class="artist-job">{{ result[1] }}</span>
 
                 <span v-if="result[4]" class="wiki-link">
                   &nbsp;&nbsp;<a :href="result[4]" target="_blank">
@@ -113,7 +113,7 @@ export default {
         { value: "small", text: "Small" },
       ],
       results: [],
-      img: ""
+      img: "",
     };
   },
   computed: {
@@ -127,23 +127,23 @@ export default {
   watch: {
     apiKeyGot() {
       if (this.$route.query.artist) {
-        this.results = []
-        let artistDict = {name: this.$route.query.artist, img: "NA"};
-        getArtistDetails(artistDict, this.results, this.$auth.knowledgeKey);
+        this.getArtistPicAndJob(this.$route.query.artist);
       }
     },
     artistDictGot() {
       if (this.$route.query.artist) { 
-        this.getArtistPic(this.$route.query.artist);
+        this.getArtistPicAndJob(this.$route.query.artist);
       }
     },
   },
   methods: {
-    getArtistPic(artistName){
+    getArtistPicAndJob(artistName){
+          this.results = []
          for (let i = 0; i < this.$lists.artistDict.length; i++) {
             let artist = this.$lists.artistDict[i];
             if (artist.name == artistName){
               this.img = artist.img
+              getArtistDetails(artist, this.results, this.$auth.knowledgeKey);
               break;
             }
           }
@@ -153,7 +153,7 @@ export default {
       return capitalized;
     },
     artistSearch(artist) {
-      this.getArtistPic(artist);
+      this.getArtistPicAndJob(artist);
       eventBus.$emit("requestComposersForArtist", artist);
     },
     resetField(input) {
@@ -170,10 +170,7 @@ export default {
       this.albumSortField = { value: "recommended", text: "Recommended sorting" };
     },
     setArtistField(artist) {
-      this.results = [];
-      this.getArtistPic(artist);
-      let artistDict = {name: artist, img: "NA"};
-      getArtistDetails(artistDict, this.results, this.$auth.knowledgeKey);
+      this.getArtistPicAndJob(artist);
       this.$router.push("/performers?artist=" + artist);
       this.query = artist;
     },
