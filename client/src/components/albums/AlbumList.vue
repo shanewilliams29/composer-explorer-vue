@@ -68,7 +68,8 @@ export default {
       sort: "",
       infiniteId: +new Date(),
       currentAlbum: 0,
-      message: ""
+      message: "",
+      newWork: true
     };
   },
   methods: {
@@ -260,6 +261,10 @@ export default {
       }
     },
     playAlbumHop(albumId) {
+      if(this.newWork){
+        this.$view.progress = 0;
+        this.newWork = false;
+      }
       this.$config.album = albumId;
       localStorage.setItem("config", JSON.stringify(this.$config));
 
@@ -303,7 +308,9 @@ export default {
       this.albums = [];
       this.infiniteId += 1;
     },
-
+    setNewWork(){
+      this.newWork = true;
+    },
     playNextAlbum() {
       // advances to next album when the current album can't be played
       this.currentAlbum += 1;
@@ -363,6 +370,7 @@ export default {
       this.initialGetAlbums(this.$config.work);
     }
     eventBus.$on("requestAlbums", this.getAlbums);
+    eventBus.$on("changeWork", this.setNewWork);
     eventBus.$on("requestAlbumsAndPlay", this.getAlbumsAndPlay);
     eventBus.$on("requestFavoritesAlbums", this.getFavoritesAlbums);
     eventBus.$on("clearAlbumsList", this.clearAlbums);
@@ -372,6 +380,7 @@ export default {
   },
   beforeDestroy() {
     eventBus.$off("requestAlbums", this.getAlbums);
+    eventBus.$off("changeWork", this.setNewWork);
     eventBus.$off("requestAlbumsAndPlay", this.getAlbumsAndPlay);
     eventBus.$off("requestFavoritesAlbums", this.getFavoritesAlbums);
     eventBus.$off("clearAlbumsList", this.clearAlbums);
