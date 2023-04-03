@@ -42,20 +42,26 @@ export function randomIntFromInterval(min, max) {
 // Gets person info from Google API and adds to peopleList
 export function getArtistDetails(personDict, peopleList, authKey) {
       const person = personDict['name'];
+      let imageUrl = "";
       let spotifyImg = ""
+      let rank = 0;
       if ('img' in personDict) {
         spotifyImg = personDict['img'];
       } else {
         spotifyImg = personDict['spotify_img'];
       }
-    
+      if ((spotifyImg != "NA") && (spotifyImg != null)){
+        imageUrl = spotifyImg;
+        rank = rank + 1;
+      }
+
     const path = `https://kgsearch.googleapis.com/v1/entities:search?indent=true&types=Person&types=MusicGroup&query=${person} Music&limit=50&key=${authKey}`
       axios({
         method: "get",
         url: path,
       })
         .then((res) => {
-          let imageUrl = "";
+          
           let description = "";
           let wikiLink = "";
           let list = res.data.itemListElement;
@@ -65,7 +71,8 @@ export function getArtistDetails(personDict, peopleList, authKey) {
 
               var personMatch = person.replace("Sir", "").replace("Dame", "").trim();
               if (list[i].result.name.includes(personMatch)) {
-                let rank = 0;
+
+                
 
                 if ((spotifyImg != "NA") && (spotifyImg != null)){
                     imageUrl = spotifyImg;
@@ -110,14 +117,14 @@ export function getArtistDetails(personDict, peopleList, authKey) {
               }
 
               if (i == list.length - 1) {
-                peopleList.push([person, "", "", -1, ""]);
+                peopleList.push([person, "", imageUrl, rank, ""]);
                 peopleList.sort(function (a, b) {
                   return b[3] - a[3];
                 });
               }
             }
           } else {
-            peopleList.push([person, "", "", -1, ""]);
+            peopleList.push([person, "", imageUrl, rank, ""]);
             peopleList.sort(function (a, b) {
               return b[3] - a[3];
             });
@@ -125,7 +132,7 @@ export function getArtistDetails(personDict, peopleList, authKey) {
         })
       .catch((error) => {
         console.error(error);
-        peopleList.push([person, "", "", -1, ""]);
+        peopleList.push([person, "", imageUrl, rank, ""]);
         peopleList.sort(function (a, b) {
           return b[3] - a[3];
         });
