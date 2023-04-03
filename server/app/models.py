@@ -301,10 +301,12 @@ class Performers(db.Model):
     id: str
     name: str
     img: str
+    description: str
 
     id = db.Column(db.String(48), primary_key=True)
     name = db.Column(db.String(256), index=True)
     img = db.Column(db.String(128))
+    description = db.Column(db.String(256))
     albums = db.relationship("WorkAlbums", secondary=performer_albums, back_populates="performers", lazy='dynamic')
 
     def __repr__(self):
