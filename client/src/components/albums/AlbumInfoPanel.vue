@@ -17,7 +17,10 @@
         </table>
       </b-card-title>
       <b-card-text class="info-card-text">
-        <div v-for="result in results" :key="result[0]">
+        <div class="spinner" v-show="loading" role="status">
+          <b-spinner class="m-5"></b-spinner>
+        </div>
+        <div v-show="!loading" v-for="result in results" :key="result[0]">
           <table>
             <tr>
               <td>
@@ -46,7 +49,24 @@ export default {
       artists: [],
       results: [],
       album: {},
+      loading: true
     };
+  },
+  computed: {
+    item_length: function () {
+      return this.results.length;
+    },
+  },
+  watch: {
+    results: {
+      handler: function () {
+        // turn off loading when people results array is fully populated
+        if (this.results.length == this.artists.length && this.artists.length > 0){
+          this.loading = false;
+        }
+      },
+      deep: true
+    }
   },
   methods: {
     getArtistComposers(artist) {
@@ -79,6 +99,7 @@ export default {
         return uniqueList;
       },
     getSpotifyAlbumData(album) {
+      this.loading = true;
       // retrieves data from Spotify. 'album' is database album object
       this.results = [];
       this.artists = album.artist_details;
