@@ -17,9 +17,9 @@
                   class="slider"
                   id="progressbar"
                   step="1000"
-                  v-model="progress"
-                  @input="setPlayback(progress, duration); suspendTimer();"
-                  @change="seek(progress)"
+                  v-model="$view.progress"
+                  @input="setPlayback($view.progress, duration); suspendTimer();"
+                  @change="seek($view.progress)"
                   type="range"
                   min="0"
                   :max="Math.floor(duration/1000) * 1000"
@@ -44,7 +44,10 @@ import {eventBus} from "@/main.js";
 import axios from "axios";
 
 const debouncedNext = debounce(() => fireNextWork());
+const debouncedHopForward = immediateDebounce((progress, duration) => hopForward(progress, duration));
+const debouncedHopBackward = immediateDebounce((progress, duration) => hopBackward(progress, duration));
 const debouncedSetDuration = immediateDebounce((duration, vm) => setDuration(duration, vm));
+
 
 let allowNext = false;
 
@@ -60,7 +63,7 @@ function debounce(func, timeout = 2000) {
 }
 
 // Debounces the given function, but fires immediately on call
-function immediateDebounce(func, timeout = 2000) {
+function immediateDebounce(func, timeout = 1000) {
   let timer;
   let immediateExecution = true;
 
@@ -94,6 +97,13 @@ function setDuration(duration, vm) {
   vm.$view.duration = duration;
 }
 
+function hopForward(progress, duration) {
+  eventBus.$emit("fireTimeHopperForward", progress, duration);
+}
+function hopBackward(progress, duration) {
+  eventBus.$emit("fireTimeHopperBackward", progress, duration);
+}
+
 export default {
   components: {
     PlayerButtons,
@@ -104,7 +114,6 @@ export default {
       token: "",
       player: "",
       playing: false,
-      progress: 0,
       duration: 0,
       display_duration: "00:00",
       display_progress: "00:00",
@@ -121,10 +130,13 @@ export default {
       spotify.pauseTrack(this.$auth.clientToken);
     },
     timeHopperForward() {
-      eventBus.$emit("fireTimeHopperForward", this.progress, this.duration);
+      debouncedHopForward(this.$view.progress, this.duration);
+    },
+    timeHopperBackward() {
+      debouncedHopBackward(this.$view.progress, this.duration);
     },
     back() {
-      if (this.progress > 2000) {
+      if (this.$view.progress > 2000) {
         spotify.beginningTrack(this.$auth.clientToken, this.$auth.deviceID);
         this.setPlayback(0, this.duration);
       } else {
@@ -151,7 +163,7 @@ export default {
       spotify.seekToPosition(this.$auth.clientToken, progress);
     },
     setPlayback(progress, duration) {
-      this.progress = progress;
+      this.$view.progress = progress;
       this.duration = duration;
       this.display_progress = this.msToHMS(progress);
       this.display_duration = this.msToHMS(duration);
@@ -168,14 +180,14 @@ export default {
     },
     playbackTimer() {
       if (!this.suspend) {
-        this.progress = parseInt(this.progress) + 1000;
-        this.setPlayback(this.progress, this.duration);
+        this.$view.progress = parseInt(this.$view.progress) + 1000;
+        this.setPlayback(this.$view.progress, this.duration);
 
-        if (this.progress >= this.duration) {
+        if (this.$view.progress >= this.duration) {
           this.setPlayback(this.duration, this.duration);
           this.suspend = true;
         }
-        if (this.progress < 0) {
+        if (this.$view.progress < 0) {
           this.setPlayback(0, this.duration);
         }
       }

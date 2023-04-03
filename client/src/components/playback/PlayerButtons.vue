@@ -9,7 +9,7 @@
       <b-icon-shuffle variant="warning"></b-icon-shuffle>
     </b-button>
     <b-button class="playback-button" id="previous-work-button" 
-      @click="$parent.previousWork()">
+      @click="$parent.timeHopperBackward()">
       <b-icon-arrow-left-circle></b-icon-arrow-left-circle>
     </b-button>
     <b-button class="playback-button" id="back-button" 

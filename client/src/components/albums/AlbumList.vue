@@ -303,23 +303,43 @@ export default {
       }
 
       this.selectRow(this.albums[this.currentAlbum].id);
-      
       this.$config.album = this.albums[this.currentAlbum].id;
+      this.determineHeart(this.$config.album);
       localStorage.setItem("config", JSON.stringify(this.$config));
       
       eventBus.$emit("requestAlbumData", this.albums[this.currentAlbum].id);
     },
-      playTimeHop(progress, duration) {
-      // advances to next album when the current album can't be played
+      playTimeHopForward(progress, duration) {
       this.currentAlbum += 1;
 
       if (this.currentAlbum >= this.albums.length) {
+        this.currentAlbum = this.albums.length - 1;
         return null;
       }
 
       this.selectRow(this.albums[this.currentAlbum].id);
       
       this.$config.album = this.albums[this.currentAlbum].id;
+      this.determineHeart(this.$config.album);
+      localStorage.setItem("config", JSON.stringify(this.$config));
+
+      let track_no = this.$view.trackIndex;
+      let percent_progress = progress / duration;
+      
+      eventBus.$emit("requestAlbumDataHopper", this.albums[this.currentAlbum].id, track_no, percent_progress);
+    },
+      playTimeHopBackward(progress, duration) {
+      this.currentAlbum -= 1;
+
+      if (this.currentAlbum < 0) {
+        this.currentAlbum = 0;
+        return null;
+      }
+
+      this.selectRow(this.albums[this.currentAlbum].id);
+      
+      this.$config.album = this.albums[this.currentAlbum].id;
+      this.determineHeart(this.$config.album);
       localStorage.setItem("config", JSON.stringify(this.$config));
 
       let track_no = this.$view.trackIndex;
@@ -337,7 +357,8 @@ export default {
     eventBus.$on("requestFavoritesAlbums", this.getFavoritesAlbums);
     eventBus.$on("clearAlbumsList", this.clearAlbums);
     eventBus.$on("advanceToNextAlbum", this.playNextAlbum);
-    eventBus.$on("fireTimeHopperForward", this.playTimeHop);
+    eventBus.$on("fireTimeHopperForward", this.playTimeHopForward);
+    eventBus.$on("fireTimeHopperBackward", this.playTimeHopBackward);
   },
   beforeDestroy() {
     eventBus.$off("requestAlbums", this.getAlbums);
@@ -345,7 +366,8 @@ export default {
     eventBus.$off("requestFavoritesAlbums", this.getFavoritesAlbums);
     eventBus.$off("clearAlbumsList", this.clearAlbums);
     eventBus.$off("advanceToNextAlbum", this.playNextAlbum);
-    eventBus.$off("fireTimeHopperForward", this.playTimeHop);
+    eventBus.$off("fireTimeHopperForward", this.playTimeHopForward);
+    eventBus.$on("fireTimeHopperBackward", this.playTimeHopBackward);
   },
 };
 
