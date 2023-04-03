@@ -776,10 +776,8 @@ def get_albums(work_id):
         test_query = temp.all()
         if len(test_query) < 1:
             query = query.join(Artists).filter(Artists.name == artist_name)
-            print("Used old Artists table.")
         else:
             query = temp
-            print("Used new Performers table.")
     
     elif favorites:
         # allow compilation albums in user favorites
@@ -809,7 +807,7 @@ def get_albums(work_id):
         .group_by(Performers.id)\
         .order_by(text('total DESC'), Performers.name).all()
 
-    # remove composer from list of artists
+    # remove composer from list of artists (assume to be first)
     if len(work_artists) > 1:
         work_artists.pop(0)
 
