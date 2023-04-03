@@ -22,14 +22,14 @@
             :selectedAlbum="selectedAlbum" 
             :likedAlbums="likedAlbums" 
             @selectAlbum="selectRow" 
-            @getAlbum="getAlbumData"/>
+            @getAlbum="playAlbumHop"/>
           <SmallAlbum 
             v-else 
             :albums="albums" 
             :selectedAlbum="selectedAlbum" 
             :likedAlbums="likedAlbums" 
             @selectAlbum="selectRow" 
-            @getAlbum="getAlbumData"/>
+            @getAlbum="playAlbumHop"/>
           <infinite-loading spinner="spiral" :identifier="infiniteId" @infinite="infiniteHandler">
             <div slot="no-more"></div>
             <div slot="no-results"></div>
@@ -259,6 +259,15 @@ export default {
         }
       }
     },
+    playAlbumHop(albumId) {
+      this.$config.album = albumId;
+      localStorage.setItem("config", JSON.stringify(this.$config));
+
+      let track_no = this.$view.trackIndex;
+      let percent_progress = this.$view.progress / this.$view.duration;
+      
+      eventBus.$emit("requestAlbumDataHopper", albumId, track_no, percent_progress);
+    },
     clearAlbums() {
       this.albums = [];
       this.message = "Select a work to view albums."
@@ -294,6 +303,7 @@ export default {
       this.albums = [];
       this.infiniteId += 1;
     },
+
     playNextAlbum() {
       // advances to next album when the current album can't be played
       this.currentAlbum += 1;

@@ -9,7 +9,7 @@
       <b-icon-shuffle variant="warning"></b-icon-shuffle>
     </b-button>
     <b-button class="playback-button" id="previous-work-button" 
-      @click="$parent.timeHopperBackward()">
+      @click="$parent.previousWork()">
       <b-icon-arrow-left-circle></b-icon-arrow-left-circle>
     </b-button>
     <b-button class="playback-button" id="back-button" 
@@ -29,7 +29,7 @@
       <b-icon-skip-end-fill></b-icon-skip-end-fill>
     </b-button>
     <b-button class="playback-button" id="next-work-button" 
-      @click="$parent.timeHopperForward()">
+      @click="$parent.nextWorkNoDebounce()">
       <b-icon-arrow-right-circle></b-icon-arrow-right-circle>
     </b-button>
     <b-button class="playback-button gray" id="like-work-button" v-show="!$view.like" 
