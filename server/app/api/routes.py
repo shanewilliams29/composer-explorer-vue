@@ -742,18 +742,7 @@ def get_albums(work_id):
     favorites = request.args.get('favorites', default=None)
 
     # base query
-    query = db.session.query(WorkAlbums.id,
-                             WorkAlbums.workid, 
-                             WorkAlbums.hidden, 
-                             WorkAlbums.work_track_count, 
-                             WorkAlbums.album_type, 
-                             WorkAlbums.score, 
-                             WorkAlbums.data, 
-                             WorkAlbums.img, 
-                             WorkAlbums.track_count,
-                             WorkAlbums.label,
-                             WorkAlbums.composer,
-                             func.count(AlbumLike.id).label('total'))\
+    query = db.session.query(WorkAlbums, func.count(AlbumLike.id).label('total'))\
         .outerjoin(AlbumLike).group_by(WorkAlbums.id)
 
     # filter by criteria
@@ -777,10 +766,25 @@ def get_albums(work_id):
 
     # filter by artist, if present. Allow compilation albums if artist mode
     if artist_name:
-        query = query.join(Artists).filter(Artists.name == artist_name)
-    elif favorites:  
+        # new Performers table
+        temp = query\
+            .select_from(t.join(performer_albums, t.c.id == performer_albums.c.album_id))\
+            .join(Performers, performer_albums.c.performer_id == Performers.id)\
+            .filter(Performers.name == artist_name)
+        
+        # use old Artists table if no results
+        test_query = temp.all()
+        if len(test_query) < 1:
+            query = query.join(Artists).filter(Artists.name == artist_name)
+            print("Used old Artists table.")
+        else:
+            query = temp
+            print("Used new Performers table.")
+    
+    elif favorites:
         # allow compilation albums in user favorites
         pass
+    
     else:
         # disallow compilation albums unless user favorited
         query = query.filter(or_(t.c.album_type != "compilation", t.c.total > 0))
@@ -798,11 +802,24 @@ def get_albums(work_id):
         return response
 
     # artist list
-    work_artists = db.session.query(Artists.name, func.count(Artists.count).label('total')) \
-        .filter(Artists.workid == work_id).group_by(Artists.name) \
-        .order_by(text('total DESC'), Artists.name).all()  # hidden or compilation???
+    work_artists = db.session.query(Performers.name, func.count(Performers.id).label('total')) \
+        .join(performer_albums)\
+        .join(WorkAlbums)\
+        .filter(WorkAlbums.workid == work_id)\
+        .group_by(Performers.id)\
+        .order_by(text('total DESC'), Performers.name).all()
 
-    # put artist list in dictionary
+    # remove composer from list of artists
+    if len(work_artists) > 1:
+        work_artists.pop(0)
+
+    # get artists from old Artists table if no results
+    if len(work_artists) < 1:
+        work_artists = db.session.query(Artists.name, func.count(Artists.count).label('total')) \
+            .filter(Artists.workid == work_id).group_by(Artists.name) \
+            .order_by(text('total DESC'), Artists.name).all()  # hidden or compilation???
+
+    # put artists in dictionary
     artist_list = {}
     artist_list.update(work_artists)
 
@@ -1134,7 +1151,6 @@ def get_artistlist():
     composers = db.session.query(ComposerList.name_full).all()
 
     composer_names = set(composer for (composer,) in composers)
-    print(composer_names)
 
     # remove composers and bad results
     for artist, img, count in artists:

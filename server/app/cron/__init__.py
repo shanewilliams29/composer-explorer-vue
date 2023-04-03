@@ -126,11 +126,12 @@ def fillperformerdata(name):
                             errors = True
                             continue
                         else:
-                            # terminate if another error
-                            logtext = "PROCESS TERMINATED. PERFORMERS FILL ERROR FOR " + name + " " + str(batch_results.get('error'))
+                            # continue if another error
+                            logtext = "PERFORMERS FILL ERROR FOR " + name + " " + str(batch_results.get('error'))
                             logger.log_text(logtext, severity="ERROR")
                             print(logtext)
-                            exit()
+                            errors = True
+                            continue
                     else:
                         results.extend(batch_results['tracks'])
 
