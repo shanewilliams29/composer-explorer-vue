@@ -8,6 +8,7 @@ from app.models import WorkList, Spotify, WorkAlbums, Artists, ComposerCron, Art
 from app.cron.functions import search_spotify_and_save, search_album
 import json
 from sqlalchemy import func, text, or_
+import jsonpickle
 
 bp = Blueprint('cron', __name__)
 
@@ -46,8 +47,8 @@ def autoperformerfill():
 
 
 # FILL PERFORMER TABLES WITH ARTISTS INFO FROM SPOTIFY
-# @bp.cli.command()
-# @click.argument("name")
+@bp.cli.command()
+@click.argument("name")
 def fillperformerdata(name):
     error_count = 0
     start_time = datetime.utcnow()
@@ -61,7 +62,7 @@ def fillperformerdata(name):
 
     # get albums for processing
     albums = db.session.query(WorkAlbums)\
-        .filter(WorkAlbums.composer == name, or_(WorkAlbums.got_artists == None, WorkAlbums.got_artists != True)).all()
+        .filter(WorkAlbums.composer == name, or_(WorkAlbums.got_artists == None, WorkAlbums.got_artists != True, WorkAlbums.duration == None)).all()
 
     all_album_list = []
     for album in albums:
@@ -69,7 +70,10 @@ def fillperformerdata(name):
                       'album_id': album.id, 
                       'work_id': album.workid, 
                       'tracks': [], 
-                      'artists': []}
+                      'artists': [],
+                      'track_durations': [],
+                      'album_duration': 0,
+                      'got_artists': album.got_artists}
         
         data = json.loads(album.data)
         
@@ -140,13 +144,15 @@ def fillperformerdata(name):
                 while m < len(results):
                     try:
                         album_list[k]['artists'].extend(results[m]['artists'])
-                    except Exception:
-                        print("ERROR")
+                        album_list[k]['track_durations'].append(int(results[m]['duration_ms']))
+                        album_list[k]['album_duration'] = int(album_list[k]['album_duration']) + int(results[m]['duration_ms'])
+                    except Exception as e:
+                        print(e)
                         error_count += 1
                         pass
                     m += 1
 
-                # Remove duplicates. Use a set to keep track of the ids we've already seen
+                # Remove duplicate artists. Use a set to keep track of the ids we've already seen
                 seen_ids = set()
 
                 # Create a new list of entries without duplicates
@@ -167,25 +173,36 @@ def fillperformerdata(name):
         existing_artists = {artist.id: artist for artist in Performers.query.all()}
 
         for k, album in enumerate(album_list):
+            
+            # fill artists if appropriate
+            if not album['got_artists']:  
+                for artist in album['artists']:
+                    # Fetch the existing artist
+                    existing_artist = existing_artists.get(artist['id'])
 
-            for artist in album['artists']:
-                # Fetch the existing artist
-                existing_artist = existing_artists.get(artist['id'])
+                    if existing_artist:
+                        # Update the existing artist's album list
+                        existing_artist.add_album(album['album'])
+                    else:
+                        # Add a new artist entry
+                        new_entry = Performers(
+                            id=artist['id'],
+                            name=artist['name'])
+                        new_entry.add_album(album['album'])
+                        existing_artists[new_entry.id] = new_entry
+                        db.session.merge(new_entry)
 
-                if existing_artist:
-                    # Update the existing artist's album list
-                    existing_artist.add_album(album['album'])
-                else:
-                    # Add a new artist entry
-                    new_entry = Performers(
-                        id=artist['id'],
-                        name=artist['name'])
-                    new_entry.add_album(album['album'])
-                    existing_artists[new_entry.id] = new_entry
-                    db.session.merge(new_entry)
+                # mark album as processed in WorkAlbums table
+                album['album'].got_artists = True
 
-            # mark album as processed in WorkAlbums table
-            album['album'].got_artists = True
+            # fill  durations
+            album['album'].duration = album['album_duration']
+            album_data = json.loads(album['album'].data)
+            
+            for j, track in enumerate(album_data['tracks']):
+                track.append(album_list[k]['track_durations'][j])
+            
+            album['album'].data = json.dumps(album_data)
 
             # Commit after every 10 albums or the last album
             if (k + 1) % 10 == 0 or k == len(album_list) - 1:

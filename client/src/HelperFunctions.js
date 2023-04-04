@@ -33,6 +33,27 @@ export function randomIntFromInterval(min, max) {
   return Math.floor(Math.random() * (max - min + 1) + min);
 }
 
+export function msToHMS(ms) {
+    let seconds = Math.floor(ms / 1000);
+    let hours = Math.floor(seconds / 3600);
+    seconds -= hours * 3600;
+    let minutes = Math.floor(seconds / 60);
+    seconds -= minutes * 60;
+
+    // Pad minutes and seconds with a leading zero if they are single-digit.
+    minutes = (hours > 0 && minutes < 10) ? '0' + minutes : minutes;
+    seconds = (seconds < 10) ? '0' + seconds : seconds;
+
+    let show_hours = ""
+    if (hours < 1){
+      show_hours = ""
+    } else {
+      show_hours = hours + ':'
+    }
+
+    return show_hours + minutes + ':' + seconds;
+}
+
 function matchOrchestra(name, description) {
   if (description == null) {
     description = "";

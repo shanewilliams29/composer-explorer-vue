@@ -834,6 +834,7 @@ def get_albums(work_id):
         item['label'] = album.label
         item['track_count'] = album.track_count
         item['composer'] = album.composer
+        item['duration'] = album.duration
 
         # de-rate newer, crappy albums
         if item['track_count']:

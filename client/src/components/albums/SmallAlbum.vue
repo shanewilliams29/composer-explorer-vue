@@ -60,6 +60,7 @@
                 <td width="100%" class="td-style">
                   <span class="label">℗ {{ album.release_date }}</span>
                   <span class="label"> · {{ album.label }}</span>
+                  <span v-if="album.duration" class="label"> · {{ timeDisplay(album.duration) }}</span>
                 </td>
               </tr>
             </table>
@@ -84,6 +85,7 @@
 <script>
 import { staticURL } from "@/main.js";
 import AlbumLikes from "./AlbumLikes.vue";
+import { msToHMS } from "@/HelperFunctions.js";
 
 export default {
   components: {
@@ -115,6 +117,11 @@ export default {
         return false;
       }
     }
+  },
+  methods: {
+    timeDisplay(milliseconds) {
+      return msToHMS(milliseconds);
+    },
   }
 };
 </script>
