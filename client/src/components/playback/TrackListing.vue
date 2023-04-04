@@ -15,6 +15,7 @@
                 <span v-else>
                   {{ track[0].substring(track[0].lastIndexOf(':') + 1) }}
                 </span>
+                <span v-if="track[3]" class="time-display"> · {{ timeDisplay(track[3]) }}</span>
               </td>
             </tr>
           </table>
@@ -29,10 +30,14 @@ import { trackMixin } from "./TrackListing.js"
 import smoothscroll from "smoothscroll-polyfill";
 import { eventBus } from "@/main.js";
 import axios from 'axios';
+import { msToHMS } from "@/HelperFunctions.js";
 
 export default {
   mixins: [trackMixin],
-  methods: {
+    methods: {
+      timeDisplay(milliseconds) {
+        return msToHMS(milliseconds);
+      },
     selectTrack(track) {
       this.selectedTrack = track;
       smoothscroll.polyfill(); // for Safari smooth scrolling
@@ -141,6 +146,9 @@ export default {
 .track-row:hover {
   cursor: pointer;
   color: var(--my-white);
+}
+.time-display{
+  color: rgba(211, 211, 211, 0.75);
 }
 .highlight-track {
   color: #ffc107 !important;

@@ -6,6 +6,7 @@
           <div class="album-titles" @click="$emit('selectAlbum', album.id); $emit('getAlbum', album.id);">
             <span style="color: black; font-weight: 600;">{{ album.artists }}</span><br />
             <span>℗ {{ album.release_date }}</span>
+            <span v-if="album.duration" class="label"> · {{ timeDisplay(album.duration) }}</span>
             <br />
             <span v-if="album.minor_artists" style="color: grey; font-size: 12px !important;">{{ album.minor_artists }}</span>
           </div>
@@ -36,6 +37,7 @@
 <script>
 import {staticURL} from "@/main.js";
 import AlbumLikes from './AlbumLikes.vue';
+import { msToHMS } from "@/HelperFunctions.js";
 
 export default {
   components: {
@@ -52,6 +54,11 @@ export default {
       spotifyLogoURLWhite: staticURL + 'Spotify_Logo_RGB_White.png',
       spotifyLogoURLBlack: staticURL + 'Spotify_Logo_RGB_Black.png',
     }
+  },
+  methods: {
+    timeDisplay(milliseconds) {
+      return msToHMS(milliseconds);
+    },
   }
 }
 </script>
