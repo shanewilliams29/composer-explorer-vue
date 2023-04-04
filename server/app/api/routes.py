@@ -3,7 +3,7 @@ from flask import jsonify, request, session, abort, current_app
 from flask_login import current_user, login_required
 from config import Config
 from app.functions import prepare_composers, group_composers_by_region, group_composers_by_alphabet
-from app.functions import prepare_works, prepare_works_with_durations
+from app.functions import prepare_works
 from app.models import ComposerList, WorkList, WorkAlbums, AlbumLike, Artists, Performers, performer_albums
 from app.models import ArtistList, User
 from sqlalchemy import func, text, or_, and_
