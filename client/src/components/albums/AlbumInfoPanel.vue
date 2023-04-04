@@ -111,11 +111,13 @@ export default {
   },
   created() {
     this.getSpotifyAlbumData(this.$config.albumData);
-    eventBus.$on("fireSetAlbum", this.getSpotifyAlbumData);
+    eventBus.$on("fireSetAlbum", this.getSpotifyAlbumData); 
+    eventBus.$on("fireSetAlbumHopper", this.getSpotifyAlbumData);
     eventBus.$on("fireSpotifyAlbumData", this.setSpotifyAlbum);
   },
   beforeDestroy() {
     eventBus.$off("fireSetAlbum", this.getSpotifyAlbumData);
+    eventBus.$off("fireSetAlbumHopper", this.getSpotifyAlbumData);
     eventBus.$off("fireSpotifyAlbumData", this.setSpotifyAlbum);
   },
 };
