@@ -89,6 +89,7 @@ export default {
       let playTrack = this.$config.playTracks.split(' ')[0].replace('spotify:track:', '');
 
       if (this.$auth.clientToken && this.$auth.deviceID && !window.firstLoad) {
+        // use local duration for playback, if available
         if (trackDuration){
             let position = Math.round(trackDuration * this.$view.percentProgress - 3000);
             if (position < 0){
@@ -96,6 +97,7 @@ export default {
             }
             this.playTracks(this.$config.playTracks, position);
         } else {
+          // fetch duration from Spotify if not available
           const path = 'https://api.spotify.com/v1/tracks/' + playTrack;
           axios({
             method: 'get',
