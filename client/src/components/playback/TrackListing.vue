@@ -74,37 +74,48 @@ export default {
       this.$view.percentProgress = percent_progress;
       this.genre = this.$config.genre;
       this.$config.allTracks = album.tracks[0][2];
-      
+      let trackDuration = album.tracks[0][3]
+
       try{
         this.$config.playTracks = album.tracks[track_no][2];
+        trackDuration = album.tracks[track_no][3]
       } catch (error){
         this.$config.playTracks = album.tracks[0][2];
       }
+
       localStorage.setItem("config", JSON.stringify(this.$config));
       this.album = album;
 
       let playTrack = this.$config.playTracks.split(' ')[0].replace('spotify:track:', '');
 
       if (this.$auth.clientToken && this.$auth.deviceID && !window.firstLoad) {
-        const path = 'https://api.spotify.com/v1/tracks/' + playTrack;
-        axios({
-          method: 'get',
-          url: path,
-          headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + this.$auth.clientToken
-          }
-        }).then((res) => {
-          let duration = res.data.duration_ms;
-          let position = Math.round(duration * this.$view.percentProgress - 3000);
-          if (position < 0){
-            position = 0;
-          }
-          this.playTracks(this.$config.playTracks, position);
-        }).catch((error) => {
-          console.error(error);
-        });
+        if (trackDuration){
+            let position = Math.round(trackDuration * this.$view.percentProgress - 3000);
+            if (position < 0){
+              position = 0;
+            }
+            this.playTracks(this.$config.playTracks, position);
+        } else {
+          const path = 'https://api.spotify.com/v1/tracks/' + playTrack;
+          axios({
+            method: 'get',
+            url: path,
+            headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json',
+              'Authorization': 'Bearer ' + this.$auth.clientToken
+            }
+            }).then((res) => {
+              let duration = res.data.duration_ms;
+              let position = Math.round(duration * this.$view.percentProgress - 3000);
+              if (position < 0){
+                position = 0;
+              }
+              this.playTracks(this.$config.playTracks, position);
+            }).catch((error) => {
+              console.error(error);
+            });
+        } 
       } else {
         window.firstLoad = false;
       }
