@@ -412,12 +412,6 @@ def get_works(name):
     liked_works_ids = []
     for (item,) in liked_works:
         liked_works_ids.append(item)
-
-    # work_albums = db.session.query(WorkAlbums).filter(WorkAlbums.composer == name).order_by(WorkAlbums.score).distinct()
-
-    # work_durations = {}
-    # for album in work_albums:
-    #     work_durations[album.workid] = album.duration
    
     # generate works list for JSON response
     works_by_genre, playlist = prepare_works(works_list, liked_works_ids)

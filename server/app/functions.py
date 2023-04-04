@@ -108,48 +108,7 @@ def prepare_works(works_list, liked_list):
         works_by_genre[genre].append(work)
 
     return works_by_genre, PLAYLIST
-
-
-def prepare_works_with_durations(works_list, liked_list, durations_dict):
-    WORKS = []
-    PLAYLIST = []
     
-    i = 0
-    for work in works_list:
-
-        info = {
-            'index': i,
-            'shuffle': random.randint(0, 1000),
-            'id': work.id,
-            'composer': work.composer,
-            'genre': work.genre,
-            'cat': work.cat,
-            'recommend': work.recommend,
-            'title': work.title,
-            'nickname': work.nickname,
-            'date': work.date,
-            'album_count': work.album_count,
-            'duration': durations_dict.get(work.id)
-        }
-
-        if work.id in liked_list:
-            info['liked'] = True
-        else:
-            info['liked'] = None
-
-        WORKS.append(info)
-        PLAYLIST.append(info)
-        i += 1
-
-    # group onto genres
-    works_by_genre = defaultdict(list)
-
-    for work in WORKS:
-        genre = work['genre']
-        works_by_genre[genre].append(work)
-
-    return works_by_genre, PLAYLIST
-
 
 def get_avatar(username, imgurl):
 
