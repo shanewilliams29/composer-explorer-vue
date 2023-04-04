@@ -6,7 +6,7 @@
           <div class="album-titles" @click="$emit('selectAlbum', album.id); $emit('getAlbum', album.id);">
             <span style="color: black; font-weight: 600;">{{ album.artists }}</span><br />
             <span>℗ {{ album.release_date }}</span>
-            <span v-if="album.duration" class="label"> · {{ timeDisplay(album.duration) }}</span>
+            <span v-if="album.duration" class="label"> · {{ duration(album.duration) }}</span>
             <br />
             <span v-if="album.minor_artists" style="color: grey; font-size: 12px !important;">{{ album.minor_artists }}</span>
           </div>
@@ -58,6 +58,17 @@ export default {
   methods: {
     timeDisplay(milliseconds) {
       return msToHMS(milliseconds);
+    },
+    duration(ms){
+        let seconds = Math.floor(ms / 1000);
+        let hours = Math.round(seconds / 3600 * 10) / 10;
+        let minutes = Math.round(seconds / 60);
+
+        if(hours > 1){
+          return hours + "h";
+        } else {
+          return minutes + "m"
+        }
     },
   }
 }

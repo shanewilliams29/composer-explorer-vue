@@ -60,7 +60,7 @@
                 <td width="100%" class="td-style">
                   <span class="label">℗ {{ album.release_date }}</span>
                   <span class="label"> · {{ album.label }}</span>
-                  <span v-if="album.duration" class="label"> · {{ timeDisplay(album.duration) }}</span>
+                  <span v-if="album.duration" class="label"> · {{ duration(album.duration) }}</span>
                 </td>
               </tr>
             </table>
@@ -121,6 +121,17 @@ export default {
   methods: {
     timeDisplay(milliseconds) {
       return msToHMS(milliseconds);
+    },
+    duration(ms){
+        let seconds = Math.floor(ms / 1000);
+        let hours = Math.round(seconds / 3600 * 10) / 10;
+        let minutes = Math.round(seconds / 60);
+
+        if(hours > 1){
+          return hours + "h";
+        } else {
+          return minutes + "m"
+        }
     },
   }
 };

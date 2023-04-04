@@ -50,6 +50,9 @@
                   </td>
                   <td width="5%" style="text-align: right;">
                     <span class="heart-number" style="white-space: nowrap;">
+                      <span v-if="work.duration" style="color: rgb(52, 58, 64, 0.7); font-size: 12px;">
+                        {{ duration(work.duration) }}&nbsp;
+                      </span> 
                       <span v-if="work.liked" style="color: rgb(52, 58, 64, 0.7); font-size: 12px;">
                         <b-icon-heart-fill></b-icon-heart-fill>&nbsp;
                       </span> 
@@ -88,6 +91,17 @@ export default {
     };
   },
   methods: {
+      duration(ms){
+        let seconds = Math.floor(ms / 1000);
+        let hours = Math.round(seconds / 3600 * 10) / 10;
+        let minutes = Math.round(seconds / 60);
+
+        if(hours > 1){
+          return hours + "h";
+        } else {
+          return minutes + "m"
+        }
+    },
     noWorks(){
       if(!this.loading && this.works.length < 1 ){
         if(!this.$view.mode && !this.$config.composer){

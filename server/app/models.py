@@ -278,7 +278,7 @@ class Artists(db.Model):
     workid: str
     album_id: float
     composer: str
-    count: str
+    count: int
     spotify_id: str
     spotify_img: str
 
@@ -323,6 +323,7 @@ class Performers(db.Model):
 #     performer_id = db.Column(db.String(48), db.ForeignKey('performers.id'))
 #     work_id = db.Column(db.String(24), db.ForeignKey('work_list.id'))
 #     album_id = db.Column(db.String(46), db.ForeignKey('work_albums.id'))
+
 
 
 class WorkAlbums(db.Model):

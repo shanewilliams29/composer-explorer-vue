@@ -3,7 +3,7 @@ from flask import jsonify, request, session, abort, current_app
 from flask_login import current_user, login_required
 from config import Config
 from app.functions import prepare_composers, group_composers_by_region, group_composers_by_alphabet
-from app.functions import prepare_works
+from app.functions import prepare_works, prepare_works_with_durations
 from app.models import ComposerList, WorkList, WorkAlbums, AlbumLike, Artists, Performers, performer_albums
 from app.models import ArtistList, User
 from sqlalchemy import func, text, or_, and_
@@ -375,20 +375,6 @@ def get_works(name):
 
         works_list = return_list
 
-    # first filter based on search term if present
-    # if search:
-    #     works_list = WorkList.query.filter_by(composer=name)\
-    #         .order_by(WorkList.order, WorkList.genre, WorkList.id).all()
-
-    #     return_list = []
-
-    #     for work in works_list:
-    #         search_string = str(work.genre) + str(work.cat) + str(work.suite) + str(work.title) + str(work.nickname) + str(work.search)
-    #         if search.lower() in unidecode(search_string.lower()):
-    #             return_list.append(work)
-
-    #     works_list = return_list
-
     # next filter on filter item if present
     elif filter_method:
         if filter_method == "recommended":
@@ -427,6 +413,12 @@ def get_works(name):
     for (item,) in liked_works:
         liked_works_ids.append(item)
 
+    # work_albums = db.session.query(WorkAlbums).filter(WorkAlbums.composer == name).order_by(WorkAlbums.score).distinct()
+
+    # work_durations = {}
+    # for album in work_albums:
+    #     work_durations[album.workid] = album.duration
+   
     # generate works list for JSON response
     works_by_genre, playlist = prepare_works(works_list, liked_works_ids)
 

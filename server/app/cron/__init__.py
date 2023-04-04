@@ -47,8 +47,8 @@ def autoperformerfill():
 
 
 # FILL PERFORMER TABLES WITH ARTISTS INFO FROM SPOTIFY
-@bp.cli.command()
-@click.argument("name")
+#@bp.cli.command()
+#@click.argument("name")
 def fillperformerdata(name):
     error_count = 0
     start_time = datetime.utcnow()
@@ -518,8 +518,8 @@ def fillalbums(name):
                 tracks = search_album(album.album_id, work)
                 SmartAlbums(tracks, work)
 
-            except:
-                print("FILL ERROR " + work.id + " " + work.title + " " + album.album_id + " " + str(tracks))
+            except Exception as e:
+                print("FILL ERROR " + work.id + " " + work.title + " " + album.album_id + " " + str(e))
                 # logtext = "FILL ERROR " + work.id + " " + work.title + " " + album.album_id + " " + str(tracks)
                 # logger.log_text(logtext, severity="ERROR")
                 try:
@@ -632,28 +632,28 @@ def cleanup(name):
         work.album_count = work.albums.count()
     db.session.commit()
 
-    # regenerate artists list
-    i = 0
-    artist_list = []
+    # # regenerate artists list
+    # i = 0
+    # artist_list = []
     
-    # artists = db.session.query(Artists.name, Artists.count).group_by(Artists.name).order_by(Artists.name).all():
-    artists = db.session.query(Artists.name, func.count(Artists.id).label('total'))\
-        .group_by(Artists.name).order_by(text('total DESC')).all()
+    # # artists = db.session.query(Artists.name, Artists.count).group_by(Artists.name).order_by(Artists.name).all():
+    # artists = db.session.query(Artists.name, func.count(Artists.id).label('total'))\
+    #     .group_by(Artists.name).order_by(text('total DESC')).all()
 
-    for value in artists:
-        artist_list.append(value[0])
-        if i < 100:
-            print(value[0] + " " + str(value[1]))
-        i += 1
+    # for value in artists:
+    #     artist_list.append(value[0])
+    #     if i < 100:
+    #         print(value[0] + " " + str(value[1]))
+    #     i += 1
 
-    artist_list = db.session.query(ArtistList).first()
-    artist_list.content = json.dumps(artist_list, ensure_ascii=False, sort_keys=False)
-    artist_list.timestamp = datetime.utcnow()
-    db.session.commit()
+    # artist_list = db.session.query(ArtistList).first()
+    # artist_list.content = json.dumps(artist_list, ensure_ascii=False, sort_keys=False)
+    # artist_list.timestamp = datetime.utcnow()
+    # db.session.commit()
 
-    message = "Cleanup completed for " + str(name) + "."
-    logger.log_text(message, severity="NOTICE")
-    print(message)
+    # message = "Cleanup completed for " + str(name) + "."
+    # logger.log_text(message, severity="NOTICE")
+    # print(message)
 
     # with open("app/static/artists.json", 'w', encoding='utf8') as outfile:
     #     json.dump(composers, outfile, ensure_ascii=False)
@@ -677,6 +677,17 @@ def regenerateartists():
 @ click.argument("name")
 def loadnew(name):
     spotifygenerate(name)
+    fillalbums(name)
+    cleanup(name)
+    albumimgs(name)
+    spotifypull(name)
+    trackcount(name)
+    print("LOAD COMPLETE!")
+
+
+@ bp.cli.command()
+@ click.argument("name")
+def fix(name):
     fillalbums(name)
     cleanup(name)
     albumimgs(name)
