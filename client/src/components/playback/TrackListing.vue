@@ -92,8 +92,10 @@ export default {
           }
         }).then((res) => {
           let duration = res.data.duration_ms;
-          let position = Math.round(duration * this.$view.percentProgress);
-          
+          let position = Math.round(duration * this.$view.percentProgress - 3000);
+          if (position < 0){
+            position = 0;
+          }
           this.playTracks(this.$config.playTracks, position);
         }).catch((error) => {
           console.error(error);

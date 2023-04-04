@@ -267,6 +267,7 @@ export default {
         this.newWork = false;
       }
       this.$config.album = albumId;
+      this.determineHeart(this.$config.album);
       localStorage.setItem("config", JSON.stringify(this.$config));
 
       let track_no = this.$view.trackIndex;
