@@ -28,32 +28,11 @@
 import { trackMixin } from "./TrackListing.js"
 import smoothscroll from "smoothscroll-polyfill";
 import { eventBus } from "@/main.js";
-import spotify from "@/SpotifyFunctions.js"; 
+import axios from 'axios';
 
 export default {
-  data() {
-    return {
-      progress: 0,
-    };
-  },
   mixins: [trackMixin],
-  computed: {
-    durationChanged() {
-      return this.$view.duration;
-    },
-  },
-  watch: {
-    durationChanged() {
-      this.seektoDuration(this.progress);
-    },
-  },
   methods: {
-    seektoDuration(progress){
-      let progress_rounded = Math.round(progress) - 2000
-      if (progress_rounded > 0){
-        spotify.seekToPosition(this.$auth.clientToken, progress_rounded)
-      }
-    },
     selectTrack(track) {
       this.selectedTrack = track;
       smoothscroll.polyfill(); // for Safari smooth scrolling
@@ -74,7 +53,6 @@ export default {
   },
   created() {
     eventBus.$on("fireSetAlbum", (album) => {
-      this.progress = 0;
       this.genre = this.$config.genre;
       this.$config.allTracks = album.tracks[0][2];
       this.$config.playTracks = album.tracks[0][2];
@@ -87,9 +65,11 @@ export default {
       }
     });
     eventBus.$on("fireSetAlbumHopper", (album, track_no, percent_progress) => {
-      this.progress = this.$view.duration * percent_progress;
+      
+      this.$view.percentProgress = percent_progress;
       this.genre = this.$config.genre;
       this.$config.allTracks = album.tracks[0][2];
+      
       try{
         this.$config.playTracks = album.tracks[track_no][2];
       } catch (error){
@@ -97,10 +77,27 @@ export default {
       }
       localStorage.setItem("config", JSON.stringify(this.$config));
       this.album = album;
-      if (this.$auth.clientToken && this.$auth.deviceID && !window.firstLoad) {
-        this.playTracks(this.$config.playTracks, this.progress);
-        
 
+      let playTrack = this.$config.playTracks.split(' ')[0].replace('spotify:track:', '');
+
+      if (this.$auth.clientToken && this.$auth.deviceID && !window.firstLoad) {
+        const path = 'https://api.spotify.com/v1/tracks/' + playTrack;
+        axios({
+          method: 'get',
+          url: path,
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + this.$auth.clientToken
+          }
+        }).then((res) => {
+          let duration = res.data.duration_ms;
+          let position = Math.round(duration * this.$view.percentProgress);
+          
+          this.playTracks(this.$config.playTracks, position);
+        }).catch((error) => {
+          console.error(error);
+        });
       } else {
         window.firstLoad = false;
       }

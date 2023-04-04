@@ -18,11 +18,11 @@
                   id="progressbar"
                   step="1000"
                   v-model="$view.progress"
-                  @input="setPlayback($view.progress, duration); suspendTimer();"
+                  @input="setPlayback($view.progress, $view.duration); suspendTimer();"
                   @change="seek($view.progress)"
                   type="range"
                   min="0"
-                  :max="Math.floor(duration/1000) * 1000"
+                  :max="Math.floor($view.duration/1000) * 1000"
                 ></b-form-input>
               </div>
             </td>
@@ -46,7 +46,6 @@ import axios from "axios";
 const debouncedNext = debounce(() => fireNextWork());
 const debouncedHopForward = immediateDebounce((progress, duration) => hopForward(progress, duration));
 const debouncedHopBackward = immediateDebounce((progress, duration) => hopBackward(progress, duration));
-const debouncedSetDuration = immediateDebounce((duration, vm) => setDuration(duration, vm));
 
 
 let allowNext = false;
@@ -93,10 +92,6 @@ function fireNextWork() {
   }
 }
 
-function setDuration(duration, vm) {
-  vm.$view.duration = duration;
-}
-
 function hopForward(progress, duration) {
   eventBus.$emit("fireTimeHopperForward", progress, duration);
 }
@@ -114,7 +109,6 @@ export default {
       token: "",
       player: "",
       playing: false,
-      duration: 0,
       display_duration: "00:00",
       display_progress: "00:00",
       suspend: true,
@@ -130,15 +124,15 @@ export default {
       spotify.pauseTrack(this.$auth.clientToken);
     },
     timeHopperForward() {
-      debouncedHopForward(this.$view.progress, this.duration);
+      debouncedHopForward(this.$view.progress, this.$view.duration);
     },
     timeHopperBackward() {
-      debouncedHopBackward(this.$view.progress, this.duration);
+      debouncedHopBackward(this.$view.progress, this.$view.duration);
     },
     back() {
       if (this.$view.progress > 2000) {
         spotify.beginningTrack(this.$auth.clientToken, this.$auth.deviceID);
-        this.setPlayback(0, this.duration);
+        this.setPlayback(0, this.$view.duration);
       } else {
         let uriList = {};
         let jsonList = {};
@@ -164,7 +158,7 @@ export default {
     },
     setPlayback(progress, duration) {
       this.$view.progress = progress;
-      this.duration = duration;
+      this.$view.duration = duration;
       this.display_progress = this.msToHMS(progress);
       this.display_duration = this.msToHMS(duration);
     },
@@ -181,14 +175,14 @@ export default {
     playbackTimer() {
       if (!this.suspend) {
         this.$view.progress = parseInt(this.$view.progress) + 1000;
-        this.setPlayback(this.$view.progress, this.duration);
+        this.setPlayback(this.$view.progress, this.$view.duration);
 
-        if (this.$view.progress >= this.duration) {
-          this.setPlayback(this.duration, this.duration);
+        if (this.$view.progress >= this.$view.duration) {
+          this.setPlayback(this.$view.duration, this.$view.duration);
           this.suspend = true;
         }
         if (this.$view.progress < 0) {
-          this.setPlayback(0, this.duration);
+          this.setPlayback(0, this.$view.duration);
         }
       }
     },
@@ -252,7 +246,7 @@ export default {
 
     // Receives data from Spotify API with current playback data upon a player state change
     eventBus.$on("firePlayerStateChanged", (track_data, position, duration, paused) => {
-        debouncedSetDuration(duration, this);
+        // debouncedSetDuration(duration, this);
       
       if (position == 0 && !paused) {
         // can delay timer here if glitchy
@@ -286,6 +280,7 @@ export default {
           this.suspend = true;
         }
 
+        //debouncedSetProgress(this, position, duration);
         this.setPlayback(position, duration);
       }
       // update previousTracks

@@ -111,7 +111,7 @@ Vue.prototype.$view = Vue.observable({
   avatar: false,
   showConnecting: true,
   progress: 0,
-  duration: 0,
+  duration: 1000,
   trackIndex: 0
 });
 
