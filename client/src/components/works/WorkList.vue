@@ -50,7 +50,7 @@
                   </td>
                   <td width="5%" style="text-align: right;">
                     <span class="heart-number" style="white-space: nowrap;">
-                      <span v-if="work.duration" style="color: rgb(52, 58, 64, 0.7); font-size: 12px;">
+                      <span v-if="work.duration && !$view.mobile" style="color: rgb(52, 58, 64, 0.7); font-size: 12px;">
                         {{ duration(work.duration) }}&nbsp;
                       </span> 
                       <span v-if="work.liked" style="color: rgb(52, 58, 64, 0.7); font-size: 12px;">
