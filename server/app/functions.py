@@ -89,6 +89,7 @@ def prepare_works(works_list, liked_list):
             'nickname': work.nickname,
             'date': work.date,
             'album_count': work.album_count,
+            'duration': work.duration,
         }
 
         if work.id in liked_list:

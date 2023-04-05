@@ -122,18 +122,30 @@ export default {
     timeDisplay(milliseconds) {
       return msToHMS(milliseconds);
     },
-    duration(ms){
+    durationAlt(ms){
         let seconds = Math.floor(ms / 1000);
-        let hours = Math.round(seconds / 3600 * 10) / 10;
+        let hours = Math.floor(seconds / 3600);
+        seconds = seconds - (hours * 3600);
         let minutes = Math.round(seconds / 60);
 
         if(hours > 1){
-          return hours + "h";
+          return hours + "h" + minutes + "m";
         } else {
           return minutes + "m"
         }
     },
-  }
+    duration(ms){
+          let seconds = Math.floor(ms / 1000);
+          let hours = Math.round(seconds / 3600 * 10) / 10;
+          let minutes = Math.round(seconds / 60);
+
+          if(hours > 1){
+            return hours + "h";
+          } else {
+            return minutes + "m"
+          }
+      },
+    },
 };
 </script>
 

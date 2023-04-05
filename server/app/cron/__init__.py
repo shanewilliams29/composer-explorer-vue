@@ -4,7 +4,7 @@ import click
 from app import db, log, sp
 from datetime import datetime, timedelta
 from app.cron.classes import GroupAlbums, SmartAlbums
-from app.models import WorkList, Spotify, WorkAlbums, Artists, ComposerCron, ArtistList, ComposerList, Performers
+from app.models import WorkList, Spotify, WorkAlbums, Artists, ComposerCron, ArtistList, ComposerList, Performers, AlbumLike
 from app.cron.functions import search_spotify_and_save, search_album
 import json
 from sqlalchemy import func, text, or_
@@ -232,6 +232,55 @@ def fillperformerdata(name):
     print(message)
     logger.log_text(message, severity="NOTICE")
 
+
+# FILL DURATION IN WORKS LIST
+@bp.cli.command()
+@click.argument("composer_name")
+def getworkdurationsbad(composer_name):
+    work_albums = db.session.query(WorkAlbums)\
+        .filter(WorkAlbums.composer == composer_name)\
+        .order_by(WorkAlbums.score.desc())\
+        .group_by(WorkAlbums.workid)\
+        .distinct()
+
+    for album in work_albums:
+        print(album.workid, album.score, album.work_track_count, album.duration)
+
+
+@bp.cli.command()
+@click.argument("composer_name")
+def getworkdurations(composer_name):
+    # create the base query
+    query = db.session.query(WorkList.id, WorkAlbums.duration)
+    
+    # filter the query based on the composer
+    query = query.join(WorkAlbums)
+    query = query.filter(WorkList.composer == composer_name)
+
+    # order the query results for top album for each work
+    query = query.outerjoin(AlbumLike).group_by(WorkAlbums.id)
+    query = query.order_by(WorkList.genre, WorkList.id, func.count(AlbumLike.id).desc(), WorkAlbums.album_type, WorkAlbums.score.desc())
+
+    # make subquery and get first album of each work
+    t = query.subquery('t')
+    query = db.session.query(t).group_by(t.c.id)
+
+    # execute the query
+    work_list = query.all()
+
+    durations_dict = {}
+    for work, duration in work_list:
+        durations_dict[work] = duration
+
+    # get works from database
+    works = db.session.query(WorkList).filter(WorkList.composer == composer_name).all()
+
+    for work in works:
+        work.duration = durations_dict.get(work.id)
+        print(work.id, work.duration)
+
+    db.session.commit()
+    print("Work durations added to WorkList table")
 
 # FILL PERFORMER TABLE WITH IMAGES FROM SPOTIFY
 # @bp.cli.command()

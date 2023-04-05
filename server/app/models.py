@@ -236,6 +236,7 @@ class WorkList(db.Model):
     search: str
     date: int
     openopus: bool
+    duration: int
 
     id = db.Column(db.String(24), primary_key=True)
     composer = db.Column(db.String(48), index=True)
@@ -250,6 +251,7 @@ class WorkList(db.Model):
     date = db.Column(db.Integer)
     openopus = db.Column(db.Boolean)
     album_count = db.Column(db.Integer, index=True)
+    duration = db.Column(db.Integer)
     albums = db.relationship("WorkAlbums", back_populates="work", lazy='dynamic')
 
     def __repr__(self):
