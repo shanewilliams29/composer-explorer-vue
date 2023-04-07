@@ -8,7 +8,6 @@ from app.models import WorkList, Spotify, WorkAlbums, Artists, ComposerCron, Art
 from app.cron.functions import search_spotify_and_save, search_album
 import json
 from sqlalchemy import func, text, or_
-import jsonpickle
 
 bp = Blueprint('cron', __name__)
 
@@ -25,6 +24,7 @@ def autoperformerfill():
 
         fillperformerdata(composer_to_fill.id)
         getspotifyartistimg()
+        getworkdurations(composer_to_fill.id)
         print("Completed " + str(composer_to_fill.id) + "!")
 
         indexed_composers = []
@@ -234,50 +234,42 @@ def fillperformerdata(name):
 
 
 # FILL DURATION IN WORKS LIST
-@bp.cli.command()
-@click.argument("composer_name")
-def getworkdurationsbad(composer_name):
-    work_albums = db.session.query(WorkAlbums)\
-        .filter(WorkAlbums.composer == composer_name)\
-        .order_by(WorkAlbums.score.desc())\
-        .group_by(WorkAlbums.workid)\
-        .distinct()
-
-    for album in work_albums:
-        print(album.workid, album.score, album.work_track_count, album.duration)
-
-
-@bp.cli.command()
-@click.argument("composer_name")
+# @bp.cli.command()
+# @click.argument("composer_name")
 def getworkdurations(composer_name):
-    # create the base query
-    query = db.session.query(WorkList.id, WorkAlbums.duration)
-    
-    # filter the query based on the composer
-    query = query.join(WorkAlbums)
-    query = query.filter(WorkList.composer == composer_name)
 
-    # order the query results for top album for each work
-    query = query.outerjoin(AlbumLike).group_by(WorkAlbums.id)
-    query = query.order_by(WorkList.genre, WorkList.id, func.count(AlbumLike.id).desc(), WorkAlbums.album_type, WorkAlbums.score.desc())
+    # base query
+    query = db.session.query(WorkAlbums, func.count(AlbumLike.id).label('total'))\
+        .outerjoin(AlbumLike).group_by(WorkAlbums.id)
 
-    # make subquery and get first album of each work
+    # filter by criteria
+    query = query.filter(WorkAlbums.composer == composer_name, 
+                         WorkAlbums.hidden != True, 
+                         WorkAlbums.track_count <= 80)
+
+    # make subquery
     t = query.subquery('t')
-    query = db.session.query(t).group_by(t.c.id)
+    query = db.session.query(t)
+
+    # disallow compilation albums unless user favorited
+    query = query.filter(or_(t.c.album_type != "compilation", t.c.total > 0))
+
+    # sort the results. Album type sort rates albums ahead of compilations and singles
+    query = query.order_by(t.c.workid, t.c.total.desc(), t.c.album_type, t.c.score.desc())
 
     # execute the query
-    work_list = query.all()
+    album_list = query.all()
 
     durations_dict = {}
-    for work, duration in work_list:
-        durations_dict[work] = duration
+    for album in album_list:
+        if album.workid not in durations_dict:
+            durations_dict[album.workid] = album.duration
 
     # get works from database
     works = db.session.query(WorkList).filter(WorkList.composer == composer_name).all()
 
     for work in works:
         work.duration = durations_dict.get(work.id)
-        print(work.id, work.duration)
 
     db.session.commit()
     print("Work durations added to WorkList table")
