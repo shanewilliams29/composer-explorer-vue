@@ -3,11 +3,12 @@ from app import db, log, sp
 from datetime import datetime, timedelta
 from app.cron.classes import GroupAlbums, SmartAlbums
 from app.models import WorkList, Spotify, WorkAlbums, Artists, ComposerCron
-from app.models import ArtistList, ComposerList, Performers, AlbumLike
+from app.models import ArtistList, Performers, AlbumLike
 from app.cron.functions import search_spotify_and_save, search_album
 from sqlalchemy import func, or_
 import click
 import json
+from collections import defaultdict
 
 bp = Blueprint('cron', __name__)
 
@@ -247,6 +248,8 @@ def fillperformerdata(name):
 
 
 # FILL DURATION IN WORKS LIST
+@ bp.cli.command()
+@ click.argument("composer_name")
 def getworkdurations(composer_name):
 
     # base query
@@ -256,7 +259,7 @@ def getworkdurations(composer_name):
     # filter by criteria
     query = query.filter(WorkAlbums.composer == composer_name, 
                          WorkAlbums.hidden != True, 
-                         WorkAlbums.track_count <= 80)
+                         WorkAlbums.track_count <= 100)
 
     # make subquery
     t = query.subquery('t')
@@ -271,11 +274,29 @@ def getworkdurations(composer_name):
     # execute the query
     album_list = query.all()
 
-    # create dictionary of unique works (first, highest ranked item from the sorted query)
-    durations_dict = {}
+    # create a dictionary of unique works with the duration of the second longest of the top 5 albums
+    durations_dict = defaultdict(list)
+    workid_album_counts = {}
+
     for album in album_list:
         if album.workid not in durations_dict:
-            durations_dict[album.workid] = album.duration
+            durations_dict[album.workid].append(album.duration)
+            workid_album_counts[album.workid] = 1
+
+        else:
+            if workid_album_counts[album.workid] < 5:
+                durations_dict[album.workid].append(album.duration)
+                durations_dict[album.workid].sort(reverse=True)
+                if len(durations_dict[album.workid]) > 2:
+                    durations_dict[album.workid].pop()
+                workid_album_counts[album.workid] += 1
+
+    # Keep only the second longest duration for each work ID
+    for workid, durations in durations_dict.items():
+        if len(durations) > 1:
+            durations_dict[workid] = durations[1]
+        else:
+            durations_dict[workid] = durations[0]
 
     # get works from database
     works = db.session.query(WorkList).filter(WorkList.composer == composer_name).all()

@@ -52,11 +52,12 @@
                     <span class="heart-number" style="white-space: nowrap;">
                       <span v-if="work.duration && !$view.mobile" style="color: rgb(52, 58, 64, 0.7); font-size: 12px;">
                         {{ duration(work.duration) }}&nbsp;
-                      </span> 
-                      <span v-if="work.liked" style="color: rgb(52, 58, 64, 0.7); font-size: 12px;">
+                      </span>
+<!--                       <span v-if="work.liked" style="color: rgb(52, 58, 64, 0.7); font-size: 12px;">
                         <b-icon-heart-fill></b-icon-heart-fill>&nbsp;
-                      </span> 
-                      <b-badge>{{ work.album_count }}</b-badge>
+                      </span>  -->
+                      <b-badge v-if="work.liked" class="liked-badge">{{ work.album_count }}</b-badge>
+                      <b-badge v-if="!work.liked" class="plain-badge">{{ work.album_count }}</b-badge>
                     </span>
                   </td>
                 </tr>
@@ -818,9 +819,14 @@ tr:hover {
     padding-left: 5px;
     padding-right: 5px;
 }
-.badge {
+.plain-badge {
     color: var(--my-white);
     background-color: rgb(52, 58, 64, 0.7);
+    border-radius: 7px;
+}
+.liked-badge {
+    color: var(--my-white);
+    background-color: darkgoldenrod;
     border-radius: 7px;
 }
 .no-works-found {

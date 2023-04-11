@@ -62,7 +62,7 @@
   color: var(--medium-dark-gray) !important;
 }
 .red {
-  color: var(--red) !important;
+  color: var(--yellow) !important;
 }
 .btn:focus,
 .btn:active:focus,
