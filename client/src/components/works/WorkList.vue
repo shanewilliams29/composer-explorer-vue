@@ -823,11 +823,15 @@ tr:hover {
     color: var(--my-white);
     background-color: rgb(52, 58, 64, 0.7);
     border-radius: 7px;
+    position: relative;
+    top: -1px;
 }
 .liked-badge {
     color: var(--my-white);
     background-color: darkgoldenrod;
     border-radius: 7px;
+    position: relative;
+    top: -1px;
 }
 .no-works-found {
     font-size: 14px;
