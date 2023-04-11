@@ -1,13 +1,13 @@
-from flask import session, current_app
-from flask import Blueprint
-import click
+from flask import session, current_app, Blueprint
 from app import db, log, sp
 from datetime import datetime, timedelta
 from app.cron.classes import GroupAlbums, SmartAlbums
-from app.models import WorkList, Spotify, WorkAlbums, Artists, ComposerCron, ArtistList, ComposerList, Performers, AlbumLike
+from app.models import WorkList, Spotify, WorkAlbums, Artists, ComposerCron
+from app.models import ArtistList, ComposerList, Performers, AlbumLike
 from app.cron.functions import search_spotify_and_save, search_album
+from sqlalchemy import func, or_
+import click
 import json
-from sqlalchemy import func, text, or_
 
 bp = Blueprint('cron', __name__)
 
@@ -15,6 +15,7 @@ log_name = "cron-log"
 logger = log.logger(log_name)
 
 
+# FILLS PERFORMER DATA AND IMAGES FOR ALL COMPOSERS
 @ bp.cli.command()
 def autoperformerfill():
 
@@ -47,10 +48,7 @@ def autoperformerfill():
 
 
 # FILL PERFORMER TABLES WITH ARTISTS INFO FROM SPOTIFY
-#@bp.cli.command()
-#@click.argument("name")
 def fillperformerdata(name):
-    error_count = 0
     start_time = datetime.utcnow()
     ctx = current_app.test_request_context()
     ctx.push()
@@ -62,7 +60,10 @@ def fillperformerdata(name):
 
     # get albums for processing
     albums = db.session.query(WorkAlbums)\
-        .filter(WorkAlbums.composer == name, or_(WorkAlbums.got_artists == None, WorkAlbums.got_artists != True, WorkAlbums.duration == None)).all()
+        .filter(WorkAlbums.composer == name, 
+                or_(WorkAlbums.got_artists == None, 
+                    WorkAlbums.got_artists != True, 
+                    WorkAlbums.duration == None)).all()
 
     all_album_list = []
     for album in albums:
@@ -82,7 +83,7 @@ def fillperformerdata(name):
         
         all_album_list.append(album_dict)
 
-    print(str(len(all_album_list)) + " albums found.")
+    print(f"{len(all_album_list)} albums found for {name}.")
 
     # process albums in batches of 50
     for p in range(0, len(all_album_list), 50):    
@@ -94,8 +95,9 @@ def fillperformerdata(name):
             k = 0
 
             while k < len(album_list):
+                flag_error = False
 
-                # ignore if artists already populated (second loop with 429 errors)
+                # ignore if artists already populated (ie. during second loop with 429 errors)
                 if album_list[k]['artists']:
                     k += 1
                     continue
@@ -128,6 +130,7 @@ def fillperformerdata(name):
                         if int(batch_results.get('error')['status']) == 429:
                             # retry if rate limit is exceeded
                             errors = True
+                            flag_error = True
                             continue
                         else:
                             # continue if another error
@@ -135,6 +138,7 @@ def fillperformerdata(name):
                             logger.log_text(logtext, severity="ERROR")
                             print(logtext)
                             errors = True
+                            flag_error = True
                             continue
                     else:
                         results.extend(batch_results['tracks'])
@@ -147,9 +151,14 @@ def fillperformerdata(name):
                         album_list[k]['track_durations'].append(int(results[m]['duration_ms']))
                         album_list[k]['album_duration'] = int(album_list[k]['album_duration']) + int(results[m]['duration_ms'])
                     except Exception as e:
-                        print(e)
-                        error_count += 1
-                        pass
+                        # retry if error
+                        print(f"ERROR: {e}")
+                        album_list[k]['artists'] = []
+                        album_list[k]['track_durations'] = []
+                        album_list[k]['album_duration'] = 0
+                        errors = True
+                        flag_error = True
+                        m = len(results)
                     m += 1
 
                 # Remove duplicate artists. Use a set to keep track of the ids we've already seen
@@ -165,7 +174,11 @@ def fillperformerdata(name):
                 album_list[k]['artists'] = unique_entries
 
                 k += 1
-                print("Fetched " + str(k + p) + " of " + str(len(all_album_list)) + " " + str(album_list[k - 1]['work_id']))
+                if flag_error is False:
+                    print(f"Fetched {k + p} of {len(all_album_list)} for {album_list[k - 1]['work_id']}")
+                else:
+                    print(f"Error in {k + p}, will retry.")
+                    flag_error = False
 
         print("Data retrieved from Spotify Successfully")
 
@@ -207,7 +220,7 @@ def fillperformerdata(name):
             # Commit after every 10 albums or the last album
             if (k + 1) % 10 == 0 or k == len(album_list) - 1:
                 db.session.commit()
-                print("Stored " + str(k + 1 + p) + " of " + str(len(all_album_list)))
+                print(f"Stored {k + 1 + p} of {len(all_album_list)}")
 
         current_time = datetime.utcnow()
         elapsed_time = current_time - start_time
@@ -228,18 +241,16 @@ def fillperformerdata(name):
     # finish
     ctx.pop()
 
-    message = "Performer info data fill complete for " + name + ", " + str(error_count) + " unresolved errors."
+    message = f"Performer info data fill complete for {name}!"
     print(message)
     logger.log_text(message, severity="NOTICE")
 
 
 # FILL DURATION IN WORKS LIST
-# @bp.cli.command()
-# @click.argument("composer_name")
 def getworkdurations(composer_name):
 
     # base query
-    query = db.session.query(WorkAlbums, func.count(AlbumLike.id).label('total'))\
+    query = db.session.query(WorkAlbums, func.count(AlbumLike.id).label('likes'))\
         .outerjoin(AlbumLike).group_by(WorkAlbums.id)
 
     # filter by criteria
@@ -252,14 +263,15 @@ def getworkdurations(composer_name):
     query = db.session.query(t)
 
     # disallow compilation albums unless user favorited
-    query = query.filter(or_(t.c.album_type != "compilation", t.c.total > 0))
+    query = query.filter(or_(t.c.album_type != "compilation", t.c.likes > 0))
 
     # sort the results. Album type sort rates albums ahead of compilations and singles
-    query = query.order_by(t.c.workid, t.c.total.desc(), t.c.album_type, t.c.score.desc())
+    query = query.order_by(t.c.workid, t.c.likes.desc(), t.c.album_type, t.c.score.desc())
 
     # execute the query
     album_list = query.all()
 
+    # create dictionary of unique works (first, highest ranked item from the sorted query)
     durations_dict = {}
     for album in album_list:
         if album.workid not in durations_dict:
@@ -272,10 +284,10 @@ def getworkdurations(composer_name):
         work.duration = durations_dict.get(work.id)
 
     db.session.commit()
-    print("Work durations added to WorkList table")
+    print(f"Work durations added to WorkList table for {composer_name}!")
+
 
 # FILL PERFORMER TABLE WITH IMAGES FROM SPOTIFY
-# @bp.cli.command()
 def getspotifyartistimg():
     start_time = datetime.utcnow()
     ctx = current_app.test_request_context()
@@ -308,7 +320,7 @@ def getspotifyartistimg():
             session['app_token'] = sp.client_authorize()
             session['app_token_expire_time'] = datetime.now() + timedelta(minutes=59)
 
-        # get in batches of 50 from Spotify
+        # get data in batches of 50 artist ids from Spotify
         while i < 50 and k < len(artist_list):
             id_fetch_list.append(artist_list[k].id)
             i += 1
@@ -359,108 +371,57 @@ def getspotifyartistimg():
     ctx.pop()
     end_time = datetime.utcnow()
     elapsed_time = end_time - start_time
-    minutes = divmod(elapsed_time.total_seconds(), 60)
 
     message = "Performers image fetch complete. " + str(error_count) + " unresolved errors."
     print(message)
 
 
-# OLD Fill artist details with information from Spotify
-@bp.cli.command()
-@click.argument("name")
-def spotifyfillartistinfo(name):
-    start_time = datetime.utcnow()
-    ctx = current_app.test_request_context()
-    ctx.push()
+# LOAD A NEW COMPOSER'S WORKS
+@ bp.cli.command()
+@ click.argument("name")
+def loadnew(name):
+    spotifygenerate(name)
+    fillalbums(name)
+    cleanup(name)
+    albumimgs(name)
+    spotifypull(name)
+    trackcount(name)
+    print("LOAD COMPLETE!")
 
-    # get spotify token
-    if not session.get('app_token'):
-        session['app_token'] = sp.client_authorize()
-        session['app_token_expire_time'] = datetime.now() + timedelta(minutes=59)
 
-    # # FIRST GET SPOTIFY ARTISTS IDS
+# REFRESH A COMPOSER'S WORKS WITH NEW SPOTIFY ALBUMS
+@ bp.cli.command()
+def autorefresh():
+    indexed_composers = []
+    for value in db.session.query(WorkList.composer).distinct():
+        str(indexed_composers.append(value[0]))
 
-    # # get Artist list
-    # artists = db.session.query(Artists, WorkAlbums.spotify_data)\
-    #     .join(WorkAlbums)\
-    #     .filter(Artists.composer == name).all()
+    composer_to_refresh = db.session.query(ComposerCron).first()
 
-    # for artist, spotify_data in artists:
+    for composer in indexed_composers:
+        if composer == composer_to_refresh.id:
+            index = indexed_composers.index(composer)
 
-    #     data = json.loads(spotify_data)
-    #     for item in data:
-    #         if item['name'] == artist.name:
-    #             artist.spotify_id = item['id']
-    #             break
+            if index == len(indexed_composers) - 1:
+                next_index = 0
+            else:
+                next_index = index + 1
 
-    # db.session.commit()
+            next_composer = indexed_composers[next_index]
+            composer_to_refresh.id = next_composer
+            db.session.commit()
+            break
 
-    # THEN GET SPOTIFY ARTIST PICTURES
+    refreshalbums(composer)
+    fillalbums(composer)
+    cleanup(composer)
+    albumimgs(composer)
+    spotifypull(composer)
+    trackcount(composer)
+    print("REFRESH COMPLETE!")
 
-    artists = db.session.query(Artists)\
-        .filter(Artists.composer == name).all()
 
-    artist_list = []
-    for artist in artists:
-        if artist.spotify_id:
-            artist_list.append(artist)
-
-    k = 0
-    j = 0
-
-    error_count = 0
-
-    while k < len(artist_list):
-
-        i = 0
-        id_fetch_list = []
-
-        # token expiry and refreshing
-        if session['app_token_expire_time'] < datetime.now():
-            session['app_token'] = sp.client_authorize()
-            session['app_token_expire_time'] = datetime.now() + timedelta(minutes=59)
-
-        while i < 50 and k < len(artist_list):
-            id_fetch_list.append(artist_list[k].spotify_id)
-            i += 1
-            k += 1
-
-        id_string = ','.join(id_fetch_list)
-
-        response = sp.get_artists(id_string)
-        results = response.json()
-
-        if results.get('error'):
-            print('FAIL')
-            error_count += 1
-            continue
-
-        m = 0
-        while m < len(results['artists']):
-            try:
-                artist_list[j].spotify_img = results['artists'][m]['images'][0]['url']
-            except:
-                print("ERROR: " + str(artist_list[j]))
-                pass
-
-            j += 1
-            m += 1
-
-        db.session.commit()
-        print("Completed " + str(k) + " of " + str(len(artist_list)))
-
-    # finish
-    ctx.pop()
-    end_time = datetime.utcnow()
-    elapsed_time = end_time - start_time
-    minutes = divmod(elapsed_time.total_seconds(), 60)
-
-    message = "Artist Spotify info data fill complete for " + name + ", " + str(error_count) + " unresolved errors. Took " + str(minutes[0]) + " minutes, " + str(minutes[1]) + " seconds."
-    print(message)
-
-# # Inital Spotify search and fill for Albums and Artists
-# @bp.cli.command()
-# @click.argument("name")
+# INITIAL RETRIEVAL OF SPOTIFY DATA FOR ALBUMS AND ARTISTS
 def spotifygenerate(name):
     start_time = datetime.utcnow()
     ctx = current_app.test_request_context()
@@ -492,7 +453,7 @@ def spotifygenerate(name):
             try:
                 GroupAlbums(tracks, work)
                 print("SUCCESS" + " " + work.id + " " + work.title + " <" + str(i) + " of " + num_works + ">")
-            except:
+            except Exception:
                 output = "SPOTIFY GENERATE FAIL - " + work.id + " " + str(tracks) + " " + work.title
                 output2 = "SPOTIFY GENERATE FAIL - " + work.id + " " + work.title
                 if str(tracks[1]) == "429":
@@ -523,9 +484,7 @@ def spotifygenerate(name):
     print(message)
 
 
-# Fill in albums with all tracks
-# @bp.cli.command()
-# @click.argument("name")
+# FILL IN ALBUMS WITH ALL WORK TRACKS
 def fillalbums(name):
     start_time = datetime.utcnow()
     ctx = current_app.test_request_context()
@@ -569,7 +528,7 @@ def fillalbums(name):
                         errors = True
                         limit_exceeded_error += 1
                         continue
-                except:
+                except Exception:
                     error_count += 1
                     continue
 
@@ -585,9 +544,27 @@ def fillalbums(name):
     print(message)
 
 
-# Check Spotify for new albums
-# @ bp.cli.command()
-# @ click.argument("name")
+# CLEAN UP ALBUMS DATABASE
+def cleanup(name):
+    # delete albums with no tracks.
+    db.session.query(WorkAlbums).filter(WorkAlbums.composer == name, WorkAlbums.score == 0).delete()
+    db.session.commit()
+
+    # delete spotify table records if no albums
+    noalbums = db.session.query(Spotify).outerjoin(WorkAlbums, Spotify.id == WorkAlbums.workid).filter(WorkAlbums.id == None).all()
+    for album in noalbums:
+        db.session.query(Spotify).filter(Spotify.id == album.id).delete()
+        db.session.commit()
+
+    # re-sum album counts
+    works = db.session.query(WorkList).filter_by(composer=name).all()
+
+    for work in works:
+        work.album_count = work.albums.count()
+    db.session.commit()
+
+
+# CHECK SPOTIFY FOR NEW ALBUMS AND RETRIEVE FOR EXISTING WORKS
 def refreshalbums(name):
     ctx = current_app.test_request_context()
     ctx.push()
@@ -618,7 +595,7 @@ def refreshalbums(name):
         try:
             tracks = search_spotify_and_save(work.id)
             test = tracks[0]['album_id']
-        except:
+        except Exception:
             output = "SPOTIFY REFRESH FAIL - " + work.id + " " + work.title
             if str(tracks[1]) == "429":
                 print("429 " + output)
@@ -654,223 +631,7 @@ def refreshalbums(name):
     logger.log_text(message, severity="NOTICE")
 
 
-# @ bp.cli.command()
-# @ click.argument("name")
-def cleanup(name):
-    # delete albums with no tracks.
-    db.session.query(WorkAlbums).filter(WorkAlbums.composer == name, WorkAlbums.score == 0).delete()
-    db.session.commit()
-    # delete spotify table records if no albums
-    noalbums = db.session.query(Spotify).outerjoin(WorkAlbums, Spotify.id == WorkAlbums.workid).filter(WorkAlbums.id == None).all()
-    for album in noalbums:
-        db.session.query(Spotify).filter(Spotify.id == album.id).delete()
-        db.session.commit()
-
-    # re-sum album counts
-    works = db.session.query(WorkList).filter_by(composer=name).all()
-
-    for work in works:
-        work.album_count = work.albums.count()
-    db.session.commit()
-
-    # # regenerate artists list
-    # i = 0
-    # artist_list = []
-    
-    # # artists = db.session.query(Artists.name, Artists.count).group_by(Artists.name).order_by(Artists.name).all():
-    # artists = db.session.query(Artists.name, func.count(Artists.id).label('total'))\
-    #     .group_by(Artists.name).order_by(text('total DESC')).all()
-
-    # for value in artists:
-    #     artist_list.append(value[0])
-    #     if i < 100:
-    #         print(value[0] + " " + str(value[1]))
-    #     i += 1
-
-    # artist_list = db.session.query(ArtistList).first()
-    # artist_list.content = json.dumps(artist_list, ensure_ascii=False, sort_keys=False)
-    # artist_list.timestamp = datetime.utcnow()
-    # db.session.commit()
-
-    # message = "Cleanup completed for " + str(name) + "."
-    # logger.log_text(message, severity="NOTICE")
-    # print(message)
-
-    # with open("app/static/artists.json", 'w', encoding='utf8') as outfile:
-    #     json.dump(composers, outfile, ensure_ascii=False)
-    # add: regenerate json list
-
-
-@ bp.cli.command()
-def regenerateartists():
-    # regenerate artists list
-    composers = []
-    for value in db.session.query(Artists.name).order_by(Artists.name).distinct():
-        composers.append(value[0])
-
-    artist_list = db.session.query(ArtistList).first()
-    artist_list.content = json.dumps(composers, ensure_ascii=False)
-    artist_list.timestamp = datetime.utcnow()
-    db.session.commit()
-
-
-@ bp.cli.command()
-@ click.argument("name")
-def loadnew(name):
-    spotifygenerate(name)
-    fillalbums(name)
-    cleanup(name)
-    albumimgs(name)
-    spotifypull(name)
-    trackcount(name)
-    print("LOAD COMPLETE!")
-
-
-@ bp.cli.command()
-@ click.argument("name")
-def fix(name):
-    fillalbums(name)
-    cleanup(name)
-    albumimgs(name)
-    spotifypull(name)
-    trackcount(name)
-    print("LOAD COMPLETE!")
-
-
-# @ bp.cli.command()
-# @ click.argument("name")
-# def refresh(name):
-#     refreshalbums(name)
-#     fillalbums(name)
-#     cleanup(name)
-#     albumimgs(name)
-#     print("REFRESH COMPLETE!")
-
-
-@ bp.cli.command()
-def autorefresh():
-    indexed_composers = []
-    for value in db.session.query(WorkList.composer).distinct():
-        str(indexed_composers.append(value[0]))
-    composer_to_refresh = db.session.query(ComposerCron).first()
-
-    for composer in indexed_composers:
-        if composer == composer_to_refresh.id:
-            index = indexed_composers.index(composer)
-
-            if index == len(indexed_composers) - 1:
-                next_index = 0
-            else:
-                next_index = index + 1
-
-            next_composer = indexed_composers[next_index]
-            composer_to_refresh.id = next_composer
-            db.session.commit()
-            break
-
-    refreshalbums(composer)
-    fillalbums(composer)
-    cleanup(composer)
-    albumimgs(composer)
-    spotifypull(composer)
-    trackcount(composer)
-    print("REFRESH COMPLETE!")
-
-
-@ bp.cli.command()
-def spotifydata():
-
-    i = 0
-    while i < 60:
-
-        indexed_composers = []
-        for value in db.session.query(WorkList.composer).distinct():
-            str(indexed_composers.append(value[0]))
-        composer_to_refresh = db.session.query(ComposerCron).first()
-
-        print("Getting data for " + str(composer_to_refresh.id) + "...")
-
-        for composer in indexed_composers:
-            if composer == composer_to_refresh.id:
-                index = indexed_composers.index(composer)
-
-                if index == len(indexed_composers) - 1:
-                    next_index = 0
-                else:
-                    next_index = index + 1
-
-                next_composer = indexed_composers[next_index]
-                composer_to_refresh.id = next_composer
-                db.session.commit()
-                break
-
-        spotifypull(composer)
-
-        i += 1
-
-    print('DATA PULL COMPLETED')
-    logger.log_text("DATA PULL COMPLETED", severity="NOTICE")
-
-
-@ bp.cli.command()
-@ click.argument("name")
-def splitsongs(name):
-    works = db.session.query(WorkList).filter_by(composer=name)
-
-    for work in works:
-        title = work.title
-        splitlist = title.split("(\"")
-        try:
-            lyrics = splitlist[1]
-            lyrics = lyrics.replace("\")", "")
-            title = splitlist[0].strip()
-            work.nickname = lyrics
-            work.title = title
-
-        except:
-            pass
-
-    db.session.commit()
-
-
-@ bp.cli.command()
-@ click.argument("name")
-def splitsongs2(name):
-    works = db.session.query(WorkList).filter_by(composer=name)
-
-    for work in works:
-        title = work.title
-        splitlist = title.split("(")
-        try:
-            lyrics = splitlist[1]
-            lyrics = lyrics.replace(")", "")
-            title = splitlist[0].strip()
-            work.nickname = lyrics
-            work.title = title
-
-        except:
-            pass
-
-    db.session.commit()
-
-
-@ bp.cli.command()
-@ click.argument("name")
-def trimtitles(name):
-    works = db.session.query(WorkList).filter_by(composer=name)
-
-    for work in works:
-        title = work.title
-        trimmed = title.strip()
-        work.title = trimmed
-        print(work.title)
-
-    db.session.commit()
-
-# @ bp.cli.command()
-# @ click.argument("name")
-
-
+# GET ALBUM IMAGE COVERS FROM SPOTIFY
 def albumimgs(name):
     start_time = datetime.utcnow()
     ctx = current_app.test_request_context()
@@ -919,7 +680,7 @@ def albumimgs(name):
         for album in album_list:
             try:
                 album.img = results['albums'][j]['images'][0]['url']
-            except:
+            except Exception:
                 pass
 
             # print(album.id + " - " + str(album.img))
@@ -939,8 +700,7 @@ def albumimgs(name):
     print(message)
 
 
-# @ bp.cli.command()
-# @ click.argument("name")
+# RETRIEVE ADDITIONAL INFORMATION FROM SPOTIFY FOR ALBUMS
 def spotifypull(name):
     start_time = datetime.utcnow()
     ctx = current_app.test_request_context()
@@ -992,7 +752,7 @@ def spotifypull(name):
                 album.label = results['albums'][j]['label']
                 album.track_count = results['albums'][j]['total_tracks']
                 album.album_type = results['albums'][j]['album_type']
-            except:
+            except Exception:
                 pass
 
             # print(album.id + " - " + str(album.img))
@@ -1012,57 +772,7 @@ def spotifypull(name):
     print(message)
 
 
-# DELETES AN ARTIST (DANGEROUS)
-# @ bp.cli.command()
-# @ click.argument("name")
-def deleteartist(name):
-    search = "%{}%".format(name)
-
-    # get albums for composer , WorkAlbums.label == None
-    albums = WorkAlbums.query.filter(WorkAlbums.artists.ilike(search)).all()
-    print("QUERY DONE")
-
-    for album in albums:
-        data = json.loads(album.data)
-
-        artists_list = data['artists'].split(', ')
-        minor_artists_list = data['minor_artists'].split(', ')
-        all_artists_list = data['all_artists'].split(', ')
-
-        try:
-            artists_list.remove(name)
-        except:
-            pass
-        try:
-            minor_artists_list.remove(name)
-        except:
-            pass
-        try:
-            all_artists_list.remove(name)
-        except:
-            pass
-
-        parent_artists_list = album.artists.split(', ')
-
-        try:
-            parent_artists_list.remove(name)
-        except:
-            pass
-
-        data['artists'] = ", ".join(artists_list)
-        data['minor_artists'] = ", ".join(minor_artists_list)
-        data['all_artists'] = ", ".join(all_artists_list)
-
-        album.artists = ", ".join(parent_artists_list)
-
-        album.data = json.dumps(data)
-
-    db.session.commit()
-    print("DONE")
-
-
-# @ bp.cli.command()
-# @ click.argument("name")
+# COUNTS THE TRACKS FOR A COMPOSER'S ALBUMS
 def trackcount(name):
     start_time = datetime.utcnow()
 
@@ -1088,7 +798,7 @@ def trackcount(name):
             try:
                 data = json.loads(album.data)
                 album.work_track_count = len(data['tracks'])
-            except:
+            except Exception:
                 error_count += 1
                 pass
 
@@ -1107,41 +817,128 @@ def trackcount(name):
     print(message)
 
 
+# DEFUNCT: REGENERATE ARTISTS LIST (for old.composerexplorer.com)
+@ bp.cli.command()
+def regenerateartists():
+    composers = []
+    for value in db.session.query(Artists.name).order_by(Artists.name).distinct():
+        composers.append(value[0])
+
+    artist_list = db.session.query(ArtistList).first()
+    artist_list.content = json.dumps(composers, ensure_ascii=False)
+    artist_list.timestamp = datetime.utcnow()
+    db.session.commit()
+
+
+# SPLITS WORK TITLES INTO TITLE AND LYRICS
+@ bp.cli.command()
+@ click.argument("name")
+def splitsongs(name):
+    works = db.session.query(WorkList).filter_by(composer=name)
+
+    for work in works:
+        title = work.title
+        splitlist = title.split("(\"")
+        try:
+            lyrics = splitlist[1]
+            lyrics = lyrics.replace("\")", "")
+            title = splitlist[0].strip()
+            work.nickname = lyrics
+            work.title = title
+
+        except Exception:
+            pass
+
+    db.session.commit()
+
+
+# SPLITS WORK TITLES INTO TITLE AND LYRICS
+@ bp.cli.command()
+@ click.argument("name")
+def splitsongs2(name):
+    works = db.session.query(WorkList).filter_by(composer=name)
+
+    for work in works:
+        title = work.title
+        splitlist = title.split("(")
+        try:
+            lyrics = splitlist[1]
+            lyrics = lyrics.replace(")", "")
+            title = splitlist[0].strip()
+            work.nickname = lyrics
+            work.title = title
+
+        except Exception:
+            pass
+
+    db.session.commit()
+
+
+# TRIMS EXCESS WHITESPACE FROM TITLE
+@ bp.cli.command()
+@ click.argument("name")
+def trimtitles(name):
+    works = db.session.query(WorkList).filter_by(composer=name)
+
+    for work in works:
+        title = work.title
+        trimmed = title.strip()
+        work.title = trimmed
+        print(work.title)
+
+    db.session.commit()
+
+
+# DELETES AN ARTIST FROM ALBUM DATA (DANGEROUS)
 # @ bp.cli.command()
-# def trackcounter():
+# @ click.argument("name")
+def deleteartist(name):
+    search = "%{}%".format(name)
 
-#     i = 0
-#     while i < 60:
+    # get albums for composer , WorkAlbums.label == None
+    albums = WorkAlbums.query.filter(WorkAlbums.artists.ilike(search)).all()
+    print("QUERY DONE")
 
-#         indexed_composers = []
-#         for value in db.session.query(WorkList.composer).distinct():
-#             str(indexed_composers.append(value[0]))
-#         composer_to_refresh = db.session.query(ComposerCron).first()
+    for album in albums:
+        data = json.loads(album.data)
 
-#         print("Getting data for " + str(composer_to_refresh.id) + "...")
+        artists_list = data['artists'].split(', ')
+        minor_artists_list = data['minor_artists'].split(', ')
+        all_artists_list = data['all_artists'].split(', ')
 
-#         for composer in indexed_composers:
-#             if composer == composer_to_refresh.id:
-#                 index = indexed_composers.index(composer)
+        try:
+            artists_list.remove(name)
+        except Exception:
+            pass
+        try:
+            minor_artists_list.remove(name)
+        except Exception:
+            pass
+        try:
+            all_artists_list.remove(name)
+        except Exception:
+            pass
 
-#                 if index == len(indexed_composers) - 1:
-#                     next_index = 0
-#                 else:
-#                     next_index = index + 1
+        parent_artists_list = album.artists.split(', ')
 
-#                 next_composer = indexed_composers[next_index]
-#                 composer_to_refresh.id = next_composer
-#                 db.session.commit()
-#                 break
+        try:
+            parent_artists_list.remove(name)
+        except Exception:
+            pass
 
-#         trackcount(composer)
+        data['artists'] = ", ".join(artists_list)
+        data['minor_artists'] = ", ".join(minor_artists_list)
+        data['all_artists'] = ", ".join(all_artists_list)
 
-#         i += 1
+        album.artists = ", ".join(parent_artists_list)
 
-#     print('TRACK COUNT COMPLETED')
-#     logger.log_text("TRACK COUNT COMPLETED", severity="NOTICE")
+        album.data = json.dumps(data)
+
+    db.session.commit()
+    print("DONE")
 
 
+# SPLITS WORK TITLES BEARING OPUS INTO OPUS AND TITLE
 @ bp.cli.command()
 def splitcat():
 
@@ -1162,6 +959,7 @@ def splitcat():
     print("Done! Updated " + str(len(works)) + " works.")
 
 
+# SPLITS WORK TITLES BEARING "FOR..." INTO TITLE
 @ bp.cli.command()
 def splittitle():
 
@@ -1181,7 +979,7 @@ def splittitle():
     print("Done! Updated " + str(len(works)) + " works.")
 
 
-# Genre updated, put keyboard search term in with piano
+# UPDATE A GENRE NAME
 @ bp.cli.command()
 def updategenre():
 
@@ -1198,6 +996,7 @@ def updategenre():
         print("Done! Updated " + str(len(works)) + " works.")
 
 
+# ADD A SEARCH TERM FOR A GENRE (ie. Add "Harpsichord" search term for "Keyboard" genres)
 @ bp.cli.command()
 def updatesearch():
 
@@ -1215,52 +1014,3 @@ def updatesearch():
 
         db.session.commit()
         print("Done! Updated " + str(len(works)) + " works.")
-
-
-# @ bp.cli.command()
-def updatehaydn():
-
-    works = WorkList.query.filter_by(composer="Haydn").all()
-
-    for work in works:
-        if "No." in work.title:
-            if "No. " not in work.title:
-                work.title = work.title.replace("No.", "No. ")
-                print(work.title)
-    db.session.commit()
-
-
-    # works = WorkList.query.filter_by(composer="Haydn" , 
-    #                                  genre="Chamber - String quartet").all()
-
-    # # for work in works:
-    # #     work_no = work.title.split(" in ")[0]
-    # #     work.title = "String Quartet " + work_no + ", " + work.suite
-    # #     db.session.commit()
-
-    # for work in works:
-    #     work.title = work.title.replace("No.", "No. ")
-    #     work.title = work.title.replace("Op.", "Op. ")
-    #     try:
-    #         work_set = work.title.split(", \"")[1].replace("\"", "")
-    #     except IndexError:
-    #         work_set = None
-    #     work.title = work.title.split(", \"")[0]
-        
-    #     if work_set:
-    #         if work.nickname:
-    #             work.nickname = work_set + " · " + work.nickname
-    #         else:
-    #             work.nickname = work_set
-    #     else:
-    #         pass
-
-    # db.session.commit()
-
-@ bp.cli.command()
-def updatetiers():
-    composers = ComposerList.query.filter_by(catalogued=True).all()
-    for composer in composers:
-        composer.tier = 1
-        print(composer.name_short)
-    db.session.commit()
