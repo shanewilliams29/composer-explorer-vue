@@ -92,6 +92,14 @@ export default {
     };
   },
   methods: {
+      rountToNearest5(num){
+        if (num > 15) {
+          return Math.round(num / 5) * 5;
+        } else {
+          return num;
+        }
+        
+      },
       duration(ms){
         let seconds = Math.floor(ms / 1000);
         let hours = Math.round(seconds / 3600 * 10) / 10;
@@ -100,7 +108,7 @@ export default {
         if(hours > 1){
           return hours + "h";
         } else {
-          return minutes + "m"
+          return this.rountToNearest5(minutes) + "m"
         }
     },
     noWorks(){
