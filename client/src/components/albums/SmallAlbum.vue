@@ -231,9 +231,9 @@ export default {
 .album-img-small{
   border-top-left-radius: 0.25rem;
   border-bottom-left-radius: 0.25rem;
-  width: 108px; 
+  width: var(--album-size); 
   height: 100%;
-  min-height: 108px;
+  min-height: var(--album-size); 
   object-fit: cover;
 }
 .spotify-icon{

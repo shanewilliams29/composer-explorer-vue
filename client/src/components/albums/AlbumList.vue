@@ -72,6 +72,20 @@ export default {
       newWork: true
     };
   },
+  computed: {
+    genreChanged() {
+      return this.$config.genre;
+    },
+  },
+  watch: {
+    genreChanged(newGenre) {
+      if(newGenre == "Opera" || newGenre == "Stage Work"){
+        document.documentElement.style.setProperty("--album-size", `108px`);
+      } else {
+        document.documentElement.style.setProperty("--album-size", `96px`);
+      }
+    },
+  },
   methods: {
     getAlbums(id, artist, sort) {
       this.changeAlbums();
@@ -371,6 +385,13 @@ export default {
     if (!this.$view.mode && !this.$route.query.search) { // only get albums in Browse ($view.mode = null) mode
       this.initialGetAlbums(this.$config.work);
     }
+
+    if(this.$config.genre == "Opera" || this.$config.genre == "Stage Work"){
+      document.documentElement.style.setProperty("--album-size", `108px`);
+    } else {
+      document.documentElement.style.setProperty("--album-size", `96px`);
+    }
+
     eventBus.$on("requestAlbums", this.getAlbums);
     eventBus.$on("changeWork", this.setNewWork);
     eventBus.$on("requestAlbumsAndPlay", this.getAlbumsAndPlay);

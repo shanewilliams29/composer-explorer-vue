@@ -98,7 +98,6 @@ export default {
         } else {
           return num;
         }
-        
       },
       duration(ms){
         let seconds = Math.floor(ms / 1000);
