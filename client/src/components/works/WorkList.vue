@@ -45,7 +45,7 @@
                     </span>
                   </td>
                   <td width="78%" class="td-style">
-                    <span>{{ work.title }}</span>
+                    <span style="color: black;">{{ work.title }}</span>
                     <span v-if="work.nickname" style="color: gray;"> · {{ work.nickname }}</span>
                   </td>
                   <td width="5%" style="text-align: right;">
@@ -714,7 +714,9 @@ export default {
   text-overflow: ellipsis; 
   overflow: hidden; 
   max-width: 1px;
+  color: grey;
 }
+
 .spinner {
     text-align: center;
 }

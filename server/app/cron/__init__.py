@@ -248,6 +248,8 @@ def fillperformerdata(name):
 
 
 # FILL DURATION IN WORKS LIST
+@ bp.cli.command()
+@ click.argument("composer_name")
 def getworkdurations(composer_name):
 
     # base query

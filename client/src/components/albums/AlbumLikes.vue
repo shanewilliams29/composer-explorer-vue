@@ -1,5 +1,8 @@
 <template>
-  <div>
+                <tr v-if="currentLikes">
+                <td width="100%" class="td-style-black">
+                  <span class="album-likes-class">
+                  <div>
     <span class="likes" v-if="currentLikes">
       <b-badge>{{ currentLikes }} Like{{ currentLikes > 1 ? 's' : '' }}</b-badge>
     </span>
@@ -7,7 +10,11 @@
     <span class="likes" v-if="!currentLikes">
       <br />
     </span>
-  </div>
+  </div>    
+            </span>
+                </td>
+              </tr>
+
 </template>
 
 <script>

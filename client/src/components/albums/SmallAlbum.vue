@@ -31,40 +31,47 @@
           <b-card-text>
             <table cellspacing="0" 
               @click="$emit('selectAlbum', album.id); $emit('getAlbum', album.id);">
+
+
+
               <tr>
-                <td width="100%" class="td-style">
+                <td width="100%" class="td-style-black">
                   <span class="album-major-artists selected">
-                    {{ album.artists }}
-                  </span>
+                    {{ album.artists.split(", ")[0] }}</span><br>
                 </td>
               </tr>
-              <tr>
-                <td width="100%" class="td-style">
-                  <span v-if="album.minor_artists" class="album-minor-artists selected">
-                    {{ album.minor_artists }}
-                  </span>
-                  <span v-else><br /></span>
-                </td>
-              </tr>
-              <tr>
-                <td width="100%" class="td-style">
-                  <span class="album-likes-class">
-                    <AlbumLikes 
-                      :likedAlbums="likedAlbums" 
-                      :album="album" 
-                      :selectedAlbum="selectedAlbum" />
-                  </span>
-                </td>
-              </tr>
-              <tr>
-                <td width="100%" class="td-style">
+
+                         <tr>
+                <td width="100%" class="td-style-black">
                   <span class="label">℗ {{ album.release_date }}</span>
                   <span class="label"> · {{ album.label }}</span>
                   <span v-if="album.duration" class="label"> · {{ duration(album.duration) }}</span>
                 </td>
               </tr>
+
+              <tr v-if="album.minor_artists || album.artists.split(', ')[1]">
+                <td width="100%" class="td-style">
+                  <span class="album-minor-artists selected">{{album.artists.split(", ")[1]}}<span v-if="album.minor_artists">,</span></span>
+                  <span v-if="album.minor_artists" class="album-minor-artists selected">
+                  {{album.minor_artists}}
+                  </span>
+                  <span v-else><br /></span>
+                </td>
+              </tr>
+   
+                    <span class="likes">
+                    <AlbumLikes 
+                      :likedAlbums="likedAlbums" 
+                      :album="album" 
+                      :selectedAlbum="selectedAlbum" />
+                  </span>
+
             </table>
-            <div v-if="album.id == selectedAlbum">
+
+          </b-card-text>
+        </b-col>
+      </div>
+                  <div v-if="album.id == selectedAlbum">
               <a target="_blank" :href="'https://open.spotify.com/album/' + album.album_id">
                 <img class="spotify-icon" width="21px" :src="spotifyLogoURLWhite" />
               </a>
@@ -74,9 +81,6 @@
                 <img class="spotify-icon" width="21px" :src="spotifyLogoURLBlack" />
               </a>
             </div>
-          </b-card-text>
-        </b-col>
-      </div>
     </b-card>
   </div>
 </template>
@@ -160,20 +164,34 @@ export default {
 .fade-leave-to {
   opacity: 0;
 }
-.td-style{
-  white-space: nowrap; 
-  text-overflow: ellipsis; 
-  overflow: hidden; 
-  max-width: 1px;
+.td-style-black{
+
+
+  color: black;
+}
+.td-style-red{
+
+
+  color: black;
+}
+.td-style-grey{
+
+
+  color: grey;
 }
 .album-major-artists{
   color: black; 
   font-weight: 600; 
   font-size: 13px;
 }
+.album-major-artists2{
+  color: gray; 
+  font-weight: 600; 
+  font-size: 13px;
+}
 .album-minor-artists{
   color: gray; 
-  font-size: 12px;
+  font-size: 11.5px;
 }
 .reveal{
   visibility: visible !important;
@@ -213,12 +231,14 @@ export default {
 .album-img-small{
   border-top-left-radius: 0.25rem;
   border-bottom-left-radius: 0.25rem;
-  width: 72px; 
+  width: 108px; 
   height: 100%;
+  min-height: 108px;
+  object-fit: cover;
 }
 .spotify-icon{
   position: absolute;
-  right: 20px;
+  right: 5px;
   bottom: 5px;
 }
 .badge-dark {
@@ -228,16 +248,16 @@ export default {
   width: 100%;
 }
 .label{
-  font-size: 10px;
+  font-size: 11px;
 }
 .gray{
   color: gray;
 }
-td {
+/*td {
   padding: 0px;
   height: 17px !important;
   vertical-align: middle;
-}
+}*/
 tr {
   border-bottom: 0px;
 }
@@ -246,12 +266,11 @@ table {
   border-collapse: separate;
   padding: 0px;
   padding-right: 5px;
-  padding-top: 3px;
-  padding-left: 2px;
+  padding-top: 0px;
+  padding-left: 0px;
   padding-bottom: 0px;
   font-size: 14px !important;
-  line-height: 120%;
-  height: 70px;
+  line-height: 100%;
 }
 header.card-header {
   background-color: var(--my-white);
@@ -275,9 +294,19 @@ header.card-header {
 }
 .album_columns {
   padding-right: 3px;
+
 }
 .album_text_columns {
-  padding-left: 0px;
+  padding-left: 4px;
+  padding-top: 4px;
+  padding-bottom: 4px;
+
+}
+.row{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+ /* or any specific height you want for the parent */
 }
 >>> .badge {
   margin-bottom: 0px !important;
