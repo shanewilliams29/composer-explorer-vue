@@ -29,8 +29,9 @@ export default {
   },
   data() {
     return {
+      likedAlbumsList: this.likedAlbums,
       currentLikes: this.album.likes,
-      userLikes: this.likedAlbums.includes(this.album.id),
+      userLikes: this.likedAlbums.includes(this.album.id)
     };
   },
   methods: {
@@ -42,12 +43,17 @@ export default {
       if (this.selectedAlbum == this.album.id && !this.userLikes) {
         this.currentLikes = this.currentLikes + 1;
         this.userLikes = true;
+        this.likedAlbumsList.push(this.selectedAlbum);
       }
     },
     unlikeAlbum() {
       if (this.selectedAlbum == this.album.id && this.userLikes) {
         this.currentLikes = this.currentLikes - 1;
         this.userLikes = false;
+        const index = this.likedAlbumsList.indexOf(this.selectedAlbum);
+        if (index > -1) {
+          this.likedAlbumsList.splice(index, 1);
+        }
       }
     },
   },
