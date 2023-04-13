@@ -135,6 +135,9 @@ export default {
 
 <style>
   @import '@/assets/styles.css';
+  
+  @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed');
 </style>
 
 <style scoped>

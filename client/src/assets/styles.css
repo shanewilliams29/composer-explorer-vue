@@ -2,6 +2,7 @@ html, body {
   height: 100% !important;
   max-height: -webkit-fill-available !important;
   background: #93989f !important;
+  font-family: Roboto,Helvetica,Oxygen,Ubuntu,Cantarell,fira sans,droid sans,sans-serif !important;
 }
 
 html {

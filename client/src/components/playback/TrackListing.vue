@@ -149,6 +149,7 @@ export default {
   width: 100%;
   font-size: 13px;
   line-height: 155%;
+  font-family: Roboto Condensed !important;
 }
 .track-card-text {
   color: var(--medium-light-gray);
