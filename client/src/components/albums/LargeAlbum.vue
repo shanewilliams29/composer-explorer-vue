@@ -3,12 +3,14 @@
     <b-card class="shadow-sm" v-for="album in albums" :key="album.id" :id="album.id" no-body header-tag="header" :class="{'highlight': (album.id == selectedAlbum)}">
       <div class="row">
         <b-col class="album_columns">
+
           <div class="album-titles" @click="$emit('selectAlbum', album.id); $emit('getAlbum', album.id);">
-            <span style="color: black; font-weight: 600;">{{ album.artists }}</span><br />
-            <span>℗ {{ album.release_date }}</span>
-            <span v-if="album.duration" class="label"> · {{ duration(album.duration) }}</span>
+            <span style="font-size: 14px; color: black; font-weight: 600;">{{ album.artists }}</span><br />
+            <span class="narrow">℗ {{ album.release_date }} {{ album.label }}</span>
+            <span v-if="album.duration" class="label narrow">&nbsp;<span style='font-size: 9px; vertical-align: 1px;'><b-icon-clock></b-icon-clock></span>&nbsp;{{ duration(album.duration) }}</span>
             <br />
-            <span v-if="album.minor_artists" style="color: grey; font-size: 12px !important;">{{ album.minor_artists }}</span>
+            <span v-if="album.minor_artists" class="narrow" style="color: grey; font-size: 13px !important;">{{ album.minor_artists }}</span>
+          
           </div>
           <div v-if="album.img_big" @click="$emit('selectAlbum', album.id); $emit('getAlbum', album.id);">
             <img class="album-cover" height="auto" v-lazy="album.img_big" />
@@ -155,5 +157,7 @@ a:hover {
 .likes-col {
     padding-left: 20px;
 }
-
+.narrow{
+  font-family: Roboto Condensed !important;
+}
 </style>
