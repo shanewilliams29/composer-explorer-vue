@@ -50,7 +50,7 @@
               </tr>
 
               <tr v-if="album.minor_artists || album.artists.split(', ')[1]">
-                <td width="100%" class="td-style narrow">
+                <td width="100%" class="td-style narrow last-td">
                   <span class="album-minor-artists selected">{{album.artists.split(", ")[1]}}<span v-if="album.minor_artists">,</span></span>
                   <span v-if="album.minor_artists" class="album-minor-artists selected">
                   {{album.minor_artists}}
@@ -178,6 +178,10 @@ export default {
 
 
   color: grey;
+}
+.likes{
+  position: relative;
+  bottom: -2px;
 }
 .album-major-artists{
   color: black; 
