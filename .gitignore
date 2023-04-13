@@ -13,6 +13,8 @@ app.yaml
 .env
 .flaskenv
 backups
+matrix
+network
 composer-explorer-4ab69db6d8b0.json
 old_code.py
 GPT Improvements.txt
@@ -28,6 +30,7 @@ yarn-error.log*
 pnpm-debug.log*
 
 # Editor directories and files
+
 .idea
 .vscode
 *.suo
@@ -40,3 +43,5 @@ pnpm-debug.log*
 commands
 Todo
 snippets
+*.ipynb
+.ipynb_checkpoints
