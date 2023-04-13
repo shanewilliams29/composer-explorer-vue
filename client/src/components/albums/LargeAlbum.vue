@@ -3,14 +3,14 @@
     <b-card class="shadow-sm" v-for="album in albums" :key="album.id" :id="album.id" no-body header-tag="header" :class="{'highlight': (album.id == selectedAlbum)}">
       <div class="row">
         <b-col class="album_columns">
-
           <div class="album-titles" @click="$emit('selectAlbum', album.id); $emit('getAlbum', album.id);">
             <span style="font-size: 14px; color: black; font-weight: 600;">{{ album.artists }}</span><br />
             <span class="narrow">℗ {{ album.release_date }} {{ album.label }}</span>
-            <span v-if="album.duration" class="label narrow">&nbsp;<span style='font-size: 9px; vertical-align: 1px;'><b-icon-clock></b-icon-clock></span>&nbsp;{{ duration(album.duration) }}</span>
+            <span v-if="album.duration" class="label narrow">&nbsp;<span style='font-size: 9px; vertical-align: 1px;'>
+                <b-icon-clock></b-icon-clock>
+              </span>&nbsp;{{ duration(album.duration) }}</span>
             <br />
             <span v-if="album.minor_artists" class="narrow" style="color: grey; font-size: 13px !important;">{{ album.minor_artists }}</span>
-          
           </div>
           <div v-if="album.img_big" @click="$emit('selectAlbum', album.id); $emit('getAlbum', album.id);">
             <img class="album-cover" height="auto" v-lazy="album.img_big" />
@@ -37,7 +37,7 @@
 
 
 <script>
-import {staticURL} from "@/main.js";
+import { staticURL } from "@/main.js";
 import AlbumLikes from './AlbumLikes.vue';
 import { msToHMS } from "@/HelperFunctions.js";
 
@@ -61,16 +61,16 @@ export default {
     timeDisplay(milliseconds) {
       return msToHMS(milliseconds);
     },
-    duration(ms){
-        let seconds = Math.floor(ms / 1000);
-        let hours = Math.round(seconds / 3600 * 10) / 10;
-        let minutes = Math.round(seconds / 60);
+    duration(ms) {
+      let seconds = Math.floor(ms / 1000);
+      let hours = Math.round(seconds / 3600 * 10) / 10;
+      let minutes = Math.round(seconds / 60);
 
-        if(hours > 1){
-          return hours + "h";
-        } else {
-          return minutes + "m"
-        }
+      if (hours > 1) {
+        return hours + "h";
+      } else {
+        return minutes + "m"
+      }
     },
   }
 }

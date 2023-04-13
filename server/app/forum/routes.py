@@ -47,7 +47,7 @@ def forum():
     return render_template("forum/subforums.html", users=users, subforums=subforums, title="Forum")
 
 
-@ bp.route('/subforum/<subforum_id>')
+@bp.route('/subforum/<subforum_id>')
 def subforum(subforum_id):
 
     if current_user.is_authenticated:
@@ -56,14 +56,21 @@ def subforum(subforum_id):
 
     page = int(request.args.get("page", 1))
     subforum = Subforum.query.filter(Subforum.id == subforum_id).first_or_404()
-    posts = db.session.query(ForumPost).filter(ForumPost.subforum_id == subforum_id).order_by(ForumPost.last_comment_date.desc()).paginate(page, 20, False)
+    posts = db.session.query(ForumPost).filter(
+        ForumPost.subforum_id == subforum_id).order_by(
+            ForumPost.last_comment_date.desc()).paginate(page, 20, False)
 
     # user viewing
     if current_user.is_authenticated:
-        current_user.page_viewing = '<a href="' + url_for("forum.subforum", subforum_id=subforum_id) + '">' + subforum.title + '</a>'
+        current_user.page_viewing = '<a href="' + url_for(
+            "forum.subforum",
+            subforum_id=subforum_id) + '">' + subforum.title + '</a>'
         db.session.commit()
 
-    return render_template("forum/subforum.html", subforum=subforum, posts=posts, title=subforum.title)
+    return render_template("forum/subforum.html",
+                           subforum=subforum,
+                           posts=posts,
+                           title=subforum.title)
 
 
 @ bp.route('/addpost')

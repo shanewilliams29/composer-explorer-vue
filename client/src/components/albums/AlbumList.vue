@@ -4,32 +4,18 @@
       <b-spinner class="m-5"></b-spinner>
     </div>
     <div class="row">
-      <span v-show="!loading && albums.length < 1 && !this.$view.mode && this.message" 
-        class="m-4 col no-albums-found">
+      <span v-show="!loading && albums.length < 1 && !this.$view.mode && this.message" class="m-4 col no-albums-found">
         {{ message }}
       </span>
-      <span v-show="!loading && albums.length < 1 && !this.$view.mode && !this.message" 
-        class="m-4 col no-albums-found">
+      <span v-show="!loading && albums.length < 1 && !this.$view.mode && !this.message" class="m-4 col no-albums-found">
         No albums found.
       </span>
     </div>
     <div v-if="albums">
       <div class="row">
         <b-card-group deck v-show="!loading">
-          <LargeAlbum 
-            v-if="$config.albumSize == 'large' || $view.mode == 'radio'" 
-            :albums="albums" 
-            :selectedAlbum="selectedAlbum" 
-            :likedAlbums="likedAlbums" 
-            @selectAlbum="selectRow" 
-            @getAlbum="playAlbumHop"/>
-          <SmallAlbum 
-            v-else 
-            :albums="albums" 
-            :selectedAlbum="selectedAlbum" 
-            :likedAlbums="likedAlbums" 
-            @selectAlbum="selectRow" 
-            @getAlbum="playAlbumHop"/>
+          <LargeAlbum v-if="$config.albumSize == 'large' || $view.mode == 'radio'" :albums="albums" :selectedAlbum="selectedAlbum" :likedAlbums="likedAlbums" @selectAlbum="selectRow" @getAlbum="playAlbumHop" />
+          <SmallAlbum v-else :albums="albums" :selectedAlbum="selectedAlbum" :likedAlbums="likedAlbums" @selectAlbum="selectRow" @getAlbum="playAlbumHop" />
           <infinite-loading spinner="spiral" :identifier="infiniteId" @infinite="infiniteHandler">
             <div slot="no-more"></div>
             <div slot="no-results"></div>
@@ -79,7 +65,7 @@ export default {
   },
   watch: {
     genreChanged(newGenre) {
-      if(newGenre == "Opera" || newGenre == "Stage Work"){
+      if (newGenre == "Opera" || newGenre == "Stage Work") {
         document.documentElement.style.setProperty("--album-size", `108px`);
       } else {
         document.documentElement.style.setProperty("--album-size", `96px`);
@@ -114,9 +100,9 @@ export default {
           this.likedAlbums = res.data.liked_albums;
           this.message = "";
           localStorage.setItem("config", JSON.stringify(this.$config));
-          
+
           eventBus.$emit("sendArtistList", res.data.artists);
-          
+
         })
         .catch((error) => {
           console.error(error);
@@ -165,7 +151,7 @@ export default {
         sort = "";
       }
       this.loading = true;
-      
+
       let path = "api/albums/" + id + "?artist=" + artist + "&sort=" + sort;
       const favorites = this.$view.favoritesAlbums;
       const limit = this.$view.radioTrackLimit;
@@ -275,7 +261,7 @@ export default {
       }
     },
     playAlbumHop(albumId) {
-      if(this.newWork){
+      if (this.newWork) {
         this.$view.progress = 0;
         this.$view.trackIndex = 0;
         this.newWork = false;
@@ -286,7 +272,7 @@ export default {
 
       let track_no = this.$view.trackIndex;
       let percent_progress = this.$view.progress / this.$view.duration;
-      
+
       eventBus.$emit("requestAlbumDataHopper", albumId, track_no, percent_progress);
     },
     clearAlbums() {
@@ -301,7 +287,7 @@ export default {
       }
     },
     infiniteHandler($state) {
-      if (this.$view.mode) { 
+      if (this.$view.mode) {
         $state.complete(); // only used in Browse mode ($view.mode = null)
       } else {
         const path = "api/albums/" + this.workId + "?artist=" + this.artistName + "&sort=" + this.sort + "&page=" + this.page;
@@ -324,7 +310,7 @@ export default {
       this.albums = [];
       this.infiniteId += 1;
     },
-    setNewWork(){
+    setNewWork() {
       this.newWork = true;
     },
     playNextAlbum() {
@@ -339,10 +325,10 @@ export default {
       this.$config.album = this.albums[this.currentAlbum].id;
       this.determineHeart(this.$config.album);
       localStorage.setItem("config", JSON.stringify(this.$config));
-      
+
       eventBus.$emit("requestAlbumData", this.albums[this.currentAlbum].id);
     },
-      playTimeHopForward(progress, duration) {
+    playTimeHopForward(progress, duration) {
       this.currentAlbum += 1;
 
       if (this.currentAlbum >= this.albums.length) {
@@ -351,17 +337,17 @@ export default {
       }
 
       this.selectRow(this.albums[this.currentAlbum].id);
-      
+
       this.$config.album = this.albums[this.currentAlbum].id;
       this.determineHeart(this.$config.album);
       localStorage.setItem("config", JSON.stringify(this.$config));
 
       let track_no = this.$view.trackIndex;
       let percent_progress = progress / duration;
-      
+
       eventBus.$emit("requestAlbumDataHopper", this.albums[this.currentAlbum].id, track_no, percent_progress);
     },
-      playTimeHopBackward(progress, duration) {
+    playTimeHopBackward(progress, duration) {
       this.currentAlbum -= 1;
 
       if (this.currentAlbum < 0) {
@@ -370,23 +356,24 @@ export default {
       }
 
       this.selectRow(this.albums[this.currentAlbum].id);
-      
+
       this.$config.album = this.albums[this.currentAlbum].id;
       this.determineHeart(this.$config.album);
       localStorage.setItem("config", JSON.stringify(this.$config));
 
       let track_no = this.$view.trackIndex;
       let percent_progress = progress / duration;
-      
+
       eventBus.$emit("requestAlbumDataHopper", this.albums[this.currentAlbum].id, track_no, percent_progress);
     },
   },
   created() {
-    if (!this.$view.mode && !this.$route.query.search) { // only get albums in Browse ($view.mode = null) mode
+    // only get albums in Browse ($view.mode = null) mode
+    if (!this.$view.mode && !this.$route.query.search) { 
       this.initialGetAlbums(this.$config.work);
     }
 
-    if(this.$config.genre == "Opera" || this.$config.genre == "Stage Work"){
+    if (this.$config.genre == "Opera" || this.$config.genre == "Stage Work") {
       document.documentElement.style.setProperty("--album-size", `108px`);
     } else {
       document.documentElement.style.setProperty("--album-size", `96px`);
@@ -412,7 +399,6 @@ export default {
     eventBus.$on("fireTimeHopperBackward", this.playTimeHopBackward);
   },
 };
-
 </script>
 
 <style scoped>
