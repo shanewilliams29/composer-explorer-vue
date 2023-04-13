@@ -858,6 +858,10 @@ def get_albums(work_id):
         sorted_list = sorted(album_list, key=lambda d: d['release_date'])
     elif sort == 'datedescending':
         sorted_list = sorted(album_list, key=lambda d: d['release_date'], reverse=True)
+    elif sort == 'durationascending':
+        sorted_list = sorted(album_list, key=lambda d: d['duration'])
+    elif sort == 'durationdescending':
+        sorted_list = sorted(album_list, key=lambda d: d['duration'], reverse=True)
     else:
         # sort the album list on popularity and likes (recommended)
         sorted_list = sorted(album_list, key=lambda d: d['score'], reverse=True)

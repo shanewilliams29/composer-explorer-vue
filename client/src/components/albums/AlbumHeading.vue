@@ -30,8 +30,10 @@ export default {
       albumSortField: { value: "recommended", text: "Recommended sorting" },
       albumSortOptions: [
         { value: "recommended", text: "Recommended sorting" },
-        { value: "dateascending", text: "Sort by date, earliest to latest" },
-        { value: "datedescending", text: "Sort by date, latest to earliest" },
+        { value: "dateascending", text: "Date, earliest to latest" },
+        { value: "datedescending", text: "Date, latest to earliest" },
+        { value: "durationascending", text: "Duration, shortest to longest" },
+        { value: "durationdescending", text: "Duration, longest to shortest" },
       ],
 
       albumSizeField: { value: this.$config.albumSize, text: this.capitalize(this.$config.albumSize) },
