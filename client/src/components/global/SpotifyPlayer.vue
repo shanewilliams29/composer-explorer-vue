@@ -12,6 +12,13 @@ let spotifyPlayerScript = document.createElement("script");
 spotifyPlayerScript.setAttribute("src", "https://sdk.scdn.co/spotify-player.js");
 document.head.appendChild(spotifyPlayerScript);
 
+function activatePlayer() {
+  window.player.activateElement();
+  console.log("Playback activated!");
+  // Remove the event listener after the first click
+  document.getElementById("app").removeEventListener("click", activatePlayer);
+}
+
 export default {
   data() {
     return {
@@ -122,6 +129,9 @@ export default {
                   window.player.activateElement();
                   window.player.togglePlay();
                 });
+
+                // Add the event listener on app to activate Spotify Player on first click
+                document.getElementById("app").addEventListener("click", activatePlayer);
 
               } else if (res.data.client_token !== null) {
                 this.$auth.clientToken = res.data.client_token;
