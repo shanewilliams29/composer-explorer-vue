@@ -39,7 +39,7 @@
                 </td>
               </tr>
               <tr v-if="album.minor_artists || album.artists.split(', ')[1]">
-                <td width="100%" class="td-style narrow last-td">
+                <td width="100%" class="td-style narrow last-td wrap-text">
                   <span class="album-minor-artists selected">{{album.artists.split(", ")[1]}}<span v-if="album.minor_artists">,</span></span>
                   <span v-if="album.minor_artists" class="album-minor-artists selected">
                     {{album.minor_artists}}
@@ -270,6 +270,15 @@ table {
   padding-bottom: 0px;
   font-size: 13px !important;
   line-height: 100%;
+}
+.wrap-text {
+  color: gray;
+  display: -webkit-box;
+  -webkit-line-clamp: var(--line-clamp); /* Limit the number of lines to 2 */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: normal;
 }
 
 header.card-header {

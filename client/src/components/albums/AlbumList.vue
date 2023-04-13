@@ -67,8 +67,10 @@ export default {
     genreChanged(newGenre) {
       if (newGenre == "Opera" || newGenre == "Stage Work") {
         document.documentElement.style.setProperty("--album-size", `108px`);
+        document.documentElement.style.setProperty("--line-clamp", `3`);
       } else {
         document.documentElement.style.setProperty("--album-size", `96px`);
+        document.documentElement.style.setProperty("--line-clamp", `2`);
       }
     },
   },
@@ -375,8 +377,10 @@ export default {
 
     if (this.$config.genre == "Opera" || this.$config.genre == "Stage Work") {
       document.documentElement.style.setProperty("--album-size", `108px`);
+      document.documentElement.style.setProperty("--line-clamp", `3`);
     } else {
       document.documentElement.style.setProperty("--album-size", `96px`);
+      document.documentElement.style.setProperty("--line-clamp", `2`);
     }
 
     eventBus.$on("requestAlbums", this.getAlbums);
