@@ -4,7 +4,7 @@
       style="height: calc(100vh - 244px - var(--panelheight)); width: 100%;"
       :words="data"
       :color="([, , color]) => color == 0 ? 'var(--dark-gray)' : color == 1 ? 'var(--medium-gray)' : '#727981'"
-      font-family="Roboto"
+      font-family="Roboto,Helvetica,Oxygen,Ubuntu,Cantarell,fira sans,droid sans,sans-serif"
       :font-size-ratio="0.2"
       :spacing="0.1"
     >

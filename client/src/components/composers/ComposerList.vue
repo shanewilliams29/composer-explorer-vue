@@ -353,6 +353,9 @@ export default {
   text-overflow: ellipsis; 
   max-width: 1px;
 }
+.narrow{
+  font-family: Roboto Condensed !important;
+}
 td {
   padding: 1px;
   vertical-align: middle;

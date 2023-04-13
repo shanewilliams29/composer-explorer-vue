@@ -42,15 +42,15 @@
               </tr>
 
                          <tr>
-                <td width="100%" class="td-style-black">
-                  <span class="label">℗ {{ album.release_date }}</span>
-                  <span class="label"> · {{ album.label }}</span>
-                  <span v-if="album.duration" class="label"> · {{ duration(album.duration) }}</span>
+                <td width="100%" class="td-style-black narrow">
+                  <span class="label">℗ {{ album.release_date }} </span>
+                  <span class="label">  {{ album.label }} </span>
+                  <span v-if="album.duration" class="label">&nbsp;<span style='font-size: 9px; vertical-align: 1px;'><b-icon-clock></b-icon-clock></span>&nbsp;{{ duration(album.duration) }}</span>
                 </td>
               </tr>
 
               <tr v-if="album.minor_artists || album.artists.split(', ')[1]">
-                <td width="100%" class="td-style">
+                <td width="100%" class="td-style narrow">
                   <span class="album-minor-artists selected">{{album.artists.split(", ")[1]}}<span v-if="album.minor_artists">,</span></span>
                   <span v-if="album.minor_artists" class="album-minor-artists selected">
                   {{album.minor_artists}}
@@ -182,16 +182,16 @@ export default {
 .album-major-artists{
   color: black; 
   font-weight: 600; 
-  font-size: 13px;
+  font-size: 14px;
 }
 .album-major-artists2{
   color: gray; 
   font-weight: 600; 
-  font-size: 13px;
+  font-size: 14px;
 }
 .album-minor-artists{
   color: gray; 
-  font-size: 11.5px;
+  font-size: 12px;
 }
 .reveal{
   visibility: visible !important;
@@ -248,10 +248,13 @@ export default {
   width: 100%;
 }
 .label{
-  font-size: 11px;
+  font-size: 12px;
 }
 .gray{
   color: gray;
+}
+.narrow{
+  font-family: Roboto Condensed !important;
 }
 /*td {
   padding: 0px;
@@ -269,7 +272,7 @@ table {
   padding-top: 0px;
   padding-left: 0px;
   padding-bottom: 0px;
-  font-size: 14px !important;
+  font-size: 13px !important;
   line-height: 100%;
 }
 header.card-header {

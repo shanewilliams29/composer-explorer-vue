@@ -35,7 +35,7 @@
                   @click="selectRow(work.id); setRecommended(work.recommend); getAlbums(work.id, work.title); setGenre(work.genre);"
                   :class="{'highlight': (work.id == selectedWork), 'no-albums': (work.album_count == 0)}"
                 >
-                  <td width="17%">
+                  <td width="16%">
                     <span style="white-space: nowrap; color: darkred;">
                       <span v-if="work.cat">{{ work.cat }}&nbsp;&nbsp;</span>
                       <span v-else>
@@ -44,13 +44,13 @@
                       </span>
                     </span>
                   </td>
-                  <td width="78%" class="td-style">
+                  <td width="79%" class="td-style">
                     <span style="color: black;">{{ work.title }}</span>
-                    <span v-if="work.nickname" style="color: gray;"> · {{ work.nickname }}</span>
+                    <span class="narrow" v-if="work.nickname" style="color: gray;"> · {{ work.nickname }}</span>
                   </td>
                   <td width="5%" style="text-align: right;">
                     <span class="heart-number" style="white-space: nowrap;">
-                      <span v-if="work.duration && !$view.mobile" style="color: rgb(52, 58, 64, 0.7); font-size: 12px;">
+                      <span class="narrow" v-if="work.duration && !$view.mobile" style="color: rgb(52, 58, 64, 0.7); font-size: 12px;">
                         {{ duration(work.duration) }}&nbsp;
                       </span>
 <!--                       <span v-if="work.liked" style="color: rgb(52, 58, 64, 0.7); font-size: 12px;">
@@ -723,7 +723,9 @@ export default {
   max-width: 1px;
   color: grey;
 }
-
+.narrow{
+  font-family: Roboto Condensed !important;
+}
 .spinner {
     text-align: center;
 }
