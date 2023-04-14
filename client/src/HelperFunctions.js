@@ -1,5 +1,15 @@
 import axios from "axios";
 
+export function prepareTracksForSpotify(tracks) {
+    let uriList = {};
+    let jsonList = {};
+    var smushTracks = tracks.replace(/\s/g, "");
+    var cleanTracks = smushTracks.replaceAll("spotify", " spotify").trim();
+    uriList["uris"] = cleanTracks.split(" ");
+    jsonList = JSON.stringify(uriList);
+    return jsonList;
+}
+
 export function addLineBreaksToParagraph(paragraph) {
   if (!paragraph) {
     return '';

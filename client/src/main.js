@@ -67,7 +67,9 @@ if (localStorage.getItem("config") !== null) {
 } else {
   config = defaultConfig;
 }
-export const startTracks = config.playTracks; // used in initial startup play button press
+
+// used in initial startup play button press
+export const startTracks = config.playTracks; 
 
 // config stores configuration data in localstorage between sessions
 Vue.prototype.$config = Vue.observable(config);

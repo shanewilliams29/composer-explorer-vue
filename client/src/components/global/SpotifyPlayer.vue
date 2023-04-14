@@ -6,214 +6,208 @@
 import axios from "axios";
 import { eventBus } from "@/main.js";
 import { startTracks } from "@/main.js";
+import { prepareTracksForSpotify } from "@/HelperFunctions.js";
 import spotify from "@/SpotifyFunctions.js";
 
 let spotifyPlayerScript = document.createElement("script");
 spotifyPlayerScript.setAttribute("src", "https://sdk.scdn.co/spotify-player.js");
 document.head.appendChild(spotifyPlayerScript);
 
+// To activate the player for Chrome and Safari Autoplay restrictions
 function activatePlayer() {
-  window.player.activateElement();
-  console.log("Playback activated!");
-  // Remove the event listener after the first click
-  document.getElementById("app").removeEventListener("click", activatePlayer);
+    window.player.activateElement();
+    console.log("Playback activated!");
+    // Remove the event listener after the first click
+    document.getElementById("app").removeEventListener("click", activatePlayer);
 }
 
 export default {
-  data() {
-    return {
-      firstLoad: true,
-      reload: true,
-    };
-  },
-  methods: {
-    initializeSpotify() {
-      window.onSpotifyWebPlaybackSDKReady = () => {
-        const path = "api/get_token";
-        axios
-          .get(path, { withCredentials: true })
-          .then((res) => {
-            if (res.data.status == "success") {
-              if (res.data.client_token !== null && res.data.premium) {
-                this.$auth.clientToken = res.data.client_token;
-                this.$auth.appToken = res.data.app_token;
-                this.$auth.userid = res.data.user_id;
-                this.$auth.displayName = res.data.display_name;
-                this.$auth.patreon = res.data.patreon;
-                this.$auth.knowledgeKey = res.data.knowledge_api;
-                this.$auth.avatar = res.data.avatar;
-                // eslint-disable-next-line
-                window.player = new Spotify.Player({
-                  name: "Composer Explorer",
-                  getOAuthToken: (cb) => {
-                    cb(this.$auth.clientToken);
-                  },
-                  volume: 1,
-                });
-                // Ready
-                window.player.addListener("ready", ({ device_id }) => {
-                  this.device_id = device_id;
-                  this.$auth.deviceID = device_id;
-                  window.device_id = device_id;
-                  console.log("Ready with Device ID", device_id);
-                  this.$view.showConnecting = false;
+    data() {
+        return {
+            firstLoad: true,
+            reload: true,
+        };
+    },
+    methods: {
+        initializeSpotify() {
+            window.onSpotifyWebPlaybackSDKReady = () => {
+                const path = "api/get_token";
+                axios
+                    .get(path, { withCredentials: true })
+                    .then((res) => {
+                        if (res.data.status == "success") {
+                            // premium member, activate Spotify player
+                            if (res.data.client_token !== null && res.data.premium) {
+                                this.$auth.clientToken = res.data.client_token;
+                                this.$auth.appToken = res.data.app_token;
+                                this.$auth.userid = res.data.user_id;
+                                this.$auth.displayName = res.data.display_name;
+                                this.$auth.patreon = res.data.patreon;
+                                this.$auth.knowledgeKey = res.data.knowledge_api;
+                                this.$auth.avatar = res.data.avatar;
+                                // eslint-disable-next-line
+                                window.player = new Spotify.Player({
+                                    name: "Composer Explorer",
+                                    getOAuthToken: (cb) => {
+                                        cb(this.$auth.clientToken);
+                                    },
+                                    volume: 1,
+                                });
+                                // Ready
+                                window.player.addListener("ready", ({ device_id }) => {
+                                    this.$auth.deviceID = device_id;
+                                    window.device_id = device_id;
+                                    console.log("Ready with Device ID", device_id);
+                                    this.$view.showConnecting = false;
 
-                  // THESE STEPS ARE NECESSARY BECAUSE SPOTIFY BREAKS CONNECTION WHEN TRACK NOT AVAILABLE
-                  // FIRST LOAD OF PLAYER
-                  if (this.firstLoad) {
-                    window.player.activateElement();
-                    this.firstLoad = false;
+                                    // THE FOLLOWING IS NECESSARY BECAUSE SPOTIFY BREAKS CONNECTION WHEN AN ALBUM IS NOT AVAILABLE. THIS FUNCTIONALITY RECOVERS IT, OR ADVANCES TO NEXT ALBUM.
+                                    
+                                    // On player first time startup, do nothing
+                                    if (this.firstLoad) {
+                                        window.player.activateElement();
+                                        this.firstLoad = false;
 
-                    // RELOAD TRACKS IF ERROR AND TRY AGAIN (WEBVIEW GLITCH)
-                  } else if (this.reload) {
-                    let uriList = {};
-                    let jsonList = {};
-                    let tracks = this.$config.playTracks;
-                    var smushTracks = tracks.replace(/\s/g, "");
-                    var cleanTracks = smushTracks.replaceAll("spotify", " spotify").trim();
-                    uriList["uris"] = cleanTracks.split(" ");
-                    jsonList = JSON.stringify(uriList);
-                    spotify.playTracks(this.$auth.clientToken, this.device_id, jsonList);
-                    this.reload = false;
-                  } else {
-                    // NEXT ALBUM IF ERROR PERSISTS (Spotify Album not found, 404)
-                    eventBus.$emit("advanceToNextAlbum");
-                    console.log("NEXT ALBUM");
-                    eventBus.$emit("fireNotFoundModal");
-                    this.reload = true;
-                  }
-                });
-                // Not Ready
-                window.player.addListener("not_ready", ({ device_id }) => {
-                  console.log("Device ID has gone offline", device_id);
-                  this.$view.showConnecting = false;
-                });
-                window.player.addListener("initialization_error", ({ message }) => {
-                  this.$view.showConnecting = false;
-                  console.error(message);
-                });
-                window.player.addListener("authentication_error", ({ message }) => {
-                  this.$view.showConnecting = false;
-                  console.error(message);
-                });
-                window.player.addListener("account_error", ({ message }) => {
-                  this.$view.showConnecting = false;
-                  console.error(message);
-                });
-                window.player.addListener("playback_error", ({ message }) => {
-                  console.error(message);
+                                    // If player is reloaded, try playing the requested tracks again
+                                    } else if (this.reload) {
+                                        let jsonTracks = prepareTracksForSpotify(this.$config.playTracks)
+                                        spotify.playTracks(this.$auth.clientToken, this.$auth.deviceID, jsonTracks);
+                                        this.reload = false;
 
-                  // Error due to no list loaded. Send list of tracks to player.
-                  let uriList = {};
-                  let jsonList = {};
-                  let tracks = startTracks;
-                  // ensure no unnecessary whitespace in track list (gives spotify erors):
-                  var smushTracks = tracks.replace(/\s/g, "");
-                  var cleanTracks = smushTracks.replaceAll("spotify", " spotify").trim();
+                                    // If error persists after reload, then go to next album
+                                    } else {
+                                        eventBus.$emit("advanceToNextAlbum");
+                                        eventBus.$emit("fireNotFoundModal");
+                                        this.reload = true;
+                                    }
+                                });
 
-                  uriList["uris"] = cleanTracks.split(" ");
-                  jsonList = JSON.stringify(uriList);
-                  spotify.playTracks(res.data.client_token, window.device_id, jsonList);
+                                // Spotify error listeners.
+                                window.player.addListener("not_ready", ({ device_id }) => {
+                                    console.log("Device ID has gone offline", device_id);
+                                    this.$view.showConnecting = false;
+                                });
+
+                                window.player.addListener("initialization_error", ({ message }) => {
+                                    this.$view.showConnecting = false;
+                                    console.error(message);
+                                });
+                                window.player.addListener("authentication_error", ({ message }) => {
+                                    this.$view.showConnecting = false;
+                                    console.error(message);
+                                });
+                                window.player.addListener("account_error", ({ message }) => {
+                                    this.$view.showConnecting = false;
+                                    console.error(message);
+                                });
+                                window.player.addListener("playback_error", ({ message }) => {
+                                    // Error due to no list loaded (happens if player clicks play button on the first startup). Send list of tracks to player.
+                                    if (message == "Cannot perform operation; no list was loaded."){
+                                        let jsonTracks = prepareTracksForSpotify(startTracks)
+                                        spotify.playTracks(this.$auth.clientToken, this.$auth.deviceID, jsonTracks);
+                                    } else {
+                                        console.error(message);
+                                    }
+                                });
+
+                                window.player.addListener("autoplay_failed", () => {
+                                    console.log("Autoplay is not allowed by the browser autoplay rules");
+                                });
+                                window.player.addListener("player_state_changed", ({ position, duration, paused, track_window: { current_track } }) => {
+                                    eventBus.$emit("firePlayerStateChanged", current_track, position, duration, paused);
+                                });
+                                window.player.connect();
+
+                                // For initial startup and playback
+                                document.getElementById("play-button").addEventListener("click", function() {
+                                    window.player.activateElement();
+                                    window.player.togglePlay();
+                                });
+
+                                // Add the event listener on app to activate Spotify Player on first click
+                                // This is for Chrome autoplay restrictions
+                                document.getElementById("app").addEventListener("click", activatePlayer);
+
+                            } else if (res.data.client_token !== null) {
+                                this.$auth.clientToken = res.data.client_token;
+                                this.$auth.userid = res.data.user_id;
+                                this.$auth.appToken = res.data.app_token;
+                                this.$auth.displayName = res.data.display_name;
+                                this.$auth.knowledgeKey = res.data.knowledge_api;
+                                this.$auth.avatar = res.data.avatar;
+                                this.$auth.patreon = res.data.patreon;
+                                eventBus.$emit("notPremium");
+                                this.$view.showConnecting = false;
+                            } else {
+                                this.$auth.appToken = res.data.app_token;
+                                this.$auth.knowledgeKey = res.data.knowledge_api;
+                                this.$view.banner = true;
+                                this.$view.showConnecting = false;
+                                this.$auth.patreon = true;
+                            }
+                        }
+                    })
+                    .catch((error) => {
+                        console.error(error);
+                        this.$auth.appToken = null;
+                        this.$auth.clientToken = null;
+                        this.$auth.patreon = true;
+                        this.$view.banner = true;
+                        this.$view.showConnecting = false;
+                    });
+            };
+        },
+
+        reInitializeSpotify() {
+            // When spotify doesnt find track, it breaks device connection. Re-establish here
+            window.player.disconnect();
+            setTimeout(() => {
+                window.player.connect().then((success) => {
+                    if (success) {
+                        console.log("The Web Playback SDK successfully connected to Spotify!");
+                    }
                 });
-
-                window.player.addListener("autoplay_failed", () => {
-                  console.log("Autoplay is not allowed by the browser autoplay rules");
+            }, 1000);
+        },
+        refreshToken() {
+            const path = "api/get_token";
+            axios
+                .get(path, { withCredentials: true })
+                .then((res) => {
+                    if (res.data.status == "success") {
+                        if (res.data.client_token !== null) {
+                            this.$auth.clientToken = res.data.client_token;
+                            this.$auth.appToken = res.data.app_token;
+                            this.$auth.knowledgeKey = res.data.knowledge_api;
+                        } else {
+                            this.$auth.appToken = res.data.app_token;
+                            this.$auth.knowledgeKey = res.data.knowledge_api;
+                        }
+                    }
+                })
+                .catch((error) => {
+                    this.$auth.appToken = null;
+                    this.$auth.clientToken = null;
+                    console.error(error);
                 });
-                window.player.addListener("player_state_changed", ({ position, duration, paused, track_window: { current_track } }) => {
-                  eventBus.$emit("firePlayerStateChanged", current_track, position, duration, paused);
-                });
-                window.player.connect();
+        },
+    },
+    mounted() {
+        this.initializeSpotify();
 
-                // For initial startup and playback
-                document.getElementById("play-button").addEventListener("click", function () {
-                  window.player.activateElement();
-                  window.player.togglePlay();
-                });
-
-                // Add the event listener on app to activate Spotify Player on first click
-                document.getElementById("app").addEventListener("click", activatePlayer);
-
-              } else if (res.data.client_token !== null) {
-                this.$auth.clientToken = res.data.client_token;
-                this.$auth.userid = res.data.user_id;
-                this.$auth.appToken = res.data.app_token;
-                this.$auth.displayName = res.data.display_name;
-                this.$auth.knowledgeKey = res.data.knowledge_api;
-                this.$auth.avatar = res.data.avatar;
-                this.$auth.patreon = res.data.patreon;
-                eventBus.$emit("notPremium");
-                this.$view.showConnecting = false;
-              } else {
-                this.$auth.appToken = res.data.app_token;
-                this.$auth.knowledgeKey = res.data.knowledge_api;
-                this.$view.banner = true;
-                this.$view.showConnecting = false;
-                this.$auth.patreon = true;
-              }
+        document.getElementById("play-button").addEventListener("click", () => {
+            if (!this.$auth.clientToken || this.$auth.clientToken == "INVALID") {
+                // Investigate why returning INVALID in app, should be null.
+                eventBus.$emit("notLoggedIn");
             }
-          })
-          .catch((error) => {
-            console.error(error);
-            this.$auth.appToken = null;
-            this.$auth.clientToken = null;
-            this.$auth.patreon = true;
-            this.$view.banner = true;
-            this.$view.showConnecting = false;
-          });
-      };
-    },
-
-    reInitializeSpotify() {
-      // When spotify doesnt find track, it breaks device connection. Re-establish here
-      window.player.disconnect();
-      setTimeout(() => {
-        window.player.connect().then((success) => {
-          if (success) {
-            console.log("The Web Playback SDK successfully connected to Spotify!");
-          }
         });
-      }, 1000);
+
+        //Timer for refreshing tokens
+        setInterval(() => {
+            this.refreshToken();
+        }, 3300000);
+
+        //Re-initialize Spotify player
+        eventBus.$on("notAvailable", this.reInitializeSpotify);
     },
-    refreshToken() {
-      const path = "api/get_token";
-      axios
-        .get(path, { withCredentials: true })
-        .then((res) => {
-          if (res.data.status == "success") {
-            if (res.data.client_token !== null) {
-              this.$auth.clientToken = res.data.client_token;
-              this.$auth.appToken = res.data.app_token;
-              this.$auth.knowledgeKey = res.data.knowledge_api;
-            } else {
-              this.$auth.appToken = res.data.app_token;
-              this.$auth.knowledgeKey = res.data.knowledge_api;
-            }
-          }
-        })
-        .catch((error) => {
-          this.$auth.appToken = null;
-          this.$auth.clientToken = null;
-          console.error(error);
-        });
-    },
-  },
-  mounted() {
-    this.initializeSpotify();
-
-    document.getElementById("play-button").addEventListener("click", () => {
-      if (!this.$auth.clientToken || this.$auth.clientToken == "INVALID") {
-        // Investigate why returning INVALID in app, should be null.
-        eventBus.$emit("notLoggedIn");
-      }
-    });
-
-    //Timer for refreshing tokens
-    setInterval(() => {
-      this.refreshToken();
-    }, 3300000);
-
-    //Re-initialize Spotify player
-    eventBus.$on("notAvailable", this.reInitializeSpotify);
-  },
 };
 </script>

@@ -1,6 +1,7 @@
 import axios from 'axios';
 import {eventBus} from "@/main.js";
 import {startTracks} from "@/main.js";
+import { prepareTracksForSpotify } from "@/HelperFunctions.js";
 
 var spotify = {
   getSpotifyAlbum(token, album) {
@@ -53,17 +54,8 @@ var spotify = {
     // eslint-disable-next-line
     }).catch((error) => {
       // fails on first play of new startup, play from localstorage
-      let uriList = {}
-      let jsonList = {}
-      let tracks = startTracks;
-
-      // ensure unnecessary whitespace in track list (gives spotify erors):
-      var smushTracks = tracks.replace(/\s/g,'');
-      var cleanTracks = smushTracks.replaceAll('spotify', ' spotify').trim();
-
-      uriList['uris'] = cleanTracks.split(' ');
-      jsonList = JSON.stringify(uriList);
-      this.playTracks(token, device_id, jsonList);
+      let jsonTracks = prepareTracksForSpotify(startTracks)
+      this.playTracks(token, device_id, jsonTracks);
     });
   },
   pauseTrack(token) {

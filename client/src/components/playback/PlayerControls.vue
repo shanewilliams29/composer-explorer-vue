@@ -42,6 +42,8 @@ import MobilePlayerButtons from '@/components/mobile/MobilePlayerButtons.vue'
 import spotify from "@/SpotifyFunctions.js";
 import {eventBus} from "@/main.js";
 import axios from "axios";
+import { prepareTracksForSpotify } from "@/HelperFunctions.js";
+
 
 const debouncedNext = debounce(() => fireNextWork());
 const debouncedHopForward = immediateDebounce((progress, duration) => hopForward(progress, duration));
@@ -134,17 +136,8 @@ export default {
         spotify.beginningTrack(this.$auth.clientToken, this.$auth.deviceID);
         this.setPlayback(0, this.$view.duration);
       } else {
-        let uriList = {};
-        let jsonList = {};
-
-        // ensure no unnecessary whitespace in track list (gives spotify API erors):
-        var smushTracks = this.$config.previousTracks.replace(/\s/g, "");
-        var cleanTracks = smushTracks.replaceAll("spotify", " spotify").trim();
-
-        // send track list to Spotify
-        uriList["uris"] = cleanTracks.split(" ");
-        jsonList = JSON.stringify(uriList);
-        spotify.playTracks(this.$auth.clientToken, this.$auth.deviceID, jsonList);
+        let jsonTracks = prepareTracksForSpotify(this.$config.previousTracks)
+        spotify.playTracks(this.$auth.clientToken, this.$auth.deviceID, jsonTracks);
       }
     },
     next() {
