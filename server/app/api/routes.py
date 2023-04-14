@@ -1120,7 +1120,7 @@ def get_artistworks():
 
 
 @bp.route('/api/artistlist', methods=['GET'])  # artist list for performer view
-#@cache.cached()
+@cache.cached()
 def get_artistlist():
     artist_list = []
 
