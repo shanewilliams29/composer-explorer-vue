@@ -136,7 +136,7 @@
         </b-card-body>
       </b-card>
     </div>
-    </transition>
+    </Transition>
     
     <div>
       <b-sidebar id="sidebar-right" title="" backdrop-variant="dark" width="350px" backdrop right shadow>
@@ -217,17 +217,6 @@ export default {
     searchInput() {
       return this.omniSearchInput;
     },
-    item_length: function () {
-      return this.results.length;
-    },
-    // menuOpen() {
-    //   if (!this.firstLoad) {
-    //     return this.viewSearchResults;
-    //   } else {
-    //     return false;
-    //   }
-      
-    // },
   },
   watch: {
     clientToken() {
@@ -236,12 +225,6 @@ export default {
     searchInput(searchInput) {
       if (searchInput == ""){
         this.viewSearchResults = false;
-      }
-    },
-    menuOpen(menuOpen) {
-      if(menuOpen == true){
-        const overlay = document.getElementById('overlay');
-        overlay.style.display = 'block';
       }
     },
     results: {

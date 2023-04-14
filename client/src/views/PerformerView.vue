@@ -47,7 +47,7 @@ export default {
   },
   beforeCreate() {
     if(this.$config.albumSize == 'large'){
-        document.documentElement.style.setProperty('--flex', '0 0 400px');
+        document.documentElement.style.setProperty('--flex', '0 0 450px');
     } else {
         document.documentElement.style.setProperty('--flex', '0 0 450px');
     }
