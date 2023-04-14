@@ -19,17 +19,26 @@
 
                 <span v-if="result[4]" class="wiki-link">
                   &nbsp;&nbsp;<a :href="result[4]" target="_blank">
-                    <b-icon icon="info-circle-fill" aria-hidden="true"></b-icon> Wikipedia</a>&nbsp;&nbsp;
+                    <b-icon icon="info-circle-fill" aria-hidden="true"></b-icon> Wikipedia</a>
                 </span>
 
                 <span 
                   @mouseover="hover = true" 
                   @mouseleave="hover = false" 
                   @click="goToAristRadio(result[0])" 
-                  class="radio-link">
+                  class="radio-link"><a>&nbsp;&nbsp;
                   <img v-if="hover" :src="radioWhiteUrl" class="radio-link-img" height="14px" />
                   <img v-else :src="radioGrayURL" class="radio-link-img" height="14px" />
-                  <a>&nbsp;Radio</a>
+                  &nbsp;Radio</a>
+                </span>
+
+                <span class="radio-link"
+                  @mouseover="hover2 = true" 
+                  @mouseleave="hover2 = false" >&nbsp;&nbsp;
+                  <a :href="spotifyUrl" target="_blank">
+                  <img v-if="hover2" :src="spotifyWhiteUrl" class="spotify-link-img" height="14px" />
+                  <img v-else :src="spotifyGrayURL" class="spotify-link-img" height="14px" />
+                  Spotify</a>
                 </span>
               </td>
             </tr>
@@ -96,10 +105,16 @@ export default {
     return {
       radioGrayURL: staticURL + "radio_gray.svg",
       radioWhiteUrl: staticURL + "radio.svg",
+      spotifyGrayURL: staticURL + "Spotify_Icon_RGB_Black.png",
+      spotifyWhiteUrl: staticURL + "Spotify_Icon_RGB_White.png",
       hover: false,
+      hover2: false,
       wikiLink: null,
       query: "",
       listLoading: false,
+      results: [],
+      img: "",
+      spotifyUrl: "",
 
       albumSortField: { value: "recommended", text: "Recommended sorting" },
       albumSortOptions: [
@@ -112,8 +127,7 @@ export default {
         { value: "large", text: "Large" },
         { value: "small", text: "Small" },
       ],
-      results: [],
-      img: "",
+
     };
   },
   computed: {
@@ -137,11 +151,12 @@ export default {
     },
   },
   methods: {
-    getArtistPicAndJob(artistName){
+    getArtistPicAndJob(artistName){ // improve,use dictonary instead of list?
         this.results = []
          for (let i = 0; i < this.$lists.artistDict.length; i++) {
             let artist = this.$lists.artistDict[i];
             if (artist.name == artistName){
+              this.spotifyUrl = 'https://open.spotify.com/artist/' + artist.id;
               this.img = artist.img
               getArtistDetails(artist, this.results, this.$auth.knowledgeKey);
               break;
@@ -271,6 +286,9 @@ table {
 .wiki-link a:hover{
   color: var(--my-white);
   cursor: pointer;
+}
+.spotify-link-img{
+  margin-bottom: 3px;
 }
 .no-results{
   font-size: 16px;

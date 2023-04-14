@@ -1122,18 +1122,9 @@ def get_artistworks():
 @bp.route('/api/artistlist', methods=['GET'])  # artist list for performer view
 #@cache.cached()
 def get_artistlist():
-    # artists = db.session.query(ArtistList).first()
-    # artist_list = artists.content
-
-    # response_object = {'status': 'success'}
-    # response_object['artists'] = artist_list
-    # response = jsonify(response_object)
-    # return response
-
-    i = 0
     artist_list = []
 
-    artists = db.session.query(Performers.name, Performers.img, Performers.description, func.count(Performers.id).label('total'))\
+    artists = db.session.query(Performers.id, Performers.name, Performers.img, Performers.description, func.count(Performers.id).label('total'))\
         .join(performer_albums)\
         .filter(or_(Performers.hidden == False, Performers.hidden == None))\
         .group_by(Performers.id).order_by(text('total DESC')).all()
@@ -1143,12 +1134,9 @@ def get_artistlist():
     composer_names = set(composer for (composer,) in composers)
 
     # remove composers and bad results
-    for artist, img, description, count in artists:
+    for _id, artist, img, description, count in artists:
         if artist not in composer_names and "/" not in artist:
-            artist_list.append({'name': artist, 'img': img, 'description': description})
-        # if i < 100:
-        #     print(item[0] + " " + str(item[1]))
-        # i += 1
+            artist_list.append({'id': _id, 'name': artist, 'img': img, 'description': description})
 
     response_object = {'status': 'success'}
     response_object['artists'] = artist_list
