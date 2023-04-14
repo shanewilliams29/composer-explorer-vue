@@ -428,7 +428,7 @@ export default {
   margin-right: 5px;
 }
 .albums-card {
-  padding-top: 3.5px !important;
+  padding-top: 5px !important;
 }
 .albums-card .card-body {
   background: none !important;
@@ -440,7 +440,7 @@ export default {
 }
 .heading-card {
   padding-top: 5px;
-  padding-bottom: 2px;
+  padding-bottom: 0px;
   padding-left: 5px;
 }
 .form-row {
