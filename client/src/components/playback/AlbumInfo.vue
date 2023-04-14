@@ -10,7 +10,7 @@
             <div class="centered album-data">
               <span>{{composer}}</span>
               <span style="font-weight: bold;">{{title}}</span>
-              <span style="font-style: italic; color: var(--medium-dark-gray); font-size: 13px;">{{album.artists}}</span>
+              <span class="narrow" style="color: var(--medium-dark-gray); font-size: 13px;">{{album.artists}}</span>
             </div>
           </b-card-text>
         </b-card-body>
@@ -96,6 +96,9 @@ export default {
 </script>
 
 <style scoped>
+.narrow {
+  font-family: Roboto Condensed !important;
+}
 .album-cover-col {
   padding-right: 0px;
 }
