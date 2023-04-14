@@ -238,6 +238,10 @@ export default {
         }
       }
 
+      if (this.artists.length < 1){
+        this.loading = false;
+      }
+
       this.artists.forEach((element) => getArtistDetails(element, this.searchresults, this.$auth.knowledgeKey));
     },
     getArtistPicAndJob(artistName){ // improve,use dictonary instead of list?
