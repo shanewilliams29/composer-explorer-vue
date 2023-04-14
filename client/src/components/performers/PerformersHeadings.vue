@@ -498,7 +498,7 @@ export default {
 .search-card {
   padding-left: 15px;
   padding-right: 15px;
-  padding-top: 8px;
+  padding-top: 12px;
   padding-bottom: 10px;
   background-color: var(--my-white) !important;
   border: none !important;
