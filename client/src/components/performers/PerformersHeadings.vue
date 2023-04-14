@@ -49,14 +49,7 @@
       <b-col class="last-col">
         <b-card class="heading-card albums-card">
           <b-form-group>
-<!--             <vue-typeahead-bootstrap 
-              v-show="$lists.artistList.length < 1" 
-              v-model="query" 
-              placeholder="Loading..." 
-              class="mt-3 select-box performer-search" 
-              size="sm" 
-              :data="[]"/> -->
-              <b-form-input id="performer-search-form" class="omnisearch" size="sm" v-model="omniSearchInput" v-debounce:500ms="omniSearch" @focus="onInputFocus()" type="search" placeholder="Search for a performer" autocomplete="off"></b-form-input>
+              <b-form-input id="performer-search-form" class="omnisearch" size="sm" v-model="omniSearchInput" v-debounce:0ms="omniSearch" @focus="onInputFocus()" type="search" placeholder="Search for a performer" autocomplete="off"></b-form-input>
             <b-row class="flex-nowrap">
               <b-col style="padding-right: 0px;" cols="8">
                 <v-select 
