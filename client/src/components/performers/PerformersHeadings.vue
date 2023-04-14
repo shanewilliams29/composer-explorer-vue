@@ -56,7 +56,7 @@
               class="mt-3 select-box performer-search" 
               size="sm" 
               :data="[]"/> -->
-              <b-form-input id="performer-search-form" class="omnisearch" size="sm" v-model="omniSearchInput" v-debounce:500ms="omniSearch" type="search" placeholder="Search for a performer" autocomplete="off"></b-form-input>
+              <b-form-input id="performer-search-form" class="omnisearch" size="sm" v-model="omniSearchInput" v-debounce:500ms="omniSearch" @focus="onInputFocus()" type="search" placeholder="Search for a performer" autocomplete="off"></b-form-input>
             <b-row class="flex-nowrap">
               <b-col style="padding-right: 0px;" cols="8">
                 <v-select 
@@ -243,6 +243,9 @@ export default {
       }
 
       this.artists.forEach((element) => getArtistDetails(element, this.searchresults, this.$auth.knowledgeKey));
+    },
+    onInputFocus() {
+      this.omniSearchInput = "";
     },
     getArtistPicAndJob(artistName){ // improve,use dictonary instead of list?
         this.results = []
