@@ -1,130 +1,103 @@
 <template>
-<div>
-  <div class="container-fluid">
-    <b-row class="flex-nowrap">
-      <b-col class="text-center">
-        <div class="vertical-centered">
-          <div class="no-results" v-if="!results[0]">
-            <table class="dummy-table">
-              Search for a performer to view composers and works they perform
-            </table>
-          </div>
-          <table  class="headings-table" v-if="results">
-            <tr class="tr-performer" v-for="result in results" :key="result[0]">
-              <td>
-                <b-avatar class="avatar" size="64px" :src="img"></b-avatar>
-              </td>
-              <td class="td-text">
-                <span class="artist-name">{{ result[0] }}&nbsp;</span><br />
-                <span class="artist-job">{{ result[1] }}</span>
-
-                <span v-if="result[4]" class="wiki-link">
-                  &nbsp;&nbsp;<a :href="result[4]" target="_blank">
-                    <b-icon icon="info-circle-fill" aria-hidden="true"></b-icon> Wikipedia</a>
-                </span>
-
-                <span 
-                  @mouseover="hover = true" 
-                  @mouseleave="hover = false" 
-                  @click="goToAristRadio(result[0])" 
-                  class="radio-link"><a>&nbsp;&nbsp;
-                  <img v-if="hover" :src="radioWhiteUrl" class="radio-link-img" height="14px" />
-                  <img v-else :src="radioGrayURL" class="radio-link-img" height="14px" />
-                  &nbsp;Radio</a>
-                </span>
-
-                <span class="radio-link"
-                  @mouseover="hover2 = true" 
-                  @mouseleave="hover2 = false" >&nbsp;&nbsp;
-                  <a :href="spotifyUrl" target="_blank">
-                  <img v-if="hover2" :src="spotifyWhiteUrl" class="spotify-link-img" height="14px" />
-                  <img v-else :src="spotifyGrayURL" class="spotify-link-img" height="14px" />
-                  Spotify</a>
-                </span>
-              </td>
-            </tr>
-          </table>
-        </div>
-      </b-col>
-      <b-col class="last-col">
-        <b-card class="heading-card albums-card">
-          <b-form-group>
-              <b-form-input id="performer-search-form" class="omnisearch" size="sm" v-model="omniSearchInput" v-debounce:0ms="omniSearch" @focus="onInputFocus()" type="search" placeholder="Search for a performer" autocomplete="off"></b-form-input>
-            <b-row class="flex-nowrap">
-              <b-col style="padding-right: 0px;" cols="8">
-                <v-select 
-                  v-model="albumSortField" 
-                  label="text" 
-                  :options="albumSortOptions" 
-                  @input="albumFilter()" 
-                  :clearable="false" 
-                  class="mt-3 select-box" 
-                  :searchable="false">
-                  </v-select>
-              </b-col>
-              <b-col style="padding-left: 5px;" cols="4">
-                <v-select 
-                  v-model="albumSizeField" 
-                  label="text" 
-                  :options="albumSizeOptions" 
-                  @input="albumSize()" 
-                  :clearable="false" 
-                  class="mt-3 select-box" 
-                  :searchable="false">
-                </v-select>
-              </b-col>
-            </b-row>
-          </b-form-group>
-        </b-card>
-      </b-col>
-    </b-row>
-  </div>
   <div>
- <Transition name="fade">
-      <div v-show="viewSearchResults && !firstLoad" class="overlay" id="performer-overlay"></div>
-    </Transition>
-
-    <Transition name="fade">
-    <div id="performer-search-results" v-show="viewSearchResults && !firstLoad">
-      <b-card class="search-card shadow-sm">
-
-        <div class="spinner" v-show="loading" role="status">
-        <b-spinner class="m-5"></b-spinner>
-        </div>
-
-          <div v-show="!loading && !firstLoad">
-            <h6 v-if="searchresults.length == 0">No search results.</h6>
-          </div>
-
-        <b-card-body v-show="!loading" id="performers" class="card-body">
-          <b-card-text class="info-card-text">
-            <div v-for="result in searchresults" :key="result[0]">
-              <table class="search-table">
-                <tr>
-                  <td>
-                    <b-avatar size="40px" :src="result[2]"></b-avatar>
-                  </td>
-                  <td class="info-td">
-                    <a class="artist-link" @click="artistSearch(result[0])">{{ result[0] }}</a><br />
-                    <span class="born-died">{{ result[1] }}</span>
-                  </td>
-                </tr>
+    <div class="container-fluid">
+      <b-row class="flex-nowrap">
+        <b-col class="text-center">
+          <div class="vertical-centered">
+            <div class="no-results" v-if="!results[0]">
+              <table class="dummy-table">
+                Search for a performer to view composers and works they perform
               </table>
             </div>
-          </b-card-text>
-        </b-card-body>
-      </b-card>
+            <table class="headings-table" v-if="results">
+              <tr class="tr-performer" v-for="result in results" :key="result[0]">
+                <td>
+                  <b-avatar class="avatar" size="64px" :src="img"></b-avatar>
+                </td>
+                <td class="td-text">
+                  <span class="artist-name">{{ result[0] }}&nbsp;</span><br />
+                  <span class="artist-job">{{ result[1] }}</span>
+                  <span v-if="result[4]" class="wiki-link">
+                    &nbsp;&nbsp;<a :href="result[4]" target="_blank">
+                      <b-icon icon="info-circle-fill" aria-hidden="true"></b-icon> Wikipedia
+                    </a>
+                  </span>
+                  <span @mouseover="hover = true" @mouseleave="hover = false" @click="goToAristRadio(result[0])" class="radio-link"><a>&nbsp;&nbsp;
+                      <img v-if="hover" :src="radioWhiteUrl" class="radio-link-img" height="14px" />
+                      <img v-else :src="radioGrayURL" class="radio-link-img" height="14px" />
+                      &nbsp;Radio</a>
+                  </span>
+                  <span class="radio-link" @mouseover="hover2 = true" @mouseleave="hover2 = false">&nbsp;
+                    <a :href="spotifyUrl" target="_blank">
+                      <img v-if="hover2" :src="spotifyWhiteUrl" class="spotify-link-img" height="14px" />
+                      <img v-else :src="spotifyGrayURL" class="spotify-link-img" height="14px" />
+                      Spotify</a>
+                  </span>
+                </td>
+              </tr>
+            </table>
+          </div>
+        </b-col>
+        <b-col class="last-col">
+          <b-card class="heading-card albums-card">
+            <b-form-group>
+              <b-form-input id="performer-search-form" class="omnisearch" size="sm" v-model="omniSearchInput" v-debounce:0ms="omniSearch" @focus="onInputFocus()" type="search" placeholder="Search for a performer" autocomplete="off"></b-form-input>
+              <b-row class="flex-nowrap">
+                <b-col style="padding-right: 0px;" cols="8">
+                  <v-select v-model="albumSortField" label="text" :options="albumSortOptions" @input="albumFilter()" :clearable="false" class="mt-3 select-box" :searchable="false">
+                  </v-select>
+                </b-col>
+                <b-col style="padding-left: 5px;" cols="4">
+                  <v-select v-model="albumSizeField" label="text" :options="albumSizeOptions" @input="albumSize()" :clearable="false" class="mt-3 select-box" :searchable="false">
+                  </v-select>
+                </b-col>
+              </b-row>
+            </b-form-group>
+          </b-card>
+        </b-col>
+      </b-row>
     </div>
-    </Transition>
-   </div>
-</div>
-  
+    <div>
+      <Transition name="fade">
+        <div v-show="viewSearchResults && !firstLoad" class="overlay" id="performer-overlay"></div>
+      </Transition>
+      <Transition name="fade">
+        <div id="performer-search-results" v-show="viewSearchResults && !firstLoad">
+          <b-card class="search-card shadow-sm">
+            <div class="spinner" v-show="loading" role="status">
+              <b-spinner class="m-5"></b-spinner>
+            </div>
+            <div v-show="!loading && !firstLoad">
+              <h6 v-if="searchresults.length == 0">No search results.</h6>
+            </div>
+            <b-card-body v-show="!loading" id="performers" class="card-body">
+              <b-card-text class="info-card-text">
+                <div v-for="result in searchresults" :key="result[0]">
+                  <table class="search-table">
+                    <tr>
+                      <td>
+                        <b-avatar size="40px" :src="result[2]"></b-avatar>
+                      </td>
+                      <td class="info-td">
+                        <a class="artist-link" @click="artistSearch(result[0])">{{ result[0] }}</a><br />
+                        <span class="born-died">{{ result[1] }}</span>
+                      </td>
+                    </tr>
+                  </table>
+                </div>
+              </b-card-text>
+            </b-card-body>
+          </b-card>
+        </div>
+      </Transition>
+    </div>
+  </div>
 </template>
 
 
 <script>
 import { eventBus, staticURL } from "@/main.js";
-import { getArtistDetails } from "@/HelperFunctions.js" 
+import { getArtistDetails } from "@/HelperFunctions.js"
 
 export default {
   data() {
@@ -165,7 +138,7 @@ export default {
     apiKeyGot() {
       return this.$auth.knowledgeKey;
     },
-  artistDictGot() {
+    artistDictGot() {
       return this.$lists.artistDict;
     },
   },
@@ -179,19 +152,19 @@ export default {
       }
     },
     artistDictGot() {
-      if (this.$route.query.artist) { 
+      if (this.$route.query.artist) {
         this.getArtistPicAndJob(this.$route.query.artist);
       }
     },
     searchInput(searchInput) {
-      if (searchInput == ""){
+      if (searchInput == "") {
         this.viewSearchResults = false;
       }
     },
     searchresults: {
-      handler: function () {
+      handler: function() {
         // turn off loading when people results array is fully populated
-        if (this.searchresults.length == this.artists.length && this.artists.length > 0){
+        if (this.searchresults.length == this.artists.length && this.artists.length > 0) {
           this.loading = false;
         }
       },
@@ -200,7 +173,7 @@ export default {
   },
   methods: {
     omniSearch() {
-      if (this.omniSearchInput !== ""){
+      if (this.omniSearchInput !== "") {
         this.getOmniSearch(this.omniSearchInput);
       } else {
         //this.viewSearchResults = false;
@@ -223,7 +196,7 @@ export default {
       for (let artist of this.$lists.artistDict) {
         let match = pattern.exec(removeAccents(artist.name.toLowerCase()));
         if (match) {
-            this.artists.push(artist);
+          this.artists.push(artist);
           i++;
         }
         if (i > 10) {
@@ -231,7 +204,7 @@ export default {
         }
       }
 
-      if (this.artists.length < 1){
+      if (this.artists.length < 1) {
         this.loading = false;
       }
 
@@ -240,18 +213,18 @@ export default {
     onInputFocus() {
       this.omniSearchInput = "";
     },
-    getArtistPicAndJob(artistName){ // improve,use dictonary instead of list?
-        this.results = []
-         for (let i = 0; i < this.$lists.artistDict.length; i++) {
-            let artist = this.$lists.artistDict[i];
-            if (artist.name == artistName){
-              this.spotifyUrl = 'https://open.spotify.com/artist/' + artist.id;
-              this.img = artist.img
-              getArtistDetails(artist, this.results, this.$auth.knowledgeKey);
-              break;
-            }
-          }
-      },
+    getArtistPicAndJob(artistName) { // improve,use dictonary instead of list?
+      this.results = []
+      for (let i = 0; i < this.$lists.artistDict.length; i++) {
+        let artist = this.$lists.artistDict[i];
+        if (artist.name == artistName) {
+          this.spotifyUrl = 'https://open.spotify.com/artist/' + artist.id;
+          this.img = artist.img
+          getArtistDetails(artist, this.results, this.$auth.knowledgeKey);
+          break;
+        }
+      }
+    },
     capitalize(string) {
       let capitalized = string[0].toUpperCase() + string.substring(1);
       return capitalized;

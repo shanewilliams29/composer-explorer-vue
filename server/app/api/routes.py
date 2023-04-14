@@ -5,7 +5,7 @@ from config import Config
 from app.functions import prepare_composers, group_composers_by_region, group_composers_by_alphabet
 from app.functions import prepare_works
 from app.models import ComposerList, WorkList, WorkAlbums, AlbumLike, Artists, Performers, performer_albums
-from app.models import ArtistList, User
+from app.models import User
 from sqlalchemy import func, text, or_, and_
 from app.api import bp
 from unidecode import unidecode
@@ -15,7 +15,7 @@ import re
 import time
 
 
-@bp.route('/api/userdata', methods=['GET'])  # main composer list
+@bp.route('/api/userdata', methods=['GET'])
 def get_userdata():
     if current_user.is_authenticated:
         new_posts = current_user.new_posts()
@@ -36,7 +36,7 @@ def get_userdata():
     return response
 
 
-@bp.route('/api/omnisearch', methods=['GET'])  # main composer list
+@bp.route('/api/omnisearch', methods=['GET'])
 def omnisearch():
     # Start the timer
     start_time = time.time()
@@ -1047,8 +1047,10 @@ def get_albuminfo(album_id):
 @bp.route('/api/artistcomposers/<artist_name>', methods=['GET'])  # for performer mode composers
 def get_artistcomposers(artist_name):
 
-    composers = db.session.query(ComposerList).join(Artists, ComposerList.name_short == Artists.composer)\
-        .filter(Artists.name == artist_name)\
+    start_time = time.time()
+
+    composers = db.session.query(ComposerList).join(WorkAlbums).join(performer_albums).join(Performers)\
+        .filter(Performers.name == artist_name)\
         .order_by(ComposerList.region, ComposerList.born).all()
 
     search_list = []
@@ -1073,6 +1075,13 @@ def get_artistcomposers(artist_name):
     response_object['composers'] = composers_by_region
     response_object['genres'] = genre_list
     response = jsonify(response_object)
+
+    end_time = time.time()
+    time_taken = end_time - start_time
+
+    # Print the time taken
+    print('Time taken:', time_taken)
+
     return response
 
 
@@ -1081,8 +1090,8 @@ def get_artistworks():
     artist_name = request.args.get('artist')
     composer_name = request.args.get('composer')
 
-    works_list = db.session.query(WorkList).join(Artists)\
-        .filter(Artists.name == artist_name, WorkList.composer == composer_name)\
+    works_list = db.session.query(WorkList).join(WorkAlbums).join(performer_albums).join(Performers)\
+        .filter(Performers.name == artist_name, WorkList.composer == composer_name)\
         .order_by(WorkList.order, WorkList.genre, WorkList.id).all()
 
     if not works_list:
