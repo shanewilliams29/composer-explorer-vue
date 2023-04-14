@@ -101,7 +101,7 @@ export default {
                     .get(path, { withCredentials: true })
                     .then((res) => {
                         if (res.data.status == "success") {
-                            // premium member, activate Spotify player
+                            // Premium member, activate Spotify player
                             if (res.data.client_token !== null && res.data.premium) {
                                 this.$auth.clientToken = res.data.client_token;
                                 this.$auth.appToken = res.data.app_token;
@@ -126,7 +126,7 @@ export default {
                                 // Connect to Spotify player
                                 window.player.connect();
 
-                                // For initial startup and playback
+                                // For initial startup, and use of play button.
                                 document.getElementById("play-button").addEventListener("click", function() {
                                     window.player.activateElement();
                                     window.player.togglePlay();
@@ -174,7 +174,7 @@ export default {
             setTimeout(() => {
                 window.player.connect().then((success) => {
                     if (success) {
-                        console.log("The Web Playback SDK successfully connected to Spotify!");
+                        console.log("The Web Playback SDK successfully re-connected to Spotify!");
                     }
                 });
             }, 1000);

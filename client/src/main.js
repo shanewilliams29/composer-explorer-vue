@@ -62,6 +62,7 @@ const defaultConfig = {
     artist: null,
     albumData: {},
 };
+
 if (localStorage.getItem("config") !== null) {
     config = JSON.parse(localStorage.getItem("config"));
 } else {

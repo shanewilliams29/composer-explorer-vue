@@ -4,9 +4,7 @@
       <b-card-text class="track-card-text">
         <div class="centered-tracks">
           <table class="track-table" cellspacing="0">
-            <tr class="track-row" v-for="track in album.tracks" :id="track[1]" :key="track[1]" 
-              @click="selectTrack(track); playTracks(track[2]); " 
-              :class="{'highlight-track': trackMatch(track)}">
+            <tr class="track-row" v-for="track in album.tracks" :id="track[1]" :key="track[1]" @click="selectTrack(track); playTracks(track[2]); " :class="{'highlight-track': trackMatch(track)}">
               <td width="100%" class="td-class">
                 <b-icon icon="play-fill" aria-hidden="true"></b-icon>
                 <span v-if="genre == 'Opera' || genre == 'Stage Work' || genre == 'Ballet'">
