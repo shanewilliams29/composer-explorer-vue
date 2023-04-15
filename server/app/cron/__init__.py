@@ -1,19 +1,202 @@
 from flask import session, current_app, Blueprint
 from app import db, log, sp
+from config import Config
 from datetime import datetime, timedelta
 from app.cron.classes import GroupAlbums, SmartAlbums
 from app.models import WorkList, Spotify, WorkAlbums, Artists, ComposerCron
-from app.models import ArtistList, Performers, AlbumLike
+from app.models import ArtistList, Performers, AlbumLike, performer_albums
 from app.cron.functions import search_spotify_and_save, search_album
-from sqlalchemy import func, or_
+from sqlalchemy import func, or_, text
 import click
 import json
 from collections import defaultdict
+import requests
+import httpx
+import asyncio
 
 bp = Blueprint('cron', __name__)
 
 log_name = "cron-log"
 logger = log.logger(log_name)
+
+
+async def get_person_details_httpx(person_name, auth_key):
+    person = person_name
+    description = ""
+
+    path = f"https://kgsearch.googleapis.com/v1/entities:search?indent=true&types=Person&types=MusicGroup&query={person} Music&limit=50&key={auth_key}"
+    
+    try:
+        async with httpx.AsyncClient() as client:
+            response = await client.get(path)
+            response.raise_for_status()
+            data = response.json()
+            item_list = data['itemListElement']
+        
+        if item_list:
+            person_match = person.replace("Sir", "").replace("Dame", "").strip()
+            
+            for item in item_list:
+                if person_match in item['result']['name']:
+                    description = item['result'].get('description', 'NA')
+                    break
+            else:
+                description = 'NA'
+        else:
+            description = 'NA'
+
+        return description
+    
+    except httpx.HTTPError as error:
+        print(error)
+        return "ERROR"
+
+
+def get_person_details(person_name, auth_key):
+    person = person_name
+    description = ""
+
+    path = f"https://kgsearch.googleapis.com/v1/entities:search?indent=true&types=Person&types=MusicGroup&query={person} Music&limit=50&key={auth_key}"
+    
+    try:
+        response = requests.get(path)
+        response.raise_for_status()
+        data = response.json()
+        item_list = data['itemListElement']
+        
+        if item_list:
+            person_match = person.replace("Sir", "").replace("Dame", "").strip()
+            
+            for item in item_list:
+                if person_match in item['result']['name']:
+                    description = item['result'].get('description', 'NA')
+                    break
+            else:
+                description = 'NA'
+        else:
+            description = 'NA'
+
+        return description
+    
+    except requests.exceptions.RequestException as error:
+        print(error)
+        return None
+
+
+# GETS PERSON INFO FROM GOOGLE AND FILLS IN DATABASE
+@ bp.cli.command()
+def fillpersoninfo():
+    # auth_key = Config.GOOGLE_KNOWLEDGE_GRAPH_API_KEY
+    start_time = datetime.utcnow()
+    ctx = current_app.test_request_context()
+    ctx.push()
+
+    all_people = db.session.query(Performers.name, Performers.id, func.count(Performers.id).label('total'))\
+        .join(performer_albums)\
+        .filter(or_(Performers.hidden == False, Performers.hidden == None))\
+        .filter(Performers.description == None) \
+        .group_by(Performers.id).order_by(text('total DESC')).limit(105).all()
+
+    all_artist_dict = {artist.id: artist for artist in Performers.query.all()}
+    
+    enumerated_list = enumerate(all_people)
+
+    # async def main(person_name):
+    #     auth_key = Config.GOOGLE_KNOWLEDGE_GRAPH_API_KEY
+    #     description = await get_person_details_httpx(person_name, auth_key)
+    #     print(person.name + " - " + str(description))
+    #     return description
+
+    async def main(person_names):
+        auth_key = Config.GOOGLE_KNOWLEDGE_GRAPH_API_KEY
+
+        tasks = [get_person_details_httpx(person_name, auth_key) for person_name in person_names]
+        descriptions = await asyncio.gather(*tasks)
+
+        people = []
+        for person_name, description in zip(person_names, descriptions):
+            people.append([person_name, description])
+
+        return people
+
+    person_list = []
+    id_list = []
+    for count, person in enumerated_list:
+        
+        if (count + 1) % 50 != 0 and count != len(all_people) - 1:
+            person_list.append(person.name)
+            id_list.append(person.id)
+
+        else:
+            person_list.append(person.name)
+            id_list.append(person.id)
+
+            people_with_descriptions = asyncio.run(main(person_list))
+
+            for i, person in enumerate(people_with_descriptions):
+                if person[1] != "ERROR":
+                    print(i, person)
+                    artist_id = id_list[i]
+                    artist = all_artist_dict.get(artist_id)
+                    artist.description = person[1]
+
+            db.session.commit()
+
+            person_list = []
+            id_list = []
+            
+            current_time = datetime.utcnow()
+            elapsed_time = current_time - start_time
+            elapsed = str(timedelta(seconds=round(elapsed_time.total_seconds())))
+
+            total = len(all_people)
+            completed = count + 1
+            remaining = total - completed
+
+            item_per_second = (completed / elapsed_time.total_seconds())
+            remaining_time = remaining * (1 / item_per_second)
+            remaining = str(timedelta(seconds=round(remaining_time)))
+
+            print(" ")
+            print(f"Stored {completed} of {total}")
+            print("Time elapsed: " + elapsed)
+            print("Remaining time: " + remaining)
+            print(" ")
+    
+    # finish
+    ctx.pop()
+    print("Complete!")
+
+# FILLS PERFORMER DATA AND IMAGES FOR ALL COMPOSERS
+@ bp.cli.command()
+def autoperformerfill():
+
+    while True:
+
+        composer_to_fill = db.session.query(ComposerCron).first()
+
+        fillperformerdata(composer_to_fill.id)
+        getspotifyartistimg()
+        getworkdurations(composer_to_fill.id)
+        print("Completed " + str(composer_to_fill.id) + "!")
+
+        indexed_composers = []
+        for value in db.session.query(WorkList.composer).distinct():
+            str(indexed_composers.append(value[0]))
+
+        for composer in indexed_composers:
+            if composer == composer_to_fill.id:
+                index = indexed_composers.index(composer)
+
+                if index == len(indexed_composers) - 1:
+                    next_index = 0
+                else:
+                    next_index = index + 1
+
+                next_composer = indexed_composers[next_index]
+                composer_to_fill.id = next_composer
+                db.session.commit()
+                break
 
 
 # FILLS PERFORMER DATA AND IMAGES FOR ALL COMPOSERS

@@ -304,11 +304,17 @@ class Performers(db.Model):
     name: str
     img: str
     description: str
+    # google_img: str
+    # wiki_link: str
+    # role: str
 
     id = db.Column(db.String(48), primary_key=True)
     name = db.Column(db.String(256), index=True)
     img = db.Column(db.String(128))
     description = db.Column(db.String(256))
+    # google_img = db.Column(db.String(128))
+    # wiki_link = db.Column(db.String(128))
+    # role = db.Column(db.String(48))
     hidden = db.Column(db.Boolean, default=False)
     albums = db.relationship("WorkAlbums", secondary=performer_albums, back_populates="performers", lazy='dynamic')
 

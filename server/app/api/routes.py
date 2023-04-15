@@ -1154,28 +1154,39 @@ def get_artistlist():
 
 
 @bp.route('/api/topartists', methods=['GET'])  # used to build json list for word cloud
-@login_required
 def get_topartists():
-    artists = db.session.query(Artists, func.count(Artists.id).label('total'))\
-        .group_by(Artists.name).order_by(text('total DESC')).paginate(1, 160, False)
 
-    artist_list = []
+    def get_artists():
+        return db.session.query(Performers.name, Performers.img, Performers.description, func.count(Performers.id).label('total'))\
+            .join(performer_albums)\
+            .filter(or_(Performers.hidden == False, Performers.hidden == None))\
+            .group_by(Performers.id).order_by(text('total DESC')).limit(250).all()
+
+    def get_composers():
+        return db.session.query(ComposerList.name_full).all()
+
+    def is_excluded_artist(artist, composer_list, exclude_list):
+        if artist in composer_list:
+            return True
+        for item in exclude_list:
+            if item in artist.lower():
+                return True
+        return False
+
+    def create_artist_list(artists, composer_list, exclude_list):
+        artist_list = []
+        for (artist, img, desc, count) in artists:
+            if not is_excluded_artist(artist, composer_list, exclude_list):
+                item = [artist, img, desc, count]
+                artist_list.append(item)
+        return artist_list
+
+    artists = get_artists()
+    composers = get_composers()
+    composer_list = [composer for (composer,) in composers]
+
     exclude_list = ['baroque', 'augsburger', 'antiqua', 'milano', 'quartet', 'beethoven', 'carl philipp emanuel bach', 'orchest', 'philharm', 'symphony', 'concert', 'chamber', 'anonymous', 'academy', 'staats', 'consort', 'chopin', 'mozart', 'symphoniker', 'covent garden', 'choir', 'akademie', 'stuttgart', 'llscher']
 
-    flag = False
-    for artist in artists.items:
-        for item in exclude_list:
-            if item in artist[0].name.lower():
-                flag = True
-            else:
-                pass
-        if not flag:
-            item = ['', '', '']
-            item[0] = artist[0].name
-            item[1] = artist[1]
-            item[2] = random.randint(0, 2)
-            artist_list.append(item)
-        flag = False
-
+    artist_list = create_artist_list(artists, composer_list, exclude_list)
     response = jsonify(artist_list)
     return response

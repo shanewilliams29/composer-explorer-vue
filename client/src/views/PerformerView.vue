@@ -3,7 +3,7 @@
     <PerformersHeadings/>
     <div class="container-fluid">
       <b-row v-if="showCloud">
-        <b-col class="word-cloud"><WordCloud/></b-col>
+        <b-col class="word-cloud"><PerformersOverview/></b-col>
       </b-row>
       <b-row v-else>
         <b-col class="display-list first-col" ref="scroll-box-comp"><ComposerList/></b-col>
@@ -19,7 +19,7 @@ import PerformersHeadings from '@/components/performers/PerformersHeadings.vue'
 import ComposerList from "@/components/composers/ComposerList.vue";
 import WorkList from "@/components/works/WorkList.vue";
 import AlbumList from "@/components/albums/AlbumList.vue";
-import WordCloud from '@/components/performers/WordCloud.vue';
+import PerformersOverview from '@/components/performers/PerformersOverview.vue';
 
 import {eventBus} from "../main.js";
 
@@ -30,7 +30,7 @@ export default {
     ComposerList,
     WorkList,
     AlbumList,
-    WordCloud
+    PerformersOverview
   },
   data() {
     return {
