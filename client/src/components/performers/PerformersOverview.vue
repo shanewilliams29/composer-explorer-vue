@@ -2,7 +2,7 @@
   <b-row>
     <b-col>
       <div class="grid-container">
-        <div class="grid-item" v-for="artist in artists" :key="artist[0]">
+        <div class="grid-item" v-for="artist in conductors" :key="artist[0]">
           <b-card class="album-info-card shadow-sm">
             <b-card-body class="card-body">
               <b-card-text class="info-card-text">
@@ -10,11 +10,11 @@
                   <table>
                     <tr>
                       <td>
-                        <b-avatar size="48px" :src="artist[1]"></b-avatar>
+                        <b-avatar size="56px" :src="artist[1]"></b-avatar>
                       </td>
                       <td class="info-td">
                         <a class="artist-name" @click="wordClick(artist[0])">{{ artist[0] }}</a><br />
-                        <span v-if="artist[2]" class="born-died">{{artist[2]}}<br></span>
+                        <span v-if="artist[2] !== 'NA'" class="born-died">{{artist[2]}}<br></span>
                       </td>
                     </tr>
                   </table>
@@ -27,7 +27,7 @@
     </b-col>
     <b-col>
       <div class="grid-container">
-        <div class="grid-item" v-for="artist in groups" :key="artist[0]">
+        <div class="grid-item" v-for="artist in orchestras" :key="artist[0]">
           <b-card class="album-info-card shadow-sm">
             <b-card-body class="card-body">
               <b-card-text class="info-card-text">
@@ -35,11 +35,61 @@
                   <table>
                     <tr>
                       <td>
-                        <b-avatar size="48px" :src="artist[1]"></b-avatar>
+                        <b-avatar size="56px" :src="artist[1]"></b-avatar>
                       </td>
                       <td class="info-td">
                         <a class="artist-name" @click="wordClick(artist[0])">{{ artist[0] }}</a><br />
-                        <span v-if="artist[2]" class="born-died">{{artist[2]}}<br></span>
+                        <span v-if="artist[2] !== 'NA'" class="born-died">{{artist[2]}}<br></span>
+                      </td>
+                    </tr>
+                  </table>
+                </div>
+              </b-card-text>
+            </b-card-body>
+          </b-card>
+        </div>
+      </div>
+    </b-col>
+    <b-col>
+      <div class="grid-container">
+        <div class="grid-item" v-for="artist in pianists" :key="artist[0]">
+          <b-card class="album-info-card shadow-sm">
+            <b-card-body class="card-body">
+              <b-card-text class="info-card-text">
+                <div>
+                  <table>
+                    <tr>
+                      <td>
+                        <b-avatar size="56px" :src="artist[1]"></b-avatar>
+                      </td>
+                      <td class="info-td">
+                        <a class="artist-name" @click="wordClick(artist[0])">{{ artist[0] }}</a><br />
+                        <span v-if="artist[2] !== 'NA'" class="born-died">{{artist[2]}}<br></span>
+                      </td>
+                    </tr>
+                  </table>
+                </div>
+              </b-card-text>
+            </b-card-body>
+          </b-card>
+        </div>
+      </div>
+    </b-col>
+    <b-col>
+      <div class="grid-container">
+        <div class="grid-item" v-for="artist in singers" :key="artist[0]">
+          <b-card class="album-info-card shadow-sm">
+            <b-card-body class="card-body">
+              <b-card-text class="info-card-text">
+                <div>
+                  <table>
+                    <tr>
+                      <td>
+                        <b-avatar size="56px" :src="artist[1]"></b-avatar>
+                      </td>
+                      <td class="info-td">
+                        <a class="artist-name" @click="wordClick(artist[0])">{{ artist[0] }}</a><br />
+                        <span v-if="artist[2] !== 'NA'" class="born-died">{{artist[2]}}<br></span>
                       </td>
                     </tr>
                   </table>
@@ -65,6 +115,13 @@ export default {
     };
   },
   methods:{
+    shuffleArray(array) {
+      // for (let i = array.length - 1; i > 0; i--) {
+      //   const j = Math.floor(Math.random() * (i + 1));
+      //   [array[i], array[j]] = [array[j], array[i]];
+      // }
+      return array;
+    },
     toK(num){
       return num.toString().slice(0, -3) + "k";
     },
@@ -73,8 +130,10 @@ export default {
     }
   },
   created() {
-    this.artists = require('@/assets/topartists.json');
-    this.groups = require('@/assets/toporch.json')
+    this.conductors = this.shuffleArray(require('@/assets/topconductors.json'));
+    this.orchestras = this.shuffleArray(require('@/assets/toporchestras.json'));
+    this.pianists = this.shuffleArray(require('@/assets/toppianists.json'));
+    this.singers = this.shuffleArray(require('@/assets/topsingers.json'));
   },
 }
 </script>
@@ -88,7 +147,7 @@ export default {
   height: calc(100vh - 244px - var(--panelheight));
   overflow: auto;
   padding-bottom: 15px;
-  padding-top: 10px;
+  padding-top: 5px;
 }
 .grid-item {
   display: flex;
@@ -105,14 +164,10 @@ export default {
 .info-card-text {
   font-size: 13px;
   line-height: 130%;
-  overflow-x: hidden;
   padding-left: 2px;
 }
 .info-td {
   padding-left: 10px;
-  white-space: nowrap; 
-  text-overflow: ellipsis; 
-  overflow: hidden; 
 }
 .born-died {
   font-size: 13px !important;
@@ -131,5 +186,10 @@ a:hover {
 table {
   margin-bottom: 6px;
 }
+.col{
+  padding: 0px;
+  padding-left: 5px;
+}
+
 </style>
 

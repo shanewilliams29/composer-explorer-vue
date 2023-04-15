@@ -1160,7 +1160,9 @@ def get_topartists():
         return db.session.query(Performers.name, Performers.img, Performers.description, func.count(Performers.id).label('total'))\
             .join(performer_albums)\
             .filter(or_(Performers.hidden == False, Performers.hidden == None))\
-            .group_by(Performers.id).order_by(text('total DESC')).limit(250).all()
+            .group_by(Performers.id).order_by(text('total DESC')).limit(1000).all()
+            # .filter(Performers.description.ilike('%{}%'.format('orchestra')))\
+            
 
     def get_composers():
         return db.session.query(ComposerList.name_full).all()
@@ -1170,13 +1172,19 @@ def get_topartists():
             return True
         for item in exclude_list:
             if item in artist.lower():
+                return False
+        return False
+
+    def is_included_description(desc, include_list):
+        for item in include_list:
+            if item in desc.lower():
                 return True
         return False
 
-    def create_artist_list(artists, composer_list, exclude_list):
+    def create_artist_list(artists, composer_list, list):
         artist_list = []
         for (artist, img, desc, count) in artists:
-            if not is_excluded_artist(artist, composer_list, exclude_list):
+            if is_included_description(desc, list):
                 item = [artist, img, desc, count]
                 artist_list.append(item)
         return artist_list
@@ -1186,7 +1194,8 @@ def get_topartists():
     composer_list = [composer for (composer,) in composers]
 
     exclude_list = ['baroque', 'augsburger', 'antiqua', 'milano', 'quartet', 'beethoven', 'carl philipp emanuel bach', 'orchest', 'philharm', 'symphony', 'concert', 'chamber', 'anonymous', 'academy', 'staats', 'consort', 'chopin', 'mozart', 'symphoniker', 'covent garden', 'choir', 'akademie', 'stuttgart', 'llscher']
-
-    artist_list = create_artist_list(artists, composer_list, exclude_list)
+    include_list = ['singer', 'bass', 'baritone', 'tenor', 'mezzo', 'soprano', 'vocalist']
+    
+    artist_list = create_artist_list(artists, composer_list, include_list)
     response = jsonify(artist_list)
     return response

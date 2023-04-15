@@ -225,6 +225,7 @@ export default {
     searchInput(searchInput) {
       if (searchInput == ""){
         this.viewSearchResults = false;
+        this.firstLoad = true;
       }
     },
     results: {
