@@ -10,7 +10,7 @@
                   <table>
                     <tr>
                       <td>
-                        <b-avatar :badge="toK(artist[3])" badge-left badge-variant="dark" size="48px" :src="artist[1]"></b-avatar>
+                        <b-avatar size="48px" :src="artist[1]"></b-avatar>
                       </td>
                       <td class="info-td">
                         <a class="artist-name" @click="wordClick(artist[0])">{{ artist[0] }}</a><br />
@@ -35,7 +35,7 @@
                   <table>
                     <tr>
                       <td>
-                        <b-avatar :badge="toK(artist[3])" badge-left badge-variant="dark" size="48px" :src="artist[1]"></b-avatar>
+                        <b-avatar size="48px" :src="artist[1]"></b-avatar>
                       </td>
                       <td class="info-td">
                         <a class="artist-name" @click="wordClick(artist[0])">{{ artist[0] }}</a><br />

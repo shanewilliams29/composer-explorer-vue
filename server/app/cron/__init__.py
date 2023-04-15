@@ -95,7 +95,7 @@ def fillpersoninfo():
         .join(performer_albums)\
         .filter(or_(Performers.hidden == False, Performers.hidden == None))\
         .filter(Performers.description == None) \
-        .group_by(Performers.id).order_by(text('total DESC')).limit(2000).all()
+        .group_by(Performers.id).order_by(text('total DESC')).limit(100).all()
 
     all_artist_dict = {artist.id: artist for artist in Performers.query.all()}
     
@@ -107,11 +107,7 @@ def fillpersoninfo():
         tasks = [get_person_details_httpx(person_name, auth_key) for person_name in person_names]
         descriptions = await asyncio.gather(*tasks)
 
-        people = []
-        for person_name, description in zip(person_names, descriptions):
-            people.append([person_name, description])
-
-        return people
+        return list(zip(person_names, descriptions))
 
     person_list = []
     id_list = []

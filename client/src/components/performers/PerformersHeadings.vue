@@ -212,6 +212,7 @@ export default {
     },
     onInputFocus() {
       this.omniSearchInput = "";
+      this.resetField()
     },
     getArtistPicAndJob(artistName) { // improve,use dictonary instead of list?
       this.results = []
@@ -239,6 +240,7 @@ export default {
         this.$router.push("/performers");
         eventBus.$emit("clearPerformers");
         this.results = [];
+        this.firstLoad = true;
       }
     },
     albumFilter() {
