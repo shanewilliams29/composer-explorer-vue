@@ -2,10 +2,12 @@
   <div id="performer">
     <PerformersHeadings/>
     <div class="container-fluid">
+      <Transition name="fade">
       <b-row v-if="showCloud">
         <b-col class="word-cloud"><PerformersOverview/></b-col>
       </b-row>
-      <b-row v-else>
+      </Transition>
+      <b-row v-if="!showCloud">
         <b-col class="display-list first-col" ref="scroll-box-comp"><ComposerList/></b-col>
         <b-col class="display-list" ref="scroll-box"><WorkList/></b-col>
         <b-col class="display-list last-col extra-margin"><AlbumList/></b-col>
@@ -13,6 +15,8 @@
     </div>
   </div>
 </template>
+
+
 
 <script>
 import PerformersHeadings from '@/components/performers/PerformersHeadings.vue'
@@ -66,6 +70,12 @@ export default {
 }
 </script>
 <style scoped>
+.fade-enter-active, .fade-leave-active {
+  transition: opacity 0.6s;
+}
+.fade-enter, .fade-leave-to {
+  opacity: 0;
+}
 >>> .highlight{
   background-color: var(--purple);
 }
