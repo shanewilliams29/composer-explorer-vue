@@ -2,313 +2,313 @@
   [
     "Berliner Philharmoniker", 
     "https://i.scdn.co/image/ab6761610000e5eb92e0a1e423bd8590dcd43bda", 
-    null, 
-    12113
-  ], 
-  [
-    "The English Concert", 
-    "https://i.scdn.co/image/ab6761610000e5eb55b58d0ec2693200440f1f51", 
-    null, 
-    8946
+    "Orchestra", 
+    12411
   ], 
   [
     "London Symphony Orchestra", 
     "https://i.scdn.co/image/ab6761610000e5ebf113c063e071771545263b9a", 
-    null, 
-    8794
+    "Orchestra", 
+    9267
+  ], 
+  [
+    "The English Concert", 
+    "https://i.scdn.co/image/ab6761610000e5eb55b58d0ec2693200440f1f51", 
+    "Orchestra", 
+    8946
   ], 
   [
     "Wiener Philharmoniker", 
     "https://i.scdn.co/image/ab6761610000e5eb4bb5eb0860d831455fab32b6", 
     "Vienna Philharmonic", 
-    8681
+    8705
   ], 
   [
     "Academy of St. Martin in the Fields", 
     "https://i.scdn.co/image/ab6761610000e5ebc8b13e554131116bf311f242", 
-    null, 
-    8051
+    "Choir", 
+    8057
   ], 
   [
     "Academy of Ancient Music", 
     "https://i.scdn.co/image/ab6761610000e5eb6a1abee417a2e69f55b4bbbb", 
-    null, 
+    "Orchestra", 
     6692
   ], 
   [
     "London Philharmonic Orchestra", 
     "https://i.scdn.co/image/ab6761610000e5eb68060bb8c0b22952f9013901", 
-    null, 
-    6434
+    "Orchestra", 
+    6461
   ], 
   [
     "Philharmonia Orchestra", 
     "https://i.scdn.co/image/ab6761610000e5eb17e46a1f93d3203a170a45ed", 
-    null, 
-    6200
+    "Orchestra", 
+    6258
   ], 
   [
     "English Chamber Orchestra", 
     "https://i.scdn.co/image/ab6761610000e5ebd56134c89f7b5ccbd2a06ca1", 
-    null, 
-    4588
+    "Orchestra", 
+    4589
   ], 
   [
     "Royal Philharmonic Orchestra", 
     "https://i.scdn.co/image/ab6761610000e5ebf9cd4a9062ded7cb2b8a351b", 
-    null, 
-    3996
+    "Orchestra", 
+    4022
   ], 
   [
     "Orpheus Chamber Orchestra", 
     "https://i.scdn.co/image/ab6761610000e5ebae79cc231c0bde53d5ed1f5b", 
-    null, 
-    3949
+    "Orchestra", 
+    3958
   ], 
   [
     "Amadeus Quartet", 
     "https://i.scdn.co/image/ab67616d0000b2733015893cff0bc5a36c10aa78", 
-    null, 
+    "Musical quartet", 
     3528
   ], 
   [
     "New York Philharmonic", 
     "https://i.scdn.co/image/ab6761610000e5ebaac46a30dc91a8148051a633", 
-    null, 
-    2925
+    "Orchestra", 
+    3004
   ], 
   [
     "Royal Concertgebouw Orchestra", 
     "https://i.scdn.co/image/ab6761610000e5eb4d56596b0ac41c8e45ef7448", 
-    null, 
-    2793
+    "Orchestra", 
+    2858
   ], 
   [
     "Wiener Mozart Ensemble", 
     "https://i.scdn.co/image/ab67616d0000b273af38aa32b7d9b0a6b3b81943", 
-    null, 
+    "NA", 
     2611
   ], 
   [
     "Chicago Symphony Orchestra", 
     "https://i.scdn.co/image/ab6761610000e5eb7e3487f5797a7920b45a184c", 
-    null, 
-    2478
+    "Musical ensemble", 
+    2496
   ], 
   [
     "Augsburger Domsingknaben", 
     "https://i.scdn.co/image/ab6761610000e5eb377a116e5ff722313085063d", 
-    null, 
+    "Choir", 
     2398
   ], 
   [
     "Staatskapelle Dresden", 
     "https://i.scdn.co/image/47e9167129caabcd5b471d8cdd321e4412932fbf", 
-    null, 
-    2392
+    "Orchestra", 
+    2395
   ], 
   [
     "Gothenburg Symphony Orchestra", 
     "https://i.scdn.co/image/1d47044ff881ce877a7c6e62121cfc360e79f802", 
-    null, 
+    "NA", 
     2225
   ], 
   [
     "Philadelphia Orchestra", 
     "https://i.scdn.co/image/ab6761610000e5ebf021c457d03c8f28395f6b5b", 
-    null, 
-    2062
+    "Orchestra", 
+    2104
+  ], 
+  [
+    "Boston Symphony Orchestra", 
+    "https://i.scdn.co/image/4b05c13944ca3cb4887765b2eea85ba0ffef8ef7", 
+    "Orchestra", 
+    2084
   ], 
   [
     "Slovak Philharmonic", 
     "https://i.scdn.co/image/ab67616d0000b2731c72ad5458bcc5d5650e3093", 
-    null, 
-    1995
-  ], 
-  [
-    "Slovak Radio Symphony Orchestra", 
-    "https://i.scdn.co/image/ab6761610000e5eb0f4cdd832091cc4fa92e9490", 
-    null, 
-    1813
+    "Orchestra", 
+    2002
   ], 
   [
     "Cleveland Orchestra", 
     "https://i.scdn.co/image/ab6761610000e5ebfaf7d80e1f60f334c89caef0", 
-    null, 
-    1785
+    "Orchestra", 
+    1957
+  ], 
+  [
+    "Slovak Radio Symphony Orchestra", 
+    "https://i.scdn.co/image/ab6761610000e5eb0f4cdd832091cc4fa92e9490", 
+    "Orchestra", 
+    1839
   ], 
   [
     "Chamber Orchestra of Europe", 
     "https://i.scdn.co/image/ab6761610000e5eb67bc0fd79b19c376acf68d65", 
-    null, 
+    "Orchestra", 
     1767
   ], 
   [
     "G\u00f6ran S\u00f6llscher", 
     "https://i.scdn.co/image/d65a109a15af01b5e21c68c9772633e8788a26ff", 
-    null, 
+    "Swedish guitarist", 
     1751
-  ], 
-  [
-    "Boston Symphony Orchestra", 
-    "https://i.scdn.co/image/4b05c13944ca3cb4887765b2eea85ba0ffef8ef7", 
-    null, 
-    1742
   ], 
   [
     "Hagen Quartett", 
     "https://i.scdn.co/image/9ccbbd1f967bf8efcbf72186d62c87f390187b3d", 
-    null, 
+    "NA", 
     1690
   ], 
   [
     "Gewandhausorchester", 
     "https://i.scdn.co/image/ab6761610000e5eb2621532f53c862da5e7d50ba", 
-    null, 
-    1634
+    "Orchestra", 
+    1635
   ], 
   [
     "Venice Baroque Orchestra", 
     "https://i.scdn.co/image/48974584fdc49b6e825b35480588a040db71c4ed", 
-    null, 
+    "Orchestra", 
     1630
   ], 
   [
     "Anonymous", 
     "https://i.scdn.co/image/ab67616d0000b273f4c36ff679e215984c204a53", 
-    null, 
-    1611
+    "Musical artist", 
+    1612
   ], 
   [
     "Bavarian Radio Symphony Orchestra", 
     "https://i.scdn.co/image/ab6761610000e5eb2e4ad984bd57b7f71d3e8d1a", 
-    null, 
-    1594
+    "Orchestra", 
+    1596
   ], 
   [
     "Emerson String Quartet", 
     "https://i.scdn.co/image/ab6761610000e5eb016cb2454e3aa43206ae5425", 
-    null, 
+    "Musical quartet", 
     1590
-  ], 
-  [
-    "English Baroque Soloists", 
-    "https://i.scdn.co/image/ab6761610000e5ebfd6d111889a2958d6bce6a4d", 
-    null, 
-    1479
   ], 
   [
     "Orchestre Symphonique de Montr\u00e9al", 
     "https://i.scdn.co/image/ab6761610000e5eb23c40a5ab7938f014b50cd73", 
-    null, 
-    1418
+    "NA", 
+    1506
+  ], 
+  [
+    "English Baroque Soloists", 
+    "https://i.scdn.co/image/ab6761610000e5ebfd6d111889a2958d6bce6a4d", 
+    "Orchestra", 
+    1479
+  ], 
+  [
+    "Orchestre de Paris", 
+    "https://i.scdn.co/image/ab6761610000e5eb41a553a326b42c68695c99cb", 
+    "Orchestra", 
+    1459
   ], 
   [
     "Bach-Collegium Stuttgart", 
     "https://i.scdn.co/image/d8020f700c7293bf2c07bf3f50a4ff3156ce3250", 
-    null, 
+    "Musical ensemble", 
     1403
   ], 
   [
     "New Philharmonia Orchestra", 
     "https://i.scdn.co/image/ab67616d0000b2738622e2800bda527a5d5923af", 
-    null, 
-    1348
-  ], 
-  [
-    "Musica Antiqua K\u00f6ln", 
-    "https://i.scdn.co/image/87f1911cf2bafc5a3b9240c04f93e8dad41befbd", 
-    null, 
-    1265
-  ], 
-  [
-    "Orchestre de Paris", 
-    "https://i.scdn.co/image/ab6761610000e5eb41a553a326b42c68695c99cb", 
-    null, 
-    1255
-  ], 
-  [
-    "G\u00e4chinger Kantorei Stuttgart", 
-    "https://i.scdn.co/image/ab67616d0000b2732b95cb5d016ccbe46b3acaf9", 
-    null, 
-    1247
+    "Orchestra", 
+    1351
   ], 
   [
     "Orchestre de la Suisse Romande", 
     "https://i.scdn.co/image/50cdee4d926e0afd1454c5b1c497f426db185a9e", 
-    null, 
-    1243
+    "Orchestra", 
+    1299
+  ], 
+  [
+    "Musica Antiqua K\u00f6ln", 
+    "https://i.scdn.co/image/87f1911cf2bafc5a3b9240c04f93e8dad41befbd", 
+    "Musical group", 
+    1265
+  ], 
+  [
+    "G\u00e4chinger Kantorei Stuttgart", 
+    "https://i.scdn.co/image/ab67616d0000b2732b95cb5d016ccbe46b3acaf9", 
+    "NA", 
+    1247
   ], 
   [
     "Vienna State Opera Orchestra", 
     "https://i.scdn.co/image/ab67616d0000b273bed8b33eff0c718c4169d072", 
-    null, 
-    1241
-  ], 
-  [
-    "Staatskapelle Berlin", 
-    "https://i.scdn.co/image/653267eaf4d06c56fd77bba38b7fd93f8a6bba11", 
-    null, 
-    1217
+    "NA", 
+    1244
   ], 
   [
     "BBC Symphony Orchestra", 
     "https://i.scdn.co/image/9108ad35156db4694bb30c36174a564c228500c2", 
-    null, 
-    1210
+    "Orchestra", 
+    1221
+  ], 
+  [
+    "Staatskapelle Berlin", 
+    "https://i.scdn.co/image/653267eaf4d06c56fd77bba38b7fd93f8a6bba11", 
+    "Orchestra", 
+    1217
+  ], 
+  [
+    "SWR Symphony Orchestra", 
+    "https://i.scdn.co/image/ab67616d0000b273060b4d9ed54c6b5a8ca53357", 
+    "NA", 
+    1194
   ], 
   [
     "Vocalconsort Berlin", 
     "https://i.scdn.co/image/ab67616d0000b2733085fdcfcdd437bd1a925fc6", 
-    null, 
+    "Musical ensemble", 
     1190
   ], 
   [
     "Wiener Symphoniker", 
     "https://i.scdn.co/image/ab6761610000e5eb9ffcb33c098e294e2da1e71f", 
-    null, 
-    1180
-  ], 
-  [
-    "SWR Symphony Orchestra", 
-    "https://i.scdn.co/image/ab67616d0000b273060b4d9ed54c6b5a8ca53357", 
-    null, 
-    1179
+    "NA", 
+    1181
   ], 
   [
     "K\u00f6lner Akademie", 
     "https://i.scdn.co/image/887a7225d6165c23d4f00fbd47f474618b13a102", 
-    null, 
+    "Orchestra", 
     1176
   ], 
   [
     "M\u00fcnchener Bach-Orchester", 
     "https://i.scdn.co/image/ab67616d0000b273a68e6b389634b988189c2905", 
-    null, 
+    "Musical ensemble", 
     1174
   ], 
   [
     "K\u00f6lner Akademie choir", 
     "https://i.scdn.co/image/ab67616d0000b273571510aaf2c18f224e4a9e1e", 
-    null, 
+    "NA", 
     1080
   ], 
   [
     "Orchestra Del Teatro Alla Scala, Milano", 
     "https://i.scdn.co/image/ab67616d0000b273f56635f3cbadcb84905fad00", 
-    null, 
+    "NA", 
     1075
   ], 
   [
     "Mozarteum Orchestra Salzburg", 
     "https://i.scdn.co/image/5b956e846a98a0a868c403d4d2bf54da386d7e68", 
-    null, 
+    "Orchestra", 
     1064
   ], 
   [
     "Royal Scottish National Orchestra", 
     "https://i.scdn.co/image/ab6761610000e5eb43fe9984ae33bcd94124865c", 
-    null, 
-    1058
+    "Orchestra", 
+    1059
   ]
 ]

@@ -95,17 +95,11 @@ def fillpersoninfo():
         .join(performer_albums)\
         .filter(or_(Performers.hidden == False, Performers.hidden == None))\
         .filter(Performers.description == None) \
-        .group_by(Performers.id).order_by(text('total DESC')).limit(105).all()
+        .group_by(Performers.id).order_by(text('total DESC')).limit(2000).all()
 
     all_artist_dict = {artist.id: artist for artist in Performers.query.all()}
     
     enumerated_list = enumerate(all_people)
-
-    # async def main(person_name):
-    #     auth_key = Config.GOOGLE_KNOWLEDGE_GRAPH_API_KEY
-    #     description = await get_person_details_httpx(person_name, auth_key)
-    #     print(person.name + " - " + str(description))
-    #     return description
 
     async def main(person_names):
         auth_key = Config.GOOGLE_KNOWLEDGE_GRAPH_API_KEY
@@ -123,7 +117,7 @@ def fillpersoninfo():
     id_list = []
     for count, person in enumerated_list:
         
-        if (count + 1) % 50 != 0 and count != len(all_people) - 1:
+        if (count + 1) % 100 != 0 and count != len(all_people) - 1:
             person_list.append(person.name)
             id_list.append(person.id)
 
