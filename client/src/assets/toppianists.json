@@ -12,6 +12,12 @@
     8341
   ], 
   [
+    "Sir Neville Marriner", 
+    "https://i.scdn.co/image/addf4464734979a85ef71a61c421f23a6bc143ae", 
+    "English Violinist", 
+    6466
+  ], 
+  [
     "Maurizio Pollini", 
     "https://i.scdn.co/image/b569f4420a0c5257c26c745a8928cac516dd4144", 
     "Italian pianist", 
@@ -28,6 +34,12 @@
     "https://i.scdn.co/image/ab6761610000e5ebb3f346327ea279f4d48a221c", 
     "Portuguese classical pianist", 
     5217
+  ], 
+  [
+    "Simon Standage", 
+    "https://i.scdn.co/image/0a5c00ae5ecc0bd8687973a3b3321963821468ad", 
+    "English Violinist", 
+    4887
   ], 
   [
     "Jean-Yves Thibaudet", 
@@ -102,6 +114,12 @@
     2543
   ], 
   [
+    "Willi Boskovsky", 
+    "https://i.scdn.co/image/7d3dec7f2a59d395626e0757e92ae8df016abc61", 
+    "Austrian Violinist", 
+    2504
+  ], 
+  [
     "Jen\u0151 Jand\u00f3", 
     "https://i.scdn.co/image/34110ec088c4d87c11a5aaa4744ff893bea593e8", 
     "Hungarian pianist", 
@@ -162,6 +180,18 @@
     1860
   ], 
   [
+    "Gidon Kremer", 
+    "https://i.scdn.co/image/ab6772690000c46c8d1cac6d8a5a1728dd2bc032", 
+    "Latvian Violinist", 
+    1805
+  ], 
+  [
+    "Yehudi Menuhin", 
+    "https://i.scdn.co/image/baa3646450d802f14ef938ff64e3315e1b1cf56d", 
+    "Violinist", 
+    1804
+  ], 
+  [
     "Valentina Lisitsa", 
     "https://i.scdn.co/image/ab6761610000e5eb0fcfc4662d94dad49e635eaf", 
     "Pianist", 
@@ -172,6 +202,12 @@
     "https://i.scdn.co/image/3a11cc5557f26ee484b36f6900d9ad9a643fb543", 
     "Polish-American pianist", 
     1652
+  ], 
+  [
+    "Iona Brown", 
+    "https://i.scdn.co/image/b7ff9a1af84c6093798b4c7bb8227e6a2d06e5e0", 
+    "British Violinist", 
+    1549
   ], 
   [
     "Friedrich Gulda", 
@@ -198,6 +234,12 @@
     1286
   ], 
   [
+    "Arthur Grumiaux", 
+    "https://i.scdn.co/image/c645a27ed94e4ba71b76ae3382b14a261be1af6c", 
+    "Belgian Violinist", 
+    1265
+  ], 
+  [
     "Mitsuko Uchida", 
     "https://i.scdn.co/image/ab6772690000c46c3cb945530367a9a1235d6444", 
     "Japanese-British classical pianist", 
@@ -220,6 +262,12 @@
     "https://i.scdn.co/image/ab6761610000e5ebc29fc86535b609d6ff7d6f6e", 
     "Croatian classical pianist", 
     1186
+  ], 
+  [
+    "Janine Jansen", 
+    "https://i.scdn.co/image/218b36dc81ff0046bb932edb7271b619695f774b", 
+    "Dutch Violinist", 
+    1172
   ], 
   [
     "H\u00e9l\u00e8ne Grimaud", 
@@ -252,6 +300,18 @@
     1107
   ], 
   [
+    "Anne-Sophie Mutter", 
+    "https://i.scdn.co/image/ab6761610000e5ebae5e23c13f72e0ee01dfa99b", 
+    "German Violinist", 
+    1091
+  ], 
+  [
+    "Daniel Hope", 
+    "https://i.scdn.co/image/ab6761610000e5ebf4ff0728843973decb486e5b", 
+    "Violinist", 
+    1090
+  ], 
+  [
     "Jean-Marc Luisada", 
     "https://i.scdn.co/image/ab67616d0000b273d65deb0e66f8521be8cfab6d", 
     "French pianist", 
@@ -276,10 +336,28 @@
     1048
   ], 
   [
+    "Gil Shaham", 
+    "https://i.scdn.co/image/402c9dc81a5b2b4f3a813faa9b9713a161119225", 
+    "American Violinist", 
+    1041
+  ], 
+  [
     "Pierre-Laurent Aimard", 
     "https://i.scdn.co/image/ab6761610000e5eb3afeb2d89eb52cd20bdef3e6", 
     "French pianist", 
     1038
+  ], 
+  [
+    "David Oistrakh", 
+    "https://i.scdn.co/image/13d9002dfc36d27dc5d5e0883b1208846611d295", 
+    "Soviet Violinist", 
+    1025
+  ], 
+  [
+    "Giuliano Carmignola", 
+    "https://i.scdn.co/image/bd3f21e0344c00340f23ddd18afdfe8b4082290b", 
+    "Italian Violinist", 
+    971
   ], 
   [
     "Wilhelm Backhaus", 
@@ -304,6 +382,12 @@
     "https://i.scdn.co/image/ab67616d0000b27352da5c0ba9dd74b1b4f3c781", 
     "French pianist", 
     939
+  ], 
+  [
+    "Itzhak Perlman", 
+    "https://i.scdn.co/image/f1658bc66d1f99ab6d118f26a2abaf7dc33a272f", 
+    "Israeli-American Violinist", 
+    906
   ], 
   [
     "Carmen Piazzini", 
@@ -352,6 +436,12 @@
     "https://i.scdn.co/image/1748b42856a7c92f4c78f1ca609e259327062344", 
     "Pianist", 
     790
+  ], 
+  [
+    "Wolfgang Schneiderhan", 
+    "https://i.scdn.co/image/cc5655359390b27f2841f76b0bb0d22996fe5aa0", 
+    "Austrian Violinist", 
+    787
   ], 
   [
     "Glenn Gould", 
@@ -408,6 +498,12 @@
     723
   ], 
   [
+    "Michel Schwalb\u00e9", 
+    "https://i.scdn.co/image/ab67616d0000b273d29d9f8835468557de18115c", 
+    "French Violinist", 
+    723
+  ], 
+  [
     "Moura Lympany", 
     "https://i.scdn.co/image/1fc7eb746206ad877f0ffe1e69f05361b9b27aac", 
     "Pianist", 
@@ -426,6 +522,18 @@
     713
   ], 
   [
+    "Jascha Heifetz", 
+    "https://i.scdn.co/image/6a7aeef10289f8b1235f7e7a06cce20da2d478a2", 
+    "American Violinist", 
+    711
+  ], 
+  [
+    "Salvatore Accardo", 
+    "https://i.scdn.co/image/a1d5aa98891c86148b9676bdbeab0ae6ac98583d", 
+    "Italian Violinist", 
+    707
+  ], 
+  [
     "Bruno Canino", 
     "https://i.scdn.co/image/366b9559907dee15c15118b14977ae6c4a3bc799", 
     "Italian classical pianist", 
@@ -436,6 +544,18 @@
     "https://i.scdn.co/image/ab6761610000e5eb50b1b97ca0855e8c79d4a68a", 
     "Polish classical pianist", 
     702
+  ], 
+  [
+    "Henryk Szeryng", 
+    "https://i.scdn.co/image/bedd742859780aa41b172d70f40e18c253fb36b1", 
+    "Polish Violinist", 
+    695
+  ], 
+  [
+    "Isaac Stern", 
+    "https://i.scdn.co/image/da5ba5365e8c40f400600257a3c7d4aeb0bec555", 
+    "American Violinist", 
+    686
   ], 
   [
     "Monique Haas", 
@@ -450,6 +570,12 @@
     678
   ], 
   [
+    "Emmy Verhey", 
+    "https://i.scdn.co/image/ab67616d0000b27353c7ff9abdee3e1450dd99f4", 
+    "Dutch Violinist", 
+    678
+  ], 
+  [
     "Yuja Wang", 
     "https://i.scdn.co/image/ab6772690000c46c0c493b30c8a63a6b8fca7027", 
     "Chinese classical pianist", 
@@ -460,131 +586,5 @@
     "https://i.scdn.co/image/ab67616d0000b27337cc205205124f1eb7e117cd", 
     "German classical pianist", 
     669
-  ], 
-  [
-    "Gy\u00f6rgy Cziffra", 
-    "https://i.scdn.co/image/38a70794f098ef9df16b3e41236e20377f6bc30c", 
-    "Hungarian-French pianist", 
-    664
-  ], 
-  [
-    "Jean-Philippe Collard", 
-    "https://i.scdn.co/image/ab6761610000e5ebeedf0dcbdd82c25885af4dfe", 
-    "French pianist", 
-    626
-  ], 
-  [
-    "Krystian Zimerman", 
-    "https://i.scdn.co/image/ab6761610000e5eb501fa094147c4871549cdebd", 
-    "Polish pianist", 
-    625
-  ], 
-  [
-    "Radu Lupu", 
-    "https://i.scdn.co/image/2d1ca54a8db5885ba86c2fbe2c537d9e73d0cb38", 
-    "Romanian pianist", 
-    616
-  ], 
-  [
-    "Cyprien Katsaris", 
-    "https://i.scdn.co/image/ab6761610000e5eb01c8eff209500c993d200ed0", 
-    "French pianist", 
-    615
-  ], 
-  [
-    "Katia Lab\u00e8que", 
-    "https://i.scdn.co/image/ab6761610000e5ebfc2cff65aa74067510ec3db3", 
-    "Pianist \u2027 Marielle Lab\u00e8que's sister", 
-    611
-  ], 
-  [
-    "Alfred Cortot", 
-    "https://i.scdn.co/image/5d765a6f24b44cd0efc2f3fbcd5f09a39b726099", 
-    "French pianist", 
-    591
-  ], 
-  [
-    "Geoffrey Parsons", 
-    "https://i.scdn.co/image/958fdddb46f8007650d82ddb9dfd44b1e09ebfa0", 
-    "Australian pianist", 
-    590
-  ], 
-  [
-    "Karl Engel", 
-    "https://i.scdn.co/image/ae89518f1104a1cbab3c6a9811832e971f8ab5a0", 
-    "Swiss pianist", 
-    590
-  ], 
-  [
-    "Peter Frankl", 
-    "https://i.scdn.co/image/dc2bfe531723703096640b0c412181e36df59370", 
-    "British pianist", 
-    587
-  ], 
-  [
-    "Ronald Brautigam", 
-    "https://i.scdn.co/image/8663342fb37fe89fdffe2f619dc189009b1406db", 
-    "Dutch pianist", 
-    583
-  ], 
-  [
-    "Irwin Gage", 
-    "https://i.scdn.co/image/e8d678301f3bd9baceb48d4a6342730e595c23c8", 
-    "American pianist", 
-    581
-  ], 
-  [
-    "Marielle Lab\u00e8que", 
-    "https://i.scdn.co/image/ab6761610000e5eb0fb3145c575a161f12f61181", 
-    "Pianist", 
-    581
-  ], 
-  [
-    "Garrick Ohlsson", 
-    "https://i.scdn.co/image/5caabdd3d1fa360d057b433b3b1f83664d6acd9e", 
-    "American classical pianist", 
-    574
-  ], 
-  [
-    "Anne Queff\u00e9lec", 
-    "https://i.scdn.co/image/ab6761610000e5eb8f52016c13c5ee521913110a", 
-    "French classical pianist", 
-    574
-  ], 
-  [
-    "Vitaly Margulis", 
-    "NA", 
-    "Classical pianist", 
-    569
-  ], 
-  [
-    "Lazar Berman", 
-    "https://i.scdn.co/image/5f269e478a0f6eca0a0b34c310adfc5d7f622799", 
-    "Classical pianist", 
-    564
-  ], 
-  [
-    "Benjamin Grosvenor", 
-    "https://i.scdn.co/image/ab6761610000e5ebb993ea2bbb0a3da6e977716b", 
-    "British classical pianist", 
-    557
-  ], 
-  [
-    "Dino Ciani", 
-    "https://i.scdn.co/image/ab67616d0000b273d77f296d2ce0d833c753b292", 
-    "Pianist", 
-    553
-  ], 
-  [
-    "Michael Ponti", 
-    "https://i.scdn.co/image/ab67616d0000b2739f369e940b5a16560d9cd768", 
-    "German classical pianist", 
-    545
-  ], 
-  [
-    "Artur Schnabel", 
-    "https://i.scdn.co/image/2861edd1e6cf3ab03fe3c9c55c2d34c9d0d753ca", 
-    "Austrian classical pianist", 
-    539
   ]
 ]

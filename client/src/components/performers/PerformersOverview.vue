@@ -116,11 +116,11 @@ export default {
   },
   methods:{
     shuffleArray(array) {
-      // for (let i = array.length - 1; i > 0; i--) {
-      //   const j = Math.floor(Math.random() * (i + 1));
-      //   [array[i], array[j]] = [array[j], array[i]];
-      // }
-      return array;
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+      return array.slice(0,30);
     },
     toK(num){
       return num.toString().slice(0, -3) + "k";
@@ -130,10 +130,11 @@ export default {
     }
   },
   created() {
-    this.conductors = this.shuffleArray(require('@/assets/topconductors.json'));
-    this.orchestras = this.shuffleArray(require('@/assets/toporchestras.json'));
-    this.pianists = this.shuffleArray(require('@/assets/toppianists.json'));
-    this.singers = this.shuffleArray(require('@/assets/topsingers.json'));
+    let n = 100;
+    this.conductors = this.shuffleArray(require('@/assets/topconductors.json').slice(0, n));
+    this.orchestras = this.shuffleArray(require('@/assets/toporchestras.json').slice(0, n));
+    this.pianists = this.shuffleArray(require('@/assets/toppianists.json').slice(0, n));
+    this.singers = this.shuffleArray(require('@/assets/topsingers.json')).slice(0, n);
   },
 }
 </script>
