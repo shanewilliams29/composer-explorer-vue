@@ -905,6 +905,194 @@ def get_albums(work_id):
     return response
 
 
+@bp.route('/api/albumsview/<work_id>', methods=['GET'])  # retrieves albums for a given work
+def get_albumsview(work_id):
+    page = request.args.get('page', 1, type=int)
+
+    # get filter and search arguments
+    artist_name = request.args.get('artist')
+    sort = request.args.get('sort')
+    limit = request.args.get('limit', default=100)
+    favorites = request.args.get('favorites', default=None)
+
+    # base query
+    query = db.session.query(WorkAlbums, func.count(AlbumLike.id).label('total'))\
+        .outerjoin(AlbumLike).group_by(WorkAlbums.id)
+
+    # filter by criteria
+    query = query.filter(WorkAlbums.workid == work_id, 
+                         WorkAlbums.hidden != True, 
+                         WorkAlbums.work_track_count <= limit)
+
+    # filter by user favorites, if present
+    if favorites:
+        if current_user.is_authenticated:
+            user_id = current_user.id
+        elif Config.MODE == 'DEVELOPMENT':
+            user_id = 85
+        else:
+            user_id = None
+        query = query.filter(AlbumLike.user_id == user_id)
+
+    # make subquery
+    t = query.subquery('t')
+    query = db.session.query(t)
+
+    # filter by artist, if present. Allow compilation albums if artist mode
+    if artist_name:
+        # new Performers table
+        temp = query\
+            .select_from(t.join(performer_albums, t.c.id == performer_albums.c.album_id))\
+            .join(Performers, performer_albums.c.performer_id == Performers.id)\
+            .filter(Performers.name == artist_name)
+        
+        # use old Artists table if no results
+        test_query = temp.all()
+        if len(test_query) < 1:
+            query = query.join(Artists).filter(Artists.name == artist_name)
+        else:
+            query = temp
+    
+    elif favorites:
+        # allow compilation albums in user favorites
+        pass
+    
+    else:
+        # disallow compilation albums unless user favorited
+        query = query.filter(or_(t.c.album_type != "compilation", t.c.total > 0))
+
+    # sort the results. Album type sort rates albums ahead of compilations and singles
+    query = query.order_by(t.c.total.desc(), t.c.album_type, t.c.score.desc())
+
+    # execute the query
+    albums = query.all()
+
+    if not albums:
+        response_object = {'status': 'error'}
+        response_object['albums'] = []
+        response = jsonify(response_object)
+        return response
+
+    # artist list
+    work_artists = db.session.query(Performers.name, func.count(Performers.id).label('total')) \
+        .join(performer_albums)\
+        .join(WorkAlbums)\
+        .filter(WorkAlbums.workid == work_id)\
+        .group_by(Performers.id)\
+        .order_by(text('total DESC'), Performers.name).all()
+
+    # remove composer from list of artists (assume to be first)
+    if len(work_artists) > 1:
+        work_artists.pop(0)
+
+    # get artists from old Artists table if no results
+    if len(work_artists) < 1:
+        work_artists = db.session.query(Artists.name, func.count(Artists.count).label('total')) \
+            .filter(Artists.workid == work_id).group_by(Artists.name) \
+            .order_by(text('total DESC'), Artists.name).all()  # hidden or compilation???
+
+    # put artists in dictionary
+    artist_list = {}
+    artist_list.update(work_artists)
+
+    # decode JSON album data and prepare JSON
+    album_list = []
+    duplicates_set = set()
+    match_string = ""
+
+    for album in albums:
+        item = json.loads(album.data)
+        item['likes'] = album.total
+        item['id'] = album.id
+        item['img_big'] = album.img
+        item['label'] = album.label
+        item['track_count'] = album.track_count
+        item['composer'] = album.composer
+        item['duration'] = album.duration
+
+        # de-rate newer, crappy albums
+        if item['track_count']:
+            if item['track_count'] > 50 and int(item['release_date'][0:4]) > 2019:
+                item['score'] = item['score'] / 4
+
+        # # filter out repeat albums
+        artists_string = "".join(sorted(re.sub(r'[^\w\s]', '', item['artists']).replace(" ", "").lower()))
+
+        if artist_name:  # return more repeat results for performer filter (allow distinct years)
+            match_string = artists_string + str(item['release_date'])
+        else:  # return more unique artists otherwise
+            match_string = artists_string
+
+        # do not include in album list if duplicate, unless it has favorites
+        if match_string in duplicates_set:
+            if(album.total == 0):
+                continue
+        else:
+            duplicates_set.add(match_string)
+        # add to album list
+        album_list.append(item)
+
+        # order so that conductor before orchestra
+        orchestra_list = ['baroque', 'augsburger', 'antiqua', 'milano', 'quartet', 'orchest', 'philharm', 'symphony', 'concert', 'chamber', 'academy', 'staats', 'consort', 'symphoniker', 'covent garden', 'choir', 'akademie', 'stuttgart', 'llscher']
+        two_artists = item['artists'].split(', ')
+
+        for term in orchestra_list:
+            if term.lower() in two_artists[0].lower():
+                two_artists.reverse()
+                item['artists'] = ", ".join(two_artists)
+                break
+        
+    if sort == 'dateascending':
+        sorted_list = sorted(album_list, key=lambda d: d['release_date'])
+    elif sort == 'datedescending':
+        sorted_list = sorted(album_list, key=lambda d: d['release_date'], reverse=True)
+    elif sort == 'durationascending':
+        sorted_list = sorted(album_list, key=lambda d: d['duration'])
+    elif sort == 'durationdescending':
+        sorted_list = sorted(album_list, key=lambda d: d['duration'], reverse=True)
+    else:
+        # sort the album list on popularity and likes (recommended)
+        sorted_list = sorted(album_list, key=lambda d: d['score'], reverse=True)
+        sorted_list = sorted(sorted_list, key=lambda d: d['likes'], reverse=True)
+
+    # return paginated items
+    results_per_page = 30
+    list_start = page * results_per_page - results_per_page
+    list_end = page * results_per_page
+
+    sorted_list = sorted_list[list_start:list_end]
+
+    # get list of current_user's liked albums:
+    search = "%{}%".format(work_id)
+
+    if current_user.is_authenticated:
+        albumlikes = db.session.query(AlbumLike.album_id)\
+            .filter(AlbumLike.user_id == current_user.id, 
+                    AlbumLike.album_id.ilike(search)).all()
+    elif Config.MODE == 'DEVELOPMENT':
+        albumlikes = db.session.query(AlbumLike.album_id)\
+            .filter(AlbumLike.user_id == '85', 
+                    AlbumLike.album_id.ilike(search)).all()
+    else:
+        albumlikes = []
+
+    liked_albums = [album.album_id for album in albumlikes]
+
+    # return response
+    response_object = {'status': 'success'}
+    response_object['albums'] = sorted_list
+    response_object['artists'] = artist_list
+    response_object['liked_albums'] = liked_albums
+
+    if sorted_list:
+        composer = ComposerList.query.filter_by(name_short=sorted_list[0]['composer']).first()
+        return_composer = prepare_composers([composer])
+        response_object['composer'] = return_composer
+
+    response = jsonify(response_object)
+    return response
+
+
 @bp.route('/api/like/<album_id>/<action>')
 def like_action(album_id, action):
     if current_user.is_authenticated:
@@ -1129,7 +1317,7 @@ def get_artistworks():
 
 
 @bp.route('/api/artistlist', methods=['GET'])  # artist list for performer view
-@cache.cached()
+#@cache.cached()
 def get_artistlist():
     artist_list = []
 

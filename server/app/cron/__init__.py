@@ -95,7 +95,7 @@ def fillpersoninfo():
         .join(performer_albums)\
         .filter(or_(Performers.hidden == False, Performers.hidden == None))\
         .filter(Performers.description == None) \
-        .group_by(Performers.id).order_by(text('total DESC')).limit(100).all()
+        .group_by(Performers.id).order_by(text('total DESC')).all()
 
     all_artist_dict = {artist.id: artist for artist in Performers.query.all()}
     
@@ -156,38 +156,6 @@ def fillpersoninfo():
     # finish
     ctx.pop()
     print("Complete!")
-
-# FILLS PERFORMER DATA AND IMAGES FOR ALL COMPOSERS
-@ bp.cli.command()
-def autoperformerfill():
-
-    while True:
-
-        composer_to_fill = db.session.query(ComposerCron).first()
-
-        fillperformerdata(composer_to_fill.id)
-        getspotifyartistimg()
-        getworkdurations(composer_to_fill.id)
-        print("Completed " + str(composer_to_fill.id) + "!")
-
-        indexed_composers = []
-        for value in db.session.query(WorkList.composer).distinct():
-            str(indexed_composers.append(value[0]))
-
-        for composer in indexed_composers:
-            if composer == composer_to_fill.id:
-                index = indexed_composers.index(composer)
-
-                if index == len(indexed_composers) - 1:
-                    next_index = 0
-                else:
-                    next_index = index + 1
-
-                next_composer = indexed_composers[next_index]
-                composer_to_fill.id = next_composer
-                db.session.commit()
-                break
-
 
 # FILLS PERFORMER DATA AND IMAGES FOR ALL COMPOSERS
 @ bp.cli.command()

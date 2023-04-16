@@ -1,187 +1,184 @@
 <template>
   <div>
-  <div v-show="!$view.mobileKeyboard">
-    <div class="container-fluid">
-      <b-navbar type="dark" variant="dark">
-        <b-navbar-brand v-if="!$view.mobile">
-          <img :src="logoURL" class="d-inline-block align-top logo" alt="Composer Explorer" height="40px" />
-        </b-navbar-brand>
-        <b-navbar-brand @click="$router.push('/mobile')" v-if="$view.mobile">
-          <img :src="logoURL" class="d-inline-block align-top logo" alt="Composer Explorer" height="40px" />
-        </b-navbar-brand>
-
-        <div v-if="!$view.mobile">
-          <b-nav pills class="navbar-items buttons-nav">
-            <b-nav-item id="home" :active='$route.path == "/"' @click="$router.push('/')"><b-icon-music-note-list></b-icon-music-note-list>&nbsp;&nbsp;Browse</b-nav-item>
-            <b-nav-item id="performer" :active='$route.name == "performers"' @click="$router.push('/performers')"><b-icon-person-lines-fill></b-icon-person-lines-fill>&nbsp;&nbsp;Performers</b-nav-item>
-            <b-nav-item v-if="$auth.clientToken" id="favorites" :active='$route.name == "favorites"' @click="$router.push('/favorites')"> <b-icon-heart></b-icon-heart>&nbsp;&nbsp;Favorites</b-nav-item>
-            <b-nav-item id="radio" :active='$route.name == "radio"' @click="$router.push('/radio')"> <img :src="radioImgURL" class="radio-img" height="22px" />&nbsp;&nbsp;Radio</b-nav-item>
-            <b-nav-item id="forum" href="/forum" target="_blank"> <b-icon-chat-right-text></b-icon-chat-right-text>&nbsp;&nbsp;Forum&nbsp;<b-badge>{{ unreadPosts }}</b-badge></b-nav-item>
-          </b-nav>
-        </div>
-
+    <div v-show="!$view.mobileKeyboard">
+      <div class="container-fluid">
+        <b-navbar type="dark" variant="dark">
+          <b-navbar-brand v-if="!$view.mobile">
+            <img :src="logoURL" class="d-inline-block align-top logo" alt="Composer Explorer" height="40px" />
+          </b-navbar-brand>
+          <b-navbar-brand @click="$router.push('/mobile')" v-if="$view.mobile">
+            <img :src="logoURL" class="d-inline-block align-top logo" alt="Composer Explorer" height="40px" />
+          </b-navbar-brand>
+          <div v-if="!$view.mobile">
+            <b-nav pills class="navbar-items buttons-nav">
+              <b-nav-item id="home" :active='$route.path == "/"' @click="$router.push('/')">
+                <b-icon-music-note-list></b-icon-music-note-list>&nbsp;&nbsp;Browse
+              </b-nav-item>
+              <b-nav-item id="performer" :active='$route.name == "performers"' @click="$router.push('/performers')">
+                <b-icon-person-lines-fill></b-icon-person-lines-fill>&nbsp;&nbsp;Performers
+              </b-nav-item>
+              <b-nav-item id="albums" :active='$route.name == "albums"' @click="$router.push('/albums')">
+                <b-icon-record-circle></b-icon-record-circle>&nbsp;&nbsp;Albums
+              </b-nav-item>
+              <b-nav-item v-if="$auth.clientToken" id="favorites" :active='$route.name == "favorites"' @click="$router.push('/favorites')">
+                <b-icon-heart></b-icon-heart>&nbsp;&nbsp;Favorites
+              </b-nav-item>
+              <b-nav-item id="radio" :active='$route.name == "radio"' @click="$router.push('/radio')"> <img :src="radioImgURL" class="radio-img" height="22px" />&nbsp;&nbsp;Radio</b-nav-item>
+              <!-- <b-nav-item id="forum" href="/forum" target="_blank"> <b-icon-chat-right-text></b-icon-chat-right-text>&nbsp;&nbsp;Forum&nbsp;<b-badge>{{ unreadPosts }}</b-badge></b-nav-item> -->
+            </b-nav>
+          </div>
           <b-navbar-nav v-if="!$view.mobile" class="search-nav">
             <div class="search-icon">
-            <b-icon-search></b-icon-search>
+              <b-icon-search></b-icon-search>
             </div>
-            
             <b-form-input id="search-form" class="omnisearch" size="sm" v-model="omniSearchInput" v-debounce:500ms="omniSearch" type="search" placeholder="Search composers, works, performers" autocomplete="off"></b-form-input>
           </b-navbar-nav>
-
-        <b-navbar-nav class="ml-auto" v-if="!$auth.clientToken">
-          <b-button v-if="$view.avatar" right variant="success" class="spotify-button" :href="spotifyURL">
-            <img :src="spotifyLogoURL" class="" alt="Spotify" height="28px" />
-          </b-button>
-          <b-nav-item class="menu-button" right v-b-toggle.sidebar-right><b-icon-three-dots-vertical></b-icon-three-dots-vertical></b-nav-item>
-        </b-navbar-nav>
-
-        <b-navbar-nav class="ml-auto" v-if="$auth.clientToken">
-          <b-nav pills class="navbar-items">
-            <b-nav-item v-if="$view.mobile && ($route.name != 'mobileradio')" id="radio" :active='$route.name == "mobileradio"' @click="$router.push('/mobileradio')">
-              <img :src="radioImgURL" class="radio-img" height="22px" />&nbsp;&nbsp;Radio
+          <b-navbar-nav class="ml-auto" v-if="!$auth.clientToken">
+            <b-button v-if="$view.avatar" right variant="success" class="spotify-button" :href="spotifyURL">
+              <img :src="spotifyLogoURL" class="" alt="Spotify" height="28px" />
+            </b-button>
+            <b-nav-item class="menu-button" right v-b-toggle.sidebar-right>
+              <b-icon-three-dots-vertical></b-icon-three-dots-vertical>
             </b-nav-item>
-            <b-nav-item v-if="$view.mobile && ($route.name == 'mobileradio')" id="radio" :active='$route.name == "mobileradio"' @click="$router.push('/mobile')">
-              <img :src="radioImgURL" class="radio-img" height="22px" />&nbsp;&nbsp;Radio
+          </b-navbar-nav>
+          <b-navbar-nav class="ml-auto" v-if="$auth.clientToken">
+            <b-nav pills class="navbar-items">
+              <b-nav-item v-if="$view.mobile && ($route.name != 'mobileradio')" id="radio" :active='$route.name == "mobileradio"' @click="$router.push('/mobileradio')">
+                <img :src="radioImgURL" class="radio-img" height="22px" />&nbsp;&nbsp;Radio
+              </b-nav-item>
+              <b-nav-item v-if="$view.mobile && ($route.name == 'mobileradio')" id="radio" :active='$route.name == "mobileradio"' @click="$router.push('/mobile')">
+                <img :src="radioImgURL" class="radio-img" height="22px" />&nbsp;&nbsp;Radio
+              </b-nav-item>
+            </b-nav>
+            <b-dropdown v-if="$view.avatar" class="avatar-button" right no-caret>
+              <template #button-content>
+                <b-avatar href="#" :src="$auth.avatar"></b-avatar>
+              </template>
+              <b-dropdown-item v-if="!$view.mobile" href="/change_display_name">Change Display Name</b-dropdown-item>
+              <b-dropdown-item v-if="!$view.mobile" href="/change_avatar">Change Avatar</b-dropdown-item>
+              <b-dropdown-item href="/log_out">Log out</b-dropdown-item>
+            </b-dropdown>
+            <b-nav-item class="menu-button" right v-b-toggle.sidebar-right>
+              <b-icon-three-dots-vertical></b-icon-three-dots-vertical>
             </b-nav-item>
-          </b-nav>
-
-          <b-dropdown v-if="$view.avatar" class="avatar-button" right no-caret>
-            <template #button-content>
-              <b-avatar href="#" :src="$auth.avatar"></b-avatar>
-            </template>
-            <b-dropdown-item v-if="!$view.mobile" href="/change_display_name">Change Display Name</b-dropdown-item>
-            <b-dropdown-item v-if="!$view.mobile" href="/change_avatar">Change Avatar</b-dropdown-item>
-            <b-dropdown-item href="/log_out">Log out</b-dropdown-item>
-          </b-dropdown>
-
-          <b-nav-item class="menu-button" right v-b-toggle.sidebar-right><b-icon-three-dots-vertical></b-icon-three-dots-vertical></b-nav-item>
-        </b-navbar-nav>
-      </b-navbar>
-    </div>
-
-    <Transition name="fade">
-      <div v-show="viewSearchResults && !firstLoad" class="overlay" id="overlay"></div>
-    </Transition>
-
-    <Transition name="fade">
-    <div id="search-results" v-show="viewSearchResults && !firstLoad">
-      <b-card class="album-info-card shadow-sm">
-      
-      <div class="spinner" v-show="loading" role="status">
-        <b-spinner class="m-5"></b-spinner>
+          </b-navbar-nav>
+        </b-navbar>
+      </div>
+      <Transition name="fade">
+        <div v-show="viewSearchResults && !firstLoad" class="overlay" id="overlay"></div>
+      </Transition>
+      <Transition name="fade">
+        <div id="search-results" v-show="viewSearchResults && !firstLoad">
+          <b-card class="album-info-card shadow-sm">
+            <div class="spinner" v-show="loading" role="status">
+              <b-spinner class="m-5"></b-spinner>
+            </div>
+            <div v-show="!loading && !firstLoad">
+              <h6 v-if="composers.length + works.length + results.length == 0">No search results.</h6>
+            </div>
+            <b-card-body v-show="!loading" id="composers" class="card-body">
+              <h6 v-if="composers.length > 0">Composers</h6>
+              <b-card-text class="info-card-text">
+                <div v-for="composer in composers" :key="composer['id']">
+                  <table>
+                    <tr>
+                      <td>
+                        <b-avatar size="40px" :src="composer['img']"></b-avatar>
+                      </td>
+                      <td class="info-td">
+                        <a class="artist-name" @click="getComposer(composer)">{{ composer['name_full'] }}</a><br />
+                        <span class="born-died">{{ composer['born']}} - {{ composer['died']}}</span>
+                      </td>
+                    </tr>
+                  </table>
+                </div>
+              </b-card-text>
+            </b-card-body>
+            <b-card-body v-show="!loading" id="works" class="card-body">
+              <h6 v-if="works.length > 0">Works</h6>
+              <b-card-text class="info-card-text">
+                <div v-for="work in works" :key="work['id']">
+                  <table>
+                    <tr>
+                      <td>
+                        <b-avatar size="40px" :src="workImgUrl(work['genre'], work['title'])"></b-avatar>
+                      </td>
+                      <td class="info-td">
+                        <a v-if="work['nickname']" @click="getSearchWork(work)" class="artist-name">{{ work['title'] }} • {{ work['nickname']}}</a>
+                        <a v-else @click="getSearchWork(work)" class="artist-name">{{ work['title'] }}</a><br />
+                        <span v-if="work['cat']" class="born-died">{{ work['composer']}} • {{ work['cat']}}</span>
+                        <span v-else class="born-died">{{ work['composer']}}</span>
+                      </td>
+                    </tr>
+                  </table>
+                </div>
+              </b-card-text>
+            </b-card-body>
+            <b-card-body v-show="!loading" id="performers" class="card-body">
+              <h6 v-if="results.length > 0">Performers</h6>
+              <b-card-text class="info-card-text">
+                <div v-for="result in results" :key="result[0]">
+                  <table>
+                    <tr>
+                      <td>
+                        <b-avatar size="40px" :src="result[2]"></b-avatar>
+                      </td>
+                      <td class="info-td">
+                        <a class="artist-name" @click="getArtistComposers(result[0])">{{ result[0] }}</a><br />
+                        <span class="born-died">{{ result[1] }}</span>
+                      </td>
+                    </tr>
+                  </table>
+                </div>
+              </b-card-text>
+            </b-card-body>
+          </b-card>
         </div>
-
-          <div v-show="!loading && !firstLoad">
-            <h6 v-if="composers.length + works.length + results.length == 0">No search results.</h6>
+      </Transition>
+      <div>
+        <b-sidebar id="sidebar-right" title="" backdrop-variant="dark" width="350px" backdrop right shadow>
+          <div class="px-3 py-0 sidebar-text">
+            <h6>Composer Explorer</h6>
+            <p>Welcome to your Classical Music Portal. Explore composers from the Medieval to the present. Listen to works on Spotify, made navigable for Classical music.</p>
+            <h6>Usage</h6>
+            <p>Log in with your <b>Spotify Premium</b> account to play music. Add performances to your favorites and create your own customized radios.</p>
+            <p v-if="false">
+              <span style="color: red;"><b>Android App:</b></span> Battery optimizations may stop playback (such as when phone is locked). Enable unrestricted battery access to the app in your phone's settings:
+              <span style="color: darkblue;">Settings > Apps > Composer Explorer > Battery > Unrestricted</span>.
+            </p>
+            <h6>Acknowledgements</h6>
+            <p v-if="!$view.mobile">
+              Composer and work information is used under licence from <a href="https://en.wikipedia.org/" target="_blank">Wikipedia</a>, <a href="https://imslp.org/" target="_blank">IMSLP</a>, and
+              <a href="https://openopus.org/" target="_blank">Open Opus</a>. Album data and cover art provided by <a href="https://www.spotify.com/" target="_blank">Spotify</a>.
+            </p>
+            <h6 v-if="!$view.mobile">Donations</h6>
+            <p v-if="!$view.mobile">
+              Composer Explorer is offered as a free and ad-free experience. If you would like to support the costs of hosting and development, please sponsor us on <a href="https://www.patreon.com/composerexplorer" target="_blank">Patreon</a>.
+            </p>
+            <p v-if="$view.mobile">
+              Composer and work information is used under licence from Wikipedia, IMSLP, and Open Opus. Album data and cover art provided by Spotify.
+            </p>
+            <h6>Disclaimer</h6>
+            <p>
+              ComposerExplorer.com is not associated with Spotify Technology SA. Artist, album and track records are retrieved through the Spotify search API and do not necessarily represent the full extent of the Spotify catalogue for a
+              given work. No guarantee is made as to the accuracy of catalogued composer and work information, and use is recommended for recreational purposes only.
+            </p>
+            <h6 v-if="!$view.mobile">GitHub</h6>
+            <p v-if="!$view.mobile">For feature requests and bug reports: <a href="https://github.com/shanewilliams29/composer-explorer-vue/issues" target="_blank">GitHub</a>.</p>
+            <h6>Contact</h6>
+            <p v-if="!$view.mobile">For all inquiries, please contact: <a href="mailto:admin@composerexplorer.com">admin@composerexplorer.com</a></p>
+            <p v-if="$view.mobile">For all inquiries, please contact: admin@composerexplorer.com</p>
+            <h6>Copyright</h6>
+            <p>
+              © 2022 ComposerExplorer.com. All rights reserved.
+            </p>
           </div>
-
-
-        <b-card-body v-show="!loading" id="composers" class="card-body">
-        <h6 v-if="composers.length > 0">Composers</h6>
-          <b-card-text class="info-card-text">
-            <div v-for="composer in composers" :key="composer['id']">
-              <table>
-                <tr>
-                  <td>
-                    <b-avatar size="40px" :src="composer['img']"></b-avatar>
-                  </td>
-                  <td class="info-td">
-                    <a class="artist-name" @click="getComposer(composer)">{{ composer['name_full'] }}</a><br />
-                    <span class="born-died">{{ composer['born']}} - {{ composer['died']}}</span>
-                  </td>
-                </tr>
-              </table>
-            </div>
-          </b-card-text>
-        </b-card-body>
-
-        <b-card-body v-show="!loading" id="works" class="card-body">
-        <h6 v-if="works.length > 0">Works</h6>
-          <b-card-text class="info-card-text">
-            <div v-for="work in works" :key="work['id']">
-              <table>
-                <tr>
-                  <td>
-                    <b-avatar size="40px" :src="workImgUrl(work['genre'], work['title'])"></b-avatar>
-                  </td>
-                  <td class="info-td">
-                    <a v-if="work['nickname']" @click="getSearchWork(work)" class="artist-name">{{ work['title'] }} • {{ work['nickname']}}</a>
-                    <a v-else @click="getSearchWork(work)" class="artist-name">{{ work['title'] }}</a><br />
-                    <span v-if="work['cat']" class="born-died">{{ work['composer']}} • {{ work['cat']}}</span>
-                    <span v-else class="born-died">{{ work['composer']}}</span>
-                  </td>
-                </tr>
-              </table>
-            </div>
-          </b-card-text>
-        </b-card-body>
-
-        <b-card-body v-show="!loading" id="performers" class="card-body">
-        <h6 v-if="results.length > 0">Performers</h6>
-          <b-card-text class="info-card-text">
-            <div v-for="result in results" :key="result[0]">
-              <table>
-                <tr>
-                  <td>
-                    <b-avatar size="40px" :src="result[2]"></b-avatar>
-                  </td>
-                  <td class="info-td">
-                    <a class="artist-name" @click="getArtistComposers(result[0])">{{ result[0] }}</a><br />
-                    <span class="born-died">{{ result[1] }}</span>
-                  </td>
-                </tr>
-              </table>
-            </div>
-          </b-card-text>
-        </b-card-body>
-      </b-card>
-    </div>
-    </Transition>
-    
-    <div>
-      <b-sidebar id="sidebar-right" title="" backdrop-variant="dark" width="350px" backdrop right shadow>
-        <div class="px-3 py-0 sidebar-text">
-          <h6>Composer Explorer</h6>
-          <p>Welcome to your Classical Music Portal. Explore composers from the Medieval to the present. Listen to works on Spotify, made navigable for Classical music.</p>
-          <h6>Usage</h6>
-          <p>Log in with your <b>Spotify Premium</b> account to play music. Add performances to your favorites and create your own customized radios.</p>
-          <p v-if="false">
-            <span style="color: red;"><b>Android App:</b></span> Battery optimizations may stop playback (such as when phone is locked). Enable unrestricted battery access to the app in your phone's settings:
-            <span style="color: darkblue;">Settings > Apps > Composer Explorer > Battery > Unrestricted</span>.
-          </p>
-          <h6>Acknowledgements</h6>
-          <p v-if="!$view.mobile">
-            Composer and work information is used under licence from <a href="https://en.wikipedia.org/" target="_blank">Wikipedia</a>, <a href="https://imslp.org/" target="_blank">IMSLP</a>, and
-            <a href="https://openopus.org/" target="_blank">Open Opus</a>. Album data and cover art provided by <a href="https://www.spotify.com/" target="_blank">Spotify</a>.
-          </p>
-          <h6 v-if="!$view.mobile">Donations</h6>
-          <p v-if="!$view.mobile">
-            Composer Explorer is offered as a free and ad-free experience. If you would like to support the costs of hosting and development, please sponsor us on <a href="https://www.patreon.com/composerexplorer" target="_blank">Patreon</a>.
-          </p>
-          <p v-if="$view.mobile">
-            Composer and work information is used under licence from Wikipedia, IMSLP, and Open Opus. Album data and cover art provided by Spotify.
-          </p>
-          <h6>Disclaimer</h6>
-          <p>
-            ComposerExplorer.com is not associated with Spotify Technology SA. Artist, album and track records are retrieved through the Spotify search API and do not necessarily represent the full extent of the Spotify catalogue for a
-            given work. No guarantee is made as to the accuracy of catalogued composer and work information, and use is recommended for recreational purposes only.
-          </p>
-          <h6 v-if="!$view.mobile">GitHub</h6>
-          <p v-if="!$view.mobile">For feature requests and bug reports:  <a href="https://github.com/shanewilliams29/composer-explorer-vue/issues" target="_blank">GitHub</a>.</p>
-          <h6>Contact</h6>
-          <p v-if="!$view.mobile">For all inquiries, please contact: <a href="mailto:admin@composerexplorer.com">admin@composerexplorer.com</a></p>
-          <p v-if="$view.mobile">For all inquiries, please contact: admin@composerexplorer.com</p>
-          <h6>Copyright</h6>
-          <p>
-            © 2022 ComposerExplorer.com. All rights reserved.
-          </p>
-        </div>
-      </b-sidebar>
-    </div>
-    <div>
+        </b-sidebar>
+      </div>
+      <div>
+      </div>
     </div>
   </div>
-</div>
 </template>
 
 
@@ -474,6 +471,9 @@ export default {
 }
 #performer .active{
   background-color: var(--purple);
+}
+#albums .active{
+  background-color: var(--orange);
 }
 #radio .active{
   background-color: var(--green);

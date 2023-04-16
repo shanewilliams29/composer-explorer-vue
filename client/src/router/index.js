@@ -4,6 +4,7 @@ import PageNotFound from '../views/PageNotFound.vue'
 import HomeView from '../views/HomeView.vue'
 import MobileView from '../views/MobileView.vue'
 import PerformerView from '../views/PerformerView.vue'
+import AlbumView from '../views/AlbumView.vue'
 import RadioView from '../views/RadioView.vue'
 import FavoritesView from '../views/FavoritesView.vue'
 import MobileRadio from '../views/MobileRadio.vue'
@@ -25,6 +26,11 @@ const routes = [
     path: '/performers',
     name: 'performers',
     component: PerformerView
+  },
+    {
+    path: '/albums',
+    name: 'albums',
+    component: AlbumView
   },
   {
     path: '/radio',
