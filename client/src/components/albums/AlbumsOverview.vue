@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="row">
+    <div class="container-fluid">
       <div class="grid-container">
         <div class="grid-item" v-for="album in albums" :key="album.album_id">
           <img class="album-cover" height="auto" v-lazy="album.img_big" />
@@ -87,14 +87,15 @@ export default {
 <style scoped>
 
 .grid-container {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  grid-gap: 10px;
+  grid-auto-flow: dense;
+  padding-top: 10px;
 }
 
 .grid-item {
-  flex: 0 1 calc(25% - 20px);
-  margin: 10px;
+  display: flex;
 }
 
 .album-cover {
