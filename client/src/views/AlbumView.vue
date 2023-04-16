@@ -1,6 +1,6 @@
 <template>
   <div id="performer">
-    <PerformersHeadings/>
+    <AlbumsViewHeading/>
     <div class="container-fluid">
       <Transition name="fade">
       <b-row v-if="showCloud">
@@ -19,18 +19,18 @@
 
 
 <script>
-import PerformersHeadings from '@/components/performers/PerformersHeadings.vue'
+import AlbumsViewHeading from '@/components/albumsview/AlbumsViewHeading.vue'
 import ComposerList from "@/components/composers/ComposerList.vue";
 import WorkList from "@/components/works/WorkList.vue";
 import AlbumList from "@/components/albums/AlbumList.vue";
-import AlbumsOverview from '@/components/albums/AlbumsOverview.vue';
+import AlbumsOverview from '@/components/albumsview/AlbumsOverview.vue';
 
 import {eventBus} from "../main.js";
 
 export default {
   name: 'PerformerView',
   components: {
-    PerformersHeadings,
+    AlbumsViewHeading,
     ComposerList,
     WorkList,
     AlbumList,

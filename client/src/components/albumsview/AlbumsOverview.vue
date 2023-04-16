@@ -29,23 +29,34 @@ export default {
       selectedAlbum: null,
       sort: "",
       message: "",
-      page: 2,
+      page: 1,
       infiniteId: +new Date(),
       currentAlbum: 0,
-      workId: "WAGNER00012"
+      workId: "WAGNER00012",
+      params: {}
     };
   },
   methods:{
-    getAlbums(id) {
+    getAlbums(composer, period, artist) {
       this.loading = true;
-
-      const path = "api/albumsview/" + id;
+      this.params['page'] = 1;
+      if (composer){
+        this.params['composer'] = composer;
+      }
+      if (period){
+        this.params['period'] = period;
+      }
+      if (artist){
+        this.params['artist'] = artist;
+      }
+      const params = this.params;
+      const path = "api/albumsview";
       axios
-        .get(path)
+        .get(path, {params})
         .then((res) => {
           this.loading = false;
           this.albums = res.data.albums;
-          this.message = "";
+          this.params['page'] += 1;
         })
         .catch((error) => {
           console.error(error);
@@ -53,16 +64,19 @@ export default {
         });
     },
     infiniteHandler($state) {
-        const path = "api/albumsview/" + this.workId + "?page=" + this.page;
-        axios.get(path).then(({ data }) => {
-          if (data.albums.length) {
-            this.page += 1;
-            this.albums.push(...data.albums);
-            $state.loaded();
-          } else {
-            $state.complete();
-          }
-        });
+      const params = this.params;
+        const path = "api/albumsview";
+        axios
+          .get(path, {params})
+          .then(({ data }) => {
+            if (data.albums.length) {
+              this.params['page'] += 1;
+              this.albums.push(...data.albums);
+              $state.loaded();
+            } else {
+              $state.complete();
+            }
+          });
     },
     shuffleArray(array) {
       for (let i = array.length - 1; i > 0; i--) {
@@ -79,10 +93,13 @@ export default {
     }
   },
   mounted(){
-    this.getAlbums(this.workId);
+    this.getAlbums(null, null, null);
   },
   created() {
-
+    eventBus.$on("requestAlbumViewAlbums", this.getAlbums);
+  },
+  beforeDestroy() {
+    eventBus.$off("requestAlbumViewAlbums", this.getAlbums);
   },
 }
 </script>

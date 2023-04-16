@@ -18,7 +18,7 @@
                 <b-icon-person-lines-fill></b-icon-person-lines-fill>&nbsp;&nbsp;Performers
               </b-nav-item>
               <b-nav-item id="albums" :active='$route.name == "albums"' @click="$router.push('/albums')">
-                <b-icon-record-circle></b-icon-record-circle>&nbsp;&nbsp;Albums
+                <b-icon-record-circle-fill></b-icon-record-circle-fill>&nbsp;&nbsp;Albums
               </b-nav-item>
               <b-nav-item v-if="$auth.clientToken" id="favorites" :active='$route.name == "favorites"' @click="$router.push('/favorites')">
                 <b-icon-heart></b-icon-heart>&nbsp;&nbsp;Favorites
