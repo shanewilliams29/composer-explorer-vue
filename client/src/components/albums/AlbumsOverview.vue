@@ -1,7 +1,10 @@
 <template>
   <div>
     <div class="container-fluid">
-      <div class="grid-container">
+    <div class="spinner" v-show="loading" role="status">
+      <b-spinner class="m-5"></b-spinner>
+    </div>
+      <div v-show="!loading" class="grid-container">
         <div class="grid-item" v-for="album in albums" :key="album.album_id">
           <img class="album-cover" height="auto" v-lazy="album.img_big" />
         </div>
@@ -29,7 +32,7 @@ export default {
       page: 2,
       infiniteId: +new Date(),
       currentAlbum: 0,
-      workId: "WAGNER00009"
+      workId: "WAGNER00012"
     };
   },
   methods:{
@@ -102,37 +105,12 @@ export default {
   width: 100%;
   height: auto;
 }
-/*.scroll-box{
-  height: calc(80vh - 244px - var(--panelheight));
-  overflow: scroll;
-}*/
-/*.album-cover {
-    margin: 5px;
-    box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
-    width: calc(100% - 25px);
+.spinner {
+  text-align: center;
 }
-.album-cover:hover {
-    cursor: pointer;
+.m-5 {
+    color: #9da6af;
 }
-.scroll-box{
-  height: calc(100vh - 244px - var(--panelheight));
-  overflow: scroll;
-}
-
-.grid-container {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  grid-gap: 5px;
-  grid-auto-flow: dense;
-/*  height: calc(100vh - 244px - var(--panelheight));
-  
-  padding-bottom: 15px;
-  padding-top: 5px;
-}
-.grid-item {
-  display: flex;
-  padding-right: 0px !important;
-}*/
 .album-info-card {
   margin-top: 5px;
   padding: 10px;

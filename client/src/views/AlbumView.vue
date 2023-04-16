@@ -85,4 +85,7 @@ export default {
 >>> .music-note{
   color: var(--purple);
 }
+.display-list{
+  padding: 0px !important;
+}
 </style>
