@@ -10,6 +10,8 @@ export const radioMixin = {
       allowClear: true,
       artistSelect: null,
       title: "",
+      composer: null,
+      period: null,
       artist: null,
       OpenIndicator: {
         render: (createElement) => createElement("span", ""),
@@ -66,24 +68,34 @@ export const radioMixin = {
       }
     },
     composerSelect() {
-        eventBus.$emit("requestAlbumViewAlbums", this.composerSelectField.value, this.periodSelectField, this.artist);
+      this.composer = null;
+      this.period = null;
+      if (this.composerSelectField) {
+        this.composer = this.composerSelectField.value
+      }
+      eventBus.$emit("requestAlbumViewAlbums", this.composer, this.period, this.artist);
     },
     periodSelect() {
+      this.composer = null;
+      this.period = null;
       if (this.periodSelectField) {
-        eventBus.$emit("requestAlbumViewAlbums", this.composerSelectField.value, this.periodSelectField, this.artist);
+        this.period = this.periodSelectField.value
       }
+      eventBus.$emit("requestAlbumViewAlbums", this.composer, this.period, this.artist);
     },
     // workSearch() {
     //   eventBus.$emit("requestWorksForRadio", this.genreSelectField, this.workFilterField.value, this.workSearchField, this.artistSelect, this.radioTypeField.value);
     // },
     artistSearch(artist) {
       this.artist = artist;
-      let composer = null;
-      if (this.composerSelectField) {
-        composer = this.composerSelectField.value
-      }
-      eventBus.$emit("requestAlbumViewAlbums", composer, this.periodSelectField, artist);
+      eventBus.$emit("requestAlbumViewAlbums", this.composer, this.period, this.artist);
     },
+    resetArtistField(input){
+      if (!input) {
+        this.artist = null;
+        eventBus.$emit("requestAlbumViewAlbums", this.composer, this.period, this.artist);
+      }
+    }
   },
   created() {
     if(this.$lists.composerList.length > 0){

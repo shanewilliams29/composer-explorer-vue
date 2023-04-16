@@ -40,15 +40,10 @@ export default {
     getAlbums(composer, period, artist) {
       this.loading = true;
       this.params['page'] = 1;
-      if (composer){
-        this.params['composer'] = composer;
-      }
-      if (period){
-        this.params['period'] = period;
-      }
-      if (artist){
-        this.params['artist'] = artist;
-      }
+      this.params['composer'] = composer;
+      this.params['period'] = period;
+      this.params['artist'] = artist;
+
       const params = this.params;
       const path = "api/albumsview";
       axios

@@ -20,15 +20,29 @@ def get_albumsview():
     page = request.args.get('page', 1, type=int)
     composer_name = request.args.get('composer')
     artist_name = request.args.get('artist')
+    era = request.args.get('period')
     sort = request.args.get('sort')
 
     # base query
     query = db.session.query(WorkAlbums)
-    query = query.filter(WorkAlbums.hidden != True, WorkAlbums.album_type != "compilation")
+    query = query.filter(WorkAlbums.hidden != True)  # WorkAlbums.album_type != "compilation"
     
     # filter on composer if present
     if composer_name and composer_name != "all":
         query = query.filter(WorkAlbums.composer == composer_name)
+
+    # filter on era if present
+    if era and era != "all":
+        eras = {
+            'common': (1500, 1907),
+            'early': (1000, 1600),
+            'baroque': (1550, 1725),
+            'classical': (1711, 1800),
+            'romantic': (1770, 1875),
+            '20th': (1850, 2051),
+        }
+        datemin, datemax = eras.get(era)
+        query = query.join(ComposerList).filter(ComposerList.born >= datemin, ComposerList.born < datemax)
 
     # filter on artist if present
     if artist_name:
@@ -39,7 +53,7 @@ def get_albumsview():
     query = query.order_by(WorkAlbums.album_type, WorkAlbums.score.desc())
 
     # execute the query
-    albums = query.group_by(WorkAlbums.album_id).limit(100)
+    albums = query.group_by(WorkAlbums.album_id).limit(500)
 
     if not albums:
         response_object = {'status': 'error'}

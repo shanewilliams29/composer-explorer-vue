@@ -37,6 +37,7 @@
               placeholder="Search for a performer" 
               class="mt-3 selector performer-search" 
               @hit="artistSearch" 
+              @input="resetArtistField"
               size="sm" 
               :data="$lists.artistList" />
         </b-form-group>
