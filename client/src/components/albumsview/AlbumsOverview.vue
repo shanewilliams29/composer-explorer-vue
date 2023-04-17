@@ -128,7 +128,7 @@ export default {
     }
   },
   mounted(){
-    this.getAlbums(null, null, null);
+    this.getAlbums();
   },
   created() {
     eventBus.$on("requestAlbumViewAlbums", this.getAlbums);

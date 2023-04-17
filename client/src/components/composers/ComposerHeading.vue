@@ -92,7 +92,7 @@ export default {
   padding-top: 5px !important;
 }
 .form-group {
-  margin-bottom: 0px;
+  margin-bottom: 1px;
 }
 .card-body {
   background: none !important;

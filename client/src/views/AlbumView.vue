@@ -7,11 +7,6 @@
         <b-col class="display-list"><AlbumsOverview/></b-col>
       </b-row>
       </Transition>
-      <b-row v-if="!showCloud">
-        <b-col class="display-list first-col" ref="scroll-box-comp"><ComposerList/></b-col>
-        <b-col class="display-list" ref="scroll-box"><WorkList/></b-col>
-        <b-col class="display-list last-col extra-margin"><AlbumList/></b-col>
-      </b-row>
     </div>
   </div>
 </template>
@@ -20,9 +15,6 @@
 
 <script>
 import AlbumsViewHeading from '@/components/albumsview/AlbumsViewHeading.vue'
-import ComposerList from "@/components/composers/ComposerList.vue";
-import WorkList from "@/components/works/WorkList.vue";
-import AlbumList from "@/components/albums/AlbumList.vue";
 import AlbumsOverview from '@/components/albumsview/AlbumsOverview.vue';
 
 import {eventBus} from "../main.js";
@@ -31,9 +23,6 @@ export default {
   name: 'PerformerView',
   components: {
     AlbumsViewHeading,
-    ComposerList,
-    WorkList,
-    AlbumList,
     AlbumsOverview
   },
   data() {
@@ -50,11 +39,7 @@ export default {
     },
   },
   beforeCreate() {
-    if(this.$config.albumSize == 'large'){
-        document.documentElement.style.setProperty('--flex', '0 0 450px');
-    } else {
-        document.documentElement.style.setProperty('--flex', '0 0 450px');
-    }
+    document.documentElement.style.setProperty("--flex", "1");
   },
   created() {
     window.firstLoad = false; // allow playback on first load for performer view

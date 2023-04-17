@@ -55,9 +55,6 @@ export default {
 </script>
 
 <style scoped>
-.display-list{
-  height: calc(100vh - var(--workingheight) - var(--panelheight)) !important;
-}
 >>> .highlight{
   background-color: var(--red);
 }
