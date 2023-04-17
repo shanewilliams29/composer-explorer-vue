@@ -40,10 +40,10 @@ export default {
     };
   },
   methods:{
-    messageBuilder(status, composer, period, artist, sort){
+    messageBuilder(status, composer, period, artist, work, sort){
       if (status == 'success'){
         let message = "Albums"
-        if (!composer && ! period && !artist || period == 'all'){
+        if (!composer && ! period && !artist && !work || period == 'all'){
           return (sort == 'popular' || !sort) ? "Popular albums" : ((sort == 'newest') ? "New releases" : "Historical recordings");
         }
         if (composer) {
@@ -54,6 +54,9 @@ export default {
         }
         if (artist) {
           message = message + " with performances by " + artist;
+        }
+        if (work) {
+          message = message + ", work title: \"" + work + "\"";
         }
         return message;
       } else {
@@ -77,9 +80,14 @@ export default {
           this.loading = false;
           this.albums = res.data.albums;
           if (this.albums.length > 0) {
-            this.message = this.messageBuilder('success', composer, period, artist, sort);
+            this.message = this.messageBuilder('success', composer, period, artist, work, sort);
           } else {
             this.message = "No albums found for query."
+          }
+          if (res.data.works.length > 0) {
+            this.$lists.albumViewWorks = res.data.works;
+          } else {
+            this.$lists.albumViewWorks = this.$lists.workList;
           }
           
           this.params['page'] += 1;
@@ -160,6 +168,7 @@ export default {
   margin-top: 10px;
   text-align: center;
   margin-bottom: 0px;
+  color: var(--medium-gray);
 }
 .album-info-card {
   margin-top: 5px;

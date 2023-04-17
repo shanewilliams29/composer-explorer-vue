@@ -49,7 +49,7 @@
               @hit="workSearch" 
               @input="resetWorkField"
               size="sm" 
-              :data="$lists.workList" />
+              :data="$lists.albumViewWorks" />
         </b-form-group>
       </b-col>
       <b-col class="last-col">

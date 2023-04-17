@@ -23,6 +23,7 @@ def get_albumsview():
     era = request.args.get('period')
     work_title = request.args.get('work')
     sort = request.args.get('sort', default='popular')
+    works_list = []
 
     # base query
     query = db.session.query(WorkAlbums)
@@ -31,6 +32,10 @@ def get_albumsview():
     # filter on composer if present
     if composer_name and composer_name != "all":
         query = query.filter(WorkAlbums.composer == composer_name)
+
+        # get works list for composer
+        works = db.session.query(WorkList.title).filter(WorkList.composer == composer_name).order_by(WorkList.title).distinct()
+        works_list = [work for (work,) in works]
 
     # filter on era if present
     if era and era != "all":
@@ -45,6 +50,12 @@ def get_albumsview():
         datemin, datemax = eras.get(era)
         query = query.join(ComposerList).filter(ComposerList.born >= datemin, ComposerList.born < datemax)
 
+        # get works list for era
+        works = db.session.query(WorkList.title).join(ComposerList, ComposerList.name_short == WorkList.composer)\
+            .filter(ComposerList.born >= datemin, ComposerList.born < datemax)\
+            .order_by(WorkList.title).distinct()
+        works_list = [work for (work,) in works]
+    
     # filter on artist if present
     if artist_name:
         query = query.join(performer_albums).join(Performers)\
@@ -64,6 +75,7 @@ def get_albumsview():
     if not albums:
         response_object = {'status': 'error'}
         response_object['albums'] = []
+        response_object['works'] = []
         response = jsonify(response_object)
         return response
 
@@ -132,6 +144,7 @@ def get_albumsview():
     # return response
     response_object = {'status': 'success'}
     response_object['albums'] = sorted_list
+    response_object['works'] = works_list
 
     if sorted_list:
         composer = ComposerList.query.filter_by(name_short=sorted_list[0]['composer']).first()

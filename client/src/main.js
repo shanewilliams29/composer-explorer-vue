@@ -86,12 +86,13 @@ Vue.prototype.$auth = Vue.observable({
     displayName: null
 });
 
-// stores lists to download from server only once at startup
+// stores lists used in dropdowns
 Vue.prototype.$lists = Vue.observable({
     artistDict: [],
     artistList: [],
     composerList: [],
     workList: [],
+    albumViewWorks: [],
 });
 
 // view stores view configuration, not saved betwen sessions

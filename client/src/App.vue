@@ -97,12 +97,13 @@ export default {
         });
     },
     getWorksList() {
-      // Gets list of all artists for performer and omni search, radio mode
+      // Gets list of all works for album view mode
       const path = "api/workslist";
       axios
         .get(path)
         .then((res) => {
           this.$lists.workList = res.data.works
+          this.$lists.albumViewWorks = this.$lists.workList
         })
         .catch((error) => {
           console.error(error);
