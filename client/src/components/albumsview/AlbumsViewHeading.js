@@ -116,8 +116,11 @@ export const albumsMixin = {
       this.composer = null;
       this.period = null;
       if (this.composerSelectField) {
-        this.composer = this.composerSelectField.value
+        this.composer = this.composerSelectField.value;
       }
+      // reset works field as well
+      this.workSelect = '';
+      this.work = null;
       eventBus.$emit("requestAlbumViewAlbums", this.composer, this.period, this.artist, this.work, this.sort);
     },
     periodSelect() {

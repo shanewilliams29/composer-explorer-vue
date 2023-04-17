@@ -56,7 +56,7 @@ export default {
           message = message + " with performances by " + artist;
         }
         if (work) {
-          message = message + ", work title: \"" + work + "\"";
+          message = message + " with work titled \"" + work + "\"";
         }
         return message;
       } else {
