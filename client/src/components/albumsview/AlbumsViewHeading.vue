@@ -36,9 +36,18 @@
               v-model="artistSelect" 
               placeholder="Search for a performer" 
               class="mt-3 selector performer-search" 
-              ref="typeahead"
+              ref="artistTypeahead"
               @hit="artistSearch" 
               @input="resetArtistField"
+              size="sm" 
+              :data="$lists.artistList" />
+            <vue-typeahead-bootstrap 
+              v-model="workSelect" 
+              placeholder="Search for a work" 
+              class="mt-3 selector performer-search" 
+              ref="workTypeahead"
+              @hit="workSearch" 
+              @input="resetWorkField"
               size="sm" 
               :data="$lists.artistList" />
         </b-form-group>
@@ -46,6 +55,12 @@
       <b-col class="last-col">
         <b-form-group>
           <v-select v-model="albumSortField" label="text" :options="albumSortOptions" @input="albumSortSelect()" :clearable="false" class="mt-3 selector" :searchable="false"></v-select>
+          <b-button class="radio-button-off" size="sm" 
+            v-if="clearInputActive" 
+            @click="clearInputs()" block>Clear Inputs</b-button>
+          <b-button class="radio-button-off-disabled" size="sm" 
+            v-if="!clearInputActive" 
+            @click="clearInputs()" disabled block>Clear Inputs</b-button>
         </b-form-group>
       </b-col>
     </b-row>

@@ -1,6 +1,9 @@
 <template>
   <div>
     <div class="container-fluid">
+    <h6 class="message">
+      {{ message }}
+    </h6>
     <div class="spinner" v-show="loading" role="status">
       <b-spinner class="m-5"></b-spinner>
     </div>
@@ -37,6 +40,26 @@ export default {
     };
   },
   methods:{
+    messageBuilder(status, composer, period, artist, sort){
+      if (status == 'success'){
+        let message = "Albums"
+        if (!composer && ! period && !artist || period == 'all'){
+          return (sort == 'popular' || !sort) ? "Popular albums" : ((sort == 'newest') ? "New releases" : "Historical recordings");
+        }
+        if (composer) {
+          message = message + " featuring " + composer;
+        } else if (period) {
+          period = (period == '20th') ? "20th/21st century" : period;
+          message = (period.charAt(0).toUpperCase() + period.slice(1)) + " music " + message.toLowerCase();
+        }
+        if (artist) {
+          message = message + " with performances by " + artist;
+        }
+        return message;
+      } else {
+        return "Error retrieving albums from database! Please try again later."
+      }
+    },
     getAlbums(composer, period, artist, sort) {
       this.loading = true;
       this.params['page'] = 1;
@@ -52,9 +75,16 @@ export default {
         .then((res) => {
           this.loading = false;
           this.albums = res.data.albums;
+          if (this.albums.length > 0) {
+            this.message = this.messageBuilder('success', composer, period, artist, sort);
+          } else {
+            this.message = "No albums found for query."
+          }
+          
           this.params['page'] += 1;
         })
         .catch((error) => {
+          this.message = this.messageBuilder('error');
           console.error(error);
           this.loading = false;
         });
@@ -117,12 +147,18 @@ export default {
 .album-cover {
   width: 100%;
   height: auto;
+  box-shadow: rgba(0, 0, 0, 0.2) 0px 1px 4px;
 }
 .spinner {
   text-align: center;
 }
 .m-5 {
     color: #9da6af;
+}
+.message{
+  margin-top: 10px;
+  text-align: center;
+  margin-bottom: 0px;
 }
 .album-info-card {
   margin-top: 5px;

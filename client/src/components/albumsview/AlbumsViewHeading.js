@@ -10,6 +10,7 @@ export const albumsMixin = {
       period: null,
       artist: null,
       sort: 'popular',
+      clearInputActive: false,
 
       OpenIndicator: {
         render: (createElement) => createElement("span", ""),
@@ -47,11 +48,17 @@ export const albumsMixin = {
     gotComposerList() {
       return this.$lists.composerList;
     },
+    inputsMade() {
+      return this.composer || this.period || this.artist;
+    },
   },
   watch: {
     gotComposerList() {
       this.makeComposerDropdown(this.$lists.composerList);
     },
+    inputsMade(bool){
+      this.clearInputActive = bool;
+    }
   },
   methods: {
     clearInputOnFocus() {
@@ -66,6 +73,15 @@ export const albumsMixin = {
       } else {
         console.log("DO NOTHING");
       }
+    },
+    clearInputs(){
+      this.composerSelectField = null;
+      this.periodSelectField = null;
+      this.composer = null;
+      this.period = null;
+      this.artistSelect = '';
+      this.resetArtistField();
+      this.albumSortField.value = 'popular';
     },
     filterFieldSelect(){
       this.composerSelectField = null;
@@ -119,11 +135,11 @@ export const albumsMixin = {
     }
   },
   mounted() {
-    const inputElement = this.$refs.typeahead.$el.querySelector('input');
+    const inputElement = this.$refs.artistTypeahead.$el.querySelector('input');
     inputElement.addEventListener('focus', this.clearInputOnFocus);
   },
   beforeDestroy() {
-    const inputElement = this.$refs.typeahead.$el.querySelector('input');
+    const inputElement = this.$refs.artistTypeahead.$el.querySelector('input');
     inputElement.removeEventListener('focus', this.clearInputOnFocus);
   },
 };
