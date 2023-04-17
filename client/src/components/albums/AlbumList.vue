@@ -8,7 +8,7 @@
         {{ message }}
       </span>
       <span v-show="!loading && albums.length < 1 && !this.$view.mode && !this.message" class="m-4 col no-albums-found">
-        No albums found.
+        No albums found
       </span>
     </div>
     <div v-if="albums">
@@ -420,8 +420,9 @@ export default {
   padding-right: 5px;
 }
 .no-albums-found {
-  font-size: 14px;
-  color: grey;
+  font-size: 15px;
+  color: var(--medium-gray) !important;
   text-align: center;
+  font-family: Roboto Condensed !important;
 }
 </style>

@@ -116,7 +116,7 @@ export default {
           this.message = `Select a composer to view works`;
         }
         if(!this.$view.mode && this.$config.composer){
-          this.message = `No works found for ${this.$config.composer} (yet!)`;
+          this.message = `No works found for ${this.$config.composer}`;
         }
         if(this.$view.mode == 'performer' && this.$config.artist){
           this.message = `Select a composer to view performances by ${this.$config.artist}`;
@@ -699,6 +699,9 @@ export default {
 </script>
 
 <style scoped>\
+.narrow{
+  font-family: Roboto Condensed !important;
+ }
 .collapsed .when-closed {
     display: show;
 }
@@ -723,16 +726,10 @@ export default {
   max-width: 1px;
   color: grey;
 }
-.narrow{
-  font-family: Roboto Condensed !important;
-}
 .spinner {
     text-align: center;
 }
 .m-5 {
-    color: #9da6af;
-}
-.m-4 {
     color: #9da6af;
 }
 .card-deck {
@@ -845,8 +842,9 @@ tr:hover {
     top: -1px;
 }
 .no-works-found {
-    font-size: 14px;
-    color: grey;
-    text-align: center;
+  font-size: 15px;
+  color: var(--medium-gray) !important;
+  text-align: center;
+  font-family: Roboto Condensed !important;
 }
 </style>

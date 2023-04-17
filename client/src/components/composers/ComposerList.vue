@@ -5,7 +5,7 @@
     </div>
     <div class="row">
       <span class="m-4 col no-composers-found" v-show="!loading && composers.length < 1 && !$view.mode">
-        No composers found.
+        No composers found
       </span>
       <b-card-group deck v-show="!loading">
         <b-card 
@@ -427,10 +427,12 @@ header.card-header:hover {
   padding-right: 5px;
 }
 .no-composers-found {
-  font-size: 14px;
-  color: grey;
+  font-size: 15px;
+  color: var(--medium-gray);
   text-align: center;
+  font-family: Roboto Condensed !important;
 }
+
 .collapsing {
     -webkit-transition: none !important;
     transition: none !important;

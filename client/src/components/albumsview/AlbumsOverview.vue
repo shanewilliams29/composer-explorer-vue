@@ -171,7 +171,7 @@ export default {
 .message{
   margin-top: 10px;
   text-align: center;
-  margin-bottom: 0px;
+  margin-bottom: 2px;
   color: var(--medium-gray);
 }
  .narrow{

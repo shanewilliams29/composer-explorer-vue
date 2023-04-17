@@ -1,6 +1,6 @@
 <template>
   <div>
-    <b-row class="message">
+    <b-row class="message narrow">
       <b-col >
         Conductors
       </b-col>
@@ -162,12 +162,15 @@ export default {
   margin-bottom: 5px;
   color: var(--medium-gray);
 }
+.narrow{
+  font-family: Roboto Condensed !important;
+ }
 .grid-container {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
   grid-gap: 5px;
   grid-auto-flow: dense;
-  height: calc(100vh - 244px - var(--panelheight) - 24px);
+  height: calc(100vh - 244px - var(--panelheight) - 29px);
   overflow: auto;
   padding-bottom: 15px;
   padding-top: 5px;
