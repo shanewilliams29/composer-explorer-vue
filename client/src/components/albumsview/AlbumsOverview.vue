@@ -1,8 +1,8 @@
 <template>
   <div>
     <div class="container-fluid">
-    <h6 class="message">
-      {{ message }}
+    <h6 class="message narrow">
+       <div v-html="message" />
     </h6>
     <div class="spinner" v-show="loading" role="status">
       <b-spinner class="m-5"></b-spinner>
@@ -47,16 +47,16 @@ export default {
           return (sort == 'popular' || !sort) ? "Popular albums" : ((sort == 'newest') ? "New releases" : "Historical recordings");
         }
         if (composer) {
-          message = message + " featuring " + composer;
+          message = message + " featuring <b>" + composer +'</b>';
         } else if (period) {
-          period = (period == '20th') ? "20th/21st century" : period;
-          message = (period.charAt(0).toUpperCase() + period.slice(1)) + " music " + message.toLowerCase();
+          period = (period == '20th') ? "<b>20th/21st century</b>" : period;
+          message = "<b>" + (period.charAt(0).toUpperCase() + period.slice(1)) + "</b> music " + message.toLowerCase();
         }
         if (artist) {
-          message = message + " with performances by " + artist;
+          message = message + " with performances by <b>" + artist + '</b>';
         }
         if (work) {
-          message = message + " with work titled \"" + work + "\"";
+          message = message + " with work titled <b>" + work + "</b>";
         }
         return message;
       } else {
@@ -82,7 +82,11 @@ export default {
           if (this.albums.length > 0) {
             this.message = this.messageBuilder('success', composer, period, artist, work, sort);
           } else {
-            this.message = "No albums found for query."
+            if (artist && composer){
+              this.message = "No albums found for <b>" + artist + "</b> performing <b>" + composer + "</b>."
+            } else {
+              this.message = "No albums found for query."
+            }
           }
           if (res.data.works.length > 0) {
             this.$lists.albumViewWorks = res.data.works;
@@ -170,6 +174,9 @@ export default {
   margin-bottom: 0px;
   color: var(--medium-gray);
 }
+ .narrow{
+  font-family: Roboto Condensed !important;
+ }
 .album-info-card {
   margin-top: 5px;
   padding: 10px;

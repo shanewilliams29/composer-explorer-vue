@@ -30,7 +30,7 @@ export const albumsMixin = {
       periodSelectField: null,
       periodOptions: [
         // { value: "popular", text: "Most popular" },
-        { value: "all", text: "All" },
+        // { value: "all", text: "All" },
         { value: "early", text: "Early" },
         { value: "baroque", text: "Baroque" },
         { value: "classical", text: "Classical" },
@@ -107,7 +107,7 @@ export const albumsMixin = {
     },
     makeComposerDropdown(composers) {
       this.composerOptions = [];
-      this.composerOptions.push({ value: "all", text: "All composers" });
+      // this.composerOptions.push({ value: "all", text: "All composers" });
       for (const composer of composers) {
         this.composerOptions.push({ value: composer, text: composer });
       }
