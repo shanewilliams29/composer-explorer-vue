@@ -5,19 +5,16 @@ export const albumsMixin = {
     return {
       allowArtistClear: false,
       allowWorkClear: false,
-      artistSelect: null,
-      workSelect: null,
-      title: "",
-      composer: null,
-      period: null,
-      artist: null,
-      work: null,
-      sort: 'popular',
       clearInputActive: false,
 
-      OpenIndicator: {
-        render: (createElement) => createElement("span", ""),
+      fieldData: {
+        composer: null,
+        period: null,
+        artist: null,
+        work: null,
+        sort: 'popular',
       },
+
       filterField: { value: "composer", text: "Filter by composer" },
       filterFieldOptions: [
         { value: "composer", text: "Filter by composer" },
@@ -29,15 +26,15 @@ export const albumsMixin = {
 
       periodSelectField: null,
       periodOptions: [
-        // { value: "popular", text: "Most popular" },
-        // { value: "all", text: "All" },
         { value: "early", text: "Early" },
         { value: "baroque", text: "Baroque" },
         { value: "classical", text: "Classical" },
         { value: "romantic", text: "Romantic" },
         { value: "20th", text: "20th/21st Century" },
-        // { value: "all", text: "All" },
       ],
+
+      artistSelectField: null,
+      workSelectField: null,
 
       albumSortField: { value: "popular", text: "Most popular" },
       albumSortOptions: [
@@ -52,7 +49,7 @@ export const albumsMixin = {
       return this.$lists.composerList;
     },
     inputsMade() {
-      return this.composer || this.period || this.artist || this.work;
+      return this.fieldData.composer || this.fieldData.period || this.fieldData.artist || this.fieldData.work;
     },
   },
   watch: {
@@ -65,38 +62,30 @@ export const albumsMixin = {
   },
   methods: {
     clearArtistInputOnFocus() {
-      let value = this.artistSelect
+      let value = this.artistSelectField
       if (value && this.allowArtistClear) {
-        console.log("CLEAR INPUT");
-        this.artistSelect = '';
+        this.artistSelectField = null;
         this.resetArtistField();
       } else if (value && !this.allowArtistClear) {
-        console.log("BLOCK CLEAR");
         this.allowArtistClear = true;
-      } else {
-        console.log("DO NOTHING");
       }
     },
     clearWorkInputOnFocus() {
-      let value = this.workSelect
+      let value = this.workSelectField
       if (value && this.allowWorkClear) {
-        console.log("CLEAR INPUT");
-        this.workSelect = '';
+        this.workSelectField = '';
         this.resetWorkField();
       } else if (value && !this.allowWorkClear) {
-        console.log("BLOCK CLEAR");
         this.allowWorkClear = true;
-      } else {
-        console.log("DO NOTHING");
       }
     },
     clearInputs(){
       this.composerSelectField = null;
       this.periodSelectField = null;
-      this.composer = null;
-      this.period = null;
-      this.artistSelect = '';
-      this.workSelect = '';
+      this.fieldData.composer = null;
+      this.fieldData.period = null;
+      this.artistSelectField = null;
+      this.workSelectField = null;
       this.resetArtistField();
       this.resetWorkField();
       this.albumSortField.value = 'popular';
@@ -113,52 +102,52 @@ export const albumsMixin = {
       }
     },
     composerSelect() {
-      this.composer = null;
-      this.period = null;
+      this.fieldData.composer = null;
+      this.fieldData.period = null;
       if (this.composerSelectField) {
-        this.composer = this.composerSelectField.value;
+        this.fieldData.composer = this.composerSelectField.value;
       }
       // reset works field as well
-      this.workSelect = '';
-      this.work = null;
-      eventBus.$emit("requestAlbumViewAlbums", this.composer, this.period, this.artist, this.work, this.sort);
+      this.workSelectField = null;
+      this.fieldData.work = null;
+      eventBus.$emit("requestAlbumViewAlbums", this.fieldData);
     },
     periodSelect() {
-      this.composer = null;
-      this.period = null;
+      this.fieldData.composer = null;
+      this.fieldData.period = null;
       if (this.periodSelectField) {
-        this.period = this.periodSelectField.value
+        this.fieldData.period = this.periodSelectField.value
       }
       // reset works field as well
-      this.workSelect = '';
-      this.work = null;
-      eventBus.$emit("requestAlbumViewAlbums", this.composer, this.period, this.artist, this.work, this.sort);
+      this.workSelectField = null;
+      this.fieldData.work = null;
+      eventBus.$emit("requestAlbumViewAlbums", this.fieldData);
     },
     workSearch(work) {
-      this.work = work;
-      eventBus.$emit("requestAlbumViewAlbums", this.composer, this.period, this.artist, this.work, this.sort);
+      this.fieldData.work = work;
+      eventBus.$emit("requestAlbumViewAlbums", this.fieldData);
     },
     artistSearch(artist) {
-      this.artist = artist;
-      eventBus.$emit("requestAlbumViewAlbums", this.composer, this.period, this.artist, this.work, this.sort);
+      this.fieldData.artist = artist;
+      eventBus.$emit("requestAlbumViewAlbums", this.fieldData);
     },
     resetArtistField(input){
       this.allowArtistClear = false;
       if (!input) {
-        this.artist = null;
-        eventBus.$emit("requestAlbumViewAlbums", this.composer, this.period, this.artist, this.work, this.sort);
+        this.fieldData.artist = null;
+        eventBus.$emit("requestAlbumViewAlbums", this.fieldData);
       }
     },
     resetWorkField(input){
       this.allowWorkClear = false;
       if (!input) {
-        this.work = null;
-        eventBus.$emit("requestAlbumViewAlbums", this.composer, this.period, this.artist, this.work, this.sort);
+        this.fieldData.work = null;
+        eventBus.$emit("requestAlbumViewAlbums", this.fieldData);
       }
     },
     albumSortSelect(){
-      this.sort = this.albumSortField.value
-      eventBus.$emit("requestAlbumViewAlbums", this.composer, this.period, this.artist, this.work, this.sort);
+      this.fieldData.sort = this.albumSortField.value
+      eventBus.$emit("requestAlbumViewAlbums", this.fieldData);
     }
   },
   created() {

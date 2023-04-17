@@ -33,7 +33,7 @@
       <b-col>
         <b-form-group>
             <vue-typeahead-bootstrap 
-              v-model="artistSelect" 
+              v-model="artistSelectField" 
               placeholder="Search for a performer" 
               class="mt-3 selector performer-search" 
               ref="artistTypeahead"
@@ -42,7 +42,7 @@
               size="sm" 
               :data="$lists.artistList" />
             <vue-typeahead-bootstrap 
-              v-model="workSelect" 
+              v-model="workSelectField" 
               placeholder="Search for a work" 
               class="mt-3 selector work-search" 
               ref="workTypeahead"

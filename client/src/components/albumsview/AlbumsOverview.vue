@@ -29,18 +29,20 @@ export default {
     return {
       albums: [],
       loading: false,
-      selectedAlbum: null,
-      sort: "",
       message: "",
       page: 1,
       infiniteId: +new Date(),
-      currentAlbum: 0,
-      workId: "WAGNER00012",
       params: {}
     };
   },
   methods:{
-    messageBuilder(status, composer, period, artist, work, sort){
+    messageBuilder(status, fieldData){
+      let composer = fieldData.composer;
+      let period = fieldData.period;
+      let artist = fieldData.artist;
+      let work = fieldData.work;
+      let sort = fieldData.sort;
+
       if (status == 'success'){
         let message = "Albums"
         if (!composer && ! period && !artist && !work || period == 'all'){
@@ -63,14 +65,10 @@ export default {
         return "Error retrieving albums from database! Please try again later."
       }
     },
-    getAlbums(composer, period, artist, work, sort) {
-      this.loading = true;
+    getAlbums(fieldData) {
+      this.params = fieldData;
       this.params['page'] = 1;
-      this.params['composer'] = composer;
-      this.params['period'] = period;
-      this.params['artist'] = artist;
-      this.params['work'] = work;
-      this.params['sort'] = sort;
+      this.loading = true;
 
       const params = this.params;
       const path = "api/albumsview";
@@ -80,10 +78,10 @@ export default {
           this.loading = false;
           this.albums = res.data.albums;
           if (this.albums.length > 0) {
-            this.message = this.messageBuilder('success', composer, period, artist, work, sort);
+            this.message = this.messageBuilder('success', fieldData);
           } else {
-            if (artist && composer){
-              this.message = "No albums found for <b>" + artist + "</b> performing <b>" + composer + "</b>."
+            if (fieldData.artist && fieldData.composer){
+              this.message = "No albums found for <b>" + fieldData.artist + "</b> performing <b>" + fieldData.composer + "</b>."
             } else {
               this.message = "No albums found for query."
             }
@@ -132,7 +130,7 @@ export default {
     }
   },
   mounted(){
-    this.getAlbums();
+    this.getAlbums(this.params);
   },
   created() {
     eventBus.$on("requestAlbumViewAlbums", this.getAlbums);
