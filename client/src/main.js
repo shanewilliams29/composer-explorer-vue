@@ -91,6 +91,7 @@ Vue.prototype.$lists = Vue.observable({
     artistDict: [],
     artistList: [],
     composerList: [],
+    workList: [],
 });
 
 // view stores view configuration, not saved betwen sessions

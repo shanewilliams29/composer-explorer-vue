@@ -13,7 +13,7 @@
               @input="composerSelect()"
               placeholder="Select composer"
               :clearable="true"
-              class="mt-3 selector allow-wrap"
+              class="mt-3 selector"
               :searchable="true"
             ></v-select>
             <v-select
@@ -24,7 +24,7 @@
               @input="periodSelect()"
               placeholder="Select period/era"
               :clearable="true"
-              class="mt-3 selector allow-wrap"
+              class="mt-3 selector"
               :searchable="false"
             ></v-select>
           </b-form-group>
@@ -44,12 +44,12 @@
             <vue-typeahead-bootstrap 
               v-model="workSelect" 
               placeholder="Search for a work" 
-              class="mt-3 selector performer-search" 
+              class="mt-3 selector work-search" 
               ref="workTypeahead"
               @hit="workSearch" 
               @input="resetWorkField"
               size="sm" 
-              :data="$lists.artistList" />
+              :data="$lists.workList" />
         </b-form-group>
       </b-col>
       <b-col class="last-col">

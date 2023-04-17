@@ -96,6 +96,18 @@ export default {
           console.error(error);
         });
     },
+    getWorksList() {
+      // Gets list of all artists for performer and omni search, radio mode
+      const path = "api/workslist";
+      axios
+        .get(path)
+        .then((res) => {
+          this.$lists.workList = res.data.works
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    },
     getComposerList() {
       // Gets list for radio composers multiselect dropdown
       this.$lists.composerList = []
@@ -127,6 +139,7 @@ export default {
   mounted(){
     this.getArtistList();
     this.getComposerList();
+    this.getWorksList();
   }
 };
 

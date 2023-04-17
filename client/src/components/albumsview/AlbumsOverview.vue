@@ -60,12 +60,13 @@ export default {
         return "Error retrieving albums from database! Please try again later."
       }
     },
-    getAlbums(composer, period, artist, sort) {
+    getAlbums(composer, period, artist, work, sort) {
       this.loading = true;
       this.params['page'] = 1;
       this.params['composer'] = composer;
       this.params['period'] = period;
       this.params['artist'] = artist;
+      this.params['work'] = work;
       this.params['sort'] = sort;
 
       const params = this.params;

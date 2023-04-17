@@ -3,12 +3,15 @@ import { eventBus } from "@/main.js";
 export const albumsMixin = {
   data() {
     return {
-      allowClear: false,
+      allowArtistClear: false,
+      allowWorkClear: false,
       artistSelect: null,
+      workSelect: null,
       title: "",
       composer: null,
       period: null,
       artist: null,
+      work: null,
       sort: 'popular',
       clearInputActive: false,
 
@@ -49,7 +52,7 @@ export const albumsMixin = {
       return this.$lists.composerList;
     },
     inputsMade() {
-      return this.composer || this.period || this.artist;
+      return this.composer || this.period || this.artist || this.work;
     },
   },
   watch: {
@@ -61,15 +64,28 @@ export const albumsMixin = {
     }
   },
   methods: {
-    clearInputOnFocus() {
+    clearArtistInputOnFocus() {
       let value = this.artistSelect
-      if (value && this.allowClear) {
+      if (value && this.allowArtistClear) {
         console.log("CLEAR INPUT");
         this.artistSelect = '';
         this.resetArtistField();
-      } else if (value && !this.allowClear) {
+      } else if (value && !this.allowArtistClear) {
         console.log("BLOCK CLEAR");
-        this.allowClear = true;
+        this.allowArtistClear = true;
+      } else {
+        console.log("DO NOTHING");
+      }
+    },
+    clearWorkInputOnFocus() {
+      let value = this.workSelect
+      if (value && this.allowWorkClear) {
+        console.log("CLEAR INPUT");
+        this.workSelect = '';
+        this.resetWorkField();
+      } else if (value && !this.allowWorkClear) {
+        console.log("BLOCK CLEAR");
+        this.allowWorkClear = true;
       } else {
         console.log("DO NOTHING");
       }
@@ -80,7 +96,9 @@ export const albumsMixin = {
       this.composer = null;
       this.period = null;
       this.artistSelect = '';
+      this.workSelect = '';
       this.resetArtistField();
+      this.resetWorkField();
       this.albumSortField.value = 'popular';
     },
     filterFieldSelect(){
@@ -100,7 +118,7 @@ export const albumsMixin = {
       if (this.composerSelectField) {
         this.composer = this.composerSelectField.value
       }
-      eventBus.$emit("requestAlbumViewAlbums", this.composer, this.period, this.artist, this.sort);
+      eventBus.$emit("requestAlbumViewAlbums", this.composer, this.period, this.artist, this.work, this.sort);
     },
     periodSelect() {
       this.composer = null;
@@ -108,25 +126,33 @@ export const albumsMixin = {
       if (this.periodSelectField) {
         this.period = this.periodSelectField.value
       }
-      eventBus.$emit("requestAlbumViewAlbums", this.composer, this.period, this.artist, this.sort);
+      eventBus.$emit("requestAlbumViewAlbums", this.composer, this.period, this.artist, this.work, this.sort);
     },
-    // workSearch() {
-    //   eventBus.$emit("requestWorksForRadio", this.genreSelectField, this.workFilterField.value, this.workSearchField, this.artistSelect, this.radioTypeField.value);
-    // },
+    workSearch(work) {
+      this.work = work;
+      eventBus.$emit("requestAlbumViewAlbums", this.composer, this.period, this.artist, this.work, this.sort);
+    },
     artistSearch(artist) {
       this.artist = artist;
-      eventBus.$emit("requestAlbumViewAlbums", this.composer, this.period, this.artist, this.sort);
+      eventBus.$emit("requestAlbumViewAlbums", this.composer, this.period, this.artist, this.work, this.sort);
     },
     resetArtistField(input){
-      this.allowClear = false;
+      this.allowArtistClear = false;
       if (!input) {
         this.artist = null;
-        eventBus.$emit("requestAlbumViewAlbums", this.composer, this.period, this.artist, this.sort);
+        eventBus.$emit("requestAlbumViewAlbums", this.composer, this.period, this.artist, this.work, this.sort);
+      }
+    },
+    resetWorkField(input){
+      this.allowWorkClear = false;
+      if (!input) {
+        this.work = null;
+        eventBus.$emit("requestAlbumViewAlbums", this.composer, this.period, this.artist, this.work, this.sort);
       }
     },
     albumSortSelect(){
       this.sort = this.albumSortField.value
-      eventBus.$emit("requestAlbumViewAlbums", this.composer, this.period, this.artist, this.sort);
+      eventBus.$emit("requestAlbumViewAlbums", this.composer, this.period, this.artist, this.work, this.sort);
     }
   },
   created() {
@@ -135,11 +161,17 @@ export const albumsMixin = {
     }
   },
   mounted() {
-    const inputElement = this.$refs.artistTypeahead.$el.querySelector('input');
-    inputElement.addEventListener('focus', this.clearInputOnFocus);
+    const inputArtistElement = this.$refs.artistTypeahead.$el.querySelector('input');
+    inputArtistElement.addEventListener('focus', this.clearArtistInputOnFocus);
+
+    const inputWorkElement = this.$refs.workTypeahead.$el.querySelector('input');
+    inputWorkElement.addEventListener('focus', this.clearWorkInputOnFocus);    
   },
   beforeDestroy() {
-    const inputElement = this.$refs.artistTypeahead.$el.querySelector('input');
-    inputElement.removeEventListener('focus', this.clearInputOnFocus);
+    const inputArtistElement = this.$refs.artistTypeahead.$el.querySelector('input');
+    inputArtistElement.removeEventListener('focus', this.clearArtistInputOnFocus);
+
+    const inputWorkElement = this.$refs.workTypeahead.$el.querySelector('input');
+    inputWorkElement.removeEventListener('focus', this.clearWorkInputOnFocus);
   },
 };

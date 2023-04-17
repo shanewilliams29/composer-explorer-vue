@@ -21,6 +21,7 @@ def get_albumsview():
     composer_name = request.args.get('composer')
     artist_name = request.args.get('artist')
     era = request.args.get('period')
+    work_title = request.args.get('work')
     sort = request.args.get('sort', default='popular')
 
     # base query
@@ -48,6 +49,11 @@ def get_albumsview():
     if artist_name:
         query = query.join(performer_albums).join(Performers)\
             .filter(Performers.name == artist_name)
+
+    # filter on work if present
+    if work_title:
+        query = query.join(WorkList)\
+            .filter(WorkList.title == work_title)
 
     # sort the results. Album type sort rates albums ahead of compilations and singles
     query = query.order_by(WorkAlbums.album_type, WorkAlbums.score.desc())
@@ -132,6 +138,21 @@ def get_albumsview():
         return_composer = prepare_composers([composer])
         response_object['composer'] = return_composer
 
+    response = jsonify(response_object)
+    return response
+
+
+@bp.route('/api/workslist', methods=['GET'])  # work list for album view
+#@cache.cached()
+def get_workslist():
+    works_list = []
+
+    works = db.session.query(WorkList.title).order_by(WorkList.title).distinct()
+
+    works_list = [work for (work,) in works]
+
+    response_object = {'status': 'success'}
+    response_object['works'] = works_list
     response = jsonify(response_object)
     return response
 
