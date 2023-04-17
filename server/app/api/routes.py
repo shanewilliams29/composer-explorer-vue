@@ -21,7 +21,7 @@ def get_albumsview():
     composer_name = request.args.get('composer')
     artist_name = request.args.get('artist')
     era = request.args.get('period')
-    sort = request.args.get('sort')
+    sort = request.args.get('sort', default='popular')
 
     # base query
     query = db.session.query(WorkAlbums)
@@ -106,14 +106,12 @@ def get_albumsview():
                 item['artists'] = ", ".join(two_artists)
                 break
         
-    if sort == 'dateascending':
-        sorted_list = sorted(album_list, key=lambda d: d['release_date'])
-    elif sort == 'datedescending':
+    if sort == 'popular':
+        sorted_list = sorted(album_list, key=lambda d: d['score'], reverse=True)
+    elif sort == 'newest':
         sorted_list = sorted(album_list, key=lambda d: d['release_date'], reverse=True)
-    elif sort == 'durationascending':
-        sorted_list = sorted(album_list, key=lambda d: d['duration'])
-    elif sort == 'durationdescending':
-        sorted_list = sorted(album_list, key=lambda d: d['duration'], reverse=True)
+    elif sort == 'oldest':
+        sorted_list = sorted(album_list, key=lambda d: d['release_date'])
     else:
         # sort the album list on popularity and likes (recommended)
         sorted_list = sorted(album_list, key=lambda d: d['score'], reverse=True)

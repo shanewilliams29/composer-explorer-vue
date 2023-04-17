@@ -37,12 +37,13 @@ export default {
     };
   },
   methods:{
-    getAlbums(composer, period, artist) {
+    getAlbums(composer, period, artist, sort) {
       this.loading = true;
       this.params['page'] = 1;
       this.params['composer'] = composer;
       this.params['period'] = period;
       this.params['artist'] = artist;
+      this.params['sort'] = sort;
 
       const params = this.params;
       const path = "api/albumsview";

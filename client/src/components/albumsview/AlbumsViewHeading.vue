@@ -36,6 +36,7 @@
               v-model="artistSelect" 
               placeholder="Search for a performer" 
               class="mt-3 selector performer-search" 
+              ref="typeahead"
               @hit="artistSearch" 
               @input="resetArtistField"
               size="sm" 
@@ -44,18 +45,17 @@
       </b-col>
       <b-col class="last-col">
         <b-form-group>
-          <v-select v-model="albumFilter" label="text" :options="albumFilterOptions" @input="albumFIlterSelect()" :clearable="false" class="mt-3 selector" :searchable="false"></v-select>
+          <v-select v-model="albumSortField" label="text" :options="albumSortOptions" @input="albumSortSelect()" :clearable="false" class="mt-3 selector" :searchable="false"></v-select>
         </b-form-group>
       </b-col>
     </b-row>
-    <PlaylistModal @submit="exportSpotify"/>
   </div>
 </template>
 
 <script>
-import { radioMixin } from "./AlbumsViewHeading.js"
+import { albumsMixin } from "./AlbumsViewHeading.js"
 export default {
-  mixins: [radioMixin],
+  mixins: [albumsMixin],
 }
 </script>
 

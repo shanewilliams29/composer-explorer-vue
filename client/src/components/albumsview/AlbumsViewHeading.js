@@ -1,18 +1,16 @@
 import { eventBus } from "@/main.js";
-import PlaylistModal from "@/components/modals/PlaylistModal.vue";
 
-export const radioMixin = {
-  components: {
-    PlaylistModal,
-  },
+export const albumsMixin = {
   data() {
     return {
-      allowClear: true,
+      allowClear: false,
       artistSelect: null,
       title: "",
       composer: null,
       period: null,
       artist: null,
+      sort: 'popular',
+
       OpenIndicator: {
         render: (createElement) => createElement("span", ""),
       },
@@ -37,11 +35,11 @@ export const radioMixin = {
         // { value: "all", text: "All" },
       ],
 
-      albumFilter: { value: "popular", text: "Most popular" },
-      albumFilterOptions: [
+      albumSortField: { value: "popular", text: "Most popular" },
+      albumSortOptions: [
         { value: "popular", text: "Most popular" },
-        { value: "newest", text: "New releases" },
-        { value: "oldest", text: "Historical recordings" },
+        { value: "newest", text: "Newest releases" },
+        { value: "oldest", text: "Older recordings" },
       ],
     };
   },
@@ -56,6 +54,19 @@ export const radioMixin = {
     },
   },
   methods: {
+    clearInputOnFocus() {
+      let value = this.artistSelect
+      if (value && this.allowClear) {
+        console.log("CLEAR INPUT");
+        this.artistSelect = '';
+        this.resetArtistField();
+      } else if (value && !this.allowClear) {
+        console.log("BLOCK CLEAR");
+        this.allowClear = true;
+      } else {
+        console.log("DO NOTHING");
+      }
+    },
     filterFieldSelect(){
       this.composerSelectField = null;
       this.periodSelectField = null;
@@ -73,7 +84,7 @@ export const radioMixin = {
       if (this.composerSelectField) {
         this.composer = this.composerSelectField.value
       }
-      eventBus.$emit("requestAlbumViewAlbums", this.composer, this.period, this.artist);
+      eventBus.$emit("requestAlbumViewAlbums", this.composer, this.period, this.artist, this.sort);
     },
     periodSelect() {
       this.composer = null;
@@ -81,20 +92,25 @@ export const radioMixin = {
       if (this.periodSelectField) {
         this.period = this.periodSelectField.value
       }
-      eventBus.$emit("requestAlbumViewAlbums", this.composer, this.period, this.artist);
+      eventBus.$emit("requestAlbumViewAlbums", this.composer, this.period, this.artist, this.sort);
     },
     // workSearch() {
     //   eventBus.$emit("requestWorksForRadio", this.genreSelectField, this.workFilterField.value, this.workSearchField, this.artistSelect, this.radioTypeField.value);
     // },
     artistSearch(artist) {
       this.artist = artist;
-      eventBus.$emit("requestAlbumViewAlbums", this.composer, this.period, this.artist);
+      eventBus.$emit("requestAlbumViewAlbums", this.composer, this.period, this.artist, this.sort);
     },
     resetArtistField(input){
+      this.allowClear = false;
       if (!input) {
         this.artist = null;
-        eventBus.$emit("requestAlbumViewAlbums", this.composer, this.period, this.artist);
+        eventBus.$emit("requestAlbumViewAlbums", this.composer, this.period, this.artist, this.sort);
       }
+    },
+    albumSortSelect(){
+      this.sort = this.albumSortField.value
+      eventBus.$emit("requestAlbumViewAlbums", this.composer, this.period, this.artist, this.sort);
     }
   },
   created() {
@@ -103,7 +119,11 @@ export const radioMixin = {
     }
   },
   mounted() {
+    const inputElement = this.$refs.typeahead.$el.querySelector('input');
+    inputElement.addEventListener('focus', this.clearInputOnFocus);
   },
   beforeDestroy() {
+    const inputElement = this.$refs.typeahead.$el.querySelector('input');
+    inputElement.removeEventListener('focus', this.clearInputOnFocus);
   },
 };
