@@ -15,6 +15,18 @@ import re
 import time
 
 
+@bp.route('/api/getalbumworks', methods=['GET'])  # work list for selected album in albums view
+#@cache.cached()
+def get_albumworks():
+    works = db.session.query(WorkList).order_by(WorkList.title).limit(3)
+    work_list = [work for work in works]
+
+    response_object = {'status': 'success'}
+    response_object['works'] = work_list
+    response = jsonify(response_object)
+    return response
+
+
 @bp.route('/api/albumsview', methods=['GET'])  # retrieves albums for a given work
 def get_albumsview():
     page = request.args.get('page', 1, type=int)
