@@ -23,7 +23,7 @@
             <div class="spinner-left" v-show="albumDataLoading" role="status">
               <b-spinner class="m-5"></b-spinner>
             </div>
-            <div>
+  
             <tr v-show="!albumDataLoading && albumWorks.length > 0" v-for="[work, data] in albumWorks" :key="work.id">
               <td class="work-td">
                 <span class="album-work-composer">{{ work.composer }} </span><br>
@@ -36,7 +36,7 @@
                       <b-icon-clock></b-icon-clock></span>&nbsp;{{ printDuration(data.tracks) }}</span><br>
               </td>
             </tr>
-          </div>
+   
           </table>
       </div>
       </td>
@@ -368,13 +368,10 @@ export default {
   z-index: 100;
 }
 
-table{
+table.no-wrap{
+ border-collapse: collapse;
   width: 100%;
-}
-
-table.no-wrap {
-  border-collapse: collapse;
-  white-space: nowrap;
+  table-layout: fixed; /* Add this property */
 }
 
 table.no-wrap th, table.no-wrap td {
@@ -384,6 +381,7 @@ table.no-wrap th, table.no-wrap td {
   white-space: nowrap;
   padding-top: 10px;
   padding-bottom: 10px;
+  width: 100%;
 
 }
 
