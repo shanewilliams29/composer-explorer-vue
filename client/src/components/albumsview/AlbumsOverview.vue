@@ -341,9 +341,9 @@ export default {
   line-height: 16px;
   padding: 0px;
   position: fixed !important;
-  top: calc(50%);
+  top: 50%;
   left: 50%;
-  transform: translate(-50%, calc(-50% - 33px - var(--panelheight)/2));
+  transform: translate(-50%, calc(-50% - 33px + 16px - var(--panelheight)/2));
   box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
   background-color: var(--dark-gray);
   z-index: 100;
@@ -378,7 +378,7 @@ table.no-wrap th, table.no-wrap td {
 .album-popup-cover{
   box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
 /*  max-height: calc(80vh - var(--workingheight));*/
-  max-height: calc(100vh - 244px - var(--panelheight) - 29px);
+  max-height: calc(100vh - 66px - var(--panelheight) - 100px - 40px);
   max-width: 50vw;
 }
 
