@@ -1,80 +1,68 @@
 <template>
   <div>
-      <Transition name="fade">
-        <div v-show="showCover" id="albums-overlay"></div>
-      </Transition>
-      <!-- ALBUM POPUP -->
-     <Transition name="fade">
-      <div>
+    <Transition name="fade">
+      <div v-show="showCover" id="albums-overlay"></div>
+    </Transition>
+
+    <!-- ALBUM POPUP -->
+    <div>
       <div class="" v-for="album in albums" :key="album.album_id">
         <table>
-        <tr class="popup" :class="{'reveal': (showAlbum == album.album_id)}">
-          <td>
-            <img class="album-popup-cover" :ref="album.album_id" :src="album.img_big" />
-          </td>
-          <td>
-            <div class="image-caption">
-              <tr>
-              <span class="album-title">{{ album.album_name }} </span><br>
-              <span class="album-details">℗ {{ album.release_date }}</span>
-              <span class="album-details"> {{ album.label }} </span><br><br>
-              </tr>
-              <table class="no-wrap">
-                <div class="spinner-left" v-show="albumDataLoading" role="status">
-                  <b-spinner class="m-5"></b-spinner>
-                </div>
-              <tr v-show="!albumDataLoading && albumWorks.length > 0"
-                v-for="[work, data] in albumWorks" :key="work.id">
-                <td class="work-td">
-              <span class="album-work-composer">{{ work.composer }} </span><br>
-              <span class="album-work-title">{{ work.title }} &nbsp;</span>
-              <span v-if="work.cat" class="album-work-cat">{{ work.cat }}</span><br>
-              <span v-if="params.artist" class="album-highlight-artist">{{ highlightArtist(data.all_artists) }}</span>
-               <span v-if="highlightArtist(data.all_artists)" class="album-work-artists">, </span>
-              <span class="album-work-artists">{{ printArtists(data.artists) }}</span><br>
+          <tr class="popup" :class="{'reveal': (showAlbum == album.album_id)}">
+            <td>
+              <img class="album-popup-cover" :ref="album.album_id" :src="album.img_big" />
+            </td>
+            <td>
+              <div class="image-caption">
+          <tr>
+            <span class="album-title">{{ album.album_name }} </span><br>
+            <span class="album-details">℗ {{ album.release_date }}</span>
+            <span class="album-details"> {{ album.label }} </span><br><br>
+          </tr>
+          <table class="no-wrap">
+            <div class="spinner-left" v-show="albumDataLoading" role="status">
+              <b-spinner class="m-5"></b-spinner>
+            </div>
+            <div>
+            <tr v-show="!albumDataLoading && albumWorks.length > 0" v-for="[work, data] in albumWorks" :key="work.id">
+              <td class="work-td">
+                <span class="album-work-composer">{{ work.composer }} </span><br>
+                <span class="album-work-title">{{ work.title }} &nbsp;</span>
+                <span v-if="work.cat" class="album-work-cat">{{ work.cat }}</span><br>
+                <span v-if="params.artist" class="album-highlight-artist">{{ highlightArtist(data.all_artists) }}</span>
+                <span v-if="highlightArtist(data.all_artists)" class="album-work-artists">, </span>
+                <span class="album-work-artists">{{ printArtists(data.artists) }}</span><br>
+                <span class="album-work-artists"><span style='font-size: 10px;'>
+                      <b-icon-clock></b-icon-clock></span>&nbsp;{{ printDuration(data.tracks) }}</span><br>
               </td>
-              </tr>
-            </table>
-            </div>
-          </td>          
-        </tr>
-      </table>
-      </div>
-    </div>
-      </Transition>
-        <!-- ALBUM POPUP -->
-<!--       <Transition name="fade">
-        <div>
-        <div v-for="album in albums" :key="album.album_id">
-          <div class="popup" :class="{'reveal': (showAlbum == album.album_id)}">
-            <img class="album-popup-cover" :ref="album.album_id" :src="album.img_big" />
-            <div class="image-caption">
-              <span class="album-major-artists">{{ album.artists }}</span><br />
-              <span v-if="album.minor_artists" class="album-minor-artists">{{ album.minor_artists }}</span>
-            </div>
+            </tr>
           </div>
-        </div>
+          </table>
       </div>
-      </Transition> -->
+      </td>
+      </tr>
+      </table>
+    </div>
+  </div>
 
-    <!-- ALBUM GRID -->
-    <div class="container-fluid">
+  <!-- ALBUM GRID -->
+  <div class="container-fluid">
     <h6 class="message narrow">
-       <div v-html="message" />
+      <div v-html="message" />
     </h6>
     <div class="spinner" v-show="loading" role="status">
       <b-spinner class="m-5"></b-spinner>
     </div>
-      <div v-show="!loading" class="grid-container">
-        <div class="grid-item" v-for="album in albums" :key="album.album_id">
-          <img @click="showCover = album.album_id" class="album-cover" height="auto" v-lazy="album.img_big" />
-        </div>
-        <infinite-loading spinner="spiral" :identifier="infiniteId" @infinite="infiniteHandler">
-          <div slot="no-more"></div>
-          <div slot="no-results"></div>
-        </infinite-loading>
+    <div v-show="!loading" class="grid-container">
+      <div class="grid-item" v-for="album in albums" :key="album.album_id">
+        <img @click="showCover = album.album_id" class="album-cover" height="auto" v-lazy="album.img_big" />
       </div>
+      <infinite-loading spinner="spiral" :identifier="infiniteId" @infinite="infiniteHandler">
+        <div slot="no-more"></div>
+        <div slot="no-results"></div>
+      </infinite-loading>
     </div>
+  </div>
   </div>
 </template>
 
@@ -115,6 +103,29 @@ export default {
     }
   },
   methods: {
+    durationAlt(ms) {
+      let seconds = Math.floor(ms / 1000);
+      let hours = Math.floor(seconds / 3600);
+      seconds = seconds - (hours * 3600);
+      let minutes = Math.round(seconds / 60);
+
+      if (hours > 1) {
+        return hours + "h" + minutes + "m";
+      } else {
+        return minutes + "m"
+      }
+    },
+    duration(ms) {
+      let seconds = Math.floor(ms / 1000);
+      let hours = Math.round(seconds / 3600 * 10) / 10;
+      let minutes = Math.round(seconds / 60);
+
+      if (hours > 1) {
+        return hours + "h";
+      } else {
+        return minutes + "m"
+      }
+    },
     highlightArtist(artists){
       if (this.params.artist) {
         if(artists.includes(this.params.artist)){
@@ -127,6 +138,7 @@ export default {
       }
     },
     printArtists(artists){
+      // console.log(artists);
       if (this.params.artist) {
         if(artists.includes(this.params.artist + ",")){
           return artists.replace(this.params.artist + ",", '');
@@ -139,6 +151,13 @@ export default {
       } else {
         return artists;
       }
+    },
+    printDuration(tracks){
+      let duration = 0;
+      for (var i = 0; i < tracks.length; i++) {
+        duration = duration + tracks[i][3];
+      }
+      return this.durationAlt(duration);
     },
     messageBuilder(status, fieldData) {
       if (!fieldData || Object.keys(fieldData).length === 0) {
