@@ -33,7 +33,7 @@
                 <span v-if="highlightArtist(data.all_artists)" class="album-work-artists">, </span>
                 <span class="album-work-artists">{{ printArtists(data.artists) }}</span><br>
                 <span class="album-work-artists"><span style='font-size: 10px;'>
-                      <b-icon-clock></b-icon-clock></span>&nbsp;{{ printDuration(data.tracks) }}</span><br>
+                      <b-icon-clock></b-icon-clock></span>&nbsp;{{ printDuration(data.tracks) }}</span>&nbsp;<b-badge class="plain-badge">{{printFull(work.duration, data.tracks)}}</b-badge>
               </td>
             </tr>
    
@@ -157,7 +157,17 @@ export default {
       for (var i = 0; i < tracks.length; i++) {
         duration = duration + tracks[i][3];
       }
-      return this.durationAlt(duration);
+      return this.duration(duration);
+    },
+    printFull(workDuration, tracks){
+      let duration = 0;
+      for (var i = 0; i < tracks.length; i++) {
+        duration = duration + tracks[i][3];
+      }
+      if (duration < workDuration / 2){
+        return "Excerpt"
+      }
+      return "Full";
     },
     messageBuilder(status, fieldData) {
       if (!fieldData || Object.keys(fieldData).length === 0) {
@@ -458,6 +468,11 @@ td.work-td:hover {
  .narrow{
   font-family: Roboto Condensed !important;
  }
+ .plain-badge{
+  font-size: 10px;
+  font-family: Roboto Condensed !important;
+}
+
 
  /*scrollbars*/
 .image-caption {
