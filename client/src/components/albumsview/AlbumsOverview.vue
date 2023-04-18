@@ -1,7 +1,7 @@
 <template>
   <div>
       <Transition name="fade">
-        <div v-show="showCover" class="overlay" id="albums-overlay"></div>
+        <div v-show="showCover" id="albums-overlay"></div>
       </Transition>
       <!-- ALBUM POPUP -->
      <Transition name="fade">
@@ -262,6 +262,9 @@ export default {
 }
 </script>
 
+
+
+
 <style scoped>
 .fade-enter-active,
 .fade-leave-active {
@@ -276,7 +279,7 @@ export default {
   opacity: 0;
 }
 
-     .overlay {
+     #albums-overlay {
             display: block;
             position: fixed;
             top: 66px;
@@ -284,8 +287,9 @@ export default {
             width: 100%;
             height: calc(100vh - 66px - 100px);
             background: rgba(52, 58, 64, 0.5);
-            z-index: 1;
+
         }
+
 .album-title {
   color: var(--my-white) !important;
   font-weight: 600;
@@ -336,13 +340,13 @@ export default {
   max-width: calc(var(--imagewidth) * 1.8);
   line-height: 16px;
   padding: 0px;
-  position: fixed;
+  position: absolute !important;
   top: calc(50% + 22.1px);
   left: 50%;
   transform: translate(-50%, -50%);
   box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
   background-color: var(--dark-gray);
-  z-index: 9999;
+  z-index: 100;
 }
 
 table.no-wrap {

@@ -168,8 +168,9 @@ export default {
 }
 #footer {
   height: 200px !important;
+  position: fixed;
   background: none;
-  z-index: 1000;
+  z-index: 9999;
 }
 .info-panel {
   position: fixed;
