@@ -25,7 +25,7 @@
                 </div>
               <tr v-show="!albumDataLoading && albumWorks.length > 0"
                 v-for="[work, data] in albumWorks" :key="work.id">
-                <td>
+                <td class="work-td">
               <span class="album-work-composer">{{ work.composer }} </span><br>
               <span class="album-work-title">{{ work.title }} &nbsp;</span>
               <span v-if="work.cat" class="album-work-cat">{{ work.cat }}</span><br>
@@ -268,7 +268,7 @@ export default {
 <style scoped>
 .fade-enter-active,
 .fade-leave-active {
-  transition: all 0.15s;
+  transition: all 0.5s;
 }
 
 .fade-enter {
@@ -286,7 +286,7 @@ export default {
             left: 0;
             width: 100%;
             height: calc(100vh - 66px - 100px);
-            background: rgba(52, 58, 64, 0.5);
+            background: rgba(52, 58, 64, 0.65);
 
         }
 
@@ -319,7 +319,7 @@ export default {
 }
 
 .album-highlight-artist{
-  color: var(--yellow) !important;
+  color: turquoise !important;
   font-weight: 600;
   font-size: 12px;
   font-family: Roboto Condensed !important;
@@ -344,9 +344,13 @@ export default {
   top: 50%;
   left: 50%;
   transform: translate(-50%, calc(-50% - 33px + 16px - var(--panelheight)/2));
-  box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
   background-color: var(--dark-gray);
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
   z-index: 100;
+}
+
+table{
+  width: 100%;
 }
 
 table.no-wrap {
@@ -355,6 +359,8 @@ table.no-wrap {
 }
 
 table.no-wrap th, table.no-wrap td {
+  border-left: solid 1px white;
+  padding-left: 10px;
   text-align: left;
   white-space: nowrap;
   padding-top: 10px;
@@ -362,10 +368,18 @@ table.no-wrap th, table.no-wrap td {
 
 }
 
+
+/* Change color of the table cell when hovering over it */
+td.work-td:hover {
+    background-color: var(--medium-gray); /* Choose your desired color */
+    color: #454D54; /* Choose your desired text color */
+    cursor: pointer;
+}
+
 .image-caption {
   visibility: inherit;
   width: 100%;
-  min-width: calc(var(--imagewidth) / 2);
+  min-width: calc(var(--imagewidth) / 1.75);
   padding-top: 15px;
   padding-bottom: 15px;
   padding-left: 15px;
