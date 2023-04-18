@@ -18,7 +18,8 @@ import time
 @bp.route('/api/getalbumworks', methods=['GET'])  # work list for selected album in albums view
 #@cache.cached()
 def get_albumworks():
-    works = db.session.query(WorkList).order_by(WorkList.title).limit(3)
+    album_id = request.args.get('album_id')
+    works = db.session.query(WorkList).join(WorkAlbums).filter(WorkAlbums.album_id == album_id).order_by(WorkList.composer, WorkList.title).all()
     work_list = [work for work in works]
 
     response_object = {'status': 'success'}

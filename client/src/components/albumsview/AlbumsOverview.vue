@@ -1,7 +1,7 @@
 <template>
   <div>
       <!-- ALBUM POPUP -->
-      <div v-for="album in albums" :key="album.album_id">
+      <div class="" v-for="album in albums" :key="album.album_id">
         <table>
         <tr class="popup" :class="{'reveal': (showAlbum == album.album_id)}">
           <td>
@@ -10,10 +10,9 @@
           <td>
             <div class="image-caption">
               <tr>
-              <span class="album-title">{{ album.album_name }} </span><br />
-              <span class="album-details">℗ {{ album.release_date }} </span>
-              <span class="album-details"> {{ album.label }} </span><br />
-              <br />
+              <span class="album-title">{{ album.album_name }} </span><br>
+              <span class="album-details">℗ {{ album.release_date }}</span>
+              <span class="album-details"> {{ album.label }} </span><br><br>
               </tr>
               <table class="no-wrap">
                 <div class="spinner-left" v-show="albumDataLoading" role="status">
@@ -21,10 +20,11 @@
                 </div>
               <tr v-show="!albumDataLoading && albumWorks.length > 0"
                 v-for="work in albumWorks" :key="work.id">
-              <span class="album-work-composer">{{ work.composer }} </span><br />
-              <span class="album-work-title">{{ work.title }} </span><br />
-              <span v-if="work.cat" class="album-work-cat">{{ work.cat }} <br/></span>
-              <br/>
+                <td>
+              <span class="album-work-composer">{{ work.composer }} </span><br>
+              <span class="album-work-title">{{ work.title }} </span><br>
+              <span v-if="work.cat" class="album-work-cat">{{ work.cat }}</span>
+              </td>
               </tr>
             </table>
             </div>
@@ -92,11 +92,13 @@ export default {
       if (this.showCover) {
         console.log(this.showCover);
         const imageWidth = this.$refs[this.showCover][0].width;
+        const imageHeight = this.$refs[this.showCover][0].height;
         if (imageWidth == 0) {
           return false;
         }
         this.getAlbumWorks(this.showCover);
         document.documentElement.style.setProperty("--imagewidth", imageWidth + 'px');
+        document.documentElement.style.setProperty("--imageheight", imageHeight + 'px');
         return this.showCover;
       } else {
         return false;
@@ -286,16 +288,21 @@ table.no-wrap {
 table.no-wrap th, table.no-wrap td {
   text-align: left;
   white-space: nowrap;
+  padding-top: 10px;
+  padding-bottom: 10px;
+
 }
 
 .image-caption {
   visibility: inherit;
   width: 100%;
-/*  min-width: calc(var(--imagewidth) / 2);*/
+  min-width: calc(var(--imagewidth) / 2);
   padding-top: 15px;
   padding-bottom: 15px;
   padding-left: 15px;
   padding-right: 15px;
+  max-height: var(--imageheight);
+  overflow-y: auto;
 }
 
 .album-popup-cover{
@@ -349,6 +356,30 @@ table.no-wrap th, table.no-wrap td {
  .narrow{
   font-family: Roboto Condensed !important;
  }
+
+ /*scrollbars*/
+.image-caption {
+  --scroll-bar-color: var(--scroll-color-light);
+  --scroll-bar-bg-color: var(--dark-gray);
+}
+.info-card-text {
+  image-caption: thin;
+  image-caption: var(--scroll-bar-color) var(--scroll-bar-bg-color) !important;
+}
+
+/* Works on Chrome, Edge, and Safari */
+.image-caption::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+.image-caption::-webkit-scrollbar-track {
+  background: var(--scroll-bar-bg-color) !important;
+}
+.image-caption::-webkit-scrollbar-thumb {
+  background-color: var(--scroll-bar-color);
+  border-radius: 20px;
+  border: 3px solid var(--scroll-bar-bg-color) !important;
+}
 
 </style>
 
