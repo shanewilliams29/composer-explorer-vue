@@ -15,6 +15,10 @@
               <span class="album-details"> {{ album.label }} </span><br />
               <br />
               </tr>
+              <table class="no-wrap">
+                <div class="spinner-left" v-show="albumDataLoading" role="status">
+                  <b-spinner class="m-5"></b-spinner>
+                </div>
               <tr v-show="!albumDataLoading && albumWorks.length > 0"
                 v-for="work in albumWorks" :key="work.id">
               <span class="album-work-composer">{{ work.composer }} </span><br />
@@ -22,6 +26,7 @@
               <span v-if="work.cat" class="album-work-cat">{{ work.cat }} <br/></span>
               <br/>
               </tr>
+            </table>
             </div>
           </td>          
         </tr>
@@ -261,7 +266,7 @@ export default {
 
 .popup {
   visibility: hidden;
-  width: calc(var(--imagewidth) * 1.8);
+  max-width: calc(var(--imagewidth) * 1.8);
   line-height: 16px;
   padding: 0px;
   position: fixed;
@@ -272,41 +277,25 @@ export default {
   background-color: var(--dark-gray);
   z-index: 9999;
 }
-.col{
-  padding-left: 0px !important;
+
+table.no-wrap {
+  border-collapse: collapse;
+  white-space: nowrap;
 }
 
-.xalbum-title {
-  color: var(--my-white) !important;
-}
-
-.xalbum-composer {
-  color: var(--my-white) !important;
-}
-
-.xalbum-cat {
-  color: var(--light-gray) !important;
-}
-
-.xalbum-work-title {
-  color: var(--my-white) !important;
-}
-
-.xalbum-composer {
-  color: var(--my-white) !important;
-}
-
-.xpopup>>>.album-cat {
-  color: var(--light-gray) !important;
+table.no-wrap th, table.no-wrap td {
+  text-align: left;
+  white-space: nowrap;
 }
 
 .image-caption {
   visibility: inherit;
   width: 100%;
-  padding-top: 8.5px;
-  padding-bottom: 10px;
-  padding-left: 10px;
-  padding-right: 10px;
+/*  min-width: calc(var(--imagewidth) / 2);*/
+  padding-top: 15px;
+  padding-bottom: 15px;
+  padding-left: 15px;
+  padding-right: 15px;
 }
 
 .album-popup-cover{
@@ -344,6 +333,9 @@ export default {
 }
 .spinner {
   text-align: center;
+}
+.spinner-left {
+  text-align: left;
 }
 .m-5 {
     color: #9da6af;
