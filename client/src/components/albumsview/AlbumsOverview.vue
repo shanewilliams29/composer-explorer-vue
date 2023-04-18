@@ -278,13 +278,13 @@ export default {
 
      .overlay {
             display: block;
-            position: absolute;
-            top: 0;
+            position: fixed;
+            top: 66px;
             left: 0;
             width: 100%;
-            height: calc(100vh - var(--workingheight));
+            height: calc(100vh - 66px - 100px);
             background: rgba(52, 58, 64, 0.5);
-            z-index: 10;
+            z-index: 1;
         }
 .album-title {
   color: var(--my-white) !important;
