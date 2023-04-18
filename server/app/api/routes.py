@@ -19,11 +19,16 @@ import time
 #@cache.cached()
 def get_albumworks():
     album_id = request.args.get('album_id')
-    works = db.session.query(WorkList).join(WorkAlbums).filter(WorkAlbums.album_id == album_id).order_by(WorkList.composer, WorkList.title).all()
-    work_list = [work for work in works]
+    works = db.session.query(WorkList, WorkAlbums.data).join(WorkAlbums).filter(WorkAlbums.album_id == album_id).order_by(WorkList.composer, WorkList.title).all()
+    
+    works_list = []
+    for (work, data) in works:
+        works_list.append([work, json.loads(data)])
+
+    print(works_list)
 
     response_object = {'status': 'success'}
-    response_object['works'] = work_list
+    response_object['works'] = works_list
     response = jsonify(response_object)
     return response
 

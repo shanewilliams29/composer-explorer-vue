@@ -1,6 +1,11 @@
 <template>
   <div>
+      <Transition name="fade">
+        <div v-show="showCover" class="overlay" id="albums-overlay"></div>
+      </Transition>
       <!-- ALBUM POPUP -->
+     <Transition name="fade">
+      <div>
       <div class="" v-for="album in albums" :key="album.album_id">
         <table>
         <tr class="popup" :class="{'reveal': (showAlbum == album.album_id)}">
@@ -19,11 +24,14 @@
                   <b-spinner class="m-5"></b-spinner>
                 </div>
               <tr v-show="!albumDataLoading && albumWorks.length > 0"
-                v-for="work in albumWorks" :key="work.id">
+                v-for="[work, data] in albumWorks" :key="work.id">
                 <td>
               <span class="album-work-composer">{{ work.composer }} </span><br>
-              <span class="album-work-title">{{ work.title }} </span><br>
-              <span v-if="work.cat" class="album-work-cat">{{ work.cat }}</span>
+              <span class="album-work-title">{{ work.title }} &nbsp;</span>
+              <span v-if="work.cat" class="album-work-cat">{{ work.cat }}</span><br>
+              <span v-if="params.artist" class="album-highlight-artist">{{ highlightArtist(data.all_artists) }}</span>
+               <span v-if="highlightArtist(data.all_artists)" class="album-work-artists">, </span>
+              <span class="album-work-artists">{{ printArtists(data.artists) }}</span><br>
               </td>
               </tr>
             </table>
@@ -32,7 +40,8 @@
         </tr>
       </table>
       </div>
-
+    </div>
+      </Transition>
         <!-- ALBUM POPUP -->
 <!--       <Transition name="fade">
         <div>
@@ -106,6 +115,31 @@ export default {
     }
   },
   methods: {
+    highlightArtist(artists){
+      if (this.params.artist) {
+        if(artists.includes(this.params.artist)){
+          return this.params.artist;
+        } else {
+          return null;
+        }
+      } else {
+        return null;
+      }
+    },
+    printArtists(artists){
+      if (this.params.artist) {
+        if(artists.includes(this.params.artist + ",")){
+          return artists.replace(this.params.artist + ",", '');
+        }
+        else if (artists.includes(this.params.artist)){
+          return artists.replace(this.params.artist, '');
+        } else {
+          return artists;
+        }
+      } else {
+        return artists;
+      }
+    },
     messageBuilder(status, fieldData) {
       if (!fieldData || Object.keys(fieldData).length === 0) {
         return "Error retrieving albums from database! Please try again later.";
@@ -140,6 +174,7 @@ export default {
       }
     },
     getAlbums(fieldData) {
+      this.showCover = false;
       this.params = fieldData;
       this.params['page'] = 1;
       this.loading = true;
@@ -211,6 +246,12 @@ export default {
   },
   mounted() {
     this.getAlbums(this.params);
+    const overlay = document.getElementById('albums-overlay');
+
+    overlay.addEventListener('click', () => {
+      this.showCover = false;
+      //overlay.style.display = 'none';
+    });
   },
   created() {
     eventBus.$on("requestAlbumViewAlbums", this.getAlbums);
@@ -235,6 +276,16 @@ export default {
   opacity: 0;
 }
 
+     .overlay {
+            display: block;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: calc(100vh - var(--workingheight));
+            background: rgba(52, 58, 64, 0.5);
+            z-index: 10;
+        }
 .album-title {
   color: var(--my-white) !important;
   font-weight: 600;
@@ -244,6 +295,7 @@ export default {
 .album-details {
   color: var(--medium-light-gray) !important;
   font-size: 14px;
+  font-family: Roboto Condensed !important;
 }
 
 .album-work-composer{
@@ -260,6 +312,19 @@ export default {
 .album-work-cat{
   color: var(--medium-light-gray) !important;
   font-size: 12px;
+}
+
+.album-highlight-artist{
+  color: var(--yellow) !important;
+  font-weight: 600;
+  font-size: 12px;
+  font-family: Roboto Condensed !important;
+}
+
+.album-work-artists{
+  color: var(--medium-dark-gray) !important;
+  font-size: 12px;
+  font-family: Roboto Condensed !important;
 }
 
 .reveal {
@@ -303,6 +368,7 @@ table.no-wrap th, table.no-wrap td {
   padding-right: 15px;
   max-height: var(--imageheight);
   overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .album-popup-cover{
