@@ -35,21 +35,25 @@ export default {
       params: {}
     };
   },
-  methods:{
-    messageBuilder(status, fieldData){
+  methods: {
+    messageBuilder(status, fieldData) {
+      if (!fieldData || Object.keys(fieldData).length === 0) {
+        return "Error retrieving albums from database! Please try again later.";
+      }
+
       let composer = fieldData.composer;
       let period = fieldData.period;
       let artist = fieldData.artist;
       let work = fieldData.work;
       let sort = fieldData.sort;
 
-      if (status == 'success'){
+      if (status == 'success') {
         let message = "Albums"
-        if (!composer && ! period && !artist && !work || period == 'all'){
+        if (!composer && !period && !artist && !work || period == 'all') {
           return (sort == 'popular' || !sort) ? "Popular albums" : ((sort == 'newest') ? "New releases" : "Historical recordings");
         }
         if (composer) {
-          message = message + " featuring <b>" + composer +'</b>';
+          message = message + " featuring <b>" + composer + '</b>';
         } else if (period) {
           period = (period == '20th') ? "<b>20th/21st century</b>" : period;
           message = "<b>" + (period.charAt(0).toUpperCase() + period.slice(1)) + "</b> music " + message.toLowerCase();
@@ -73,14 +77,14 @@ export default {
       const params = this.params;
       const path = "api/albumsview";
       axios
-        .get(path, {params})
+        .get(path, { params })
         .then((res) => {
           this.loading = false;
           this.albums = res.data.albums;
           if (this.albums.length > 0) {
             this.message = this.messageBuilder('success', fieldData);
           } else {
-            if (fieldData.artist && fieldData.composer){
+            if (fieldData.artist && fieldData.composer) {
               this.message = "No albums found for <b>" + fieldData.artist + "</b> performing <b>" + fieldData.composer + "</b>."
             } else {
               this.message = "No albums found for query."
@@ -91,45 +95,33 @@ export default {
           } else {
             this.$lists.albumViewWorks = this.$lists.workList;
           }
-          
+
           this.params['page'] += 1;
         })
         .catch((error) => {
-          this.message = this.messageBuilder('error');
-          console.error(error);
           this.loading = false;
+          this.message = this.messageBuilder('error');
+          console.log(this.message);
+          console.error(error);
         });
     },
     infiniteHandler($state) {
       const params = this.params;
-        const path = "api/albumsview";
-        axios
-          .get(path, {params})
-          .then(({ data }) => {
-            if (data.albums.length) {
-              this.params['page'] += 1;
-              this.albums.push(...data.albums);
-              $state.loaded();
-            } else {
-              $state.complete();
-            }
-          });
+      const path = "api/albumsview";
+      axios
+        .get(path, { params })
+        .then(({ data }) => {
+          if (data.albums.length) {
+            this.params['page'] += 1;
+            this.albums.push(...data.albums);
+            $state.loaded();
+          } else {
+            $state.complete();
+          }
+        });
     },
-    shuffleArray(array) {
-      for (let i = array.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [array[i], array[j]] = [array[j], array[i]];
-      }
-      return array.slice(0,30);
-    },
-    toK(num){
-      return num.toString().slice(0, -3) + "k";
-    },
-    wordClick(word){
-      eventBus.$emit('requestComposersForArtist', word);
-    }
   },
-  mounted(){
+  mounted() {
     this.getAlbums(this.params);
   },
   created() {
@@ -149,6 +141,7 @@ export default {
   grid-gap: 10px;
   grid-auto-flow: dense;
   padding-top: 10px;
+  padding-bottom: 15px;
 }
 
 .grid-item {
@@ -167,7 +160,7 @@ export default {
     color: #9da6af;
 }
 .message{
-  margin-top: 10px;
+  margin-top: 12px;
   text-align: center;
   margin-bottom: 2px;
   color: var(--medium-gray);

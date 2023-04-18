@@ -3,8 +3,10 @@ import { eventBus } from "@/main.js";
 export const albumsMixin = {
   data() {
     return {
-      allowArtistClear: false,
-      allowWorkClear: false,
+      allowClear: {
+        artist: false,
+        work: false
+      },
       clearInputActive: false,
 
       fieldData: {
@@ -12,7 +14,7 @@ export const albumsMixin = {
         period: null,
         artist: null,
         work: null,
-        sort: 'popular',
+        sort: "popular",
       },
 
       filterField: { value: "composer", text: "Filter by composer" },
@@ -56,47 +58,49 @@ export const albumsMixin = {
     gotComposerList() {
       this.makeComposerDropdown(this.$lists.composerList);
     },
-    inputsMade(bool){
+    inputsMade(bool) {
       this.clearInputActive = bool;
     }
   },
   methods: {
     clearArtistInputOnFocus() {
       let value = this.artistSelectField
-      if (value && this.allowArtistClear) {
+      if (value && this.allowClear.artist) {
         this.artistSelectField = null;
         this.resetArtistField();
-      } else if (value && !this.allowArtistClear) {
-        this.allowArtistClear = true;
+      } else if (value && !this.allowClear.artist) {
+        this.allowClear.artist = true;
       }
     },
     clearWorkInputOnFocus() {
       let value = this.workSelectField
-      if (value && this.allowWorkClear) {
-        this.workSelectField = '';
+      if (value && this.allowClear.work) {
+        this.workSelectField = null;
         this.resetWorkField();
-      } else if (value && !this.allowWorkClear) {
-        this.allowWorkClear = true;
+      } else if (value && !this.allowClear.work) {
+        this.allowClear.work = true;
       }
     },
-    clearInputs(){
+    clearInputs() {
       this.composerSelectField = null;
       this.periodSelectField = null;
-      this.fieldData.composer = null;
-      this.fieldData.period = null;
       this.artistSelectField = null;
       this.workSelectField = null;
-      this.resetArtistField();
-      this.resetWorkField();
-      this.albumSortField.value = 'popular';
+      this.albumSortField = { value: "popular", text: "Most popular" };
+      this.fieldData.composer = null;
+      this.fieldData.period = null;
+      this.fieldData.artist = null;
+      this.fieldData.work = null;
+      this.fieldData.sort = this.albumSortField.value
+      eventBus.$emit("requestAlbumViewAlbums", this.fieldData);
     },
-    filterFieldSelect(){
+    filterFieldSelect() {
+      // clear fields on selection of filter type
       this.composerSelectField = null;
       this.periodSelectField = null;
     },
     makeComposerDropdown(composers) {
       this.composerOptions = [];
-      // this.composerOptions.push({ value: "all", text: "All composers" });
       for (const composer of composers) {
         this.composerOptions.push({ value: composer, text: composer });
       }
@@ -107,7 +111,7 @@ export const albumsMixin = {
       if (this.composerSelectField) {
         this.fieldData.composer = this.composerSelectField.value;
       }
-      // reset works field as well
+      // reset works field as well upon composer change
       this.workSelectField = null;
       this.fieldData.work = null;
       eventBus.$emit("requestAlbumViewAlbums", this.fieldData);
@@ -118,7 +122,7 @@ export const albumsMixin = {
       if (this.periodSelectField) {
         this.fieldData.period = this.periodSelectField.value
       }
-      // reset works field as well
+      // reset works field as well upon period change
       this.workSelectField = null;
       this.fieldData.work = null;
       eventBus.$emit("requestAlbumViewAlbums", this.fieldData);
@@ -131,27 +135,27 @@ export const albumsMixin = {
       this.fieldData.artist = artist;
       eventBus.$emit("requestAlbumViewAlbums", this.fieldData);
     },
-    resetArtistField(input){
-      this.allowArtistClear = false;
+    resetArtistField(input) {
+      this.allowClear.artist = false;
       if (!input) {
         this.fieldData.artist = null;
         eventBus.$emit("requestAlbumViewAlbums", this.fieldData);
       }
     },
-    resetWorkField(input){
-      this.allowWorkClear = false;
+    resetWorkField(input) {
+      this.allowClear.work = false;
       if (!input) {
         this.fieldData.work = null;
         eventBus.$emit("requestAlbumViewAlbums", this.fieldData);
       }
     },
-    albumSortSelect(){
+    albumSortSelect() {
       this.fieldData.sort = this.albumSortField.value
       eventBus.$emit("requestAlbumViewAlbums", this.fieldData);
     }
   },
   created() {
-    if(this.$lists.composerList.length > 0){
+    if (this.$lists.composerList.length > 0) {
       this.makeComposerDropdown(this.$lists.composerList);
     }
   },
@@ -160,7 +164,7 @@ export const albumsMixin = {
     inputArtistElement.addEventListener('focus', this.clearArtistInputOnFocus);
 
     const inputWorkElement = this.$refs.workTypeahead.$el.querySelector('input');
-    inputWorkElement.addEventListener('focus', this.clearWorkInputOnFocus);    
+    inputWorkElement.addEventListener('focus', this.clearWorkInputOnFocus);
   },
   beforeDestroy() {
     const inputArtistElement = this.$refs.artistTypeahead.$el.querySelector('input');

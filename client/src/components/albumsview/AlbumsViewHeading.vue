@@ -4,7 +4,15 @@
       <b-col>
         <div>
           <b-form-group>
-            <v-select v-model="filterField" label="text" :options="filterFieldOptions" @input="filterFieldSelect()" :clearable="false" class="mt-3 selector" :searchable="false"></v-select>
+            <v-select
+              v-model="filterField" 
+              label="text" 
+              :options="filterFieldOptions" 
+              @input="filterFieldSelect()" 
+              :clearable="false" 
+              class="mt-3 selector" 
+              :searchable="false">
+            </v-select>
             <v-select
               v-if="filterField.value == 'composer'"
               v-model="composerSelectField"
@@ -54,7 +62,15 @@
       </b-col>
       <b-col class="last-col">
         <b-form-group>
-          <v-select v-model="albumSortField" label="text" :options="albumSortOptions" @input="albumSortSelect()" :clearable="false" class="mt-3 selector" :searchable="false"></v-select>
+          <v-select 
+            v-model="albumSortField" 
+            label="text" 
+            :options="albumSortOptions" 
+            @input="albumSortSelect()" 
+            :clearable="false" 
+            class="mt-3 selector" 
+            :searchable="false">
+          </v-select>
           <b-button class="radio-button-off" size="sm" 
             v-if="clearInputActive" 
             @click="clearInputs()" block>Clear Inputs</b-button>
