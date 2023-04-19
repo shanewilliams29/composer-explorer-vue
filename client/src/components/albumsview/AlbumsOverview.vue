@@ -24,8 +24,8 @@
             <div class="spinner-left" v-show="albumDataLoading" role="status">
               <b-spinner class="m-5"></b-spinner>
             </div>
-  
-            <tr v-show="!albumDataLoading && albumWorks.length > 0" v-for="[work, data] in albumWorks" :key="work.id">
+            <div v-show="!albumDataLoading && albumWorks.length > 0" v-for="[work, data] in albumWorks" :key="work.id">
+            <tr>
               <Transition name="fade">
               <td class="work-td" v-if="showAlbum == album.album_id">
                 <span class="album-work-composer">{{ work.composer }} </span><br>
@@ -43,6 +43,10 @@
               </td>
             </Transition>
             </tr>
+            <tr>
+              <td><br></td>
+            </tr>
+          </div>
    
           </table>
       </div>
@@ -432,8 +436,8 @@ table.no-wrap th, table.no-wrap td {
   text-align: left;
   white-space: nowrap;
   text-overflow: ellipsis;
-  padding-top: 10px;
-  padding-bottom: 10px;
+  padding-top: 0px;
+  padding-bottom: 0px;
   width: 100%;
 }
 
