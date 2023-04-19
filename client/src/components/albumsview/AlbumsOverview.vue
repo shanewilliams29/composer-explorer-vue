@@ -349,7 +349,7 @@ export default {
         left: 0;
         width: 100%;
         height: calc(100vh - 66px - 100px);
-        background: rgba(52, 58, 64, 0.65);
+        background: rgba(52, 58, 64, 0.75);
 
     }
 
@@ -458,12 +458,12 @@ td.work-td:hover {
 .image-caption {
   visibility: inherit;
   width: 100%;
-  min-width: calc(var(--imagewidth) / 2);
+  min-width: calc(var(--imagewidth) / 1.75);
   padding-top: 15px;
   padding-bottom: 15px;
   padding-left: 15px;
   padding-right: 15px;
-  max-height: var(--imageheight);
+  max-height: calc(100vh - 66px - var(--panelheight) - 100px - 40px);
   overflow-y: auto;
   overflow-x: hidden;
 }
