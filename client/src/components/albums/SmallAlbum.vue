@@ -35,7 +35,7 @@
                   <span class="label"> {{ album.label }} </span>
                   <span v-if="album.duration" class="label">&nbsp;<span style='font-size: 9px; vertical-align: 1px;'>
                       <b-icon-clock></b-icon-clock>
-                    </span>&nbsp;{{ duration(album.duration) }}</span>
+                    </span>&nbsp;{{ duration(album.duration) }}&nbsp;{{ fullOrExerpt(album.full_performance) }}</span>
                 </td>
               </tr>
               <tr v-if="album.minor_artists || album.artists.split(', ')[1]">
@@ -106,6 +106,9 @@ export default {
     }
   },
   methods: {
+    fullOrExerpt(bool){ // add to albums list
+      return bool ? "" : "(Excerpt)"
+    },
     timeDisplay(milliseconds) {
       return msToHMS(milliseconds);
     },
@@ -320,6 +323,13 @@ header.card-header {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+ .duration-badge{
+  font-size: 10px;
+  font-family: Roboto Condensed !important;
+  color: var(--light-gray) !important;
+  vertical-align: 0.5px;
 }
 
 >>>.badge {

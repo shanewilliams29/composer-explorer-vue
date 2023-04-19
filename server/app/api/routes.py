@@ -980,6 +980,9 @@ def get_albums(work_id):
     artist_list = {}
     artist_list.update(work_artists)
 
+    # get work duration
+    (work_duration,) = db.session.query(WorkList.duration).filter(WorkList.id == work_id).first()
+
     # decode JSON album data and prepare JSON
     album_list = []
     duplicates_set = set()
@@ -994,6 +997,12 @@ def get_albums(work_id):
         item['track_count'] = album.track_count
         item['composer'] = album.composer
         item['duration'] = album.duration
+
+        # determine if full performance or excerpt
+        if album.duration < work_duration / 1.5:
+            item['full_performance'] = False
+        else:
+            item['full_performance'] = True
 
         # de-rate newer, crappy albums
         if item['track_count']:
@@ -1033,6 +1042,7 @@ def get_albums(work_id):
         sorted_list = sorted(album_list, key=lambda d: d['release_date'], reverse=True)
     elif sort == 'durationascending':
         sorted_list = sorted(album_list, key=lambda d: d['duration'])
+        sorted_list = sorted(sorted_list, key=lambda d: d['full_performance'], reverse=True)
     elif sort == 'durationdescending':
         sorted_list = sorted(album_list, key=lambda d: d['duration'], reverse=True)
     else:
