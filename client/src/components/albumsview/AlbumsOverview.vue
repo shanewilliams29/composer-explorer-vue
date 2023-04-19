@@ -439,8 +439,6 @@ table.no-wrap th, table.no-wrap td {
   text-align: left;
   white-space: nowrap;
   text-overflow: ellipsis;
-  padding-top: 5px;
-  padding-bottom: 5px;
   width: 100%;
 }
 
@@ -450,6 +448,8 @@ tr{
 
 td.work-td{
   border-left: solid 1px white;
+  padding-top: 5px;
+  padding-bottom: 5px;
 }
 
 td.work-td-minor{
