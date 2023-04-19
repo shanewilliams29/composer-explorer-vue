@@ -33,7 +33,7 @@
                 <span v-if="highlightArtist(data.all_artists)" class="album-work-artists">, </span>
                 <span class="album-work-artists">{{ printArtists(data.artists) }}</span><br>
                 <span class="album-work-artists"><span style='font-size: 10px;'>
-                      <b-icon-clock></b-icon-clock></span>&nbsp;{{ printDuration(data.tracks) }}</span>&nbsp;<b-badge class="plain-badge">{{printFull(work.duration, data.tracks)}}</b-badge>
+                      <b-icon-clock></b-icon-clock></span>&nbsp;{{ printDuration(data.tracks) }}</span>&nbsp;<b-badge class="duration-badge">{{printFull(work.duration, data.tracks)}}</b-badge>
               </td>
             </tr>
    
@@ -159,15 +159,18 @@ export default {
       }
       return this.duration(duration);
     },
-    printFull(workDuration, tracks){
+    printFull(workDuration, tracks){ // add to albums list
+      if(workDuration < 1800000) {
+        return null;
+      }
       let duration = 0;
       for (var i = 0; i < tracks.length; i++) {
         duration = duration + tracks[i][3];
       }
-      if (duration < workDuration / 2){
+      if (duration < workDuration / 1.5){
         return "Excerpt"
       }
-      return "Full";
+      return "Full performance";
     },
     messageBuilder(status, fieldData) {
       if (!fieldData || Object.keys(fieldData).length === 0) {
@@ -308,16 +311,16 @@ export default {
   opacity: 0;
 }
 
-     #albums-overlay {
-            display: block;
-            position: fixed;
-            top: 66px;
-            left: 0;
-            width: 100%;
-            height: calc(100vh - 66px - 100px);
-            background: rgba(52, 58, 64, 0.65);
+ #albums-overlay {
+        display: block;
+        position: fixed;
+        top: 66px;
+        left: 0;
+        width: 100%;
+        height: calc(100vh - 66px - 100px);
+        background: rgba(52, 58, 64, 0.65);
 
-        }
+    }
 
 .album-title {
   color: var(--my-white) !important;
@@ -468,9 +471,11 @@ td.work-td:hover {
  .narrow{
   font-family: Roboto Condensed !important;
  }
- .plain-badge{
+ .duration-badge{
   font-size: 10px;
   font-family: Roboto Condensed !important;
+  color: var(--light-gray) !important;
+  vertical-align: 0.5px;
 }
 
 
