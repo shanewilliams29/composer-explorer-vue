@@ -444,7 +444,8 @@ td.work-td-minor{
   text-overflow: ellipsis;
   overflow: hidden;
   max-width: calc(var(--imagewidth) - 100px);
-  padding-right: 10px;
+  padding-top: 0px !important;
+  padding-bottom: 0px !important;
   font-size: 12px;
   color: var(--light-gray) !important;
   font-family: Roboto Condensed !important;
