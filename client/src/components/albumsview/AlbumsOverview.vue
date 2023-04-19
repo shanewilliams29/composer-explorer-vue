@@ -24,7 +24,9 @@
             <div class="spinner-left" v-show="albumDataLoading" role="status">
               <b-spinner class="m-5"></b-spinner>
             </div>
+          </table>
             <div v-show="!albumDataLoading && albumWorks.length > 0" v-for="[work, data] in albumWorks" :key="work.id">
+            <table class="no-wrap">
             <tr>
               <Transition name="fade">
               <td class="work-td" v-if="showAlbum == album.album_id">
@@ -46,9 +48,10 @@
             <tr>
               <td><br></td>
             </tr>
+            </table>
           </div>
    
-          </table>
+          
       </div>
       </td>
       </tr>
@@ -438,6 +441,10 @@ table.no-wrap th, table.no-wrap td {
   text-overflow: ellipsis;
   padding-top: 0px;
   padding-bottom: 0px;
+  width: 100%;
+}
+
+tr{
   width: 100%;
 }
 
