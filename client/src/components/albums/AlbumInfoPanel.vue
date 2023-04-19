@@ -3,7 +3,7 @@
     <b-card-body class="card-body">
       <b-card-title class="card-title">
         <table v-if="album.release_date">
-          <tr class="heading-tr">
+          <tr class="heading-tr" @click="goToAlbum(album)">
             <td>
               <b-avatar square size="60px" :src="album.images[0].url"></b-avatar>
             </td>
@@ -24,7 +24,7 @@
           <table>
             <tr>
               <td>
-                <b-avatar size="40px" :src="result[2]"></b-avatar>
+                <b-avatar button @click="getArtistComposers(result[0])" size="40px" :src="result[2]"></b-avatar>
               </td>
               <td class="info-td">
                 <a class="artist-name" @click="getArtistComposers(result[0])">{{ result[0] }}</a><br />
@@ -69,6 +69,13 @@ export default {
     }
   },
   methods: {
+    goToAlbum(album) {
+      if (!this.$view.mobile) {
+        if (this.$route.name != "albums") {
+          this.$router.push("/albums?id=" + album.id);
+        }
+      }
+    },
     getArtistComposers(artist) {
       if (!this.$view.mobile) {
         eventBus.$emit("requestComposersForArtist", artist);
@@ -138,6 +145,7 @@ a:hover {
 .heading-tr {
   vertical-align: middle;
   height: 62px !important;
+  cursor: pointer;
 }
 .heading-td {
   padding-left: 10px;

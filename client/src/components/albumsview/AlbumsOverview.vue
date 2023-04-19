@@ -3,63 +3,60 @@
     <Transition name="fade">
       <div v-show="showCover" id="albums-overlay"></div>
     </Transition>
-
     <!-- ALBUM POPUP -->
     <div>
       <div v-for="album in albums" :key="album.album_id">
         <Transition name="fade">
-        <table class="popup" v-show="showAlbum == album.album_id">
-          <tr >
-            <td>
-              <img class="album-popup-cover" :ref="album.album_id" :src="album.img_big" />
-            </td>
-            <td>
-              <div class="image-caption">
-          <tr>
-            <span class="album-title">{{ album.album_name }} </span><br>
-            <span class="album-details">℗ {{ album.release_date }}</span>
-            <span class="album-details"> {{ album.label }} </span><br><br>
-          </tr>
-          <table class="no-wrap">
-            <div class="spinner-left" v-show="albumDataLoading" role="status">
-              <b-spinner class="m-5"></b-spinner>
-            </div>
-          </table>
-            <div v-show="!albumDataLoading && albumWorks.length > 0" v-for="[work, data] in albumWorks" :key="work.id">
-            <table class="no-wrap">
+          <table class="popup" v-show="showAlbum == album.album_id">
             <tr>
-              <Transition name="fade">
-              <td :class="{'highlight': ((work.id + data.album_id) == $config.album)}" class="work-td" v-if="showAlbum == album.album_id" @click="getAlbumData(work, data);">
-                <span class="album-work-composer">{{ work.composer }} </span><br>
-                <span class="album-work-title">{{ work.title }} &nbsp;</span>
-                <span v-if="work.cat" class="album-work-cat">{{ work.cat }}</span><br>
-                <span v-if="params.artist" class="album-highlight-artist">{{ highlightArtist(data.all_artists) }}</span>
-                <span v-if="highlightArtist(data.all_artists)" class="album-work-artists">, </span>
-                <span class="album-work-artists">{{ printArtists(data.artists) }}</span><br>
-                <span class="album-work-artists"><span style='font-size: 10px;'>
-                      <b-icon-clock></b-icon-clock></span>&nbsp;{{ printDuration(data.tracks) }}</span>&nbsp;<b-badge class="duration-badge">{{printFull(work.duration, data.tracks)}}</b-badge><br><span v-if="showTracks(work.duration, data.tracks)"><br></span>
-                      <tr v-if="showTracks(work.duration, data.tracks)">
-                        <td v-html="printTracks(work, data.tracks)" class="work-td-minor">
-                      </td>
-                      </tr>
+              <td>
+                <img class="album-popup-cover" :ref="album.album_id" :src="album.img_big" />
               </td>
-            </Transition>
-            </tr>
+              <td>
+                <div class="image-caption">
             <tr>
-              <td><br></td>
+              <span class="album-title">{{ album.album_name }} </span><br>
+              <span class="album-details">℗ {{ album.release_date }}</span>
+              <span class="album-details"> {{ album.label }} </span><br><br>
             </tr>
+            <table class="no-wrap">
+              <div class="spinner-left" v-show="albumDataLoading" role="status">
+                <b-spinner class="m-5"></b-spinner>
+              </div>
             </table>
-          </div>
-   
-          
+            <div v-show="!albumDataLoading && albumWorks.length > 0" v-for="[work, data] in albumWorks" :key="work.id">
+              <table class="no-wrap">
+                <tr>
+                  <Transition name="fade">
+                    <td :class="{'highlight': ((work.id + data.album_id) == $config.album)}" class="work-td" v-if="showAlbum == album.album_id" @click="getAlbumData(work, data);">
+                      <span class="album-work-composer">{{ work.composer }} </span><br>
+                      <span class="album-work-title">{{ work.title }} &nbsp;</span>
+                      <span v-if="work.cat" class="album-work-cat">{{ work.cat }}</span><br>
+                      <span v-if="params.artist" class="album-highlight-artist">{{ highlightArtist(data.all_artists) }}</span>
+                      <span v-if="highlightArtist(data.all_artists)" class="album-work-artists">, </span>
+                      <span class="album-work-artists">{{ printArtists(data.artists) }}</span><br>
+                      <span class="album-work-artists"><span style='font-size: 10px;'>
+                          <b-icon-clock></b-icon-clock>
+                        </span>&nbsp;{{ printDuration(data.tracks) }}</span>&nbsp;<b-badge class="duration-badge">{{printFull(work.duration, data.tracks)}}</b-badge><br><span v-if="showTracks(work.duration, data.tracks)"><br></span>
+                <tr v-if="showTracks(work.duration, data.tracks)">
+                  <td v-html="printTracks(work, data.tracks)" class="work-td-minor">
+                  </td>
+                </tr>
+                </td>
+        </Transition>
+        </tr>
+        <tr>
+          <td><br></td>
+        </tr>
+        </table>
       </div>
-      </td>
-      </tr>
-      </table>
-    </Transition>
     </div>
+    </td>
+    </tr>
+    </table>
+    </Transition>
   </div>
-
+  </div>
   <!-- ALBUM GRID -->
   <div class="container-fluid">
     <h6 class="message narrow">
@@ -253,6 +250,7 @@ export default {
       this.params = fieldData;
       this.params['page'] = 1;
       this.loading = true;
+      this.albums = [];
 
       const params = this.params;
       const path = "api/albumsview";
@@ -260,7 +258,7 @@ export default {
         .get(path, { params })
         .then((res) => {
           this.loading = false;
-          this.albums = res.data.albums;
+          this.albums.push(...res.data.albums);
           if (this.albums.length > 0) {
             this.message = this.messageBuilder('success', fieldData);
           } else {
@@ -281,6 +279,23 @@ export default {
         .catch((error) => {
           this.loading = false;
           this.message = this.messageBuilder('error');
+          console.error(error);
+        });
+    },
+    getOneAlbum(albumId) {
+      const params = {'id': albumId};
+      const path = "api/getonealbum";
+      axios
+        .get(path, { params })
+        .then((res) => {
+          this.albums.push(...res.data.albums);
+          if (this.$route.query.id){
+            setTimeout(()=>{
+              this.showCover = this.$route.query.id;
+            }, 500);
+          }
+        })
+        .catch((error) => {
           console.error(error);
         });
     },
@@ -332,15 +347,19 @@ export default {
   },
   mounted() {
     this.getAlbums(this.params);
-    const overlay = document.getElementById('albums-overlay');
 
+    const overlay = document.getElementById('albums-overlay');
     overlay.addEventListener('click', () => {
       this.showCover = false;
       //overlay.style.display = 'none';
     });
   },
   created() {
+    this.$view.mode = 'albums';
     eventBus.$on("requestAlbumViewAlbums", this.getAlbums);
+    if (this.$route.query.id){
+      this.getOneAlbum(this.$route.query.id);
+    }
   },
   beforeDestroy() {
     eventBus.$off("requestAlbumViewAlbums", this.getAlbums);
@@ -512,8 +531,8 @@ td.work-td:hover {
   visibility: inherit;
   width: 100%;
   min-width: calc(var(--imagewidth) / 1.75);
-  padding-top: 15px;
-  padding-bottom: 15px;
+  padding-top: 25px;
+  padding-bottom: 10px;
   padding-left: 15px;
   padding-right: 15px;
   overflow-y: auto;
