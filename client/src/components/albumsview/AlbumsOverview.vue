@@ -319,6 +319,7 @@ export default {
     },
     getAlbumData(work, data) {
       const workAlbumId = work.id + data.album_id;
+      this.$config.composer = work.composer;
       this.$config.album = workAlbumId;
       this.$config.work = work.id;
       this.$config.workTitle = work.title;
@@ -440,11 +441,11 @@ export default {
 }
 
 .highlight .album-work-title {
-  color: var(--my-gray) !important;
+  color: var(--light-gray) !important;
 }
 
 .highlight .album-work-cat {
-  color: var(--dark-gray) !important;
+  color: var(--light-gray) !important;
 }
 
 .highlight .album-highlight-artist {
