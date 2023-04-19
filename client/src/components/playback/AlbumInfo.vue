@@ -2,7 +2,7 @@
   <b-card no-body v-show="!loading">
     <b-row no-gutters>
       <b-col cols="12" md="auto" class="album-cover-col">
-        <b-card-img :src="album.img_big" alt="Album Cover" class="rounded-0"></b-card-img>
+        <b-card-img @click="goToAlbum(album.id)" :src="album.img_big" alt="Album Cover" class="rounded-0"></b-card-img>
       </b-col>
       <b-col>
         <b-card-body class="info-card-body">
@@ -33,6 +33,14 @@ export default {
     };
   },
   methods: {
+    goToAlbum(album_id) {
+      let albumId = album_id.replace(this.$config.work, "");
+      if (!this.$view.mobile) {
+        if (this.$route.name != "albums") {
+          this.$router.push("/albums?id=" + albumId);
+        }
+      }
+    },
     getAlbumInfo(album_id) {
       this.title = this.$config.workTitle;
       this.loading = true;
@@ -44,6 +52,7 @@ export default {
           localStorage.setItem("config", JSON.stringify(this.$config));
           eventBus.$emit("fireSetAlbum", res.data.album);
           this.album = res.data.album;
+          console.log(this.album);
           this.composer = res.data.album.composer;
           this.loading = false;
         })
@@ -96,6 +105,9 @@ export default {
 </script>
 
 <style scoped>
+.rounded-0{
+cursor: pointer;
+}
 .narrow {
   font-family: Roboto Condensed !important;
 }

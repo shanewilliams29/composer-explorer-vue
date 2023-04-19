@@ -292,6 +292,7 @@ export default {
           if (this.$route.query.id){
             setTimeout(()=>{
               this.showCover = this.$route.query.id;
+              this.$router.replace({'query': null});
             }, 500);
           }
         })
