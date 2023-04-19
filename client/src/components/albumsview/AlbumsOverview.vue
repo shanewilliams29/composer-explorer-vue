@@ -6,9 +6,10 @@
 
     <!-- ALBUM POPUP -->
     <div>
-      <div class="" v-for="album in albums" :key="album.album_id">
-        <table>
-          <tr class="popup" :class="{'reveal': (showAlbum == album.album_id)}">
+      <div v-for="album in albums" :key="album.album_id">
+        <Transition name="fade">
+        <table class="popup" v-show="showAlbum == album.album_id">
+          <tr >
             <td>
               <img class="album-popup-cover" :ref="album.album_id" :src="album.img_big" />
             </td>
@@ -46,6 +47,7 @@
       </td>
       </tr>
       </table>
+    </Transition>
     </div>
   </div>
 
@@ -401,8 +403,6 @@ export default {
 }
 
 .popup {
-  visibility: hidden;
-  
   line-height: 16px;
   padding: 0px;
   position: fixed !important;
@@ -415,11 +415,13 @@ export default {
 }
 
 table.no-wrap{
+
  border-collapse: collapse;
   width: 100%;
 }
 
 table.no-wrap th, table.no-wrap td {
+
   padding-left: 10px;
   padding-right: 10px;
   text-align: left;
@@ -456,6 +458,7 @@ td.work-td:hover {
 }
 
 .image-caption {
+  max-height: min(var(--imageheight), calc(100vh - 66px - var(--panelheight) - 100px - 40px));
   visibility: inherit;
   width: 100%;
   min-width: calc(var(--imagewidth) / 1.75);
@@ -463,7 +466,6 @@ td.work-td:hover {
   padding-bottom: 15px;
   padding-left: 15px;
   padding-right: 15px;
-  max-height: calc(100vh - 66px - var(--panelheight) - 100px - 40px);
   overflow-y: auto;
   overflow-x: hidden;
 }
