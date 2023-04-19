@@ -62,13 +62,13 @@ export default {
   opacity: 0;
 }
 >>> .highlight{
-  background-color: var(--purple);
+  background-color: var(--orange) !important;
 }
 >>> .highlight td{
-  background-color: var(--purple);
+  background-color: var(--orange) !important;
 }
 >>> .music-note{
-  color: var(--purple);
+  color: var(--orange);
 }
 .display-list{
   padding: 0px !important;

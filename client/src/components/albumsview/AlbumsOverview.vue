@@ -29,7 +29,7 @@
             <table class="no-wrap">
             <tr>
               <Transition name="fade">
-              <td class="work-td" v-if="showAlbum == album.album_id">
+              <td :class="{'highlight': ((work.id + data.album_id) == $config.album)}" class="work-td" v-if="showAlbum == album.album_id" @click="getAlbumData(work, data);">
                 <span class="album-work-composer">{{ work.composer }} </span><br>
                 <span class="album-work-title">{{ work.title }} &nbsp;</span>
                 <span v-if="work.cat" class="album-work-cat">{{ work.cat }}</span><br>
@@ -317,6 +317,17 @@ export default {
           }
         });
     },
+    getAlbumData(work, data) {
+      const workAlbumId = work.id + data.album_id;
+      this.$config.album = workAlbumId;
+      this.$config.work = work.id;
+      this.$config.workTitle = work.title;
+      this.$config.genre = work.genre;
+
+      localStorage.setItem("config", JSON.stringify(this.$config));
+
+      eventBus.$emit("requestAlbumData", workAlbumId);
+    }
   },
   mounted() {
     this.getAlbums(this.params);
@@ -367,49 +378,6 @@ export default {
 
     }
 
-.album-title {
-  color: var(--my-white) !important;
-  font-weight: 600;
-  font-size: 16px;
-}
-
-.album-details {
-  color: var(--medium-light-gray) !important;
-  font-size: 14px;
-  font-family: Roboto Condensed !important;
-}
-
-.album-work-composer{
-  color: var(--orange) !important;
-  font-size: 14px;
-}
-
-.album-work-title{
-  color: var(--my-white) !important;
-  font-weight: 600;
-  font-size: 14px;
-}
-
-.album-work-cat{
-  color: var(--medium-light-gray) !important;
-  font-size: 12px;
-}
-
-.album-highlight-artist{
-  color: turquoise !important;
-  font-weight: 600;
-  font-size: 12px;
-  font-family: Roboto Condensed !important;
-}
-
-.album-work-artists{
-  color: var(--medium-dark-gray) !important;
-  font-size: 12px;
-  font-family: Roboto Condensed !important;
-}
-
-
-
 .reveal {
   visibility: visible !important;
 }
@@ -424,6 +392,72 @@ export default {
   background-color: var(--dark-gray);
   box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
   z-index: 100;
+}
+
+.album-title {
+  color: var(--my-white) !important;
+  font-weight: 600;
+  font-size: 16px;
+}
+
+.album-details {
+  color: var(--medium-light-gray) !important;
+  font-size: 14px;
+  font-family: Roboto Condensed !important;
+}
+
+.album-work-composer{
+  color: var(--orange);
+  font-size: 14px;
+}
+
+.album-work-title{
+  color: var(--my-white);
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.album-work-cat{
+  color: var(--medium-light-gray);
+  font-size: 12px;
+}
+
+.album-highlight-artist{
+  color: turquoise;
+  font-weight: 600;
+  font-size: 12px;
+  font-family: Roboto Condensed !important;
+}
+
+.album-work-artists{
+  color: var(--medium-dark-gray);
+  font-size: 12px;
+  font-family: Roboto Condensed !important;
+}
+
+.highlight .album-work-composer {
+  color: var(--dark-gray) !important;
+}
+
+.highlight .album-work-title {
+  color: var(--my-gray) !important;
+}
+
+.highlight .album-work-cat {
+  color: var(--dark-gray) !important;
+}
+
+.highlight .album-highlight-artist {
+  color: var(--dark-gray) !important;
+}
+
+.highlight .album-work-artists {
+  color: var(--dark-gray) !important;
+}
+
+.highlight .work-td-minor{
+  color: var(--dark-gray) !important;
+  border-left: solid 1px var(--dark-gray);
 }
 
 table.no-wrap{
@@ -462,7 +496,7 @@ td.work-td-minor{
   padding-top: 0px !important;
   padding-bottom: 0px !important;
   font-size: 12px;
-  color: var(--light-gray) !important;
+  color: var(--light-gray);
   font-family: Roboto Condensed !important;
 }
 
@@ -540,7 +574,7 @@ td.work-td:hover {
 .duration-badge{
   font-size: 10px;
   font-family: Roboto Condensed !important;
-  color: var(--medium-light-gray) !important;
+  color: var(--medium-light-gray);
   vertical-align: 0.5px;
   background-color: var(--medium-gray);
 }

@@ -34,7 +34,7 @@ export default {
   },
   methods: {
     getAlbumInfo(album_id) {
-      this.title = this.hold_title;
+      this.title = this.$config.workTitle;
       this.loading = true;
       const path = "api/albuminfo/" + album_id;
       axios
@@ -53,7 +53,7 @@ export default {
         });
     },
     getAlbumInfoHopper(album_id, track_no, percent_progress) {
-      this.title = this.hold_title;
+      this.title = this.$config.workTitle;
       this.loading = true;
       const path = "api/albuminfo/" + album_id;
       axios
