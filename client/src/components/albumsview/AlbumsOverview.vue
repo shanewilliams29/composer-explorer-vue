@@ -457,8 +457,7 @@ td.work-td-minor{
 
 /* Change color of the table cell when hovering over it */
 td.work-td:hover {
-    background-color: var(--medium-gray); /* Choose your desired color */
-    color: #454D54; /* Choose your desired text color */
+    background-color: #454D54; /* Choose your desired color */
     cursor: pointer;
 }
 
