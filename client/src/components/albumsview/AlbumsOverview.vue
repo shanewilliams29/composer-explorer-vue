@@ -33,7 +33,11 @@
                 <span v-if="highlightArtist(data.all_artists)" class="album-work-artists">, </span>
                 <span class="album-work-artists">{{ printArtists(data.artists) }}</span><br>
                 <span class="album-work-artists"><span style='font-size: 10px;'>
-                      <b-icon-clock></b-icon-clock></span>&nbsp;{{ printDuration(data.tracks) }}</span>&nbsp;<b-badge class="duration-badge">{{printFull(work.duration, data.tracks)}}</b-badge>
+                      <b-icon-clock></b-icon-clock></span>&nbsp;{{ printDuration(data.tracks) }}</span>&nbsp;<b-badge class="duration-badge">{{printFull(work.duration, data.tracks)}}</b-badge><br><span v-if="showTracks(work.duration, data.tracks)"><br></span>
+                      <tr v-if="showTracks(work.duration, data.tracks)">
+                        <td v-html="printTracks(work, data.tracks)" class="work-td-minor">
+                      </td>
+                      </tr>
               </td>
             </tr>
    
@@ -160,9 +164,6 @@ export default {
       return this.duration(duration);
     },
     printFull(workDuration, tracks){ // add to albums list
-      if(workDuration < 1800000) {
-        return null;
-      }
       let duration = 0;
       for (var i = 0; i < tracks.length; i++) {
         duration = duration + tracks[i][3];
@@ -171,6 +172,36 @@ export default {
         return "Excerpt"
       }
       return "Full performance";
+    },
+    showTracks(workDuration, tracks){ // add to albums list
+      let duration = 0;
+      for (var i = 0; i < tracks.length; i++) {
+        duration = duration + tracks[i][3];
+      }
+      if (duration < workDuration / 1.5){
+        return true
+      }
+      return false;
+    },
+    printTracks(work, tracks){ // add to albums list
+      let duration = 0;
+      let tracksList = "";
+      for (var i = 0; i < tracks.length; i++) {
+        duration = duration + tracks[i][3];
+        let trackRaw = tracks[i][0];
+        let trackFixed = '';
+
+        if(work.genre == 'Opera' || work.genre == 'Stage Work' || work.genre == 'Ballet'){
+          trackFixed = trackRaw.substring(trackRaw.lastIndexOf(' Act ') + 1).trim()
+        } else {
+          trackFixed = trackRaw.substring(trackRaw.lastIndexOf(':') + 1)
+        }
+        tracksList = tracksList + trackFixed + "<br>";
+      }
+      if (duration < work.duration / 1.5){
+        return tracksList;
+      }
+      return tracksList;
     },
     messageBuilder(status, fieldData) {
       if (!fieldData || Object.keys(fieldData).length === 0) {
@@ -363,13 +394,15 @@ export default {
   font-family: Roboto Condensed !important;
 }
 
+
+
 .reveal {
   visibility: visible !important;
 }
 
 .popup {
   visibility: hidden;
-/*  max-width: calc(var(--imagewidth) * 2);*/
+  
   line-height: 16px;
   padding: 0px;
   position: fixed !important;
@@ -384,19 +417,45 @@ export default {
 table.no-wrap{
  border-collapse: collapse;
   width: 100%;
-  table-layout: fixed; /* Add this property */
 }
 
 table.no-wrap th, table.no-wrap td {
-  border-left: solid 1px white;
   padding-left: 10px;
+  padding-right: 10px;
   text-align: left;
   white-space: nowrap;
+  text-overflow: ellipsis;
   padding-top: 10px;
   padding-bottom: 10px;
   width: 100%;
-
 }
+
+td.work-td{
+  border-left: solid 1px white;
+}
+
+td.work-td-minor{
+  width: 100%;
+  border-left: solid 1px var(--orange);
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  max-width: calc(var(--imagewidth) - 100px);
+  padding-right: 10px;
+  font-size: 12px;
+  color: var(--light-gray) !important;
+  font-family: Roboto Condensed !important;
+}
+
+/*.album-work-tracks{
+  max-width: 200px !important;
+  color: var(--light-gray) !important;
+  font-size: 12px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-family: Roboto Condensed !important;
+}*/
 
 
 /* Change color of the table cell when hovering over it */
