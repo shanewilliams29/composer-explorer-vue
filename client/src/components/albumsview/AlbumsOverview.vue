@@ -547,7 +547,7 @@ td.work-td:hover {
 
  /*scrollbars*/
 .image-caption {
-  --scroll-bar-color: var(--scroll-color-light);
+  --scroll-bar-color: var(--medium-gray);
   --scroll-bar-bg-color: var(--dark-gray);
 }
 .info-card-text {
