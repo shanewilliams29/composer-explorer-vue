@@ -193,6 +193,9 @@ export default {
 
         if(work.genre == 'Opera' || work.genre == 'Stage Work' || work.genre == 'Ballet'){
           trackFixed = trackRaw.substring(trackRaw.lastIndexOf(' Act ') + 1).trim()
+          if(trackFixed.lastIndexOf(':') === -1){
+            trackFixed = trackFixed + ": Prelude ";
+          }
         } else {
           trackFixed = trackRaw.substring(trackRaw.lastIndexOf(':') + 1)
         }
@@ -201,7 +204,7 @@ export default {
       if (duration < work.duration / 1.5){
         return tracksList;
       }
-      return tracksList;
+      return null;
     },
     messageBuilder(status, fieldData) {
       if (!fieldData || Object.keys(fieldData).length === 0) {
@@ -446,17 +449,6 @@ td.work-td-minor{
   color: var(--light-gray) !important;
   font-family: Roboto Condensed !important;
 }
-
-/*.album-work-tracks{
-  max-width: 200px !important;
-  color: var(--light-gray) !important;
-  font-size: 12px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  font-family: Roboto Condensed !important;
-}*/
-
 
 /* Change color of the table cell when hovering over it */
 td.work-td:hover {
