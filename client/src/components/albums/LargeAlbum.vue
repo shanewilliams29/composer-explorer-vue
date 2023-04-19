@@ -8,7 +8,7 @@
             <span class="narrow">℗ {{ album.release_date }} {{ album.label }}</span>
             <span v-if="album.duration" class="label narrow">&nbsp;<span style='font-size: 9px; vertical-align: 1px;'>
                 <b-icon-clock></b-icon-clock>
-              </span>&nbsp;{{ duration(album.duration) }}</span>
+              </span>&nbsp;{{ duration(album.duration) }}&nbsp;{{ fullOrExerpt(album.full_performance) }}</span>
             <br />
             <span v-if="album.minor_artists" class="narrow" style="color: grey; font-size: 13px !important;">{{ album.minor_artists }}</span>
           </div>
@@ -58,6 +58,9 @@ export default {
     }
   },
   methods: {
+    fullOrExerpt(bool){ // add to albums list
+      return bool ? "" : "(Excerpt)"
+    },
     timeDisplay(milliseconds) {
       return msToHMS(milliseconds);
     },
