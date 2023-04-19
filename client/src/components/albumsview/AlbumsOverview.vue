@@ -537,11 +537,12 @@ td.work-td:hover {
  .narrow{
   font-family: Roboto Condensed !important;
  }
- .duration-badge{
+.duration-badge{
   font-size: 10px;
   font-family: Roboto Condensed !important;
-  color: var(--light-gray) !important;
+  color: var(--medium-light-gray) !important;
   vertical-align: 0.5px;
+  background-color: var(--medium-gray);
 }
 
 
