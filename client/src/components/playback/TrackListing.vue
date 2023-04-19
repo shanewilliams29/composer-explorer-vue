@@ -8,7 +8,7 @@
               <td width="100%" class="td-class">
                 <b-icon icon="play-fill" aria-hidden="true"></b-icon>
                 <span v-if="genre == 'Opera' || genre == 'Stage Work' || genre == 'Ballet'">
-                  {{ track[0].substring(track[0].lastIndexOf(' Act ') + 1).trim() }}
+                  {{ getOperaTrack(track[0]) }}
                 </span>
                 <span v-else>
                   {{ track[0].substring(track[0].lastIndexOf(':') + 1) }}
@@ -36,6 +36,13 @@ export default {
       timeDisplay(milliseconds) {
         return msToHMS(milliseconds);
       },
+      getOperaTrack(trackRaw){
+        let trackFixed = trackRaw.substring(trackRaw.lastIndexOf(' Act ') + 1).trim()
+                  if(trackFixed.lastIndexOf(':') === -1){
+                    trackFixed = trackFixed + ": Prelude ";
+                } 
+              return trackFixed;
+            },
     selectTrack(track) {
       this.selectedTrack = track;
       smoothscroll.polyfill(); // for Safari smooth scrolling
