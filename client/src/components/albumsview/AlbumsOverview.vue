@@ -26,6 +26,7 @@
             </div>
   
             <tr v-show="!albumDataLoading && albumWorks.length > 0" v-for="[work, data] in albumWorks" :key="work.id">
+              <Transition name="fade">
               <td class="work-td" v-if="showAlbum == album.album_id">
                 <span class="album-work-composer">{{ work.composer }} </span><br>
                 <span class="album-work-title">{{ work.title }} &nbsp;</span>
@@ -40,6 +41,7 @@
                       </td>
                       </tr>
               </td>
+            </Transition>
             </tr>
    
           </table>
@@ -331,9 +333,12 @@ export default {
 
 
 <style scoped>
-.fade-enter-active,
-.fade-leave-active {
+.fade-enter-active {
   transition: all 0.5s;
+}
+
+.fade-leave-active {
+  transition: all 0.3s;
 }
 
 .fade-enter {
