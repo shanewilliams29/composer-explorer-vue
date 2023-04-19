@@ -439,8 +439,8 @@ table.no-wrap th, table.no-wrap td {
   text-align: left;
   white-space: nowrap;
   text-overflow: ellipsis;
-  padding-top: 0px;
-  padding-bottom: 0px;
+  padding-top: 5px;
+  padding-bottom: 5px;
   width: 100%;
 }
 
