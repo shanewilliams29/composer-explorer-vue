@@ -25,7 +25,7 @@
             </div>
   
             <tr v-show="!albumDataLoading && albumWorks.length > 0" v-for="[work, data] in albumWorks" :key="work.id">
-              <td class="work-td">
+              <td class="work-td" v-if="showAlbum == album.album_id">
                 <span class="album-work-composer">{{ work.composer }} </span><br>
                 <span class="album-work-title">{{ work.title }} &nbsp;</span>
                 <span v-if="work.cat" class="album-work-cat">{{ work.cat }}</span><br>
@@ -91,7 +91,6 @@ export default {
   computed: {
     showAlbum() {
       if (this.showCover) {
-        console.log(this.showCover);
         const imageWidth = this.$refs[this.showCover][0].width;
         const imageHeight = this.$refs[this.showCover][0].height;
         if (imageWidth == 0) {
@@ -142,7 +141,6 @@ export default {
       }
     },
     printArtists(artists){
-      // console.log(artists);
       if (this.params.artist) {
         if(artists.includes(this.params.artist + ",")){
           return artists.replace(this.params.artist + ",", '');
@@ -272,7 +270,6 @@ export default {
         .catch((error) => {
           this.loading = false;
           this.message = this.messageBuilder('error');
-          console.log(this.message);
           console.error(error);
         });
     },
@@ -461,7 +458,7 @@ td.work-td:hover {
 .image-caption {
   visibility: inherit;
   width: 100%;
-  min-width: calc(var(--imagewidth) / 1.75);
+  min-width: calc(var(--imagewidth) / 2);
   padding-top: 15px;
   padding-bottom: 15px;
   padding-left: 15px;
