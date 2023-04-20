@@ -13,6 +13,11 @@
                 <img class="album-popup-cover" :ref="album.album_id" :src="album.img_big" />
               </td>
               <td>
+                <button type="button" @click="hidePopup()" aria-label="Close" id="close-popup-button" class="close-button close text-dark"><svg viewBox="0 0 16 16" width="1em" height="1em" focusable="false" role="img" aria-label="x" xmlns="http://www.w3.org/2000/svg" fill="white" class="bi-x b-icon bi">
+                    <g>
+                      <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"></path>
+                    </g>
+                  </svg></button>
                 <div class="image-caption">
             <tr>
               <span class="album-title">{{ album.album_name }} </span><br>
@@ -50,6 +55,7 @@
         </tr>
         </table>
       </div>
+      <a target="_blank" :href="`https://open.spotify.com/album/${album.album_id}`"><img class="spotify-logo" width="70px" :src="spotifyLogoURLWhite" /></a><br>
     </div>
     </td>
     </tr>
@@ -57,6 +63,7 @@
     </Transition>
   </div>
   </div>
+
   <!-- ALBUM GRID -->
   <div class="container-fluid">
     <h6 class="message narrow">
@@ -79,12 +86,14 @@
 </template>
 
 <script>
+import { staticURL } from "@/main.js";
 import { eventBus } from "@/main.js";
 import axios from "axios";
 
 export default {
   data() {
     return {
+      spotifyLogoURLWhite: staticURL + 'Spotify_Logo_RGB_White.png',
       albums: [],
       albumWorks: [],
       showCover: false,
@@ -344,6 +353,9 @@ export default {
       localStorage.setItem("config", JSON.stringify(this.$config));
 
       eventBus.$emit("requestAlbumData", workAlbumId);
+    },
+    hidePopup() {
+      this.showCover = false;
     }
   },
   mounted() {
@@ -386,6 +398,12 @@ export default {
 
 .fade-leave-to {
   opacity: 0;
+}
+
+.close-button{
+  position: absolute;
+  top: 5px;
+  right: 15px;
 }
 
  #albums-overlay {
@@ -533,7 +551,7 @@ td.work-td:hover {
   width: 100%;
   min-width: calc(var(--imagewidth) / 1.75);
   padding-top: 25px;
-  padding-bottom: 10px;
+  padding-bottom: 15px;
   padding-left: 15px;
   padding-right: 15px;
   overflow-y: auto;
