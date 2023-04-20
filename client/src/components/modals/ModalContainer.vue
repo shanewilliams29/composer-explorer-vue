@@ -4,6 +4,7 @@
     <AutoplayModal />
     <NotPremiumModal />
     <NotAvailableModal />
+    <SpotifyFailModal />
   </div>
 </template>
 
@@ -12,6 +13,7 @@ import SpotifyModal from './SpotifyModal.vue'
 import AutoplayModal from './AutoplayModal.vue'
 import NotPremiumModal from './NotPremiumModal.vue'
 import NotAvailableModal from './NotAvailableModal.vue'
+import SpotifyFailModal from './SpotifyFailModal.vue'
 
 import {eventBus} from "@/main.js";
 
@@ -20,7 +22,8 @@ export default {
     SpotifyModal,
     AutoplayModal,
     NotPremiumModal,
-    NotAvailableModal
+    NotAvailableModal,
+    SpotifyFailModal
   },
   methods:{
     notLoggedIn(){

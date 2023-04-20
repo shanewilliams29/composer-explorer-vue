@@ -134,6 +134,7 @@ var spotify = {
       }
     // eslint-disable-next-line
     }).then((res) => {
+
     }).catch(function(error) {
       if (error.response.status == 401) {
         eventBus.$emit('notLoggedIn');
