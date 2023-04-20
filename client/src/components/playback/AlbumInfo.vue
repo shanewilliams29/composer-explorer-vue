@@ -149,6 +149,6 @@ cursor: pointer;
   line-height: 130%;
 }
 .composer{
-  color: var(--playback-color);
+  color: var(--my-white);
 }
 </style>

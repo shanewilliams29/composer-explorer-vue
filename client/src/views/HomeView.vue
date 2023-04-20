@@ -49,7 +49,7 @@ export default {
     } else {
       document.documentElement.style.setProperty("--flex", "1");
     }
-    document.documentElement.style.setProperty("--playback-color", "#66b0ff"); // 007bff
+    document.documentElement.style.setProperty("--playback-color", "var(--yellow)"); // 007bff
   },
   created() {
     // remove query parameters for landing from search on another page
