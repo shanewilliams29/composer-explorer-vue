@@ -52,7 +52,6 @@ export default {
           localStorage.setItem("config", JSON.stringify(this.$config));
           eventBus.$emit("fireSetAlbum", res.data.album);
           this.album = res.data.album;
-          console.log(this.album);
           this.composer = res.data.album.composer;
           this.loading = false;
         })

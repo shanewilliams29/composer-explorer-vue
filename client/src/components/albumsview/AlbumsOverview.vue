@@ -146,9 +146,9 @@ export default {
         return minutes + "m"
       }
     },
-    highlightArtist(artists){
+    highlightArtist(artists) {
       if (this.params.artist) {
-        if(artists.includes(this.params.artist)){
+        if (artists.includes(this.params.artist)) {
           return this.params.artist;
         } else {
           return null;
@@ -157,12 +157,11 @@ export default {
         return null;
       }
     },
-    printArtists(artists){
+    printArtists(artists) {
       if (this.params.artist) {
-        if(artists.includes(this.params.artist + ",")){
+        if (artists.includes(this.params.artist + ",")) {
           return artists.replace(this.params.artist + ",", '');
-        }
-        else if (artists.includes(this.params.artist)){
+        } else if (artists.includes(this.params.artist)) {
           return artists.replace(this.params.artist, '');
         } else {
           return artists;
@@ -171,34 +170,34 @@ export default {
         return artists;
       }
     },
-    printDuration(tracks){
+    printDuration(tracks) {
       let duration = 0;
       for (var i = 0; i < tracks.length; i++) {
         duration = duration + tracks[i][3];
       }
       return this.duration(duration);
     },
-    printFull(workDuration, tracks){ // add to albums list
+    printFull(workDuration, tracks) { // add to albums list
       let duration = 0;
       for (var i = 0; i < tracks.length; i++) {
         duration = duration + tracks[i][3];
       }
-      if (duration < workDuration / 1.5){
+      if (duration < workDuration / 1.5) {
         return "Excerpt"
       }
       return "Full performance";
     },
-    showTracks(workDuration, tracks){ // add to albums list
+    showTracks(workDuration, tracks) { // add to albums list
       let duration = 0;
       for (var i = 0; i < tracks.length; i++) {
         duration = duration + tracks[i][3];
       }
-      if (duration < workDuration / 1.5){
+      if (duration < workDuration / 1.5) {
         return true
       }
       return false;
     },
-    printTracks(work, tracks){ // add to albums list
+    printTracks(work, tracks) { // add to albums list
       let duration = 0;
       let tracksList = "";
       for (var i = 0; i < tracks.length; i++) {
@@ -206,9 +205,9 @@ export default {
         let trackRaw = tracks[i][0];
         let trackFixed = '';
 
-        if(work.genre == 'Opera' || work.genre == 'Stage Work' || work.genre == 'Ballet'){
+        if (work.genre == 'Opera' || work.genre == 'Stage Work' || work.genre == 'Ballet') {
           trackFixed = trackRaw.substring(trackRaw.lastIndexOf(' Act ') + 1).trim()
-          if(trackFixed.lastIndexOf(':') === -1){
+          if (trackFixed.lastIndexOf(':') === -1) {
             trackFixed = trackFixed + ": Prelude ";
           }
         } else {
@@ -216,7 +215,7 @@ export default {
         }
         tracksList = tracksList + trackFixed + "<br>";
       }
-      if (duration < work.duration / 1.5){
+      if (duration < work.duration / 1.5) {
         return tracksList;
       }
       return null;
@@ -292,16 +291,16 @@ export default {
         });
     },
     getOneAlbum(albumId) {
-      const params = {'id': albumId};
+      const params = { 'id': albumId };
       const path = "api/getonealbum";
       axios
         .get(path, { params })
         .then((res) => {
           this.albums.push(...res.data.albums);
-          if (this.$route.query.id){
-            setTimeout(()=>{
+          if (this.$route.query.id) {
+            setTimeout(() => {
               this.showCover = this.$route.query.id;
-              this.$router.replace({'query': null});
+              this.$router.replace({ 'query': null });
             }, 500);
           }
         })
@@ -309,10 +308,10 @@ export default {
           console.error(error);
         });
     },
-    getAlbumWorks(album_id){
+    getAlbumWorks(album_id) {
       this.albumDataLoading = true;
       this.albumWorks = [];
-      const params = {'album_id': album_id};
+      const params = { 'album_id': album_id };
       const path = "api/getalbumworks";
       axios
         .get(path, { params })
@@ -343,6 +342,7 @@ export default {
         });
     },
     getAlbumData(work, data) {
+      console.log(work, data);
       const workAlbumId = work.id + data.album_id;
       this.$config.composer = work.composer;
       this.$config.album = workAlbumId;
@@ -356,6 +356,57 @@ export default {
     },
     hidePopup() {
       this.showCover = false;
+    },
+    shuffleArray(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+      return array;
+    },
+    nextWork() {
+      if (this.$view.shuffle) {
+        let match = true;
+        while (match) {
+          var i = Math.floor(Math.random() * this.albumWorks.length);
+          console.log(i);
+          if (this.albumWorks[i][0].id == this.$config.work && this.albumWorks.length > 1) {
+            match = true;
+          } else {
+            match = false;
+          }
+        }
+        this.getAlbumData(this.albumWorks[i][0], this.albumWorks[i][1]);
+      } else {
+        for (var j = 0; j < this.albumWorks.length; j++) {
+          if (this.albumWorks[j][0].id == this.$config.work && j !== this.albumWorks.length - 1) {
+            this.getAlbumData(this.albumWorks[j + 1][0], this.albumWorks[j + 1][1]);
+            break;
+          }
+        }
+      }
+    },
+    previousWork() {
+      if (this.$view.shuffle) {
+        let match = true;
+        while (match) {
+          var i = Math.floor(Math.random() * this.albumWorks.length);
+          console.log(i);
+          if (this.albumWorks[i][0].id == this.$config.work && this.albumWorks.length > 1) {
+            match = true;
+          } else {
+            match = false;
+          }
+        }
+        this.getAlbumData(this.albumWorks[i][0], this.albumWorks[i][1]);
+      } else {
+        for (var j = 0; j < this.albumWorks.length; j++) {
+          if (this.albumWorks[j][0].id == this.$config.work && j !== 0) {
+            this.getAlbumData(this.albumWorks[j - 1][0], this.albumWorks[j - 1][1]);
+            break;
+          }
+        }
+      }
     }
   },
   mounted() {
@@ -364,18 +415,21 @@ export default {
     const overlay = document.getElementById('albums-overlay');
     overlay.addEventListener('click', () => {
       this.showCover = false;
-      //overlay.style.display = 'none';
     });
   },
   created() {
     this.$view.mode = 'albums';
-    eventBus.$on("requestAlbumViewAlbums", this.getAlbums);
-    if (this.$route.query.id){
+    if (this.$route.query.id) {
       this.getOneAlbum(this.$route.query.id);
     }
+    eventBus.$on("requestAlbumViewAlbums", this.getAlbums);
+    eventBus.$on("fireNextWork", this.nextWork);
+    eventBus.$on("firePreviousWork", this.previousWork);
   },
   beforeDestroy() {
     eventBus.$off("requestAlbumViewAlbums", this.getAlbums);
+    eventBus.$off("fireNextWork", this.nextWork);
+    eventBus.$on("firePreviousWork", this.previousWork);
   },
 }
 </script>
