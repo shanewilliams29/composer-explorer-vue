@@ -184,7 +184,7 @@ export default {
       }
       return this.duration(duration);
     },
-    printFull(workDuration, tracks) { // add to albums list
+    printFull(workDuration, tracks) { 
       let duration = 0;
       for (var i = 0; i < tracks.length; i++) {
         duration = duration + tracks[i][3];
@@ -194,7 +194,7 @@ export default {
       }
       return "Full performance";
     },
-    showTracks(workDuration, tracks) { // add to albums list
+    showTracks(workDuration, tracks) { 
       let duration = 0;
       for (var i = 0; i < tracks.length; i++) {
         duration = duration + tracks[i][3];
@@ -204,7 +204,7 @@ export default {
       }
       return false;
     },
-    printTracks(work, tracks) { // add to albums list
+    printTracks(work, tracks) { 
       let duration = 0;
       let tracksList = "";
       for (var i = 0; i < tracks.length; i++) {
@@ -323,7 +323,6 @@ export default {
       axios
         .get(path, { params })
         .then(({ data }) => {
-          console.log(data);
           this.likedAlbums = data.liked_albums;
           this.albumDataLoading = false;
           if (data.works.length) {
