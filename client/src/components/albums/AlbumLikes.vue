@@ -1,20 +1,10 @@
 <template>
-                <tr v-if="currentLikes">
-                <td width="100%" class="td-style-black">
-                  <span class="album-likes-class">
-                  <div>
-    <span class="likes" v-if="currentLikes">
+  <span>
+  <span class="likes" v-if="currentLikes">
       <b-badge>{{ currentLikes }} Like{{ currentLikes > 1 ? 's' : '' }}</b-badge>
     </span>
     <span class="user-liked" v-if="userLikes">&nbsp;<b-icon-heart-fill></b-icon-heart-fill></span>
-    <span class="likes" v-if="!currentLikes">
-      <br />
-    </span>
-  </div>    
-            </span>
-                </td>
-              </tr>
-
+</span>
 </template>
 
 <script>

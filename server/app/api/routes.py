@@ -19,14 +19,42 @@ import time
 #@cache.cached()
 def get_albumworks():
     album_id = request.args.get('album_id')
-    works = db.session.query(WorkList, WorkAlbums.data).join(WorkAlbums).filter(WorkAlbums.album_id == album_id).order_by(WorkList.composer, WorkList.title).all()
+    works = db.session.query(WorkList, WorkAlbums.data, func.count(AlbumLike.id).label('total'))\
+        .select_from(WorkAlbums)\
+        .filter(WorkAlbums.album_id == album_id)\
+        .join(WorkList)\
+        .outerjoin(AlbumLike, WorkAlbums.id == AlbumLike.album_id)\
+        .group_by(WorkAlbums.id)\
+        .order_by(WorkList.composer, WorkList.title).all()
     
+    temp_list = []
+    for (work, data, likes) in works:
+        temp_list.append([work, json.loads(data), likes])
+
     works_list = []
-    for (work, data) in works:
-        works_list.append([work, json.loads(data)])
+    for [work, data, likes] in temp_list:
+        data['likes'] = likes
+        data['id'] = work.id + data['album_id']
+        works_list.append([work, data])
+
+    search = "%{}%".format(album_id)
+
+    if current_user.is_authenticated:
+        albumlikes = db.session.query(AlbumLike.album_id)\
+            .filter(AlbumLike.user_id == current_user.id, 
+                    AlbumLike.album_id.ilike(search)).all()
+    elif Config.MODE == 'DEVELOPMENT':
+        albumlikes = db.session.query(AlbumLike.album_id)\
+            .filter(AlbumLike.user_id == '85', 
+                    AlbumLike.album_id.ilike(search)).all()
+    else:
+        albumlikes = []
+
+    liked_albums = [album.album_id for album in albumlikes]
 
     response_object = {'status': 'success'}
     response_object['works'] = works_list
+    response_object['liked_albums'] = liked_albums
     response = jsonify(response_object)
     return response
 

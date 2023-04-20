@@ -42,7 +42,8 @@
                       <span class="album-work-artists">{{ printArtists(data.artists) }}</span><br>
                       <span class="album-work-artists"><span style='font-size: 10px;'>
                           <b-icon-clock></b-icon-clock>
-                        </span>&nbsp;{{ printDuration(data.tracks) }}</span>&nbsp;<b-badge class="duration-badge">{{printFull(work.duration, data.tracks)}}</b-badge><br><span v-if="showTracks(work.duration, data.tracks)"><br></span>
+                        </span>&nbsp;{{ printDuration(data.tracks) }}</span>&nbsp;<b-badge class="duration-badge">{{printFull(work.duration, data.tracks)}}</b-badge> <AlbumLikes :likedAlbums="likedAlbums" :album="data" :selectedAlbum="$config.album" />
+                        <br><span v-if="showTracks(work.duration, data.tracks)"><br></span>
                 <tr v-if="showTracks(work.duration, data.tracks)">
                   <td v-html="printTracks(work, data.tracks)" class="work-td-minor">
                   </td>
@@ -89,8 +90,12 @@
 import { staticURL } from "@/main.js";
 import { eventBus } from "@/main.js";
 import axios from "axios";
+import AlbumLikes from "@/components/albums/AlbumLikes.vue";
 
 export default {
+  components: {
+    AlbumLikes,
+  },
   data() {
     return {
       spotifyLogoURLWhite: staticURL + 'Spotify_Logo_RGB_White.png',
@@ -102,7 +107,9 @@ export default {
       message: "",
       page: 1,
       infiniteId: +new Date(),
-      params: {}
+      params: {},
+      selectedAlbum: null,
+      likedAlbums: [],
     };
   },
   computed: {
@@ -316,6 +323,8 @@ export default {
       axios
         .get(path, { params })
         .then(({ data }) => {
+          console.log(data);
+          this.likedAlbums = data.liked_albums;
           this.albumDataLoading = false;
           if (data.works.length) {
             this.albumWorks.push(...data.works);
@@ -342,7 +351,6 @@ export default {
         });
     },
     getAlbumData(work, data) {
-      console.log(work, data);
       const workAlbumId = work.id + data.album_id;
       this.$config.composer = work.composer;
       this.$config.album = workAlbumId;
@@ -369,7 +377,6 @@ export default {
         let match = true;
         while (match) {
           var i = Math.floor(Math.random() * this.albumWorks.length);
-          console.log(i);
           if (this.albumWorks[i][0].id == this.$config.work && this.albumWorks.length > 1) {
             match = true;
           } else {
@@ -391,7 +398,6 @@ export default {
         let match = true;
         while (match) {
           var i = Math.floor(Math.random() * this.albumWorks.length);
-          console.log(i);
           if (this.albumWorks[i][0].id == this.$config.work && this.albumWorks.length > 1) {
             match = true;
           } else {
@@ -664,12 +670,22 @@ td.work-td:hover {
  .narrow{
   font-family: Roboto Condensed !important;
  }
-.duration-badge{
+ .duration-badge{
   font-size: 10px;
   font-family: Roboto Condensed !important;
   color: var(--medium-light-gray);
-  vertical-align: 0.5px;
   background-color: var(--medium-gray);
+  border-radius: 3px;
+}
+  >>> .badge{
+  font-size: 10px;
+  font-family: Roboto Condensed !important;
+  vertical-align: 0.5px;
+  border-radius: 3px;
+  margin-bottom: 0px;
+}
+>>> .user-liked{
+  font-size: 13px !important;
 }
 
 
