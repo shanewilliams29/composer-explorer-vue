@@ -9,7 +9,7 @@
           <b-card-text>
             <div class="centered album-data">
               <span>{{composer}}</span>
-              <span style="font-weight: bold;">{{title}}</span>
+              <span class="title" style="font-weight: bold;">{{title}}</span>
               <span class="narrow" style="color: var(--medium-dark-gray); font-size: 13px;">{{album.artists}}</span>
             </div>
           </b-card-text>
@@ -148,5 +148,8 @@ cursor: pointer;
 .album-data {
   padding-left: 12px;
   line-height: 130%;
+}
+.title{
+  color: var(--playback-color);
 }
 </style>

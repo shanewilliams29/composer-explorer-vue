@@ -49,6 +49,7 @@ export default {
     } else {
       document.documentElement.style.setProperty("--flex", "1");
     }
+    document.documentElement.style.setProperty("--playback-color", "#79c0fe");
   },
   created() {
     // remove query parameters for landing from search on another page
@@ -75,4 +76,6 @@ export default {
 >>> .music-note{
   color: var(--blue);
 }
+
+
 </style>

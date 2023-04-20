@@ -373,17 +373,17 @@ input[type="range"]:focus {
   input[type="range"]::-webkit-slider-runnable-track {
     overflow: hidden;
     height: 6px;
-    color: #ffc107;
+    color: var(--playback-color);
     margin-top: -3px;
   }
 
   input[type="range"]::-webkit-slider-thumb {
-    box-shadow: -350px 0 0 350px #ffc107;
+    box-shadow: -350px 0 0 350px var(--playback-color);
   }
 }
 /** FF*/
 input[type="range"]::-moz-range-progress {
-  background-color: #ffc107;
+  background-color: var(--playback-color);
   height: 6px;
 }
 </style>

@@ -5,7 +5,7 @@
         <AlbumInfo />
       </b-col>
       <b-col>
-        <b-button class="info-panel-button" @click="$emit('togglePanel')" variant="warning">
+        <b-button class="info-panel-button" @click="$emit('togglePanel')">
           <span v-if="!showPanel"><b-icon-chevron-up></b-icon-chevron-up></span>
           <span v-else><b-icon-chevron-down></b-icon-chevron-down></span> INFO PANEL
         </b-button>
@@ -69,5 +69,9 @@ export default {
   padding-bottom: 1px !important;
   bottom: 90px;
   z-index: 9999;
+  background-color: var(--playback-color) !important;
+  color: black !important;
+  border: none;
+  outline: none !important;
 }
 </style>

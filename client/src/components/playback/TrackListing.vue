@@ -170,7 +170,7 @@ export default {
   color: rgba(211, 211, 211, 0.75);
 }
 .highlight-track {
-  color: #ffc107 !important;
+  color: var(--playback-color) !important;
 }
 
 /*scrollbars*/

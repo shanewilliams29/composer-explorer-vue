@@ -55,6 +55,7 @@ export default {
     } else {
         document.documentElement.style.setProperty('--flex', '0 0 450px');
     }
+    document.documentElement.style.setProperty("--playback-color", "#c0a5de");
   },
   created() {
     window.firstLoad = false; // allow playback on first load for performer view

@@ -30,6 +30,7 @@ export default {
   },
   created(){
     this.$view.mode = 'radio';
+    document.documentElement.style.setProperty("--playback-color", "#99e7ab");
   }
 }
 </script>

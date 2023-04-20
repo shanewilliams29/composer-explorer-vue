@@ -51,6 +51,7 @@ export default {
     } else{
       this.showCloud = true;
     }
+    document.documentElement.style.setProperty("--playback-color", "#febe89");
   },
 }
 </script>
