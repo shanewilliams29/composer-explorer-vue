@@ -49,7 +49,7 @@ export default {
   created() {
     window.firstLoad = false; // allow playback on first load
     this.$view.mode = "favorites";
-    document.documentElement.style.setProperty("--playback-color", "#ed99a1");
+    document.documentElement.style.setProperty("--playback-color", "#e7727d"); //#dc3545
   },
 };
 
