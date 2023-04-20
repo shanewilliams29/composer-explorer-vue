@@ -42,8 +42,9 @@
                       <span class="album-work-artists">{{ printArtists(data.artists) }}</span><br>
                       <span class="album-work-artists"><span style='font-size: 10px;'>
                           <b-icon-clock></b-icon-clock>
-                        </span>&nbsp;{{ printDuration(data.tracks) }}</span>&nbsp;<b-badge class="duration-badge">{{printFull(work.duration, data.tracks)}}</b-badge> <AlbumLikes :likedAlbums="likedAlbums" :album="data" :selectedAlbum="$config.album" />
-                        <br><span v-if="showTracks(work.duration, data.tracks)"><br></span>
+                        </span>&nbsp;{{ printDuration(data.tracks) }}</span>&nbsp;<b-badge class="duration-badge">{{printFull(work.duration, data.tracks)}}</b-badge>
+                      <AlbumLikes :likedAlbums="likedAlbums" :album="data" :selectedAlbum="$config.album" />
+                      <br><span v-if="showTracks(work.duration, data.tracks)"><br></span>
                 <tr v-if="showTracks(work.duration, data.tracks)">
                   <td v-html="printTracks(work, data.tracks)" class="work-td-minor">
                   </td>
@@ -64,7 +65,6 @@
     </Transition>
   </div>
   </div>
-
   <!-- ALBUM GRID -->
   <div class="container-fluid">
     <h6 class="message narrow">
@@ -184,7 +184,7 @@ export default {
       }
       return this.duration(duration);
     },
-    printFull(workDuration, tracks) { 
+    printFull(workDuration, tracks) {
       let duration = 0;
       for (var i = 0; i < tracks.length; i++) {
         duration = duration + tracks[i][3];
@@ -194,7 +194,7 @@ export default {
       }
       return "Full performance";
     },
-    showTracks(workDuration, tracks) { 
+    showTracks(workDuration, tracks) {
       let duration = 0;
       for (var i = 0; i < tracks.length; i++) {
         duration = duration + tracks[i][3];
@@ -204,7 +204,7 @@ export default {
       }
       return false;
     },
-    printTracks(work, tracks) { 
+    printTracks(work, tracks) {
       let duration = 0;
       let tracksList = "";
       for (var i = 0; i < tracks.length; i++) {
@@ -221,13 +221,13 @@ export default {
           trackFixed = trackRaw.substring(trackRaw.lastIndexOf(':') + 1)
         }
 
-        if (i < 4){
+        if (i < 4) {
           tracksList = tracksList + trackFixed + "<br>";
         } else {
           tracksList = tracksList + "<span style='color: var(--medium-dark-gray)'>" + (tracks.length - 4) + " more track" + (tracks.length == 5 ? "" : "s") + "</span>";
           break;
         }
-        
+
       }
       if (duration < work.duration / 1.5) {
         return tracksList;
@@ -466,22 +466,22 @@ export default {
   opacity: 0;
 }
 
-.close-button{
+.close-button {
   position: absolute;
   top: 5px;
   right: 15px;
 }
 
- #albums-overlay {
-        display: block;
-        position: fixed;
-        top: 66px;
-        left: 0;
-        width: 100%;
-        height: calc(100vh - 66px - 100px);
-        background: rgba(52, 58, 64, 0.75);
+#albums-overlay {
+  display: block;
+  position: fixed;
+  top: 66px;
+  left: 0;
+  width: 100%;
+  height: calc(100vh - 66px - 100px);
+  background: rgba(52, 58, 64, 0.75);
 
-    }
+}
 
 .reveal {
   visibility: visible !important;
@@ -511,30 +511,30 @@ export default {
   font-family: Roboto Condensed !important;
 }
 
-.album-work-composer{
+.album-work-composer {
   color: var(--orange);
   font-size: 14px;
 }
 
-.album-work-title{
+.album-work-title {
   color: var(--my-white);
   font-weight: 600;
   font-size: 14px;
 }
 
-.album-work-cat{
+.album-work-cat {
   color: var(--medium-light-gray);
   font-size: 12px;
 }
 
-.album-highlight-artist{
+.album-highlight-artist {
   color: turquoise;
   font-weight: 600;
   font-size: 12px;
   font-family: Roboto Condensed !important;
 }
 
-.album-work-artists{
+.album-work-artists {
   color: var(--medium-dark-gray);
   font-size: 12px;
   font-family: Roboto Condensed !important;
@@ -560,18 +560,19 @@ export default {
   color: var(--my-white) !important;
 }
 
-.highlight .work-td-minor{
+.highlight .work-td-minor {
   color: var(--my-white) !important;
   border-left: solid 1px var(--my-white);
 }
 
-table.no-wrap{
+table.no-wrap {
 
- border-collapse: collapse;
+  border-collapse: collapse;
   width: 100%;
 }
 
-table.no-wrap th, table.no-wrap td {
+table.no-wrap th,
+table.no-wrap td {
 
   padding-left: 10px;
   padding-right: 10px;
@@ -581,17 +582,17 @@ table.no-wrap th, table.no-wrap td {
   width: 100%;
 }
 
-tr{
+tr {
   width: 100%;
 }
 
-td.work-td{
+td.work-td {
   border-left: solid 1px white;
   padding-top: 5px;
   padding-bottom: 5px;
 }
 
-td.work-td-minor{
+td.work-td-minor {
   width: 100%;
   border-left: solid 1px var(--orange);
   white-space: nowrap;
@@ -605,10 +606,9 @@ td.work-td-minor{
   font-family: Roboto Condensed !important;
 }
 
-/* Change color of the table cell when hovering over it */
 td.work-td:hover {
-    background-color: #454D54; /* Choose your desired color */
-    cursor: pointer;
+  background-color: #454D54;
+  cursor: pointer;
 }
 
 .image-caption {
@@ -624,14 +624,13 @@ td.work-td:hover {
   overflow-x: hidden;
 }
 
-.album-popup-cover{
+.album-popup-cover {
   box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
-/*  max-height: calc(80vh - var(--workingheight));*/
   max-height: calc(100vh - 66px - var(--panelheight) - 100px - 40px);
   max-width: 50vw;
 }
 
-.orange{
+.orange {
   color: var(--orange) !important;
 }
 
@@ -653,66 +652,79 @@ td.work-td:hover {
   height: auto;
   box-shadow: rgba(0, 0, 0, 0.2) 0px 1px 4px;
 }
+
 .album-cover:hover {
   cursor: pointer;
   box-shadow: rgba(0, 0, 0, 0.6) 0px 2px 4px !important;
   outline: solid 5px var(--orange);
 }
+
 .spinner {
   text-align: center;
 }
+
 .spinner-left {
   text-align: left;
 }
+
 .m-5 {
-    color: #9da6af;
+  color: #9da6af;
 }
-.message{
+
+.message {
   margin-top: 12px;
   text-align: center;
   margin-bottom: 2px;
   color: var(--medium-gray);
 }
- .narrow{
+
+.narrow {
   font-family: Roboto Condensed !important;
- }
- .duration-badge{
+}
+
+.duration-badge {
   font-size: 10px;
   font-family: Roboto Condensed !important;
   color: var(--medium-light-gray);
   background-color: var(--medium-gray);
   border-radius: 3px;
 }
- .highlight .duration-badge{
+
+.highlight .duration-badge {
   font-size: 10px;
   font-family: Roboto Condensed !important;
   color: var(--dark-gray);
   background-color: var(--my-white);
   border-radius: 3px;
 }
-  >>> .badge{
+
+>>>.badge {
   font-size: 10px;
   font-family: Roboto Condensed !important;
   vertical-align: 0.5px;
   border-radius: 3px;
   margin-bottom: 0px;
 }
-  .highlight >>> .badge{
+
+.highlight>>>.badge {
   color: var(--dark-gray) !important;
 }
->>> .user-liked{
+
+>>>.user-liked {
   font-size: 13px !important;
 }
-.highlight >>> span{
+
+.highlight>>>span {
   color: white !important;
 }
 
 
- /*scrollbars*/
+/*scrollbars*/
 .image-caption {
   --scroll-bar-color: var(--medium-gray);
   --scroll-bar-bg-color: var(--dark-gray);
 }
+
 .info-card-text {
   image-caption: thin;
   image-caption: var(--scroll-bar-color) var(--scroll-bar-bg-color) !important;
@@ -723,14 +735,15 @@ td.work-td:hover {
   width: 12px;
   height: 12px;
 }
+
 .image-caption::-webkit-scrollbar-track {
   background: var(--scroll-bar-bg-color) !important;
 }
+
 .image-caption::-webkit-scrollbar-thumb {
   background-color: var(--scroll-bar-color);
   border-radius: 20px;
   border: 3px solid var(--scroll-bar-bg-color) !important;
 }
-
 </style>
 
