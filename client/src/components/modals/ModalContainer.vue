@@ -36,6 +36,9 @@ export default {
     },
     autoplayDisabled(){
       this.$bvModal.show('autoplay-modal');
+    },
+    spotifyFailure(){
+      this.$bvModal.show('spotify-fail-modal');
     }
   },
   mounted() {
@@ -43,6 +46,7 @@ export default {
     eventBus.$on('fireAutoplayFailed', this.autoplayDisabled);
     eventBus.$on('notPremium', this.notPremium);
     eventBus.$on('fireNotFoundModal', this.notAvailable);
+    eventBus.$on('spotifyFail', this.spotifyFailure);
   },
 };
 </script>

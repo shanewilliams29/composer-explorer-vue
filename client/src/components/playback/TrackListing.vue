@@ -51,7 +51,7 @@ export default {
         var element = document.getElementById(trackId);
         var top = element.offsetTop;
         this.$refs["scroll-box"].scrollTo({
-          top: top,
+          top: top - 21,
           left: 0,
           behavior: "smooth",
         });
@@ -159,7 +159,7 @@ export default {
 .track-card-text {
   color: var(--medium-light-gray);
   padding-top: 6px;
-  padding-bottom: 0px;
+  padding-bottom: 5px;
   padding-right: 10px;
 }
 .track-row:hover {

@@ -139,6 +139,8 @@ var spotify = {
         eventBus.$emit('notLoggedIn');
       } else if (error.response.status == 404 || error.response.status == 502){
         eventBus.$emit('notAvailable');
+      } else if (error.response.status == 500 || error.response.status == 503){
+        eventBus.$emit('spotifyFail');
       } else {
         console.error(error);
       }
