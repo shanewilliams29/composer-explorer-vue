@@ -91,6 +91,26 @@ import { eventBus } from "@/main.js";
 import axios from "axios";
 import AlbumLikes from "@/components/albums/AlbumLikes.vue";
 
+function debounce(func, wait, leading = true) {
+  let timeout;
+  let lastCall = 0;
+
+  return function (...args) {
+    const context = this;
+    const now = Date.now();
+
+    if (leading && now - lastCall >= wait) {
+      func.apply(context, args);
+      lastCall = now;
+    } else {
+      clearTimeout(timeout);
+      timeout = setTimeout(() => {
+        func.apply(context, args);
+      }, wait);
+    }
+  };
+}
+
 export default {
   components: {
     AlbumLikes,
@@ -340,21 +360,21 @@ export default {
           console.error(error);
         });
     },
-    infiniteHandler($state) {
+    infiniteHandler: debounce(function($state) {
       const params = this.params;
       const path = "api/albumsview";
       axios
         .get(path, { params })
         .then(({ data }) => {
           if (data.albums.length) {
-            this.params['page'] += 1;
+            this.params["page"] += 1;
             this.albums.push(...data.albums);
             $state.loaded();
           } else {
             $state.complete();
           }
         });
-    },
+    }, 3000),
     getAlbumData(work, data) {
       const workAlbumId = work.id + data.album_id;
       this.$config.composer = work.composer;
