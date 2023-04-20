@@ -42,8 +42,7 @@
                       <span class="album-work-artists">{{ printArtists(data.artists) }}</span><br>
                       <span class="album-work-artists"><span style='font-size: 10px;'>
                           <b-icon-clock></b-icon-clock>
-                        </span>&nbsp;{{ printDuration(data.tracks) }}</span>&nbsp;<b-badge class="duration-badge">{{printFull(work.duration, data.tracks)}}</b-badge>
-                      <AlbumLikes :likedAlbums="likedAlbums" :album="data" :selectedAlbum="$config.album" />
+                        </span>&nbsp;{{ printDuration(data.tracks) }}</span>&nbsp;<b-badge class="duration-badge">{{printFull(work.duration, data.tracks)}}</b-badge> <AlbumLikes :likedAlbums="likedAlbums" :album="data" :selectedAlbum="$config.album" />
                       <br><span v-if="showTracks(work.duration, data.tracks)"><br></span>
                 <tr v-if="showTracks(work.duration, data.tracks)">
                   <td v-html="printTracks(work, data.tracks)" class="work-td-minor">
