@@ -8,7 +8,6 @@ import InfiniteLoading from "vue-infinite-loading";
 import VueLazyload from "vue-lazyload";
 import vueDebounce from "vue-debounce";
 import router from "./router";
-import VueWordCloud from "vuewordcloud";
 
 import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap-vue/dist/bootstrap-vue.css";
@@ -25,7 +24,7 @@ Vue.use(vueDebounce, {
 Vue.use(InfiniteLoading, {
     props: {
         spinner: "spiral",
-        distance: 200,
+        distance: 500,
     },
 });
 const loadimage = "https://storage.googleapis.com/composer-explorer.appspot.com/assets/album_placeholder.png";
@@ -38,7 +37,6 @@ Vue.use(VueLazyload, {
 
 Vue.component("vue-typeahead-bootstrap", VueTypeaheadBootstrap);
 Vue.component("v-select", vSelect);
-Vue.component(VueWordCloud.name, VueWordCloud);
 
 export const eventBus = new Vue();
 export const spotifyPlayer = new Vue();

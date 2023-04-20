@@ -28,7 +28,7 @@ for orders in worklist:
         cat=orders['cat'],
         recommend=orders['recommend'],
         title=orders['title'],
-        search=orders['search'],
+        # search=orders['search'],
         date=orders['date'],
         openopus=False)
     db.session.merge(new_entry)
