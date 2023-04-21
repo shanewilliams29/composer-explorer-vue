@@ -71,12 +71,22 @@ export default {
 }
 </script>
 <style scoped>
-.fade-enter-active, .fade-leave-active {
-  transition: opacity 0.75s;
+.fade-enter-active {
+  transition: all 0.5s;
 }
-.fade-enter, .fade-leave-to {
+
+.fade-leave-active {
+  transition: all 0.3s;
+}
+
+.fade-enter {
   opacity: 0;
 }
+
+.fade-leave-to {
+  opacity: 0;
+}
+
 >>> .highlight{
   background-color: var(--purple);
 }

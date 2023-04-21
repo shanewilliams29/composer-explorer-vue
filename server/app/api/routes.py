@@ -16,7 +16,6 @@ import time
 
 
 @bp.route('/api/getalbumworks', methods=['GET'])  # work list for selected album in albums view
-#@cache.cached()
 def get_albumworks():
     album_id = request.args.get('album_id')
     works = db.session.query(WorkList, WorkAlbums.data, func.count(AlbumLike.id).label('total'))\
@@ -59,7 +58,7 @@ def get_albumworks():
     return response
 
 
-@bp.route('/api/getonealbum', methods=['GET'])  # retrieves albums for a given work
+@bp.route('/api/getonealbum', methods=['GET'])  # used in links to albums
 def get_onealbum():
     album_id = request.args.get('id')
     artist_name = None
@@ -118,7 +117,7 @@ def get_onealbum():
                 item['artists'] = ", ".join(two_artists)
                 break
         
-    # sort the album list on popularity and likes (recommended)
+    # sort the album list on score
     sorted_list = sorted(album_list, key=lambda d: d['score'], reverse=True)
 
     # return response
@@ -134,7 +133,7 @@ def get_onealbum():
     return response
 
 
-@bp.route('/api/albumsview', methods=['GET'])  # retrieves albums for a given work
+@bp.route('/api/albumsview', methods=['GET'])  # populates AlbumsView with albums
 def get_albumsview():
     page = request.args.get('page', 1, type=int)
     composer_name = request.args.get('composer')
@@ -146,7 +145,7 @@ def get_albumsview():
 
     # base query
     query = db.session.query(WorkAlbums)
-    query = query.filter(WorkAlbums.hidden != True)  # WorkAlbums.album_type != "compilation"
+    query = query.filter(WorkAlbums.hidden != True)
     
     # filter on composer if present
     if composer_name and composer_name != "all":
@@ -185,7 +184,7 @@ def get_albumsview():
         query = query.join(WorkList)\
             .filter(WorkList.title == work_title)
 
-    # sort the results. Album type sort rates albums ahead of compilations and singles
+    # sort the results. Album type sorts albums ahead of compilations and singles
     query = query.order_by(WorkAlbums.album_type, WorkAlbums.score.desc())
 
     # execute the query
@@ -250,11 +249,11 @@ def get_albumsview():
     elif sort == 'oldest':
         sorted_list = sorted(album_list, key=lambda d: d['release_date'])
     else:
-        # sort the album list on popularity and likes (recommended)
+        # sort the album list on score
         sorted_list = sorted(album_list, key=lambda d: d['score'], reverse=True)
 
     # return paginated items
-    results_per_page = 30
+    results_per_page = 50
     list_start = page * results_per_page - results_per_page
     list_end = page * results_per_page
 
@@ -264,17 +263,11 @@ def get_albumsview():
     response_object = {'status': 'success'}
     response_object['albums'] = sorted_list
     response_object['works'] = works_list
-
-    if sorted_list:
-        composer = ComposerList.query.filter_by(name_short=sorted_list[0]['composer']).first()
-        return_composer = prepare_composers([composer])
-        response_object['composer'] = return_composer
-
     response = jsonify(response_object)
     return response
 
 
-@bp.route('/api/workslist', methods=['GET'])  # work list for album view
+@bp.route('/api/workslist', methods=['GET'])  # work list for album view search dropdown
 #@cache.cached()
 def get_workslist():
     works_list = []

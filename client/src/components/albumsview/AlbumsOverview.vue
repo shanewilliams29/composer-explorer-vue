@@ -499,7 +499,6 @@ export default {
   width: 100%;
   height: calc(100vh - 66px - 100px);
   background: rgba(52, 58, 64, 0.75);
-
 }
 
 .reveal {
@@ -585,14 +584,12 @@ export default {
 }
 
 table.no-wrap {
-
   border-collapse: collapse;
   width: 100%;
 }
 
 table.no-wrap th,
 table.no-wrap td {
-
   padding-left: 10px;
   padding-right: 10px;
   text-align: left;
