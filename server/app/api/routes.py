@@ -73,8 +73,6 @@ def get_onealbum():
 
     # decode JSON album data and prepare JSON
     album_list = []
-    duplicates_set = set()
-    match_string = ""
 
     for album in albums:
         item = json.loads(album.data)
@@ -90,19 +88,6 @@ def get_onealbum():
             if item['track_count'] > 50 and int(item['release_date'][0:4]) > 2019:
                 item['score'] = item['score'] / 4
 
-        # # filter out repeat albums
-        artists_string = "".join(sorted(re.sub(r'[^\w\s]', '', item['artists']).replace(" ", "").lower()))
-
-        if artist_name:  # return more repeat results for performer filter (allow distinct years)
-            match_string = artists_string + str(item['release_date'])
-        else:  # return more unique artists otherwise
-            match_string = artists_string
-
-        # do not include in album list if duplicate, unless it has favorites
-        if match_string in duplicates_set:
-            continue
-        else:
-            duplicates_set.add(match_string)
         # add to album list
         album_list.append(item)
 
@@ -221,10 +206,8 @@ def get_albumsview():
         # # filter out repeat albums
         artists_string = "".join(sorted(re.sub(r'[^\w\s]', '', item['artists']).replace(" ", "").lower()))
 
-        if artist_name:  # return more repeat results for performer filter (allow distinct years)
-            match_string = artists_string + str(item['release_date'])
-        else:  # return more unique artists otherwise
-            match_string = artists_string
+        # return more repeat results for performer (allow distinct years)
+        match_string = artists_string + str(item['release_date'])
 
         # do not include in album list if duplicate, unless it has favorites
         if match_string in duplicates_set:

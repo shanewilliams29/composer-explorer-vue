@@ -63,10 +63,10 @@ export default {
   opacity: 0;
 }
 >>> .highlight{
-  background-color: var(--orange) !important;
+  background-color: #e47112 !important;
 }
 >>> .highlight td{
-  background-color: var(--orange) !important;
+  background-color: #e47112 !important;
 }
 >>> .music-note{
   color: var(--orange);
