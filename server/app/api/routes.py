@@ -1,6 +1,6 @@
 from app import db, sp, cache, storage_client
 from flask import jsonify, request, session, abort, current_app
-from flask_login import current_user, login_required
+from flask_login import current_user
 from config import Config
 from app.functions import prepare_composers, group_composers_by_region, group_composers_by_alphabet
 from app.functions import prepare_works
@@ -10,7 +10,6 @@ from sqlalchemy import func, text, or_, and_
 from app.api import bp
 from unidecode import unidecode
 import json
-import random
 import re
 import time
 
@@ -152,7 +151,9 @@ def get_albumsview():
         query = query.filter(WorkAlbums.composer == composer_name)
 
         # get works list for composer
-        works = db.session.query(WorkList.title).filter(WorkList.composer == composer_name).order_by(WorkList.title).distinct()
+        works = db.session.query(WorkList.title)\
+            .filter(WorkList.composer == composer_name)\
+            .order_by(WorkList.title).distinct()
         works_list = [work for (work,) in works]
 
     # filter on era if present
@@ -169,7 +170,8 @@ def get_albumsview():
         query = query.join(ComposerList).filter(ComposerList.born >= datemin, ComposerList.born < datemax)
 
         # get works list for era
-        works = db.session.query(WorkList.title).join(ComposerList, ComposerList.name_short == WorkList.composer)\
+        works = db.session.query(WorkList.title)\
+            .join(ComposerList, ComposerList.name_short == WorkList.composer)\
             .filter(ComposerList.born >= datemin, ComposerList.born < datemax)\
             .order_by(WorkList.title).distinct()
         works_list = [work for (work,) in works]
@@ -241,7 +243,8 @@ def get_albumsview():
                 two_artists.reverse()
                 item['artists'] = ", ".join(two_artists)
                 break
-        
+
+    # apply sorting
     if sort == 'popular':
         sorted_list = sorted(album_list, key=lambda d: d['score'], reverse=True)
     elif sort == 'newest':
