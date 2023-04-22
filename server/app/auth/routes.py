@@ -11,6 +11,16 @@ import random
 import json
 
 
+@bp.route('/testlogin', methods=['GET'])
+def test_login():
+    user = User.query.filter_by(display_name='testusergfj9ewg43h4ge43l32l2fras').first()
+    if user and user.id == 85:
+        login_user(user)
+        return jsonify({'status': 'success', 'message': 'Logged in successfully'})
+    else:
+        return jsonify({'status': 'error', 'message': 'Log in unsuccessful'}), 401
+
+
 @bp.route('/connect_spotify')
 def connect_spotify():
     url = sp.authorize()

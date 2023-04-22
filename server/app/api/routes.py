@@ -60,7 +60,6 @@ def get_albumworks():
 @bp.route('/api/getonealbum', methods=['GET'])  # used in links to albums
 def get_onealbum():
     album_id = request.args.get('id')
-    artist_name = None
 
     # get workalbums for album id
     albums = [db.session.query(WorkAlbums).filter(WorkAlbums.album_id == album_id).first()]
@@ -291,8 +290,6 @@ def get_userdata():
 
 @bp.route('/api/omnisearch', methods=['GET'])
 def omnisearch():
-    # Start the timer
-    start_time = time.time()
 
     # look for search term or filter term
     search_item = request.args.get('search')
@@ -366,19 +363,12 @@ def omnisearch():
     #     if i > 10:
     #         break
 
-    # Calculate the time taken
-    end_time = time.time()
-    time_taken = end_time - start_time
 
-    # Print the time taken
-    print('Time taken:', time_taken)
-   
     # return response
     response_object = {'status': 'success'}
     response_object['composers'] = composers
     response_object['works'] = return_works
     # response_object['artists'] = return_list
-    response_object['query_time'] = time_taken
     response = jsonify(response_object)
     return response
 
@@ -1099,7 +1089,7 @@ def get_albums(work_id):
 
         # do not include in album list if duplicate, unless it has favorites
         if match_string in duplicates_set:
-            if(album.total == 0):
+            if (album.total == 0):
                 continue
         else:
             duplicates_set.add(match_string)
@@ -1194,7 +1184,7 @@ def like_action(album_id, action):
         response = jsonify(response_object)
         return response
 
-    response_object = {'error': 'must be logged in to like albums'}
+    response_object = {'status': 'error'}
     response = jsonify(response_object)
     return response
 
@@ -1402,8 +1392,12 @@ def get_artistlist():
         .group_by(Performers.id).order_by(text('total DESC')).all()
 
     composers = db.session.query(ComposerList.name_full).all()
-
     composer_names = set(composer for (composer,) in composers)
+    
+    # remove composers who were also conductors and performance artists
+    exceptions_list = ['Leonard Bernstein', 'Pierre Boulez', 'Steve Reich']
+    for exception in exceptions_list:
+        composer_names.remove(exception)
 
     # remove composers and bad results
     for _id, artist, img, description, count in artists:
@@ -1416,7 +1410,7 @@ def get_artistlist():
     return response
 
 
-@bp.route('/api/topartists', methods=['GET'])  # used to build json list for word cloud
+@bp.route('/api/topartists', methods=['GET'])  # used to build json lists for performance view
 def get_topartists():
 
     def get_artists():

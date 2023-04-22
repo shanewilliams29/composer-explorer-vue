@@ -1,0 +1,379 @@
+from test_secrets import os
+import unittest
+import json
+from app import create_app
+from app.models import User, WorkAlbums
+
+
+app = create_app()
+
+
+class TestAPI(unittest.TestCase):
+    def setUp(self):
+        self.app_context = app.app_context()
+        self.app_context.push()
+        self.client = app.test_client()
+
+    def tearDown(self):
+        self.app_context.pop()
+
+    def test_get_albumworks(self):
+
+        album_id = '6Y32IeqLPuUZftGjiLOINZ'
+        response = self.client.get('/api/getalbumworks', query_string={'album_id': album_id})
+
+        self.assertEqual(response.status_code, 200)
+
+        data = json.loads(response.data)
+        self.assertEqual(data['status'], 'success')
+        self.assertGreater(len(data['works']), 0)
+        self.assertIn('liked_albums', data)
+
+    def test_get_onealbum(self):
+
+        album_id = '6Y32IeqLPuUZftGjiLOINZ'
+        response = self.client.get('/api/getonealbum', query_string={'id': album_id})
+
+        self.assertEqual(response.status_code, 200)
+
+        data = json.loads(response.data)
+        self.assertEqual(data['status'], 'success')
+        self.assertGreater(len(data['albums']), 0)
+        self.assertGreater(len(data['composer']), 0)
+
+        for album in data['albums']:
+            self.assertIn('id', album)
+            self.assertIn('img_big', album)
+            self.assertIn('label', album)
+            self.assertIn('track_count', album)
+            self.assertIn('composer', album)
+            self.assertIn('duration', album)
+            self.assertIn('score', album)
+            self.assertIn('artists', album)
+
+    def test_get_albumsview(self):
+        query = {
+            'page': 1,
+            'composer': 'Wagner',
+            'artist': 'Sir Georg Solti',
+            'era': 'romantic',
+            'work': 'Tristan und Isolde',
+            'sort': 'popular'
+        }
+        response = self.client.get('/api/albumsview', query_string=query)
+
+        self.assertEqual(response.status_code, 200)   
+
+        data = json.loads(response.data)
+        self.assertEqual(data['status'], 'success')
+        self.assertGreater(len(data['albums']), 0)
+        self.assertGreater(len(data['works']), 0)
+
+    def test_get_workslist(self):
+        response = self.client.get('/api/workslist', follow_redirects=True)
+
+        self.assertEqual(response.status_code, 200)   
+
+        data = json.loads(response.data)
+        self.assertEqual(data['status'], 'success')
+        self.assertGreater(len(data['works']), 0)
+
+    def test_get_userdata(self):
+        response = self.client.get('/api/userdata', follow_redirects=True)
+
+        self.assertEqual(response.status_code, 200)   
+
+        data = json.loads(response.data)
+        self.assertEqual(data['status'], 'success')
+        self.assertIn('new_posts', data)
+
+    def test_omnisearch(self):
+
+        search_string = 'Mahler 2'
+        response = self.client.get('/api/omnisearch', query_string={'search': search_string})
+
+        self.assertEqual(response.status_code, 200)
+
+        data = json.loads(response.data)
+        self.assertEqual(data['status'], 'success')
+        self.assertGreater(len(data['composers']), 0)
+        self.assertGreater(len(data['works']), 0)
+
+    def test_get_composers(self):
+
+        # Default load
+        response = self.client.get('/api/composers')
+
+        self.assertEqual(response.status_code, 200)
+
+        data = json.loads(response.data)
+        self.assertEqual(data['status'], 'success')
+        self.assertGreater(len(data['composers']), 0)
+        self.assertGreater(len(data['genres']), 0)
+
+        # Filter
+        response = self.client.get('/api/composers', query_string={'filter': 'romantic'})
+
+        self.assertEqual(response.status_code, 200)
+
+        data = json.loads(response.data)
+        self.assertEqual(data['status'], 'success')
+        self.assertGreater(len(data['composers']), 0)
+        self.assertGreater(len(data['genres']), 0)
+
+        # Search
+        response = self.client.get('/api/composers', query_string={'search': 'wagner'})
+
+        self.assertEqual(response.status_code, 200)
+
+        data = json.loads(response.data)
+        self.assertEqual(data['status'], 'success')
+        self.assertGreater(len(data['composers']), 0)
+        self.assertGreater(len(data['genres']), 0)
+
+    def test_get_favoritescomposers(self):
+
+        # Log in test user
+        login_response = self.client.get('/testlogin')
+        self.assertEqual(login_response.status_code, 200)
+        self.assertEqual(login_response.json['status'], 'success')
+
+        # test endpoint
+        response = self.client.get('/api/favoritescomposers')
+        
+        self.assertEqual(response.status_code, 200)
+
+        data = json.loads(response.data)
+        self.assertEqual(data['status'], 'success')
+        self.assertGreater(len(data['composers']), 0)
+        self.assertGreater(len(data['genres']), 0)
+
+    def test_get_multicomposers(self):
+        composers_data = [
+            {"value": "Wagner"},
+            {"value": "Berlioz"},
+        ]
+
+        response = self.client.post('api/multicomposers', json=composers_data)
+       
+        self.assertEqual(response.status_code, 200)
+
+        data = json.loads(response.data)
+        self.assertEqual(data['status'], 'success')
+        self.assertGreater(len(data['composers']), 0)
+        self.assertGreater(len(data['genres']), 0)
+
+    def test_get_composersradio(self):
+        response = self.client.get('/api/composersradio')
+        
+        self.assertEqual(response.status_code, 200)
+        
+        data = json.loads(response.data)
+        self.assertEqual(data['status'], 'success')
+        self.assertGreater(len(data['composers']), 0)
+        self.assertIn('Wagner', data['composers'])
+
+    def test_get_works(self):
+
+        # Base case
+        response = self.client.get('/api/works/Wagner')
+        
+        self.assertEqual(response.status_code, 200)
+        
+        data = json.loads(response.data)
+        self.assertEqual(data['status'], 'success')
+        self.assertGreater(len(data['works']), 0)
+        self.assertGreater(len(data['playlist']), 0)
+
+        # Search case
+        response = self.client.get('/api/works/Wagner', query_string={'search': 'tristan'})
+
+        self.assertEqual(response.status_code, 200)
+        
+        data = json.loads(response.data)
+        self.assertEqual(data['status'], 'success')
+        self.assertGreater(len(data['works']), 0)
+        self.assertGreater(len(data['playlist']), 0)
+
+        # Filter case
+        response = self.client.get('/api/works/Wagner', query_string={'filter': 'all'})
+
+        self.assertEqual(response.status_code, 200)
+        
+        data = json.loads(response.data)
+        self.assertEqual(data['status'], 'success')
+        self.assertGreater(len(data['works']), 0)
+        self.assertGreater(len(data['playlist']), 0)
+
+    def test_get_favoriteworks(self):
+
+        # Log in test user
+        login_response = self.client.get('/testlogin')
+        self.assertEqual(login_response.status_code, 200)
+        self.assertEqual(login_response.json['status'], 'success')
+
+        response = self.client.get('/api/favoriteworks/Wagner')
+        self.assertEqual(response.status_code, 200)
+
+        data = json.loads(response.data)
+        self.assertEqual(data['status'], 'success')
+        self.assertGreater(len(data['works']), 0)
+        self.assertGreater(len(data['playlist']), 0)
+
+    def test_get_radioworks(self):
+
+        # Basic test
+        payload = {
+            "genres": [{"value": "all"}],
+            "filter": "all",
+            "search": "",
+            "artist": "",
+            "radio_type": "composer"
+        }
+
+        response = self.client.post('api/radioworks', json=payload)
+        self.assertEqual(response.status_code, 200)
+
+        data = json.loads(response.data)
+        self.assertEqual(data['status'], 'success')
+
+        # Test favorites radio
+        payload = {
+            "genres": [{"value": "all"}],
+            "filter": "all",
+            "search": "",
+            "artist": "",
+            "radio_type": "favorites"
+        }
+
+        # Log in test user
+        login_response = self.client.get('/testlogin')
+        self.assertEqual(login_response.status_code, 200)
+        self.assertEqual(login_response.json['status'], 'success')    
+        
+        # Get favorites radio
+        response = self.client.post('api/radioworks', json=payload)
+        self.assertEqual(response.status_code, 200)
+        self.assertGreater(len(data['works']), 0)
+        self.assertGreater(len(data['playlist']), 0)
+
+        # Test with specific filter, search term, and artist
+        payload = {
+            "genres": [{"value": "Opera"}],
+            "filter": "recommended",
+            "search": "Parsifal",
+            "artist": "Waltraud Meier",
+            "radio_type": "all"
+        }
+
+        response = self.client.post('api/radioworks', json=payload)
+        self.assertEqual(response.status_code, 200)
+        self.assertGreater(len(data['works']), 0)
+        self.assertGreater(len(data['playlist']), 0)
+        
+        data = json.loads(response.data)
+        self.assertEqual(data['status'], 'success')  
+        self.assertGreater(len(data['works']), 0)
+        self.assertGreater(len(data['playlist']), 0)
+
+        # Test radio export
+        payload = {
+            "genres": [{"value": "Opera"}],
+            "filter": "recommended",
+            "search": "Parsifal",
+            "performer": "Waltraud Meier",
+            "radio_type": "performer",
+            "limit": 100,
+            "name": "My Spotify Playlist",
+            "prefetch": True,
+            "random": False
+        }
+
+        response = self.client.post('api/exportplaylist', json=payload)
+        self.assertEqual(response.status_code, 200)
+
+        data = json.loads(response.data)
+        self.assertGreater(data['track_count'], 0)
+
+    def test_get_albums(self):
+
+        # Log in test user
+        login_response = self.client.get('/testlogin')
+        self.assertEqual(login_response.status_code, 200)
+        self.assertEqual(login_response.json['status'], 'success') 
+
+        # Basic test
+        response = self.client.get('/api/albums/WAGNER00013')
+        self.assertEqual(response.status_code, 200)
+
+        data = json.loads(response.data)
+        self.assertEqual(data['status'], 'success') 
+        self.assertGreater(len(data['artists']), 0)
+        self.assertIn('liked_albums', data)
+        self.assertIn('composer', data)
+        self.assertIn('Wagner', data['composer'][0]['name_short'])
+
+        # With filters
+        query = {
+            'page': 1,
+            'artist': 'Sir Georg Solti',
+            'sort': 'durationdescending',
+            'limit': 100,
+        }
+        response = self.client.get('/api/albums/WAGNER00013', query_string=query)
+        self.assertEqual(response.status_code, 200)
+
+        data = json.loads(response.data)
+        self.assertEqual(data['status'], 'success') 
+        self.assertGreater(len(data['artists']), 0)
+        self.assertIn('liked_albums', data)
+        self.assertIn('composer', data)
+        self.assertIn('Wagner', data['composer'][0]['name_short'])
+
+        # Favorites
+        query = {
+            'favorites': True
+        }
+        response = self.client.get('/api/albums/WAGNER00013', query_string=query)
+        self.assertEqual(response.status_code, 200)
+
+        data = json.loads(response.data)
+        self.assertEqual(data['status'], 'success')
+
+    def test_like_action(self):
+
+        # Unauthenticated user
+        response = self.client.get('/api/like/BERLIOZ000026Y32IeqLPuUZftGjiLOINZ/like')
+        self.assertEqual(response.status_code, 200)
+
+        data = json.loads(response.data)
+        self.assertEqual(data['status'], 'error') 
+
+        # Log in test user
+        login_response = self.client.get('/testlogin')
+        self.assertEqual(login_response.status_code, 200)
+        self.assertEqual(login_response.json['status'], 'success') 
+
+        # Test liking an album
+        response = self.client.get('/api/like/BERLIOZ000026Y32IeqLPuUZftGjiLOINZ/like')
+        self.assertEqual(response.status_code, 200)
+
+        data = json.loads(response.data)
+        self.assertEqual(data['status'], 'success')  
+
+        album = WorkAlbums.query.get('BERLIOZ000026Y32IeqLPuUZftGjiLOINZ')
+        self.assertTrue(User.query.get(85).has_liked_album(album))
+
+        # Test unliking an album
+        response = self.client.get('/api/like/BERLIOZ000026Y32IeqLPuUZftGjiLOINZ/unlike')
+        self.assertEqual(response.status_code, 200)
+
+        data = json.loads(response.data)
+        self.assertEqual(data['status'], 'success')  
+
+        album = WorkAlbums.query.get('BERLIOZ000026Y32IeqLPuUZftGjiLOINZ')
+        self.assertFalse(User.query.get(85).has_liked_album(album))
+
+
+if __name__ == '__main__':
+    unittest.main(verbosity=2)

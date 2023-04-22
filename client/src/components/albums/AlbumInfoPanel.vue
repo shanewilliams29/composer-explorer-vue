@@ -110,7 +110,6 @@ export default {
       // retrieves data from Spotify. 'album' is database album object
       this.results = [];
       this.artists = album.artist_details;
-      console.log(this.artists);
       this.artists = this.fixArtists(this.artists);
       let album_id = album.album_uri.substring(album.album_uri.lastIndexOf(":") + 1);
       spotify.getSpotifyAlbum(this.$auth.appToken, album_id);

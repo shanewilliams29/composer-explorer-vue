@@ -74,6 +74,7 @@ export default {
 }
 .user-liked{
   color: darkgoldenrod !important;
+  vertical-align: -0.5px;
 }
 .highlight .user-liked{
   color: var(--my-white) !important;

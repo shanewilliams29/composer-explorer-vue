@@ -325,14 +325,6 @@ class Performers(db.Model):
         #if album not in self.albums:
         self.albums.append(album)
 
-# class PerformerAlbums(db.Model):
-#     __tablename__ = 'performer_albums'
-#     id = db.Column(db.Integer, primary_key=True)
-#     performer_id = db.Column(db.String(48), db.ForeignKey('performers.id'))
-#     work_id = db.Column(db.String(24), db.ForeignKey('work_list.id'))
-#     album_id = db.Column(db.String(46), db.ForeignKey('work_albums.id'))
-
-
 
 class WorkAlbums(db.Model):
     id = db.Column(db.String(46), primary_key=True)

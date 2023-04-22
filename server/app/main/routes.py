@@ -11,7 +11,7 @@ from app.main import bp
 def before_app_request():
     
     # redirect to https
-    if "localhost:5000" in request.url:
+    if "localhost" in request.url:  # removed :5000
         pass
     else:
         if not request.is_secure:
