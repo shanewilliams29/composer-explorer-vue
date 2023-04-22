@@ -47,6 +47,6 @@ snippets
 *.ipynb
 .ipynb_checkpoints
 production.txt
-import_works.py
+import_new_works.py
 import_composers.py
 test_secrets.py

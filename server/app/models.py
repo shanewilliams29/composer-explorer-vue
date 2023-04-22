@@ -273,6 +273,7 @@ class ArtistAlbums(db.Model):
     updated = db.Column(db.DateTime, default=datetime.utcnow)
 
 
+# Old table of artists/performers
 @dataclass
 class Artists(db.Model):
     id: str
