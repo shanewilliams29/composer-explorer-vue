@@ -11,7 +11,6 @@ from app.api import bp
 from unidecode import unidecode
 import json
 import re
-import time
 
 
 @bp.route('/api/getalbumworks', methods=['GET'])  # work list for selected album in albums view
@@ -1300,8 +1299,6 @@ def get_albuminfo(album_id):
 @bp.route('/api/artistcomposers/<artist_name>', methods=['GET'])  # for performer mode composers
 def get_artistcomposers(artist_name):
 
-    start_time = time.time()
-
     composers = db.session.query(ComposerList).join(WorkAlbums).join(performer_albums).join(Performers)\
         .filter(Performers.name == artist_name)\
         .order_by(ComposerList.region, ComposerList.born).all()
@@ -1328,12 +1325,6 @@ def get_artistcomposers(artist_name):
     response_object['composers'] = composers_by_region
     response_object['genres'] = genre_list
     response = jsonify(response_object)
-
-    end_time = time.time()
-    time_taken = end_time - start_time
-
-    # Print the time taken
-    print('Time taken:', time_taken)
 
     return response
 

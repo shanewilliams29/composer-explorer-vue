@@ -374,6 +374,72 @@ class TestAPI(unittest.TestCase):
         album = WorkAlbums.query.get('BERLIOZ000026Y32IeqLPuUZftGjiLOINZ')
         self.assertFalse(User.query.get(85).has_liked_album(album))
 
+    def test_get_composerinfo(self):
+
+        response = self.client.get('/api/composerinfo/Wagner')
+        self.assertEqual(response.status_code, 200)
+
+        data = json.loads(response.data)
+        self.assertEqual(data['status'], 'success')
+        self.assertIn('Wagner', data['info']['name_short'])
+
+    def test_get_workinfo(self):
+
+        response = self.client.get('/api/workinfo/WAGNER00013')
+
+        self.assertEqual(response.status_code, 200)
+
+        response_data = json.loads(response.data)
+        self.assertEqual(response_data['status'], 'success')
+        self.assertEqual(response_data['info']['composer'], "Wagner")
+
+    def test_get_albuminfo(self):
+
+        response = self.client.get('/api/albuminfo/BERLIOZ000026Y32IeqLPuUZftGjiLOINZ')
+
+        self.assertEqual(response.status_code, 200)
+
+        response_data = json.loads(response.data)
+        self.assertEqual(response_data['status'], 'success')
+        self.assertEqual(response_data['album']['composer'], "Berlioz")
+
+    def test_get_artistcomposers(self):
+
+        response = self.client.get('/api/artistcomposers/Waltraud%20Meier')
+
+        self.assertEqual(response.status_code, 200)
+
+        data = json.loads(response.data)
+        self.assertEqual(data['status'], 'success')
+        self.assertGreater(len(data['composers']), 0)
+        self.assertGreater(len(data['genres']), 0)
+
+    def test_get_artistworks(self):
+
+        query = {
+            'composer': 'Wagner',
+            'artist': 'Sir Georg Solti',
+        }
+
+        response = self.client.get('/api/artistworks', query_string=query)
+        
+        self.assertEqual(response.status_code, 200)
+        
+        data = json.loads(response.data)
+        self.assertEqual(data['status'], 'success')
+        self.assertGreater(len(data['works']), 0)
+        self.assertGreater(len(data['playlist']), 0)
+
+    def test_get_artistlist(self):
+
+        response = self.client.get('/api/artistlist')
+
+        self.assertEqual(response.status_code, 200)
+
+        data = json.loads(response.data)
+        self.assertEqual(data['status'], 'success')
+        self.assertGreater(len(data['artists']), 0)
+
 
 if __name__ == '__main__':
     unittest.main(verbosity=2)
