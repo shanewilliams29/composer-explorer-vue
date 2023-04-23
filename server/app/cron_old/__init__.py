@@ -2,10 +2,10 @@ from flask import session, current_app, Blueprint
 from app import db, log, sp
 from config import Config
 from datetime import datetime, timedelta
-from app.cron.classes import GroupAlbums, SmartAlbums
+from app.cron_old.classes import GroupAlbums, SmartAlbums
 from app.models import WorkList, Spotify, WorkAlbums, Artists, ComposerCron
 from app.models import ArtistList, Performers, AlbumLike, performer_albums
-from app.cron.functions import search_spotify_and_save, search_album
+from app.cron_old.functions import search_spotify_and_save, search_album
 from sqlalchemy import func, or_, text
 import click
 import json
@@ -14,7 +14,7 @@ import requests
 import httpx
 import asyncio
 
-bp = Blueprint('cron', __name__)
+bp = Blueprint('cron_old', __name__)
 
 log_name = "cron-log"
 logger = log.logger(log_name)

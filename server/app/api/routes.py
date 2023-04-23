@@ -454,8 +454,9 @@ def get_composers():
         composer_name_list.append(composer.name_short)
 
     session['radio_composers'] = composer_name_list
-    if Config.MODE == "DEVELOPMENT":
-        cache.set('composers', composer_name_list)  # store in cache for dev server
+    if Config.MODE == "DEVELOPMENT" or Config.SECRET_KEY == 'abcde':
+        print('CACHE HIT')
+        cache.set('composers', composer_name_list)  # store in cache for dev server and testing
 
     # get genres list (for radio)
     with open('app/static/genres.json') as f:
