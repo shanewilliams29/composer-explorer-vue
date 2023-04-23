@@ -98,6 +98,22 @@ class SpotifyAPI(object):
         response = requests.get('https://api.spotify.com/v1/search', headers=headers, params=params)
         return response
 
+    def get_next_search_page(self, nexturl):
+
+        headers = {
+            'Authorization': 'Bearer {}'.format(session['app_token']),
+        }
+        response = requests.get(nexturl, headers=headers)
+        return response
+
+    def search_spotify_by_url(self, url):
+
+        headers = {
+            'Authorization': 'Bearer {}'.format(session['app_token']),
+        }
+        response = requests.get(url, headers=headers)
+        return response
+
     def get_more_results(self, resultslist, nexturl, time, _id):
         stoptime = datetime.now() + timedelta(seconds=time)
         while nexturl and datetime.now() < stoptime:
