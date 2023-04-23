@@ -53,7 +53,6 @@ def get_spotify_albums_and_store(composer_name):
     print(f"\n{len(works)} works found for {composer_name}. Beginning Spotify data pull...\n")
 
     works_processed = set()
-
     while len(works_processed) < len(works):
 
         timer.set_loop_length(len(works) - len(works_processed))

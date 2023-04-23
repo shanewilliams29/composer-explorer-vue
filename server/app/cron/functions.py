@@ -44,6 +44,8 @@ def retrieve_spotify_tracks_for_work_async(composer, work):
     else:
         search_string = work.composer + " " + work.title + " " + work.cat
 
+    print(f"Searching Spotify: [{search_string}]")
+
     search_urls = []
     for i in range(0, 1000, 50): 
         search_urls.append(f"https://api.spotify.com/v1/search?query={search_string}&type=track&offset={i}&limit=50")
@@ -54,7 +56,7 @@ def retrieve_spotify_tracks_for_work_async(composer, work):
         track_list.extend(result['tracks']['items'])
 
     if len(track_list) > 0:
-        print(f"Spotify search complete! {len(track_list)} tracks found.")
+        print(f"{len(track_list)} tracks found!")
     
     return track_list
 
