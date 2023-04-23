@@ -455,7 +455,6 @@ def get_composers():
 
     session['radio_composers'] = composer_name_list
     if Config.MODE == "DEVELOPMENT" or Config.SECRET_KEY == 'abcde':
-        print('CACHE HIT')
         cache.set('composers', composer_name_list)  # store in cache for dev server and testing
 
     # get genres list (for radio)
@@ -702,6 +701,7 @@ def get_favoriteworks(name):
 
 @bp.route('/api/radioworks', methods=['POST'])  # used in radio mode for populating work list
 def get_radioworks():
+    
     # get selected genres
     payload = request.get_json()
 
