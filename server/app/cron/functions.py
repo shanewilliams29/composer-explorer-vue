@@ -127,7 +127,7 @@ def drop_unmatched_tracks(composer, work, tracks):
             return False
         return True
 
-    def is_cat_found_in_title(work, track):
+    def is_cat_found_in_track(work, track):
         cat1 = re.sub(r'\W+', ' ', work.cat.lower().strip()).replace(" ", "") + " "
         cat2 = re.sub(r'\W+', ' ', work.cat.lower().strip()) + " "
         name = re.sub(r'\W+', ' ', track['name'].lower()) + " "
@@ -136,18 +136,55 @@ def drop_unmatched_tracks(composer, work, tracks):
             return False
 
         return True
-    
+
+    def should_check_no(work):
+        work_title_string = re.sub(r'\W+', ' ', work.title.lower())
+
+        if " no " in work_title_string:
+            return True
+        return False
+
+    def is_no_found_in_track(work, track): # Sonata No. 4
+        work_title_string = re.sub(r'\W+', ' ', work.title.lower())  # sonata no 4
+        track_string = re.sub(r'\W+', ' ', track['name'].lower())
+
+        # print(f'\nWORK: {work.title} --> {work_title_string}')
+        
+        three_chars_after_no = work_title_string.split(" no ", 1)[1].replace(" ", "")[0:3]  # 4
+        find_digits = re.search(r'\d+', three_chars_after_no)  # re.Match object for digits after " no "
+        if find_digits:  # will return None if digits are not found
+            num = find_digits.group()  # 4, result digits from re
+        else:
+            return False
+
+        no = "no " + num + " "
+        # print("M " + no)
+        # print("S " + track_string)
+        
+        if no not in track_string + " ":
+            # print('REJECT')
+            return False
+        else:
+            # print('MATCH')
+            return True
+
     for track in tracks:
         
-        # check that composer appears in artists and skip if not
+        # CHECK 1: check that composer appears in artists and skip if not
         artists = track['artists']
         if not is_composer_in_artists(composer, artists):
             continue
 
-        # check that cat number appears in work, if relevant
+        # CHECK 2: check that cat number appears in work, if relevant. Skip if not
         if should_check_cat(composer, work):
-            if not is_cat_found_in_title(work, track):
+            if not is_cat_found_in_track(work, track):
                 continue
 
+        # CHECK 3: check that the work no. appears in track name. Pass if there isn't a no.
+        if should_check_no(work):
+            if not is_no_found_in_track(work, track):
+                continue
+            else:
+                print(track['name'])
 
 

@@ -44,8 +44,7 @@ def get_spotify_albums_and_store(composer_name):
     works = db.session.query(WorkList)\
         .filter(WorkList.composer == composer_name, WorkList.spotify_loaded == None)\
         .all()
-    # .filter(WorkList.title == "Symphonie fantastique")\
-
+        # .filter(WorkList.title == "Sonata No. 4")\
     if not works:
         print(f"Error: No unprocessed works for {composer_name} found!")
         exit()
