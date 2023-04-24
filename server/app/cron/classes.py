@@ -24,7 +24,7 @@ class Timer(object):
         remaining_time = remaining * (1 / item_per_second)
         remaining = str(timedelta(seconds=round(remaining_time)))
         
-        print(f">>> Completed [ {count} ] of [ {self.loop_length} ]. Time elapsed: [ {self.elapsed} ]. Remaining time: [ {remaining} ]\n")
+        print(f"    Completed [ {count} ] of [ {self.loop_length} ]. Time elapsed: [ {self.elapsed} ]. Remaining time: [ {remaining} ]\n")
 
     def get_elapsed_time(self):
         return self.elapsed

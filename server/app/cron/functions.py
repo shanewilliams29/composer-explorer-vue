@@ -56,63 +56,24 @@ def retrieve_spotify_tracks_for_work_async(composer, work):
     for result in result_list:
         track_list.extend(result['tracks']['items'])
 
-    if len(track_list) > 0:
-        print(f"    [ {len(track_list)} ] tracks retrieved!")
+    # do search again for case where opera composer has cat numbers (returns more operas)
+    if not composer.general and work.genre.lower().strip() in general_genres:
+        search_string = work.composer + " " + work.title + " " + work.cat
+    
+        print(f"    Searching Spotify... \"{search_string}\"")
+
+        search_urls = []
+        for i in range(0, 1000, 50): 
+            search_urls.append(f"https://api.spotify.com/v1/search?query={search_string}&type=track&offset={i}&limit=50")
+
+        result_list = asyncio.run(main(search_urls))
+
+        for result in result_list:
+            track_list.extend(result['tracks']['items'])
+
+    print(f"    [ {len(track_list)} ] tracks retrieved!")
     
     return track_list
-
-
-# def retrieve_spotify_tracks_for_work(composer, work):
-    
-#     track_list = []
-#     general_genres = get_general_genres()
-
-#     # search without cat numbers for composer.general or opera/stage work
-#     if composer.general or work.genre.lower().strip() in general_genres:
-#         search_string = work.composer + " " + work.title
-
-#     # search with cat numbers if not composer.general
-#     else:
-#         search_string = work.composer + " " + work.title + " " + work.cat
-
-#     response = sp.search(search_string)
-#     results = response.json()
-
-#     if results.get('error'):
-#         raise Exception(results['error']['status'])
-
-#     # do a more general search on just cat. no if no results
-#     if len(results['tracks']['items']) == 0 and work.cat.strip() and work.cat.strip() != "Op. posth.":
-#         search_string = work.composer + " " + work.cat
-#         response = sp.search(search_string)
-#         results = response.json()
-
-#     if results.get('error'):
-#         raise Exception(results['error']['status'])  
-
-#     if len(results['tracks']['items']) == 0:
-#         raise Exception(404)
-
-#     # add items to track list
-#     track_list.extend(results['tracks']['items'])
-
-#     # get next pages of results
-#     next_url = results['tracks']['next']
-
-#     while next_url:
-#         response = sp.get_next_search_page(next_url)
-#         results = response.json()
-#         
-
-#         if results.get('error'):
-#             raise Exception(results['error']['status'])
-
-#         track_list.extend(results['tracks']['items'])
-#         next_url = results['tracks']['next']
-
-#     print(f"\nSpotify search complete! {len(track_list)} tracks found.")
-        
-#     return track_list
 
 
 def drop_unmatched_tracks(composer, work, tracks):
@@ -221,7 +182,7 @@ def drop_unmatched_tracks(composer, work, tracks):
             if not is_no_found_in_track(work, track):
                 continue
 
-        # CHECK 4: check that title is an exact match if no cat number in work
+        # CHECK 4: check that title is a match if no cat number in work
         if not should_check_cat(composer, work):
             if not is_title_match(work, track):
                 continue

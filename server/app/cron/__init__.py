@@ -79,7 +79,7 @@ def get_spotify_albums_and_store(composer_name):
                         continue
 
                 if len(tracks) == 0:
-                    print("\n>>> No tracks found for work. Skipping...\n")
+                    print("\n    No tracks found for work. Skipping...\n")
                     # work.spotify_loaded = True
                     # db.session.commit()
                     works_processed.add(work.id)
@@ -93,7 +93,7 @@ def get_spotify_albums_and_store(composer_name):
                     continue
 
                 if len(matched_tracks) == 0:
-                    print("\n>>> No matching tracks found for work. Skipping...\n")
+                    print("\n    No matching tracks found for work. Skipping...\n")
                     # work.spotify_loaded = True
                     # db.session.commit()
                     works_processed.add(work.id)
