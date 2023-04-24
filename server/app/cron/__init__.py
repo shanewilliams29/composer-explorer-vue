@@ -3,7 +3,9 @@ from datetime import datetime, timedelta
 
 from app import db, log, sp
 from app.cron.classes import Timer, SpotifyToken, Errors
-from app.cron.functions import retrieve_spotify_tracks_for_work_async, get_albums_from_ids, drop_unmatched_tracks, get_album_list_from_tracks
+from app.cron.functions import retrieve_spotify_tracks_for_work_async, retrieve_album_tracks_and_drop
+from app.cron.functions import get_albums_from_ids_async, drop_unmatched_tracks, get_album_list_from_tracks
+from app.cron.functions import prepare_work_albums_and_performers
 from app.models import WorkList, ComposerList
 
 import click
@@ -88,6 +90,7 @@ def get_spotify_albums_and_store(composer_name):
                 # STEP 2: PURGE TRACKS THAT DON'T MATCH WORK TITLE
                 try:
                     matched_tracks = drop_unmatched_tracks(composer, work, tracks)
+                    print(f"    [ {len(matched_tracks)} ] matched with work!")
                 except Exception as e:
                     print(f"\n>>> TRACK MATCH ERROR: {e}. Will try again next loop...\n")
                     continue
@@ -103,16 +106,31 @@ def get_spotify_albums_and_store(composer_name):
                 album_id_list = get_album_list_from_tracks(matched_tracks)
 
                 try:
-                    albums = get_albums_from_ids(album_id_list)
+                    albums = get_albums_from_ids_async(album_id_list)
+                except httpx.HTTPStatusError as e:
+                    if e.response.status_code == 429:
+                        print(f"\n>>> 429 ALBUM FETCH ERROR: Rate limit exceeded. Will try again next loop...\n")
+                        errors.register_rate_error()
+                        time.sleep(4)
+                        continue
+                    else:
+                        print(f"\n>>> {e.response.status_code} ALBUM FETCH ERROR: An unexpected error occurred. Will try again next loop...\n")
+                        errors.register_misc_error()
+                        continue
+
+                # STEP 4: RETRIEVE ALL ALBUM TRACKS FROM SPOTIFY AND DROP NON-MATCHING TRACKS
+                try:
+                    processed_albums = retrieve_album_tracks_and_drop(composer, work, albums)
                 except Exception as e:
-                    print(f"\n>>> ALBUM FETCH ERROR: {e}. Will try again next loop...\n")
+                    print(f"\n>>> ALBUMS TRACK FETCH ERROR: {e}. Will try again next loop...\n")
                     continue
 
-                # STEP 4: PROCESS SPOTIFY ALBUM INFORMATION INTO WORKALBUMS ENTITY
-
-
-                # STEP 5: GET PERFORMERS FOR ALL ALBUM TRACKS
-
+                # STEP 5: PREPARE WORK ALBUMS AND PERFORMERS FOR DATABASE STORAGE
+                try:
+                    work_albums, performers = prepare_work_albums_and_performers(composer, work, processed_albums)
+                except Exception as e:
+                    print(f"\n>>> ALBUMS INFO PREP ERROR: {e}. Will try again next loop...\n")
+                    continue                
 
 
                 # STEP 6: STORE ALBUM AND PERFORMERS IN DATABASE

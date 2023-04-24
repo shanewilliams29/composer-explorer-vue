@@ -347,6 +347,7 @@ class WorkAlbums(db.Model):
     work_track_count = db.Column(db.Integer)
     album_type = db.Column(db.String(255))
     duration = db.Column(db.Integer)
+    markets = db.Column(db.Text)
     likes = db.relationship('AlbumLike', backref='album', lazy='dynamic', passive_deletes=True)
     work = db.relationship("WorkList", back_populates="albums")
     performers = db.relationship("Performers", secondary=performer_albums, back_populates="albums", lazy='dynamic')

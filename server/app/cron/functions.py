@@ -4,6 +4,7 @@ import re
 import httpx
 import asyncio
 import unidecode
+import jsonpickle
 
 
 def get_general_genres():
@@ -189,8 +190,6 @@ def drop_unmatched_tracks(composer, work, tracks):
 
         good_tracks.append(track)
 
-    print(f"    [ {len(good_tracks)} ] matched with work!")
-
     return good_tracks
 
 
@@ -204,31 +203,132 @@ def get_album_list_from_tracks(tracks):
     return list(album_ids)
 
 
-def get_albums_from_ids(id_list):
+def get_albums_from_ids_async(id_list):
+
+    api_endpoint = 'https://api.spotify.com/v1/albums?ids='
+    url_fetch_list = []
+
+    print("    Fetching albums...")
+
+    for i in range(0, len(id_list), 20):
+        id_fetch_list = id_list[i:i + 20]
+        id_string = ','.join(id_fetch_list)
+
+        url_fetch_list.append(api_endpoint + id_string)
+
+    album_results = asyncio.run(main(url_fetch_list))
 
     album_list = []
-    k = 0
-    while k < len(id_list):
+    for album_group in album_results:
+        album_list.extend(album_group['albums'])
 
-        i = 0
-        id_fetch_list = []
-
-        while i < 20 and k < len(id_list):
-            
-            id_fetch_list.append(id_list[k])
-            i += 1
-            k += 1
-
-        id_string = ','.join(id_fetch_list)
-        response = sp.get_albums(id_string)
-        print(f"    Fetching albums... {k} of {len(id_list)}", end='\r')
-        results = response.json()
-
-        if results.get('error'):
-            raise Exception(results['error']['message'])  
-
-        album_list.append(results)
-
-    print(f"\n    [ {len(id_list)} ] albums retrieved!\n")
+    print(f"    [ {len(album_list)} ] albums retrieved!\n")
 
     return album_list
+
+
+def retrieve_album_tracks_and_drop(composer, work, albums):
+
+    print("    Processing albums...")
+
+    for album in albums:
+
+        tracks = album['tracks']['items']
+        next_tracks_url = album['tracks']['next']
+
+        while next_tracks_url:
+            response = sp.get_more_album(next_tracks_url)
+            results = response.json()
+        
+            if results.get('error'):
+                raise Exception(results['error']['message'])
+
+            tracks.extend(results['items'])
+            next_tracks_url = results['next']
+
+        work_tracks = drop_unmatched_tracks(composer, work, tracks)
+        album['work_tracks'] = work_tracks
+
+    print(f"    [ {len(albums)} ] albums prepared for processing!")
+
+    return albums
+
+
+def prepare_work_albums_and_performers(composer, work, albums):
+
+    for album in albums:
+
+        # Album information
+        work_album_id = work.id + album['id']
+        work_id = work.id
+        spotify_album_id = album['id']
+        work_composer = work.composer
+        try:
+            img_large = album['images'][0]
+        except Exception:
+            img_large = None
+        try:
+            img_small = album['images'][1]
+        except Exception:
+            img_small = None
+        label = album['label']
+        album_title = album['name']
+        markets = album['available_markets']
+        album_track_count = album['total_tracks']
+        work_track_count = len(album['work_tracks'])
+        album_type = album['album_type']
+        release_date = album['release_date'].split('-')[0]
+        popularity = album['popularity']
+
+        # Generate track data
+        work_track = {}
+        track_list = []
+        tracks = album['work_tracks']
+        for track in tracks:
+            work_track = {
+                'id': track['id'],
+                'uri': track['uri'],
+                'title': track['name'],
+                'disc_no': track['disc_number'],
+                'track_no': track['track_number'],
+                'duration': track['duration_ms'],
+                'preview_url': track['preview_url'],
+                'artists': track['artists'],
+            }
+            track_list.append(work_track)
+
+        track_list = sorted(track_list, key=lambda i: (i['disc_no'], i['track_no']))
+
+        data = {}
+
+        work_playlist = []
+        for track in track_list:
+            work_playlist.append(track['uri'])
+
+        for i, track in enumerate(track_list):
+            cut = len(work_playlist) - i
+            track_playlist = " ".join(work_playlist[-cut:])
+            track_data_item = [track['title'], track['id'], track_playlist, track['duration']]
+            print(track_data_item)
+            print(' ')
+
+
+
+
+        # work_album = WorkAlbums(id=work_album_id,
+        #                         workid=work_id,
+        #                         album_id=spotify_album_id,
+        #                         composer=work_composer,
+        #                         score=score,
+        #                         data=data,
+        #                         filled=True,
+        #                         got_artists=False,
+        #                         img=img,
+        #                         label=label,
+        #                         title=album_title,
+        #                         markets=markets,
+        #                         track_count=album_track_count,
+        #                         work_track_count=work_track_count,
+        #                         album_type=album_type,
+        #                         duration=album_duration)
+
