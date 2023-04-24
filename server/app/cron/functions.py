@@ -3,6 +3,7 @@ from app import sp
 import re
 import httpx
 import asyncio
+import unidecode
 
 
 def get_general_genres():
@@ -137,54 +138,85 @@ def drop_unmatched_tracks(composer, work, tracks):
 
         return True
 
-    def should_check_no(work):
-        work_title_string = re.sub(r'\W+', ' ', work.title.lower())
+    def should_check_no_work(work):
+        work_title_string = " " + re.sub(r'\W+', ' ', work.title.lower())
 
         if " no " in work_title_string:
             return True
         return False
 
-    def is_no_found_in_track(work, track): # Sonata No. 4
-        work_title_string = re.sub(r'\W+', ' ', work.title.lower())  # sonata no 4
-        track_string = re.sub(r'\W+', ' ', track['name'].lower())
+    def should_check_no_track(track):
+        track_title_string = " " + re.sub(r'\W+', ' ', track['name'].lower())
 
-        # print(f'\nWORK: {work.title} --> {work_title_string}')
+        if " no " in track_title_string:
+            return True
+        return False
+
+    def is_no_found_in_track(work, track):  # Sonata No. 4 in C major
+        work_title_string = " " + re.sub(r'\W+', ' ', work.title.lower())  # sonata no 4 in c major
+        track_string = re.sub(r'\W+', ' ', track['name'].lower())
         
-        three_chars_after_no = work_title_string.split(" no ", 1)[1].replace(" ", "")[0:3]  # 4
+        three_chars_after_no = work_title_string.split(" no ", 1)[1].replace(" ", "")[0:3]  # 4i
         find_digits = re.search(r'\d+', three_chars_after_no)  # re.Match object for digits after " no "
-        if find_digits:  # will return None if digits are not found
+
+        if find_digits:  # re returns None if digits are not found
             num = find_digits.group()  # 4, result digits from re
         else:
             return False
 
         no = "no " + num + " "
-        # print("M " + no)
-        # print("S " + track_string)
         
         if no not in track_string + " ":
-            # print('REJECT')
             return False
         else:
-            # print('MATCH')
             return True
 
+    def is_title_match(work, track):
+        # reject tracks with a "no." if the work doesn't have a "no."
+        work_no_check = should_check_no_work(work)
+        track_no_check = should_check_no_track(track)
+
+        if work_no_check != track_no_check:
+            return False
+
+        # check if titles match, remove sharps and flats
+        work_title_string = re.sub(r'\W+', ' ', work.title.lower()).replace(" sharp", "").replace(" flat", "")
+        track_string = re.sub(r'\W+', ' ', track['name'].lower()).replace(" sharp", "").replace(" flat", "")
+
+        work_title_string = unidecode.unidecode(work_title_string).replace(" ", "")
+        track_string = unidecode.unidecode(track_string).replace(" ", "")
+
+        if work_title_string.strip() not in track_string.strip():
+            pass
+            return False
+        else:
+            return True
+
+    good_tracks = []
+
     for track in tracks:
-        
-        # CHECK 1: check that composer appears in artists and skip if not
+        # CHECK 1: check that composer appears in artists and skip if not found
         artists = track['artists']
         if not is_composer_in_artists(composer, artists):
             continue
 
-        # CHECK 2: check that cat number appears in work, if relevant. Skip if not
+        # CHECK 2: check that cat number appears in work, if relevant. Skip if not found
         if should_check_cat(composer, work):
             if not is_cat_found_in_track(work, track):
                 continue
 
-        # CHECK 3: check that the work no. appears in track name. Pass if there isn't a no.
-        if should_check_no(work):
+        # CHECK 3: check that the work no. appears in track name. Pass if there isn't a no. in work
+        if should_check_no_work(work):
             if not is_no_found_in_track(work, track):
                 continue
-            else:
-                print(track['name'])
+
+        # CHECK 4: check that title is an exact match if no cat number in work
+        if not should_check_cat(composer, work):
+            if not is_title_match(work, track):
+                continue
+
+        print(f"MATCH: {work.title} ---> {track['name']}")
+        good_tracks.append(track)
 
 
+    print(f"{len(good_tracks)} matched with work!")
