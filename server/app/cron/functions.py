@@ -5,6 +5,7 @@ import httpx
 import asyncio
 import unidecode
 import jsonpickle
+import collections
 
 
 def get_general_genres():
@@ -280,7 +281,7 @@ def prepare_work_albums_and_performers(composer, work, albums):
         release_date = album['release_date'].split('-')[0]
         popularity = album['popularity']
 
-        # Generate track data
+        # Generate track list
         work_track = {}
         track_list = []
         tracks = album['work_tracks']
@@ -299,20 +300,44 @@ def prepare_work_albums_and_performers(composer, work, albums):
 
         track_list = sorted(track_list, key=lambda i: (i['disc_no'], i['track_no']))
 
-        data = {}
-
+        # generate album tracks data item
         work_playlist = []
         for track in track_list:
             work_playlist.append(track['uri'])
 
+        data_tracks = []
         for i, track in enumerate(track_list):
             cut = len(work_playlist) - i
             track_playlist = " ".join(work_playlist[-cut:])
             track_data_item = [track['title'], track['id'], track_playlist, track['duration']]
-            print(track_data_item)
-            print(' ')
+            data_tracks.append(track_data_item)
 
+        # generate album artists items
+        raw_artist_list = []
+        for track in track_list:
+            for artist in track['artists']:
+                raw_artist_list.append(artist['name'])
 
+        fixed_artists = []
+        for artist in raw_artist_list:
+            if '/' in artist:
+                split_artists = artist.split('/')
+                split_artists = [x.strip() for x in split_artists]  # Trim whitespace from each artist name
+                fixed_artists.extend(split_artists)
+            else:
+                fixed_artists.append(artist)
+
+        no_composer_list = [x for x in fixed_artists if x != composer.name_full]
+        if len(no_composer_list) == 0:
+            no_composer_list.append(composer.name_full)
+
+        counter = collections.Counter(no_composer_list)
+        #artists = counter
+        artists = ", ".join(list(dict(counter.most_common(2)).keys()))
+        minor_artists = ", ".join(list(set((dict(counter.most_common(8)).keys())) - set(dict(counter.most_common(2)).keys())))
+        all_artists = ", ".join(list(dict(counter).keys()))
+
+    return track_list, track_list
 
 
         # work_album = WorkAlbums(id=work_album_id,
