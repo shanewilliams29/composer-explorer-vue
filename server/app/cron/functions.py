@@ -45,7 +45,7 @@ def retrieve_spotify_tracks_for_work_async(composer, work):
     else:
         search_string = work.composer + " " + work.title + " " + work.cat
 
-    print(f"Searching Spotify: [{search_string}]")
+    print(f"\n    Searching Spotify... \"{search_string}\"")
 
     search_urls = []
     for i in range(0, 1000, 50): 
@@ -57,62 +57,62 @@ def retrieve_spotify_tracks_for_work_async(composer, work):
         track_list.extend(result['tracks']['items'])
 
     if len(track_list) > 0:
-        print(f"{len(track_list)} tracks found!")
+        print(f"    [ {len(track_list)} ] tracks retrieved!")
     
     return track_list
 
 
-def retrieve_spotify_tracks_for_work(composer, work):
+# def retrieve_spotify_tracks_for_work(composer, work):
     
-    track_list = []
-    general_genres = get_general_genres()
+#     track_list = []
+#     general_genres = get_general_genres()
 
-    # search without cat numbers for composer.general or opera/stage work
-    if composer.general or work.genre.lower().strip() in general_genres:
-        search_string = work.composer + " " + work.title
+#     # search without cat numbers for composer.general or opera/stage work
+#     if composer.general or work.genre.lower().strip() in general_genres:
+#         search_string = work.composer + " " + work.title
 
-    # search with cat numbers if not composer.general
-    else:
-        search_string = work.composer + " " + work.title + " " + work.cat
+#     # search with cat numbers if not composer.general
+#     else:
+#         search_string = work.composer + " " + work.title + " " + work.cat
 
-    response = sp.search(search_string)
-    results = response.json()
+#     response = sp.search(search_string)
+#     results = response.json()
 
-    if results.get('error'):
-        raise Exception(results['error']['status'])
+#     if results.get('error'):
+#         raise Exception(results['error']['status'])
 
-    # do a more general search on just cat. no if no results
-    if len(results['tracks']['items']) == 0 and work.cat.strip() and work.cat.strip() != "Op. posth.":
-        search_string = work.composer + " " + work.cat
-        response = sp.search(search_string)
-        results = response.json()
+#     # do a more general search on just cat. no if no results
+#     if len(results['tracks']['items']) == 0 and work.cat.strip() and work.cat.strip() != "Op. posth.":
+#         search_string = work.composer + " " + work.cat
+#         response = sp.search(search_string)
+#         results = response.json()
 
-    if results.get('error'):
-        raise Exception(results['error']['status'])  
+#     if results.get('error'):
+#         raise Exception(results['error']['status'])  
 
-    if len(results['tracks']['items']) == 0:
-        raise Exception(404)
+#     if len(results['tracks']['items']) == 0:
+#         raise Exception(404)
 
-    # add items to track list
-    track_list.extend(results['tracks']['items'])
+#     # add items to track list
+#     track_list.extend(results['tracks']['items'])
 
-    # get next pages of results
-    next_url = results['tracks']['next']
+#     # get next pages of results
+#     next_url = results['tracks']['next']
 
-    while next_url:
-        response = sp.get_next_search_page(next_url)
-        results = response.json()
-        print(f"Searching Spotify: {next_url}", end='\r')
+#     while next_url:
+#         response = sp.get_next_search_page(next_url)
+#         results = response.json()
+#         
 
-        if results.get('error'):
-            raise Exception(results['error']['status'])
+#         if results.get('error'):
+#             raise Exception(results['error']['status'])
 
-        track_list.extend(results['tracks']['items'])
-        next_url = results['tracks']['next']
+#         track_list.extend(results['tracks']['items'])
+#         next_url = results['tracks']['next']
 
-    print(f"\nSpotify search complete! {len(track_list)} tracks found.")
+#     print(f"\nSpotify search complete! {len(track_list)} tracks found.")
         
-    return track_list
+#     return track_list
 
 
 def drop_unmatched_tracks(composer, work, tracks):
@@ -171,6 +171,15 @@ def drop_unmatched_tracks(composer, work, tracks):
         else:
             return True
 
+    def flag_specific_rejections(work_string, track_string):
+        # prevents gotterdammerung tracks from being added to siegfried
+        if "siegfried" in work_string:
+            if "gotterdammerung" in track_string:
+                return True
+            if "twilight" in track_string:
+                return True
+        return False
+
     def is_title_match(work, track):
         # reject tracks with a "no." if the work doesn't have a "no."
         work_no_check = should_check_no_work(work)
@@ -186,11 +195,13 @@ def drop_unmatched_tracks(composer, work, tracks):
         work_title_string = unidecode.unidecode(work_title_string).replace(" ", "")
         track_string = unidecode.unidecode(track_string).replace(" ", "")
 
-        if work_title_string.strip() not in track_string.strip():
-            pass
+        if flag_specific_rejections(work_title_string, track_string):
             return False
-        else:
-            return True
+
+        if work_title_string.strip() not in track_string.strip():
+            return False
+
+        return True
 
     good_tracks = []
 
@@ -215,8 +226,48 @@ def drop_unmatched_tracks(composer, work, tracks):
             if not is_title_match(work, track):
                 continue
 
-        print(f"MATCH: {work.title} ---> {track['name']}")
         good_tracks.append(track)
 
+    print(f"    [ {len(good_tracks)} ] matched with work!")
 
-    print(f"{len(good_tracks)} matched with work!")
+    return good_tracks
+
+
+def get_album_list_from_tracks(tracks):
+
+    album_ids = set()
+    for track in tracks:
+        album_ids.add(track['album']['id'])
+
+    print(f"    [ {len(album_ids)} ] unique albums!\n")
+    return list(album_ids)
+
+
+def get_albums_from_ids(id_list):
+
+    album_list = []
+    k = 0
+    while k < len(id_list):
+
+        i = 0
+        id_fetch_list = []
+
+        while i < 20 and k < len(id_list):
+            
+            id_fetch_list.append(id_list[k])
+            i += 1
+            k += 1
+
+        id_string = ','.join(id_fetch_list)
+        response = sp.get_albums(id_string)
+        print(f"    Fetching albums... {k} of {len(id_list)}", end='\r')
+        results = response.json()
+
+        if results.get('error'):
+            raise Exception(results['error']['message'])  
+
+        album_list.append(results)
+
+    print(f"\n    [ {len(id_list)} ] albums retrieved!\n")
+
+    return album_list

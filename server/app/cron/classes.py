@@ -24,7 +24,7 @@ class Timer(object):
         remaining_time = remaining * (1 / item_per_second)
         remaining = str(timedelta(seconds=round(remaining_time)))
         
-        print(f"Completed {count} of {self.loop_length}. Time elapsed: {self.elapsed}. Remaining time: {remaining}\n")
+        print(f">>> Completed [ {count} ] of [ {self.loop_length} ]. Time elapsed: [ {self.elapsed} ]. Remaining time: [ {remaining} ]\n")
 
     def get_elapsed_time(self):
         return self.elapsed
@@ -53,21 +53,12 @@ class Errors(object):
 
     def __init__(self):
         self.rate_error = self.Error("rate_limit")
-        self.not_found_error = self.Error("not_found")
         self.misc_error = self.Error("misc_error")
 
     def register_rate_error(self):
         self.rate_error.found = True
         self.rate_error.count += 1
 
-    def register_not_found_error(self):
-        self.not_found_error.found = True
-        self.not_found_error.count += 1
-
     def register_misc_error(self):
         self.misc_error.found = True
         self.misc_error.count += 1
-
-    def reset_rate_errors(self):
-        self.rate_error.found = False
-        self.rate_error.count = 0

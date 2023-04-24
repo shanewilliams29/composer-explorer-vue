@@ -3,7 +3,7 @@ from datetime import datetime, timedelta
 
 from app import db, log, sp
 from app.cron.classes import Timer, SpotifyToken, Errors
-from app.cron.functions import retrieve_spotify_tracks_for_work_async, drop_unmatched_tracks
+from app.cron.functions import retrieve_spotify_tracks_for_work_async, get_albums_from_ids, drop_unmatched_tracks, get_album_list_from_tracks
 from app.models import WorkList, ComposerList
 
 import click
@@ -37,16 +37,15 @@ def get_spotify_albums_and_store(composer_name):
     # get composer
     composer = ComposerList.query.filter_by(name_short=composer_name).first()
     if not composer:
-        print(f"Error: Composer {composer_name} not found!")
+        print(f">>> ERROR: Composer {composer_name} not found!")
         exit()
 
     # get works for composer that haven't been processed
     works = db.session.query(WorkList)\
         .filter(WorkList.composer == composer_name, WorkList.spotify_loaded == None)\
         .all()
-    # .filter(WorkList.title == "Symphony No. 5 in C♯ minor")\
     if not works:
-        print(f"Error: No unprocessed works for {composer_name} found!")
+        print(f">>> ERROR: No unprocessed works for {composer_name} found!")
         exit()
 
     print(f"\n{len(works)} works found for {composer_name}. Beginning Spotify data pull...\n")
@@ -63,39 +62,63 @@ def get_spotify_albums_and_store(composer_name):
                 i += 1
 
                 spotify_token.refresh_token()
-                print(f"<{work.id}, {work.title}>")
+                print(f"--- {work.id} ---------------------------------------------------------------------")
 
+                # STEP 1: SEARCH SPOTIFY FOR TRACKS FOR WORK
                 try:
                     tracks = retrieve_spotify_tracks_for_work_async(composer, work)
                 except httpx.HTTPStatusError as e:
                     if e.response.status_code == 429:
-                        print(f"429 ERROR: Rate limit exceeded. Will try again next loop...\n")
+                        print(f"\n>>> 429 TRACK FETCH ERROR: Rate limit exceeded. Will try again next loop...\n")
                         errors.register_rate_error()
                         time.sleep(4)
                         continue
                     else:
+                        print(f"\n>>> {e.response.status_code} TRACK FETCH ERROR: An unexpected error occurred. Will try again next loop...\n")
                         errors.register_misc_error()
-                        print(f"{e.response.status_code} ERROR: An unexpected error occurred. Program terminated.\n")
-                        exit()
+                        continue
 
                 if len(tracks) == 0:
-                    print("404 ERROR: No tracks found for work. Skipping...\n")
-                    errors.register_not_found_error()
-                    work.spotify_loaded = True
-                    db.session.commit()
+                    print("\n>>> No tracks found for work. Skipping...\n")
+                    # work.spotify_loaded = True
+                    # db.session.commit()
                     works_processed.add(work.id)
                     continue
 
-                processed_tracks = drop_unmatched_tracks(composer, work, tracks)
+                # STEP 2: PURGE TRACKS THAT DON'T MATCH WORK TITLE
+                try:
+                    matched_tracks = drop_unmatched_tracks(composer, work, tracks)
+                except Exception as e:
+                    print(f"\n>>> TRACK MATCH ERROR: {e}. Will try again next loop...\n")
+                    continue
 
-                # temp_albums = create_album_list_from_tracks(work, tracks)
+                if len(matched_tracks) == 0:
+                    print("\n>>> No matching tracks found for work. Skipping...\n")
+                    # work.spotify_loaded = True
+                    # db.session.commit()
+                    works_processed.add(work.id)
+                    continue
 
-                # albums, performers = fill_albums_and_performers(temp_albums)
+                # STEP 3: RETRIEVE ALBUMS FROM SPOTIFY FOR TRACKS MATCHING WORK
+                album_id_list = get_album_list_from_tracks(matched_tracks)
 
-                # store_albums(albums)
-                # store_performers(performers)
-                # work.spotify_loaded = True
-                # db.session.commit()
+                try:
+                    albums = get_albums_from_ids(album_id_list)
+                except Exception as e:
+                    print(f"\n>>> ALBUM FETCH ERROR: {e}. Will try again next loop...\n")
+                    continue
+
+                # STEP 4: PROCESS SPOTIFY ALBUM INFORMATION INTO WORKALBUMS ENTITY
+
+
+                # STEP 5: GET PERFORMERS FOR ALL ALBUM TRACKS
+
+
+
+                # STEP 6: STORE ALBUM AND PERFORMERS IN DATABASE
+
+
+
                 works_processed.add(work.id)
                 
                 timer.print_status_update(i)
@@ -103,12 +126,12 @@ def get_spotify_albums_and_store(composer_name):
     time_taken = timer.get_elapsed_time()
     ctx.pop()
 
-    print(f"""Spotify data pull for {composer_name} complete!
-    {len(works)} works processed,
-    {errors.rate_error.count} resolved rate limit 429 errors,
-    {errors.not_found_error.count} work not found 404 errors,
-    {errors.misc_error.count} unresolved misc errors.
-    Total time taken: {time_taken}\n""")
+    print(f"""
+    FINISHED. Spotify data pull for {composer_name} complete!\n
+    [ {len(works)} ] works processed,
+    [ {errors.rate_error.count} ] resolved rate limit 429 errors,
+    [ {errors.misc_error.count} ] unresolved misc errors.
+    [ {time_taken} ] total time taken.\n""")
 
 
 
