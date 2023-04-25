@@ -42,7 +42,7 @@ def get_spotify_albums_and_store(composer_name):
         print(f">>> ERROR: Composer {composer_name} not found!\n")
         exit()
 
-    is_not_general = input("Should load use work catalogue numbers? (y/n): ")
+    is_not_general = input("\n>>> Should load use work catalogue numbers? (y/n): ")
 
     if is_not_general == "y":
         composer.general = False
@@ -60,7 +60,7 @@ def get_spotify_albums_and_store(composer_name):
         .filter(WorkList.composer == composer_name, WorkList.spotify_loaded == None)\
         .all()
     if not works:
-        print(f"\n>>> No unprocessed works for {composer_name} found! Skipping.\n")
+        print(f"\n    No unprocessed works for {composer_name} found! Skipping.\n")
         return
 
     print(f"    \n{len(works)} unprocessed works found for {composer_name}. Beginning Spotify data pull...\n")
@@ -236,6 +236,7 @@ def fill_work_durations(composer_name):
 
 # FILL PERFORMER TABLE WITH IMAGES FROM SPOTIFY
 def get_spotify_performers_img():
+
     ctx = current_app.test_request_context()
     ctx.push()
 
@@ -249,9 +250,10 @@ def get_spotify_performers_img():
         .filter(Performers.img == None).all()
 
     if not artists:
-        print(f">>> No unprocessed performer images found! Skipping.\n")
+        print(f"    No unprocessed performer images found! Skipping.\n")
         return
 
+    print(f"    Retrieving performer images from Spotify...")
     artist_list = []
     for artist in artists:
         artist_list.append(artist)
@@ -307,7 +309,7 @@ def get_spotify_performers_img():
     time_taken = timer.get_elapsed_time()
 
     print(f"""
-    FINISHED. Spotify performer image pull complete!\n
+    \nSpotify performer image pull complete!\n
     [ {len(artist_list)} ] performers processed,
     [ {images_found} ] images retrieved.
     [ {errors.misc_error.count} ] errors.

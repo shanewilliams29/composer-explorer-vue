@@ -342,9 +342,8 @@ def prepare_work_albums_and_performers(composer, work, albums, existing_artists)
             album_score = cutoff
         return album_score * 33.3 + popularity
 
-
     work_albums_list = []
-    work_albums_performers_list = []
+    work_artist_ids = set()
 
     for album in albums:
 
@@ -448,10 +447,7 @@ def prepare_work_albums_and_performers(composer, work, albums, existing_artists)
                 if artist['id'] not in seen_artist_ids:
                     unique_album_artists.append(artist)
                     seen_artist_ids.add(artist['id'])
-
-        # print(seen_artist_ids)
-        # for artist in unique_album_artists:
-        #     print(artist['id'], artist['name'])
+                    work_artist_ids.add(artist['id'])
 
         for artist in unique_album_artists:
             existing_artist = existing_artists.get(artist['id'])
@@ -466,6 +462,11 @@ def prepare_work_albums_and_performers(composer, work, albums, existing_artists)
                 new_artist.add_album(work_album) 
                 existing_artists[new_artist.id] = new_artist
                 # db.session.merge(new_artist)
+
+    # drop performers that are not updated
+    for id in list(existing_artists.keys()):
+        if id not in work_artist_ids:
+            del existing_artists[id]
 
     print(f"    [ {len(work_albums_list)} ] albums processed!\n")
     return work_albums_list, existing_artists
