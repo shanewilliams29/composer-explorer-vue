@@ -542,6 +542,7 @@ def getspotifyartistimg():
 @ bp.cli.command()
 @ click.argument("name")
 def loadnew(name):
+    start_time = datetime.utcnow()
     spotifygenerate(name)
     fillalbums(name)
     cleanup(name)
@@ -549,6 +550,10 @@ def loadnew(name):
     spotifypull(name)
     trackcount(name)
     print("LOAD COMPLETE!")
+    current_time = datetime.utcnow()
+    elapsed_time = current_time - start_time
+    elapsed = str(timedelta(seconds=round(elapsed_time.total_seconds())))
+    print("Time elapsed: " + elapsed)
 
 
 # REFRESH A COMPOSER'S WORKS WITH NEW SPOTIFY ALBUMS

@@ -1,12 +1,14 @@
-from flask import session, current_app, Blueprint
-from datetime import datetime, timedelta
+from flask import current_app, Blueprint
+from datetime import datetime
 
-from app import db, log, sp
+from app import db
 from app.cron.classes import Timer, SpotifyToken, Errors
 from app.cron.functions import retrieve_spotify_tracks_for_work_async, retrieve_album_tracks_and_drop
 from app.cron.functions import get_albums_from_ids_async, drop_unmatched_tracks, get_album_list_from_tracks
 from app.cron.functions import prepare_work_albums_and_performers
-from app.models import WorkList, ComposerList
+from app.models import WorkList, ComposerList, WorkAlbums, AlbumLike
+from sqlalchemy import func, or_
+from collections import defaultdict
 
 import click
 import time
@@ -20,10 +22,8 @@ bp = Blueprint('cron', __name__)
 @ click.argument("composer_name")
 def load_new(composer_name):
     get_spotify_albums_and_store(composer_name)
-    # clean_up_albums(composer_name)
-    # albums_track_count(composer_name)
-    # fill_performer_info_from_google(composer_name)
-    # store_work_durations(composer_name)
+    fill_work_durations(composer_name)
+    print(f"\nLoad for {composer_name} complete!\n")
 
 
 def get_spotify_albums_and_store(composer_name):
@@ -146,9 +146,10 @@ def get_spotify_albums_and_store(composer_name):
 
                 # STEP 6: STORE ALBUM AND PERFORMERS IN DATABASE
                 print("    Storing albums in database...")
-                # db.session.add_all(work_albums)
-                # work.spotify_loaded = True
-                # db.session.commit()                
+                db.session.add_all(work_albums)
+                work.album_count = len(work_albums)
+                work.spotify_loaded = True
+                db.session.commit()                
                 
                 print(f"    [ {len(work_albums)} ] albums stored in database!\n")
                 
@@ -166,9 +167,62 @@ def get_spotify_albums_and_store(composer_name):
     [ {time_taken} ] total time taken.\n""")
 
 
+def fill_work_durations(composer_name):
 
+    # base query
+    query = db.session.query(WorkAlbums, func.count(AlbumLike.id).label('likes'))\
+        .outerjoin(AlbumLike).group_by(WorkAlbums.id)
 
+    # filter by criteria
+    query = query.filter(WorkAlbums.composer == composer_name, 
+                         WorkAlbums.hidden != True, 
+                         WorkAlbums.track_count <= 100)
 
+    # make subquery
+    t = query.subquery('t')
+    query = db.session.query(t)
+
+    # disallow compilation albums unless user favorited
+    query = query.filter(or_(t.c.album_type != "compilation", t.c.likes > 0))
+
+    # sort the results. Album type sort rates albums ahead of compilations and singles
+    query = query.order_by(t.c.workid, t.c.likes.desc(), t.c.album_type, t.c.score.desc())
+
+    # execute the query
+    album_list = query.all()
+
+    # create a dictionary of unique works with the duration of the second longest of the top 5 albums
+    durations_dict = defaultdict(list)
+    workid_album_counts = {}
+
+    for album in album_list:
+        if album.workid not in durations_dict:
+            durations_dict[album.workid].append(album.duration)
+            workid_album_counts[album.workid] = 1
+
+        else:
+            if workid_album_counts[album.workid] < 5:
+                durations_dict[album.workid].append(album.duration)
+                durations_dict[album.workid].sort(reverse=True)
+                if len(durations_dict[album.workid]) > 2:
+                    durations_dict[album.workid].pop()
+                workid_album_counts[album.workid] += 1
+
+    # Keep only the second longest duration for each work ID
+    for workid, durations in durations_dict.items():
+        if len(durations) > 1:
+            durations_dict[workid] = durations[1]
+        else:
+            durations_dict[workid] = durations[0]
+
+    # get works from database
+    works = db.session.query(WorkList).filter(WorkList.composer == composer_name).all()
+
+    for work in works:
+        work.duration = durations_dict.get(work.id)
+
+    db.session.commit()
+    print(f"Work durations added to WorkList table for {composer_name}!")
 
 
 
