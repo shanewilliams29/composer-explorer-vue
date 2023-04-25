@@ -265,7 +265,7 @@ def retrieve_album_tracks_and_drop(composer, work, albums):
         work_tracks = drop_unmatched_tracks(composer, work, tracks)
         album['work_tracks'] = work_tracks
 
-    print(f"    [ {len(albums)} ] albums prepared for processing!")
+    print(f"    [ {len(albums)} ] albums prepared for processing!                  ")
 
     return albums
 

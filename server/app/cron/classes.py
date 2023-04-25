@@ -26,6 +26,20 @@ class Timer(object):
         
         print(f"    Completed [ {count} ] of [ {self.loop_length} ]. Time elapsed: [ {self.elapsed} ]. Remaining time: [ {remaining} ]\n")
 
+    def print_status_update_one_line(self, count):
+        current_time = datetime.utcnow()
+        elapsed_time = current_time - self.start_time
+        self.elapsed = str(timedelta(seconds=round(elapsed_time.total_seconds())))
+
+        completed = count
+        remaining = self.loop_length - completed
+
+        item_per_second = (completed / elapsed_time.total_seconds())
+        remaining_time = remaining * (1 / item_per_second)
+        remaining = str(timedelta(seconds=round(remaining_time)))
+        
+        print(f"    Completed [ {count} ] of [ {self.loop_length} ]. Time elapsed: [ {self.elapsed} ]. Remaining time: [ {remaining} ]", end='\r')
+
     def get_elapsed_time(self):
         return self.elapsed
 

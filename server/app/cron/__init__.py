@@ -1,7 +1,7 @@
 from flask import current_app, Blueprint
 from datetime import datetime
 
-from app import db
+from app import db, sp
 from app.cron.classes import Timer, SpotifyToken, Errors
 from app.cron.functions import retrieve_spotify_tracks_for_work_async, retrieve_album_tracks_and_drop
 from app.cron.functions import get_albums_from_ids_async, drop_unmatched_tracks, get_album_list_from_tracks
@@ -23,7 +23,8 @@ bp = Blueprint('cron', __name__)
 def load_new(composer_name):
     get_spotify_albums_and_store(composer_name)
     fill_work_durations(composer_name)
-    print(f"\nLoad for {composer_name} complete!\n")
+    get_spotify_performers_img()
+    print(f"    Load for {composer_name} complete!\n")
 
 
 def get_spotify_albums_and_store(composer_name):
@@ -59,10 +60,10 @@ def get_spotify_albums_and_store(composer_name):
         .filter(WorkList.composer == composer_name, WorkList.spotify_loaded == None)\
         .all()
     if not works:
-        print(f">>> ERROR: No unprocessed works for {composer_name} found!\n")
-        exit()
+        print(f"\n>>> No unprocessed works for {composer_name} found! Skipping.\n")
+        return
 
-    print(f"\n{len(works)} works found for {composer_name}. Beginning Spotify data pull...\n")
+    print(f"    \n{len(works)} unprocessed works found for {composer_name}. Beginning Spotify data pull...\n")
 
     works_processed = set()
     while len(works_processed) < len(works):
@@ -158,7 +159,7 @@ def get_spotify_albums_and_store(composer_name):
                 work.spotify_loaded = True
                 db.session.commit()            
                 
-                print(f"    [ {len(work_albums)} ] albums stored in database!\n")
+                print(f"    [ {len(work_albums)} ] albums stored in database!")
                 print(f"    [ {len(performers)} ] performers updated in database!\n")
                 
                 works_processed.add(work.id)
@@ -174,7 +175,7 @@ def get_spotify_albums_and_store(composer_name):
     [ {errors.misc_error.count} ] resolved misc errors.
     [ {time_taken} ] total time taken.\n""")
 
-
+#  FILL WORK DURATIONS WITH ALBUM DATA
 def fill_work_durations(composer_name):
 
     # base query
@@ -230,13 +231,84 @@ def fill_work_durations(composer_name):
         work.duration = durations_dict.get(work.id)
 
     db.session.commit()
-    print(f"Work durations added to WorkList table for {composer_name}!")
+    print(f"    Work durations added to WorkList table for {composer_name}!\n")
 
 
+# FILL PERFORMER TABLE WITH IMAGES FROM SPOTIFY
+def get_spotify_performers_img():
+    ctx = current_app.test_request_context()
+    ctx.push()
 
+    timer = Timer(datetime.utcnow())
+    spotify_token = SpotifyToken()
 
+    errors = Errors()
 
+    # get performers without images
+    artists = db.session.query(Performers)\
+        .filter(Performers.img == None).all()
 
+    if not artists:
+        print(f">>> No unprocessed performer images found! Skipping.\n")
+        return
 
+    artist_list = []
+    for artist in artists:
+        artist_list.append(artist)
 
+    k = 0
+    j = 0
+    images_found = 0
+    timer.set_loop_length(len(artist_list))
 
+    while k < len(artist_list):
+
+        i = 0
+        id_fetch_list = []
+
+        # token expiry and refreshing
+        spotify_token.refresh_token()
+
+        # get data in batches of 50 artist ids from Spotify
+        while i < 50 and k < len(artist_list):
+            id_fetch_list.append(artist_list[k].id)
+            i += 1
+            k += 1
+
+        id_string = ','.join(id_fetch_list)
+
+        response = sp.get_artists(id_string)
+        results = response.json()
+
+        if results.get('error'):
+            print(results.get('error'))
+            errors.register_misc_error()
+            continue
+
+        # add image link to database
+        m = 0
+        while m < len(results['artists']):
+            try:
+                artist_list[j].img = results['artists'][m]['images'][0]['url']
+                images_found += 1
+            except Exception:
+                artist_list[j].img = "NA"
+                pass
+
+            j += 1
+            m += 1
+
+        db.session.commit()
+
+        timer.print_status_update_one_line(k)
+
+    # finish
+    ctx.pop()
+    time_taken = timer.get_elapsed_time()
+
+    print(f"""
+    FINISHED. Spotify performer image pull complete!\n
+    [ {len(artist_list)} ] performers processed,
+    [ {images_found} ] images retrieved.
+    [ {errors.misc_error.count} ] errors.
+    [ {time_taken} ] total time taken.\n""")
