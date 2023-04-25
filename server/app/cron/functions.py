@@ -1,15 +1,16 @@
 from flask import session
 from app import sp
+from app.models import WorkAlbums
 import re
 import httpx
 import asyncio
 import unidecode
-import jsonpickle
+import json
 import collections
 
 
 def get_general_genres():
-    return set(['opera', 'stage work'])
+    return set(['opera', 'stage work', 'ballet'])
 
 
 async def search_spotify_httpx(url):
@@ -237,15 +238,17 @@ def retrieve_album_tracks_and_drop(composer, work, albums):
         tracks = album['tracks']['items']
         next_tracks_url = album['tracks']['next']
 
-        while next_tracks_url:
-            response = sp.get_more_album(next_tracks_url)
-            results = response.json()
-        
-            if results.get('error'):
-                raise Exception(results['error']['message'])
+        if album['album_type'] != "compilation":
 
-            tracks.extend(results['items'])
-            next_tracks_url = results['next']
+            while next_tracks_url:
+                response = sp.get_more_album(next_tracks_url)
+                results = response.json()
+            
+                if results.get('error'):
+                    raise Exception(results['error']['message'])
+
+                tracks.extend(results['items'])
+                next_tracks_url = results['next']
 
         work_tracks = drop_unmatched_tracks(composer, work, tracks)
         album['work_tracks'] = work_tracks
@@ -257,50 +260,8 @@ def retrieve_album_tracks_and_drop(composer, work, albums):
 
 def prepare_work_albums_and_performers(composer, work, albums):
 
-    for album in albums:
+    def generate_album_data_tracks(track_list):
 
-        # Album information
-        work_album_id = work.id + album['id']
-        work_id = work.id
-        spotify_album_id = album['id']
-        work_composer = work.composer
-        try:
-            img_large = album['images'][0]
-        except Exception:
-            img_large = None
-        try:
-            img_small = album['images'][1]
-        except Exception:
-            img_small = None
-        label = album['label']
-        album_title = album['name']
-        markets = album['available_markets']
-        album_track_count = album['total_tracks']
-        work_track_count = len(album['work_tracks'])
-        album_type = album['album_type']
-        release_date = album['release_date'].split('-')[0]
-        popularity = album['popularity']
-
-        # Generate track list
-        work_track = {}
-        track_list = []
-        tracks = album['work_tracks']
-        for track in tracks:
-            work_track = {
-                'id': track['id'],
-                'uri': track['uri'],
-                'title': track['name'],
-                'disc_no': track['disc_number'],
-                'track_no': track['track_number'],
-                'duration': track['duration_ms'],
-                'preview_url': track['preview_url'],
-                'artists': track['artists'],
-            }
-            track_list.append(work_track)
-
-        track_list = sorted(track_list, key=lambda i: (i['disc_no'], i['track_no']))
-
-        # generate album tracks data item
         work_playlist = []
         for track in track_list:
             work_playlist.append(track['uri'])
@@ -312,7 +273,12 @@ def prepare_work_albums_and_performers(composer, work, albums):
             track_data_item = [track['title'], track['id'], track_playlist, track['duration']]
             data_tracks.append(track_data_item)
 
-        # generate album artists items
+        return data_tracks
+
+    def generate_album_data_artists(track_list):
+
+        artist_dict = {}
+
         raw_artist_list = []
         for track in track_list:
             for artist in track['artists']:
@@ -333,27 +299,131 @@ def prepare_work_albums_and_performers(composer, work, albums):
 
         counter = collections.Counter(no_composer_list)
         #artists = counter
-        artists = ", ".join(list(dict(counter.most_common(2)).keys()))
-        minor_artists = ", ".join(list(set((dict(counter.most_common(8)).keys())) - set(dict(counter.most_common(2)).keys())))
-        all_artists = ", ".join(list(dict(counter).keys()))
+        artist_dict['artists'] = ", ".join(list(dict(counter.most_common(2)).keys()))
+        artist_dict['minor_artists'] = ", ".join(list(set((dict(counter.most_common(8)).keys())) - set(dict(counter.most_common(2)).keys())))
+        artist_dict['all_artists'] = ", ".join(list(dict(counter).keys()))
 
-    return track_list, track_list
+        return artist_dict
 
+    def calculate_album_duration(track_list):
 
-        # work_album = WorkAlbums(id=work_album_id,
-        #                         workid=work_id,
-        #                         album_id=spotify_album_id,
-        #                         composer=work_composer,
-        #                         score=score,
-        #                         data=data,
-        #                         filled=True,
-        #                         got_artists=False,
-        #                         img=img,
-        #                         label=label,
-        #                         title=album_title,
-        #                         markets=markets,
-        #                         track_count=album_track_count,
-        #                         work_track_count=work_track_count,
-        #                         album_type=album_type,
-        #                         duration=album_duration)
+        album_duration = 0
+        for track in track_list:
+            album_duration += int(track['duration'])
 
+        return album_duration
+
+    def calculate_album_score(track_list, popularity):
+
+        album_score = len(track_list)
+
+        if work.genre.lower().strip() in get_general_genres():
+            if album_score > 20:
+                album_score = 20
+            return album_score * 5 + popularity
+
+        if work.composer == "Chopin":
+            cutoff = 1
+        else:
+            cutoff = 3
+        if album_score > cutoff:
+            album_score = cutoff
+        return album_score * 33.3 + popularity
+
+    work_albums_list = []
+
+    for album in albums:
+
+        # don't process if no work tracks
+        if len(album['work_tracks']) == 0:
+            continue
+
+        # Album information
+        work_album_id = work.id + album['id']
+        work_id = work.id
+        spotify_album_id = album['id']
+        work_composer = work.composer
+        try:
+            img_large = album['images'][0]['url']
+        except Exception:
+            img_large = None
+        try:
+            img_small = album['images'][1]['url']
+        except Exception:
+            img_small = None
+        label = album['label']
+        album_title = album['name']
+        album_track_count = album['total_tracks']
+        work_track_count = len(album['work_tracks'])
+        album_type = album['album_type']
+        release_date = album['release_date'].split('-')[0]
+        popularity = album['popularity']
+
+        # generate track list
+        work_track = {}
+        track_list = []
+        tracks = album['work_tracks']
+        for track in tracks:
+            work_track = {
+                'id': track['id'],
+                'uri': track['uri'],
+                'title': track['name'],
+                'disc_no': track['disc_number'],
+                'track_no': track['track_number'],
+                'duration': track['duration_ms'],
+                'preview_url': track['preview_url'],
+                'artists': track['artists'],
+            }
+            track_list.append(work_track)
+
+        track_list = sorted(track_list, key=lambda i: (i['disc_no'], i['track_no']))
+
+        # generate album tracks data item
+        data_tracks = generate_album_data_tracks(track_list)
+
+        # generate artists tracks data item
+        data_artists = generate_album_data_artists(track_list)
+
+        # calculate work durations
+        album_duration = calculate_album_duration(track_list)
+
+        # calculate and add score score
+        score = calculate_album_score(track_list, popularity)
+
+        # prepare album data dict
+        data = {
+          "album_name": album_title,
+          "album_id": spotify_album_id,
+          "album_uri": f"spotify:album:{spotify_album_id}",
+          "release_date": f"{release_date}",
+          "popularity": popularity,
+          "album_img": img_small,
+          "tracks": data_tracks,
+          "artists": data_artists['artists'],
+          "track_count": work_track_count,
+          "minor_artists": data_artists['minor_artists'],
+          "all_artists": data_artists['all_artists'],
+          "score": score
+        }
+
+        work_album = WorkAlbums(id=work_album_id,
+                                workid=work_id,
+                                album_id=spotify_album_id,
+                                composer=work_composer,
+                                score=score,
+                                artists=data_artists['all_artists'],
+                                data=json.dumps(data),
+                                filled=True,
+                                got_artists=True,
+                                img=img_large,
+                                label=label,
+                                title=album_title,
+                                track_count=album_track_count,
+                                work_track_count=work_track_count,
+                                album_type=album_type,
+                                duration=album_duration)
+
+        work_albums_list.append(work_album)
+
+    print(f"    [ {len(work_albums_list)} ] albums processed!\n")
+    return work_albums_list, ['null']

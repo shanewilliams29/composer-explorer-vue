@@ -10,7 +10,6 @@ from app.models import WorkList, ComposerList
 
 import click
 import time
-import jsonpickle
 import httpx
 
 bp = Blueprint('cron', __name__)
@@ -39,15 +38,28 @@ def get_spotify_albums_and_store(composer_name):
     # get composer
     composer = ComposerList.query.filter_by(name_short=composer_name).first()
     if not composer:
-        print(f">>> ERROR: Composer {composer_name} not found!")
+        print(f">>> ERROR: Composer {composer_name} not found!\n")
         exit()
+
+    is_not_general = input("Should load use work catalogue numbers? (y/n): ")
+
+    if is_not_general == "y":
+        composer.general = False
+    elif is_not_general == "n":
+        composer.general = True
+    else:
+        print(">>> ERROR: Invalid input entered!\n")
+        exit()
+
+    composer.catalogued = True
+    db.session.commit()
 
     # get works for composer that haven't been processed
     works = db.session.query(WorkList)\
         .filter(WorkList.composer == composer_name, WorkList.spotify_loaded == None)\
         .all()
     if not works:
-        print(f">>> ERROR: No unprocessed works for {composer_name} found!")
+        print(f">>> ERROR: No unprocessed works for {composer_name} found!\n")
         exit()
 
     print(f"\n{len(works)} works found for {composer_name}. Beginning Spotify data pull...\n")
@@ -82,8 +94,8 @@ def get_spotify_albums_and_store(composer_name):
 
                 if len(tracks) == 0:
                     print("\n    No tracks found for work. Skipping...\n")
-                    # work.spotify_loaded = True
-                    # db.session.commit()
+                    work.spotify_loaded = True
+                    db.session.commit()
                     works_processed.add(work.id)
                     continue
 
@@ -97,8 +109,8 @@ def get_spotify_albums_and_store(composer_name):
 
                 if len(matched_tracks) == 0:
                     print("\n    No matching tracks found for work. Skipping...\n")
-                    # work.spotify_loaded = True
-                    # db.session.commit()
+                    work.spotify_loaded = True
+                    db.session.commit()
                     works_processed.add(work.id)
                     continue
 
@@ -132,13 +144,15 @@ def get_spotify_albums_and_store(composer_name):
                     print(f"\n>>> ALBUMS INFO PREP ERROR: {e}. Will try again next loop...\n")
                     continue                
 
-
                 # STEP 6: STORE ALBUM AND PERFORMERS IN DATABASE
-
-
-
-                works_processed.add(work.id)
+                print("    Storing albums in database...")
+                # db.session.add_all(work_albums)
+                # work.spotify_loaded = True
+                # db.session.commit()                
                 
+                print(f"    [ {len(work_albums)} ] albums stored in database!\n")
+                
+                works_processed.add(work.id)
                 timer.print_status_update(i)
 
     time_taken = timer.get_elapsed_time()
