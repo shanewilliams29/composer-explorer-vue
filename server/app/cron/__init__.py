@@ -63,7 +63,7 @@ def get_spotify_albums_and_store(composer_name):
         print(f"\n    No unprocessed works for {composer_name} found! Skipping.\n")
         return
 
-    print(f"    \n{len(works)} unprocessed works found for {composer_name}. Beginning Spotify data pull...\n")
+    print(f"\n    {len(works)} unprocessed works found for {composer_name}. Beginning Spotify data pull...\n")
 
     works_processed = set()
     while len(works_processed) < len(works):

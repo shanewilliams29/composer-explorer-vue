@@ -5,6 +5,7 @@ from app import create_app
 from app.models import User, WorkAlbums
 
 app = create_app()
+print("\nNote: Composer 'Wagner' must be loaded in database for tests to succeed.\n")
 
 
 class TestAPI(unittest.TestCase):
@@ -18,7 +19,7 @@ class TestAPI(unittest.TestCase):
 
     def test_get_albumworks(self):
 
-        album_id = '6Y32IeqLPuUZftGjiLOINZ'
+        album_id = '6BIzBPVDbAw4DdyMOENCFe'
         response = self.client.get('/api/getalbumworks', query_string={'album_id': album_id})
 
         self.assertEqual(response.status_code, 200)
@@ -30,7 +31,7 @@ class TestAPI(unittest.TestCase):
 
     def test_get_onealbum(self):
 
-        album_id = '6Y32IeqLPuUZftGjiLOINZ'
+        album_id = '6BIzBPVDbAw4DdyMOENCFe'
         response = self.client.get('/api/getonealbum', query_string={'id': album_id})
 
         self.assertEqual(response.status_code, 200)
@@ -88,7 +89,7 @@ class TestAPI(unittest.TestCase):
 
     def test_omnisearch(self):
 
-        search_string = 'Mahler 2'
+        search_string = 'Wagner Tristan'
         response = self.client.get('/api/omnisearch', query_string={'search': search_string})
 
         self.assertEqual(response.status_code, 200)
@@ -150,7 +151,6 @@ class TestAPI(unittest.TestCase):
     def test_get_multicomposers(self):
         composers_data = [
             {"value": "Wagner"},
-            {"value": "Berlioz"},
         ]
 
         response = self.client.post('api/multicomposers', json=composers_data)
@@ -342,7 +342,7 @@ class TestAPI(unittest.TestCase):
     def test_like_action(self):
 
         # Unauthenticated user
-        response = self.client.get('/api/like/BERLIOZ000026Y32IeqLPuUZftGjiLOINZ/like')
+        response = self.client.get('/api/like/WAGNER000096BIzBPVDbAw4DdyMOENCFe/like')
         self.assertEqual(response.status_code, 200)
 
         data = json.loads(response.data)
@@ -354,23 +354,23 @@ class TestAPI(unittest.TestCase):
         self.assertEqual(login_response.json['status'], 'success') 
 
         # Test liking an album
-        response = self.client.get('/api/like/BERLIOZ000026Y32IeqLPuUZftGjiLOINZ/like')
+        response = self.client.get('/api/like/WAGNER000096BIzBPVDbAw4DdyMOENCFe/like')
         self.assertEqual(response.status_code, 200)
 
         data = json.loads(response.data)
         self.assertEqual(data['status'], 'success')  
 
-        album = WorkAlbums.query.get('BERLIOZ000026Y32IeqLPuUZftGjiLOINZ')
+        album = WorkAlbums.query.get('WAGNER000096BIzBPVDbAw4DdyMOENCFe')
         self.assertTrue(User.query.get(85).has_liked_album(album))
 
         # Test unliking an album
-        response = self.client.get('/api/like/BERLIOZ000026Y32IeqLPuUZftGjiLOINZ/unlike')
+        response = self.client.get('/api/like/WAGNER000096BIzBPVDbAw4DdyMOENCFe/unlike')
         self.assertEqual(response.status_code, 200)
 
         data = json.loads(response.data)
         self.assertEqual(data['status'], 'success')  
 
-        album = WorkAlbums.query.get('BERLIOZ000026Y32IeqLPuUZftGjiLOINZ')
+        album = WorkAlbums.query.get('WAGNER000096BIzBPVDbAw4DdyMOENCFe')
         self.assertFalse(User.query.get(85).has_liked_album(album))
 
     def test_get_composerinfo(self):
@@ -394,13 +394,13 @@ class TestAPI(unittest.TestCase):
 
     def test_get_albuminfo(self):
 
-        response = self.client.get('/api/albuminfo/BERLIOZ000026Y32IeqLPuUZftGjiLOINZ')
+        response = self.client.get('/api/albuminfo/WAGNER000096BIzBPVDbAw4DdyMOENCFe')
 
         self.assertEqual(response.status_code, 200)
 
         response_data = json.loads(response.data)
         self.assertEqual(response_data['status'], 'success')
-        self.assertEqual(response_data['album']['composer'], "Berlioz")
+        self.assertEqual(response_data['album']['composer'], "Wagner")
 
     def test_get_artistcomposers(self):
 
