@@ -1,6 +1,6 @@
 from flask import session
-from app import sp
-from app.models import WorkAlbums
+from app import db
+from app.models import WorkAlbums, Performers
 import re
 import httpx
 import asyncio
@@ -233,22 +233,34 @@ def retrieve_album_tracks_and_drop(composer, work, albums):
 
     print("    Processing albums...")
 
+    album_url_dict = {}
     for album in albums:
+        if album['album_type'] == "compilation":  # don't bother with compilation albums
+            continue
 
+        num_tracks = album['total_tracks']
+
+        url_list = []
+        for i in range(50, num_tracks, 50):
+            url = f'https://api.spotify.com/v1/albums/{album["id"]}/tracks?offset={i}&limit=50'
+            url_list.append(url)
+
+        if num_tracks > 50:
+            album_url_dict[album['id']] = url_list
+
+    album_results_dict = {}
+
+    for album_id, urls in album_url_dict.items():
+        album_results = asyncio.run(main(urls))
+        print(f"    Fetched {len(urls)} pages for {album_id}", end='\r')
+        album_results_dict[album_id] = album_results
+
+    for album in albums:
         tracks = album['tracks']['items']
-        next_tracks_url = album['tracks']['next']
-
-        if album['album_type'] != "compilation":
-
-            while next_tracks_url:
-                response = sp.get_more_album(next_tracks_url)
-                results = response.json()
-            
-                if results.get('error'):
-                    raise Exception(results['error']['message'])
-
-                tracks.extend(results['items'])
-                next_tracks_url = results['next']
+        results = album_results_dict.get(album['id'])
+        if results:
+            for result in results:
+                tracks.extend(result['items'])
 
         work_tracks = drop_unmatched_tracks(composer, work, tracks)
         album['work_tracks'] = work_tracks
@@ -258,7 +270,7 @@ def retrieve_album_tracks_and_drop(composer, work, albums):
     return albums
 
 
-def prepare_work_albums_and_performers(composer, work, albums):
+def prepare_work_albums_and_performers(composer, work, albums, existing_artists):
 
     def generate_album_data_tracks(track_list):
 
@@ -330,7 +342,9 @@ def prepare_work_albums_and_performers(composer, work, albums):
             album_score = cutoff
         return album_score * 33.3 + popularity
 
+
     work_albums_list = []
+    work_albums_performers_list = []
 
     for album in albums:
 
@@ -425,5 +439,33 @@ def prepare_work_albums_and_performers(composer, work, albums):
 
         work_albums_list.append(work_album)
 
+        # generate performers entries
+        unique_album_artists = []
+        seen_artist_ids = set()
+
+        for track in track_list:
+            for artist in track['artists']:
+                if artist['id'] not in seen_artist_ids:
+                    unique_album_artists.append(artist)
+                    seen_artist_ids.add(artist['id'])
+
+        # print(seen_artist_ids)
+        # for artist in unique_album_artists:
+        #     print(artist['id'], artist['name'])
+
+        for artist in unique_album_artists:
+            existing_artist = existing_artists.get(artist['id'])
+            if existing_artist:
+                # Update the existing artist's album list
+                existing_artist.add_album(work_album)
+            else:
+                # Add a new artist entry
+                new_artist = Performers(
+                    id=artist['id'],
+                    name=artist['name'])
+                new_artist.add_album(work_album) 
+                existing_artists[new_artist.id] = new_artist
+                # db.session.merge(new_artist)
+
     print(f"    [ {len(work_albums_list)} ] albums processed!\n")
-    return work_albums_list, ['null']
+    return work_albums_list, existing_artists

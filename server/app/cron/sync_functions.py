@@ -71,3 +71,34 @@ def get_albums_from_ids(id_list):
 
     return album_list
 
+
+
+def retrieve_album_tracks_and_drop(composer, work, albums):
+
+    print("    Processing albums...")
+
+    for i, album in enumerate(albums):
+
+        print(f"    {i} of {len(albums)}", end='\r')
+
+        tracks = album['tracks']['items']
+        next_tracks_url = album['tracks']['next']
+
+        if album['album_type'] != "compilation":
+
+            while next_tracks_url:
+                response = sp.get_more_album(next_tracks_url)
+                results = response.json()
+            
+                if results.get('error'):
+                    raise Exception(results['error']['message'])
+
+                tracks.extend(results['items'])
+                next_tracks_url = results['next']
+
+        work_tracks = drop_unmatched_tracks(composer, work, tracks)
+        album['work_tracks'] = work_tracks
+
+    print(f"    [ {len(albums)} ] albums prepared for processing!")
+
+    return albums

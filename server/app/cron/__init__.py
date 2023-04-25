@@ -6,7 +6,7 @@ from app.cron.classes import Timer, SpotifyToken, Errors
 from app.cron.functions import retrieve_spotify_tracks_for_work_async, retrieve_album_tracks_and_drop
 from app.cron.functions import get_albums_from_ids_async, drop_unmatched_tracks, get_album_list_from_tracks
 from app.cron.functions import prepare_work_albums_and_performers
-from app.models import WorkList, ComposerList, WorkAlbums, AlbumLike
+from app.models import WorkList, ComposerList, WorkAlbums, AlbumLike, Performers
 from sqlalchemy import func, or_
 from collections import defaultdict
 
@@ -18,8 +18,8 @@ bp = Blueprint('cron', __name__)
 
 
 # LOAD A NEW COMPOSER
-@ bp.cli.command()
-@ click.argument("composer_name")
+@bp.cli.command()
+@click.argument("composer_name")
 def load_new(composer_name):
     get_spotify_albums_and_store(composer_name)
     fill_work_durations(composer_name)
@@ -105,6 +105,7 @@ def get_spotify_albums_and_store(composer_name):
                     print(f"    [ {len(matched_tracks)} ] matched with work!")
                 except Exception as e:
                     print(f"\n>>> TRACK MATCH ERROR: {e}. Will try again next loop...\n")
+                    errors.register_misc_error()
                     continue
 
                 if len(matched_tracks) == 0:
@@ -135,23 +136,30 @@ def get_spotify_albums_and_store(composer_name):
                     processed_albums = retrieve_album_tracks_and_drop(composer, work, albums)
                 except Exception as e:
                     print(f"\n>>> ALBUMS TRACK FETCH ERROR: {e}. Will try again next loop...\n")
+                    errors.register_misc_error()
                     continue
 
                 # STEP 5: PREPARE WORK ALBUMS AND PERFORMERS FOR DATABASE STORAGE
+                existing_artists = {artist.id: artist for artist in Performers.query.all()}
                 try:
-                    work_albums, performers = prepare_work_albums_and_performers(composer, work, processed_albums)
+                    work_albums, performers = prepare_work_albums_and_performers(composer, work, processed_albums, existing_artists)
                 except Exception as e:
                     print(f"\n>>> ALBUMS INFO PREP ERROR: {e}. Will try again next loop...\n")
+                    errors.register_misc_error()
                     continue                
 
                 # STEP 6: STORE ALBUM AND PERFORMERS IN DATABASE
-                print("    Storing albums in database...")
+                print("    Storing albums and performers in database...")
+
                 db.session.add_all(work_albums)
+                for performer in performers.values():
+                    db.session.merge(performer)
                 work.album_count = len(work_albums)
                 work.spotify_loaded = True
-                db.session.commit()                
+                db.session.commit()            
                 
                 print(f"    [ {len(work_albums)} ] albums stored in database!\n")
+                print(f"    [ {len(performers)} ] performers updated in database!\n")
                 
                 works_processed.add(work.id)
                 timer.print_status_update(i)
@@ -163,7 +171,7 @@ def get_spotify_albums_and_store(composer_name):
     FINISHED. Spotify data pull for {composer_name} complete!\n
     [ {len(works)} ] works processed,
     [ {errors.rate_error.count} ] resolved rate limit 429 errors,
-    [ {errors.misc_error.count} ] unresolved misc errors.
+    [ {errors.misc_error.count} ] resolved misc errors.
     [ {time_taken} ] total time taken.\n""")
 
 
