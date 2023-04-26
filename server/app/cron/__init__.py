@@ -250,7 +250,7 @@ def fill_work_durations(composer_name):
         work.duration = durations_dict.get(work.id)
 
     db.session.commit()
-    print(f"    Work durations added to WorkList table for {composer_name}!\n")
+    print(f"\n    Work durations added to WorkList table for {composer_name}!\n")
 
 
 # FILL PERFORMER TABLE WITH IMAGES FROM SPOTIFY

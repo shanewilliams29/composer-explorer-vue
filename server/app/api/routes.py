@@ -169,11 +169,12 @@ def get_albumsview():
         query = query.join(WorkList)\
             .filter(WorkList.title == work_title)
 
-    # sort the results. Album type sorts albums ahead of compilations and singles
-    query = query.order_by(WorkAlbums.album_type, WorkAlbums.score.desc())
+    # sort the results. Slow for artist_name and work_title, so exclude.
+    if not artist_name and not work_title:
+        query = query.order_by(WorkAlbums.score.desc())
 
     # execute the query
-    albums = query.group_by(WorkAlbums.album_id).limit(500)
+    albums = query.limit(page * 400).all()
 
     if not albums:
         response_object = {'status': 'error'}
@@ -185,11 +186,11 @@ def get_albumsview():
     # decode JSON album data and prepare JSON
     album_list = []
     duplicates_set = set()
-    match_string = ""
 
     for album in albums:
         item = json.loads(album.data)
         item['id'] = album.id
+        item['album_id'] = album.album_id
         item['img_big'] = album.img
         item['label'] = album.label
         item['track_count'] = album.track_count
@@ -201,29 +202,12 @@ def get_albumsview():
             if item['track_count'] > 50 and int(item['release_date'][0:4]) > 2019:
                 item['score'] = item['score'] / 4
 
-        # # filter out repeat albums
-        artists_string = "".join(sorted(re.sub(r'[^\w\s]', '', item['artists']).replace(" ", "").lower()))
-
-        # return more repeat results for performer (allow distinct years)
-        match_string = artists_string + str(item['release_date'])
-
-        # do not include in album list if duplicate, unless it has favorites
-        if match_string in duplicates_set:
+        if item['album_id'] in duplicates_set:
             continue
         else:
-            duplicates_set.add(match_string)
-        # add to album list
+            duplicates_set.add(item['album_id'])
+
         album_list.append(item)
-
-        # order so that conductor before orchestra
-        orchestra_list = ['baroque', 'augsburger', 'antiqua', 'milano', 'quartet', 'orchest', 'philharm', 'symphony', 'concert', 'chamber', 'academy', 'staats', 'consort', 'symphoniker', 'covent garden', 'choir', 'akademie', 'stuttgart', 'llscher']
-        two_artists = item['artists'].split(', ')
-
-        for term in orchestra_list:
-            if term.lower() in two_artists[0].lower():
-                two_artists.reverse()
-                item['artists'] = ", ".join(two_artists)
-                break
 
     # apply sorting
     if sort == 'popular':
