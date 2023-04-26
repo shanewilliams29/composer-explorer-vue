@@ -22,7 +22,7 @@ def get_albumworks():
         .join(WorkList)\
         .outerjoin(AlbumLike, WorkAlbums.id == AlbumLike.album_id)\
         .group_by(WorkAlbums.id)\
-        .order_by(WorkList.composer, WorkList.title).all()
+        .order_by(WorkList.id).all()
     
     temp_list = []
     for (work, data, likes) in works:
