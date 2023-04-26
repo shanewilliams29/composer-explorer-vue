@@ -77,7 +77,7 @@ def get_spotify_albums_and_store(composer_name):
                 i += 1
 
                 spotify_token.refresh_token()
-                print(f"--- {work.id} ---------------------------------------------------------------------")
+                print(f"--- {work.id} ---------------------------------------------------------------------\n")
 
                 # STEP 1: SEARCH SPOTIFY FOR TRACKS FOR WORK
                 try:
@@ -136,7 +136,7 @@ def get_spotify_albums_and_store(composer_name):
                 try:
                     processed_albums = retrieve_album_tracks_and_drop(composer, work, albums)
                 except Exception as e:
-                    if "429" in e:
+                    if "429" in str(e):
                         print("\n>>> 429 ALBUMS TRACK FETCH ERROR: Rate limit exceeded. Will try again next loop...\n")
                         errors.register_rate_error()
                         time.sleep(4)
