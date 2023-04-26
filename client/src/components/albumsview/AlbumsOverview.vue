@@ -218,7 +218,7 @@ export default {
       for (var i = 0; i < tracks.length; i++) {
         duration = duration + tracks[i][3];
       }
-      if (duration < workDuration / 1.5) {
+      if ((workDuration > 600000) && (duration < workDuration / 1.5)) {
         return true
       }
       return false;
