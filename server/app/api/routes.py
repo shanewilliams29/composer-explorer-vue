@@ -127,7 +127,7 @@ def get_albumsview():
 
     # base query
     query = db.session.query(WorkAlbums)
-    query = query.filter(WorkAlbums.hidden != True)
+    query = query.filter(WorkAlbums.hidden != True, WorkAlbums.img != None)
     
     # filter on composer if present
     if composer_name and composer_name != "all":
