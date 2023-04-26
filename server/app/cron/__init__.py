@@ -64,7 +64,7 @@ def get_spotify_albums_and_store(composer_name):
 
     # get works for composer that haven't been processed
     works = db.session.query(WorkList)\
-        .filter(WorkList.composer == composer_name, WorkList.spotify_loaded == None)\
+        .filter(WorkList.composer == composer_name, WorkList.spotify_loaded != True)\
         .all()
     if not works:
         print(f"\n    No unprocessed works for {composer_name} found! Skipping.\n")

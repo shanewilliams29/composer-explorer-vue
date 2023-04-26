@@ -1001,7 +1001,7 @@ def get_albums(work_id):
         query = query.filter(or_(t.c.album_type != "compilation", t.c.total > 0))
 
     # sort the results. Album type sort rates albums ahead of compilations and singles
-    query = query.order_by(t.c.total.desc(), t.c.album_type, t.c.score.desc())
+    query = query.order_by(t.c.album_type, t.c.score.desc())
 
     # execute the query
     albums = query.all()
@@ -1069,10 +1069,11 @@ def get_albums(work_id):
         # # filter out repeat albums
         artists_string = "".join(sorted(re.sub(r'[^\w\s]', '', item['artists']).replace(" ", "").lower()))
 
-        if artist_name:  # return more repeat results for performer filter (allow distinct years)
+        if artist_name or 'WAGNER' in work_id:  # return more repeat results for performer filter (allow distinct years)
             match_string = artists_string + str(item['release_date'])
         else:  # return more unique artists otherwise
-            match_string = artists_string
+            match_string = artists_string 
+
 
         # do not include in album list if duplicate, unless it has favorites
         if match_string in duplicates_set:
