@@ -1,5 +1,6 @@
 from flask import current_app, Blueprint
 from datetime import datetime
+import os
 
 from app import db, sp
 from app.cron.classes import Timer, SpotifyToken, Errors
@@ -16,6 +17,10 @@ import httpx
 
 bp = Blueprint('cron', __name__)
 
+# console text colors
+RED = "\033[31m"
+GREEN = "\033[32m"
+RESET = "\033[0m"
 
 # LOAD A NEW COMPOSER
 @bp.cli.command()
@@ -39,7 +44,7 @@ def get_spotify_albums_and_store(composer_name):
     # get composer
     composer = ComposerList.query.filter_by(name_short=composer_name).first()
     if not composer:
-        print(f">>> ERROR: Composer {composer_name} not found!\n")
+        print(RED + f"\n>>> ERROR: Composer {composer_name} not found!\n" + RESET)
         exit()
 
     is_not_general = input("\n>>> Should load use work catalogue numbers? (y/n): ")
@@ -49,7 +54,7 @@ def get_spotify_albums_and_store(composer_name):
     elif is_not_general == "n":
         composer.general = True
     else:
-        print(">>> ERROR: Invalid input entered!\n")
+        print(RED + "\n>>> ERROR: Invalid input entered!\n" + RESET)
         exit()
 
     composer.catalogued = True
@@ -76,20 +81,23 @@ def get_spotify_albums_and_store(composer_name):
             if work.id not in works_processed:
                 i += 1
 
+                console_width = os.get_terminal_size().columns
                 spotify_token.refresh_token()
-                print(f"--- {work.id} ---------------------------------------------------------------------\n")
+                
+                print("-" * console_width)
+                print(f"\n    {work.id}\n")
 
                 # STEP 1: SEARCH SPOTIFY FOR TRACKS FOR WORK
                 try:
                     tracks = retrieve_spotify_tracks_for_work_async(composer, work)
                 except httpx.HTTPStatusError as e:
                     if e.response.status_code == 429:
-                        print("\n>>> 429 TRACK FETCH ERROR: Rate limit exceeded. Will try again next loop...\n")
+                        print(RED + "\n>>> 429 TRACK FETCH ERROR: Rate limit exceeded. Will try again next loop...\n" + RESET)
                         errors.register_rate_error()
                         time.sleep(4)
                         continue
                     else:
-                        print(f"\n>>> {e.response.status_code} TRACK FETCH ERROR: An unexpected error occurred. Will try again next loop...\n")
+                        print(RED + f"\n>>> {e.response.status_code} TRACK FETCH ERROR: An unexpected error occurred. Will try again next loop...\n" + RESET)
                         errors.register_misc_error()
                         continue
 
@@ -105,7 +113,7 @@ def get_spotify_albums_and_store(composer_name):
                     matched_tracks = drop_unmatched_tracks(composer, work, tracks)
                     print(f"    [ {len(matched_tracks)} ] matched with work!")
                 except Exception as e:
-                    print(f"\n>>> TRACK MATCH ERROR: {e}. Will try again next loop...\n")
+                    print(RED + f"\n>>> TRACK MATCH ERROR: {e}. Will try again next loop...\n" + RESET)
                     errors.register_misc_error()
                     continue
 
@@ -123,12 +131,12 @@ def get_spotify_albums_and_store(composer_name):
                     albums = get_albums_from_ids_async(album_id_list)
                 except httpx.HTTPStatusError as e:
                     if e.response.status_code == 429:
-                        print("\n>>> 429 ALBUM FETCH ERROR: Rate limit exceeded. Will try again next loop...\n")
+                        print(RED + "\n>>> 429 ALBUM FETCH ERROR: Rate limit exceeded. Will try again next loop...\n" + RESET)
                         errors.register_rate_error()
                         time.sleep(4)
                         continue
                     else:
-                        print(f"\n>>> {e.response.status_code} ALBUM FETCH ERROR: An unexpected error occurred. Will try again next loop...\n")
+                        print(RED + f"\n>>> {e.response.status_code} ALBUM FETCH ERROR: An unexpected error occurred. Will try again next loop...\n" + RESET)
                         errors.register_misc_error()
                         continue
 
@@ -137,11 +145,11 @@ def get_spotify_albums_and_store(composer_name):
                     processed_albums = retrieve_album_tracks_and_drop(composer, work, albums)
                 except Exception as e:
                     if "429" in str(e):
-                        print("\n>>> 429 ALBUMS TRACK FETCH ERROR: Rate limit exceeded. Will try again next loop...\n")
+                        print(RED + "\n\n>>> 429 ALBUMS TRACK FETCH ERROR: Rate limit exceeded. Will try again next loop...\n" + RESET)
                         errors.register_rate_error()
                         time.sleep(4)
                     else:
-                        print(f"\n>>> ALBUMS TRACK FETCH ERROR: {e}. Will try again next loop...\n")
+                        print(RED + f"\n>>> ALBUMS TRACK FETCH ERROR: {e}. Will try again next loop...\n" + RESET)
                         errors.register_misc_error()
                     continue
 
@@ -150,7 +158,7 @@ def get_spotify_albums_and_store(composer_name):
                 try:
                     work_albums, performers = prepare_work_albums_and_performers(composer, work, processed_albums, existing_artists)
                 except Exception as e:
-                    print(f"\n>>> ALBUMS INFO PREP ERROR: {e}. Will try again next loop...\n")
+                    print(RED + f"\n>>> ALBUMS INFO PREP ERROR: {e}. Will try again next loop...\n" + RESET)
                     errors.register_misc_error()
                     continue                
 
@@ -168,17 +176,19 @@ def get_spotify_albums_and_store(composer_name):
                 print(f"    [ {len(performers)} ] performers updated in database!\n")
                 
                 works_processed.add(work.id)
-                timer.print_status_update(i)
+                timer.print_status_update(i, errors)
 
     time_taken = timer.get_elapsed_time()
     ctx.pop()
 
-    print(f"""
+    print("-" * console_width)
+    print(GREEN + f"""
     FINISHED. Spotify data pull for {composer_name} complete!\n
     [ {len(works)} ] works processed,
     [ {errors.rate_error.count} ] resolved rate limit 429 errors,
     [ {errors.misc_error.count} ] resolved misc errors.
-    [ {time_taken} ] total time taken.\n""")
+    [ {time_taken} ] total time taken.\n""" + RESET)
+    print("-" * console_width)
 
 
 #  FILL WORK DURATIONS WITH ALBUM DATA
@@ -242,7 +252,6 @@ def fill_work_durations(composer_name):
 
 # FILL PERFORMER TABLE WITH IMAGES FROM SPOTIFY
 def get_spotify_performers_img():
-
     ctx = current_app.test_request_context()
     ctx.push()
 
@@ -255,6 +264,8 @@ def get_spotify_performers_img():
     artists = db.session.query(Performers)\
         .filter(Performers.img == None).all()
 
+    console_width = os.get_terminal_size().columns
+    print("-" * console_width)
     if not artists:
         print("    No unprocessed performer images found! Skipping.\n")
         return

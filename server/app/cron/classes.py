@@ -2,6 +2,10 @@ from datetime import datetime, timedelta
 from flask import session
 from app import sp
 
+RED = "\033[31m"
+GREEN = "\033[32m"
+RESET = "\033[0m"
+
 
 class Timer(object):
 
@@ -12,7 +16,7 @@ class Timer(object):
     def set_loop_length(self, length):
         self.loop_length = length
 
-    def print_status_update(self, count):
+    def print_status_update(self, count, errors):
         current_time = datetime.utcnow()
         elapsed_time = current_time - self.start_time
         self.elapsed = str(timedelta(seconds=round(elapsed_time.total_seconds())))
@@ -24,7 +28,7 @@ class Timer(object):
         remaining_time = remaining * (1 / item_per_second)
         remaining = str(timedelta(seconds=round(remaining_time)))
         
-        print(f"    Completed [ {count} ] of [ {self.loop_length} ]. Time elapsed: [ {self.elapsed} ]. Remaining time: [ {remaining} ]\n")
+        print(GREEN + f"    Completed [ {count} ] of [ {self.loop_length} ]. Time elapsed: [ {self.elapsed} ]. Remaining time: [ {remaining} ]. 429 errors: [ {errors.rate_error.count} ].\n" + RESET)
 
     def print_status_update_one_line(self, count):
         current_time = datetime.utcnow()
@@ -38,7 +42,7 @@ class Timer(object):
         remaining_time = remaining * (1 / item_per_second)
         remaining = str(timedelta(seconds=round(remaining_time)))
         
-        print(f"    Completed [ {count} ] of [ {self.loop_length} ]. Time elapsed: [ {self.elapsed} ]. Remaining time: [ {remaining} ]", end='\r')
+        print(GREEN + f"    Completed [ {count} ] of [ {self.loop_length} ]. Time elapsed: [ {self.elapsed} ]. Remaining time: [ {remaining} ]", end='\r'+ RESET)
 
     def get_elapsed_time(self):
         return self.elapsed

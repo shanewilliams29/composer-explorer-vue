@@ -404,7 +404,7 @@ def prepare_work_albums_and_performers(composer, work, albums, existing_artists)
         # calculate work durations
         album_duration = calculate_album_duration(track_list)
 
-        # calculate and add score score
+        # calculate and add score
         score = calculate_album_score(track_list, popularity)
 
         # prepare album data dict
