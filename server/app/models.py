@@ -13,7 +13,7 @@ favorites = db.Table('favorites',
 
 performer_albums = db.Table('performer_albums',
                             db.Column('performer_id', db.String(48), db.ForeignKey('performers.id')),
-                            db.Column('album_id', db.String(46), db.ForeignKey('work_albums.id'))
+                            db.Column('album_id', db.String(46), db.ForeignKey('work_albums.id', ondelete='CASCADE'))
                             )
 
 visits = db.Table('visits',
@@ -350,7 +350,7 @@ class WorkAlbums(db.Model):
     markets = db.Column(db.Text)
     likes = db.relationship('AlbumLike', backref='album', lazy='dynamic', passive_deletes=True)
     work = db.relationship("WorkList", back_populates="albums")
-    performers = db.relationship("Performers", secondary=performer_albums, back_populates="albums", lazy='dynamic')
+    performers = db.relationship("Performers", secondary=performer_albums, back_populates="albums", lazy='dynamic', passive_deletes=True)
 
     def __repr__(self):
         return '<{}>'.format(self.id)

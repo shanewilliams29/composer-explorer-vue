@@ -74,6 +74,21 @@ def retrieve_spotify_tracks_for_work_async(composer, work):
         for result in result_list:
             track_list.extend(result['tracks']['items'])
 
+    # do search again on cat number only if cat number composer
+    if not composer.general:
+        search_string = work.composer + " " + work.cat
+    
+        print(f"    Searching Spotify... \"{search_string}\"")
+
+        search_urls = []
+        for i in range(0, 1000, 50): 
+            search_urls.append(f"https://api.spotify.com/v1/search?query={search_string}&type=track&offset={i}&limit=50")
+
+        result_list = asyncio.run(main(search_urls))
+
+        for result in result_list:
+            track_list.extend(result['tracks']['items'])
+
     print(f"    [ {len(track_list)} ] tracks retrieved!")
     
     return track_list
@@ -105,7 +120,8 @@ def drop_unmatched_tracks(composer, work, tracks):
     def should_check_no_work(work):
         work_title_string = " " + re.sub(r'\W+', ' ', work.title.lower())
 
-        if " no " in work_title_string:
+        # exclude Haydn from check due to alternate numbering schemes
+        if " no " in work_title_string and work.composer != "Haydn":  
             return True
         return False
 
