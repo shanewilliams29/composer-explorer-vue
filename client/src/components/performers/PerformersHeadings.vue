@@ -104,7 +104,7 @@ export default {
     return {
       radioGrayURL: staticURL + "radio_gray.svg",
       radioWhiteUrl: staticURL + "radio.svg",
-      spotifyGrayURL: staticURL + "Spotify_Icon_RGB_Black.png",
+      spotifyGrayURL: staticURL + "Spotify_Icon_RGB_Gray.png",
       spotifyWhiteUrl: staticURL + "Spotify_Icon_RGB_White.png",
       hover: false,
       hover2: false,
