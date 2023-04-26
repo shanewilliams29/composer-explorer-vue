@@ -84,7 +84,7 @@ def get_spotify_albums_and_store(composer_name):
                     tracks = retrieve_spotify_tracks_for_work_async(composer, work)
                 except httpx.HTTPStatusError as e:
                     if e.response.status_code == 429:
-                        print(f"\n>>> 429 TRACK FETCH ERROR: Rate limit exceeded. Will try again next loop...\n")
+                        print("\n>>> 429 TRACK FETCH ERROR: Rate limit exceeded. Will try again next loop...\n")
                         errors.register_rate_error()
                         time.sleep(4)
                         continue
@@ -123,7 +123,7 @@ def get_spotify_albums_and_store(composer_name):
                     albums = get_albums_from_ids_async(album_id_list)
                 except httpx.HTTPStatusError as e:
                     if e.response.status_code == 429:
-                        print(f"\n>>> 429 ALBUM FETCH ERROR: Rate limit exceeded. Will try again next loop...\n")
+                        print("\n>>> 429 ALBUM FETCH ERROR: Rate limit exceeded. Will try again next loop...\n")
                         errors.register_rate_error()
                         time.sleep(4)
                         continue
@@ -136,8 +136,13 @@ def get_spotify_albums_and_store(composer_name):
                 try:
                     processed_albums = retrieve_album_tracks_and_drop(composer, work, albums)
                 except Exception as e:
-                    print(f"\n>>> ALBUMS TRACK FETCH ERROR: {e}. Will try again next loop...\n")
-                    errors.register_misc_error()
+                    if "429" in e:
+                        print("\n>>> 429 ALBUMS TRACK FETCH ERROR: Rate limit exceeded. Will try again next loop...\n")
+                        errors.register_rate_error()
+                        time.sleep(4)
+                    else:
+                        print(f"\n>>> ALBUMS TRACK FETCH ERROR: {e}. Will try again next loop...\n")
+                        errors.register_misc_error()
                     continue
 
                 # STEP 5: PREPARE WORK ALBUMS AND PERFORMERS FOR DATABASE STORAGE
@@ -174,6 +179,7 @@ def get_spotify_albums_and_store(composer_name):
     [ {errors.rate_error.count} ] resolved rate limit 429 errors,
     [ {errors.misc_error.count} ] resolved misc errors.
     [ {time_taken} ] total time taken.\n""")
+
 
 #  FILL WORK DURATIONS WITH ALBUM DATA
 def fill_work_durations(composer_name):
@@ -250,10 +256,10 @@ def get_spotify_performers_img():
         .filter(Performers.img == None).all()
 
     if not artists:
-        print(f"    No unprocessed performer images found! Skipping.\n")
+        print("    No unprocessed performer images found! Skipping.\n")
         return
 
-    print(f"    Retrieving performer images from Spotify...")
+    print("    Retrieving performer images from Spotify...")
     artist_list = []
     for artist in artists:
         artist_list.append(artist)
