@@ -1068,12 +1068,15 @@ def get_albums(work_id):
         item['composer'] = album.composer
         item['duration'] = album.duration
 
-        # determine if full performance or excerpt
-        if album.duration < work_duration / 1.5:
-            item['full_performance'] = False
+        if work_duration:
+            # determine if full performance or excerpt
+            if album.duration < work_duration / 1.5:
+                item['full_performance'] = False
+            else:
+                item['full_performance'] = True
         else:
             item['full_performance'] = True
-
+            
         # de-rate newer, crappy albums
         if item['track_count']:
             if item['track_count'] > 50 and int(item['release_date'][0:4]) > 2019:

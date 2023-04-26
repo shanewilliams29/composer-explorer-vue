@@ -28,7 +28,7 @@ class Timer(object):
         remaining_time = remaining * (1 / item_per_second)
         remaining = str(timedelta(seconds=round(remaining_time)))
         
-        print(GREEN + f"    Completed [ {count} ] of [ {self.loop_length} ]. Time elapsed: [ {self.elapsed} ]. Remaining time: [ {remaining} ]. 429 errors: [ {errors.rate_error.count} ].\n" + RESET)
+        print(GREEN + f"    Completed [ {count} ] of [ {self.loop_length} ]." + RESET + f" Time elapsed: [ {self.elapsed} ]. Remaining time: [ {remaining} ]. 429 errors: [ {errors.rate_error.count} ].\n")
 
     def print_status_update_one_line(self, count):
         current_time = datetime.utcnow()
@@ -42,7 +42,7 @@ class Timer(object):
         remaining_time = remaining * (1 / item_per_second)
         remaining = str(timedelta(seconds=round(remaining_time)))
         
-        print(GREEN + f"    Completed [ {count} ] of [ {self.loop_length} ]. Time elapsed: [ {self.elapsed} ]. Remaining time: [ {remaining} ]", end='\r'+ RESET)
+        print(f"    Completed [ {count} ] of [ {self.loop_length} ]. Time elapsed: [ {self.elapsed} ]. Remaining time: [ {remaining} ]", end='\r')
 
     def get_elapsed_time(self):
         return self.elapsed
