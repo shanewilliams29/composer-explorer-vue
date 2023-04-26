@@ -1054,7 +1054,7 @@ def get_albums(work_id):
 
         if work_duration:
             # determine if full performance or excerpt
-            if album.duration < work_duration / 1.5:
+            if work_duration > 600000 and album.duration < work_duration / 1.5:
                 item['full_performance'] = False
             else:
                 item['full_performance'] = True
