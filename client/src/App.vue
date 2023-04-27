@@ -168,6 +168,7 @@ export default {
 }
 #footer {
   height: 200px !important;
+  width: 100%;
   position: fixed;
   background: none;
   z-index: 9999;

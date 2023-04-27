@@ -216,9 +216,9 @@ export default {
     },
   },
   watch: {
-    clientToken() {
-      this.getUnreadPosts()
-    },
+    // clientToken() {
+    //   this.getUnreadPosts()
+    // },
     searchInput(searchInput) {
       if (searchInput == ""){
         this.viewSearchResults = false;
@@ -418,7 +418,7 @@ export default {
   },
   mounted() {
     // Periodically checks for new forum posts
-    setInterval(this.getUnreadPosts, 60000);
+    // setInterval(this.getUnreadPosts, 60000);
     const inputForm = document.getElementById("search-form");
 
     // inputForm.addEventListener("click", () => {
