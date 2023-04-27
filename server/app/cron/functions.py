@@ -209,7 +209,7 @@ def get_album_list_from_tracks(tracks):
     return list(album_ids)
 
 
-def check_if_album_in_database(album_ids, work):
+def check_if_albums_in_database(album_ids, work):
 
     potential_new_albums = set()
     for album_id in album_ids:

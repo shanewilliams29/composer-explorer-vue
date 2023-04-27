@@ -6,7 +6,7 @@ from app import db, sp
 from app.cron.classes import Timer, SpotifyToken, Errors
 from app.cron.functions import retrieve_spotify_tracks_for_work_async, retrieve_album_tracks_and_drop
 from app.cron.functions import get_albums_from_ids_async, drop_unmatched_tracks, get_album_list_from_tracks
-from app.cron.functions import prepare_work_albums_and_performers, check_if_album_in_database
+from app.cron.functions import prepare_work_albums_and_performers, check_if_albums_in_database
 from app.models import WorkList, ComposerList, WorkAlbums, AlbumLike, Performers
 from sqlalchemy import func, or_
 from collections import defaultdict
@@ -55,9 +55,9 @@ def get_and_store_new_albums(composer_name):
     if not composer.catalogued:
         is_not_general = input("\n    New composer detected. Should load use work catalogue numbers? (y/n): ")
 
-        if is_not_general == "y":
+        if is_not_general.lower() == "y":
             composer.general = False
-        elif is_not_general == "n":
+        elif is_not_general.lower() == "n":
             composer.general = True
         else:
             print(RED + "\n    ERROR: Invalid input entered!\n" + RESET)
@@ -144,8 +144,7 @@ def get_and_store_new_albums(composer_name):
 
                 # STEP 3: GET ALBUM ID LIST AND CHECK IF ALREADY IN DATABASE. THEN GET NEW ALBUMS
                 album_id_list = get_album_list_from_tracks(matched_tracks)
-
-                new_ids_list = check_if_album_in_database(album_id_list, work)
+                new_ids_list = check_if_albums_in_database(album_id_list, work)
 
                 if len(new_ids_list) == 0:
                     print("    No new albums found for work. Skipping...\n")

@@ -252,7 +252,6 @@ class WorkList(db.Model):
     openopus = db.Column(db.Boolean)
     album_count = db.Column(db.Integer, index=True)
     duration = db.Column(db.Integer)
-    spotify_loaded = db.Column(db.Boolean)
     last_refresh = db.Column(db.DateTime)
     albums = db.relationship("WorkAlbums", back_populates="work", lazy='dynamic')
 
