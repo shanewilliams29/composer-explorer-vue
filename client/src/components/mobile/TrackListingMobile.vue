@@ -60,7 +60,11 @@ export default {
         this.genre = this.$config.genre;
         this.album = album;
     })
-  }
+    eventBus.$on('fireSetAlbumHopper', (album) => {
+      this.genre = this.$config.genre;
+      this.album = album;
+  })
+}
 };
 </script>
 

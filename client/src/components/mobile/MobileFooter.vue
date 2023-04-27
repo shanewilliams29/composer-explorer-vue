@@ -73,7 +73,6 @@ export default {
       this.buttonActive = !this.buttonActive;
     },
     updatePic(){
-      alert('test');
       this.reveal = !this.reveal;
 
       if (this.reveal) {
@@ -97,6 +96,7 @@ export default {
   },
   created(){
     eventBus.$on('fireSetAlbum', this.updatePic);
+    eventBus.$on('fireSetAlbumHopper', this.updatePic);
   }
 };
 </script>
@@ -106,10 +106,10 @@ export default {
   mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 1.0) 0%, transparent 100%);
   position: absolute;
   object-fit: cover;
-  height: 200px;
+  height: 130px;
   width: 100%;
   left: 0px;
-  bottom: 0px;
+  bottom: 70px;
   z-index: -5;
   opacity: 0.3;
 }
