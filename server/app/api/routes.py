@@ -1161,6 +1161,7 @@ def like_action(album_id, action):
         return response
     elif Config.MODE == 'DEVELOPMENT':
         user = User.query.filter_by(id=85).first()
+        print(user)
         album = WorkAlbums.query.filter_by(id=album_id).first()
         if action == 'like':
             user.like_album(album)

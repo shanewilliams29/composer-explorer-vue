@@ -205,8 +205,27 @@ def get_album_list_from_tracks(tracks):
     for track in tracks:
         album_ids.add(track['album']['id'])
 
-    print(f"    [ {len(album_ids)} ] unique albums!\n")
+    print(f"    [ {len(album_ids)} ] unique albums!")
     return list(album_ids)
+
+
+def check_if_album_in_database(album_ids, work):
+
+    potential_new_albums = set()
+    for album_id in album_ids:
+        potential_new_albums.add(work.id + album_id)
+
+    existing_albums = set({album.id for album in WorkAlbums.query.filter_by(workid=work.id).all()})
+
+    new_albums_set = potential_new_albums.difference(existing_albums)
+
+    new_albums_list = []
+    for album in new_albums_set:
+        new_albums_list.append(album.replace(work.id, ""))
+
+    print(f"    [ {len(new_albums_list)} ] new albums not already in database!\n")
+
+    return new_albums_list
 
 
 def get_albums_from_ids_async(id_list):
@@ -474,3 +493,6 @@ def prepare_work_albums_and_performers(composer, work, albums, existing_artists)
 
     print(f"    [ {len(work_albums_list)} ] albums processed!\n")
     return work_albums_list, existing_artists
+
+
+

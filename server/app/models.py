@@ -253,6 +253,7 @@ class WorkList(db.Model):
     album_count = db.Column(db.Integer, index=True)
     duration = db.Column(db.Integer)
     spotify_loaded = db.Column(db.Boolean)
+    last_refresh = db.Column(db.DateTime)
     albums = db.relationship("WorkAlbums", back_populates="work", lazy='dynamic')
 
     def __repr__(self):
@@ -306,17 +307,15 @@ class Performers(db.Model):
     name: str
     img: str
     description: str
-    # google_img: str
-    # wiki_link: str
-    # role: str
+    google_img: str
+    wiki_link: str
 
     id = db.Column(db.String(48), primary_key=True)
     name = db.Column(db.String(256), index=True)
     img = db.Column(db.String(128))
     description = db.Column(db.String(256))
-    # google_img = db.Column(db.String(128))
-    # wiki_link = db.Column(db.String(128))
-    # role = db.Column(db.String(48))
+    google_img = db.Column(db.String(128))
+    wiki_link = db.Column(db.String(256))
     hidden = db.Column(db.Boolean, default=False)
     albums = db.relationship("WorkAlbums", secondary=performer_albums, back_populates="performers", lazy='dynamic')
 
