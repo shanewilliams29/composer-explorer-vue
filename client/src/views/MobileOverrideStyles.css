@@ -54,10 +54,16 @@
 >>> .works-table .heart-number span{
   font-size: 12px !important;
 }
->>> .album_text_columns span{
-  font-size: 14px !important;
+
+>>> .album_text_columns .album-major-artists{
+  font-size: 15px !important;
 }
->>> .album_text_columns .album-likes-class .likes span{
+
+>>> .album_text_columns .label svg{
+  font-size: 10px !important;
+}
+
+/*>>> .album_text_columns .album-likes-class .likes span{
   font-size: 12px !important;
 }
 >>> .album_text_columns .album-likes-class .user-liked span{
@@ -65,7 +71,4 @@
 }
 >>> .album_text_columns .label{
   font-size: 12px !important;
-}
->>> .album-titles {
-  font-size: 14px !important;
-}
+}*/

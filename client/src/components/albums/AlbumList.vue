@@ -375,9 +375,12 @@ export default {
       this.initialGetAlbums(this.$config.work);
     }
 
-    if (this.$config.genre == "Opera" || this.$config.genre == "Stage Work") {
+    if (!this.$view.mobile && (this.$config.genre == "Opera" || this.$config.genre == "Stage Work")) {
       document.documentElement.style.setProperty("--album-size", `108px`);
       document.documentElement.style.setProperty("--line-clamp", `3`);
+    } else if (this.$view.mobile) {
+      document.documentElement.style.setProperty("--album-size", `96px`);
+      document.documentElement.style.setProperty("--line-clamp", `2`);
     } else {
       document.documentElement.style.setProperty("--album-size", `96px`);
       document.documentElement.style.setProperty("--line-clamp", `2`);

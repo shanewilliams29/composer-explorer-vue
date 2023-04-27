@@ -54,6 +54,7 @@
           </b-card-text>
         </b-col>
       </div>
+      <div v-if="!$view.mobile">
       <div v-if="album.id == selectedAlbum">
         <a target="_blank" :href="'https://open.spotify.com/album/' + album.album_id">
           <img class="spotify-icon" width="21px" :src="spotifyLogoURLWhite" />
@@ -64,6 +65,7 @@
           <img class="spotify-icon" width="21px" :src="spotifyLogoURLBlack" />
         </a>
       </div>
+    </div>
     </b-card>
   </div>
 </template>
@@ -277,7 +279,7 @@ table {
 .wrap-text {
   color: gray;
   display: -webkit-box;
-  -webkit-line-clamp: var(--line-clamp); /* Limit the number of lines to 2 */
+  -webkit-line-clamp: var(--line-clamp);
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
