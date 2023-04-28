@@ -69,6 +69,15 @@ def load(composer_name):
     print(GREEN + f"    Load for {composer_name} complete!\n" + RESET)
 
 
+# Necessary for cron tab to execute properlu
+def get_console_width(default=80):
+    try:
+        console_width = os.get_terminal_size().columns
+    except OSError:
+        console_width = default
+    return console_width
+
+
 def get_and_store_new_albums(composer_name):
     ctx = current_app.test_request_context()
     ctx.push()
@@ -124,7 +133,7 @@ def get_and_store_new_albums(composer_name):
             if work.id not in works_processed:
                 i += 1
 
-                console_width = os.get_terminal_size().columns
+                console_width = get_console_width()
                 spotify_token.refresh_token()
                 
                 print("-" * console_width)
