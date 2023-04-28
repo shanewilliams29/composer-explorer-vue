@@ -148,7 +148,7 @@ def get_and_store_new_albums(composer_name):
                         time.sleep(4)
                         continue
                     else:
-                        print(RED + f"\n    {e.response.status_code} TRACK FETCH ERROR: An unexpected error occurred. Will try again next loop...\n" + RESET)
+                        print(RED + f"\n   TRACK FETCH ERROR: {e}. An unexpected error occurred. Will try again next loop...\n" + RESET)
                         errors.register_misc_error()
                         continue
                 except Exception as e:
