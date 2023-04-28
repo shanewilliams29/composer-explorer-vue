@@ -107,6 +107,7 @@ export default {
   created() {
     this.$view.mode = null;
     this.$view.shuffle = false;
+    document.documentElement.style.setProperty("--playback-color", "var(--yellow)");
 
     window.firstLoad = true; // prevent playback on first load
     eventBus.$on("requestWorksList", (composer) => {
