@@ -51,7 +51,7 @@ def search_spotify_for_tracks(track_list, search_string):
 
 
 def retrieve_spotify_tracks_for_work_async(composer, work):
-    
+
     track_list = []
     general_genres = get_general_genres()
 

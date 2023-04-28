@@ -2,12 +2,12 @@ from flask import current_app, Blueprint
 from datetime import datetime, timedelta
 import os
 
-from app import db, sp
+from app import db, log, sp
 from app.cron.classes import Timer, SpotifyToken, Errors
 from app.cron.functions import retrieve_spotify_tracks_for_work_async, retrieve_album_tracks_and_drop
 from app.cron.functions import get_albums_from_ids_async, drop_unmatched_tracks, get_album_list_from_tracks
 from app.cron.functions import prepare_work_albums_and_performers, check_if_albums_in_database
-from app.models import WorkList, ComposerList, WorkAlbums, AlbumLike, Performers
+from app.models import WorkList, ComposerList, WorkAlbums, AlbumLike, Performers, ComposerCron
 from sqlalchemy import func, or_
 from collections import defaultdict
 
@@ -17,11 +17,45 @@ import httpx
 
 bp = Blueprint('cron', __name__)
 
+log_name = "cron-log"
+logger = log.logger(log_name)
+
 # console text colors
 RED = "\033[31m"
 GREEN = "\033[32m"
 RESET = "\033[0m"
 BOLD = '\033[1m'
+
+
+# FILLS ALBUMS AND PERFORMER DATA FOR ALL COMPOSERS
+@ bp.cli.command()
+def auto_load():
+
+    composer_to_fill = db.session.query(ComposerCron).first()
+
+    get_and_store_new_albums(composer_to_fill.id)
+    fill_work_durations(composer_to_fill.id)
+    count_albums(composer_to_fill.id)
+    get_spotify_performers_img()
+    print(GREEN + f"    Load for {composer_to_fill.id} complete!\n" + RESET)
+
+    indexed_composers = []
+    for value in db.session.query(WorkList.composer).distinct():
+        str(indexed_composers.append(value[0]))
+
+    for composer in indexed_composers:
+        if composer == composer_to_fill.id:
+            index = indexed_composers.index(composer)
+
+            if index == len(indexed_composers) - 1:
+                next_index = 0
+            else:
+                next_index = index + 1
+
+            next_composer = indexed_composers[next_index]
+            composer_to_fill.id = next_composer
+            db.session.commit()
+            break
 
 
 # FIND AND ADD NEW ALBUMS FOR A COMPOSER
@@ -77,8 +111,11 @@ def get_and_store_new_albums(composer_name):
     print(f"\n    {len(works)} works found for {composer_name}. Beginning Spotify data pull...\n")
 
     works_processed = set()
-    while len(works_processed) < len(works):
+    max_number_of_loops = 5
+    loop_counter = 0
+    while len(works_processed) < len(works) and loop_counter < max_number_of_loops:
 
+        loop_counter += 1
         timer.set_loop_length(len(works) - len(works_processed))
         i = 0
 
@@ -214,15 +251,34 @@ def get_and_store_new_albums(composer_name):
     time_taken = timer.get_elapsed_time()
     ctx.pop()
 
-    print("-" * console_width)
-    print(GREEN + f"""
+    if loop_counter == max_number_of_loops:
+
+        logtext = f"""
+    FINISHED WITH UNRESOLVED ERRORS! Spotify data pull for {composer_name} partially complete!\n
+    [ {len(works)} ] works processed,
+    [ {new_albums_count} ] works with new albums,
+    [ {len(works) - len(works_processed)} ] works not completed properly,
+    [ {errors.rate_error.count} ] rate limit 429 errors,
+    [ {errors.misc_error.count} ] misc errors.
+    [ {time_taken} ] total time taken.\n"""
+
+        print("-" * console_width)
+        print(RED + logtext + RESET)
+        print("-" * console_width)
+        logger.log_text(logtext, severity="ERROR")
+        return
+
+    logtext = f"""
     FINISHED. Spotify data pull for {composer_name} complete!\n
     [ {len(works)} ] works processed,
     [ {new_albums_count} ] works with new albums,
     [ {errors.rate_error.count} ] resolved rate limit 429 errors,
     [ {errors.misc_error.count} ] resolved misc errors.
-    [ {time_taken} ] total time taken.\n""" + RESET)
+    [ {time_taken} ] total time taken.\n"""
     print("-" * console_width)
+    print(GREEN + logtext + RESET)
+    print("-" * console_width)
+    logger.log_text(logtext, severity="NOTICE")
 
 
 #  FILL WORK DURATIONS WITH ALBUM DATA
