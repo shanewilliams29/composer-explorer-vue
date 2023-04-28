@@ -428,7 +428,7 @@ header.card-header:hover {
 }
 .no-composers-found {
   font-size: 15px;
-  color: var(--medium-gray);
+  color: #9da6af;
   text-align: center;
   font-family: Roboto Condensed !important;
 }

@@ -843,7 +843,7 @@ tr:hover {
 }
 .no-works-found {
   font-size: 15px;
-  color: var(--medium-gray) !important;
+  color: #9da6af !important;
   text-align: center;
   font-family: Roboto Condensed !important;
 }
