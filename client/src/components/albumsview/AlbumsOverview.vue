@@ -148,6 +148,13 @@ export default {
       }
     }
   },
+    watch: {
+      '$route' () {
+        if (this.$route.query.id){
+          this.getOneAlbum(this.$route.query.id);
+        }
+      }
+    },
   methods: {
     durationAlt(ms) {
       let seconds = Math.floor(ms / 1000);

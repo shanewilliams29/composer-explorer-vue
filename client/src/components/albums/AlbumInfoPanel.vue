@@ -71,9 +71,7 @@ export default {
   methods: {
     goToAlbum(album) {
       if (!this.$view.mobile) {
-        if (this.$route.name != "albums") {
           this.$router.push("/albums?id=" + album.id);
-        }
       }
     },
     getArtistComposers(artist) {
