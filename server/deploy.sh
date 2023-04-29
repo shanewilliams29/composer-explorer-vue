@@ -6,14 +6,14 @@ python3 -m unittest tests.py
 
 # Check if tests were successful
 if [ $? -eq 0 ]; then
-  echo "Unit tests passed. Proceeding to deployment..."
+  echo -e "\033[32mUnit tests passed. Proceeding to deployment...\033[0m"
   
   # Deploy to Google Cloud
   gcloud config set project composer-explorer
   gcloud app deploy --quiet
   
-  echo "Deployment successful."
+  echo -e "\033[32mDeployment successful.\033[0m"
 else
-  echo "Unit tests failed. Deployment canceled."
+  echo -e "\033[31mUnit tests failed. Deployment canceled.\033[0m"
   exit 1
 fi
