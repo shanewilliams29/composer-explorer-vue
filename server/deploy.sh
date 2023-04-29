@@ -19,6 +19,14 @@ if [ $? -eq 0 ]; then
   echo "Running 'npm run build' in ../client directory..."
   npm run build
 
+  # Check if npm run build was successful
+  if [ $? -eq 0 ]; then
+    echo -e "\033[32m'npm run build' successful. Continuing to deployment.\n\033[0m"
+  else
+    echo -e "\033[31m'npm run build' failed. Exiting.\n\033[0m"
+    exit 1
+  fi
+
   # Change back to the initial directory (../server)
   cd "$initial_dir"
   
@@ -28,9 +36,9 @@ if [ $? -eq 0 ]; then
 
   # Check if deployment was successful
   if [ $? -eq 0 ]; then
-    echo -e "\033[32mDeployment successful!\033[0m"
+    echo -e "\033[32m\nDeployment successful!\n\033[0m"
   else
-    echo -e "\033[31mDeployment failed!\033[0m"
+    echo -e "\033[31m\nDeployment failed!\n\033[0m"
     exit 1
   fi
 else
