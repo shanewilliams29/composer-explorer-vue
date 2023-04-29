@@ -1257,6 +1257,7 @@ def get_albuminfo(album_id):
     ALBUM = {
         'composer': album.composer,
         'id': album.id,
+        'spotify_id': album.album_id,
         'album_img': album_details['album_img'],
         'img_big': album.img,
         'album_name': album_details['album_name'],

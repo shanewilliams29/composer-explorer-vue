@@ -2,7 +2,7 @@
   <b-card no-body v-show="!loading">
     <b-row no-gutters>
       <b-col cols="12" md="auto" class="album-cover-col">
-        <b-card-img @click="goToAlbum(album.id)" :src="album.img_big" alt="Album Cover" class="rounded-0"></b-card-img>
+        <b-card-img @click="goToAlbum(album.spotify_id)" :src="album.img_big" alt="Album Cover" class="rounded-0"></b-card-img>
       </b-col>
       <b-col>
         <b-card-body class="info-card-body">
@@ -34,10 +34,9 @@ export default {
   },
   methods: {
     goToAlbum(album_id) {
-      let albumId = album_id.replace(this.$config.work, "");
       if (!this.$view.mobile) {
         if (this.$route.name != "albums") {
-          this.$router.push("/albums?id=" + albumId);
+          this.$router.push("/albums?id=" + album_id);
         }
       }
     },
@@ -52,6 +51,7 @@ export default {
           localStorage.setItem("config", JSON.stringify(this.$config));
           eventBus.$emit("fireSetAlbum", res.data.album);
           this.album = res.data.album;
+          console.log(this.album)
           this.composer = res.data.album.composer;
           this.loading = false;
         })
