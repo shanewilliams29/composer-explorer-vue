@@ -2,7 +2,7 @@ from flask import current_app, Blueprint
 from datetime import datetime, timedelta
 import os
 
-from app import db, log, sp
+from app import db, log, sp, twilio
 from app.cron.classes import Timer, SpotifyToken, Errors
 from app.cron.functions import retrieve_spotify_tracks_for_work_async, retrieve_album_tracks_and_drop
 from app.cron.functions import get_albums_from_ids_async, drop_unmatched_tracks, get_album_list_from_tracks
@@ -275,6 +275,11 @@ def get_and_store_new_albums(composer_name):
         print(RED + logtext + RESET)
         print("-" * console_width)
         logger.log_text(logtext, severity="ERROR")
+        twilio.messages.create(
+            body=logtext,
+            from_='+16203902577',
+            to='+14039924389'
+        )
         return
 
     logtext = f"""
@@ -288,6 +293,11 @@ def get_and_store_new_albums(composer_name):
     print(GREEN + logtext + RESET)
     print("-" * console_width)
     logger.log_text(logtext, severity="NOTICE")
+    twilio.messages.create(
+        body=logtext,
+        from_='+16203902577',
+        to='+14039924389'
+    )
 
 
 #  FILL WORK DURATIONS WITH ALBUM DATA

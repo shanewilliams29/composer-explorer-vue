@@ -10,6 +10,7 @@ from app.spotify import SpotifyAPI
 from flask_bootstrap import Bootstrap4
 from flask_migrate import Migrate
 from google.cloud import logging, storage
+from twilio.rest import Client
 
 
 db = SQLAlchemy()
@@ -22,6 +23,7 @@ migrate = Migrate()
 log = logging.Client()
 storage_client = storage.Client(project='composer-explorer')
 sp = SpotifyAPI(Config.SPOTIFY_CLIENT_ID, Config.SPOTIFY_CLIENT_SECRET, Config.SPOTIFY_REDIRECT_URL)
+twilio = Client(Config.TWILIO_SID, Config.TWILIO_AUTH_TOKEN)
 
 
 def create_app(config_class=Config):

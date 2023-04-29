@@ -19,6 +19,9 @@ class Config(object):
 
     STATIC = 'https://storage.googleapis.com/composer-explorer.appspot.com/'
 
+    TWILIO_SID = os.environ.get('TWILIO_SID')
+    TWILIO_AUTH_TOKEN = os.environ.get('TWILIO_AUTH_TOKEN')
+
     CACHE_TYPE = "FileSystemCache"  # Flask-Caching related configs
     CACHE_THRESHOLD = 10000
     CACHE_DEFAULT_TIMEOUT = 86400
