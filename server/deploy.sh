@@ -25,8 +25,14 @@ if [ $? -eq 0 ]; then
   # Deploy to Google Cloud
   gcloud config set project composer-explorer
   gcloud app deploy --quiet
-  
-  echo -e "\033[32m\nDeployment successful.\n\033[0m"
+
+  # Check if deployment was successful
+  if [ $? -eq 0 ]; then
+    echo -e "\033[32mDeployment successful!\033[0m"
+  else
+    echo -e "\033[31mDeployment failed!\033[0m"
+    exit 1
+  fi
 else
   echo -e "\033[31m\nUnit tests failed. Deployment canceled.\n\033[0m"
   exit 1
