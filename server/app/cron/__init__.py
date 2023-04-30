@@ -589,7 +589,7 @@ def fill_person_info():
                 print(RED + f"429 Error! Sleeping for {sleep_time} seconds..." + RESET)
             time.sleep(sleep_time)
 
-            if success_count < 10:
+            if success_count < batch_size/2:
                 sleep_time = sleep_time * 2
             else:
                 sleep_time = 1
