@@ -58,23 +58,23 @@ def retrieve_spotify_tracks_for_work_async(composer, work):
 
     # search without cat numbers for composer.general or opera/stage work
     if composer.general or work.genre.lower().strip() in general_genres:
-        search_string = work.composer + " " + quote(work.title)
+        search_string = quote(work.composer) + " " + quote(work.title)
 
     # search with cat numbers if not composer.general
     else:
-        search_string = work.composer + " " + quote(work.title) + " " + work.cat
+        search_string = quote(work.composer) + " " + quote(work.title) + " " + quote(work.cat)
 
     track_list = search_spotify_for_tracks(track_list, search_string)
 
     # do search again for case where opera composer has cat numbers (returns more operas)
     if not composer.general and work.genre.lower().strip() in general_genres:
-        search_string = work.composer + " " + quote(work.title) + " " + work.cat
+        search_string = quote(work.composer) + " " + quote(work.title) + " " + quote(work.cat)
     
         track_list = search_spotify_for_tracks(track_list, search_string)
 
     # do search again on cat number only if a cat number composer
     if not composer.general:
-        search_string = work.composer + " " + work.cat
+        search_string = quote(work.composer) + " " + quote(work.cat)
     
         track_list = search_spotify_for_tracks(track_list, search_string)
 
