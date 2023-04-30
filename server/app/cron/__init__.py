@@ -11,6 +11,7 @@ from app.models import WorkList, ComposerList, WorkAlbums, AlbumLike, Performers
 from sqlalchemy import func, or_, text
 from collections import defaultdict
 from config import Config
+from urllib.parse import quote
 
 import click
 import time
@@ -461,7 +462,7 @@ def get_spotify_performers_img():
 
 #  ASYNC FUNCTION TO FETCH FROM GOOGLE KNOWLEDGE GRAPH
 async def get_person_details_httpx(person_name, auth_key):
-    person = person_name
+    person = quote(person_name)
     info = {}
 
     path = f"https://kgsearch.googleapis.com/v1/entities:search?indent=true&types=Person&types=MusicGroup&query={person} Music&limit=50&key={auth_key}"
