@@ -531,14 +531,18 @@ def fill_person_info():
     id_list = []
     completed_count = 0
     batch_size = 50
+    sleep_time = 1
+
     for count, person in enumerated_list:
+
+        success_count = 0
+        error_count = 0
         
         if (count + 1) % batch_size != 0 and count != len(all_people) - 1:
             person_list.append(person.name)
             id_list.append(person.id)
 
         else:
-            sleep_time = 0
             person_list.append(person.name)
             id_list.append(person.id)
 
@@ -547,14 +551,14 @@ def fill_person_info():
             for i, (person, info) in enumerate(people_with_info):
                 if not isinstance(info, int):
                     completed_count += 1
+                    success_count += 1
                     artist_id = id_list[i]
                     artist = all_artist_dict.get(artist_id)
                     artist.description = info['description']
                     artist.google_img = info['image']
                     artist.wiki_link = info['link']
                 elif info == 429:
-                    print(RED + "\n429 ERROR: Sleep for a bit...\n" + RESET)
-                    sleep_time = 5
+                    error_count += 1
                     break
                 else:
                     pass
@@ -581,8 +585,15 @@ def fill_person_info():
             print("Remaining time: " + remaining)
             print(" ")
 
+            if error_count:
+                print(RED + f"429 Error! Sleeping for {sleep_time} seconds..." + RESET)
             time.sleep(sleep_time)
-    
+
+            if success_count < 10:
+                sleep_time = sleep_time * 2
+            else:
+                sleep_time = 1
+
     # finish
     ctx.pop()
     print("Complete!")
