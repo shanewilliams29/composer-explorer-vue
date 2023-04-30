@@ -538,6 +538,7 @@ def fill_person_info():
             id_list.append(person.id)
 
         else:
+            sleep_time = 0
             person_list.append(person.name)
             id_list.append(person.id)
 
@@ -552,8 +553,8 @@ def fill_person_info():
                     artist.google_img = info['image']
                     artist.wiki_link = info['link']
                 elif info == 429:
-                    print(RED + "\n429 ERROR: Sleep for 10 seconds...\n" + RESET)
-                    time.sleep(10)
+                    print(RED + "\n429 ERROR: Sleep for a bit...\n" + RESET)
+                    sleep_time = 5
                     break
                 else:
                     pass
@@ -580,7 +581,7 @@ def fill_person_info():
             print("Remaining time: " + remaining)
             print(" ")
 
-            time.sleep(5)
+            time.sleep(sleep_time)
     
     # finish
     ctx.pop()
