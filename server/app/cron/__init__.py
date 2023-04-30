@@ -459,6 +459,7 @@ def get_spotify_performers_img():
     [ {time_taken} ] total time taken.\n""")
 
 
+#  ASYNC FUNCTION TO FETCH FROM GOOGLE KNOWLEDGE GRAPH
 async def get_person_details_httpx(person_name, auth_key):
     person = person_name
     info = {}
@@ -553,6 +554,7 @@ def fill_person_info():
                 elif info == 429:
                     print(RED + "\n429 ERROR: Sleep for 10 seconds...\n" + RESET)
                     time.sleep(10)
+                    break
                 else:
                     pass
 
