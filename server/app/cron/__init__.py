@@ -7,13 +7,16 @@ from app.cron.classes import Timer, SpotifyToken, Errors
 from app.cron.functions import retrieve_spotify_tracks_for_work_async, retrieve_album_tracks_and_drop
 from app.cron.functions import get_albums_from_ids_async, drop_unmatched_tracks, get_album_list_from_tracks
 from app.cron.functions import prepare_work_albums_and_performers, check_if_albums_in_database
-from app.models import WorkList, ComposerList, WorkAlbums, AlbumLike, Performers, ComposerCron
-from sqlalchemy import func, or_
+from app.models import WorkList, ComposerList, WorkAlbums, AlbumLike, Performers, ComposerCron, performer_albums
+from sqlalchemy import func, or_, text
 from collections import defaultdict
+from config import Config
 
 import click
 import time
 import httpx
+import re
+import asyncio
 
 bp = Blueprint('cron', __name__)
 
@@ -454,3 +457,129 @@ def get_spotify_performers_img():
     [ {images_found} ] images retrieved.
     [ {errors.misc_error.count} ] errors.
     [ {time_taken} ] total time taken.\n""")
+
+
+async def get_person_details_httpx(person_name, auth_key):
+    person = person_name
+    info = {}
+
+    path = f"https://kgsearch.googleapis.com/v1/entities:search?indent=true&types=Person&types=MusicGroup&query={person} Music&limit=50&key={auth_key}"
+    
+    try:
+        async with httpx.AsyncClient() as client:
+            response = await client.get(path)
+            response.raise_for_status()
+            data = response.json()
+            item_list = data['itemListElement']
+        
+        if item_list:
+            person_match = re.sub(r'^(Sir|Dame) ', '', person).strip()
+            
+            for item in item_list:
+                if person_match in item['result']['name']:
+                    info = {'description': item['result'].get('description', 'NA'),
+                            'image': item['result']['image'].get('contentUrl', 'NA') if 'image' in item['result'] else 'NA',
+                            'link': item['result']['detailedDescription'].get('url', 'NA') if 'detailedDescription' in item['result'] else 'NA'
+                            }
+                    break
+            else:
+                info = {'description': 'NA',
+                        'image': 'NA',
+                        'link': 'NA'
+                        }
+        else:
+            info = {'description': 'NA',
+                    'image': 'NA',
+                    'link': 'NA'
+                    }
+
+        return info
+    
+    except httpx.HTTPError as e:
+        print(e)
+        return e.response.status_code
+
+
+# GETS PERSON INFO FROM GOOGLE AND FILLS IN DATABASE
+@ bp.cli.command()
+def fill_person_info():
+    print("\nBeginning collection of performer information from Google Knowledge Graph...\n")
+    start_time = datetime.utcnow()
+    ctx = current_app.test_request_context()
+    ctx.push()
+
+    all_people = db.session.query(Performers.name, Performers.id, func.count(Performers.id).label('total'))\
+        .join(performer_albums)\
+        .filter(or_(Performers.hidden == False, Performers.hidden == None))\
+        .filter(Performers.description == None) \
+        .group_by(Performers.id).order_by(text('total DESC')).all()
+
+    all_artist_dict = {artist.id: artist for artist in Performers.query.all()}
+    
+    enumerated_list = enumerate(all_people)
+
+    async def main(person_names):
+        auth_key = Config.GOOGLE_KNOWLEDGE_GRAPH_API_KEY
+
+        tasks = [get_person_details_httpx(person_name, auth_key) for person_name in person_names]
+        info_list = await asyncio.gather(*tasks)
+
+        return list(zip(person_names, info_list))
+
+    person_list = []
+    id_list = []
+    completed_count = 0
+    batch_size = 50
+    for count, person in enumerated_list:
+        
+        if (count + 1) % batch_size != 0 and count != len(all_people) - 1:
+            person_list.append(person.name)
+            id_list.append(person.id)
+
+        else:
+            person_list.append(person.name)
+            id_list.append(person.id)
+
+            people_with_info = asyncio.run(main(person_list))
+
+            for i, (person, info) in enumerate(people_with_info):
+                if not isinstance(info, int):
+                    completed_count += 1
+                    artist_id = id_list[i]
+                    artist = all_artist_dict.get(artist_id)
+                    artist.description = info['description']
+                    artist.google_img = info['image']
+                    artist.wiki_link = info['link']
+                elif info == 429:
+                    print(RED + "\n429 ERROR: Sleep for 10 seconds...\n" + RESET)
+                    time.sleep(10)
+                else:
+                    pass
+
+            db.session.commit()
+
+            person_list = []
+            id_list = []
+            
+            current_time = datetime.utcnow()
+            elapsed_time = current_time - start_time
+            elapsed = str(timedelta(seconds=round(elapsed_time.total_seconds())))
+
+            total = len(all_people)
+            completed = completed_count + 1
+            remaining = total - completed
+
+            item_per_second = (completed / elapsed_time.total_seconds())
+            remaining_time = remaining * (1 / item_per_second)
+            remaining = str(timedelta(seconds=round(remaining_time)))
+
+            print(f"Stored {completed} of {total}")
+            print("Time elapsed: " + elapsed)
+            print("Remaining time: " + remaining)
+            print(" ")
+
+            time.sleep(5)
+    
+    # finish
+    ctx.pop()
+    print("Complete!")

@@ -38,14 +38,16 @@ async def get_person_details_httpx(person_name, auth_key):
             
             for item in item_list:
                 if person_match in item['result']['name']:
-                    description = item['result'].get('description', 'NA')
+                    info = {'description': item['result'].get('description', 'NA'),
+                            'image': item['result'].get('image', 'NA').get('contentUrl', 'NA'),
+                            'link': item['result'].get('detailedDescription', 'NA').get('url', 'NA')}
                     break
             else:
-                description = 'NA'
+                info = {}
         else:
-            description = 'NA'
+            info = {}
 
-        return description
+        return info
     
     except httpx.HTTPError as error:
         print(error)
