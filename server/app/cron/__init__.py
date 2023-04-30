@@ -41,6 +41,7 @@ def auto_load():
     fill_work_durations(composer_to_fill.id)
     count_albums(composer_to_fill.id)
     get_spotify_performers_img()
+    fill_person_info()
     print(GREEN + f"    Load for {composer_to_fill.id} complete!\n" + RESET)
 
     indexed_composers = []
@@ -70,6 +71,7 @@ def load(composer_name):
     fill_work_durations(composer_name)
     count_albums(composer_name)
     get_spotify_performers_img()
+    fill_person_info()
     print(GREEN + f"    Load for {composer_name} complete!\n" + RESET)
 
 
@@ -503,7 +505,6 @@ async def get_person_details_httpx(person_name, auth_key):
 
 
 # GETS PERSON INFO FROM GOOGLE AND FILLS IN DATABASE
-@ bp.cli.command()
 def fill_person_info():
     print("\nBeginning collection of performer information from Google Knowledge Graph...\n")
     start_time = datetime.utcnow()
