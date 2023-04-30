@@ -575,7 +575,7 @@ def fill_person_info():
             elapsed = str(timedelta(seconds=round(elapsed_time.total_seconds())))
 
             total = len(all_people)
-            completed = completed_count + 1
+            completed = completed_count
             remaining = total - completed
 
             item_per_second = (completed / elapsed_time.total_seconds())
