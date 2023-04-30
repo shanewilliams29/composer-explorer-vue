@@ -506,7 +506,7 @@ async def get_person_details_httpx(person_name, auth_key):
 
 # GETS PERSON INFO FROM GOOGLE AND FILLS IN DATABASE
 def fill_person_info():
-    print("\nBeginning collection of performer information from Google Knowledge Graph...\n")
+    print("    Beginning collection of performer information from Google Knowledge Graph...\n")
     start_time = datetime.utcnow()
     ctx = current_app.test_request_context()
     ctx.push()
@@ -582,9 +582,9 @@ def fill_person_info():
             remaining_time = remaining * (1 / item_per_second)
             remaining = str(timedelta(seconds=round(remaining_time)))
 
-            print(f"Stored {completed} of {total}")
-            print("Time elapsed: " + elapsed)
-            print("Remaining time: " + remaining)
+            print(f"    Stored {completed} of {total}")
+            print("    Time elapsed: " + elapsed)
+            print("    Remaining time: " + remaining)
             print(" ")
 
             if success_count < batch_size / 2:
@@ -599,4 +599,4 @@ def fill_person_info():
 
     # finish
     ctx.pop()
-    print("Complete!")
+    print("    Performer info load complete!\n")
