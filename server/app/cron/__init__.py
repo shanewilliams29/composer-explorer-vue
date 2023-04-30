@@ -531,7 +531,7 @@ def fill_person_info():
     id_list = []
     completed_count = 0
     batch_size = 50
-    sleep_time = 2
+    sleep_time = 3
 
     for count, person in enumerated_list:
 
@@ -588,10 +588,10 @@ def fill_person_info():
             if success_count < batch_size / 2:
                 sleep_time = sleep_time * 2
             else:
-                sleep_time = 2
+                sleep_time = 3
 
             if error_count:
-                print(RED + f"429 Error! Sleeping for {sleep_time} seconds..." + RESET)
+                print(RED + f"429 Error! Sleeping for {sleep_time} seconds...\n" + RESET)
             time.sleep(sleep_time)
 
 
