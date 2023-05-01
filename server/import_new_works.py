@@ -23,6 +23,7 @@ for work in worklist:
         order=work['order'],
         cat=work['cat'],
         recommend=work['recommend'],
+        nickname=work['nickname'],
         title=work['title'],
         date=work['date']
         )
