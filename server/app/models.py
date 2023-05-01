@@ -193,7 +193,7 @@ class ComposerList(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     source = db.Column(db.String(255))
-    name_short = db.Column(db.String(255), unique=True)
+    name_short = db.Column(db.String(255), unique=True, index=True)
     name_full = db.Column(db.String(255))
     name_norm = db.Column(db.String(255), index=True)
     born = db.Column(db.Integer, index=True)
@@ -216,6 +216,7 @@ class ComposerList(db.Model):
     general = db.Column(db.Boolean)
     view = db.Column(db.Integer)
     preview_music = db.Column(db.String(255))
+    works = db.relationship("WorkList", lazy='dynamic')
     favorites = db.relationship("User", secondary=favorites, back_populates="favorited", lazy='dynamic')
 
     def __repr__(self):
@@ -239,7 +240,7 @@ class WorkList(db.Model):
     duration: int
 
     id = db.Column(db.String(24), primary_key=True)
-    composer = db.Column(db.String(48), index=True)
+    composer = db.Column(db.String(48), db.ForeignKey('composer_list.name_short'))
     genre = db.Column(db.String(128), index=True)
     order = db.Column(db.Float, index=True)
     cat = db.Column(db.String(24), index=True)
@@ -335,9 +336,6 @@ class WorkAlbums(db.Model):
     artists = db.Column(db.Text)
     data = db.Column(MEDIUMTEXT)
     hidden = db.Column(db.Boolean, default=False)
-    filled = db.Column(db.Boolean, default=False)
-    got_artists = db.Column(db.Boolean, default=False)
-    spotify_data = db.Column(db.Text)
     img = db.Column(db.Text)
     label = db.Column(db.String(1024))
     title = db.Column(db.String(2048))
@@ -345,7 +343,6 @@ class WorkAlbums(db.Model):
     work_track_count = db.Column(db.Integer)
     album_type = db.Column(db.String(255), index=True)
     duration = db.Column(db.Integer)
-    markets = db.Column(db.Text)
     likes = db.relationship('AlbumLike', backref='album', lazy='dynamic', passive_deletes=True)
     work = db.relationship("WorkList", back_populates="albums")
     performers = db.relationship("Performers", secondary=performer_albums, back_populates="albums", lazy='dynamic', passive_deletes=True)

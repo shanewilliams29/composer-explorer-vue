@@ -202,6 +202,7 @@ def get_albumsview():
             if item['track_count'] > 50 and int(item['release_date'][0:4]) > 2019:
                 item['score'] = item['score'] / 4
 
+        # get unique albums only
         if item['album_id'] in duplicates_set:
             continue
         else:

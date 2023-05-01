@@ -46,7 +46,7 @@ Todo
 snippets
 *.ipynb
 .ipynb_checkpoints
-production.txt
+database_urls.txt
 import_new_works.py
 import_composers.py
 test_secrets.py
