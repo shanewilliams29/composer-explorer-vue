@@ -450,8 +450,6 @@ def prepare_work_albums_and_performers(composer, work, albums, existing_artists)
                                 score=score,
                                 artists=data_artists['all_artists'],
                                 data=json.dumps(data),
-                                filled=True,
-                                got_artists=True,
                                 img=img_large,
                                 label=label,
                                 title=album_title,
