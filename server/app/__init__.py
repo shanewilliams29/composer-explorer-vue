@@ -59,9 +59,6 @@ def create_app(config_class=Config):
     from app.cron import bp as cron_bp
     app.register_blueprint(cron_bp)
 
-    from app.cron_old import bp as cron_old_bp
-    app.register_blueprint(cron_old_bp)
-
     return app
 
 
