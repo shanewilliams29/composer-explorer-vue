@@ -14,20 +14,20 @@ with open('../data/works/' + name + '.json') as f:
     worklist = json.load(f)
 
 # load new works
-orders_entries = []
-for orders in worklist:
+entries = []
+for work in worklist:
     new_entry = WorkList(
-        id=orders['id'],
-        composer=orders['composer'],
-        genre=orders['genre'],
-        order=orders['order'],
-        cat=orders['cat'],
-        recommend=orders['recommend'],
-        title=orders['title'],
-        date=orders['date']
+        id=work['id'],
+        composer=work['composer'],
+        genre=work['genre'],
+        order=work['order'],
+        cat=work['cat'],
+        recommend=work['recommend'],
+        title=work['title'],
+        date=work['date']
         )
     db.session.merge(new_entry)
-    orders_entries.append(new_entry)
+    entries.append(new_entry)
 
 db.session.commit()
-print(orders_entries)
+print(entries)
