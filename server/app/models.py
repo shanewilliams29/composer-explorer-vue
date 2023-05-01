@@ -260,13 +260,6 @@ class WorkList(db.Model):
         return '<{}>'.format(self.title)
 
 
-class Spotify(db.Model):
-    id = db.Column(db.String(24), primary_key=True)
-    composer = db.Column(db.String(48))
-    results = db.Column(MEDIUMTEXT)
-    updated = db.Column(db.DateTime, default=datetime.utcnow)
-
-
 # Used in old site
 class ArtistAlbums(db.Model):
     id = db.Column(db.String(24), primary_key=True)
