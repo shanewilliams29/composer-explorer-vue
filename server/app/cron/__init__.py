@@ -500,26 +500,11 @@ async def get_person_details_httpx(person_name, auth_key):
         return info
     
     except httpx.HTTPError as e:
-        print(e)
         return e.response.status_code
 
 
 # GETS PERSON INFO FROM GOOGLE AND FILLS IN DATABASE
 def fill_person_info():
-    print("    Beginning collection of performer information from Google Knowledge Graph...\n")
-    start_time = datetime.utcnow()
-    ctx = current_app.test_request_context()
-    ctx.push()
-
-    all_people = db.session.query(Performers.name, Performers.id, func.count(Performers.id).label('total'))\
-        .join(performer_albums)\
-        .filter(or_(Performers.hidden == False, Performers.hidden == None))\
-        .filter(Performers.description == None) \
-        .group_by(Performers.id).order_by(text('total DESC')).all()
-
-    all_artist_dict = {artist.id: artist for artist in Performers.query.all()}
-    
-    enumerated_list = enumerate(all_people)
 
     async def main(person_names):
         auth_key = Config.GOOGLE_KNOWLEDGE_GRAPH_API_KEY
@@ -529,17 +514,40 @@ def fill_person_info():
 
         return list(zip(person_names, info_list))
 
+    def get_people_from_db():
+        return db.session.query(Performers.name, Performers.id, func.count(Performers.id).label('total')) \
+            .join(performer_albums) \
+            .filter(or_(Performers.hidden == False, Performers.hidden == None)) \
+            .filter(Performers.description == None) \
+            .group_by(Performers.id).order_by(text('total DESC')).all()
+
+    print("    Beginning collection of performer information from Google Knowledge Graph...\n")
+
+    ctx = current_app.test_request_context()
+    ctx.push()
+
+    timer = Timer(datetime.utcnow())
+    errors = Errors()
+
+    # Get all performers in order of album count who have not been filled with Google info
+    all_people = get_people_from_db()
+    enumerated_list = enumerate(all_people)
+
+    # Create artist dictionary for updating artist information
+    all_artist_dict = {artist.id: artist for artist in Performers.query.all()}
+    
     person_list = []
     id_list = []
     completed_count = 0
     batch_size = 50
     sleep_time = 5
+    timer.set_loop_length(len(all_people))
 
+    # Loop through performers, retrieve info in batches of batch_size from Google
     for count, person in enumerated_list:
+        loop_success_count = 0
+        loop_error_count = 0
 
-        success_count = 0
-        error_count = 0
-        
         if (count + 1) % batch_size != 0 and count != len(all_people) - 1:
             person_list.append(person.name)
             id_list.append(person.id)
@@ -550,52 +558,37 @@ def fill_person_info():
 
             people_with_info = asyncio.run(main(person_list))
 
+            # Update performers database table with retrieved info
             for i, (person, info) in enumerate(people_with_info):
                 if not isinstance(info, int):
-                    completed_count += 1
-                    success_count += 1
                     artist_id = id_list[i]
                     artist = all_artist_dict.get(artist_id)
                     artist.description = info['description']
                     artist.google_img = info['image']
                     artist.wiki_link = info['link']
+                    completed_count += 1
+                    loop_success_count += 1
                 elif info == 429:
-                    error_count += 1
-                    break
-                else:
-                    pass
+                    loop_error_count += 1
+                    errors.register_rate_error()
 
             db.session.commit()
 
             person_list = []
             id_list = []
+
+            timer.print_status_update(completed_count, errors)
             
-            current_time = datetime.utcnow()
-            elapsed_time = current_time - start_time
-            elapsed = str(timedelta(seconds=round(elapsed_time.total_seconds())))
-
-            total = len(all_people)
-            completed = completed_count
-            remaining = total - completed
-
-            item_per_second = (completed / elapsed_time.total_seconds())
-            remaining_time = remaining * (1 / item_per_second)
-            remaining = str(timedelta(seconds=round(remaining_time)))
-
-            print(f"    Stored {completed} of {total}")
-            print("    Time elapsed: " + elapsed)
-            print("    Remaining time: " + remaining)
-            print(" ")
-
-            if success_count < batch_size / 2:
+            # Increase sleep time if too many 429 errors are occuring
+            if loop_success_count < batch_size / 2:
                 sleep_time = sleep_time * 2
             else:
                 sleep_time = 5
 
-            if error_count:
-                print(RED + f"429 Error! Sleeping for {sleep_time} seconds...\n" + RESET)
+            if loop_error_count:
+                print(RED + f"    [ {loop_error_count} ] 429 Errors! Sleeping for {sleep_time} seconds...\n" + RESET)
+            
             time.sleep(sleep_time)
-
 
     # finish
     ctx.pop()
