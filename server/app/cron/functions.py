@@ -73,7 +73,7 @@ def retrieve_spotify_tracks_for_work_async(composer, work):
         track_list = search_spotify_for_tracks(track_list, search_string)
 
     # do search again on cat number only if a cat number composer
-    if not composer.general:
+    if not composer.general and work.cat:
         search_string = work.composer + " " + work.cat
     
         track_list = search_spotify_for_tracks(track_list, search_string)
