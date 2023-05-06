@@ -50,3 +50,5 @@ database_urls.txt
 import_composers.py
 test_secrets.py
 Idagio.py
+info.sh
+tasks.todo

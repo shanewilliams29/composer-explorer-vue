@@ -78,6 +78,12 @@ def retrieve_spotify_tracks_for_work_async(composer, work):
     
         track_list = search_spotify_for_tracks(track_list, search_string)
 
+    # do search again on nickname if work has a nickname
+    if work.nickname:
+        search_string = work.composer + " " + work.nickname
+    
+        track_list = search_spotify_for_tracks(track_list, search_string)
+
     print(f"    [ {len(track_list)} ] tracks retrieved!")
     
     return track_list
@@ -172,6 +178,22 @@ def drop_unmatched_tracks(composer, work, tracks):
 
         return True
 
+    def is_nickname_match(work, track):
+        if not work.nickname:
+            return False
+            
+        # check if track title matches work nickname
+        work_nickname_string = re.sub(r'\W+', ' ', work.nickname.lower())
+        track_string = re.sub(r'\W+', ' ', track['name'].lower())
+
+        work_nickname_string = unidecode.unidecode(work_nickname_string).replace(" ", "")
+        track_string = unidecode.unidecode(track_string).replace(" ", "")
+
+        if work_nickname_string.strip() not in track_string.strip():
+            return False
+
+        return True
+
     good_tracks = []
 
     for track in tracks:
@@ -190,10 +212,11 @@ def drop_unmatched_tracks(composer, work, tracks):
             if not is_no_found_in_track(work, track):
                 continue
 
-        # CHECK 4: check that title is a match if no cat number in work
+        # CHECK 4: check that title or nickname is a match, if no cat number in work
         if not should_check_cat(composer, work):
             if not is_title_match(work, track):
-                continue
+                if not is_nickname_match(work, track):
+                    continue
 
         good_tracks.append(track)
 
