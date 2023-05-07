@@ -176,6 +176,7 @@ def get_and_store_new_albums(composer_name):
                     work.last_refresh = datetime.now()
                     db.session.commit()
                     works_processed.add(work.id)
+                    timer.print_status_update(i, errors)
                     continue
 
                 # STEP 2: PURGE TRACKS THAT DON'T MATCH WORK TITLE
@@ -192,6 +193,7 @@ def get_and_store_new_albums(composer_name):
                     work.last_refresh = datetime.now()
                     db.session.commit()
                     works_processed.add(work.id)
+                    timer.print_status_update(i, errors)
                     continue
 
                 # STEP 3: GET ALBUM ID LIST AND CHECK IF ALREADY IN DATABASE. THEN GET NEW ALBUMS
