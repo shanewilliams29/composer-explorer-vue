@@ -109,7 +109,6 @@ def drop_unmatched_tracks(composer, work, tracks):
 
         if cat1 not in name and cat2 not in name:
             return False
-
         return True
 
     def should_check_no_work(work):
@@ -212,8 +211,8 @@ def drop_unmatched_tracks(composer, work, tracks):
             if not is_no_found_in_track(work, track):
                 continue
 
-        # CHECK 4: check that title or nickname is a match, if no cat number in work
-        if not should_check_cat(composer, work):
+        # CHECK 4: check that title or nickname is a match, if no cat number in work, or op. posth.
+        if not should_check_cat(composer, work) or work.cat.lower() == "op. posth.":
             if not is_title_match(work, track):
                 if not is_nickname_match(work, track):
                     continue
