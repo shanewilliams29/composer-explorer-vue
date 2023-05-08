@@ -897,6 +897,7 @@ def exportplaylist():
             query = query.order_by(WorkList.genre, WorkList.id, func.count(AlbumLike.id).desc(), WorkAlbums.album_type, WorkAlbums.score.desc())
 
         # make subquery and get first album of each work
+        # Note: This only works in MySQL 5.7 and not in later versions where subquery cannot be sorted before main query
         t = query.subquery('t')
         query = db.session.query(t).group_by(t.c.workid)
 
