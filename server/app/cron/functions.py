@@ -250,7 +250,7 @@ def check_if_albums_in_database(album_ids, work):
     for album in new_albums_set:
         new_albums_list.append(album.replace(work.id, ""))
 
-    print(f"    [ {len(new_albums_list)} ] new albums not already in database!\n")
+    print(f"    [ {len(new_albums_list)} ] albums not already in database!\n")
 
     return new_albums_list
 
@@ -360,7 +360,6 @@ def prepare_work_albums_and_performers(composer, work, albums, existing_artists)
             no_composer_list.append(composer.name_full)
 
         counter = collections.Counter(no_composer_list)
-        #artists = counter
         artist_dict['artists'] = ", ".join(list(dict(counter.most_common(2)).keys()))
         artist_dict['minor_artists'] = ", ".join(list(set((dict(counter.most_common(8)).keys())) - set(dict(counter.most_common(2)).keys())))
         artist_dict['all_artists'] = ", ".join(list(dict(counter).keys()))
@@ -394,11 +393,13 @@ def prepare_work_albums_and_performers(composer, work, albums, existing_artists)
 
     work_albums_list = []
     work_artist_ids = set()
+    dropped_albums_count = 0
 
     for album in albums:
 
         # don't process if no work tracks
         if len(album['work_tracks']) == 0:
+            dropped_albums_count += 1
             continue
 
         # Album information
@@ -516,8 +517,5 @@ def prepare_work_albums_and_performers(composer, work, albums, existing_artists)
         if id not in work_artist_ids:
             del existing_artists[id]
 
-    print(f"    [ {len(work_albums_list)} ] albums processed!\n")
+    print(f"    [ {len(work_albums_list)} ] albums processed! [ {dropped_albums_count} ] compilation albums dropped.\n")
     return work_albums_list, existing_artists
-
-
-

@@ -246,7 +246,16 @@ def get_and_store_new_albums(composer_name):
                 except Exception as e:
                     print(RED + f"\n    ALBUMS INFO PREP ERROR: {e}. Will try again next loop...\n" + RESET)
                     errors.register_misc_error()
-                    continue                
+                    continue
+
+                if len(work_albums) == 0:
+                    print("    No new albums found for work. Skipping...\n")
+                    works_processed.add(work.id)
+                    work.last_refresh = datetime.now()
+                    db.session.commit()
+                    timer.print_status_update(i, errors)
+                    time.sleep(2)
+                    continue
 
                 # STEP 6: STORE ALBUM AND PERFORMERS IN DATABASE
                 print("    Storing albums and performers in database...")
