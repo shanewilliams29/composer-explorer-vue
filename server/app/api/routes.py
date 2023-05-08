@@ -552,7 +552,7 @@ def get_multicomposers():
 
 
 @bp.route('/api/composersradio', methods=['GET'])  # used by radio to populate composer multiselect
-# @cache.cached()
+@cache.cached()
 def get_composersradio():
     composer_list = db.session.query(ComposerList.name_short)\
         .filter(ComposerList.catalogued == True) \
@@ -1365,7 +1365,7 @@ def get_artistworks():
 
 
 @bp.route('/api/artistlist', methods=['GET'])  # artist list for performer view
-#@cache.cached()
+@cache.cached()
 def get_artistlist():
     artist_list = []
 
