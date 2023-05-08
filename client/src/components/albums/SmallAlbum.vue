@@ -16,13 +16,13 @@
       </Transition>
 
       <!-- ALBUM ITEM PANEL -->
-      <div class="row" @mouseover="showCover = album.id" @mouseleave="showCover = false">
+      <div class="row" @click="$emit('selectAlbum', album.id); $emit('getAlbum', album.id);" @mouseover="showCover = album.id" @mouseleave="showCover = false">
         <b-col cols="auto" class="album_columns">
-          <img class="album-img-small" @click="$emit('selectAlbum', album.id); $emit('getAlbum', album.id);" v-lazy="album.img_big" />
+          <img class="album-img-small" v-lazy="album.img_big" />
         </b-col>
         <b-col class="album_text_columns">
           <b-card-text>
-            <table cellspacing="0" @click="$emit('selectAlbum', album.id); $emit('getAlbum', album.id);">
+            <table cellspacing="0">
               <tr>
                 <td width="100%" class="td-style-black">
                   <span class="album-major-artists selected">
