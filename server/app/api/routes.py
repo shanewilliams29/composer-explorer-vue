@@ -898,7 +898,7 @@ def exportplaylist():
 
         # make subquery and get first album of each work
         # Note: This only works in MySQL 5.7 and not in later versions and MariaDB where subquery sorting is ignored
-        # See: https://mariadb.com/kb/en/group-by-trick-has-been-optimized-away/
+        # See: https://mariadb.com/kb/en/why-is-order-by-in-a-from-subquery-ignored/
         t = query.subquery('t')
         query = db.session.query(t).group_by(t.c.workid)
 
