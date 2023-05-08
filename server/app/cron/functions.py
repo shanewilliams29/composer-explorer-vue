@@ -162,9 +162,13 @@ def drop_unmatched_tracks(composer, work, tracks):
         if work_no_check != track_no_check:
             return False
 
-        # check if titles match, remove sharps and flats
-        work_title_string = re.sub(r'\W+', ' ', work.title.lower()).replace(" sharp", "").replace(" flat", "")
-        track_string = re.sub(r'\W+', ' ', track['name'].lower()).replace(" sharp", "").replace(" flat", "")
+        # change sharps and flats from symbols into words
+        work_title_string = work.title.replace("♭", "flat").replace("#", "sharp").lower()
+        track_string = track['name'].replace("♭", "flat").replace("#", "sharp").lower()
+
+        # remove symbols and spaces
+        work_title_string = re.sub(r'\W+', ' ', work_title_string)
+        track_string = re.sub(r'\W+', ' ', track_string)
 
         work_title_string = unidecode.unidecode(work_title_string).replace(" ", "")
         track_string = unidecode.unidecode(track_string).replace(" ", "")
