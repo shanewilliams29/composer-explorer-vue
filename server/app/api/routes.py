@@ -4,7 +4,7 @@ from flask_login import current_user
 from config import Config
 from app.functions import prepare_composers, group_composers_by_region, group_composers_by_alphabet
 from app.functions import prepare_works
-from app.models import ComposerList, WorkList, WorkAlbums, AlbumLike, Artists, Performers, performer_albums
+from app.models import ComposerList, WorkList, WorkAlbums, AlbumLike, Performers, performer_albums
 from app.models import User
 from sqlalchemy import func, text, or_, and_
 from app.api import bp
@@ -896,7 +896,7 @@ def exportplaylist():
         else:
             query = query.order_by(WorkList.genre, WorkList.id, func.count(AlbumLike.id).desc(), WorkAlbums.album_type, WorkAlbums.score.desc())
 
-        # make subquery and get first album of each work
+        # make subquery and get first album of each work from sorted subquery
         # Note: This only works in MySQL 5.7 and not in later versions and MariaDB where subquery sorting is ignored
         # See: https://mariadb.com/kb/en/why-is-order-by-in-a-from-subquery-ignored/
         t = query.subquery('t')
@@ -996,17 +996,10 @@ def get_albums(work_id):
     # filter by artist, if present. Allow compilation albums if artist mode
     if artist_name:
         # new Performers table
-        temp = query\
+        query = query\
             .select_from(t.join(performer_albums, t.c.id == performer_albums.c.album_id))\
             .join(Performers, performer_albums.c.performer_id == Performers.id)\
             .filter(Performers.name == artist_name)
-        
-        # use old Artists table if no results
-        test_query = temp.all()
-        if len(test_query) < 1:
-            query = query.join(Artists).filter(Artists.name == artist_name)
-        else:
-            query = temp
     
     elif favorites:
         # allow compilation albums in user favorites
@@ -1039,12 +1032,6 @@ def get_albums(work_id):
     # remove composer from list of artists (assume to be first)
     if len(work_artists) > 1:
         work_artists.pop(0)
-
-    # get artists from old Artists table if no results
-    if len(work_artists) < 1:
-        work_artists = db.session.query(Artists.name, func.count(Artists.count).label('total')) \
-            .filter(Artists.workid == work_id).group_by(Artists.name) \
-            .order_by(text('total DESC'), Artists.name).all()  # hidden or compilation???
 
     # put artists in dictionary
     artist_list = {}
@@ -1257,12 +1244,6 @@ def get_albuminfo(album_id):
     # query new artist table first
     artists = Performers.query.join(performer_albums).join(WorkAlbums)\
         .filter(WorkAlbums.id == album_id).all()
-
-    # retrive from old artist table if no record in new
-    if not artists:
-        artists = db.session.query(Artists)\
-                .filter(Artists.album_id == album_id)\
-                .all()
 
     # remove composer from artist list
     if len(artists) > 1:
