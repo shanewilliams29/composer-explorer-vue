@@ -237,7 +237,7 @@ def get_albumsview():
 
 
 @bp.route('/api/workslist', methods=['GET'])  # work list for album view search dropdown
-#@cache.cached()
+@cache.cached()
 def get_workslist():
     works_list = []
 
