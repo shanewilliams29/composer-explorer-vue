@@ -849,8 +849,6 @@ def exportplaylist():
         if performer:
             query = query.join(performer_albums).join(Performers)\
                 .filter(Performers.name == performer)
-            # query = query.join(Artists).filter(Artists.name == performer)
-            # query = query.filter(WorkAlbums.artists.ilike('%{}%'.format(performer)))
 
         # filter the query based on the genre list
         if genre_list[0] != "all":
