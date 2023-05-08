@@ -4,7 +4,7 @@ from app import db, login
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
 from dataclasses import dataclass
-from sqlalchemy.dialects.mysql import MEDIUMTEXT, LONGTEXT
+from sqlalchemy.dialects.mysql import MEDIUMTEXT
 
 favorites = db.Table('favorites',
                      db.Column('composer_id', db.Integer, db.ForeignKey('composer_list.id')),
@@ -268,32 +268,6 @@ class ArtistAlbums(db.Model):
     updated = db.Column(db.DateTime, default=datetime.utcnow)
 
 
-# Old table of artists/performers
-@dataclass
-class Artists(db.Model):
-    id: str
-    name: str
-    workid: str
-    album_id: float
-    composer: str
-    count: int
-    spotify_id: str
-    spotify_img: str
-
-    id = db.Column(db.String(128), primary_key=True)
-    name = db.Column(db.String(256), index=True)
-    workid = db.Column(db.String(24), db.ForeignKey('work_list.id'))
-    album_id = db.Column(db.String(46), db.ForeignKey('work_albums.id'))
-    composer = db.Column(db.String(48))
-    work = db.relationship("WorkList")
-    count = db.Column(db.Integer)
-    spotify_id = db.Column(db.String(48))
-    spotify_img = db.Column(db.String(128))
-
-    def __repr__(self):
-        return '<{}>'.format(self.name)
-
-
 @dataclass
 class Performers(db.Model):
     id: str
@@ -316,7 +290,7 @@ class Performers(db.Model):
         return '<{}>'.format(self.name)
 
     def add_album(self, album):
-        #if album not in self.albums:
+        # if album not in self.albums:
         self.albums.append(album)
 
 
@@ -417,9 +391,3 @@ class Views(db.Model):
 
 class ComposerCron(db.Model):
     id = db.Column(db.String(255), primary_key=True)
-
-
-class ArtistList(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    content = db.Column(LONGTEXT)
-    timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
