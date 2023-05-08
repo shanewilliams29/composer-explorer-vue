@@ -720,7 +720,8 @@ def get_radioworks():
 
     # filter the query based on the artist name
     if artist_name:
-        query = query.join(Artists).filter(Artists.name == artist_name)
+        query = query.join(WorkAlbums).join(performer_albums).join(Performers)\
+            .filter(Performers.name == artist_name)
 
     # filter the query based on the genre list
     if genre_list[0] != "all":
@@ -761,9 +762,14 @@ def get_radioworks():
     else:
         user_id = None
 
-    liked_works = query.join(WorkAlbums).join(AlbumLike)\
-        .order_by(WorkList.genre, WorkList.id)\
-        .filter(AlbumLike.user_id == user_id).all()
+    if artist_name:
+        liked_works = query.join(AlbumLike)\
+            .order_by(WorkList.genre, WorkList.id)\
+            .filter(AlbumLike.user_id == user_id).all()
+    else:
+        liked_works = query.join(WorkAlbums).join(AlbumLike)\
+            .order_by(WorkList.genre, WorkList.id)\
+            .filter(AlbumLike.user_id == user_id).all()
 
     if radio_type == "favorites" and user_id:
         works_list = liked_works
