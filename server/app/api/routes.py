@@ -897,7 +897,8 @@ def exportplaylist():
             query = query.order_by(WorkList.genre, WorkList.id, func.count(AlbumLike.id).desc(), WorkAlbums.album_type, WorkAlbums.score.desc())
 
         # make subquery and get first album of each work
-        # Note: This only works in MySQL 5.7 and not in later versions where subquery cannot be sorted before main query
+        # Note: This only works in MySQL 5.7 and not in later versions and MariaDB where subquery sorting is ignored
+        # See: https://mariadb.com/kb/en/group-by-trick-has-been-optimized-away/
         t = query.subquery('t')
         query = db.session.query(t).group_by(t.c.workid)
 
@@ -907,7 +908,7 @@ def exportplaylist():
         if not album_list:
             abort(404)
 
-        # Get album tracks
+        # get album tracks
         tracklist = []
         for album in album_list:
             album = json.loads(album.data)
@@ -915,7 +916,13 @@ def exportplaylist():
             for track in album['tracks']:
                 tracklist.append(track[1])
 
-        cache.set('tracks', tracklist)
+        # temporarily store tracks in cache
+        if Config.MODE == "DEVELOPMENT":
+            user_id = '12173954849'
+        else:
+            user_id = current_user.username
+
+        cache.set(user_id, tracklist)
 
         # return response
         response_object = {'status': 'success'}
@@ -931,7 +938,8 @@ def exportplaylist():
     else:
         user_id = current_user.username
     
-    tracklist = cache.get('tracks')
+    # get tracks from cache
+    tracklist = cache.get(user_id)
 
     try:
         response = sp.create_playlist(name, user_id)
