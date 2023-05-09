@@ -116,11 +116,8 @@ def drop_unmatched_tracks(composer, work, tracks):
         cat2 = re.sub(r'\W+', ' ', work.cat.strip()) + " "
         name = re.sub(r'\W+', ' ', track['name']) + " "
 
-        print(f"{cat1} or {cat2} in {name}")
         if cat1 not in name and cat2 not in name:
-            print("REJECT")
             return False
-        print("MATCH")
         return True
 
     def should_check_no_work(work):
