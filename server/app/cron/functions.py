@@ -111,6 +111,18 @@ def drop_unmatched_tracks(composer, work, tracks):
             return False
         return True
 
+    def is_cat_found_in_track_case_sensitive(work, track):
+        cat1 = re.sub(r'\W+', ' ', work.cat.strip()).replace(" ", "") + " "
+        cat2 = re.sub(r'\W+', ' ', work.cat.strip()) + " "
+        name = re.sub(r'\W+', ' ', track['name']) + " "
+
+        print(f"{cat1} or {cat2} in {name}")
+        if cat1 not in name and cat2 not in name:
+            print("REJECT")
+            return False
+        print("MATCH")
+        return True
+
     def should_check_no_work(work):
         work_title_string = " " + re.sub(r'\W+', ' ', work.title.lower())
 
@@ -207,8 +219,12 @@ def drop_unmatched_tracks(composer, work, tracks):
 
         # CHECK 2: check that cat number appears in work, if relevant. Skip if not found
         if should_check_cat(composer, work):
-            if not is_cat_found_in_track(work, track):
-                continue
+            if composer.name_short == "Telemann":  # Telemann cat nos. are case-sensitive
+                if not is_cat_found_in_track_case_sensitive(work, track):
+                    continue
+            else:
+                if not is_cat_found_in_track(work, track):
+                    continue
 
         # CHECK 3: check that the work no. appears in track name. Pass if there isn't a no. in work
         if should_check_no_work(work):

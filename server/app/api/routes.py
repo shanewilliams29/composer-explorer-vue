@@ -1077,13 +1077,13 @@ def get_albums(work_id):
         else:  # return more unique artists otherwise
             match_string = artists_string 
 
-
         # do not include in album list if duplicate, unless it has favorites
         if match_string in duplicates_set:
             if (album.total == 0):
                 continue
         else:
             duplicates_set.add(match_string)
+        
         # add to album list
         album_list.append(item)
 
@@ -1097,6 +1097,7 @@ def get_albums(work_id):
                 item['artists'] = ", ".join(two_artists)
                 break
         
+    # album sorting
     if sort == 'dateascending':
         sorted_list = sorted(album_list, key=lambda d: d['release_date'])
     elif sort == 'datedescending':
