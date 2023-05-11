@@ -1381,6 +1381,30 @@ def get_artistworks():
 def get_artistlist():
 
     artist_list = cache.get('artists')
+    if artist_list is None:
+
+        artist_list = []
+
+        artists = db.session.query(Performers.id, Performers.name, Performers.img, Performers.description, func.count(Performers.id).label('total'))\
+            .join(performer_albums)\
+            .filter(or_(Performers.hidden == False, Performers.hidden == None))\
+            .group_by(Performers.id).order_by(text('total DESC')).all()
+
+        composers = db.session.query(ComposerList.name_full).all()
+        composer_names = set(composer for (composer,) in composers)
+        
+        # remove composer exceptions who were also conductors and performance artists
+        exceptions_list = ['Leonard Bernstein', 'Pierre Boulez', 'Steve Reich']
+        for exception in exceptions_list:
+            composer_names.remove(exception)
+
+        # remove composers and bad results
+        for _id, artist, img, description, count in artists:
+            if artist not in composer_names and "/" not in artist:
+                artist_list.append({'id': _id, 'name': artist, 'img': img, 'description': description})
+
+        cache.set('artists', artist_list)
+
     return_list = []
 
     for artist in artist_list:
