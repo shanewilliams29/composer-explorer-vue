@@ -30,5 +30,5 @@ class Config(object):
     else:
         CACHE_TYPE = 'MemcachedCache'  # Flask-Caching related configs
         CACHE_DEFAULT_TIMEOUT = 86400
-        CACHE_KEY_PREFIX = 'composer_explorer_cache'
-        CACHE_MEMCACHED_SERVERS = '10.21.0.3:11211'
+        CACHE_KEY_PREFIX = 'cache'
+        CACHE_MEMCACHED_SERVERS = ['10.21.0.3:11211']
