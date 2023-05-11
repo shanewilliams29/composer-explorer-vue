@@ -41,7 +41,7 @@
         <b-col class="last-col">
           <b-card class="heading-card albums-card">
             <b-form-group>
-              <b-form-input id="performer-search-form" class="omnisearch" size="sm" v-model="omniSearchInput" v-debounce:0ms="omniSearch" @focus="onInputFocus()" type="search" placeholder="Search for a performer" autocomplete="off"></b-form-input>
+              <b-form-input id="performer-search-form" class="omnisearch" size="sm" v-model="omniSearchInput" v-debounce:500ms="omniSearch" @focus="onInputFocus()" type="search" placeholder="Search for a performer" autocomplete="off"></b-form-input>
               <b-row class="flex-nowrap">
                 <b-col style="padding-right: 0px;" cols="8">
                   <v-select v-model="albumSortField" label="text" :options="albumSortOptions" @input="albumFilter()" :clearable="false" class="mt-3 select-box" :searchable="false">
@@ -68,19 +68,19 @@
               <b-spinner class="m-5"></b-spinner>
             </div>
             <div v-show="!loading && !firstLoad">
-              <h6 v-if="searchresults.length == 0">No search results.</h6>
+              <h6 v-if="artists.length == 0">No search results.</h6>
             </div>
             <b-card-body v-show="!loading" id="performers" class="card-body">
               <b-card-text class="info-card-text">
-                <div v-for="result in searchresults" :key="result[0]">
+                <div v-for="artist in artists" :key="artist.id">
                   <table class="search-table">
                     <tr>
                       <td>
-                        <b-avatar size="40px" :src="result[2]"></b-avatar>
+                        <b-avatar size="40px" :src="artist.img"></b-avatar>
                       </td>
                       <td class="info-td">
-                        <a class="artist-link" @click="artistSearch(result[0])">{{ result[0] }}</a><br />
-                        <span class="born-died">{{ result[1] }}</span>
+                        <a class="artist-link" @click="artistSearch(artist.name)">{{ artist.name }}</a><br />
+                        <span class="born-died">{{ artist.description }}</span>
                       </td>
                     </tr>
                   </table>
@@ -98,6 +98,7 @@
 <script>
 import { eventBus, staticURL } from "@/main.js";
 import { getArtistDetails } from "@/HelperFunctions.js"
+import axios from "axios";
 
 export default {
   data() {
@@ -116,7 +117,6 @@ export default {
       spotifyUrl: "",
       omniSearchInput: null,
       viewSearchResults: false,
-      searchresults: [],
       artists: [],
       firstLoad: true,
 
@@ -161,15 +161,6 @@ export default {
         this.viewSearchResults = false;
       }
     },
-    searchresults: {
-      handler: function() {
-        // turn off loading when people results array is fully populated
-        if (this.searchresults.length == this.artists.length && this.artists.length > 0) {
-          this.loading = false;
-        }
-      },
-      deep: true
-    }
   },
   methods: {
     omniSearch() {
@@ -183,32 +174,23 @@ export default {
       this.loading = true;
       this.viewSearchResults = true;
       this.firstLoad = false;
-      this.searchresults = [];
       this.artists = [];
 
-      function removeAccents(text) {
-        return text.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-      }
+      const path = "api/searchperformers?search=" + item;
 
-      let i = 0;
-      let pattern = new RegExp("\\b" + item.toLowerCase() + "\\w*");
-
-      for (let artist of this.$lists.artistDict) {
-        let match = pattern.exec(removeAccents(artist.name.toLowerCase()));
-        if (match) {
-          this.artists.push(artist);
-          i++;
-        }
-        if (i > 10) {
-          break;
-        }
-      }
-
-      if (this.artists.length < 1) {
-        this.loading = false;
-      }
-
-      this.artists.forEach((element) => getArtistDetails(element, this.searchresults, this.$auth.knowledgeKey));
+      axios
+        .get(path)
+        .then((res) => {
+          this.artists = res.data.artists;
+          this.loading = false;
+        })
+        .catch((error) => {
+          // eslint-disable-next-line
+          console.error(error);
+          this.loading = false;
+          this.viewSearchResults = true;
+          this.ajax_waiting = false;
+        });
     },
     onInputFocus() {
       this.omniSearchInput = "";

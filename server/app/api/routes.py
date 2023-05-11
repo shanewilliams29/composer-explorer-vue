@@ -348,6 +348,30 @@ def omnisearch():
     return response
 
 
+@bp.route('/api/searchperformers', methods=['GET'])
+def searchperformers():
+
+    # look for search term or filter term
+    search_item = request.args.get('search')
+    search_terms = search_item.split()
+
+    search_words = [term for term in search_terms if not term.isdigit()]
+
+    # search for performers
+    artist_list = cache.get('artists')
+
+    for word in search_words:
+        artist_matches = [item for item in artist_list if word.lower() in unidecode(item['name'].lower())]
+
+    first_10_artists = list(itertools.islice(artist_matches, 10))
+    
+    # return response
+    response_object = {'status': 'success'}
+    response_object['artists'] = first_10_artists
+    response = jsonify(response_object)
+    return response
+
+
 @bp.route('/api/composers', methods=['GET'])  # main composer list
 # @cache.cached(query_string=True)
 def get_composers():
