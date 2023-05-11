@@ -138,20 +138,12 @@ export default {
     apiKeyGot() {
       return this.$auth.knowledgeKey;
     },
-    artistDictGot() {
-      return this.$lists.artistDict;
-    },
   },
   searchInput() {
     return this.omniSearchInput;
   },
   watch: {
     apiKeyGot() {
-      if (this.$route.query.artist) {
-        this.getArtistPicAndJob(this.$route.query.artist);
-      }
-    },
-    artistDictGot() {
       if (this.$route.query.artist) {
         this.getArtistPicAndJob(this.$route.query.artist);
       }
@@ -196,10 +188,10 @@ export default {
       this.omniSearchInput = "";
       this.resetField()
     },
-    getArtistPicAndJob(artistName) { // improve,use dictonary instead of list?
+    getArtistPicAndJob(artistName) { // NEED TO FIX!
       this.results = []
-      for (let i = 0; i < this.$lists.artistDict.length; i++) {
-        let artist = this.$lists.artistDict[i];
+      for (let i = 0; i < this.artists.length; i++) {
+        let artist = this.artists[i];
         if (artist.name == artistName) {
           this.spotifyUrl = 'https://open.spotify.com/artist/' + artist.id;
           this.img = artist.img

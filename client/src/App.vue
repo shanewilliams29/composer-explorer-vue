@@ -85,12 +85,7 @@ export default {
       axios
         .get(path)
         .then((res) => {
-          this.$lists.artistDict = res.data.artists
-          for (let i = 0; i < res.data.artists.length; i++) {
-            let artist = res.data.artists[i];
-            let artistName = artist.name; 
-            this.$lists.artistList.push(artistName)
-          }
+          this.$lists.artistList = res.data.artists;
         })
         .catch((error) => {
           console.error(error);
@@ -102,7 +97,7 @@ export default {
       axios
         .get(path)
         .then((res) => {
-          this.$lists.workList = res.data.works
+          this.$lists.workList = res.data.works;
           this.$lists.albumViewWorks = this.$lists.workList
         })
         .catch((error) => {

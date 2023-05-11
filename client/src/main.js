@@ -86,7 +86,6 @@ Vue.prototype.$auth = Vue.observable({
 
 // stores lists used in dropdowns
 Vue.prototype.$lists = Vue.observable({
-    artistDict: [],
     artistList: [],
     composerList: [],
     workList: [],
