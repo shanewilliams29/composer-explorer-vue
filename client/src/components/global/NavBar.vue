@@ -74,7 +74,7 @@
               <b-spinner class="m-5"></b-spinner>
             </div>
             <div v-show="!loading && !firstLoad">
-              <h6 v-if="composers.length + works.length + results.length == 0">No search results.</h6>
+              <h6 v-if="composers.length + works.length + artists.length == 0">No search results.</h6>
             </div>
             <b-card-body v-show="!loading" id="composers" class="card-body">
               <h6 v-if="composers.length > 0">Composers</h6>
@@ -115,17 +115,17 @@
               </b-card-text>
             </b-card-body>
             <b-card-body v-show="!loading" id="performers" class="card-body">
-              <h6 v-if="results.length > 0">Performers</h6>
+              <h6 v-if="artists.length > 0">Performers</h6>
               <b-card-text class="info-card-text">
-                <div v-for="result in results" :key="result[0]">
+                <div v-for="artist in artists" :key="artist.id">
                   <table>
                     <tr>
                       <td>
-                        <b-avatar size="40px" :src="result[2]"></b-avatar>
+                        <b-avatar size="40px" :src="artist.img"></b-avatar>
                       </td>
                       <td class="info-td">
-                        <a class="artist-name" @click="getArtistComposers(result[0])">{{ result[0] }}</a><br />
-                        <span class="born-died">{{ result[1] }}</span>
+                        <a class="artist-name" @click="getArtistComposers(artist.name)">{{ artist.name }}</a><br />
+                        <span class="born-died">{{ artist.description }}</span>
                       </td>
                     </tr>
                   </table>
@@ -185,7 +185,6 @@
 <script>
 import {baseURL, staticURL} from "@/main.js";
 import axios from "axios";
-import {getArtistDetails} from "@/HelperFunctions.js" 
 import { eventBus } from "@/main.js";
 
 export default {
@@ -202,7 +201,6 @@ export default {
       composers: [],
       works: [],
       artists: [],
-      results: [],
       loading: false,
       firstLoad: true
     };
@@ -216,25 +214,12 @@ export default {
     },
   },
   watch: {
-    // clientToken() {
-    //   this.getUnreadPosts()
-    // },
     searchInput(searchInput) {
       if (searchInput == ""){
         this.viewSearchResults = false;
         this.firstLoad = true;
       }
     },
-    results: {
-      handler: function () {
-        // turn off loading when people results array is fully populated
-        if (this.results.length == this.artists.length && this.artists.length > 0){
-          this.loading = false;
-          this.removeComposers(this.composers);
-        }
-      },
-      deep: true
-    }
   },
   methods: {
     iOS() {
@@ -288,16 +273,6 @@ export default {
         //this.viewSearchResults = false;
       }
     },
-    removeComposers(composers) {
-      for(let i = 0; i < composers.length; i++) {
-          let composerName = composers[i]['name_full'];
-          for (var j = this.results.length - 1; j >= 0; j--) {
-           if (this.results[j][0] === composerName) {
-            this.results.splice(j, 1);
-           }
-          }
-      }
-    },
     getOmniSearch(item) {
       this.loading = true;
       this.viewSearchResults = true;
@@ -305,27 +280,6 @@ export default {
       this.composers = [];
       this.works = [];
       this.artists = [];
-      this.results = [];
-
-      function removeAccents(text) {
-        return text.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-      }
-
-      let i = 0;
-      let pattern = new RegExp("\\b" + item.toLowerCase() + "\\w*");
-
-      for (let artist of this.$lists.artistDict) {
-        let match = pattern.exec(removeAccents(artist.name.toLowerCase()));
-        if (match) {
-            this.artists.push(artist);
-          i++;
-        }
-        if (i > 10) {
-          break;
-        }
-      }
-
-      this.artists.forEach((element) => getArtistDetails(element, this.results, this.$auth.knowledgeKey));
 
       const path = "api/omnisearch?search=" + item;
       
@@ -340,8 +294,8 @@ export default {
         .then((res) => {
           this.composers = res.data.composers;
           this.works = res.data.works;
+          this.artists = res.data.artists;
           this.loading = false;
-          this.removeComposers(this.composers);
 
           var content = "";
           var parent = "";
@@ -405,8 +359,6 @@ export default {
     var apple = this.iOS();
     var userAgent = window.navigator.userAgent.toLowerCase();
 
-    //this.getUnreadPosts();
-
     if (userAgent.includes('wv')) { // Webview (App)
       this.$view.avatar = false;
     } else {
@@ -417,32 +369,15 @@ export default {
     }
   },
   mounted() {
-    // Periodically checks for new forum posts
-    // setInterval(this.getUnreadPosts, 60000);
     const inputForm = document.getElementById("search-form");
-
-    // inputForm.addEventListener("click", () => {
-    //   this.viewSearchResults = true;
-    // });
-
-    // // Close the popup when the user clicks outside of it
-    // document.addEventListener("click", (event) => {
-    //   const isClickInsidePopup = popup.contains(event.target);
-    //   const isClickInsideForm = inputForm.contains(event.target);
-    //   if (!isClickInsidePopup && !isClickInsideForm) {
-    //     this.viewSearchResults = false;
-    //   }
-    // });
     const overlay = document.getElementById('overlay');
 
     inputForm.addEventListener('click', () => {
       this.viewSearchResults = true;
-      // overlay.style.display = 'block';
     });
 
     overlay.addEventListener('click', () => {
       this.viewSearchResults = false;
-      //overlay.style.display = 'none';
     });
 
   },
