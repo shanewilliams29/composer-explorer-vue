@@ -120,7 +120,7 @@ def get_onealbum():
 def get_albumsview():
     page = request.args.get('page', 1, type=int)
     composer_name = request.args.get('composer')
-    artist_name = request.args.get('artist')
+    artist_id = request.args.get('artist')
     era = request.args.get('period')
     work_title = request.args.get('work')
     sort = request.args.get('sort', default='popular')
@@ -161,9 +161,9 @@ def get_albumsview():
         works_list = [work for (work,) in works]
     
     # filter on artist if present
-    if artist_name:
+    if artist_id:
         query = query.join(performer_albums).join(Performers)\
-            .filter(Performers.name == artist_name)
+            .filter(Performers.id == artist_id)
 
     # filter on work if present
     if work_title:
@@ -171,7 +171,7 @@ def get_albumsview():
             .filter(WorkList.title == work_title)
 
     # sort the results. Slow for artist_name and work_title, so exclude.
-    if not artist_name and not work_title:
+    if not artist_id and not work_title:
         query = query.order_by(WorkAlbums.score.desc())
 
     # execute the query
@@ -1005,7 +1005,7 @@ def get_albums(work_id):
     page = request.args.get('page', 1, type=int)
 
     # get filter and search arguments
-    artist_name = request.args.get('artist')
+    artist_id = request.args.get('artist')
     sort = request.args.get('sort')
     limit = request.args.get('limit', default=100)
     favorites = request.args.get('favorites', default=None)
@@ -1034,12 +1034,12 @@ def get_albums(work_id):
     query = db.session.query(t)
 
     # filter by artist, if present. Allow compilation albums if artist mode
-    if artist_name:
+    if artist_id:
         # new Performers table
         query = query\
             .select_from(t.join(performer_albums, t.c.id == performer_albums.c.album_id))\
             .join(Performers, performer_albums.c.performer_id == Performers.id)\
-            .filter(Performers.name == artist_name)
+            .filter(Performers.id == artist_id)
     
     elif favorites:
         # allow compilation albums in user favorites
@@ -1112,7 +1112,7 @@ def get_albums(work_id):
         # # filter out repeat albums
         artists_string = "".join(sorted(re.sub(r'[^\w\s]', '', item['artists']).replace(" ", "").lower()))
 
-        if artist_name or 'WAGNER' in work_id:  # return more repeat results for performer filter (allow distinct years)
+        if artist_id or 'WAGNER' in work_id:  # return more repeat results for performer filter (allow distinct years)
             match_string = artists_string + str(item['release_date'])
         else:  # return more unique artists otherwise
             match_string = artists_string 
@@ -1325,11 +1325,11 @@ def get_albuminfo(album_id):
     return response
 
 
-@bp.route('/api/artistcomposers/<artist_name>', methods=['GET'])  # for performer mode composers
-def get_artistcomposers(artist_name):
+@bp.route('/api/artistcomposers/<artist_id>', methods=['GET'])  # for performer mode composers
+def get_artistcomposers(artist_id):
 
     composers = db.session.query(ComposerList).join(WorkAlbums).join(performer_albums).join(Performers)\
-        .filter(Performers.name == artist_name)\
+        .filter(Performers.id == artist_id)\
         .order_by(ComposerList.region, ComposerList.born).all()
 
     search_list = []
@@ -1360,11 +1360,11 @@ def get_artistcomposers(artist_name):
 
 @bp.route('/api/artistworks', methods=['GET'])  # for performer mode works
 def get_artistworks():
-    artist_name = request.args.get('artist')
+    artist_id = request.args.get('artist')
     composer_name = request.args.get('composer')
 
     works_list = db.session.query(WorkList).join(WorkAlbums).join(performer_albums).join(Performers)\
-        .filter(Performers.name == artist_name, WorkList.composer == composer_name)\
+        .filter(Performers.id == artist_id, WorkList.composer == composer_name)\
         .order_by(WorkList.order, WorkList.genre, WorkList.id).all()
 
     if not works_list:
