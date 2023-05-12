@@ -12,13 +12,13 @@ from sqlalchemy import func, text, or_
 def before_app_request():
     
     # redirect to https
-    if "localhost" in request.url:  # removed :5000
-        pass
-    else:
-        if not request.is_secure:
-            url = request.url.replace('http://', 'https://', 1)
-            code = 301
-            return redirect(url, code=code)
+    # if "localhost" in request.url:  # removed :5000
+    #     pass
+    # else:
+    #     if not request.is_secure:
+    #         url = request.url.replace('http://', 'https://', 1)
+    #         code = 301
+    #         return redirect(url, code=code)
 
     # mobile view
     if not session.get('mobile'):
@@ -37,12 +37,12 @@ def before_app_request():
 @bp.route('/', defaults={'path': ''})
 @bp.route("/<string:path>")
 def index(path):
-    if request.MOBILE and not session['mobile']:
-        session['mobile'] = 'true'
-        if Config.MODE == "DEVELOPMENT":
-            return redirect('http://localhost:8080/mobile')
-        else:
-            return redirect('https://www.composerexplorer.com/mobile')
+    # if request.MOBILE and not session['mobile']:
+    #     session['mobile'] = 'true'
+    #     if Config.MODE == "DEVELOPMENT":
+    #         return redirect('http://localhost:8080/mobile')
+    #     else:
+    #         return redirect('https://www.composerexplorer.com/mobile')
 
     # user last seen
     if current_user.is_authenticated:
