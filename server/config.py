@@ -22,13 +22,7 @@ class Config(object):
     TWILIO_SID = os.environ.get('TWILIO_SID')
     TWILIO_AUTH_TOKEN = os.environ.get('TWILIO_AUTH_TOKEN')
 
-    if MODE != 'PRODUCTION':
-        CACHE_TYPE = 'FileSystemCache'  # Flask-Caching related configs
-        CACHE_THRESHOLD = 10000
-        CACHE_DEFAULT_TIMEOUT = 86400
-        CACHE_DIR = '/tmp/flaskcache'
-    else:
-        CACHE_TYPE = 'MemcachedCache'  # Flask-Caching related configs
-        CACHE_DEFAULT_TIMEOUT = 86400
-        CACHE_KEY_PREFIX = 'cache'
-        CACHE_MEMCACHED_SERVERS = ['10.21.0.3:11211']
+    CACHE_TYPE = 'FileSystemCache'  # Flask-Caching related configs
+    CACHE_THRESHOLD = 10000
+    CACHE_DEFAULT_TIMEOUT = 86400
+    CACHE_DIR = '/tmp/flaskcache'
