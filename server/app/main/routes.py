@@ -12,13 +12,13 @@ from sqlalchemy import func, text, or_
 def before_app_request():
     
     # redirect to https
-    if "localhost" in request.url:  # removed :5000
-        pass
-    else:
-        if not request.is_secure:
-            url = request.url.replace('http://', 'https://', 1)
-            code = 301
-            return redirect(url, code=code)
+    # if "localhost" in request.url:  # removed :5000
+    #     pass
+    # else:
+    #     if not request.is_secure:
+    #         url = request.url.replace('http://', 'https://', 1)
+    #         code = 301
+    #         return redirect(url, code=code)
 
     # mobile view
     if not session.get('mobile'):
