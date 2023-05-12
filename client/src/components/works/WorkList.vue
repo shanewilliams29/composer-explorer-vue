@@ -419,7 +419,6 @@ export default {
     getArtistWorks(artist, composer) {
       // used in performer mode
       this.loading = true;
-      this.$config.artist = artist;
       this.$config.composer = composer;
       localStorage.setItem("config", JSON.stringify(this.$config));
 
@@ -451,7 +450,7 @@ export default {
 
       } else if (this.$view.mode == "performer") {
         // performer mode
-        eventBus.$emit("requestAlbums", workId, this.$config.artist);
+        eventBus.$emit("requestAlbums", workId, this.$config.artist.id);
 
       } else if (this.$view.mode == "favorites") {
         // favorites mode
@@ -460,7 +459,7 @@ export default {
       } else {
         // radio mode, play automatically
         if (this.$config.artist) {
-          eventBus.$emit("requestAlbumsAndPlay", workId, this.$config.artist);
+          eventBus.$emit("requestAlbumsAndPlay", workId, this.$config.artist.id);
 
         } else {
           eventBus.$emit("requestAlbumsAndPlay", workId);
@@ -478,7 +477,7 @@ export default {
 
       if ((this.$view.mode == "performer") || (this.$config.artist && this.$view.mode == "radio")) {
         // performer mode or radio performer mode
-        eventBus.$emit("requestAlbumsAndPlay", workId, this.$config.artist);
+        eventBus.$emit("requestAlbumsAndPlay", workId, this.$config.artist.id);
 
       } else {
         // browse, favorites or standard radio mode
