@@ -124,7 +124,7 @@
                         <b-avatar size="40px" :src="artist.img"></b-avatar>
                       </td>
                       <td class="info-td">
-                        <a class="artist-name" @click="getArtistComposers(artist.name)">{{ artist.name }}</a><br />
+                        <a class="artist-name" @click="getArtistComposers(artist.id)">{{ artist.name }}</a><br />
                         <span class="born-died">{{ artist.description }}</span>
                       </td>
                     </tr>
