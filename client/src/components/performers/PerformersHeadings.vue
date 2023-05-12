@@ -16,8 +16,8 @@
                 </td>
                 <td class="td-text">
                   <span class="artist-name">{{ $config.artist.name }}&nbsp;</span><br />
-                  <span class="artist-job">{{ $config.artist.description }}</span>
-                  <span v-if="$config.artist.wiki_link" class="wiki-link">
+                  <span v-if="$config.artist.wiki_link != 'NA'" class="artist-job">{{ $config.artist.description }}</span>
+                  <span v-if="$config.artist.wiki_link != 'NA'" class="wiki-link">
                     &nbsp;&nbsp;<a :href="$config.artist.wiki_link" target="_blank">
                       <b-icon icon="info-circle-fill" aria-hidden="true"></b-icon> Wikipedia
                     </a>
@@ -97,7 +97,6 @@
 
 <script>
 import { eventBus, staticURL } from "@/main.js";
-import { getArtistDetails } from "@/HelperFunctions.js"
 import axios from "axios";
 
 export default {
@@ -109,10 +108,7 @@ export default {
       spotifyWhiteUrl: staticURL + "Spotify_Icon_RGB_White.png",
       hover: false,
       hover2: false,
-      wikiLink: null,
-      query: "",
       loading: false,
-      results: [],
       img: "",
       spotifyUrl: "",
       omniSearchInput: null,
@@ -133,26 +129,6 @@ export default {
       ],
 
     };
-  },
-  computed: {
-    apiKeyGot() {
-      return this.$auth.knowledgeKey;
-    },
-  },
-  searchInput() {
-    return this.omniSearchInput;
-  },
-  watch: {
-    apiKeyGot() {
-      if (this.$route.query.artist) {
-        this.getArtistPicAndJob(this.$route.query.artist);
-      }
-    },
-    searchInput(searchInput) {
-      if (searchInput == "") {
-        this.viewSearchResults = false;
-      }
-    },
   },
   methods: {
     omniSearch() {
@@ -185,7 +161,6 @@ export default {
         });
     },
     getArtist(artistId) {
-      alert("Coming from other page");
       const path = "api/getperformer?id=" + artistId;
 
       axios
@@ -205,18 +180,6 @@ export default {
       this.omniSearchInput = "";
       this.resetField()
     },
-    getArtistPicAndJob(artistName) { // NEED TO FIX!
-      this.results = []
-      for (let i = 0; i < this.artists.length; i++) {
-        let artist = this.artists[i];
-        if (artist.name == artistName) {
-          this.spotifyUrl = 'https://open.spotify.com/artist/' + artist.id;
-          this.img = artist.img
-          getArtistDetails(artist, this.results, this.$auth.knowledgeKey);
-          break;
-        }
-      }
-    },
     capitalize(string) {
       let capitalized = string[0].toUpperCase() + string.substring(1);
       return capitalized;
@@ -230,7 +193,6 @@ export default {
         this.$router.push("/performers");
         eventBus.$emit("clearPerformers");
         this.$config.artist = null;
-        this.results = [];
         this.firstLoad = true;
       }
     },
