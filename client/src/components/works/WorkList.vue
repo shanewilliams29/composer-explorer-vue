@@ -119,7 +119,7 @@ export default {
           this.message = `No works found for ${this.$config.composer}`;
         }
         if(this.$view.mode == 'performer' && this.$config.artist){
-          this.message = `Select a composer to view performances by ${this.$config.artist}`;
+          this.message = `Select a composer to view performances by ${this.$config.artist.name}`;
         }
         if(this.$view.mode == 'performer' && !this.$config.artist){
           this.message = ``;
@@ -218,7 +218,7 @@ export default {
       }
       // Performer view works
       if (this.$view.mode == "performer") {
-        const path = "api/artistworks?artist=" + this.$config.artist + "&composer=" + this.$config.composer;
+        const path = "api/artistworks?artist=" + this.$config.artist.id + "&composer=" + this.$config.composer;
         axios
           .get(path)
           .then((res) => {

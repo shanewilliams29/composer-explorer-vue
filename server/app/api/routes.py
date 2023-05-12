@@ -14,6 +14,23 @@ import json
 import re
 
 
+@bp.route('/api/getperformer', methods=['GET'])  # get performer details from id
+def get_performer():
+    performer_id = request.args.get('id')
+
+    performer = Performers.query.get(performer_id)
+
+    if not performer:
+        response_object = {'status': 'error'}
+        response_object['message'] = 'performer not found for id'
+        response = jsonify(response_object)
+        return response
+
+    response_object = {'status': 'success'}
+    response_object['artist'] = performer
+    response = jsonify(response_object)
+    return response
+
 @bp.route('/api/getalbumworks', methods=['GET'])  # work list for selected album in albums view
 def get_albumworks():
     album_id = request.args.get('album_id')
@@ -1410,7 +1427,7 @@ def get_artistlist():
 
         artist_list = []
 
-        artists = db.session.query(Performers.id, Performers.name, Performers.img, Performers.description, func.count(Performers.id).label('total'))\
+        artists = db.session.query(Performers.id, Performers.name, Performers.img, Performers.description, Performers.wiki_link, func.count(Performers.id).label('total'))\
             .join(performer_albums)\
             .filter(or_(Performers.hidden == False, Performers.hidden == None))\
             .group_by(Performers.id).order_by(text('total DESC')).all()
@@ -1424,9 +1441,9 @@ def get_artistlist():
             composer_names.remove(exception)
 
         # remove composers and bad results
-        for _id, artist, img, description, count in artists:
+        for _id, artist, img, description, wiki_link, count in artists:
             if artist not in composer_names and "/" not in artist:
-                artist_list.append({'id': _id, 'name': artist, 'img': img, 'description': description})
+                artist_list.append({'id': _id, 'name': artist, 'img': img, 'description': description, 'wiki_link': wiki_link})
 
         cache.set('artists', artist_list)
 

@@ -24,10 +24,10 @@
           <table>
             <tr>
               <td>
-                <b-avatar button @click="getArtistComposers(artist.id)" size="40px" :src="artist.img"></b-avatar>
+                <b-avatar button @click="getArtistComposers(artist)" size="40px" :src="artist.img"></b-avatar>
               </td>
               <td class="info-td">
-                <a class="artist-name" @click="getArtistComposers(artist.id)">{{ artist.name }}</a><br />
+                <a class="artist-name" @click="getArtistComposers(artist)">{{ artist.name }}</a><br />
                 <span class="born-died">{{artist.description}}</span>
               </td>
             </tr>
@@ -56,12 +56,13 @@ export default {
           this.$router.push("/albums?id=" + album.id);
       }
     },
-    getArtistComposers(artist_id) {
+    getArtistComposers(artist) {
       if (!this.$view.mobile) {
-        eventBus.$emit("requestComposersForArtist", artist_id);
-        this.$config.artist = artist_id;
+        this.$config.artist = artist;
         if (this.$route.name != "performers") {
-          this.$router.push("/performers?artist=" + artist_id);
+          this.$router.push("/performers?artist=" + artist.id);
+        } else {
+          eventBus.$emit("requestPerformer", artist);
         }
       }
     },
