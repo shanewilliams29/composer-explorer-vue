@@ -1,11 +1,10 @@
-from app import db, sp, cache
+from app import db, sp
 from flask import request, redirect, session, render_template, send_from_directory, current_app
 from flask_login import current_user
 from config import Config
-from app.models import User, Performers, performer_albums, ComposerList
+from app.models import User
 from datetime import datetime, timedelta, timezone
 from app.main import bp
-from sqlalchemy import func, text, or_
 
 
 @bp.before_app_request
