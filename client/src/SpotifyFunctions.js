@@ -19,7 +19,7 @@ var spotify = {
     }).catch((error) => {
       console.error(error);
     });
-  },
+  }, 
   getSpotifyArtists(token, artistIdString) {
     const path = 'https://api.spotify.com/v1/artists?ids=' + artistIdString;
     axios({
