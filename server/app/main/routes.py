@@ -10,15 +10,6 @@ from app.main import bp
 @bp.before_app_request
 def before_app_request():
     
-    # redirect to https
-    # if "localhost" in request.url:  # removed :5000
-    #     pass
-    # else:
-    #     if not request.is_secure:
-    #         url = request.url.replace('http://', 'https://', 1)
-    #         code = 301
-    #         return redirect(url, code=code)
-
     # mobile view
     if not session.get('mobile'):
         session['mobile'] = None
@@ -41,7 +32,7 @@ def index(path):
         if Config.MODE == "DEVELOPMENT":
             return redirect('http://localhost:8080/mobile')
         else:
-            return redirect('https://www.composerexplorer.com/mobile')
+            return redirect('https://composerexplorer.com/mobile')
 
     # user last seen
     if current_user.is_authenticated:

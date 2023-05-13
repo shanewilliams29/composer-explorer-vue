@@ -1,0 +1,695 @@
+[
+  {
+    "id": "6NUhQz7eAEsZvjEHTKHux9", 
+    "name": "Sir Neville Marriner", 
+    "img": "https://i.scdn.co/image/addf4464734979a85ef71a61c421f23a6bc143ae", 
+    "description": "English Violinist", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Neville_Marriner"
+  }, 
+  {
+    "id": "4F0h097DbL1XBqIbDw2xOj", 
+    "name": "Wilhelm Kempff", 
+    "img": "https://i.scdn.co/image/03f1536313e3d388fd2c3af6dd7ead11390e62c7", 
+    "description": "German pianist", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Wilhelm_Kempff"
+  }, 
+  {
+    "id": "78sEozQOEJxzXegUuqRSgH", 
+    "name": "Daniel Barenboim", 
+    "img": "https://i.scdn.co/image/ab6761610000e5eb078ae88e99727476235d816f", 
+    "description": "Classical pianist", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Daniel_Barenboim"
+  }, 
+  {
+    "id": "2jIBkRzVUboTbp05rJnKeT", 
+    "name": "Simon Standage", 
+    "img": "https://i.scdn.co/image/0a5c00ae5ecc0bd8687973a3b3321963821468ad", 
+    "description": "English Violinist", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Simon_Standage"
+  }, 
+  {
+    "id": "20iZXzMb8LoWXOeca32i82", 
+    "name": "Vladimir Ashkenazy", 
+    "img": "https://i.scdn.co/image/ab6761610000e5eba5a4a932f73faefc19b4e24f", 
+    "description": "Pianist", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Vladimir_Ashkenazy"
+  }, 
+  {
+    "id": "24K6LTZFqBAvKsorwK0iXd", 
+    "name": "Andr\u00e1s Schiff", 
+    "img": "https://i.scdn.co/image/ab6761610000e5eb0931477643a0f9b69d261c41", 
+    "description": "British classical pianist", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Andr%C3%A1s_Schiff"
+  }, 
+  {
+    "id": "66MvLAvLznk5UOvASVGjk4", 
+    "name": "Martha Argerich", 
+    "img": "https://i.scdn.co/image/ab6761610000e5eb66cd5da57e71a33da20de712", 
+    "description": "Argentine classical pianist", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Martha_Argerich"
+  }, 
+  {
+    "id": "1Dot4uMsJMx8n1Xi7gAdV6", 
+    "name": "Jean-Yves Thibaudet", 
+    "img": "https://i.scdn.co/image/ab6761610000e5eb60b6694c42464c30589755b9", 
+    "description": "French pianist", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Jean-Yves_Thibaudet"
+  }, 
+  {
+    "id": "5vBh0nve44zwwVF5KWtCwA", 
+    "name": "Alfred Brendel", 
+    "img": "https://i.scdn.co/image/ab6761610000e5eb669845465a41edd9d504b3bc", 
+    "description": "Austrian classical pianist", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Alfred_Brendel"
+  }, 
+  {
+    "id": "5hnUbiLAjGNZ9JsiWzOBRC", 
+    "name": "Walter Gieseking", 
+    "img": "https://i.scdn.co/image/2d4760e61787441dff862a81e5b077da9ea21f44", 
+    "description": "French-German pianist", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Walter_Gieseking"
+  }, 
+  {
+    "id": "4hBgCK8FyJ5bV36ZZLB56X", 
+    "name": "Sviatoslav Richter", 
+    "img": "https://i.scdn.co/image/1b73c6aaab0f43cfe569edc79aa96fe458752c57", 
+    "description": "Soviet-Russian classical pianist", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Sviatoslav_Richter"
+  }, 
+  {
+    "id": "21h8E3aA7a9mjcUHbLpjxf", 
+    "name": "Emil Gilels", 
+    "img": "https://i.scdn.co/image/1dedfde3d7c1938ce0928a018e61a8968f1e0f41", 
+    "description": "Russian pianist", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Emil_Gilels"
+  }, 
+  {
+    "id": "0KE7MPlNGYZugOqQngcqQV", 
+    "name": "Willi Boskovsky", 
+    "img": "https://i.scdn.co/image/7d3dec7f2a59d395626e0757e92ae8df016abc61", 
+    "description": "Austrian Violinist", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Willi_Boskovsky"
+  }, 
+  {
+    "id": "0QjqcG7aDPrqJrEogqZu3w", 
+    "name": "Gerald Moore", 
+    "img": "https://i.scdn.co/image/638061f0429943fe4cae7d87eb65dfafcc6d662b", 
+    "description": "Classical pianist", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Gerald_Moore"
+  }, 
+  {
+    "id": "1hRLlo7ZGxEmc0ztMOKurs", 
+    "name": "Maria Jo\u00e3o Pires", 
+    "img": "https://i.scdn.co/image/ab6761610000e5ebb3f346327ea279f4d48a221c", 
+    "description": "Portuguese classical pianist", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Maria_Jo%C3%A3o_Pires"
+  }, 
+  {
+    "id": "5Kb0Qf13EyYtVJvzCdI9M7", 
+    "name": "Jen\u0151 Jand\u00f3", 
+    "img": "https://i.scdn.co/image/34110ec088c4d87c11a5aaa4744ff893bea593e8", 
+    "description": "Hungarian pianist", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Jen%C5%91_Jand%C3%B3"
+  }, 
+  {
+    "id": "4Ws5hSoABAwvGJ4LhHwHgq", 
+    "name": "Vladimir Horowitz", 
+    "img": "https://i.scdn.co/image/ab6761610000e5eba0c5bd974ec30d1cb6833747", 
+    "description": "Russian-American classical pianist", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Vladimir_Horowitz"
+  }, 
+  {
+    "id": "5X5cGjYEmKnuihYXEePQcs", 
+    "name": "Pascal Rog\u00e9", 
+    "img": "https://i.scdn.co/image/225b2f9237c877ab5c937fc960b4ad768aaffaf9", 
+    "description": "French pianist", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Pascal_Rog%C3%A9"
+  }, 
+  {
+    "id": "0iqgjl0OG3z53PZVIB7ZyD", 
+    "name": "V\u00edkingur \u00d3lafsson", 
+    "img": "https://i.scdn.co/image/ab6761610000e5ebd3ff12aa9a6cb3a56133f882", 
+    "description": "Icelandic pianist", 
+    "wiki_link": "https://en.wikipedia.org/wiki/V%C3%ADkingur_%C3%93lafsson"
+  }, 
+  {
+    "id": "2YdRnOqBXCl9g8xCLcGh8C", 
+    "name": "Mikhail Pletnev", 
+    "img": "https://i.scdn.co/image/ab6772690000c46cf77e6a84cfbfdf136d8470a3", 
+    "description": "Russian pianist", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Mikhail_Pletnev"
+  }, 
+  {
+    "id": "2VIdKQmRHnWofsR4odfFOh", 
+    "name": "Maurizio Pollini", 
+    "img": "https://i.scdn.co/image/b569f4420a0c5257c26c745a8928cac516dd4144", 
+    "description": "Italian pianist", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Maurizio_Pollini"
+  }, 
+  {
+    "id": "0xfOM47aJ8EcFX7T6Ugr9W", 
+    "name": "Christoph Eschenbach", 
+    "img": "https://i.scdn.co/image/bed313fa091a803cff89df037b75a3361b3533ba", 
+    "description": "German pianist", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Christoph_Eschenbach"
+  }, 
+  {
+    "id": "24ibCRKLtfIZcfrixiBAsm", 
+    "name": "Gidon Kremer", 
+    "img": "https://i.scdn.co/image/ab6772690000c46c8d1cac6d8a5a1728dd2bc032", 
+    "description": "Latvian Violinist", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Gidon_Kremer"
+  }, 
+  {
+    "id": "32i0ni9RO8Q7T7T7ZqkGU2", 
+    "name": "Yehudi Menuhin", 
+    "img": "https://i.scdn.co/image/baa3646450d802f14ef938ff64e3315e1b1cf56d", 
+    "description": "Violinist", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Yehudi_Menuhin"
+  }, 
+  {
+    "id": "5Gi9bw3svtZMwonzcQG2wm", 
+    "name": "Zolt\u00e1n Kocsis", 
+    "img": "https://i.scdn.co/image/ac476515a51e921ac250e9fbc4f1d23fcb261e19", 
+    "description": "Hungarian pianist", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Zolt%C3%A1n_Kocsis"
+  }, 
+  {
+    "id": "4EQ6Hw3KV9S80ZG1swsFN5", 
+    "name": "Iona Brown", 
+    "img": "https://i.scdn.co/image/b7ff9a1af84c6093798b4c7bb8227e6a2d06e5e0", 
+    "description": "British Violinist", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Iona_Brown"
+  }, 
+  {
+    "id": "5UQqgiSt6Eh19Zm58qPxPS", 
+    "name": "Andrei Gavrilov", 
+    "img": "https://i.scdn.co/image/4b4b39e5a7910ac91a2d5d867d3b1d282131195e", 
+    "description": "Swiss pianist", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Andrei_Gavrilov"
+  }, 
+  {
+    "id": "5k15M5itLxlNtLk7BGpGa1", 
+    "name": "Claudio Arrau", 
+    "img": "https://i.scdn.co/image/412078c6389dfe2e0d1591e9c95791809bc19265", 
+    "description": "Chilean pianist", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Claudio_Arrau"
+  }, 
+  {
+    "id": "2sjOsPGCavFqNIgpCoy2hJ", 
+    "name": "Friedrich Gulda", 
+    "img": "https://i.scdn.co/image/67c5f3475700f3d2cfaeb944e4d3088c0a73c559", 
+    "description": "Austrian pianist", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Friedrich_Gulda"
+  }, 
+  {
+    "id": "0DfXBLdnI4KVzyNua2rZ8Q", 
+    "name": "Arthur Grumiaux", 
+    "img": "https://i.scdn.co/image/c645a27ed94e4ba71b76ae3382b14a261be1af6c", 
+    "description": "Belgian Violinist", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Arthur_Grumiaux"
+  }, 
+  {
+    "id": "3MizzvztoimXSPJc716p8F", 
+    "name": "Ana-Marija Markovina", 
+    "img": "https://i.scdn.co/image/ab6761610000e5ebc29fc86535b609d6ff7d6f6e", 
+    "description": "Croatian classical pianist", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Ana-Marija_Markovina"
+  }, 
+  {
+    "id": "606pshIhidPHebEaDWSXDe", 
+    "name": "Mitsuko Uchida", 
+    "img": "https://i.scdn.co/image/ab6772690000c46c3cb945530367a9a1235d6444", 
+    "description": "Japanese-British classical pianist", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Mitsuko_Uchida"
+  }, 
+  {
+    "id": "00hfOKuZEhvKKNXmVdb1We", 
+    "name": "Janine Jansen", 
+    "img": "https://i.scdn.co/image/218b36dc81ff0046bb932edb7271b619695f774b", 
+    "description": "Dutch Violinist", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Janine_Jansen"
+  }, 
+  {
+    "id": "7y5puJ1Dk69nBH8ccUSKCD", 
+    "name": "Carlo Grante", 
+    "img": "https://i.scdn.co/image/3d5d7e154e361bdb8263d26bdf2bd348c8a6bb44", 
+    "description": "Italian classical pianist", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Carlo_Grante"
+  }, 
+  {
+    "id": "22jDZXnu8F1BNH63ujGkT3", 
+    "name": "Nelson Freire", 
+    "img": "https://i.scdn.co/image/ceb0340a08dfdb59e50ac0aa7ce640e8c3fe352a", 
+    "description": "Brazilian classical pianist", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Nelson_Freire"
+  }, 
+  {
+    "id": "4EEQIAJoeN1V30MqFFtXxB", 
+    "name": "Murray Perahia", 
+    "img": "https://i.scdn.co/image/36a16b86186e883f0f2d6e068b88df6773456d73", 
+    "description": "American pianist", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Murray_Perahia"
+  }, 
+  {
+    "id": "6pzfUmBsQAKxOhy0NSi8zn", 
+    "name": "Anne-Sophie Mutter", 
+    "img": "https://i.scdn.co/image/ab6761610000e5ebae5e23c13f72e0ee01dfa99b", 
+    "description": "German Violinist", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Anne-Sophie_Mutter"
+  }, 
+  {
+    "id": "59r5UU2HOytn9V5uMZ5Vur", 
+    "name": "Daniel Hope", 
+    "img": "https://i.scdn.co/image/ab6761610000e5ebf4ff0728843973decb486e5b", 
+    "description": "Violinist", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Daniel_Hope"
+  }, 
+  {
+    "id": "2IxMWYFzAcMyZq2k10zgTt", 
+    "name": "Jean Louis Steuerman", 
+    "img": "https://i.scdn.co/image/ab67616d0000b2734b1d00f562d2f7499d6c5dd8", 
+    "description": "Pianist", 
+    "wiki_link": "NA"
+  }, 
+  {
+    "id": "1fUhTALoWXPL6PZSkKImY9", 
+    "name": "Daniil Trifonov", 
+    "img": "https://i.scdn.co/image/ab6761610000e5ebd37ecf6c9f68f921fb553446", 
+    "description": "Russian pianist", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Daniil_Trifonov"
+  }, 
+  {
+    "id": "12y7xuLQncD5W92j99pqB4", 
+    "name": "Ulrich Eisenlohr", 
+    "img": "https://i.scdn.co/image/ab67616d0000b27345e28e28367009e5a1b45f4e", 
+    "description": "German classical pianist", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Ulrich_Eisenlohr"
+  }, 
+  {
+    "id": "7o2OjTu0Ls0xiWl3RzjdVp", 
+    "name": "David Oistrakh", 
+    "img": "https://i.scdn.co/image/13d9002dfc36d27dc5d5e0883b1208846611d295", 
+    "description": "Soviet Violinist", 
+    "wiki_link": "https://en.wikipedia.org/wiki/David_Oistrakh"
+  }, 
+  {
+    "id": "1YZhNFBxkEB5UKTgMDvot4", 
+    "name": "Lang Lang", 
+    "img": "https://i.scdn.co/image/ab6761610000e5eb7886cfce596f2c29d4264f23", 
+    "description": "Chinese pianist", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Lang_Lang"
+  }, 
+  {
+    "id": "6ALhP2ILfgcSmpTefE4C3Q", 
+    "name": "Gil Shaham", 
+    "img": "https://i.scdn.co/image/402c9dc81a5b2b4f3a813faa9b9713a161119225", 
+    "description": "American Violinist", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Gil_Shaham"
+  }, 
+  {
+    "id": "0VkQgzGZUmazUc7ouT5S79", 
+    "name": "H\u00e9l\u00e8ne Grimaud", 
+    "img": "https://i.scdn.co/image/ab6761610000e5ebc2432345f78d5f0c92c55e6d", 
+    "description": "French classical pianist", 
+    "wiki_link": "https://en.wikipedia.org/wiki/H%C3%A9l%C3%A8ne_Grimaud"
+  }, 
+  {
+    "id": "0wy0KtAlsZ59mEgtmEjuUk", 
+    "name": "Pierre-Laurent Aimard", 
+    "img": "https://i.scdn.co/image/ab6761610000e5eb3afeb2d89eb52cd20bdef3e6", 
+    "description": "French pianist", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Pierre-Laurent_Aimard"
+  }, 
+  {
+    "id": "0eQTutigtSNq6DmsYU9hPS", 
+    "name": "Arturo Benedetti Michelangeli", 
+    "img": "https://i.scdn.co/image/c3c685766d9ad373690ec12067fed117e978d621", 
+    "description": "Italian classical pianist", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Arturo_Benedetti_Michelangeli"
+  }, 
+  {
+    "id": "4heIabFyBGbVj3lc4n7iVO", 
+    "name": "Giuliano Carmignola", 
+    "img": "https://i.scdn.co/image/bd3f21e0344c00340f23ddd18afdfe8b4082290b", 
+    "description": "Italian Violinist", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Giuliano_Carmignola"
+  }, 
+  {
+    "id": "0hIG9FXgjQxT8fKaYceFbA", 
+    "name": "Itzhak Perlman", 
+    "img": "https://i.scdn.co/image/f1658bc66d1f99ab6d118f26a2abaf7dc33a272f", 
+    "description": "Israeli-American Violinist", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Itzhak_Perlman"
+  }, 
+  {
+    "id": "1WCGM94WQwqQnisq2QEOHl", 
+    "name": "Henrik M\u00e5we", 
+    "img": "https://i.scdn.co/image/ab67616d0000b27325e0cc3e6828700c09fcd311", 
+    "description": "Classical pianist", 
+    "wiki_link": "NA"
+  }, 
+  {
+    "id": "2fxWL96h0S44PhEa9e6mtm", 
+    "name": "Alexis Weissenberg", 
+    "img": "https://i.scdn.co/image/d7b95acb954cd985e1ce85a4dd2f0fdd36293822", 
+    "description": "Bulgarian pianist", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Alexis_Weissenberg"
+  }, 
+  {
+    "id": "4DozkIMJBaF8L9Tix8pUID", 
+    "name": "Jorge Bolet", 
+    "img": "https://i.scdn.co/image/6ffb62d0d4065ec5634c9fec9c361fffd5e30882", 
+    "description": "Cuban-American pianist", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Jorge_Bolet"
+  }, 
+  {
+    "id": "6aQUOvrKLOquCAvIGdIwTx", 
+    "name": "Carmen Piazzini", 
+    "img": "https://i.scdn.co/image/1dc8f4430bbf39a814e3413892c020122215924f", 
+    "description": "Pianist", 
+    "wiki_link": "NA"
+  }, 
+  {
+    "id": "3Tsq7oTvga9K2osAf6vArw", 
+    "name": "Stephen Kovacevich", 
+    "img": "https://i.scdn.co/image/71d66fd4e3764c46482fe37a7b422bdb6c9a60a0", 
+    "description": "American classical pianist", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Stephen_Kovacevich"
+  }, 
+  {
+    "id": "2gAmSWx7vn8ZUSFDRdte9X", 
+    "name": "Paul Badura-Skoda", 
+    "img": "https://i.scdn.co/image/51201ae9aa30048fa738ef05a17ba4fdacd42dd1", 
+    "description": "Austrian pianist", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Paul_Badura-Skoda"
+  }, 
+  {
+    "id": "7bdwlNOPsycFColkPRlNxY", 
+    "name": "Rudolf Buchbinder", 
+    "img": "https://i.scdn.co/image/8037424678ae16f6b271a9d7684f10203b40321b", 
+    "description": "Austrian classical pianist", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Rudolf_Buchbinder"
+  }, 
+  {
+    "id": "7bFDJIIDPq0Gn5vI7Ce34f", 
+    "name": "Aldo Ciccolini", 
+    "img": "https://i.scdn.co/image/8bb54ad1bfe66f5f2379d5d800fcfee33895b077", 
+    "description": "Italian pianist", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Aldo_Ciccolini"
+  }, 
+  {
+    "id": "0d6alfZHUx3xoRnPjkTL7Q", 
+    "name": "Alice Sara Ott", 
+    "img": "https://i.scdn.co/image/ab6761610000e5eb07008abbf8b2c86808c12d80", 
+    "description": "German classical pianist", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Alice_Sara_Ott"
+  }, 
+  {
+    "id": "08yT4NXiwN4HvaayEo72sm", 
+    "name": "Alicia de Larrocha", 
+    "img": "https://i.scdn.co/image/ab6761610000e5eb247f12a490fa82b1a2656b79", 
+    "description": "Spanish pianist", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Alicia_de_Larrocha"
+  }, 
+  {
+    "id": "39FRKToWvMqZFNxgIbgzBq", 
+    "name": "Wolfgang Schneiderhan", 
+    "img": "https://i.scdn.co/image/cc5655359390b27f2841f76b0bb0d22996fe5aa0", 
+    "description": "Austrian Violinist", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Wolfgang_Schneiderhan_(violinist)"
+  }, 
+  {
+    "id": "3iC45HcbQN9jtqfT7meNld", 
+    "name": "Wilhelm Backhaus", 
+    "img": "https://i.scdn.co/image/cedea4dee575fc8dfa6a479fcc332cb6af8dc98a", 
+    "description": "German pianist", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Wilhelm_Backhaus"
+  }, 
+  {
+    "id": "13dkPjqmbcchm8cXjEJQeP", 
+    "name": "Glenn Gould", 
+    "img": "https://i.scdn.co/image/ab6761610000e5ebae1364cd7533a53776d8ae43", 
+    "description": "Canadian classical pianist", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Glenn_Gould"
+  }, 
+  {
+    "id": "5uYFQGCwvdTgxXz9IgZ64h", 
+    "name": "Philippe Cassard", 
+    "img": "https://i.scdn.co/image/ab67616d0000b2732742280b4009ee41f402a38d", 
+    "description": "French classical pianist", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Philippe_Cassard"
+  }, 
+  {
+    "id": "5EnRYHrlhjPbdyS9cCoxMS", 
+    "name": "J\u00f6rg Demus", 
+    "img": "https://i.scdn.co/image/95a140ace2e100583fca24f739de2b74109f7ce6", 
+    "description": "Austrian classical pianist", 
+    "wiki_link": "https://en.wikipedia.org/wiki/J%C3%B6rg_Demus"
+  }, 
+  {
+    "id": "3mabOGxmXQo74MHWrzsJlz", 
+    "name": "Aloys Kontarsky", 
+    "img": "https://i.scdn.co/image/ab67616d0000b2738de91daf0bbfd4431f083469", 
+    "description": "Pianist", 
+    "wiki_link": "NA"
+  }, 
+  {
+    "id": "4ylqqqUMfc5TdqwoLuq6he", 
+    "name": "Tam\u00e1s V\u00e1s\u00e1ry", 
+    "img": "https://i.scdn.co/image/ab67616d0000b273be2f0c0bb53438328de2edbb", 
+    "description": "Hungarian pianist", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Tam%C3%A1s_V%C3%A1s%C3%A1ry"
+  }, 
+  {
+    "id": "36BgOKslOMQpqjTGn9wSuY", 
+    "name": "Cristina Ortiz", 
+    "img": "https://i.scdn.co/image/1042cdc862b107bbeaa3641c9492b4a1e14e5907", 
+    "description": "Brazilian pianist", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Cristina_Ortiz"
+  }, 
+  {
+    "id": "7yaBUcdjmqPP2vIv6F5bFD", 
+    "name": "Jascha Heifetz", 
+    "img": "https://i.scdn.co/image/6a7aeef10289f8b1235f7e7a06cce20da2d478a2", 
+    "description": "American Violinist", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Jascha_Heifetz"
+  }, 
+  {
+    "id": "4fZVzi00xb3DKLG1GSSCUE", 
+    "name": "Michel Schwalb\u00e9", 
+    "img": "https://i.scdn.co/image/ab67616d0000b273d29d9f8835468557de18115c", 
+    "description": "French Violinist", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Michel_Schwalb%C3%A9"
+  }, 
+  {
+    "id": "0ICQavgpRKTvhYyF5kHosd", 
+    "name": "Gordon Fergus-Thompson", 
+    "img": "https://i.scdn.co/image/ab67616d0000b273c39e48d91d6a0c36261eb533", 
+    "description": "Pianist", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Gordon_Fergus-Thompson"
+  }, 
+  {
+    "id": "1T44kWQsaCh6VLltor1DFk", 
+    "name": "Emmy Verhey", 
+    "img": "https://i.scdn.co/image/ab67616d0000b27353c7ff9abdee3e1450dd99f4", 
+    "description": "Dutch Violinist", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Emmy_Verhey"
+  }, 
+  {
+    "id": "5ccyh1kIfmtUfJf4d5wchx", 
+    "name": "George Malcolm", 
+    "img": "https://i.scdn.co/image/ab67616d0000b273449e9558a67bec1b28e80fda", 
+    "description": "Pianist", 
+    "wiki_link": "https://en.wikipedia.org/wiki/George_Malcolm_(musician)"
+  }, 
+  {
+    "id": "0H3c9Y0r1HnyP3uiR1lHTr", 
+    "name": "Artur Pizarro", 
+    "img": "https://i.scdn.co/image/ab6772690000c46cba179019c9e1b1f18cef9d5f", 
+    "description": "Portuguese pianist", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Artur_Pizarro"
+  }, 
+  {
+    "id": "2OQorEVvzvGCM4J4PHa6di", 
+    "name": "Walter Klien", 
+    "img": "https://i.scdn.co/image/34a69e5981dd5ddcbdb3cfd2d5b52b5da8c71b93", 
+    "description": "Austrian pianist", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Walter_Klien"
+  }, 
+  {
+    "id": "4J806QjdyKrK4guMFMRzKc", 
+    "name": "Salvatore Accardo", 
+    "img": "https://i.scdn.co/image/a1d5aa98891c86148b9676bdbeab0ae6ac98583d", 
+    "description": "Italian Violinist", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Salvatore_Accardo"
+  }, 
+  {
+    "id": "6mxKqEHPXH9qUGaFLFnkfR", 
+    "name": "Bruno Canino", 
+    "img": "https://i.scdn.co/image/366b9559907dee15c15118b14977ae6c4a3bc799", 
+    "description": "Italian classical pianist", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Bruno_Canino"
+  }, 
+  {
+    "id": "3HYV4ZdJ1LSOhPo5ehlEqF", 
+    "name": "Isaac Stern", 
+    "img": "https://i.scdn.co/image/da5ba5365e8c40f400600257a3c7d4aeb0bec555", 
+    "description": "American Violinist", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Isaac_Stern"
+  }, 
+  {
+    "id": "5658BnFZoMz8CtydqPjk8S", 
+    "name": "G\u00e9za Anda", 
+    "img": "https://i.scdn.co/image/fd19bf94672bba70b84b11799295bc1790c735a6", 
+    "description": "Hungarian pianist", 
+    "wiki_link": "https://en.wikipedia.org/wiki/G%C3%A9za_Anda"
+  }, 
+  {
+    "id": "1QoKB19XVwnNwlKDjyYYe8", 
+    "name": "Henryk Szeryng", 
+    "img": "https://i.scdn.co/image/bedd742859780aa41b172d70f40e18c253fb36b1", 
+    "description": "Polish Violinist", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Henryk_Szeryng"
+  }, 
+  {
+    "id": "4GN4kZWO3WUJz4vNM179pU", 
+    "name": "Monique Haas", 
+    "img": "https://i.scdn.co/image/ab67616d0000b273f5479caa5a52da41c87b5cda", 
+    "description": "French pianist", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Monique_Haas"
+  }, 
+  {
+    "id": "0rmB1nZVDjwoCN3kQVS7UZ", 
+    "name": "Rudolf Serkin", 
+    "img": "https://i.scdn.co/image/ab6761610000e5ebba416bfc8d56a1dc4af83c71", 
+    "description": "Austrian-American pianist", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Rudolf_Serkin"
+  }, 
+  {
+    "id": "4iOVIMcUg6zfAPv2Dz01eq", 
+    "name": "Werner Haas", 
+    "img": "https://i.scdn.co/image/ab67616d0000b27337cc205205124f1eb7e117cd", 
+    "description": "German classical pianist", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Werner_Haas_(pianist)"
+  }, 
+  {
+    "id": "7HUNjWo242UAVHZvj9zk4w", 
+    "name": "Yuja Wang", 
+    "img": "https://i.scdn.co/image/ab6772690000c46c0c493b30c8a63a6b8fca7027", 
+    "description": "Chinese classical pianist", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Yuja_Wang"
+  }, 
+  {
+    "id": "362GV7hdgLf9AHDE9l0zyn", 
+    "name": "Ronald Brautigam", 
+    "img": "https://i.scdn.co/image/8663342fb37fe89fdffe2f619dc189009b1406db", 
+    "description": "Dutch pianist", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Ronald_Brautigam"
+  }, 
+  {
+    "id": "6NYeMhiOjcNVSXwvkllyTe", 
+    "name": "Daniel Lozakovich", 
+    "img": "https://i.scdn.co/image/ab6761610000e5ebc0ff9db96d02abc503cf6e30", 
+    "description": "Swedish Violinist", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Daniel_Lozakovich"
+  }, 
+  {
+    "id": "2ydqw8ijsOMDxRczhzWhHd", 
+    "name": "Dubravka Tom\u0161i\u010d", 
+    "img": "https://i.scdn.co/image/f67a217d9f11c0e189d8c8f1dc40d9a013e1b7b8", 
+    "description": "Slovenian pianist", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Dubravka_Tom%C5%A1i%C4%8D_Srebotnjak"
+  }, 
+  {
+    "id": "36NfRmhEeMBlaQXAG3CP9Q", 
+    "name": "Julius Katchen", 
+    "img": "https://i.scdn.co/image/59c99a9b13f20ddce9cd8150849d96934f2201f8", 
+    "description": "American pianist", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Julius_Katchen"
+  }, 
+  {
+    "id": "3oob8cWQ5FMlfVZRwSSVES", 
+    "name": "Roland P\u00f6ntinen", 
+    "img": "https://i.scdn.co/image/533fa76463dd0778874c30408044180469b0004e", 
+    "description": "Swedish pianist", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Roland_P%C3%B6ntinen"
+  }, 
+  {
+    "id": "2BoWH2w47EUxEiOuvl4mxF", 
+    "name": "Radu Lupu", 
+    "img": "https://i.scdn.co/image/2d1ca54a8db5885ba86c2fbe2c537d9e73d0cb38", 
+    "description": "Romanian pianist", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Radu_Lupu"
+  }, 
+  {
+    "id": "4SbPzV12NmiqoWBMCvtP3X", 
+    "name": "Rafa\u0142 Blechacz", 
+    "img": "https://i.scdn.co/image/ab6761610000e5eb50b1b97ca0855e8c79d4a68a", 
+    "description": "Polish classical pianist", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Rafa%C5%82_Blechacz"
+  }, 
+  {
+    "id": "7mOe6jfxX9EILXET9l5L6H", 
+    "name": "Peter Schmalfuss", 
+    "img": "https://i.scdn.co/image/ab67616d0000b27308fa17be7bd6194f38778767", 
+    "description": "German classical pianist", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Peter_Schmalfuss"
+  }, 
+  {
+    "id": "5Pj7u76MK9VDyzDiAyYPSL", 
+    "name": "Katia Lab\u00e8que", 
+    "img": "https://i.scdn.co/image/ab6761610000e5ebfc2cff65aa74067510ec3db3", 
+    "description": "Pianist", 
+    "wiki_link": "NA"
+  }, 
+  {
+    "id": "7JJ6q1xkNvce4kNwrEuJRr", 
+    "name": "Anatol Ugorski", 
+    "img": "https://i.scdn.co/image/6e417feb4051ab98feef707a65274e7d63a902d1", 
+    "description": "Classical pianist", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Anatol_Ugorski"
+  }, 
+  {
+    "id": "74FWRHtdjFgWKiWkWYuAVh", 
+    "name": "Karl Engel", 
+    "img": "https://i.scdn.co/image/ae89518f1104a1cbab3c6a9811832e971f8ab5a0", 
+    "description": "Swiss pianist", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Karl_Engel"
+  }, 
+  {
+    "id": "0v9z3JGhtZ8BCDbAOCSgBa", 
+    "name": "Moura Lympany", 
+    "img": "https://i.scdn.co/image/1fc7eb746206ad877f0ffe1e69f05361b9b27aac", 
+    "description": "Pianist", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Moura_Lympany"
+  }, 
+  {
+    "id": "3x9SScXuqC40Sq6j4hpXCC", 
+    "name": "Geoffrey Parsons", 
+    "img": "https://i.scdn.co/image/958fdddb46f8007650d82ddb9dfd44b1e09ebfa0", 
+    "description": "Australian pianist", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Geoffrey_Parsons_(pianist)"
+  }, 
+  {
+    "id": "4uR3qmb8hWYkPh3BQNwAtt", 
+    "name": "Irwin Gage", 
+    "img": "https://i.scdn.co/image/e8d678301f3bd9baceb48d4a6342730e595c23c8", 
+    "description": "American pianist", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Irwin_Gage"
+  }, 
+  {
+    "id": "3bLTVhgwYcsH54wmhf31Nd", 
+    "name": "Jean-Philippe Collard", 
+    "img": "https://i.scdn.co/image/ab6761610000e5ebeedf0dcbdd82c25885af4dfe", 
+    "description": "French pianist", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Jean-Philippe_Collard"
+  }, 
+  {
+    "id": "6pOkgFusj8zIOfRZemKGah", 
+    "name": "John Holloway", 
+    "img": "https://i.scdn.co/image/486372f7a9672e55aaa61009eb2a8eb2f1de36fb", 
+    "description": "British Violinist", 
+    "wiki_link": "https://en.wikipedia.org/wiki/John_Holloway_(musician)"
+  }
+]

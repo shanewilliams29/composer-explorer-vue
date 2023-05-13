@@ -124,7 +124,7 @@
                         <b-avatar size="40px" :src="artist.img"></b-avatar>
                       </td>
                       <td class="info-td">
-                        <a class="artist-name" @click="getArtistComposers(artist.name)">{{ artist.name }}</a><br />
+                        <a class="artist-name" @click="getArtistComposers(artist)">{{ artist.name }}</a><br />
                         <span class="born-died">{{ artist.description }}</span>
                       </td>
                     </tr>
@@ -345,12 +345,13 @@ export default {
         }, delay);
     },
     getArtistComposers(artist) {
+      this.viewSearchResults = false;
       if (!this.$view.mobile) {
-        eventBus.$emit("requestComposersForArtist", artist);
         this.$config.artist = artist;
-        this.viewSearchResults = false;
         if (this.$route.name != "performers") {
-          this.$router.push("/performers?artist=" + artist);
+          this.$router.push("/performers?artist=" + artist.id);
+        } else {
+          eventBus.$emit("requestPerformer", artist);
         }
       }
     },

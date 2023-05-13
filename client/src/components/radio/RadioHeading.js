@@ -1,6 +1,7 @@
 import { eventBus } from "@/main.js";
 import spotify from "@/SpotifyFunctions.js";
 import PlaylistModal from "@/components/modals/PlaylistModal.vue";
+import axios from "axios";
 
 export const radioMixin = {
   components: {
@@ -177,9 +178,18 @@ export const radioMixin = {
         this.$view.randomAlbum = false;
       }
     },
-    artistSearch(artist) {
-      this.$config.artist = artist;
-      eventBus.$emit("requestComposersForArtist", artist);
+    artistSearch(artist_name) {
+    const path = "api/getperformerbyname?name=" + artist_name;
+    axios
+      .get(path)
+      .then((res) => {
+        const artist = res.data.artist;
+        this.$config.artist = artist;
+        eventBus.$emit("requestComposersForArtist", artist.id);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
     },
     prepareForExport() {
       eventBus.$emit("firePlaylistExport", this.artistSelect, this.radioTypeField.value, this.genreSelectField, this.workFilterField.value, this.workSearchField, this.limitFilterField.value, true, "dummyname");
@@ -196,7 +206,7 @@ export const radioMixin = {
     }
     this.$config.genre = null;
     if (this.$route.query.artist) {
-      this.$config.artist = this.$route.query.artist;
+      //this.$config.artist = this.$route.query.artist;
     } else {
       this.$config.artist = null;
     }
@@ -210,7 +220,17 @@ export const radioMixin = {
   mounted() {
     if (this.$route.query.artist) {
       this.radioTypeField = { value: "performer", text: "Performer Radio" };
-      this.artistSelect = this.$route.query.artist;
+      const path = "api/getperformer?id=" + this.$route.query.artist;
+      axios
+        .get(path)
+        .then((res) => {
+          const artist = res.data.artist;
+          this.$config.artist = artist;
+          this.artistSelect = artist.name;
+        })
+        .catch((error) => {
+          console.error(error);
+        });
     }
   },
   beforeDestroy() {

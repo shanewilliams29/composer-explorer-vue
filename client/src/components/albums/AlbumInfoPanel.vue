@@ -20,15 +20,15 @@
         <div class="spinner" v-show="loading" role="status">
           <b-spinner class="m-5"></b-spinner>
         </div>
-        <div v-show="!loading" v-for="result in results" :key="result[0]">
+        <div v-show="!loading" v-for="artist in artists" :key="artist.id">
           <table>
             <tr>
               <td>
-                <b-avatar button @click="getArtistComposers(result[0])" size="40px" :src="result[2]"></b-avatar>
+                <b-avatar button @click="getArtistComposers(artist)" size="40px" :src="artist.img"></b-avatar>
               </td>
               <td class="info-td">
-                <a class="artist-name" @click="getArtistComposers(result[0])">{{ result[0] }}</a><br />
-                <span class="born-died">{{result[1]}}</span>
+                <a class="artist-name" @click="getArtistComposers(artist)">{{ artist.name }}</a><br />
+                <span class="born-died">{{artist.description}}</span>
               </td>
             </tr>
           </table>
@@ -41,32 +41,14 @@
 <script>
 import { eventBus } from "@/main.js";
 import spotify from "@/SpotifyFunctions.js";
-import {getArtistDetails} from "@/HelperFunctions.js" 
 
 export default {
   data() {
     return {
       artists: [],
-      results: [],
       album: {},
-      loading: true
+      loading: false
     };
-  },
-  computed: {
-    item_length: function () {
-      return this.results.length;
-    },
-  },
-  watch: {
-    results: {
-      handler: function () {
-        // turn off loading when people results array is fully populated
-        if (this.results.length == this.artists.length && this.artists.length > 0){
-          this.loading = false;
-        }
-      },
-      deep: true
-    }
   },
   methods: {
     goToAlbum(album) {
@@ -76,42 +58,23 @@ export default {
     },
     getArtistComposers(artist) {
       if (!this.$view.mobile) {
-        eventBus.$emit("requestComposersForArtist", artist);
         this.$config.artist = artist;
         if (this.$route.name != "performers") {
-          this.$router.push("/performers?artist=" + artist);
+          this.$router.push("/performers?artist=" + artist.id);
+        } else {
+          eventBus.$emit("requestPerformer", artist);
         }
       }
     },
     setSpotifyAlbum(album) {
       this.album = album;
     },
-    fixArtists(artists){
-      // Fixes string of artists that are wrong in Spotify (ie. Meier/Barenboim/Bohm as one artist)
-       for (let i = 0; i < artists.length; i++) {
-          if (artists[i].name.indexOf("/") !== -1) {
-            let fixedArtists = artists[i].name.split("/");
-            let artistDictList = fixedArtists.map(function(artistName) {
-              return { name: artistName , img: "NA"};
-            });
-            artists.splice(i, 1);
-            artists.push(...artistDictList);
-          }
-        }
-        let uniqueList = artists.filter((dict, index, self) =>
-            index === self.findIndex((d) => d.name === dict.name)
-        );
-        return uniqueList;
-      },
     getSpotifyAlbumData(album) {
-      this.loading = true;
       // retrieves data from Spotify. 'album' is database album object
       this.results = [];
       this.artists = album.artist_details;
-      this.artists = this.fixArtists(this.artists);
       let album_id = album.album_uri.substring(album.album_uri.lastIndexOf(":") + 1);
       spotify.getSpotifyAlbum(this.$auth.appToken, album_id);
-      this.artists.forEach((element) => getArtistDetails(element, this.results, this.$auth.knowledgeKey));
     }
   },
   created() {
