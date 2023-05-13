@@ -450,7 +450,7 @@ export default {
 
       } else if (this.$view.mode == "performer") {
         // performer mode
-        eventBus.$emit("requestAlbums", workId, this.$config.artist.id);
+        eventBus.$emit("requestAlbums", workId, this.$config.artist.name);
 
       } else if (this.$view.mode == "favorites") {
         // favorites mode
@@ -459,7 +459,7 @@ export default {
       } else {
         // radio mode, play automatically
         if (this.$config.artist) {
-          eventBus.$emit("requestAlbumsAndPlay", workId, this.$config.artist.id);
+          eventBus.$emit("requestAlbumsAndPlay", workId, this.$config.artist.name);
 
         } else {
           eventBus.$emit("requestAlbumsAndPlay", workId);
@@ -477,7 +477,7 @@ export default {
 
       if ((this.$view.mode == "performer") || (this.$config.artist && this.$view.mode == "radio")) {
         // performer mode or radio performer mode
-        eventBus.$emit("requestAlbumsAndPlay", workId, this.$config.artist.id);
+        eventBus.$emit("requestAlbumsAndPlay", workId, this.$config.artist.name);
 
       } else {
         // browse, favorites or standard radio mode

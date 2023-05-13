@@ -197,7 +197,7 @@ export default {
       }
     },
     albumFilter() {
-      eventBus.$emit("requestAlbums", this.$config.work, this.$config.artist.id, this.albumSortField.value);
+      eventBus.$emit("requestAlbums", this.$config.work, this.$config.artist.name, this.albumSortField.value);
     },
     resetAlbumSort() {
       this.albumSortField = { value: "recommended", text: "Recommended sorting" };
