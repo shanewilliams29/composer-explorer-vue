@@ -1,25 +1,15 @@
-from app import db, sp, cache
+from app import db, sp
 from flask import request, redirect, session, render_template, send_from_directory, current_app
 from flask_login import current_user
 from config import Config
-from app.models import User, Performers, performer_albums, ComposerList
+from app.models import User
 from datetime import datetime, timedelta, timezone
 from app.main import bp
-from sqlalchemy import func, text, or_
 
 
 @bp.before_app_request
 def before_app_request():
     
-    # redirect to https
-    # if "localhost" in request.url:  # removed :5000
-    #     pass
-    # else:
-    #     if not request.is_secure:
-    #         url = request.url.replace('http://', 'https://', 1)
-    #         code = 301
-    #         return redirect(url, code=code)
-
     # mobile view
     if not session.get('mobile'):
         session['mobile'] = None
@@ -42,7 +32,7 @@ def index(path):
         if Config.MODE == "DEVELOPMENT":
             return redirect('http://localhost:8080/mobile')
         else:
-            return redirect('https://www.composerexplorer.com/mobile')
+            return redirect('https://composerexplorer.com/mobile')
 
     # user last seen
     if current_user.is_authenticated:

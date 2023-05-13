@@ -190,17 +190,17 @@ export default {
           this.loading = false;
         });
     },
-    getArtistComposers(artist) {
+    getArtistComposers(artist_id) {
       // populates composer list for a performer (used in performer and radio modes)
       this.loading = true;
-      this.artist = artist;
+      this.artist = artist_id;
       this.visibility = true;
-      this.$config.artist = artist;
 
       eventBus.$emit("clearWorksList");
       eventBus.$emit("clearAlbumsList");
 
-      const path = "api/artistcomposers/" + artist;
+      const path = "api/artistcomposers/" + artist_id;
+      console.log(path);
       axios
         .get(path)
         .then((res) => {
@@ -279,6 +279,7 @@ export default {
     },
   },
   created() {
+    console.log("created");
     if (!this.$view.mode && !this.$route.query.search) { // dont get composers in performer or radio modes or if omnisearch present
       this.getComposers();
       const config = JSON.parse(localStorage.getItem("config"));
@@ -306,6 +307,7 @@ export default {
     eventBus.$on("clearComposersList", this.clearComposers);
   },
   beforeDestroy() {
+    console.log("destroyed");
     eventBus.$off("requestComposersFromFilter", this.getFilteredComposers);
     eventBus.$off("requestComposersFromSearch", this.getSearchComposers);
     eventBus.$off("requestComposersForArtist", this.getArtistComposers);

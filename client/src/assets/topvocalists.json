@@ -1,0 +1,702 @@
+[
+  {
+    "id": "10CN8N2O3FlGlPVJWBiu5D", 
+    "name": "Dietrich Fischer-Dieskau", 
+    "img": "https://i.scdn.co/image/4bf52cbbba74ebf46bb9491f9536785445fdd143", 
+    "description": "German baritone", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Dietrich_Fischer-Dieskau"
+  }, 
+  {
+    "id": "38ghpVkkvBf5wugUg4HW4G", 
+    "name": "Peter Schreier", 
+    "img": "https://i.scdn.co/image/ab6761610000e5eb55b99f4b793147edad98608f", 
+    "description": "German tenor", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Peter_Schreier"
+  }, 
+  {
+    "id": "0Y8KmFkKOgJybpVobn1onU", 
+    "name": "Luciano Pavarotti", 
+    "img": "https://i.scdn.co/image/ab6761610000e5eb7c79a26af7f4b435ec8c6b95", 
+    "description": "Opera singer", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Luciano_Pavarotti"
+  }, 
+  {
+    "id": "4pU3BpenOZFEBzORx2YBJW", 
+    "name": "Pl\u00e1cido Domingo", 
+    "img": "https://i.scdn.co/image/cd7bd083928d11461642bf32df6f5bda813785f9", 
+    "description": "Spanish opera singer", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Pl%C3%A1cido_Domingo"
+  }, 
+  {
+    "id": "4pFlv4QVInj7bAo0MqHpwW", 
+    "name": "Anne Sofie von Otter", 
+    "img": "https://i.scdn.co/image/9e519eed0ea47d4e90b712cab04ad1094b6c6a60", 
+    "description": "Swedish mezzo-soprano", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Anne_Sofie_von_Otter"
+  }, 
+  {
+    "id": "0bjdfjE8XbLa2Odstu6E1E", 
+    "name": "Maria Callas", 
+    "img": "https://i.scdn.co/image/ab6761610000e5ebbc26189576baaf4bb6f1971b", 
+    "description": "American-Greek soprano", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Maria_Callas"
+  }, 
+  {
+    "id": "0B94ekfBARqVS2gwrTnvJ6", 
+    "name": "Elisabeth Schwarzkopf", 
+    "img": "https://i.scdn.co/image/7bee86b46e062fbcf8c1806264f9d9673add6fc7", 
+    "description": "British soprano", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Elisabeth_Schwarzkopf"
+  }, 
+  {
+    "id": "4ThA3BeHNucwqI7wKyKS8h", 
+    "name": "Janet Baker", 
+    "img": "https://i.scdn.co/image/905eb07a9ed6f5cefb1210b7ec331b7fe344902c", 
+    "description": "Mezzo-soprano", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Janet_Baker"
+  }, 
+  {
+    "id": "5pDhuwdCJlEIB6D5zMpWJW", 
+    "name": "Bas Ramselaar", 
+    "img": "https://i.scdn.co/image/ab67616d0000b273e364eccd76fef78ba7fee438", 
+    "description": "Dutch bass singer", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Bas_Ramselaar"
+  }, 
+  {
+    "id": "2VMPE6OWfNkGhnPe4KFLgX", 
+    "name": "Gundula Janowitz", 
+    "img": "https://i.scdn.co/image/47230b3ddc2a154ac2d97423fdf546b9a372a9df", 
+    "description": "Austrian soprano", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Gundula_Janowitz"
+  }, 
+  {
+    "id": "1Jgntox16Lhl0bFoRhV3Ar", 
+    "name": "Christa Ludwig", 
+    "img": "https://i.scdn.co/image/5cc27d54fc026130af291eb52449a9dc2e07f372", 
+    "description": "German mezzo-soprano", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Christa_Ludwig"
+  }, 
+  {
+    "id": "0HLqp813o9kv2t8JtVLH4a", 
+    "name": "Klaus Thunemann", 
+    "img": "https://i.scdn.co/image/89080c264803abef754f797e27dd8ce71afab13c", 
+    "description": "German bassoonist", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Klaus_Thunemann"
+  }, 
+  {
+    "id": "39gp1NxfhmLEyvNggMH4xg", 
+    "name": "Arleen Auger", 
+    "img": "https://i.scdn.co/image/d970a512bf71726b2856f6dffe5766c1cbdd659a", 
+    "description": "American soprano", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Arleen_Auger"
+  }, 
+  {
+    "id": "3gdchu3GRExh4tF8ypQc9Y", 
+    "name": "Hermann Prey", 
+    "img": "https://i.scdn.co/image/b1ce63dfd2f752a402ac00b299a979585cfb0ed8", 
+    "description": "German baritone", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Hermann_Prey"
+  }, 
+  {
+    "id": "6pqASX91Qh5vjWHFuLAllv", 
+    "name": "Ruth Holton", 
+    "img": "https://i.scdn.co/image/ab67616d0000b273595679ec0d74e6ea043e3be5", 
+    "description": "Soprano", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Ruth_Holton"
+  }, 
+  {
+    "id": "2F9wlqbFp62pIdVrjnhdZi", 
+    "name": "Thomas Quasthoff", 
+    "img": "https://i.scdn.co/image/e8bf64c1f609e62d74c175062f508a57844c253d", 
+    "description": "German bass-baritone", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Thomas_Quasthoff"
+  }, 
+  {
+    "id": "4BhpzQLhDh71GNvzKraKsu", 
+    "name": "Brigitte Fassbaender", 
+    "img": "https://i.scdn.co/image/e50740a2b6b150c13e6dc0084158bd1b84eeb01d", 
+    "description": "German mezzo-soprano", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Brigitte_Fassbaender"
+  }, 
+  {
+    "id": "57ut70dPEUxC1dk83YY3hY", 
+    "name": "Dame Joan Sutherland", 
+    "img": "https://i.scdn.co/image/ab6772690000c46c7d086f132e228ccf9ffa0847", 
+    "description": "Australian dramatic coloratura soprano", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Joan_Sutherland"
+  }, 
+  {
+    "id": "0eOythKkGSageuVFr6nDHf", 
+    "name": "Edith Mathis", 
+    "img": "https://i.scdn.co/image/654c25787e52d081ca7cf5fb1a6113bd07e9ae04", 
+    "description": "Swiss soprano", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Edith_Mathis"
+  }, 
+  {
+    "id": "3fcsflK8xu26XH4OYTcm5T", 
+    "name": "Kiri Te Kanawa", 
+    "img": "https://i.scdn.co/image/e0ec235c44a69656460b5b311d5f691b0f0a436d", 
+    "description": "New Zealand opera singer", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Kiri_Te_Kanawa"
+  }, 
+  {
+    "id": "6FUbcx4NUDhuIqsmsFyIqJ", 
+    "name": "Lucia Popp", 
+    "img": "https://i.scdn.co/image/093d81e4fedc831dad3b0d893343d2e937dcba52", 
+    "description": "Slovak operatic soprano", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Lucia_Popp"
+  }, 
+  {
+    "id": "0zdBW3w3XzBuPMUEiarUUw", 
+    "name": "Jessye Norman", 
+    "img": "https://i.scdn.co/image/35f67cc76adc57e376639662b77fff0e6ba866bc", 
+    "description": "American opera singer", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Jessye_Norman"
+  }, 
+  {
+    "id": "1F3yfrc1DyiWsM0YG7kpsN", 
+    "name": "Matthias Goerne", 
+    "img": "https://i.scdn.co/image/7e0d5f84a9f1e6a4b1571c6b0f86d045cc9b7507", 
+    "description": "German baritone", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Matthias_Goerne"
+  }, 
+  {
+    "id": "0QVlaFCrge4YWt0yftF8FE", 
+    "name": "Ian Bostridge", 
+    "img": "https://i.scdn.co/image/ab6761610000e5ebb644b14391015e20fa7f99ca", 
+    "description": "English tenor", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Ian_Bostridge"
+  }, 
+  {
+    "id": "3jp4zawfeVYVpSzO2Yujbv", 
+    "name": "Fritz Wunderlich", 
+    "img": "https://i.scdn.co/image/a69f13f522d89a79ab52a74e789deae6dbe10f18", 
+    "description": "German tenor", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Fritz_Wunderlich"
+  }, 
+  {
+    "id": "16cu3GNnOfi6ltCamrr8Xa", 
+    "name": "Wolfgang Holzmair", 
+    "img": "https://i.scdn.co/image/df02b3ff827cfd893ef6aaf49f521e9d7ab4073b", 
+    "description": "Austrian baritone", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Wolfgang_Holzmair"
+  }, 
+  {
+    "id": "24fwyM31DLDqYOPvQ0jFFr", 
+    "name": "Barbara Bonney", 
+    "img": "https://i.scdn.co/image/79cee15eb0d4917100625eac9acba44fd01b4723", 
+    "description": "American soprano", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Barbara_Bonney"
+  }, 
+  {
+    "id": "5dz9lXIYillOvg5xH0t5EN", 
+    "name": "Mirella Freni", 
+    "img": "https://i.scdn.co/image/50862fd686d3ce1947fed4bc325ecc7c05eacd43", 
+    "description": "Italian operatic soprano", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Mirella_Freni"
+  }, 
+  {
+    "id": "6pxEWWaFpWFJGEZK6dOzsF", 
+    "name": "Thomas Hampson", 
+    "img": "https://i.scdn.co/image/ab6761610000e5ebf0628d5c8a2292ccd6aa908b", 
+    "description": "American baritone", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Thomas_Hampson"
+  }, 
+  {
+    "id": "0D5GLqp4LQMG8Io8LxTdME", 
+    "name": "Monica Groop", 
+    "img": "https://i.scdn.co/image/13048568cc9e530cd341a6c19519648d2e174a57", 
+    "description": "Finnish operatic soprano", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Monica_Groop"
+  }, 
+  {
+    "id": "6EF4HWfjexcF6EmdoRnSVC", 
+    "name": "Elly Ameling", 
+    "img": "https://i.scdn.co/image/6197fb3cf03c70e1f25cc94960479963e9b8fe67", 
+    "description": "Dutch soprano", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Elly_Ameling"
+  }, 
+  {
+    "id": "7wRKUyRFa78oIENRaZhPtA", 
+    "name": "Knut Schoch", 
+    "img": "https://i.scdn.co/image/ab67616d0000b2739d3fb189de0e877178035619", 
+    "description": "German tenor", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Knut_Schoch"
+  }, 
+  {
+    "id": "13Tfk6ZpGdF0G3v9B3kasP", 
+    "name": "Kathleen Battle", 
+    "img": "https://i.scdn.co/image/06b98294a3e8cd9214f0f92e000910c30b6ecbb8", 
+    "description": "American operatic soprano", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Kathleen_Battle"
+  }, 
+  {
+    "id": "3uw6GzeL10NfFrcikMo9Na", 
+    "name": "Cecilia Bartoli", 
+    "img": "https://i.scdn.co/image/ab6761610000e5ebd179eae43dbc2856f8043bed", 
+    "description": "Italian mezzo-soprano", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Cecilia_Bartoli"
+  }, 
+  {
+    "id": "7cIdAeGd445NFOMJ3fr64K", 
+    "name": "Emma Kirkby", 
+    "img": "https://i.scdn.co/image/87c76fce4bb4e58797e69c1640995afce961d13d", 
+    "description": "English soprano", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Emma_Kirkby"
+  }, 
+  {
+    "id": "6oGu0NZWy8gJ18wggybFqH", 
+    "name": "Montserrat Caball\u00e9", 
+    "img": "https://i.scdn.co/image/b343b60ac961cf39341acf3e85589bdec96e51a7", 
+    "description": "Spanish operatic soprano", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Montserrat_Caball%C3%A9"
+  }, 
+  {
+    "id": "6ILd69yy67k6OU7cwpGNSl", 
+    "name": "Bryn Terfel", 
+    "img": "https://i.scdn.co/image/39f3f66ed10155a86ef854e1842def2a0af35f89", 
+    "description": "Welsh bass-baritone", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Bryn_Terfel"
+  }, 
+  {
+    "id": "1CjvOazvrDCipu1gbgyjIh", 
+    "name": "Nicolai Gedda", 
+    "img": "https://i.scdn.co/image/6d9c8d5a5fe41dc1864ed4e0d9b06d7f968e61f5", 
+    "description": "Swedish operatic tenor", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Nicolai_Gedda"
+  }, 
+  {
+    "id": "6ljM6B2XmSU7BtG3tZLQ1K", 
+    "name": "Birgit Nilsson", 
+    "img": "https://i.scdn.co/image/0ebf14df85f505c23446439574788d951a3e7902", 
+    "description": "Swedish soprano", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Birgit_Nilsson"
+  }, 
+  {
+    "id": "4M4iRyyLAlSbnDKOuldXIF", 
+    "name": "Karita Mattila", 
+    "img": "https://i.scdn.co/image/a1f304a402a41a7c8244494f054195391c6719cb", 
+    "description": "Opera singer", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Karita_Mattila"
+  }, 
+  {
+    "id": "5YB96PPFR0dEMazdUzMJDb", 
+    "name": "Simone Kermes", 
+    "img": "https://i.scdn.co/image/ab6761610000e5ebe8cc37ae407f33f81dbf974a", 
+    "description": "German soprano", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Simone_Kermes"
+  }, 
+  {
+    "id": "2mjYUXIj32wSpgoZqlc2lP", 
+    "name": "Victoria de los \u00c1ngeles", 
+    "img": "https://i.scdn.co/image/868dbaa8fe272780ef5faa25bca30a514b4c521e", 
+    "description": "Spanish operatic soprano", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Victoria_de_los_%C3%81ngeles"
+  }, 
+  {
+    "id": "7sdIwHhEEFS9TtoBseTlGA", 
+    "name": "Irmgard Seefried", 
+    "img": "https://i.scdn.co/image/bb7366f076d8ccc9d95d68260891c07e8ca39afb", 
+    "description": "German soprano", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Irmgard_Seefried"
+  }, 
+  {
+    "id": "2RWHmppBK4tjdqxtuesmZI", 
+    "name": "Renata Tebaldi", 
+    "img": "https://i.scdn.co/image/ab6761610000e5ebe7c3d7175ffc7d084f386963", 
+    "description": "Italian soprano", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Renata_Tebaldi"
+  }, 
+  {
+    "id": "6e8FGpzFgR9ar9h2bhzE3y", 
+    "name": "Mitsuko Shirai", 
+    "img": "https://i.scdn.co/image/d230fdd1dd833694da58c8bf2fff1bf27d5d06f3", 
+    "description": "Japanese mezzo-soprano", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Mitsuko_Shirai"
+  }, 
+  {
+    "id": "01Ti9tP1kNrsjr5qE1sNIS", 
+    "name": "Ernst Haefliger", 
+    "img": "https://i.scdn.co/image/bfabb5bfd4bf520ab17f9facde35ee0916cc87b8", 
+    "description": "Swiss tenor", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Ernst_Haefliger"
+  }, 
+  {
+    "id": "5moBlpk9BYtujdRW6VLepL", 
+    "name": "Anna Netrebko", 
+    "img": "https://i.scdn.co/image/643eb6b9a0a31a21f114e62f21a77622ff89c66d", 
+    "description": "Russian-Austrian operatic soprano", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Anna_Netrebko"
+  }, 
+  {
+    "id": "1ahGKezyX9Rl7GuEF2tc15", 
+    "name": "Jos\u00e9 Carreras", 
+    "img": "https://i.scdn.co/image/a9401975b5245e8e29f417ab78772d65ebfec7bf", 
+    "description": "Spanish operatic tenor", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Jos%C3%A9_Carreras"
+  }, 
+  {
+    "id": "3GtU1O2V8snd7EP5ySYLqN", 
+    "name": "Hans Hotter", 
+    "img": "https://i.scdn.co/image/cc80ed9302d87f5402d6e59f234f3d9a8088d289", 
+    "description": "German bass-baritone", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Hans_Hotter"
+  }, 
+  {
+    "id": "5Ac7rBwAF2MX98ku1isuhy", 
+    "name": "Peter Kooij", 
+    "img": "https://i.scdn.co/image/f79c2b492b57eaa56c6c85e835ec343f34547b27", 
+    "description": "Dutch bass singer", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Peter_Kooy"
+  }, 
+  {
+    "id": "4FNjPnaiiXYeG2qOhVtd8A", 
+    "name": "Jussi Bj\u00f6rling", 
+    "img": "https://i.scdn.co/image/04c3e5934e270a5b673e82b377ad56bbe2d1a3be", 
+    "description": "Swedish tenor", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Jussi_Bj%C3%B6rling"
+  }, 
+  {
+    "id": "21ZrUwCPuok2HGHtuUVCGL", 
+    "name": "Sandrine Piau", 
+    "img": "https://i.scdn.co/image/ab6761610000e5ebf587b25e82b1aca9cf686c47", 
+    "description": "French soprano", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Sandrine_Piau"
+  }, 
+  {
+    "id": "2jGwHz0EoSv0rk6XwZX9Ay", 
+    "name": "Kurt Equiluz", 
+    "img": "https://i.scdn.co/image/e065a946f5896a4fa8e9925a89eab88b2fb8a998", 
+    "description": "Austrian tenor", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Kurt_Equiluz"
+  }, 
+  {
+    "id": "2pbSEyAiiPwFivKqxXLhiB", 
+    "name": "Dalton Baldwin", 
+    "img": "https://i.scdn.co/image/bea70c8a303907c963dee673052bbcd9312d0e59", 
+    "description": "American singer", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Dalton_Baldwin"
+  }, 
+  {
+    "id": "4KdvkjFvLnChrlb1ZYN6Yi", 
+    "name": "Felicity Lott", 
+    "img": "https://i.scdn.co/image/fc5c517994151185ced35e743b13da07bdd974b5", 
+    "description": "English soprano", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Felicity_Lott"
+  }, 
+  {
+    "id": "5pWhQJvszoZVnQASf6KrEt", 
+    "name": "Margaret Price", 
+    "img": "https://i.scdn.co/image/2000dd9573cb2bccd17d6821161ad1e8a3ff9753", 
+    "description": "Soprano", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Margaret_Price"
+  }, 
+  {
+    "id": "3U1lulJE6dpbmVV0I6jS78", 
+    "name": "Herbert Kraus", 
+    "img": "https://i.scdn.co/image/ab67616d0000b2733ffb1015609c5ea4004b2ec5", 
+    "description": "Singer", 
+    "wiki_link": "NA"
+  }, 
+  {
+    "id": "5iOcU9R0uuvRGUjRvj2UVl", 
+    "name": "Kirsten Flagstad", 
+    "img": "https://i.scdn.co/image/6ef15528250a31bbaaa2159c0fbd45ec08504b96", 
+    "description": "Norwegian opera singer", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Kirsten_Flagstad"
+  }, 
+  {
+    "id": "7DimmxPVE900gITx8gLiu8", 
+    "name": "Sibylla Rubens", 
+    "img": "https://i.scdn.co/image/efdcdac816f241e7ef5990c30a4061323df66014", 
+    "description": "German soprano", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Sibylla_Rubens"
+  }, 
+  {
+    "id": "3BbwO46TU61EPYFcC9l9Lq", 
+    "name": "Rolando Villaz\u00f3n", 
+    "img": "https://i.scdn.co/image/ab6761610000e5eba45163db75b9d973abee410e", 
+    "description": "Mexican operatic tenor", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Rolando_Villaz%C3%B3n"
+  }, 
+  {
+    "id": "0kPQqnwTpb4xoBSxoGXnkO", 
+    "name": "Anthony Rolfe Johnson", 
+    "img": "https://i.scdn.co/image/6cc1570a7f3f6a2ab15b556bbcf5f2b065b1f542", 
+    "description": "Operatic tenor", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Anthony_Rolfe_Johnson"
+  }, 
+  {
+    "id": "7FjSvvNq767gjo9ge8oXhP", 
+    "name": "Carolyn Sampson", 
+    "img": "https://i.scdn.co/image/ab6761610000e5eb47e4961602c74fbee644ebdb", 
+    "description": "Soprano", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Carolyn_Sampson"
+  }, 
+  {
+    "id": "5W7pOtn53qBRrQo00IvHTj", 
+    "name": "Renata Scotto", 
+    "img": "https://i.scdn.co/image/30725d5790bda6d4855cb2fd6f4b41adf4f4102c", 
+    "description": "Italian soprano", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Renata_Scotto"
+  }, 
+  {
+    "id": "3ALYsjti5tptGpfAgEYweV", 
+    "name": "Carlo Bergonzi", 
+    "img": "https://i.scdn.co/image/a88abc28bb6f5f6a35af81cc362cca6c4952e7ef", 
+    "description": "Italian operatic tenor", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Carlo_Bergonzi_(tenor)"
+  }, 
+  {
+    "id": "6Mh6TOKv7l4wRDtQ4rROyC", 
+    "name": "Yvonne Kenny", 
+    "img": "https://i.scdn.co/image/7087905f2103e9c11efbd9946b39ec16aca1461e", 
+    "description": "Australian soprano singer", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Yvonne_Kenny"
+  }, 
+  {
+    "id": "1Lq2OVm5zTJ4hDGWn2T0D0", 
+    "name": "Bernarda Fink", 
+    "img": "https://i.scdn.co/image/6da230c1277e8eb61baa839af0535ad2dafdf2ed", 
+    "description": "Argentine mezzo-soprano", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Bernarda_Fink"
+  }, 
+  {
+    "id": "7D9goxJ3SeeDhLdsuTVBF2", 
+    "name": "Boris Christoff", 
+    "img": "https://i.scdn.co/image/c74a40348bd78e75a1450423c5c07df9760e2efa", 
+    "description": "Bulgarian opera singer", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Boris_Christoff"
+  }, 
+  {
+    "id": "1ZHJoS53NtBHIT7ZgwUlFx", 
+    "name": "Robert Tear", 
+    "img": "https://i.scdn.co/image/52d0c6969e2cfe5e17f1a098b975c2891fa906bb", 
+    "description": "Tenor", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Robert_Tear"
+  }, 
+  {
+    "id": "1VAybmgrRVxINWWCSoP5FB", 
+    "name": "Robin Blaze", 
+    "img": "https://i.scdn.co/image/f84fcadbaa5d84e6fb31d6373145851fd79f6f9f", 
+    "description": "Tenor", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Robin_Blaze"
+  }, 
+  {
+    "id": "7GqzUP7TApb2wPZ7pxlDeN", 
+    "name": "Theo Adam", 
+    "img": "https://i.scdn.co/image/22cdb9d3a293c30a29252f97948e4144ddcb5472", 
+    "description": "German bass-baritone", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Theo_Adam"
+  }, 
+  {
+    "id": "77kh0Si5vYGHDTjLT01t7r", 
+    "name": "Ingeborg Danz", 
+    "img": "https://i.scdn.co/image/3ea369d8eb49e4d7fc023e8958c54182da08119c", 
+    "description": "German mezzo-soprano", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Ingeborg_Danz"
+  }, 
+  {
+    "id": "6myXAUJ8cAp5oSXId946SJ", 
+    "name": "Teresa Berganza", 
+    "img": "https://i.scdn.co/image/a2077365e6ac9e6eaebcccd24cb8357b02eca193", 
+    "description": "Spanish mezzo-soprano", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Teresa_Berganza"
+  }, 
+  {
+    "id": "5NQ3MRv3HCYUP2DiT6bfwc", 
+    "name": "Soile Isokoski", 
+    "img": "https://i.scdn.co/image/b8bd087a179b0047fb99792654152f31fdb28b0e", 
+    "description": "Finnish soprano", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Soile_Isokoski"
+  }, 
+  {
+    "id": "4IIrEQMwqiSZ02ZoV3kQdH", 
+    "name": "Maria Stader", 
+    "img": "https://i.scdn.co/image/b43e363951ac04465e4258509f01bd4534f6630e", 
+    "description": "Swiss soprano", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Maria_Stader"
+  }, 
+  {
+    "id": "4jCfIA4UDHUWpc45H7A4ud", 
+    "name": "Natalie Dessay", 
+    "img": "https://i.scdn.co/image/121b3e547fcdfcb928736abe9e0e89780caf7685", 
+    "description": "French singer", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Natalie_Dessay"
+  }, 
+  {
+    "id": "6AWyB0AhI3gzsAbe9cksLF", 
+    "name": "Nancy Argenta", 
+    "img": "https://i.scdn.co/image/68d9d87d2dfe60f76329bc5ce2191e1426b6e316", 
+    "description": "Canadian singer", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Nancy_Argenta"
+  }, 
+  {
+    "id": "2X1SZFqImVgl59tWagfjcl", 
+    "name": "Marilyn Horne", 
+    "img": "https://i.scdn.co/image/cb2cbd56af96d5a642335cf92e09c0da67c1857f", 
+    "description": "American mezzo-soprano", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Marilyn_Horne"
+  }, 
+  {
+    "id": "5Sv7K5dTZGilfyrxYIFVSJ", 
+    "name": "Walter Berry", 
+    "img": "https://i.scdn.co/image/d13ef3fa4812724fbdbc23baddde9151918849bb", 
+    "description": "Austrian bass-baritone", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Walter_Berry_(bass-baritone)"
+  }, 
+  {
+    "id": "2AyySZZK01JT6ZSYZ2CWgf", 
+    "name": "Roberto Alagna", 
+    "img": "https://i.scdn.co/image/ab6761610000e5ebfc508773cc830a11625b6fdd", 
+    "description": "French operatic tenor", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Roberto_Alagna"
+  }, 
+  {
+    "id": "1f2LjOKVya7mchLI73LjuN", 
+    "name": "Peter Harvey", 
+    "img": "https://i.scdn.co/image/e88790d85e98350eaa306d54c4b0cc7ca434ab20", 
+    "description": "Baritone", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Peter_Harvey_(baritone)"
+  }, 
+  {
+    "id": "4gbrnZzPDYl2SBjzAL4KIE", 
+    "name": "Diana Damrau", 
+    "img": "https://i.scdn.co/image/ab6761610000e5ebac5d8f240695be172f32bcbc", 
+    "description": "Opera singer", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Diana_Damrau"
+  }, 
+  {
+    "id": "0gHar4003EyqU81XGv1Bka", 
+    "name": "Nicolai Ghiaurov", 
+    "img": "https://i.scdn.co/image/6e19cdf20b7ffecc876a514dbeca94329f90855b", 
+    "description": "Bulgarian opera singer", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Nicolai_Ghiaurov"
+  }, 
+  {
+    "id": "75dN1x42c0LtoRuBOz2huI", 
+    "name": "Julia Varady", 
+    "img": "https://i.scdn.co/image/ab499c802825398238b149857d54926e15ad4060", 
+    "description": "German soprano", 
+    "wiki_link": "https://en.wikipedia.org/wiki/J%C3%BAlia_V%C3%A1rady"
+  }, 
+  {
+    "id": "7gxxE0IbP9hFZeJVwdWCSc", 
+    "name": "Piero de Palma", 
+    "img": "https://i.scdn.co/image/2cdae9f426faab92040972f52bbb9c55188736cc", 
+    "description": "Operatic tenor", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Piero_de_Palma"
+  }, 
+  {
+    "id": "5wBaHI4YBLWJ2OkXU63YFs", 
+    "name": "Wolfgang Windgassen", 
+    "img": "https://i.scdn.co/image/42ea36c39a681c842091ff58f68f666588e5bad0", 
+    "description": "Tenor", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Wolfgang_Windgassen"
+  }, 
+  {
+    "id": "0TU5B5Zchs3He9YQYXhC1S", 
+    "name": "Stephen Varcoe", 
+    "img": "https://i.scdn.co/image/ff56e4deb270820f8bfea35280cdad15636c5102", 
+    "description": "Bass-baritone", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Stephen_Varcoe"
+  }, 
+  {
+    "id": "2STYCI1vifLsLtiXJuRUE9", 
+    "name": "Siegfried Lorenz", 
+    "img": "https://i.scdn.co/image/a8372cae90ba46d22708de0a05ef6d48ae9f973a", 
+    "description": "German baritone", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Siegfried_Lorenz_(baritone)"
+  }, 
+  {
+    "id": "6kjCrVbejP0Aw6otiMaxNt", 
+    "name": "Giuseppe Di Stefano", 
+    "img": "https://i.scdn.co/image/ff7b4ec8251098484b6aa11977f37c4c26ab94f6", 
+    "description": "Italian operatic tenor", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Giuseppe_Di_Stefano"
+  }, 
+  {
+    "id": "63jASK5GkDHb5f9zCsOyem", 
+    "name": "Kurt Moll", 
+    "img": "https://i.scdn.co/image/17edca100d2065cded0b5828730f2432ef4d8004", 
+    "description": "German bass singer", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Kurt_Moll"
+  }, 
+  {
+    "id": "63aSj4hbN7Q4nw74Y0xNF6", 
+    "name": "Sylvia McNair", 
+    "img": "https://i.scdn.co/image/60b9354e6df871bd1a87eb86cbc660a48e15172b", 
+    "description": "American opera singer", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Sylvia_McNair"
+  }, 
+  {
+    "id": "5P6p90HYfFxo4GTmHJjeNe", 
+    "name": "Dmitri Hvorostovsky", 
+    "img": "https://i.scdn.co/image/ab6761610000e5ebf67b956fb3252a0bb2ca04af", 
+    "description": "Russian opera singer", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Dmitri_Hvorostovsky"
+  }, 
+  {
+    "id": "2B4N612xGjNj2cAAYsP4MO", 
+    "name": "Sir Peter Pears", 
+    "img": "https://i.scdn.co/image/5a250b3fd476bb6b961829b8049cc6cb64ff7622", 
+    "description": "English tenor", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Peter_Pears"
+  }, 
+  {
+    "id": "3Qh7r2c4JWTmRLH3swU9dC", 
+    "name": "Leontyne Price", 
+    "img": "https://i.scdn.co/image/1c1f03af4c50ebaf6ddc280665a47bc0b1b615ea", 
+    "description": "American soprano", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Leontyne_Price"
+  }, 
+  {
+    "id": "1eHSioSmhSyUnYHLlOcZPK", 
+    "name": "Christine Sch\u00e4fer", 
+    "img": "https://i.scdn.co/image/44953aa1e2e46ab48021c0218d665ebddf31a8e7", 
+    "description": "German operatic soprano", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Christine_Sch%C3%A4fer"
+  }, 
+  {
+    "id": "0uRyoGMnJfoX8u1vDScXkk", 
+    "name": "Tom Krause", 
+    "img": "https://i.scdn.co/image/129948d5543af09ea4f6f6a25ecf2983e7046d52", 
+    "description": "Finnish bass-baritone", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Tom_Krause"
+  }, 
+  {
+    "id": "2Owak0BXSN5auAjwTh1N68", 
+    "name": "Cheryl Studer", 
+    "img": "https://i.scdn.co/image/14d93c5707873f3fdcec6d3749e8aaf7e6b122a2", 
+    "description": "American soprano", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Cheryl_Studer"
+  }, 
+  {
+    "id": "2OHnFY58Dg8c2SC2PtootB", 
+    "name": "Jonas Kaufmann", 
+    "img": "https://i.scdn.co/image/ab6761610000e5eb813b06e83950be806924f7a3", 
+    "description": "German opera singer", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Jonas_Kaufmann"
+  }, 
+  {
+    "id": "5HZ0WzJwZa38S1adyyeVrY", 
+    "name": "Rolando Panerai", 
+    "img": "https://i.scdn.co/image/8ca96820c45ecbd6761e6f0a2547123d5ed63428", 
+    "description": "Italian baritone", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Rolando_Panerai"
+  }, 
+  {
+    "id": "3d1Z9cAzU0KA1NMkfN4WZG", 
+    "name": "Astrid Varnay", 
+    "img": "https://i.scdn.co/image/434c935484be4c754ea8050f4befce4a91b96df3", 
+    "description": "American soprano", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Astrid_Varnay"
+  }, 
+  {
+    "id": "0KLsfTW9toRLas36xEOdgC", 
+    "name": "Rita Streich", 
+    "img": "https://i.scdn.co/image/a649e4e5e646a02cb97d85307622dff43d148db4", 
+    "description": "Soprano", 
+    "wiki_link": "https://en.wikipedia.org/wiki/Rita_Streich"
+  }
+]

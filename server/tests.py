@@ -404,7 +404,7 @@ class TestAPI(unittest.TestCase):
 
     def test_get_artistcomposers(self):
 
-        response = self.client.get('/api/artistcomposers/Waltraud%20Meier')
+        response = self.client.get('/api/artistcomposers/0dicUFoK5LIbqu6OoHu8VH')
 
         self.assertEqual(response.status_code, 200)
 
@@ -417,7 +417,7 @@ class TestAPI(unittest.TestCase):
 
         query = {
             'composer': 'Wagner',
-            'artist': 'Sir Georg Solti',
+            'artist': '0dicUFoK5LIbqu6OoHu8VH',
         }
 
         response = self.client.get('/api/artistworks', query_string=query)

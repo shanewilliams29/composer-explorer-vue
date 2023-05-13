@@ -4,31 +4,31 @@
       <b-row class="flex-nowrap">
         <b-col class="text-center">
           <div class="vertical-centered">
-            <div class="no-results" v-if="!results[0]">
+            <div class="no-results" v-if="!$config.artist">
               <table class="dummy-table">
                 Search for a performer to view composers and works they perform
               </table>
             </div>
-            <table class="headings-table" v-if="results">
-              <tr class="tr-performer" v-for="result in results" :key="result[0]">
+            <table class="headings-table" v-if="$config.artist">
+              <tr class="tr-performer">
                 <td>
-                  <b-avatar class="avatar" size="64px" :src="img"></b-avatar>
+                  <b-avatar class="avatar" size="64px" :src="$config.artist.img"></b-avatar>
                 </td>
                 <td class="td-text">
-                  <span class="artist-name">{{ result[0] }}&nbsp;</span><br />
-                  <span class="artist-job">{{ result[1] }}</span>
-                  <span v-if="result[4]" class="wiki-link">
-                    &nbsp;&nbsp;<a :href="result[4]" target="_blank">
+                  <span class="artist-name">{{ $config.artist.name }}&nbsp;</span><br />
+                  <span v-if="$config.artist.wiki_link != 'NA'" class="artist-job">{{ $config.artist.description }}</span>
+                  <span v-if="$config.artist.wiki_link != 'NA'" class="wiki-link">
+                    &nbsp;&nbsp;<a :href="$config.artist.wiki_link" target="_blank">
                       <b-icon icon="info-circle-fill" aria-hidden="true"></b-icon> Wikipedia
                     </a>
                   </span>
-                  <span @mouseover="hover = true" @mouseleave="hover = false" @click="goToAristRadio(result[0])" class="radio-link"><a>&nbsp;&nbsp;
+                  <span @mouseover="hover = true" @mouseleave="hover = false" @click="goToAristRadio($config.artist.id)" class="radio-link"><a>&nbsp;&nbsp;
                       <img v-if="hover" :src="radioWhiteUrl" class="radio-link-img" height="14px" />
                       <img v-else :src="radioGrayURL" class="radio-link-img" height="14px" />
                       &nbsp;Radio</a>
                   </span>
                   <span class="radio-link" @mouseover="hover2 = true" @mouseleave="hover2 = false">&nbsp;
-                    <a :href="spotifyUrl" target="_blank">
+                    <a :href="'https://open.spotify.com/artist/' + $config.artist.id" target="_blank">
                       <img v-if="hover2" :src="spotifyWhiteUrl" class="spotify-link-img" height="14px" />
                       <img v-else :src="spotifyGrayURL" class="spotify-link-img" height="14px" />
                       Spotify</a>
@@ -79,7 +79,7 @@
                         <b-avatar size="40px" :src="artist.img"></b-avatar>
                       </td>
                       <td class="info-td">
-                        <a class="artist-link" @click="artistSearch(artist.name)">{{ artist.name }}</a><br />
+                        <a class="artist-link" @click="artistSearch(artist)">{{ artist.name }}</a><br />
                         <span class="born-died">{{ artist.description }}</span>
                       </td>
                     </tr>
@@ -97,7 +97,6 @@
 
 <script>
 import { eventBus, staticURL } from "@/main.js";
-import { getArtistDetails } from "@/HelperFunctions.js"
 import axios from "axios";
 
 export default {
@@ -109,10 +108,7 @@ export default {
       spotifyWhiteUrl: staticURL + "Spotify_Icon_RGB_White.png",
       hover: false,
       hover2: false,
-      wikiLink: null,
-      query: "",
       loading: false,
-      results: [],
       img: "",
       spotifyUrl: "",
       omniSearchInput: null,
@@ -133,26 +129,6 @@ export default {
       ],
 
     };
-  },
-  computed: {
-    apiKeyGot() {
-      return this.$auth.knowledgeKey;
-    },
-  },
-  searchInput() {
-    return this.omniSearchInput;
-  },
-  watch: {
-    apiKeyGot() {
-      if (this.$route.query.artist) {
-        this.getArtistPicAndJob(this.$route.query.artist);
-      }
-    },
-    searchInput(searchInput) {
-      if (searchInput == "") {
-        this.viewSearchResults = false;
-      }
-    },
   },
   methods: {
     omniSearch() {
@@ -184,21 +160,25 @@ export default {
           this.ajax_waiting = false;
         });
     },
+    getArtist(artistId) {
+      const path = "api/getperformer?id=" + artistId;
+
+      axios
+        .get(path)
+        .then((res) => {
+          this.$config.artist = res.data.artist;
+          this.spotifyUrl = 'https://open.spotify.com/artist/' + res.data.artist.id;
+          this.omniSearchInput = res.data.artist.name;
+          eventBus.$emit("requestComposersForArtist", res.data.artist.id);
+        })
+        .catch((error) => {
+          // eslint-disable-next-line
+          console.error(error);
+        });
+    },
     onInputFocus() {
       this.omniSearchInput = "";
       this.resetField()
-    },
-    getArtistPicAndJob(artistName) { // NEED TO FIX!
-      this.results = []
-      for (let i = 0; i < this.artists.length; i++) {
-        let artist = this.artists[i];
-        if (artist.name == artistName) {
-          this.spotifyUrl = 'https://open.spotify.com/artist/' + artist.id;
-          this.img = artist.img
-          getArtistDetails(artist, this.results, this.$auth.knowledgeKey);
-          break;
-        }
-      }
     },
     capitalize(string) {
       let capitalized = string[0].toUpperCase() + string.substring(1);
@@ -206,27 +186,27 @@ export default {
     },
     artistSearch(artist) {
       this.viewSearchResults = false;
-      this.getArtistPicAndJob(artist);
-      eventBus.$emit("requestComposersForArtist", artist);
+      this.setArtist(artist);
     },
     resetField(input) {
       if (!input) {
         this.$router.push("/performers");
         eventBus.$emit("clearPerformers");
-        this.results = [];
+        this.$config.artist = null;
         this.firstLoad = true;
       }
     },
     albumFilter() {
-      eventBus.$emit("requestAlbums", this.$config.work, this.omniSearchInput, this.albumSortField.value);
+      eventBus.$emit("requestAlbums", this.$config.work, this.$config.artist.name, this.albumSortField.value);
     },
     resetAlbumSort() {
       this.albumSortField = { value: "recommended", text: "Recommended sorting" };
     },
-    setArtistField(artist) {
-      this.getArtistPicAndJob(artist);
-      this.$router.push("/performers?artist=" + artist);
-      this.omniSearchInput = artist;
+    setArtist(artist) {
+      this.$config.artist = artist;
+      this.omniSearchInput = artist.name;
+      this.$router.push("/performers?artist=" + artist.id);
+      eventBus.$emit("requestComposersForArtist", artist.id);
     },
     albumSize() {
       this.$config.albumSize = this.albumSizeField.value === "large" ? "large" : "small";
@@ -239,12 +219,10 @@ export default {
   created() {
     this.$config.artist = null;
     if (this.$route.query.artist) {
-      this.artistSearch(this.$route.query.artist);
-      this.omniSearchInput = this.$route.query.artist;
-      this.$config.artist = this.$route.query.artist;
+      this.getArtist(this.$route.query.artist);
     }
     eventBus.$on("fireArtistAlbums", this.resetAlbumSort);
-    eventBus.$on("requestComposersForArtist", this.setArtistField);
+    eventBus.$on("requestPerformer", this.setArtist);
   },
   mounted() {
     const inputForm = document.getElementById("performer-search-form");
@@ -264,7 +242,7 @@ export default {
   },
   beforeDestroy() {
     eventBus.$off("fireArtistAlbums", this.resetAlbumSort);
-    eventBus.$off("requestComposersForArtist", this.setArtistField);
+    eventBus.$off("requestPerformer", this.setArtist);
   },
 };
 </script>
