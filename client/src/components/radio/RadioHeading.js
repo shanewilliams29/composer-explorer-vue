@@ -205,11 +205,6 @@ export const radioMixin = {
       this.makeComposerDropdown(this.$lists.composerList);
     }
     this.$config.genre = null;
-    if (this.$route.query.artist) {
-      //this.$config.artist = this.$route.query.artist;
-    } else {
-      this.$config.artist = null;
-    }
     this.$view.radioPlaying = false;
     this.$view.enableRadio = false;
     this.$view.enableExport = false;
@@ -217,9 +212,14 @@ export const radioMixin = {
     
     eventBus.$on("sendGenreListToRadio", this.makeGenreList);
   },
-  mounted() {
+  mounted(){
     if (this.$route.query.artist) {
-      this.radioTypeField = { value: "performer", text: "Performer Radio" };
+      this.radioTypeField = { value: "performer", text: "Performer Radio" }
+    }
+  },
+  beforeCreate() {
+    // Doesn't work reliably when coming from performers page or refreshing artist mode
+    if (this.$route.query.artist) {
       const path = "api/getperformer?id=" + this.$route.query.artist;
       axios
         .get(path)
@@ -231,6 +231,8 @@ export const radioMixin = {
         .catch((error) => {
           console.error(error);
         });
+    } else {
+      this.$config.artist = null;
     }
   },
   beforeDestroy() {
