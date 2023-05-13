@@ -1458,49 +1458,70 @@ def get_artistlist():
     return response
 
 
-@bp.route('/api/topartists', methods=['GET'])  # used to build json lists for performance view
-def get_topartists():
+@bp.route('/api/topartists/<artist_type>', methods=['GET'])  # used to build json lists for performance view
+def get_topartists(artist_type):
 
     def get_artists():
-        return db.session.query(Performers.name, Performers.img, Performers.description, func.count(Performers.id).label('total'))\
-            .join(performer_albums)\
-            .filter(or_(Performers.hidden == False, Performers.hidden == None))\
-            .filter(or_(Performers.description.ilike('%{}%'.format('orchestra')),
-                        Performers.description.ilike('%{}%'.format('quartet'))))\
-            .group_by(Performers.id).order_by(text('total DESC')).limit(100).all()
+        if artist_type == "orchestras":
+            return db.session.query(Performers.id, Performers.name, Performers.img, Performers.description, Performers.wiki_link, func.count(Performers.id).label('total'))\
+                .join(performer_albums)\
+                .filter(or_(Performers.hidden == False, Performers.hidden == None))\
+                .filter(or_(Performers.description.ilike('%{}%'.format('orchestra')),
+                            Performers.description.ilike('%{}%'.format('quartet'))))\
+                .group_by(Performers.id).order_by(text('total DESC')).limit(100).all()
+
+        if artist_type == "conductors":
+            return db.session.query(Performers.id, Performers.name, Performers.img, Performers.description, Performers.wiki_link, func.count(Performers.id).label('total'))\
+                .join(performer_albums)\
+                .filter(or_(Performers.hidden == False, Performers.hidden == None))\
+                .filter(Performers.description.ilike('%{}%'.format('conductor')))\
+                .group_by(Performers.id).order_by(text('total DESC')).limit(100).all()
+        
+        if artist_type == "soloists":
+            return db.session.query(Performers.id, Performers.name, Performers.img, Performers.description, Performers.wiki_link, func.count(Performers.id).label('total'))\
+                .join(performer_albums)\
+                .filter(or_(Performers.hidden == False, Performers.hidden == None))\
+                .filter(or_(Performers.description.ilike('%{}%'.format('pianist')),
+                            Performers.description.ilike('%{}%'.format('violinist'))))\
+                .group_by(Performers.id).order_by(text('total DESC')).limit(100).all()
+        if artist_type == "vocalists":
+            return db.session.query(Performers.id, Performers.name, Performers.img, Performers.description, Performers.wiki_link, func.count(Performers.id).label('total'))\
+                .join(performer_albums)\
+                .filter(or_(Performers.hidden == False, Performers.hidden == None))\
+                .filter(or_(Performers.description.ilike('%{}%'.format('singer')),
+                            Performers.description.ilike('%{}%'.format('bass')),
+                            Performers.description.ilike('%{}%'.format('baritone')),
+                            Performers.description.ilike('%{}%'.format('tenor')),
+                            Performers.description.ilike('%{}%'.format('mezzo')),
+                            Performers.description.ilike('%{}%'.format('soprano')),
+                            Performers.description.ilike('%{}%'.format('vocalist'))))\
+                .group_by(Performers.id).order_by(text('total DESC')).limit(100).all()
 
     def get_composers():
         return db.session.query(ComposerList.name_full).all()
 
-    def is_excluded_artist(artist, composer_list, exclude_list):
+    def is_excluded_artist(artist, composer_list):
         if artist in composer_list:
             return True
-        for item in exclude_list:
-            if item in artist.lower():
-                return True
         return False
 
-    def is_included_description(desc, include_list):
-        for item in include_list:
-            if item in desc.lower():
-                return True
-        return False
-
-    def create_artist_list(artists, composer_list, _list):
+    def create_artist_list(artists, composer_list):
         artist_list = []
-        for (artist, img, desc, count) in artists:
-            if not is_excluded_artist(artist, composer_list, _list):
-                item = [artist, img, desc, count]
+        for (_id, name, img, desc, wiki_link, count) in artists:
+            if not is_excluded_artist(name, composer_list):
+                item = {}
+                item['id'] = _id
+                item['name'] = name
+                item['img'] = img
+                item['description'] = desc
+                item['wiki_link'] = wiki_link
                 artist_list.append(item)
         return artist_list
 
     artists = get_artists()
     composers = get_composers()
     composer_list = [composer for (composer,) in composers]
-
-    exclude_list = ['baroque', 'augsburger', 'antiqua', 'milano', 'quartet', 'beethoven', 'carl philipp emanuel bach', 'orchest', 'philharm', 'symphony', 'concert', 'chamber', 'anonymous', 'academy', 'staats', 'consort', 'chopin', 'mozart', 'symphoniker', 'covent garden', 'choir', 'akademie', 'stuttgart', 'llscher']
-    include_list = ['singer', 'bass', 'baritone', 'tenor', 'mezzo', 'soprano', 'vocalist']
     
-    artist_list = create_artist_list(artists, composer_list, include_list)
+    artist_list = create_artist_list(artists, composer_list)
     response = jsonify(artist_list)
     return response

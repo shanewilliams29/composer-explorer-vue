@@ -203,7 +203,6 @@ export default {
       this.albumSortField = { value: "recommended", text: "Recommended sorting" };
     },
     setArtist(artist) {
-      console.log(artist);
       this.$config.artist = artist;
       this.omniSearchInput = artist.name;
       this.$router.push("/performers?artist=" + artist.id);

@@ -17,7 +17,7 @@
     <b-row>
       <b-col>
         <div class="grid-container">
-          <div class="grid-item" v-for="artist in conductors" :key="artist[0]">
+          <div class="grid-item" v-for="artist in conductors" :key="artist.id">
             <b-card class="album-info-card shadow-sm">
               <b-card-body class="card-body">
                 <b-card-text class="info-card-text">
@@ -25,11 +25,11 @@
                     <table>
                       <tr>
                         <td>
-                          <b-avatar size="56px" :src="artist[1]"></b-avatar>
+                          <b-avatar size="56px" :src="artist.img"></b-avatar>
                         </td>
                         <td class="info-td">
-                          <a class="artist-name" @click="wordClick(artist[0])">{{ artist[0] }}</a><br />
-                          <span v-if="artist[2] !== 'NA'" class="born-died">{{artist[2]}}<br></span>
+                          <a class="artist-name" @click="wordClick(artist)">{{ artist.name }}</a><br />
+                          <span v-if="artist.description !== 'NA'" class="born-died">{{artist.description}}<br></span>
                         </td>
                       </tr>
                     </table>
@@ -42,7 +42,7 @@
       </b-col>
       <b-col>
         <div class="grid-container">
-          <div class="grid-item" v-for="artist in orchestras" :key="artist[0]">
+          <div class="grid-item" v-for="artist in groups" :key="artist.id">
             <b-card class="album-info-card shadow-sm">
               <b-card-body class="card-body">
                 <b-card-text class="info-card-text">
@@ -50,11 +50,11 @@
                     <table>
                       <tr>
                         <td>
-                          <b-avatar size="56px" :src="artist[1]"></b-avatar>
+                          <b-avatar size="56px" :src="artist.img"></b-avatar>
                         </td>
                         <td class="info-td">
-                          <a class="artist-name" @click="wordClick(artist[0])">{{ artist[0] }}</a><br />
-                          <span v-if="artist[2] !== 'NA'" class="born-died">{{artist[2]}}<br></span>
+                          <a class="artist-name" @click="wordClick(artist)">{{ artist.name }}</a><br />
+                          <span v-if="artist.description !== 'NA'" class="born-died">{{artist.description}}<br></span>
                         </td>
                       </tr>
                     </table>
@@ -67,7 +67,7 @@
       </b-col>
       <b-col>
         <div class="grid-container">
-          <div class="grid-item" v-for="artist in pianists" :key="artist[0]">
+          <div class="grid-item" v-for="artist in soloists" :key="artist.id">
             <b-card class="album-info-card shadow-sm">
               <b-card-body class="card-body">
                 <b-card-text class="info-card-text">
@@ -75,11 +75,11 @@
                     <table>
                       <tr>
                         <td>
-                          <b-avatar size="56px" :src="artist[1]"></b-avatar>
+                          <b-avatar size="56px" :src="artist.img"></b-avatar>
                         </td>
                         <td class="info-td">
-                          <a class="artist-name" @click="wordClick(artist[0])">{{ artist[0] }}</a><br />
-                          <span v-if="artist[2] !== 'NA'" class="born-died">{{artist[2]}}<br></span>
+                          <a class="artist-name" @click="wordClick(artist)">{{ artist.name }}</a><br />
+                          <span v-if="artist.description !== 'NA'" class="born-died">{{artist.description}}<br></span>
                         </td>
                       </tr>
                     </table>
@@ -92,7 +92,7 @@
       </b-col>
       <b-col>
         <div class="grid-container">
-          <div class="grid-item" v-for="artist in singers" :key="artist[0]">
+          <div class="grid-item" v-for="artist in vocalists" :key="artist.id">
             <b-card class="album-info-card shadow-sm">
               <b-card-body class="card-body">
                 <b-card-text class="info-card-text">
@@ -100,11 +100,11 @@
                     <table>
                       <tr>
                         <td>
-                          <b-avatar size="56px" :src="artist[1]"></b-avatar>
+                          <b-avatar size="56px" :src="artist.img"></b-avatar>
                         </td>
                         <td class="info-td">
-                          <a class="artist-name" @click="wordClick(artist[0])">{{ artist[0] }}</a><br />
-                          <span v-if="artist[2] !== 'NA'" class="born-died">{{artist[2]}}<br></span>
+                          <a class="artist-name" @click="wordClick(artist)">{{ artist.name }}</a><br />
+                          <span v-if="artist.description !== 'NA'" class="born-died">{{artist.description}}<br></span>
                         </td>
                       </tr>
                     </table>
@@ -141,16 +141,16 @@ export default {
     toK(num){
       return num.toString().slice(0, -3) + "k";
     },
-    wordClick(word){
-      eventBus.$emit('requestComposersForArtist', word);
+    wordClick(artist){
+      eventBus.$emit("requestPerformer", artist);
     }
   },
   created() {
     let n = 100;
     this.conductors = this.shuffleArray(require('@/assets/topconductors.json').slice(0, n));
-    this.orchestras = this.shuffleArray(require('@/assets/toporchestras.json').slice(0, n));
-    this.pianists = this.shuffleArray(require('@/assets/toppianists.json').slice(0, n));
-    this.singers = this.shuffleArray(require('@/assets/topsingers.json')).slice(0, n);
+    this.groups = this.shuffleArray(require('@/assets/topgroups.json').slice(0, n));
+    this.soloists = this.shuffleArray(require('@/assets/topsoloists.json').slice(0, n));
+    this.vocalists = this.shuffleArray(require('@/assets/topvocalists.json')).slice(0, n);
   },
 }
 </script>
