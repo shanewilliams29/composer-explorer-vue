@@ -1,695 +1,695 @@
 [
   {
-    "id": "0vBafEFOLXtq5mZuhMgsyL", 
-    "name": "Christopher Hogwood", 
-    "img": "https://i.scdn.co/image/bab910fbd10b078f85a0c7f7c0b5108b00dc8c4d", 
-    "description": "Conductor", 
+    "id": "0vBafEFOLXtq5mZuhMgsyL",
+    "name": "Christopher Hogwood",
+    "img": "https://i.scdn.co/image/bab910fbd10b078f85a0c7f7c0b5108b00dc8c4d",
+    "description": "Conductor",
     "wiki_link": "https://en.wikipedia.org/wiki/Christopher_Hogwood"
-  }, 
+  },
   {
-    "id": "5zCaQxjl110XTrm4LQ1CxY", 
-    "name": "Herbert von Karajan", 
-    "img": "https://i.scdn.co/image/ab6761610000e5ebf67fde1740e91a88445d5bdd", 
-    "description": "Austrian conductor", 
+    "id": "5zCaQxjl110XTrm4LQ1CxY",
+    "name": "Herbert von Karajan",
+    "img": "https://i.scdn.co/image/ab6761610000e5ebf67fde1740e91a88445d5bdd",
+    "description": "Austrian conductor",
     "wiki_link": "https://en.wikipedia.org/wiki/Herbert_von_Karajan"
-  }, 
+  },
   {
-    "id": "6HclTVD03WSY6GUpN16BkP", 
-    "name": "Claudio Abbado", 
-    "img": "https://i.scdn.co/image/bc4cad090275374d9276721974ab23eb61e5fe66", 
-    "description": "Italian conductor", 
+    "id": "6HclTVD03WSY6GUpN16BkP",
+    "name": "Claudio Abbado",
+    "img": "https://i.scdn.co/image/bc4cad090275374d9276721974ab23eb61e5fe66",
+    "description": "Italian conductor",
     "wiki_link": "https://en.wikipedia.org/wiki/Claudio_Abbado"
-  }, 
+  },
   {
-    "id": "5UHZvYJA0aPcJSLYkYAeps", 
-    "name": "Neeme J\u00e4rvi", 
-    "img": "https://i.scdn.co/image/126dce1aa39c2fd8b728fd9bfa94dbdffe773ce5", 
-    "description": "Estonian-American conductor", 
+    "id": "5UHZvYJA0aPcJSLYkYAeps",
+    "name": "Neeme J\u00e4rvi",
+    "img": "https://i.scdn.co/image/126dce1aa39c2fd8b728fd9bfa94dbdffe773ce5",
+    "description": "Estonian-American conductor",
     "wiki_link": "https://en.wikipedia.org/wiki/Neeme_J%C3%A4rvi"
-  }, 
+  },
   {
-    "id": "3fyr5uksidSlLzsUjRIz5A", 
-    "name": "Karl B\u00f6hm", 
-    "img": "https://i.scdn.co/image/08253b9b73e3b9b98487f74f06a456c5ed28273e", 
-    "description": "Austrian conductor", 
-    "wiki_link": "https://en.wikipedia.org/wiki/Karl_B%C3%B6hm"
-  }, 
-  {
-    "id": "1qIRoGEKXINqrCx5N1engi", 
-    "name": "John Eliot Gardiner", 
-    "img": "https://i.scdn.co/image/48524e78bab6185ab73bca33bf6313070aea05df", 
-    "description": "Conductor", 
-    "wiki_link": "https://en.wikipedia.org/wiki/John_Eliot_Gardiner"
-  }, 
-  {
-    "id": "4E2Rqf4KfXgR2aVt8FvIkh", 
-    "name": "Monica Huggett", 
-    "img": "https://i.scdn.co/image/9dc609b5d5da8ad7137914b1c22ceade70a12359", 
-    "description": "British conductor", 
-    "wiki_link": "https://en.wikipedia.org/wiki/Monica_Huggett"
-  }, 
-  {
-    "id": "7Fu8GId2mQkNzqDbZbcDWM", 
-    "name": "Ton Koopman", 
-    "img": "https://i.scdn.co/image/b662fe57c28a9872f685edaed68ac399aa349e13", 
-    "description": "Dutch conductor", 
-    "wiki_link": "https://en.wikipedia.org/wiki/Ton_Koopman"
-  }, 
-  {
-    "id": "0dicUFoK5LIbqu6OoHu8VH", 
-    "name": "Sir Georg Solti", 
-    "img": "https://i.scdn.co/image/ab6761610000e5ebb5e6e8f4576eff760d58446d", 
-    "description": "Hungarian-British conductor", 
-    "wiki_link": "https://en.wikipedia.org/wiki/Georg_Solti"
-  }, 
-  {
-    "id": "3iamDPaou6RYgX0C43Qm6j", 
-    "name": "Karl Richter", 
-    "img": "https://i.scdn.co/image/39e753816892062616df51ce29d475b670d882a8", 
-    "description": "German conductor", 
-    "wiki_link": "https://en.wikipedia.org/wiki/Karl_Richter_(conductor)"
-  }, 
-  {
-    "id": "0Ku5VBNL7cfGXRhp2BxXEQ", 
-    "name": "Charles Dutoit", 
-    "img": "https://i.scdn.co/image/005fcb121f6b97637c1fb438bcc616e5e4833091", 
-    "description": "Swiss conductor", 
-    "wiki_link": "https://en.wikipedia.org/wiki/Charles_Dutoit"
-  }, 
-  {
-    "id": "5TwA5VjT0UxdrtnEWT9saC", 
-    "name": "Helmuth Rilling", 
-    "img": "https://i.scdn.co/image/78fd374b92229dd49b4830fefa23a15228930ba4", 
-    "description": "German conductor", 
+    "id": "5TwA5VjT0UxdrtnEWT9saC",
+    "name": "Helmuth Rilling",
+    "img": "https://i.scdn.co/image/78fd374b92229dd49b4830fefa23a15228930ba4",
+    "description": "German conductor",
     "wiki_link": "https://en.wikipedia.org/wiki/Helmuth_Rilling"
-  }, 
+  },
   {
-    "id": "0TrG2LSot4KhaXqdf5K2zE", 
-    "name": "Sir Colin Davis", 
-    "img": "https://i.scdn.co/image/ab6761610000e5ebee243800f422e8001f735abd", 
-    "description": "English conductor", 
+    "id": "3fyr5uksidSlLzsUjRIz5A",
+    "name": "Karl B\u00f6hm",
+    "img": "https://i.scdn.co/image/08253b9b73e3b9b98487f74f06a456c5ed28273e",
+    "description": "Austrian conductor",
+    "wiki_link": "https://en.wikipedia.org/wiki/Karl_B%C3%B6hm"
+  },
+  {
+    "id": "1qIRoGEKXINqrCx5N1engi",
+    "name": "John Eliot Gardiner",
+    "img": "https://i.scdn.co/image/48524e78bab6185ab73bca33bf6313070aea05df",
+    "description": "Conductor",
+    "wiki_link": "https://en.wikipedia.org/wiki/John_Eliot_Gardiner"
+  },
+  {
+    "id": "7Fu8GId2mQkNzqDbZbcDWM",
+    "name": "Ton Koopman",
+    "img": "https://i.scdn.co/image/b662fe57c28a9872f685edaed68ac399aa349e13",
+    "description": "Dutch conductor",
+    "wiki_link": "https://en.wikipedia.org/wiki/Ton_Koopman"
+  },
+  {
+    "id": "4E2Rqf4KfXgR2aVt8FvIkh",
+    "name": "Monica Huggett",
+    "img": "https://i.scdn.co/image/9dc609b5d5da8ad7137914b1c22ceade70a12359",
+    "description": "British conductor",
+    "wiki_link": "https://en.wikipedia.org/wiki/Monica_Huggett"
+  },
+  {
+    "id": "3iamDPaou6RYgX0C43Qm6j",
+    "name": "Karl Richter",
+    "img": "https://i.scdn.co/image/39e753816892062616df51ce29d475b670d882a8",
+    "description": "German conductor",
+    "wiki_link": "https://en.wikipedia.org/wiki/Karl_Richter_(conductor)"
+  },
+  {
+    "id": "0Ku5VBNL7cfGXRhp2BxXEQ",
+    "name": "Charles Dutoit",
+    "img": "https://i.scdn.co/image/005fcb121f6b97637c1fb438bcc616e5e4833091",
+    "description": "Swiss conductor",
+    "wiki_link": "https://en.wikipedia.org/wiki/Charles_Dutoit"
+  },
+  {
+    "id": "0dicUFoK5LIbqu6OoHu8VH",
+    "name": "Sir Georg Solti",
+    "img": "https://i.scdn.co/image/ab6761610000e5ebb5e6e8f4576eff760d58446d",
+    "description": "Hungarian-British conductor",
+    "wiki_link": "https://en.wikipedia.org/wiki/Georg_Solti"
+  },
+  {
+    "id": "0TrG2LSot4KhaXqdf5K2zE",
+    "name": "Sir Colin Davis",
+    "img": "https://i.scdn.co/image/ab6761610000e5ebee243800f422e8001f735abd",
+    "description": "English conductor",
     "wiki_link": "https://en.wikipedia.org/wiki/Colin_Davis"
-  }, 
+  },
   {
-    "id": "1JlF2VuyOSOasy8ZxCbD6C", 
-    "name": "Rafael Kubel\u00edk", 
-    "img": "https://i.scdn.co/image/b5f8697aabf57507182609514ed055071d3db3c9", 
-    "description": "Conductor", 
-    "wiki_link": "https://en.wikipedia.org/wiki/Rafael_Kubel%C3%ADk"
-  }, 
-  {
-    "id": "4tvRZdoY4H9Wgcf0w1rZqs", 
-    "name": "Wilhelm Furtw\u00e4ngler", 
-    "img": "https://i.scdn.co/image/b895f114b566ec610ca7d0ed3be5c0ede687678f", 
-    "description": "German conductor", 
+    "id": "4tvRZdoY4H9Wgcf0w1rZqs",
+    "name": "Wilhelm Furtw\u00e4ngler",
+    "img": "https://i.scdn.co/image/b895f114b566ec610ca7d0ed3be5c0ede687678f",
+    "description": "German conductor",
     "wiki_link": "https://en.wikipedia.org/wiki/Wilhelm_Furtw%C3%A4ngler"
-  }, 
+  },
   {
-    "id": "0atCvjK2GL6ezQFGOQOYQo", 
-    "name": "Seiji Ozawa", 
-    "img": "https://i.scdn.co/image/41cdd76a828a566abed0fe325352aff90a0f8d3c", 
-    "description": "Japanese conductor", 
+    "id": "0atCvjK2GL6ezQFGOQOYQo",
+    "name": "Seiji Ozawa",
+    "img": "https://i.scdn.co/image/41cdd76a828a566abed0fe325352aff90a0f8d3c",
+    "description": "Japanese conductor",
     "wiki_link": "https://en.wikipedia.org/wiki/Seiji_Ozawa"
-  }, 
+  },
   {
-    "id": "0BjUTtTzgWxoQkbGjz4NmZ", 
-    "name": "Ferenc Fricsay", 
-    "img": "https://i.scdn.co/image/7dbaf4b1209071c5161e48db6154a9e52b89b4da", 
-    "description": "Hungarian conductor", 
+    "id": "1JlF2VuyOSOasy8ZxCbD6C",
+    "name": "Rafael Kubel\u00edk",
+    "img": "https://i.scdn.co/image/b5f8697aabf57507182609514ed055071d3db3c9",
+    "description": "Conductor",
+    "wiki_link": "https://en.wikipedia.org/wiki/Rafael_Kubel%C3%ADk"
+  },
+  {
+    "id": "0BjUTtTzgWxoQkbGjz4NmZ",
+    "name": "Ferenc Fricsay",
+    "img": "https://i.scdn.co/image/7dbaf4b1209071c5161e48db6154a9e52b89b4da",
+    "description": "Hungarian conductor",
     "wiki_link": "https://en.wikipedia.org/wiki/Ferenc_Fricsay"
-  }, 
+  },
   {
-    "id": "13F9LNBUeRx3FYLr96Bge1", 
-    "name": "Bernard Haitink", 
-    "img": "https://i.scdn.co/image/d12c1361b4b3aaf70b3ec68cc49e25322e1f4091", 
-    "description": "Dutch conductor", 
-    "wiki_link": "https://en.wikipedia.org/wiki/Bernard_Haitink"
-  }, 
-  {
-    "id": "4qFQgEF1rg6a9WvJM0MQIa", 
-    "name": "James Levine", 
-    "img": "https://i.scdn.co/image/07f25551ca228cb0d66d65eb5091b92417685188", 
-    "description": "American conductor", 
-    "wiki_link": "https://en.wikipedia.org/wiki/James_Levine"
-  }, 
-  {
-    "id": "6aZcT9sJMlL0yUOrEWa74E", 
-    "name": "Reinhard Goebel", 
-    "img": "https://i.scdn.co/image/4d9b86048f0822d4194ef4d85e8c777d5fd1c4a4", 
-    "description": "German conductor", 
+    "id": "6aZcT9sJMlL0yUOrEWa74E",
+    "name": "Reinhard Goebel",
+    "img": "https://i.scdn.co/image/4d9b86048f0822d4194ef4d85e8c777d5fd1c4a4",
+    "description": "German conductor",
     "wiki_link": "https://en.wikipedia.org/wiki/Reinhard_Goebel"
-  }, 
+  },
   {
-    "id": "0AeOzXbHJu8q2xqILEOLEO", 
-    "name": "Nikolaus Harnoncourt", 
-    "img": "https://i.scdn.co/image/e480b555e90666003864b23cd532db0d0603aa55", 
-    "description": "Austrian conductor", 
+    "id": "13F9LNBUeRx3FYLr96Bge1",
+    "name": "Bernard Haitink",
+    "img": "https://i.scdn.co/image/d12c1361b4b3aaf70b3ec68cc49e25322e1f4091",
+    "description": "Dutch conductor",
+    "wiki_link": "https://en.wikipedia.org/wiki/Bernard_Haitink"
+  },
+  {
+    "id": "4qFQgEF1rg6a9WvJM0MQIa",
+    "name": "James Levine",
+    "img": "https://i.scdn.co/image/07f25551ca228cb0d66d65eb5091b92417685188",
+    "description": "American conductor",
+    "wiki_link": "https://en.wikipedia.org/wiki/James_Levine"
+  },
+  {
+    "id": "0AeOzXbHJu8q2xqILEOLEO",
+    "name": "Nikolaus Harnoncourt",
+    "img": "https://i.scdn.co/image/e480b555e90666003864b23cd532db0d0603aa55",
+    "description": "Austrian conductor",
     "wiki_link": "https://en.wikipedia.org/wiki/Nikolaus_Harnoncourt"
-  }, 
+  },
   {
-    "id": "3EQvBmWlfyaRLGDuVfKmve", 
-    "name": "Lorin Maazel", 
-    "img": "https://i.scdn.co/image/6ed41d89bf284c90c9f5ac7e995abdb1d2e858f5", 
-    "description": "American conductor", 
-    "wiki_link": "https://en.wikipedia.org/wiki/Lorin_Maazel"
-  }, 
-  {
-    "id": "3VmMw22C6Yt9rM2T8tcZKU", 
-    "name": "Andrea Marcon", 
-    "img": "https://i.scdn.co/image/bee3a687d23e7d2aba680ef8caf3e8c9217d43d9", 
-    "description": "Italian conductor", 
-    "wiki_link": "https://en.wikipedia.org/wiki/Andrea_Marcon"
-  }, 
-  {
-    "id": "7silW8RiEOoLBgAg5JBCL1", 
-    "name": "Riccardo Muti", 
-    "img": "https://i.scdn.co/image/d013a9936db457f5336b03c7b3611ce7420c7cbb", 
-    "description": "Italian conductor", 
-    "wiki_link": "https://en.wikipedia.org/wiki/Riccardo_Muti"
-  }, 
-  {
-    "id": "3YjLvhwK5zw7N5S5oX0DVl", 
-    "name": "Sir Adrian Boult", 
-    "img": "https://i.scdn.co/image/64eec4a544377a02dbd400b5437a7bdfa3bf6505", 
-    "description": "English conductor", 
-    "wiki_link": "https://en.wikipedia.org/wiki/Adrian_Boult"
-  }, 
-  {
-    "id": "4Kjr1MPMUfuH3QKXtAljNy", 
-    "name": "Riccardo Chailly", 
-    "img": "https://i.scdn.co/image/303bf972c8e1d3e0766dc099d91be0a802f51988", 
-    "description": "Italian conductor", 
-    "wiki_link": "https://en.wikipedia.org/wiki/Riccardo_Chailly"
-  }, 
-  {
-    "id": "3naY4Tq98GRh9K8xOsINyv", 
-    "name": "Eugene Ormandy", 
-    "img": "https://i.scdn.co/image/95d899a772ee7b2da28479a980bced44f8c98811", 
-    "description": "Hungarian-American conductor", 
+    "id": "3naY4Tq98GRh9K8xOsINyv",
+    "name": "Eugene Ormandy",
+    "img": "https://i.scdn.co/image/95d899a772ee7b2da28479a980bced44f8c98811",
+    "description": "Hungarian-American conductor",
     "wiki_link": "https://en.wikipedia.org/wiki/Eugene_Ormandy"
-  }, 
+  },
   {
-    "id": "37Lr1lIJy824MQIENRUnZn", 
-    "name": "Kurt Masur", 
-    "img": "https://i.scdn.co/image/a10aff1e20c688bb81c99e3e40b5c1619e9dbccd", 
-    "description": "German conductor", 
+    "id": "3YjLvhwK5zw7N5S5oX0DVl",
+    "name": "Sir Adrian Boult",
+    "img": "https://i.scdn.co/image/64eec4a544377a02dbd400b5437a7bdfa3bf6505",
+    "description": "English conductor",
+    "wiki_link": "https://en.wikipedia.org/wiki/Adrian_Boult"
+  },
+  {
+    "id": "7silW8RiEOoLBgAg5JBCL1",
+    "name": "Riccardo Muti",
+    "img": "https://i.scdn.co/image/d013a9936db457f5336b03c7b3611ce7420c7cbb",
+    "description": "Italian conductor",
+    "wiki_link": "https://en.wikipedia.org/wiki/Riccardo_Muti"
+  },
+  {
+    "id": "3VmMw22C6Yt9rM2T8tcZKU",
+    "name": "Andrea Marcon",
+    "img": "https://i.scdn.co/image/bee3a687d23e7d2aba680ef8caf3e8c9217d43d9",
+    "description": "Italian conductor",
+    "wiki_link": "https://en.wikipedia.org/wiki/Andrea_Marcon"
+  },
+  {
+    "id": "3EQvBmWlfyaRLGDuVfKmve",
+    "name": "Lorin Maazel",
+    "img": "https://i.scdn.co/image/6ed41d89bf284c90c9f5ac7e995abdb1d2e858f5",
+    "description": "American conductor",
+    "wiki_link": "https://en.wikipedia.org/wiki/Lorin_Maazel"
+  },
+  {
+    "id": "4Kjr1MPMUfuH3QKXtAljNy",
+    "name": "Riccardo Chailly",
+    "img": "https://i.scdn.co/image/303bf972c8e1d3e0766dc099d91be0a802f51988",
+    "description": "Italian conductor",
+    "wiki_link": "https://en.wikipedia.org/wiki/Riccardo_Chailly"
+  },
+  {
+    "id": "37Lr1lIJy824MQIENRUnZn",
+    "name": "Kurt Masur",
+    "img": "https://i.scdn.co/image/a10aff1e20c688bb81c99e3e40b5c1619e9dbccd",
+    "description": "German conductor",
     "wiki_link": "https://en.wikipedia.org/wiki/Kurt_Masur"
-  }, 
+  },
   {
-    "id": "7pXrinMxBCkgrmVWMqRsAH", 
-    "name": "Daniel Reuss", 
-    "img": "https://i.scdn.co/image/92140f4b6b10a26b29cd4245eca3df397df577a9", 
-    "description": "Dutch conductor", 
-    "wiki_link": "https://en.wikipedia.org/wiki/Daniel_Reuss"
-  }, 
-  {
-    "id": "2CFaOiHKik5FgNGzZJ08sx", 
-    "name": "George Szell", 
-    "img": "https://i.scdn.co/image/f9c56547cabf19ebd1aad33741252861ce5ed1b4", 
-    "description": "Hungarian-American conductor", 
+    "id": "2CFaOiHKik5FgNGzZJ08sx",
+    "name": "George Szell",
+    "img": "https://i.scdn.co/image/f9c56547cabf19ebd1aad33741252861ce5ed1b4",
+    "description": "Hungarian-American conductor",
     "wiki_link": "https://en.wikipedia.org/wiki/George_Szell"
-  }, 
+  },
   {
-    "id": "4GQwgdcDQwqtcHICjUNndp", 
-    "name": "Sir Simon Rattle", 
-    "img": "https://i.scdn.co/image/3460fd826c1cc058c4c4134e6c695e00dcf89fa6", 
-    "description": "Conductor", 
-    "wiki_link": "https://en.wikipedia.org/wiki/Simon_Rattle"
-  }, 
-  {
-    "id": "3FEd0qHPFOgcpfw7bCXB4x", 
-    "name": "Zubin Mehta", 
-    "img": "https://i.scdn.co/image/0cc51a2abbedf3d71cee680fe47ef093e1ce6953", 
-    "description": "Indian conductor", 
+    "id": "3FEd0qHPFOgcpfw7bCXB4x",
+    "name": "Zubin Mehta",
+    "img": "https://i.scdn.co/image/0cc51a2abbedf3d71cee680fe47ef093e1ce6953",
+    "description": "Indian conductor",
     "wiki_link": "https://en.wikipedia.org/wiki/Zubin_Mehta"
-  }, 
+  },
   {
-    "id": "0IuqAyi5CMgpuyhckrcqNs", 
-    "name": "Mariss Jansons", 
-    "img": "https://i.scdn.co/image/9a30c2f2f38b32c919631fe90be83d934d67fc29", 
-    "description": "Latvian conductor", 
+    "id": "4GQwgdcDQwqtcHICjUNndp",
+    "name": "Sir Simon Rattle",
+    "img": "https://i.scdn.co/image/3460fd826c1cc058c4c4134e6c695e00dcf89fa6",
+    "description": "Conductor",
+    "wiki_link": "https://en.wikipedia.org/wiki/Simon_Rattle"
+  },
+  {
+    "id": "7pXrinMxBCkgrmVWMqRsAH",
+    "name": "Daniel Reuss",
+    "img": "https://i.scdn.co/image/92140f4b6b10a26b29cd4245eca3df397df577a9",
+    "description": "Dutch conductor",
+    "wiki_link": "https://en.wikipedia.org/wiki/Daniel_Reuss"
+  },
+  {
+    "id": "0IuqAyi5CMgpuyhckrcqNs",
+    "name": "Mariss Jansons",
+    "img": "https://i.scdn.co/image/9a30c2f2f38b32c919631fe90be83d934d67fc29",
+    "description": "Latvian conductor",
     "wiki_link": "https://en.wikipedia.org/wiki/Mariss_Jansons"
-  }, 
+  },
   {
-    "id": "7LeEa79J3ePCT5pXKQ7Mkv", 
-    "name": "Carlo Maria Giulini", 
-    "img": "https://i.scdn.co/image/29ffc7e37f5d2fed154ca8880bd72cc4dba04f38", 
-    "description": "Italian conductor", 
-    "wiki_link": "https://en.wikipedia.org/wiki/Carlo_Maria_Giulini"
-  }, 
-  {
-    "id": "6XVxGOzn7c2rLi1GpXxm5v", 
-    "name": "Eugen Jochum", 
-    "img": "https://i.scdn.co/image/01f064498e34757d1828253881330224d89bdf04", 
-    "description": "German conductor", 
-    "wiki_link": "https://en.wikipedia.org/wiki/Eugen_Jochum"
-  }, 
-  {
-    "id": "1iyvtzGjtuQa1I5UGpzk6l", 
-    "name": "Sir Charles Mackerras", 
-    "img": "https://i.scdn.co/image/55b398d9e91c56f1a8d561c0c0adb2917bb5aefd", 
-    "description": "Australian conductor", 
+    "id": "1iyvtzGjtuQa1I5UGpzk6l",
+    "name": "Sir Charles Mackerras",
+    "img": "https://i.scdn.co/image/55b398d9e91c56f1a8d561c0c0adb2917bb5aefd",
+    "description": "Australian conductor",
     "wiki_link": "https://en.wikipedia.org/wiki/Charles_Mackerras"
-  }, 
+  },
   {
-    "id": "04kScQiBaLpLuCR1rh20Dd", 
-    "name": "Sir Thomas Beecham", 
-    "img": "https://i.scdn.co/image/276a642ef3d24a5104847c3235eebfb4f253a128", 
-    "description": "English conductor", 
-    "wiki_link": "https://en.wikipedia.org/wiki/Thomas_Beecham"
-  }, 
+    "id": "7LeEa79J3ePCT5pXKQ7Mkv",
+    "name": "Carlo Maria Giulini",
+    "img": "https://i.scdn.co/image/29ffc7e37f5d2fed154ca8880bd72cc4dba04f38",
+    "description": "Italian conductor",
+    "wiki_link": "https://en.wikipedia.org/wiki/Carlo_Maria_Giulini"
+  },
   {
-    "id": "3kBrUZAp2FVhkN5bcTu0QL", 
-    "name": "Antal Dor\u00e1ti", 
-    "img": "https://i.scdn.co/image/3828820664222256231bc97a673ca650b0a876f6", 
-    "description": "Hungarian conductor", 
-    "wiki_link": "https://en.wikipedia.org/wiki/Antal_Dor%C3%A1ti"
-  }, 
-  {
-    "id": "0VxqNUj1W2yTGKtiJ2hJE9", 
-    "name": "Pieter Jan Leusink", 
-    "img": "https://i.scdn.co/image/ab6761610000e5eb5512b9ddbdcd26e0b83031b8", 
-    "description": "Dutch conductor", 
-    "wiki_link": "https://en.wikipedia.org/wiki/Pieter_Jan_Leusink"
-  }, 
-  {
-    "id": "5X3hmAle6klG0VvstAnvyD", 
-    "name": "Sir John Barbirolli", 
-    "img": "https://i.scdn.co/image/4e960fa5cabc4da31cf211a7570ab0635d0acb9c", 
-    "description": "Conductor", 
+    "id": "5X3hmAle6klG0VvstAnvyD",
+    "name": "Sir John Barbirolli",
+    "img": "https://i.scdn.co/image/4e960fa5cabc4da31cf211a7570ab0635d0acb9c",
+    "description": "Conductor",
     "wiki_link": "https://en.wikipedia.org/wiki/John_Barbirolli"
-  }, 
+  },
   {
-    "id": "2nXNvTKpp7LSEXNUMFOd1t", 
-    "name": "Sir Roger Norrington", 
-    "img": "https://i.scdn.co/image/d3d17e60cd49541f153727b466dcc83f5cfe67c6", 
-    "description": "Conductor", 
-    "wiki_link": "https://en.wikipedia.org/wiki/Roger_Norrington"
-  }, 
-  {
-    "id": "52sDxFX9DvIxUupTy8f1yx", 
-    "name": "Leopold Stokowski", 
-    "img": "https://i.scdn.co/image/59b11bcc004e1370818c6ed0b33bb73ce2debcb1", 
-    "description": "British conductor", 
-    "wiki_link": "https://en.wikipedia.org/wiki/Leopold_Stokowski"
-  }, 
-  {
-    "id": "3d1jQ9OG2p2PW3rzzTspDY", 
-    "name": "Giuseppe Sinopoli", 
-    "img": "https://i.scdn.co/image/6e844b849e1a6fa61b459650905912488e82830a", 
-    "description": "Italian conductor", 
-    "wiki_link": "https://en.wikipedia.org/wiki/Giuseppe_Sinopoli"
-  }, 
-  {
-    "id": "0MPbAeGQj0YatrUMdY2KEr", 
-    "name": "Andrew Manze", 
-    "img": "https://i.scdn.co/image/4b0f0c2d9de9fd22ed585147930799f994275586", 
-    "description": "Conductor", 
-    "wiki_link": "https://en.wikipedia.org/wiki/Andrew_Manze"
-  }, 
-  {
-    "id": "4nsMLwMcViXAqwTLJ71y8i", 
-    "name": "Fritz Reiner", 
-    "img": "https://i.scdn.co/image/e96e13f72da98373a90653425b82ece1f205fa84", 
-    "description": "American conductor", 
+    "id": "4nsMLwMcViXAqwTLJ71y8i",
+    "name": "Fritz Reiner",
+    "img": "https://i.scdn.co/image/e96e13f72da98373a90653425b82ece1f205fa84",
+    "description": "American conductor",
     "wiki_link": "https://en.wikipedia.org/wiki/Fritz_Reiner"
-  }, 
+  },
   {
-    "id": "6yAWv145sy4X8JuioX2niU", 
-    "name": "Nicol Matt", 
-    "img": "https://i.scdn.co/image/ab67616d0000b273fffbf85dd86980696b3dd489", 
-    "description": "Conductor", 
+    "id": "3kBrUZAp2FVhkN5bcTu0QL",
+    "name": "Antal Dor\u00e1ti",
+    "img": "https://i.scdn.co/image/3828820664222256231bc97a673ca650b0a876f6",
+    "description": "Hungarian conductor",
+    "wiki_link": "https://en.wikipedia.org/wiki/Antal_Dor%C3%A1ti"
+  },
+  {
+    "id": "04kScQiBaLpLuCR1rh20Dd",
+    "name": "Sir Thomas Beecham",
+    "img": "https://i.scdn.co/image/276a642ef3d24a5104847c3235eebfb4f253a128",
+    "description": "English conductor",
+    "wiki_link": "https://en.wikipedia.org/wiki/Thomas_Beecham"
+  },
+  {
+    "id": "52sDxFX9DvIxUupTy8f1yx",
+    "name": "Leopold Stokowski",
+    "img": "https://i.scdn.co/image/59b11bcc004e1370818c6ed0b33bb73ce2debcb1",
+    "description": "British conductor",
+    "wiki_link": "https://en.wikipedia.org/wiki/Leopold_Stokowski"
+  },
+  {
+    "id": "6XVxGOzn7c2rLi1GpXxm5v",
+    "name": "Eugen Jochum",
+    "img": "https://i.scdn.co/image/01f064498e34757d1828253881330224d89bdf04",
+    "description": "German conductor",
+    "wiki_link": "https://en.wikipedia.org/wiki/Eugen_Jochum"
+  },
+  {
+    "id": "0VxqNUj1W2yTGKtiJ2hJE9",
+    "name": "Pieter Jan Leusink",
+    "img": "https://i.scdn.co/image/ab6761610000e5eb5512b9ddbdcd26e0b83031b8",
+    "description": "Dutch conductor",
+    "wiki_link": "https://en.wikipedia.org/wiki/Pieter_Jan_Leusink"
+  },
+  {
+    "id": "6yAWv145sy4X8JuioX2niU",
+    "name": "Nicol Matt",
+    "img": "https://i.scdn.co/image/ab67616d0000b273fffbf85dd86980696b3dd489",
+    "description": "Conductor",
     "wiki_link": "NA"
-  }, 
+  },
   {
-    "id": "2ljDHW0zt90SrHDwjVIGXs", 
-    "name": "Otto Klemperer", 
-    "img": "https://i.scdn.co/image/236e26c64873147b7ef57cc62a99bb172f6749e7", 
-    "description": "Conductor", 
-    "wiki_link": "https://en.wikipedia.org/wiki/Otto_Klemperer"
-  }, 
+    "id": "2nXNvTKpp7LSEXNUMFOd1t",
+    "name": "Sir Roger Norrington",
+    "img": "https://i.scdn.co/image/d3d17e60cd49541f153727b466dcc83f5cfe67c6",
+    "description": "Conductor",
+    "wiki_link": "https://en.wikipedia.org/wiki/Roger_Norrington"
+  },
   {
-    "id": "1Q9HCWdqbiui9pOsDtYkXW", 
-    "name": "Andrew Davis", 
-    "img": "https://i.scdn.co/image/65fc695d809f943611f8f2a8b864239d55d1325a", 
-    "description": "Conductor", 
+    "id": "1Q9HCWdqbiui9pOsDtYkXW",
+    "name": "Andrew Davis",
+    "img": "https://i.scdn.co/image/65fc695d809f943611f8f2a8b864239d55d1325a",
+    "description": "Conductor",
     "wiki_link": "https://en.wikipedia.org/wiki/Andrew_Davis_(conductor)"
-  }, 
+  },
   {
-    "id": "08C4m48uN8PsFIPgTS1KqK", 
-    "name": "Jeffrey Tate", 
-    "img": "https://i.scdn.co/image/762c8f308e47a78f63a7ad41fb94bd49d81252ae", 
-    "description": "English conductor", 
-    "wiki_link": "https://en.wikipedia.org/wiki/Jeffrey_Tate"
-  }, 
+    "id": "3d1jQ9OG2p2PW3rzzTspDY",
+    "name": "Giuseppe Sinopoli",
+    "img": "https://i.scdn.co/image/6e844b849e1a6fa61b459650905912488e82830a",
+    "description": "Italian conductor",
+    "wiki_link": "https://en.wikipedia.org/wiki/Giuseppe_Sinopoli"
+  },
   {
-    "id": "5sjJnaI3YhaO8KylpJk3gN", 
-    "name": "Barry Wordsworth", 
-    "img": "https://i.scdn.co/image/b5b05560a51b368cca8b3420e4e3536586720aa8", 
-    "description": "British conductor", 
-    "wiki_link": "https://en.wikipedia.org/wiki/Barry_Wordsworth"
-  }, 
+    "id": "0MPbAeGQj0YatrUMdY2KEr",
+    "name": "Andrew Manze",
+    "img": "https://i.scdn.co/image/4b0f0c2d9de9fd22ed585147930799f994275586",
+    "description": "Conductor",
+    "wiki_link": "https://en.wikipedia.org/wiki/Andrew_Manze"
+  },
   {
-    "id": "1jhnnBVAie5Cj2IngkLSRc", 
-    "name": "Frans Br\u00fcggen", 
-    "img": "https://i.scdn.co/image/c8c530c46bf5a2e0d8698f8a0b66f719cbb0f9a2", 
-    "description": "Dutch conductor", 
+    "id": "2ljDHW0zt90SrHDwjVIGXs",
+    "name": "Otto Klemperer",
+    "img": "https://i.scdn.co/image/236e26c64873147b7ef57cc62a99bb172f6749e7",
+    "description": "Conductor",
+    "wiki_link": "https://en.wikipedia.org/wiki/Otto_Klemperer"
+  },
+  {
+    "id": "1jhnnBVAie5Cj2IngkLSRc",
+    "name": "Frans Br\u00fcggen",
+    "img": "https://i.scdn.co/image/c8c530c46bf5a2e0d8698f8a0b66f719cbb0f9a2",
+    "description": "Dutch conductor",
     "wiki_link": "https://en.wikipedia.org/wiki/Frans_Br%C3%BCggen"
-  }, 
+  },
   {
-    "id": "1e8TlvBk6qegjR3fkYZ9hV", 
-    "name": "Ernest Ansermet", 
-    "img": "https://i.scdn.co/image/2f1971640a7c579ecd9ddf1fc07c9ee7c8847748", 
-    "description": "Swiss conductor", 
-    "wiki_link": "https://en.wikipedia.org/wiki/Ernest_Ansermet"
-  }, 
-  {
-    "id": "4xpgBZSojKNEQqQHXrwSXA", 
-    "name": "Arturo Toscanini", 
-    "img": "https://i.scdn.co/image/6f5304c6cb8485303f060d535d4fb0ab6e0bc321", 
-    "description": "Italian conductor", 
-    "wiki_link": "https://en.wikipedia.org/wiki/Arturo_Toscanini"
-  }, 
-  {
-    "id": "1p4YAX8Nh6LiW3uPd49oAR", 
-    "name": "Bruno Walter", 
-    "img": "https://i.scdn.co/image/229a5212582129ec1a8032d141f0935357dbee1c", 
-    "description": "Conductor", 
-    "wiki_link": "https://en.wikipedia.org/wiki/Bruno_Walter"
-  }, 
-  {
-    "id": "1nBRaXFNbBFqcFNeB1AMg2", 
-    "name": "Kirill Kondrashin", 
-    "img": "https://i.scdn.co/image/8cebd4835b3636ba74e5a4868c4cf13a66e33200", 
-    "description": "Russian conductor", 
-    "wiki_link": "https://en.wikipedia.org/wiki/Kirill_Kondrashin"
-  }, 
-  {
-    "id": "2KijWsy9IabBw2joLYQ8kn", 
-    "name": "Ferdinand Leitner", 
-    "img": "https://i.scdn.co/image/ab67616d0000b273d31f6e79a9a15db957d7b8a4", 
-    "description": "German conductor", 
-    "wiki_link": "https://en.wikipedia.org/wiki/Ferdinand_Leitner"
-  }, 
-  {
-    "id": "6JAPOSeaWl61UBRKZYgAeZ", 
-    "name": "Richard Bonynge", 
-    "img": "https://i.scdn.co/image/f95d1bbb8f9a662e1ddf1115cc34ef3daebbb49f", 
-    "description": "Australian conductor", 
-    "wiki_link": "https://en.wikipedia.org/wiki/Richard_Bonynge"
-  }, 
-  {
-    "id": "27sxIn9cqlHftnewCLqEFd", 
-    "name": "Richard Hickox", 
-    "img": "https://i.scdn.co/image/ab6761610000e5ebd14e838d9c888321b81f8415", 
-    "description": "English conductor", 
-    "wiki_link": "https://en.wikipedia.org/wiki/Richard_Hickox"
-  }, 
-  {
-    "id": "4VFBTPFWvhecBc2BWYOQkF", 
-    "name": "Wolfgang Sawallisch", 
-    "img": "https://i.scdn.co/image/17bcb1232145bf15d23b275805bed6ca4f9245cc", 
-    "description": "German conductor", 
-    "wiki_link": "https://en.wikipedia.org/wiki/Wolfgang_Sawallisch"
-  }, 
-  {
-    "id": "4HumAOOMTRnq7Vb1osyeX9", 
-    "name": "Leopold Hager", 
-    "img": "https://i.scdn.co/image/a0bb60e0d87ded34a96a5bc1aa3bf7de0d5060e2", 
-    "description": "Austrian conductor", 
-    "wiki_link": "https://en.wikipedia.org/wiki/Leopold_Hager"
-  }, 
-  {
-    "id": "5r6BbRI2QTDC9dv4rkSgCP", 
-    "name": "G\u00fcnter Wand", 
-    "img": "https://i.scdn.co/image/aff7b3db2af77cafa7bb930e569e537caf35c88e", 
-    "description": "German conductor", 
-    "wiki_link": "https://en.wikipedia.org/wiki/G%C3%BCnter_Wand"
-  }, 
-  {
-    "id": "4JZT7RXVZmP8K6zRmHhtfq", 
-    "name": "Bohdan Warchal", 
-    "img": "https://i.scdn.co/image/b05be09448e23eed86fb2eb281e58278cc4b5018", 
-    "description": "Slovak chief conductor", 
-    "wiki_link": "https://en.wikipedia.org/wiki/Bohdan_Warchal"
-  }, 
-  {
-    "id": "4zBSN7OzdsGmKIdLPzXueB", 
-    "name": "Anton Nanut", 
-    "img": "https://i.scdn.co/image/88ef43f01198a3849616097d3bf4f9654a0299dd", 
-    "description": "Slovenian conductor", 
-    "wiki_link": "https://en.wikipedia.org/wiki/Anton_Nanut"
-  }, 
-  {
-    "id": "2nhApVkD1mcbeH3ubJHiGg", 
-    "name": "Karl M\u00fcnchinger", 
-    "img": "https://i.scdn.co/image/f1151c196100d8de29322909ddd227e2325dd9e1", 
-    "description": "German conductor", 
-    "wiki_link": "https://en.wikipedia.org/wiki/Karl_M%C3%BCnchinger"
-  }, 
-  {
-    "id": "0f4gYAcahUX8MaZxWQ2PG4", 
-    "name": "Libor Pe\u0161ek", 
-    "img": "https://i.scdn.co/image/49da8f6903b5f6f56049044c4ecd9ceb78de84c0", 
-    "description": "Czech conductor", 
-    "wiki_link": "https://en.wikipedia.org/wiki/Libor_Pe%C5%A1ek"
-  }, 
-  {
-    "id": "0Do8lkxP8HHqyl7IgHjO45", 
-    "name": "Stephen Gunzenhauser", 
-    "img": "https://i.scdn.co/image/a3c2f9fda16ec40d9b1698581c9b7fa5115ee494", 
-    "description": "American conductor", 
-    "wiki_link": "https://en.wikipedia.org/wiki/Stephen_Gunzenhauser"
-  }, 
-  {
-    "id": "582DACpHBiVtsBpY3giwPB", 
-    "name": "Marc Minkowski", 
-    "img": "https://i.scdn.co/image/ab6761610000e5ebf1316da4ac388c36bb27f3a4", 
-    "description": "French conductor", 
-    "wiki_link": "https://en.wikipedia.org/wiki/Marc_Minkowski"
-  }, 
-  {
-    "id": "0xcogVKoT8y5OBIg3L0fua", 
-    "name": "Leonard Slatkin", 
-    "img": "https://i.scdn.co/image/6b82327ed38bf9786789810f6a96a555ff8693b5", 
-    "description": "American conductor", 
-    "wiki_link": "https://en.wikipedia.org/wiki/Leonard_Slatkin"
-  }, 
-  {
-    "id": "6VemLCzrmF3n1lxY3cbfKf", 
-    "name": "J\u00f6rg Faerber", 
-    "img": "https://i.scdn.co/image/050be8df02fdab63c646f4226ebd5ce5a8e9b544", 
-    "description": "German conductor", 
-    "wiki_link": "https://en.wikipedia.org/wiki/J%C3%B6rg_Faerber"
-  }, 
-  {
-    "id": "2GhXDeZqUWAqSpz7So8yUt", 
-    "name": "Osmo V\u00e4nsk\u00e4", 
-    "img": "https://i.scdn.co/image/f9a136559662e3f5d43555b704e8e424cb833926", 
-    "description": "Finnish conductor", 
-    "wiki_link": "https://en.wikipedia.org/wiki/Osmo_V%C3%A4nsk%C3%A4"
-  }, 
-  {
-    "id": "2OJaTm0rPZVyMA5k5s8vbh", 
-    "name": "Antoni Wit", 
-    "img": "https://i.scdn.co/image/c4c30d87db0970af5d775b32761d10b312b7457d", 
-    "description": "Polish conductor", 
-    "wiki_link": "https://en.wikipedia.org/wiki/Antoni_Wit"
-  }, 
-  {
-    "id": "28pP6NtZiz5wSRDVTHddyy", 
-    "name": "Stefano Molardi", 
-    "img": "https://i.scdn.co/image/ab67616d0000b2734d5eec786563a091d88cb872", 
-    "description": "Conductor", 
-    "wiki_link": "NA"
-  }, 
-  {
-    "id": "3PxVHnLJg0RwOEkKQVrs2F", 
-    "name": "Louis de Froment", 
-    "img": "https://i.scdn.co/image/2357d4c515bd019da1975c5f41ceca038b84c22b", 
-    "description": "French conductor", 
-    "wiki_link": "https://en.wikipedia.org/wiki/Louis_de_Froment"
-  }, 
-  {
-    "id": "7sjMk07ASNAAPVXoag7sGO", 
-    "name": "Gennady Rozhdestvensky", 
-    "img": "https://i.scdn.co/image/04a97db5fbead5d5d0327a1190981c35d5cd6220", 
-    "description": "Soviet conductor", 
-    "wiki_link": "https://en.wikipedia.org/wiki/Gennady_Rozhdestvensky"
-  }, 
-  {
-    "id": "68fkzPiWFDYjsI9MhNR8Bo", 
-    "name": "Eduardo Marturet", 
-    "img": "https://i.scdn.co/image/ab6761610000e5eb1d9f4dd023dfa10e26ac9e5a", 
-    "description": "Venezuelan conductor", 
-    "wiki_link": "https://en.wikipedia.org/wiki/Eduardo_Marturet"
-  }, 
-  {
-    "id": "3QEztQUVjL5FGxXuP70mJQ", 
-    "name": "Johannes Wildner", 
-    "img": "https://i.scdn.co/image/c419c122ca8cff61fbec6f1598bcabc405f0ba95", 
-    "description": "Austrian conductor", 
-    "wiki_link": "https://en.wikipedia.org/wiki/Johannes_Wildner"
-  }, 
-  {
-    "id": "1xfayCGnoPqO2Wh3Y27IgG", 
-    "name": "Yevgeny Svetlanov", 
-    "img": "https://i.scdn.co/image/52dcf92bad912478dbffc3a7f07145bbb5288301", 
-    "description": "Russian conductor", 
-    "wiki_link": "https://en.wikipedia.org/wiki/Yevgeny_Svetlanov"
-  }, 
-  {
-    "id": "0gVO4VlBsDIMFrMIAJJzD3", 
-    "name": "Hans Knappertsbusch", 
-    "img": "https://i.scdn.co/image/67bdc4ccf67554d753b01ec8d710b14ec6224072", 
-    "description": "German conductor", 
-    "wiki_link": "https://en.wikipedia.org/wiki/Hans_Knappertsbusch"
-  }, 
-  {
-    "id": "2qGkessPTMJjSEYtxJ11KC", 
-    "name": "Andr\u00e9 Cluytens", 
-    "img": "https://i.scdn.co/image/aea63a185964b15f915268441ee8a3675319fbc2", 
-    "description": "Belgian-French conductor", 
-    "wiki_link": "https://en.wikipedia.org/wiki/Andr%C3%A9_Cluytens"
-  }, 
-  {
-    "id": "5bBulPVoQuw4lzargujOvI", 
-    "name": "Peter Maag", 
-    "img": "https://i.scdn.co/image/a5b135ea6278b029c1d6cc62b3dae589463c5088", 
-    "description": "Swiss conductor", 
-    "wiki_link": "https://en.wikipedia.org/wiki/Peter_Maag"
-  }, 
-  {
-    "id": "4WAWF88jefCusmHVGL0qem", 
-    "name": "Erich Leinsdorf", 
-    "img": "https://i.scdn.co/image/6bd5e81c24b5183239b0c80ffc0228570470c4d9", 
-    "description": "Austrian conductor", 
-    "wiki_link": "https://en.wikipedia.org/wiki/Erich_Leinsdorf"
-  }, 
-  {
-    "id": "2m3QTMNI89DEFSlvmnayPE", 
-    "name": "Gerard Schwarz", 
-    "img": "https://i.scdn.co/image/ab6761610000e5eb3834cd835a78c9a41b9f9934", 
-    "description": "American conductor", 
-    "wiki_link": "https://en.wikipedia.org/wiki/Gerard_Schwarz"
-  }, 
-  {
-    "id": "3H5lFsmGtr8CoZexz2rznB", 
-    "name": "Herbert Blomstedt", 
-    "img": "https://i.scdn.co/image/ab6772690000c46c7062dacdddf3c872bca7ad60", 
-    "description": "Swedish conductor", 
-    "wiki_link": "https://en.wikipedia.org/wiki/Herbert_Blomstedt"
-  }, 
-  {
-    "id": "1AZTVGOm7t5zkOcweZBivz", 
-    "name": "Leif Segerstam", 
-    "img": "https://i.scdn.co/image/c4e02290a5a8a1d4096457d15745911f3f3dffa9", 
-    "description": "Finnish conductor", 
+    "id": "1AZTVGOm7t5zkOcweZBivz",
+    "name": "Leif Segerstam",
+    "img": "https://i.scdn.co/image/c4e02290a5a8a1d4096457d15745911f3f3dffa9",
+    "description": "Finnish conductor",
     "wiki_link": "https://en.wikipedia.org/wiki/Leif_Segerstam"
-  }, 
+  },
   {
-    "id": "27kuIxOlYJi0Wt6dH7Xe5Y", 
-    "name": "Adrian Leaper", 
-    "img": "https://i.scdn.co/image/ab6772690000c46c6ac01bc9c57469bd8bf393ba", 
-    "description": "English conductor", 
-    "wiki_link": "https://en.wikipedia.org/wiki/Adrian_Leaper"
-  }, 
+    "id": "27sxIn9cqlHftnewCLqEFd",
+    "name": "Richard Hickox",
+    "img": "https://i.scdn.co/image/ab6761610000e5ebd14e838d9c888321b81f8415",
+    "description": "English conductor",
+    "wiki_link": "https://en.wikipedia.org/wiki/Richard_Hickox"
+  },
   {
-    "id": "602N5onbeR10Gl2NA98h02", 
-    "name": "Jean Martinon", 
-    "img": "https://i.scdn.co/image/c1ec5d05b41b79d788f7a1228cf85b9f188c9077", 
-    "description": "French conductor", 
-    "wiki_link": "https://en.wikipedia.org/wiki/Jean_Martinon"
-  }, 
+    "id": "4xpgBZSojKNEQqQHXrwSXA",
+    "name": "Arturo Toscanini",
+    "img": "https://i.scdn.co/image/6f5304c6cb8485303f060d535d4fb0ab6e0bc321",
+    "description": "Italian conductor",
+    "wiki_link": "https://en.wikipedia.org/wiki/Arturo_Toscanini"
+  },
   {
-    "id": "6RX3X6dI939ANy78YXqWXT", 
-    "name": "Raymond Leppard", 
-    "img": "https://i.scdn.co/image/6bbf2b0deccc72de1669f2dbfb20df5d4e26ec6b", 
-    "description": "Conductor", 
-    "wiki_link": "https://en.wikipedia.org/wiki/Raymond_Leppard"
-  }, 
+    "id": "5sjJnaI3YhaO8KylpJk3gN",
+    "name": "Barry Wordsworth",
+    "img": "https://i.scdn.co/image/b5b05560a51b368cca8b3420e4e3536586720aa8",
+    "description": "British conductor",
+    "wiki_link": "https://en.wikipedia.org/wiki/Barry_Wordsworth"
+  },
   {
-    "id": "6jnyvg611nzPsnPmmeEYBw", 
-    "name": "Claudio Scimone", 
-    "img": "https://i.scdn.co/image/fd7e43a890c6903347ac0f1455aedc1d9dd6b9a5", 
-    "description": "Italian conductor", 
+    "id": "1nBRaXFNbBFqcFNeB1AMg2",
+    "name": "Kirill Kondrashin",
+    "img": "https://i.scdn.co/image/8cebd4835b3636ba74e5a4868c4cf13a66e33200",
+    "description": "Russian conductor",
+    "wiki_link": "https://en.wikipedia.org/wiki/Kirill_Kondrashin"
+  },
+  {
+    "id": "2OJaTm0rPZVyMA5k5s8vbh",
+    "name": "Antoni Wit",
+    "img": "https://i.scdn.co/image/c4c30d87db0970af5d775b32761d10b312b7457d",
+    "description": "Polish conductor",
+    "wiki_link": "https://en.wikipedia.org/wiki/Antoni_Wit"
+  },
+  {
+    "id": "1p4YAX8Nh6LiW3uPd49oAR",
+    "name": "Bruno Walter",
+    "img": "https://i.scdn.co/image/229a5212582129ec1a8032d141f0935357dbee1c",
+    "description": "Conductor",
+    "wiki_link": "https://en.wikipedia.org/wiki/Bruno_Walter"
+  },
+  {
+    "id": "08C4m48uN8PsFIPgTS1KqK",
+    "name": "Jeffrey Tate",
+    "img": "https://i.scdn.co/image/762c8f308e47a78f63a7ad41fb94bd49d81252ae",
+    "description": "English conductor",
+    "wiki_link": "https://en.wikipedia.org/wiki/Jeffrey_Tate"
+  },
+  {
+    "id": "4JZT7RXVZmP8K6zRmHhtfq",
+    "name": "Bohdan Warchal",
+    "img": "https://i.scdn.co/image/b05be09448e23eed86fb2eb281e58278cc4b5018",
+    "description": "Slovak chief conductor",
+    "wiki_link": "https://en.wikipedia.org/wiki/Bohdan_Warchal"
+  },
+  {
+    "id": "1e8TlvBk6qegjR3fkYZ9hV",
+    "name": "Ernest Ansermet",
+    "img": "https://i.scdn.co/image/2f1971640a7c579ecd9ddf1fc07c9ee7c8847748",
+    "description": "Swiss conductor",
+    "wiki_link": "https://en.wikipedia.org/wiki/Ernest_Ansermet"
+  },
+  {
+    "id": "4VFBTPFWvhecBc2BWYOQkF",
+    "name": "Wolfgang Sawallisch",
+    "img": "https://i.scdn.co/image/17bcb1232145bf15d23b275805bed6ca4f9245cc",
+    "description": "German conductor",
+    "wiki_link": "https://en.wikipedia.org/wiki/Wolfgang_Sawallisch"
+  },
+  {
+    "id": "4zBSN7OzdsGmKIdLPzXueB",
+    "name": "Anton Nanut",
+    "img": "https://i.scdn.co/image/88ef43f01198a3849616097d3bf4f9654a0299dd",
+    "description": "Slovenian conductor",
+    "wiki_link": "https://en.wikipedia.org/wiki/Anton_Nanut"
+  },
+  {
+    "id": "2KijWsy9IabBw2joLYQ8kn",
+    "name": "Ferdinand Leitner",
+    "img": "https://i.scdn.co/image/ab67616d0000b273d31f6e79a9a15db957d7b8a4",
+    "description": "German conductor",
+    "wiki_link": "https://en.wikipedia.org/wiki/Ferdinand_Leitner"
+  },
+  {
+    "id": "6JAPOSeaWl61UBRKZYgAeZ",
+    "name": "Richard Bonynge",
+    "img": "https://i.scdn.co/image/f95d1bbb8f9a662e1ddf1115cc34ef3daebbb49f",
+    "description": "Australian conductor",
+    "wiki_link": "https://en.wikipedia.org/wiki/Richard_Bonynge"
+  },
+  {
+    "id": "5r6BbRI2QTDC9dv4rkSgCP",
+    "name": "G\u00fcnter Wand",
+    "img": "https://i.scdn.co/image/aff7b3db2af77cafa7bb930e569e537caf35c88e",
+    "description": "German conductor",
+    "wiki_link": "https://en.wikipedia.org/wiki/G%C3%BCnter_Wand"
+  },
+  {
+    "id": "4HumAOOMTRnq7Vb1osyeX9",
+    "name": "Leopold Hager",
+    "img": "https://i.scdn.co/image/a0bb60e0d87ded34a96a5bc1aa3bf7de0d5060e2",
+    "description": "Austrian conductor",
+    "wiki_link": "https://en.wikipedia.org/wiki/Leopold_Hager"
+  },
+  {
+    "id": "0f4gYAcahUX8MaZxWQ2PG4",
+    "name": "Libor Pe\u0161ek",
+    "img": "https://i.scdn.co/image/49da8f6903b5f6f56049044c4ecd9ceb78de84c0",
+    "description": "Czech conductor",
+    "wiki_link": "https://en.wikipedia.org/wiki/Libor_Pe%C5%A1ek"
+  },
+  {
+    "id": "2GhXDeZqUWAqSpz7So8yUt",
+    "name": "Osmo V\u00e4nsk\u00e4",
+    "img": "https://i.scdn.co/image/f9a136559662e3f5d43555b704e8e424cb833926",
+    "description": "Finnish conductor",
+    "wiki_link": "https://en.wikipedia.org/wiki/Osmo_V%C3%A4nsk%C3%A4"
+  },
+  {
+    "id": "68fkzPiWFDYjsI9MhNR8Bo",
+    "name": "Eduardo Marturet",
+    "img": "https://i.scdn.co/image/ab6761610000e5eb1d9f4dd023dfa10e26ac9e5a",
+    "description": "Venezuelan conductor",
+    "wiki_link": "https://en.wikipedia.org/wiki/Eduardo_Marturet"
+  },
+  {
+    "id": "2nhApVkD1mcbeH3ubJHiGg",
+    "name": "Karl M\u00fcnchinger",
+    "img": "https://i.scdn.co/image/f1151c196100d8de29322909ddd227e2325dd9e1",
+    "description": "German conductor",
+    "wiki_link": "https://en.wikipedia.org/wiki/Karl_M%C3%BCnchinger"
+  },
+  {
+    "id": "0Do8lkxP8HHqyl7IgHjO45",
+    "name": "Stephen Gunzenhauser",
+    "img": "https://i.scdn.co/image/a3c2f9fda16ec40d9b1698581c9b7fa5115ee494",
+    "description": "American conductor",
+    "wiki_link": "https://en.wikipedia.org/wiki/Stephen_Gunzenhauser"
+  },
+  {
+    "id": "0xcogVKoT8y5OBIg3L0fua",
+    "name": "Leonard Slatkin",
+    "img": "https://i.scdn.co/image/6b82327ed38bf9786789810f6a96a555ff8693b5",
+    "description": "American conductor",
+    "wiki_link": "https://en.wikipedia.org/wiki/Leonard_Slatkin"
+  },
+  {
+    "id": "2m3QTMNI89DEFSlvmnayPE",
+    "name": "Gerard Schwarz",
+    "img": "https://i.scdn.co/image/ab6761610000e5eb3834cd835a78c9a41b9f9934",
+    "description": "American conductor",
+    "wiki_link": "https://en.wikipedia.org/wiki/Gerard_Schwarz"
+  },
+  {
+    "id": "3PxVHnLJg0RwOEkKQVrs2F",
+    "name": "Louis de Froment",
+    "img": "https://i.scdn.co/image/2357d4c515bd019da1975c5f41ceca038b84c22b",
+    "description": "French conductor",
+    "wiki_link": "https://en.wikipedia.org/wiki/Louis_de_Froment"
+  },
+  {
+    "id": "7sjMk07ASNAAPVXoag7sGO",
+    "name": "Gennady Rozhdestvensky",
+    "img": "https://i.scdn.co/image/04a97db5fbead5d5d0327a1190981c35d5cd6220",
+    "description": "Soviet conductor",
+    "wiki_link": "https://en.wikipedia.org/wiki/Gennady_Rozhdestvensky"
+  },
+  {
+    "id": "28pP6NtZiz5wSRDVTHddyy",
+    "name": "Stefano Molardi",
+    "img": "https://i.scdn.co/image/ab67616d0000b2734d5eec786563a091d88cb872",
+    "description": "Conductor",
+    "wiki_link": "NA"
+  },
+  {
+    "id": "6VemLCzrmF3n1lxY3cbfKf",
+    "name": "J\u00f6rg Faerber",
+    "img": "https://i.scdn.co/image/050be8df02fdab63c646f4226ebd5ce5a8e9b544",
+    "description": "German conductor",
+    "wiki_link": "https://en.wikipedia.org/wiki/J%C3%B6rg_Faerber"
+  },
+  {
+    "id": "582DACpHBiVtsBpY3giwPB",
+    "name": "Marc Minkowski",
+    "img": "https://i.scdn.co/image/ab6761610000e5ebf1316da4ac388c36bb27f3a4",
+    "description": "French conductor",
+    "wiki_link": "https://en.wikipedia.org/wiki/Marc_Minkowski"
+  },
+  {
+    "id": "2qGkessPTMJjSEYtxJ11KC",
+    "name": "Andr\u00e9 Cluytens",
+    "img": "https://i.scdn.co/image/aea63a185964b15f915268441ee8a3675319fbc2",
+    "description": "Belgian-French conductor",
+    "wiki_link": "https://en.wikipedia.org/wiki/Andr%C3%A9_Cluytens"
+  },
+  {
+    "id": "1xfayCGnoPqO2Wh3Y27IgG",
+    "name": "Yevgeny Svetlanov",
+    "img": "https://i.scdn.co/image/52dcf92bad912478dbffc3a7f07145bbb5288301",
+    "description": "Russian conductor",
+    "wiki_link": "https://en.wikipedia.org/wiki/Yevgeny_Svetlanov"
+  },
+  {
+    "id": "3QEztQUVjL5FGxXuP70mJQ",
+    "name": "Johannes Wildner",
+    "img": "https://i.scdn.co/image/c419c122ca8cff61fbec6f1598bcabc405f0ba95",
+    "description": "Austrian conductor",
+    "wiki_link": "https://en.wikipedia.org/wiki/Johannes_Wildner"
+  },
+  {
+    "id": "0gVO4VlBsDIMFrMIAJJzD3",
+    "name": "Hans Knappertsbusch",
+    "img": "https://i.scdn.co/image/67bdc4ccf67554d753b01ec8d710b14ec6224072",
+    "description": "German conductor",
+    "wiki_link": "https://en.wikipedia.org/wiki/Hans_Knappertsbusch"
+  },
+  {
+    "id": "5bBulPVoQuw4lzargujOvI",
+    "name": "Peter Maag",
+    "img": "https://i.scdn.co/image/a5b135ea6278b029c1d6cc62b3dae589463c5088",
+    "description": "Swiss conductor",
+    "wiki_link": "https://en.wikipedia.org/wiki/Peter_Maag"
+  },
+  {
+    "id": "6jnyvg611nzPsnPmmeEYBw",
+    "name": "Claudio Scimone",
+    "img": "https://i.scdn.co/image/fd7e43a890c6903347ac0f1455aedc1d9dd6b9a5",
+    "description": "Italian conductor",
     "wiki_link": "https://en.wikipedia.org/wiki/Claudio_Scimone"
-  }, 
+  },
   {
-    "id": "1CqIIrCkdFMduTzAdIaeZb", 
-    "name": "Rinaldo Alessandrini", 
-    "img": "https://i.scdn.co/image/ab6761610000e5eb669dd4ec750bcda05bab1a4f", 
-    "description": "Conductor", 
-    "wiki_link": "https://en.wikipedia.org/wiki/Rinaldo_Alessandrini"
-  }, 
-  {
-    "id": "2ozcTa5tl8qhSbhJKM60I5", 
-    "name": "Philippe Herreweghe", 
-    "img": "https://i.scdn.co/image/914364be0f93ff2756c1352c2a2a5ae25ddb53cd", 
-    "description": "Belgian conductor", 
-    "wiki_link": "https://en.wikipedia.org/wiki/Philippe_Herreweghe"
-  }, 
-  {
-    "id": "0846wlmyZ8g1zGTudT6jMe", 
-    "name": "Michael Gielen", 
-    "img": "https://i.scdn.co/image/fb6489c19cdfd5f661a965753b75218c9a3123e3", 
-    "description": "Austrian conductor", 
+    "id": "0846wlmyZ8g1zGTudT6jMe",
+    "name": "Michael Gielen",
+    "img": "https://i.scdn.co/image/fb6489c19cdfd5f661a965753b75218c9a3123e3",
+    "description": "Austrian conductor",
     "wiki_link": "https://en.wikipedia.org/wiki/Michael_Gielen"
-  }, 
+  },
   {
-    "id": "5CwK5oXgjqjjcU5JSo8200", 
-    "name": "Ottavio Dantone", 
-    "img": "https://i.scdn.co/image/75e2b05637057eb4c23cf78329b0d13e97f7f062", 
-    "description": "Italian conductor", 
-    "wiki_link": "https://en.wikipedia.org/wiki/Ottavio_Dantone"
-  }, 
+    "id": "4WAWF88jefCusmHVGL0qem",
+    "name": "Erich Leinsdorf",
+    "img": "https://i.scdn.co/image/6bd5e81c24b5183239b0c80ffc0228570470c4d9",
+    "description": "Austrian conductor",
+    "wiki_link": "https://en.wikipedia.org/wiki/Erich_Leinsdorf"
+  },
   {
-    "id": "6p4RwKsAymPrqeEEluZECW", 
-    "name": "Giovanni Antonini", 
-    "img": "https://i.scdn.co/image/ab6761610000e5eb4c83f82a7c366eecc9e84754", 
-    "description": "Italian conductor", 
-    "wiki_link": "https://en.wikipedia.org/wiki/Giovanni_Antonini"
-  }, 
+    "id": "27kuIxOlYJi0Wt6dH7Xe5Y",
+    "name": "Adrian Leaper",
+    "img": "https://i.scdn.co/image/ab6772690000c46c6ac01bc9c57469bd8bf393ba",
+    "description": "English conductor",
+    "wiki_link": "https://en.wikipedia.org/wiki/Adrian_Leaper"
+  },
   {
-    "id": "3V9McxlPI0G2RmkU0DhYGO", 
-    "name": "Paavo J\u00e4rvi", 
-    "img": "https://i.scdn.co/image/ab6761610000e5eb95fa6d9b5c26a7c6d202b515", 
-    "description": "Estonian-American conductor", 
-    "wiki_link": "https://en.wikipedia.org/wiki/Paavo_J%C3%A4rvi"
-  }, 
+    "id": "6RX3X6dI939ANy78YXqWXT",
+    "name": "Raymond Leppard",
+    "img": "https://i.scdn.co/image/6bbf2b0deccc72de1669f2dbfb20df5d4e26ec6b",
+    "description": "Conductor",
+    "wiki_link": "https://en.wikipedia.org/wiki/Raymond_Leppard"
+  },
   {
-    "id": "4FhjvKJ6w2iX3q8p2LpN8y", 
-    "name": "Barry Tuckwell", 
-    "img": "https://i.scdn.co/image/6eb268d6725852f8f5ea46dc534c65fa34daf957", 
-    "description": "Conductor", 
+    "id": "602N5onbeR10Gl2NA98h02",
+    "name": "Jean Martinon",
+    "img": "https://i.scdn.co/image/c1ec5d05b41b79d788f7a1228cf85b9f188c9077",
+    "description": "French conductor",
+    "wiki_link": "https://en.wikipedia.org/wiki/Jean_Martinon"
+  },
+  {
+    "id": "3H5lFsmGtr8CoZexz2rznB",
+    "name": "Herbert Blomstedt",
+    "img": "https://i.scdn.co/image/ab6772690000c46c7062dacdddf3c872bca7ad60",
+    "description": "Swedish conductor",
+    "wiki_link": "https://en.wikipedia.org/wiki/Herbert_Blomstedt"
+  },
+  {
+    "id": "1CqIIrCkdFMduTzAdIaeZb",
+    "name": "Rinaldo Alessandrini",
+    "img": "https://i.scdn.co/image/ab6761610000e5eb669dd4ec750bcda05bab1a4f",
+    "description": "Conductor",
+    "wiki_link": "https://en.wikipedia.org/wiki/Rinaldo_Alessandrini"
+  },
+  {
+    "id": "4FhjvKJ6w2iX3q8p2LpN8y",
+    "name": "Barry Tuckwell",
+    "img": "https://i.scdn.co/image/6eb268d6725852f8f5ea46dc534c65fa34daf957",
+    "description": "Conductor",
     "wiki_link": "https://en.wikipedia.org/wiki/Barry_Tuckwell"
-  }, 
+  },
   {
-    "id": "2J7jiJ5cdLieortTaN6yMT", 
-    "name": "David Zinman", 
-    "img": "https://i.scdn.co/image/163af40a2ffcecc7cfa0bf0b25b8138b09baf9ce", 
-    "description": "American conductor", 
-    "wiki_link": "https://en.wikipedia.org/wiki/David_Zinman"
-  }, 
+    "id": "3V9McxlPI0G2RmkU0DhYGO",
+    "name": "Paavo J\u00e4rvi",
+    "img": "https://i.scdn.co/image/ab6761610000e5eb95fa6d9b5c26a7c6d202b515",
+    "description": "Estonian-American conductor",
+    "wiki_link": "https://en.wikipedia.org/wiki/Paavo_J%C3%A4rvi"
+  },
   {
-    "id": "2eqNsX66FyKi3bnl1KSqZz", 
-    "name": "B\u00e9la Drahos", 
-    "img": "https://i.scdn.co/image/1b19d1852631788a34c96ef68d659c9499b20076", 
-    "description": "Hungarian conductor", 
-    "wiki_link": "https://en.wikipedia.org/wiki/B%C3%A9la_Drahos"
-  }, 
+    "id": "2ozcTa5tl8qhSbhJKM60I5",
+    "name": "Philippe Herreweghe",
+    "img": "https://i.scdn.co/image/914364be0f93ff2756c1352c2a2a5ae25ddb53cd",
+    "description": "Belgian conductor",
+    "wiki_link": "https://en.wikipedia.org/wiki/Philippe_Herreweghe"
+  },
   {
-    "id": "4fwcEh4tMsyFvKvO8w7DKO", 
-    "name": "Iv\u00e1n Fischer", 
-    "img": "https://i.scdn.co/image/06c7b1159a04d7fbda82613ed69fc72512b3f12d", 
-    "description": "Hungarian conductor", 
-    "wiki_link": "https://en.wikipedia.org/wiki/Iv%C3%A1n_Fischer"
-  }, 
+    "id": "5CwK5oXgjqjjcU5JSo8200",
+    "name": "Ottavio Dantone",
+    "img": "https://i.scdn.co/image/75e2b05637057eb4c23cf78329b0d13e97f7f062",
+    "description": "Italian conductor",
+    "wiki_link": "https://en.wikipedia.org/wiki/Ottavio_Dantone"
+  },
   {
-    "id": "3adMGKhs0hyGuTVpe7hnqC", 
-    "name": "Sir David Willcocks", 
-    "img": "https://i.scdn.co/image/f2ff49be0147c85f9be5479c2dbf74af03f384c2", 
-    "description": "Conductor", 
+    "id": "6p4RwKsAymPrqeEEluZECW",
+    "name": "Giovanni Antonini",
+    "img": "https://i.scdn.co/image/ab6761610000e5eb4c83f82a7c366eecc9e84754",
+    "description": "Italian conductor",
+    "wiki_link": "https://en.wikipedia.org/wiki/Giovanni_Antonini"
+  },
+  {
+    "id": "0xHw5qPRSEc8sUmSmXf5sw",
+    "name": "Antonio Pappano",
+    "img": "https://i.scdn.co/image/3b193ccd91570ecff1a1881120c3d7ae5c4a51b9",
+    "description": "Italian conductor",
+    "wiki_link": "https://en.wikipedia.org/wiki/Antonio_Pappano"
+  },
+  {
+    "id": "1diRoj5kNpfL9LRU3k3B6Z",
+    "name": "G\u00fcnter Kehr",
+    "img": "https://i.scdn.co/image/ab67616d0000b2734c29cb654b0cc848a2c94347",
+    "description": "German conductor",
+    "wiki_link": "https://en.wikipedia.org/wiki/G%C3%BCnter_Kehr"
+  },
+  {
+    "id": "3adMGKhs0hyGuTVpe7hnqC",
+    "name": "Sir David Willcocks",
+    "img": "https://i.scdn.co/image/f2ff49be0147c85f9be5479c2dbf74af03f384c2",
+    "description": "Conductor",
     "wiki_link": "https://en.wikipedia.org/wiki/David_Willcocks"
+  },
+  {
+    "id": "4fwcEh4tMsyFvKvO8w7DKO",
+    "name": "Iv\u00e1n Fischer",
+    "img": "https://i.scdn.co/image/06c7b1159a04d7fbda82613ed69fc72512b3f12d",
+    "description": "Hungarian conductor",
+    "wiki_link": "https://en.wikipedia.org/wiki/Iv%C3%A1n_Fischer"
   }
 ]
