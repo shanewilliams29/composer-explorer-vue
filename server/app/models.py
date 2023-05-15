@@ -6,20 +6,10 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from dataclasses import dataclass
 from sqlalchemy.dialects.mysql import MEDIUMTEXT
 
-favorites = db.Table('favorites',
-                     db.Column('composer_id', db.Integer, db.ForeignKey('composer_list.id')),
-                     db.Column('user_id', db.Integer, db.ForeignKey('user.id'))
-                     )
-
 performer_albums = db.Table('performer_albums',
                             db.Column('performer_id', db.String(48), db.ForeignKey('performers.id')),
                             db.Column('album_id', db.String(46), db.ForeignKey('work_albums.id', ondelete='CASCADE'))
                             )
-
-visits = db.Table('visits',
-                  db.Column('work_id', db.String(24), db.ForeignKey('work_list.id')),
-                  db.Column('user_id', db.Integer, db.ForeignKey('user.id'))
-                  )
 
 
 class User(UserMixin, db.Model):
@@ -29,7 +19,6 @@ class User(UserMixin, db.Model):
     password_hash = db.Column(db.String(128))
     display_name = db.Column(db.String(128), unique=True)
     img = db.Column(db.String(1024))
-    comments = db.relationship('Comment', backref='author', lazy='dynamic')
     about_me = db.Column(db.String(140))
     last_seen = db.Column(db.DateTime, default=datetime.utcnow)
     page_viewing = db.Column(db.String(1024))
@@ -39,15 +28,7 @@ class User(UserMixin, db.Model):
     product = db.Column(db.String(64))
     forum_posts = db.relationship("ForumPost", backref="user", lazy='dynamic')
     forum_comments = db.relationship("ForumComment", backref="user", lazy='dynamic')
-    favorited = db.relationship("ComposerList", secondary=favorites, back_populates="favorites", lazy='dynamic')
-    visited = db.relationship("WorkList", secondary=visits, backref='user', lazy='dynamic')
     liked = db.relationship('AlbumLike', foreign_keys='AlbumLike.user_id', backref='user', lazy='dynamic')
-    messages_sent = db.relationship('Message',
-                                    foreign_keys='Message.sender_id',
-                                    backref='author', lazy='dynamic')
-    messages_received = db.relationship('Message',
-                                        foreign_keys='Message.recipient_id',
-                                        backref='recipient', lazy='dynamic')
     last_message_read_time = db.Column(db.DateTime)
     refresh_token = db.Column(db.String(1024))
 
@@ -66,37 +47,6 @@ class User(UserMixin, db.Model):
         digest = md5(self.email.lower().encode('utf-8')).hexdigest()
         return 'https://www.gravatar.com/avatar/{}?d=identicon&s={}'.format(digest, size)
 
-    def favorite(self, composer):
-        if not self.is_favorite(composer):
-            self.favorited.append(composer)
-
-    def unfavorite(self, composer):
-        if self.is_favorite(composer):
-            self.favorited.remove(composer)
-
-    def is_favorite(self, composer):
-        return self.favorited.filter(
-            favorites.c.composer_id == composer.id).count() > 0
-
-    def favorited_composers(self):
-        favorited = ComposerList.query.join(favorites).filter(favorites.c.user_id == self.id)
-        return favorited
-
-    def visit(self, work):
-        if not self.has_visited(work):
-            self.visited.append(work)
-
-    def unvisit(self, work):
-        if self.has_visited(work):
-            self.visited.remove(work)
-
-    def has_visited(self, work):
-        return self.visited.filter(
-            visits.c.work_id == work.id).count() > 0
-
-    def all_visits(self):
-        return self.visited.filter(visits.c.user_id == self.id).all()
-
     def like_album(self, album):
         if not self.has_liked_album(album):
             like = AlbumLike(user_id=self.id, album_id=album.id)
@@ -112,11 +62,6 @@ class User(UserMixin, db.Model):
         return bool(AlbumLike.query.filter(
             AlbumLike.user_id == self.id,
             AlbumLike.album_id == album.id).count())
-
-    def new_messages(self):
-        last_read_time = self.last_message_read_time or datetime(1900, 1, 1)
-        return Message.query.filter_by(recipient=self).filter(
-            Message.timestamp > last_read_time).count()
 
     def new_posts(self):
         last_read_time = self.last_message_read_time or datetime(1900, 1, 1)
@@ -149,18 +94,6 @@ class User(UserMixin, db.Model):
 @login.user_loader
 def load_user(id):
     return User.query.get(int(id))
-
-
-#  used in old site
-class Comment(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    body = db.Column(db.Text)
-    timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
-    workid = db.Column(db.String(24), db.ForeignKey('work_list.id'))
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-
-    def __repr__(self):
-        return '<Comment {}>'.format(self.body)
 
 
 @dataclass
@@ -217,7 +150,6 @@ class ComposerList(db.Model):
     view = db.Column(db.Integer)
     preview_music = db.Column(db.String(255))
     works = db.relationship("WorkList", lazy='dynamic')
-    favorites = db.relationship("User", secondary=favorites, back_populates="favorited", lazy='dynamic')
 
     def __repr__(self):
         return '<Composer {}>'.format(self.name_full)
@@ -258,14 +190,6 @@ class WorkList(db.Model):
 
     def __repr__(self):
         return '<{}>'.format(self.title)
-
-
-# Used in old site
-class ArtistAlbums(db.Model):
-    id = db.Column(db.String(24), primary_key=True)
-    results = db.Column(MEDIUMTEXT)
-    artists = db.Column(db.Text)
-    updated = db.Column(db.DateTime, default=datetime.utcnow)
 
 
 @dataclass
@@ -323,19 +247,6 @@ class AlbumLike(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), index=True)
     album_id = db.Column(db.String(46), db.ForeignKey('work_albums.id', ondelete='CASCADE'))
-
-
-class Message(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    sender_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    recipient_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    body = db.Column(db.Text)
-    timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
-    sender_visible = db.Column(db.Boolean, default=True)
-    recipient_visible = db.Column(db.Boolean, default=True)
-
-    def __repr__(self):
-        return '<Message {}>'.format(self.body)
 
 
 class ForumPost(db.Model):
