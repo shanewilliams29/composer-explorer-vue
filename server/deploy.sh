@@ -21,27 +21,29 @@ if [ $? -eq 0 ]; then
 
   # Check if npm run build was successful
   if [ $? -eq 0 ]; then
-    echo -e "\033[32m'npm run build' successful. Continuing to deployment.\n\033[0m"
+    echo -e "\033[32m'npm run build' successful. Project ready for deployment!\n\033[0m"
   else
     echo -e "\033[31m'npm run build' failed. Exiting.\n\033[0m"
-    exit 1
-  fi
-
-  # Change back to the initial directory (../server)
-  cd "$initial_dir"
-  
-  # Deploy to Google Cloud
-  gcloud config set project composer-explorer
-  gcloud app deploy --quiet
-
-  # Check if deployment was successful
-  if [ $? -eq 0 ]; then
-    echo -e "\033[32m\nDeployment successful!\n\033[0m"
-  else
-    echo -e "\033[31m\nDeployment failed!\n\033[0m"
     exit 1
   fi
 else
   echo -e "\033[31m\nUnit tests failed. Deployment canceled.\n\033[0m"
   exit 1
 fi
+
+
+# For Google App Engine Deployment
+#   # Change back to the initial directory (../server)
+#   cd "$initial_dir"
+  
+#   # Deploy to Google Cloud
+#   gcloud config set project composer-explorer
+#   gcloud app deploy --quiet
+
+#   # Check if deployment was successful
+#   if [ $? -eq 0 ]; then
+#     echo -e "\033[32m\nDeployment successful!\n\033[0m"
+#   else
+#     echo -e "\033[31m\nDeployment failed!\n\033[0m"
+#     exit 1
+#   fi
