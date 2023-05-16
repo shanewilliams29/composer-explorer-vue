@@ -17,6 +17,26 @@ class TestAPI(unittest.TestCase):
     def tearDown(self):
         self.app_context.pop()
 
+    def test_get_performer(self):
+
+        performer_id = '4irur0XnWruVmdJKoIp2d6'
+        response = self.client.get('/api/getperformer', query_string={'id': performer_id})
+
+        self.assertEqual(response.status_code, 200)
+        data = json.loads(response.data)
+        self.assertEqual(data['status'], 'success')
+        self.assertIn('name', data['artist'])
+
+    def test_get_performerbyname(self):
+
+        name = 'Waltraud Meier'
+        response = self.client.get('/api/getperformerbyname', query_string={'name': name})
+
+        self.assertEqual(response.status_code, 200)
+        data = json.loads(response.data)
+        self.assertEqual(data['status'], 'success')
+        self.assertIn('id', data['artist'])
+
     def test_get_albumworks(self):
 
         album_id = '6BIzBPVDbAw4DdyMOENCFe'
