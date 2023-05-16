@@ -47,7 +47,7 @@ snippets
 database_urls.txt
 import_composers.py
 test_secrets.py
-Idagio.py
+import_wizard.py
 info.sh
 tasks.todo
 misc_code.py
