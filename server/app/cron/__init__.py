@@ -75,7 +75,7 @@ def load(composer_name):
     print(GREEN + f"    Load for {composer_name} complete!\n" + RESET)
 
 
-# Necessary for cron tab to execute properlu
+# Necessary for cron-tab to execute properly
 def get_console_width(default=80):
     try:
         console_width = os.get_terminal_size().columns
@@ -294,8 +294,8 @@ def get_and_store_new_albums(composer_name):
         logger.log_text(logtext, severity="ERROR")
         twilio.messages.create(
             body=logtext,
-            from_='+16203902577',
-            to='+14039924389'
+            from_=Config.SOURCE_PHONE,
+            to=Config.TARGET_PHONE
         )
         return
 
@@ -312,8 +312,8 @@ def get_and_store_new_albums(composer_name):
     logger.log_text(logtext, severity="NOTICE")
     twilio.messages.create(
         body=logtext,
-        from_='+16203902577',
-        to='+14039924389'
+        from_=Config.SOURCE_PHONE,
+        to=Config.TARGET_PHONE
     )
 
 

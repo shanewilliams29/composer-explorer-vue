@@ -21,6 +21,8 @@ class Config(object):
 
     TWILIO_SID = os.environ.get('TWILIO_SID')
     TWILIO_AUTH_TOKEN = os.environ.get('TWILIO_AUTH_TOKEN')
+    SOURCE_PHONE = os.environ.get('SOURCE_PHONE')
+    TARGET_PHONE = os.environ.get('TARGET_PHONE')
 
     CACHE_TYPE = 'FileSystemCache'  # Flask-Caching related configs
     CACHE_THRESHOLD = 10000
