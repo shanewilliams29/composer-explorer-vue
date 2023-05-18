@@ -523,7 +523,6 @@ def prepare_work_albums_and_performers(composer, work, albums, existing_artists)
                     name=artist['name'])
                 new_artist.add_album(work_album) 
                 existing_artists[new_artist.id] = new_artist
-                # db.session.merge(new_artist)
 
     # drop performers that are not updated
     for id in list(existing_artists.keys()):
