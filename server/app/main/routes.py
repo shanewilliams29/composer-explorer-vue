@@ -63,6 +63,11 @@ def forum_css():
     return send_from_directory('static', 'forum.css')
 
 
+@bp.route("/favicon.ico")
+def favico():
+    return send_from_directory('static', 'favicon.ico')
+
+
 @bp.route('/user_list')
 def user_list():
 
