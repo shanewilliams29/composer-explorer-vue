@@ -9,6 +9,15 @@ from app.main import bp
 
 @bp.before_app_request
 def before_app_request():
+
+    # redirect to https
+    if "localhost" in request.url:  # removed :5000
+        pass
+    else:
+        if not request.is_secure:
+            url = request.url.replace('http://', 'https://', 1)
+            code = 301
+            return redirect(url, code=code)
     
     # mobile view
     if not session.get('mobile'):
@@ -61,6 +70,11 @@ def custom_css():
 @bp.route("/forum.css")
 def forum_css():
     return send_from_directory('static', 'forum.css')
+
+
+@bp.route("/favicon.ico")
+def favico():
+    return send_from_directory('static', 'favicon.ico')
 
 
 @bp.route('/user_list')
