@@ -34,7 +34,11 @@ def spotify():
     if not code:
         return redirect(url_for('main.index'))
 
-    url = '/login?code=' + code
+    if Config.MODE == "DEVELOPMENT":
+        url = '/login?code=' + code
+    else:
+        url = 'https://composerexplorer.com/login?code=' + code
+    
     return redirect(url)
 
 
