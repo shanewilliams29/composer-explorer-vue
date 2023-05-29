@@ -104,7 +104,7 @@ def login():
         if Config.MODE == "DEVELOPMENT":
             return redirect('http://localhost:8080/mobile')
         else:
-            return redirect('https://www.composerexplorer.com/mobile')
+            return redirect('https://composerexplorer.com/mobile')
     else:
         if Config.MODE == "DEVELOPMENT":
             return redirect("http://localhost:8080/")
