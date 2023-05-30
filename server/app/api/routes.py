@@ -413,7 +413,6 @@ def omnisearch():
         search_string = unidecode(artist['name'].lower())
         for word in search_words:
             matches.extend(match_beginning_of_words(search_string, unidecode(word)))
-            print(matches)
         if len(matches) == len(search_terms):
             return_artists.append(artist)
 
