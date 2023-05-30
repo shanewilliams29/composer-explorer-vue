@@ -3,7 +3,7 @@
     <PatreonBanner />
     
     <NavBar />
-
+    <MobileNavbar />
     <ConnectingOverlay />
     <WelcomeOverlay />
     <ModalContainer />
@@ -27,7 +27,6 @@
       </Transition>
       <MobileTracks />
       <MobileFooter @togglePanel="togglePanel"/>
-      <MobileNavbar />
     </div>
   </div>
 </template>
@@ -126,7 +125,7 @@ export default {
     if (this.$route.name == "mobile" || this.$route.name == "mobileradio") {
       this.$view.mobile = true;
       document.documentElement.style.setProperty("--playerpadding", `0px`);
-      document.documentElement.style.setProperty("--workingheight", `390px`);
+      document.documentElement.style.setProperty("--workingheight", `380px`);
       document.documentElement.style.setProperty("--appbackgroundcolor", `var(--dark-gray)`);
     } else {
       this.$view.mobile = false;

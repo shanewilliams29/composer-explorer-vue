@@ -2,30 +2,30 @@
   <div v-if="$view.mobile">
     <div v-show="!$view.mobileKeyboard">
       <div class="container-fluid">
-<b-navbar type="dark" variant="dark" class="no-padding">
-  <b-container fluid class="d-flex">
-    <b-nav pills class="navbar-items buttons-nav flex-fill justify-content-around flex-nowrap">
-      <b-nav-item class="small-text flex-fill text-center" id="search" :active='$route.path == "mobilesearch"' @click="$router.push('/mobilesearch')">
-        <b-icon-search></b-icon-search><br>Search
-      </b-nav-item>
-      <b-nav-item class="small-text flex-fill text-center" id="home" :active='$route.path == "/mobile"' @click="$router.push('/mobile')">
-        <b-icon-music-note-list></b-icon-music-note-list><br>Browse
-      </b-nav-item>
-      <b-nav-item class="small-text flex-fill text-center" id="performer" :active='$route.name == "performers"' @click="$router.push('/performers')">
-        <b-icon-person-lines-fill></b-icon-person-lines-fill><br>Performers
-      </b-nav-item>
-      <b-nav-item class="small-text flex-fill text-center" id="albums" :active='$route.name == "albums"' @click="$router.push('/albums')">
-        <b-icon-record-circle-fill></b-icon-record-circle-fill><br>Albums
-      </b-nav-item>
-      <b-nav-item class="small-text flex-fill text-center" id="favorites" :active='$route.name == "favorites"' @click="$router.push('/favorites')">
-        <b-icon-heart></b-icon-heart><br>Favorites
-      </b-nav-item>
-      <b-nav-item class="small-text flex-fill text-center" id="radio" :active='$route.name == "radio"' @click="$router.push('/radio')"> 
-        <b-icon-soundwave></b-icon-soundwave><br>Radio
-      </b-nav-item>
-    </b-nav>
-  </b-container>
-</b-navbar>
+        <b-navbar type="dark" variant="dark" class="no-padding">
+          <b-container fluid class="d-flex">
+            <b-nav pills class="navbar-items buttons-nav flex-fill justify-content-around flex-nowrap">
+              <b-nav-item class="small-text flex-fill text-center" id="search" :active='$route.path == "mobilesearch"' @click="$router.push('/mobilesearch')">
+                <b-icon-search></b-icon-search><br>Search
+              </b-nav-item>
+              <b-nav-item class="small-text flex-fill text-center" id="home" :active='$route.path == "/mobile"' @click="$router.push('/mobile')">
+                <b-icon-music-note-list></b-icon-music-note-list><br>Browse
+              </b-nav-item>
+              <b-nav-item class="small-text flex-fill text-center" id="performer" :active='$route.name == "performers"' @click="$router.push('/performers')">
+                <b-icon-person-lines-fill></b-icon-person-lines-fill><br>Performers
+              </b-nav-item>
+              <b-nav-item class="small-text flex-fill text-center" id="albums" :active='$route.name == "albums"' @click="$router.push('/albums')">
+                <b-icon-record-circle-fill></b-icon-record-circle-fill><br>Albums
+              </b-nav-item>
+              <b-nav-item class="small-text flex-fill text-center" id="favorites" :active='$route.name == "favorites"' @click="$router.push('/favorites')">
+                <b-icon-heart></b-icon-heart><br>Favorites
+              </b-nav-item>
+              <b-nav-item class="small-text flex-fill text-center" id="radio" :active='$route.name == "radio"' @click="$router.push('/mobileradio')"> 
+                <b-icon-soundwave></b-icon-soundwave><br>Radio
+              </b-nav-item>
+            </b-nav>
+          </b-container>
+        </b-navbar>
       </div>
       <Transition name="fade">
         <div v-show="viewSearchResults && !firstLoad" class="overlay" id="overlay"></div>
