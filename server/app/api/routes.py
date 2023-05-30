@@ -355,7 +355,7 @@ def omnisearch():
         search_string = str(work.composer) + str(work.genre) + str(work.cat) + str(work.suite) + str(work.title) + str(work.nickname) + str(work.search)
         j = 0
         for word in search_words:
-            if word.lower() in unidecode(search_string.lower()):
+            if unidecode(word.lower()) in unidecode(search_string.lower()):
                 j += 1
         for num in search_nums:
             pattern = r'(?<!\d)' + str(num) + r'(?!\d)'
@@ -396,10 +396,29 @@ def omnisearch():
         # store in cache
         cache.set('artists', artist_list)
 
+    # match search words with artist names
     for word in search_words:
-        artist_matches = [item for item in artist_list if word.lower() in unidecode(item['name'].lower())]
+        artist_matches = [item for item in artist_list if unidecode(word.lower()) in unidecode(item['name'].lower())]
 
-    first_10_artists = list(itertools.islice(artist_matches, 10))
+    # further refine list of artists to return, match on beginning of word and number of words
+    def match_beginning_of_words(string, word_beginning):
+        pattern = r'\b' + word_beginning  # '\b' matches at the boundary (beginning) of a word
+        matches = re.findall(pattern, string, re.IGNORECASE)
+        return matches
+
+    return_artists = []
+
+    for artist in artist_list:
+        matches = []
+        search_string = unidecode(artist['name'].lower())
+        for word in search_words:
+            matches.extend(match_beginning_of_words(search_string, unidecode(word)))
+            print(matches)
+        if len(matches) == len(search_terms):
+            return_artists.append(artist)
+
+    first_10_artists = return_artists[:10]
+    
     # return response
     response_object = {'status': 'success'}
     response_object['composers'] = composers
