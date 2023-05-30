@@ -174,9 +174,9 @@ export default {
   margin-left: -15px;
   margin-right: -10px;
 }
->>> .form-control{
+/*>>> .form-control{
   color: var(--yellow) !important;
-}
+}*/
 
 /*>>> .v-select {
   --vs-selected-color: var(--yellow) !important;
@@ -188,8 +188,7 @@ export default {
   font-weight: 500;
 }
 .heading-card{
-  border-top: solid 2px var(--medium-gray) !important;
-  background: var(--dark-gray) !important;
+  background: var(--medium-gray) !important;
   padding-top:  0px;
   padding-right: 5px;
   margin-right: -15px;
