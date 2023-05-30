@@ -1,68 +1,31 @@
 <template>
-  <div v-if="!$view.mobile">
+  <div v-if="$view.mobile">
     <div v-show="!$view.mobileKeyboard">
       <div class="container-fluid">
-        <b-navbar type="dark" variant="dark">
-          <b-navbar-brand v-if="!$view.mobile">
-            <img :src="logoURL" class="d-inline-block align-top logo" alt="Composer Explorer" height="40px" />
-          </b-navbar-brand>
-          <b-navbar-brand @click="$router.push('/mobile')" v-if="$view.mobile">
-            <img :src="logoURL" class="d-inline-block align-top logo" alt="Composer Explorer" height="40px" />
-          </b-navbar-brand>
-          <div v-if="!$view.mobile">
-            <b-nav pills class="navbar-items buttons-nav">
-              <b-nav-item id="home" :active='$route.path == "/"' @click="$router.push('/')">
-                <b-icon-music-note-list></b-icon-music-note-list>&nbsp;&nbsp;Browse
-              </b-nav-item>
-              <b-nav-item id="performer" :active='$route.name == "performers"' @click="$router.push('/performers')">
-                <b-icon-person-lines-fill></b-icon-person-lines-fill>&nbsp;&nbsp;Performers
-              </b-nav-item>
-              <b-nav-item id="albums" :active='$route.name == "albums"' @click="$router.push('/albums')">
-                <b-icon-record-circle-fill></b-icon-record-circle-fill>&nbsp;&nbsp;Albums
-              </b-nav-item>
-              <b-nav-item v-if="$auth.clientToken" id="favorites" :active='$route.name == "favorites"' @click="$router.push('/favorites')">
-                <b-icon-heart></b-icon-heart>&nbsp;&nbsp;Favorites
-              </b-nav-item>
-              <b-nav-item id="radio" :active='$route.name == "radio"' @click="$router.push('/radio')"> <img :src="radioImgURL" class="radio-img" height="22px" />&nbsp;&nbsp;Radio</b-nav-item>
-              <!-- <b-nav-item id="forum" href="/forum" target="_blank"> <b-icon-chat-right-text></b-icon-chat-right-text>&nbsp;&nbsp;Forum&nbsp;<b-badge>{{ unreadPosts }}</b-badge></b-nav-item> -->
-            </b-nav>
-          </div>
-          <b-navbar-nav v-if="!$view.mobile" class="search-nav">
-            <div class="search-icon">
-              <b-icon-search></b-icon-search>
-            </div>
-            <b-form-input id="search-form" class="omnisearch" size="sm" v-model="omniSearchInput" v-debounce:500ms="omniSearch" type="search" placeholder="Search composers, works, performers" autocomplete="off"></b-form-input>
-          </b-navbar-nav>
-          <b-navbar-nav class="ml-auto" v-if="!$auth.clientToken">
-            <b-button v-if="$view.avatar" right variant="success" class="spotify-button" :href="spotifyURL">
-              <img :src="spotifyLogoURL" class="" alt="Spotify" height="28px" />
-            </b-button>
-            <b-nav-item class="menu-button" right v-b-toggle.sidebar-right>
-              <b-icon-three-dots-vertical></b-icon-three-dots-vertical>
-            </b-nav-item>
-          </b-navbar-nav>
-          <b-navbar-nav class="ml-auto" v-if="$auth.clientToken">
-            <b-nav pills class="navbar-items">
-              <b-nav-item v-if="$view.mobile && ($route.name != 'mobileradio')" id="radio" :active='$route.name == "mobileradio"' @click="$router.push('/mobileradio')">
-                <img :src="radioImgURL" class="radio-img" height="22px" />&nbsp;&nbsp;Radio
-              </b-nav-item>
-              <b-nav-item v-if="$view.mobile && ($route.name == 'mobileradio')" id="radio" :active='$route.name == "mobileradio"' @click="$router.push('/mobile')">
-                <img :src="radioImgURL" class="radio-img" height="22px" />&nbsp;&nbsp;Radio
-              </b-nav-item>
-            </b-nav>
-            <b-dropdown v-if="$view.avatar" class="avatar-button" right no-caret>
-              <template #button-content>
-                <b-avatar href="#" :src="$auth.avatar"></b-avatar>
-              </template>
-              <b-dropdown-item v-if="!$view.mobile" href="/change_display_name">Change Display Name</b-dropdown-item>
-              <b-dropdown-item v-if="!$view.mobile" href="/change_avatar">Change Avatar</b-dropdown-item>
-              <b-dropdown-item href="/log_out">Log out</b-dropdown-item>
-            </b-dropdown>
-            <b-nav-item class="menu-button" right v-b-toggle.sidebar-right>
-              <b-icon-three-dots-vertical></b-icon-three-dots-vertical>
-            </b-nav-item>
-          </b-navbar-nav>
-        </b-navbar>
+<b-navbar type="dark" variant="dark" class="no-padding">
+  <b-container fluid class="d-flex">
+    <b-nav pills class="navbar-items buttons-nav flex-fill justify-content-around flex-nowrap">
+      <b-nav-item class="small-text flex-fill text-center" id="search" :active='$route.path == "mobilesearch"' @click="$router.push('/mobilesearch')">
+        <b-icon-search></b-icon-search><br>Search
+      </b-nav-item>
+      <b-nav-item class="small-text flex-fill text-center" id="home" :active='$route.path == "/mobile"' @click="$router.push('/mobile')">
+        <b-icon-music-note-list></b-icon-music-note-list><br>Browse
+      </b-nav-item>
+      <b-nav-item class="small-text flex-fill text-center" id="performer" :active='$route.name == "performers"' @click="$router.push('/performers')">
+        <b-icon-person-lines-fill></b-icon-person-lines-fill><br>Performers
+      </b-nav-item>
+      <b-nav-item class="small-text flex-fill text-center" id="albums" :active='$route.name == "albums"' @click="$router.push('/albums')">
+        <b-icon-record-circle-fill></b-icon-record-circle-fill><br>Albums
+      </b-nav-item>
+      <b-nav-item class="small-text flex-fill text-center" id="favorites" :active='$route.name == "favorites"' @click="$router.push('/favorites')">
+        <b-icon-heart></b-icon-heart><br>Favorites
+      </b-nav-item>
+      <b-nav-item class="small-text flex-fill text-center" id="radio" :active='$route.name == "radio"' @click="$router.push('/radio')"> 
+        <b-icon-soundwave></b-icon-soundwave><br>Radio
+      </b-nav-item>
+    </b-nav>
+  </b-container>
+</b-navbar>
       </div>
       <Transition name="fade">
         <div v-show="viewSearchResults && !firstLoad" class="overlay" id="overlay"></div>
@@ -234,16 +197,16 @@ export default {
       // iPad on iOS 13 detection
       || (navigator.userAgent.includes("Mac") && "ontouchend" in document)
     },
-    // makeToast() {
-    //   this.$bvToast.toast(`Get the App on Play Store`, {
-    //     href: 'https://play.google.com/store/apps/details?id=com.app.composerexplorer',
-    //     title: 'App available for Android',
-    //     toaster: 'b-toaster-bottom-full',
-    //     solid: true,
-    //     variant: 'warning',
-    //     autoHideDelay: 3600000
-    //   })
-    // },
+    makeToast() {
+      this.$bvToast.toast(`Get the App on Play Store`, {
+        href: 'https://play.google.com/store/apps/details?id=com.app.composerexplorer',
+        title: 'App available for Android',
+        toaster: 'b-toaster-bottom-full',
+        solid: true,
+        variant: 'warning',
+        autoHideDelay: 3600000
+      })
+    },
     workImgUrl(genre, title) {
       let url = "";
       if(genre == 'Opera' || genre == 'Stage Work' || genre == 'Ballet'){
@@ -357,16 +320,16 @@ export default {
     },
   },
   created(){
-    // var apple = this.iOS();
+    var apple = this.iOS();
     var userAgent = window.navigator.userAgent.toLowerCase();
 
     if (userAgent.includes('wv')) { // Webview (App)
       this.$view.avatar = false;
     } else {
       this.$view.avatar = true;
-      // if (this.$view.mobile && !apple) {
-      //   this.makeToast();
-      // }
+      if (this.$view.mobile && !apple) {
+        this.makeToast();
+      }
     }
   },
   mounted() {
@@ -402,20 +365,44 @@ export default {
             background: rgba(52, 58, 64, 0.5);
             z-index: 10;
         }
+
+.centered{
+  text-align: center;
+}
+.small-text{
+  font-size: 10px;
+}
+.nav-link{
+  padding-left: 0px;
+  padding-right: 0px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+svg{
+  font-size: 18px !important;
+}
+.no-padding{
+  padding: 0px;
+}
 #home .active{
-  background-color: var(--blue);
+  color: var(--yellow) !important;
+  background: none;
 }
 #performer .active{
-  background-color: var(--purple);
+  color: var(--yellow) !important;
+  background: none;
 }
 #albums .active{
-  background-color: var(--orange);
+  color: var(--yellow) !important;
+  background: none;
 }
 #radio .active{
-  background-color: var(--green);
+  color: var(--yellow) !important;
+  background: none;
 }
 #favorites .active{
-  background-color: var(--red);
+  color: var(--yellow) !important;
+  background: none;
 }
 
 .radio-img{
@@ -438,9 +425,7 @@ img {
 .navbar.navbar-dark.bg-dark {
   background-color: var(--dark-gray) !important;
 }
-.buttons-nav{
-  min-width: 620px !important;
-}
+
 .navbar-items a {
   color: var(--my-white) !important;
 }

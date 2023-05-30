@@ -8,9 +8,11 @@
           </b-button>
         </b-card-header>
         <b-collapse :visible="composerDisabled" id="accordion-1" accordion="my-accordion" role="tabpanel">
+          <div class="container-fluid header-padding">
+            <ComposerHeading />
+          </div>
           <b-card-body>
             <b-col class="composer-list-mobile disable-scrollbars" ref="scroll-box-comp">
-              <ComposerHeading />
               <ComposerList />
             </b-col>
           </b-card-body>
@@ -24,9 +26,11 @@
           </b-button>
         </b-card-header>
         <b-collapse :visible="workDisabled" id="accordion-2" accordion="my-accordion" role="tabpanel">
+          <div class="container-fluid header-padding">
+            <WorkHeading />
+          </div>
           <b-card-body>
             <b-col class="work-list-mobile disable-scrollbars" ref="scroll-box">
-              <WorkHeading />
               <WorkList />
             </b-col>
           </b-card-body>
@@ -40,9 +44,11 @@
           </b-button>
         </b-card-header>
         <b-collapse :visible="albumDisabled" id="accordion-3" accordion="my-accordion" role="tabpanel">
+          <div class="container-fluid header-padding">
+            <AlbumHeading />
+          </div>
           <b-card-body>
             <b-col class="album-list-mobile disable-scrollbars">
-              <AlbumHeading />
               <AlbumList />
             </b-col>
           </b-card-body>
@@ -146,8 +152,10 @@ export default {
 </style>
 
 <style scoped>
->>> .card{
+>>> .card .shadow-sm{
   color: var(--dark-gray);
+  margin-top: 0px;
+  margin-bottom: 5px !important;
 }
 >>> .composer-card{
   margin-left: -15px;
@@ -160,7 +168,6 @@ export default {
 >>> .albums-card{
   margin-left: -15px;
   margin-right: -10px;
-  padding-top: 8.5px !important;
 }
 .heading-text{
   padding-left: 20px;
@@ -172,6 +179,10 @@ export default {
   padding-right: 5px;
   margin-right: -15px;
   border-radius: 0px;
+  padding-bottom: 5px;
+}
+.card-deck{
+  padding-top: 0px !important;
 }
 .card-body{
   background: var(--medium-gray) !important;
