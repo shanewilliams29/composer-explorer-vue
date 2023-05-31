@@ -1,14 +1,6 @@
 <template>
   <div id="home">
-              <div v-show="composerDisabled" class="container-fluid header-padding">
-            <ComposerHeading />
-          </div>
-                    <div v-show="workDisabled" class="container-fluid header-padding">
-            <WorkHeading />
-          </div>
-                    <div v-show="albumDisabled" class="container-fluid header-padding">
-            <AlbumHeading />
-          </div>
+
     <div role="tablist">
       <b-card no-body class="mb-1 mobile-card">
         <b-card-header header-tag="header" class="p-1" role="tab" v-show="!$view.mobileKeyboard">
@@ -17,7 +9,9 @@
           </b-button>
         </b-card-header>
         <b-collapse :visible="composerDisabled" id="accordion-1" accordion="my-accordion" role="tabpanel">
-
+              <div class="container-fluid header-padding">
+            <ComposerHeading />
+          </div>
           <b-card-body>
             <b-col class="composer-list-mobile disable-scrollbars" ref="scroll-box-comp">
               <ComposerList />
@@ -25,7 +19,6 @@
           </b-card-body>
         </b-collapse>
       </b-card>
-
       <b-card no-body class="mb-1 mobile-card">
         <b-card-header header-tag="header" class="p-1" role="tab" v-show="!$view.mobileKeyboard">
           <b-button class="header-button" :disabled="workDisabled" block @click="workToggle" variant="secondary">
@@ -33,7 +26,9 @@
           </b-button>
         </b-card-header>
         <b-collapse :visible="workDisabled" id="accordion-2" accordion="my-accordion" role="tabpanel">
-
+              <div class="container-fluid header-padding">
+            <WorkHeading />
+          </div>
           <b-card-body>
             <b-col class="work-list-mobile disable-scrollbars" ref="scroll-box">
               <WorkList />
@@ -49,7 +44,9 @@
           </b-button>
         </b-card-header>
         <b-collapse :visible="albumDisabled" id="accordion-3" accordion="my-accordion" role="tabpanel">
-
+              <div class="container-fluid header-padding">
+            <AlbumHeading />
+          </div>
           <b-card-body>
             <b-col class="album-list-mobile disable-scrollbars">
               <AlbumList />
@@ -159,7 +156,8 @@ export default {
 /* Overrides */
 >>> .card .shadow-sm{
   color: var(--dark-gray);
-  margin-top: 5px;
+  margin-top: 0px;
+  margin-bottom: 5px !important;
 
 }
 >>> .composer-card{
@@ -193,7 +191,7 @@ export default {
   padding-right: 5px;
   margin-right: -15px;
   border-radius: 0px;
-  padding-bottom: 2px;
+  padding-bottom: 5px;
 }
 .card-deck{
   padding-top: 0px !important;
