@@ -279,7 +279,6 @@ export default {
     },
   },
   created() {
-    console.log("created");
     if (!this.$view.mode && !this.$route.query.search) { // dont get composers in performer or radio modes or if omnisearch present
       this.getComposers();
       const config = JSON.parse(localStorage.getItem("config"));
@@ -307,7 +306,6 @@ export default {
     eventBus.$on("clearComposersList", this.clearComposers);
   },
   beforeDestroy() {
-    console.log("destroyed");
     eventBus.$off("requestComposersFromFilter", this.getFilteredComposers);
     eventBus.$off("requestComposersFromSearch", this.getSearchComposers);
     eventBus.$off("requestComposersForArtist", this.getArtistComposers);
