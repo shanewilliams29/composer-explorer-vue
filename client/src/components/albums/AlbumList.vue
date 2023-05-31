@@ -65,6 +65,7 @@ export default {
   },
   watch: {
     genreChanged(newGenre) {
+      // Opera albums are larger, allowing more space for lines of text
       if (newGenre == "Opera" || newGenre == "Stage Work") {
         document.documentElement.style.setProperty("--album-size", `108px`);
         document.documentElement.style.setProperty("--line-clamp", `3`);

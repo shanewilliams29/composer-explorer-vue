@@ -3,6 +3,7 @@ import VueRouter from 'vue-router'
 import PageNotFound from '../views/PageNotFound.vue'
 import HomeView from '../views/HomeView.vue'
 import MobileView from '../views/MobileView.vue'
+import MobileSearch from '../views/MobileSearch.vue'
 import PerformerView from '../views/PerformerView.vue'
 import AlbumView from '../views/AlbumView.vue'
 import RadioView from '../views/RadioView.vue'
@@ -41,6 +42,11 @@ const routes = [
     path: '/favorites',
     name: 'favorites',
     component: FavoritesView
+  },
+    {
+    path: '/mobilesearch',
+    name: 'mobilesearch',
+    component: MobileSearch
   },
     {
     path: '/mobileradio',

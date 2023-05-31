@@ -41,7 +41,7 @@ import SpotifyPlayer from "@/components/global/SpotifyPlayer.vue";
 import InfoPanel from "@/components/global/InfoPanel.vue";
 import PageFooter from "@/components/global/PageFooter.vue";
 import NavBar from "@/components/global/NavBar.vue";
-import MobileNavbar from "@/components/global/MobileNavbar.vue";
+import MobileNavbar from "@/components/mobile/MobileNavbar.vue";
 import ModalContainer from "@/components/modals/ModalContainer.vue";
 import MobileInfoPanel from "@/components/mobile/MobileInfoPanel.vue";
 import MobileTracks from "@/components/mobile/MobileTracks.vue";
@@ -123,10 +123,10 @@ export default {
     },
   },
   beforeCreate() {
-    if (this.$route.name == "mobile" || this.$route.name == "mobileradio") {
+    if (this.$route.name == "mobile" || this.$route.name == "mobileradio" || this.$route.name == "mobilesearch") {
       this.$view.mobile = true;
       document.documentElement.style.setProperty("--playerpadding", `0px`);
-      document.documentElement.style.setProperty("--workingheight", `380px`);
+      document.documentElement.style.setProperty("--workingheight", `191.6px`);
       document.documentElement.style.setProperty("--appbackgroundcolor", `var(--dark-gray)`);
     } else {
       this.$view.mobile = false;

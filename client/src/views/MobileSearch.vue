@@ -1,38 +1,19 @@
 <template>
-  <div v-if="$view.mobile">
-    <div v-show="!$view.mobileKeyboard">
+  <div>
+    <div>
       <div class="container-fluid">
-        <b-navbar type="dark" variant="dark" class="no-padding">
-          <b-container fluid class="d-flex">
-            <b-nav pills class="navbar-items buttons-nav flex-fill justify-content-around flex-nowrap">
-              <b-nav-item class="small-text flex-fill text-center" id="search" :active='$route.path == "mobilesearch"' @click="$router.push('/mobilesearch')">
-                <b-icon-search></b-icon-search><br>Search
-              </b-nav-item>
-              <b-nav-item class="small-text flex-fill text-center" id="home" :active='$route.path == "/mobile"' @click="$router.push('/mobile')">
-                <b-icon-music-note-list></b-icon-music-note-list><br>Browse
-              </b-nav-item>
-              <b-nav-item class="small-text flex-fill text-center" id="performer" :active='$route.name == "performers"' @click="$router.push('/performers')">
-                <b-icon-person-lines-fill></b-icon-person-lines-fill><br>Performers
-              </b-nav-item>
-              <b-nav-item class="small-text flex-fill text-center" id="albums" :active='$route.name == "albums"' @click="$router.push('/albums')">
-                <b-icon-record-circle-fill></b-icon-record-circle-fill><br>Albums
-              </b-nav-item>
-              <b-nav-item class="small-text flex-fill text-center" id="favorites" :active='$route.name == "favorites"' @click="$router.push('/favorites')">
-                <b-icon-heart></b-icon-heart><br>Favorites
-              </b-nav-item>
-              <b-nav-item class="small-text flex-fill text-center" id="radio" :active='$route.name == "radio"' @click="$router.push('/mobileradio')"> 
-                <b-icon-soundwave></b-icon-soundwave><br>Radio
-              </b-nav-item>
-            </b-nav>
-          </b-container>
+        <b-navbar type="dark" variant="dark">
+          <b-navbar-nav class="search-nav">
+            <div class="search-icon">
+              <b-icon-search></b-icon-search>
+            </div>
+            <b-form-input id="search-form" class="omnisearch" size="sm" v-model="omniSearchInput" v-debounce:500ms="omniSearch" type="search" placeholder="Search composers, works, performers" autocomplete="off"></b-form-input>
+          </b-navbar-nav>
         </b-navbar>
       </div>
-      <Transition name="fade">
-        <div v-show="viewSearchResults && !firstLoad" class="overlay" id="overlay"></div>
-      </Transition>
-      <Transition name="fade">
+      <div id="dummy-div">
         <div id="search-results" v-show="viewSearchResults && !firstLoad">
-          <b-card class="album-info-card shadow-sm">
+          <b-card class="album-info-card">
             <div class="spinner" v-show="loading" role="status">
               <b-spinner class="m-5"></b-spinner>
             </div>
@@ -97,49 +78,7 @@
             </b-card-body>
           </b-card>
         </div>
-      </Transition>
-      <div>
-        <b-sidebar id="sidebar-right" title="" backdrop-variant="dark" width="350px" backdrop right shadow>
-          <div class="px-3 py-0 sidebar-text">
-            <h6>Composer Explorer</h6>
-            <p>Welcome to your Classical Music Portal. Explore composers from the Medieval to the present. Listen to works on Spotify, made navigable for Classical music.</p>
-            <h6>Usage</h6>
-            <p>Log in with your <b>Spotify Premium</b> account to play music. Add performances to your favorites and create your own customized radios.</p>
-            <p v-if="false">
-              <span style="color: red;"><b>Android App:</b></span> Battery optimizations may stop playback (such as when phone is locked). Enable unrestricted battery access to the app in your phone's settings:
-              <span style="color: darkblue;">Settings > Apps > Composer Explorer > Battery > Unrestricted</span>.
-            </p>
-            <h6>Acknowledgements</h6>
-            <p v-if="!$view.mobile">
-              Composer and work information is used under licence from <a href="https://en.wikipedia.org/" target="_blank">Wikipedia</a>, <a href="https://imslp.org/" target="_blank">IMSLP</a>, and
-              <a href="https://openopus.org/" target="_blank">Open Opus</a>. Album data and cover art provided by <a href="https://www.spotify.com/" target="_blank">Spotify</a>.
-            </p>
-            <h6 v-if="!$view.mobile">Donations</h6>
-            <p v-if="!$view.mobile">
-              Composer Explorer is offered as a free and ad-free experience. If you would like to support the costs of hosting and development, please sponsor us on <a href="https://www.patreon.com/composerexplorer" target="_blank">Patreon</a>.
-            </p>
-            <p v-if="$view.mobile">
-              Composer and work information is used under licence from Wikipedia, IMSLP, and Open Opus. Album data and cover art provided by Spotify.
-            </p>
-            <h6>Disclaimer</h6>
-            <p>
-              ComposerExplorer.com is not associated with Spotify Technology SA. Artist, album and track records are retrieved through the Spotify search API and do not necessarily represent the full extent of the Spotify catalogue for a
-              given work. No guarantee is made as to the accuracy of catalogued composer and work information, and use is recommended for recreational purposes only.
-            </p>
-            <h6 v-if="!$view.mobile">GitHub</h6>
-            <p v-if="!$view.mobile">For feature requests and bug reports: <a href="https://github.com/shanewilliams29/composer-explorer-vue/issues" target="_blank">GitHub</a>.</p>
-            <h6>Contact</h6>
-            <p v-if="!$view.mobile">For all inquiries, please contact: <a href="mailto:admin@composerexplorer.com">admin@composerexplorer.com</a></p>
-            <p v-if="$view.mobile">For all inquiries, please contact: admin@composerexplorer.com</p>
-            <h6>Copyright</h6>
-            <p>
-              © 2022 ComposerExplorer.com. All rights reserved.
-            </p>
-          </div>
-        </b-sidebar>
-      </div>
-      <div>
-      </div>
+        </div>
     </div>
   </div>
 </template>
@@ -197,16 +136,16 @@ export default {
       // iPad on iOS 13 detection
       || (navigator.userAgent.includes("Mac") && "ontouchend" in document)
     },
-    makeToast() {
-      this.$bvToast.toast(`Get the App on Play Store`, {
-        href: 'https://play.google.com/store/apps/details?id=com.app.composerexplorer',
-        title: 'App available for Android',
-        toaster: 'b-toaster-bottom-full',
-        solid: true,
-        variant: 'warning',
-        autoHideDelay: 3600000
-      })
-    },
+    // makeToast() {
+    //   this.$bvToast.toast(`Get the App on Play Store`, {
+    //     href: 'https://play.google.com/store/apps/details?id=com.app.composerexplorer',
+    //     title: 'App available for Android',
+    //     toaster: 'b-toaster-bottom-full',
+    //     solid: true,
+    //     variant: 'warning',
+    //     autoHideDelay: 3600000
+    //   })
+    // },
     workImgUrl(genre, title) {
       let url = "";
       if(genre == 'Opera' || genre == 'Stage Work' || genre == 'Ballet'){
@@ -320,16 +259,16 @@ export default {
     },
   },
   created(){
-    var apple = this.iOS();
+    // var apple = this.iOS();
     var userAgent = window.navigator.userAgent.toLowerCase();
 
     if (userAgent.includes('wv')) { // Webview (App)
       this.$view.avatar = false;
     } else {
       this.$view.avatar = true;
-      if (this.$view.mobile && !apple) {
-        this.makeToast();
-      }
+      // if (this.$view.mobile && !apple) {
+      //   this.makeToast();
+      // }
     }
   },
   mounted() {
@@ -365,44 +304,20 @@ export default {
             background: rgba(52, 58, 64, 0.5);
             z-index: 10;
         }
-
-.centered{
-  text-align: center;
-}
-.small-text{
-  font-size: 10px;
-}
-.nav-link{
-  padding-left: 0px;
-  padding-right: 0px;
-  padding-top: 10px;
-  padding-bottom: 10px;
-}
-svg{
-  font-size: 18px !important;
-}
-.no-padding{
-  padding: 0px;
-}
 #home .active{
-  color: var(--yellow) !important;
-  background: none;
+  background-color: var(--blue);
 }
 #performer .active{
-  color: var(--yellow) !important;
-  background: none;
+  background-color: var(--purple);
 }
 #albums .active{
-  color: var(--yellow) !important;
-  background: none;
+  background-color: var(--orange);
 }
 #radio .active{
-  color: var(--yellow) !important;
-  background: none;
+  background-color: var(--green);
 }
 #favorites .active{
-  color: var(--yellow) !important;
-  background: none;
+  background-color: var(--red);
 }
 
 .radio-img{
@@ -425,7 +340,9 @@ img {
 .navbar.navbar-dark.bg-dark {
   background-color: var(--dark-gray) !important;
 }
-
+.buttons-nav{
+  min-width: 620px !important;
+}
 .navbar-items a {
   color: var(--my-white) !important;
 }
@@ -443,8 +360,8 @@ img {
 }
 .search-icon{
   position: absolute;
-  top: 21px;
-  left: calc(165.3px + 600px + 38px);
+  top: 12px;
+  left: 24px;
   color: white;
 }
 .search-nav{
@@ -453,8 +370,8 @@ img {
 .omnisearch{
   background-color: var(--medium-gray) !important;
   width: 100% !important;
-  margin-right: 30px;
-  margin-left: 10px;
+  margin-right: 0px;
+  margin-left: 0px;
 }
 .form-control:focus{
   box-shadow: none; 
@@ -469,13 +386,17 @@ input[type="search"]::-webkit-search-cancel-button {
    width: 13px;
    background: url("data:image/svg+xml;charset=UTF-8,%3csvg viewPort='0 0 12 12' version='1.1' xmlns='http://www.w3.org/2000/svg'%3e%3cline x1='1' y1='11' x2='11' y2='1' stroke='white' stroke-width='2'/%3e%3cline x1='1' y1='1' x2='11' y2='11' stroke='white' stroke-width='2'/%3e%3c/svg%3e");
 }
+
+#dummy-div{
+  background-color: #fff;
+  width: 100%;
+  height: calc(100vh - 47px - var(--workingheight));
+}
 #search-results{
-  position: absolute;
-  top: 60px;
-  left: calc(165.3px + 600px + 30px);
+  width: 100%;
   z-index: 9999;
-  width: calc(100% - 165.3px - 600px - 35px);
-  box-shadow: rgba(0, 0, 0, 0.07) 0px 1px 2px, rgba(0, 0, 0, 0.07) 0px 2px 4px, rgba(0, 0, 0, 0.07) 0px 4px 8px, rgba(0, 0, 0, 0.07) 0px 8px 16px, rgba(0, 0, 0, 0.07) 0px 16px 32px, rgba(0, 0, 0, 0.07) 0px 32px 64px;
+  max-height: calc(100vh - 47px - var(--workingheight));
+  overflow-y: scroll;
 }
 .spinner {
   text-align: center;
@@ -498,8 +419,6 @@ input[type="search"]::-webkit-search-cancel-button {
 .info-card-text {
   font-size: 13px;
   line-height: 130%;
-  overflow-y: scroll;
-  max-height: 190px;
   padding-left: 2px;
 }
 .info-td {
@@ -521,24 +440,24 @@ input[type="search"]::-webkit-search-cancel-button {
 }
 
 /*scrollbars*/
-.info-card-text {
+#search-results {
   --scroll-bar-color: var(--scroll-color-light);
   --scroll-bar-bg-color: var(--my-white);
 }
-.info-card-text {
+#search-results {
   scrollbar-width: thin;
   scrollbar-color: var(--scroll-bar-color) var(--scroll-bar-bg-color) !important;
 }
 
 /* Works on Chrome, Edge, and Safari */
-.info-card-text::-webkit-scrollbar {
+#search-results::-webkit-scrollbar {
   width: 12px;
   height: 12px;
 }
-.info-card-text::-webkit-scrollbar-track {
+#search-results::-webkit-scrollbar-track {
   background: var(--scroll-bar-bg-color) !important;
 }
-.info-card-text::-webkit-scrollbar-thumb {
+#search-results::-webkit-scrollbar-thumb {
   background-color: var(--scroll-bar-color);
   border-radius: 20px;
   border: 3px solid var(--scroll-bar-bg-color) !important;
