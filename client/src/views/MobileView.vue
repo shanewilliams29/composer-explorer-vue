@@ -9,7 +9,7 @@
           </b-button>
         </b-card-header>
         <b-collapse :visible="composerDisabled" id="accordion-1" accordion="my-accordion" role="tabpanel">
-              <div class="container-fluid header-padding">
+              <div class="container-fluid header-height">
             <ComposerHeading />
           </div>
           <b-card-body>
@@ -26,7 +26,7 @@
           </b-button>
         </b-card-header>
         <b-collapse :visible="workDisabled" id="accordion-2" accordion="my-accordion" role="tabpanel">
-              <div class="container-fluid header-padding">
+              <div class="container-fluid header-height">
             <WorkHeading />
           </div>
           <b-card-body>
@@ -44,7 +44,7 @@
           </b-button>
         </b-card-header>
         <b-collapse :visible="albumDisabled" id="accordion-3" accordion="my-accordion" role="tabpanel">
-              <div class="container-fluid header-padding">
+              <div class="container-fluid header-height">
             <AlbumHeading />
           </div>
           <b-card-body>
@@ -115,7 +115,17 @@ export default {
     this.$view.shuffle = false;
     document.documentElement.style.setProperty("--playback-color", "var(--yellow)");
 
-    window.firstLoad = true; // prevent playback on first load
+    // remove query parameters for landing from search on another page
+    if (this.$route.query.search) {
+      window.firstLoad = false; // allow playback on first load from another page
+        setTimeout(() => {
+          this.$router.replace({'query': null});
+        }, 1000);
+    } else {
+      window.firstLoad = true; // prevent playback on first load
+    }
+    this.$view.mode = null;
+
     eventBus.$on("requestWorksList", (composer) => {
       this.composer = composer;
       this.workToggle();
@@ -181,6 +191,9 @@ export default {
 }*/
 
 /* Page styling */
+.header-height{
+  height: 76px !important;
+}
 .heading-text{
   padding-left: 20px;
   font-weight: 500;

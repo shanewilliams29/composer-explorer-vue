@@ -225,7 +225,7 @@ export default {
         let delay = 0;
         if (this.$route.name != "home") {
           delay = 200;
-          this.$router.push("/?search=" + composer.name_short);
+          this.$router.push("/mobile?search=" + composer.name_short);
         }
         setTimeout(function(){
           eventBus.$emit("fireComposerOmniSearch", composer);
