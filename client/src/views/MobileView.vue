@@ -172,9 +172,9 @@ export default {
   margin-left: -15px;
   margin-right: -10px;
 }
-/*>>> .form-control{
-  color: var(--yellow) !important;
-}*/
+>>> .form-control{
+  height: 31px !important;
+}
 
 /*>>> .v-select {
   --vs-selected-color: var(--yellow) !important;
