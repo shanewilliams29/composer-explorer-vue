@@ -230,8 +230,6 @@ export default {
         setTimeout(function(){
           eventBus.$emit("fireComposerOmniSearch", composer);
           eventBus.$emit("requestWorksList", composer.name_short);
-          eventBus.$emit("clearAlbumsList", composer.name_short);
-          eventBus.$emit("sendArtistList", []);
         }, delay);
     },
     getSearchWork(work) {
@@ -240,10 +238,12 @@ export default {
         let delay = 0;
         if (this.$route.name != "home") {
           delay = 200;
-          this.$router.push("/?search=" + work.id);
+          this.$router.push("/mobile?search=" + work.id);
         }
         setTimeout(function(){
           eventBus.$emit("fireWorkOmniSearch", work);
+          eventBus.$emit("requestWorksList", work.composer);
+          eventBus.$emit("requestAlbums");
         }, delay);
     },
     getArtistComposers(artist) {

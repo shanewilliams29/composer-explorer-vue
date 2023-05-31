@@ -1,15 +1,16 @@
 <template>
   <div id="home">
-
     <div role="tablist">
       <b-card no-body class="mb-1 mobile-card">
         <b-card-header header-tag="header" class="p-1" role="tab" v-show="!$view.mobileKeyboard">
           <b-button class="header-button" :disabled="composerDisabled" @click="composerToggle" block variant="secondary">
-            <span class="heading-text">Composers</span><span class="mb-0 float-right"><b-icon-chevron-down></b-icon-chevron-down></span>
+            <span class="heading-text">Composers</span><span class="mb-0 float-right">
+              <b-icon-chevron-down></b-icon-chevron-down>
+            </span>
           </b-button>
         </b-card-header>
         <b-collapse :visible="composerDisabled" id="accordion-1" accordion="my-accordion" role="tabpanel">
-              <div class="container-fluid header-height">
+          <div class="container-fluid header-height">
             <ComposerHeading />
           </div>
           <b-card-body>
@@ -22,11 +23,13 @@
       <b-card no-body class="mb-1 mobile-card">
         <b-card-header header-tag="header" class="p-1" role="tab" v-show="!$view.mobileKeyboard">
           <b-button class="header-button" :disabled="workDisabled" block @click="workToggle" variant="secondary">
-            <span class="heading-text">Works by {{ composer }}</span><span class="mb-0 float-right"><b-icon-chevron-down></b-icon-chevron-down></span>
+            <span class="heading-text">Works by {{ composer }}</span><span class="mb-0 float-right">
+              <b-icon-chevron-down></b-icon-chevron-down>
+            </span>
           </b-button>
         </b-card-header>
         <b-collapse :visible="workDisabled" id="accordion-2" accordion="my-accordion" role="tabpanel">
-              <div class="container-fluid header-height">
+          <div class="container-fluid header-height">
             <WorkHeading />
           </div>
           <b-card-body>
@@ -36,15 +39,16 @@
           </b-card-body>
         </b-collapse>
       </b-card>
-
       <b-card no-body class="mb-1 mobile-card">
         <b-card-header header-tag="header" class="p-1" role="tab" v-show="!$view.mobileKeyboard">
           <b-button class="header-button last-button" :disabled="albumDisabled" @click="albumToggle" block variant="secondary">
-            <span class="heading-text">{{ title }}</span><span class="mb-0 float-right"><b-icon-chevron-down></b-icon-chevron-down></span>
+            <span class="heading-text">{{ title }}</span><span class="mb-0 float-right">
+              <b-icon-chevron-down></b-icon-chevron-down>
+            </span>
           </b-button>
         </b-card-header>
         <b-collapse :visible="albumDisabled" id="accordion-3" accordion="my-accordion" role="tabpanel">
-              <div class="container-fluid header-height">
+          <div class="container-fluid header-height">
             <AlbumHeading />
           </div>
           <b-card-body>
