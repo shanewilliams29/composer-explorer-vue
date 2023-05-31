@@ -67,7 +67,7 @@ html {
 /* MOBILE STYLES */
 
 .composer-list-mobile{
-  height: calc(var(--vh, 1vh) * 100 - var(--workingheight));
+  height: calc(var(--vh, 1vh) * 100 - 114px - 76px - var(--workingheight));
   overflow-y: scroll;
 }
 .composer-list-mobile .composer-img{
@@ -86,7 +86,7 @@ html {
   padding-left: 3px;
 }
 .work-list-mobile{
-  height: calc(var(--vh, 1vh) * 100 - var(--workingheight));
+  height: calc(var(--vh, 1vh) * 100 - 114px - 76.33px - var(--workingheight));
   overflow-y: scroll;
 }
 .work-list-mobile .card{
@@ -97,7 +97,7 @@ html {
   padding-bottom: 5px;
 }
 .album-list-mobile{
-  height: calc(var(--vh, 1vh) * 100 - var(--workingheight));
+  height: calc(var(--vh, 1vh) * 100 - 114px - 76.33px - var(--workingheight));
   overflow-y: scroll;
   overflow-x: hidden;
 }
