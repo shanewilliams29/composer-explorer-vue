@@ -56,11 +56,19 @@
 }
 
 >>> .album_text_columns .album-major-artists{
-  font-size: 15px !important;
+  font-size: 16px !important;
+}
+
+>>> .album_text_columns .label{
+  font-size: 13px !important;
 }
 
 >>> .album_text_columns .label svg{
   font-size: 10px !important;
+}
+
+>>> .album_text_columns .album-minor-artists{
+  font-size: 13px !important;
 }
 
 /*>>> .album_text_columns .album-likes-class .likes span{
