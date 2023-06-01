@@ -91,6 +91,7 @@ export default {
       initialWorksLoad: true,
       initialAlbumsLoad: true,
       composerListKey: 0,
+      initialWindowHeight: 0,
     };
   },
   methods: {
@@ -110,6 +111,19 @@ export default {
       this.workDisabled = false;
       this.albumDisabled = true;
     },
+    detectKeyboard(){
+      let vh = window.innerHeight * 0.01;
+      console.log(window.innerHeight);
+      // for mobile keyboard
+      if (window.innerHeight < this.initialWindowHeight) {
+        this.$view.mobileKeyboard = true;
+        vh = vh + 300 * 0.01;
+      } else {
+        this.$view.mobileKeyboard = false;
+      }
+
+      document.documentElement.style.setProperty("--vh", `${vh}px`);
+    }
   },
   beforeCreate() {
     this.$view.mobile = true;
@@ -117,6 +131,7 @@ export default {
   created() {
     this.$view.mode = null;
     this.$view.shuffle = false;
+    this.initialWindowHeight = window.innerHeight;
     document.documentElement.style.setProperty("--playback-color", "var(--yellow)");
 
     // remove query parameters for landing from search on another page
@@ -144,19 +159,10 @@ export default {
     let vh = window.innerHeight * 0.01;
     document.documentElement.style.setProperty("--vh", `${vh}px`);
 
-    window.addEventListener("resize", () => {
-      let vh = window.innerHeight * 0.01;
-
-      // for mobile keyboard
-      if (window.innerHeight < 550) {
-        this.$view.mobileKeyboard = true;
-        vh = vh + 300 * 0.01;
-      } else {
-        this.$view.mobileKeyboard = false;
-      }
-
-      document.documentElement.style.setProperty("--vh", `${vh}px`);
-    });
+    window.addEventListener('resize', this.detectKeyboard);
+  },
+  beforeDestroy() {
+    window.removeEventListener('resize', this.detectKeyboard);
   },
 };
 

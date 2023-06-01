@@ -12,7 +12,7 @@
         </b-navbar>
       </div>
       <div id="dummy-div">
-        <div id="search-results" v-show="viewSearchResults && !firstLoad">
+        <div id="search-results" v-show="viewSearchResults && !firstLoad" @scroll="hideKeyboard">
           <b-card class="album-info-card">
             <div class="spinner" v-show="loading" role="status">
               <b-spinner class="m-5"></b-spinner>
@@ -104,7 +104,8 @@ export default {
       works: [],
       artists: [],
       loading: false,
-      firstLoad: true
+      firstLoad: true,
+      initialWindowHeight: 0,
     };
   },
   computed: {
@@ -124,6 +125,9 @@ export default {
     },
   },
   methods: {
+    hideKeyboard() {
+      document.activeElement.blur();
+    },
     iOS() {
       return [
         'iPad Simulator',
@@ -257,23 +261,27 @@ export default {
         }
       }
     },
+    detectKeyboard(){
+      let vh = window.innerHeight * 0.01;
+      console.log(window.innerHeight);
+      // for mobile keyboard
+      if (window.innerHeight < this.initialWindowHeight) {
+        this.$view.mobileKeyboard = true;
+        vh = vh + 200 * 0.01;
+      } else {
+        this.$view.mobileKeyboard = false;
+      }
+
+      document.documentElement.style.setProperty("--vh", `${vh}px`);
+    }
   },
   created(){
-    // var apple = this.iOS();
-    var userAgent = window.navigator.userAgent.toLowerCase();
-
-    if (userAgent.includes('wv')) { // Webview (App)
-      this.$view.avatar = false;
-    } else {
-      this.$view.avatar = true;
-      // if (this.$view.mobile && !apple) {
-      //   this.makeToast();
-      // }
-    }
+    this.initialWindowHeight = window.innerHeight;
+    window.addEventListener('resize', this.detectKeyboard);
   },
   mounted() {
     const inputForm = document.getElementById("search-form");
-    const overlay = document.getElementById('overlay');
+    const overlay = document.getElementById("overlay");
 
     inputForm.addEventListener('click', () => {
       this.viewSearchResults = true;
@@ -282,8 +290,10 @@ export default {
     overlay.addEventListener('click', () => {
       this.viewSearchResults = false;
     });
-
   },
+  beforeDestroy(){
+    window.removeEventListener('resize', this.detectKeyboard);
+  }
 }
 </script>
 
@@ -390,12 +400,12 @@ input[type="search"]::-webkit-search-cancel-button {
 #dummy-div{
   background-color: #fff;
   width: 100%;
-  height: calc(100vh - 47px - var(--workingheight));
+  height: calc(var(--vh, 1vh) * 100 - 47px - var(--workingheight));
 }
 #search-results{
   width: 100%;
   z-index: 9999;
-  max-height: calc(100vh - 47px - var(--workingheight));
+  max-height: calc(var(--vh, 1vh) * 100 - 47px - var(--workingheight));
   overflow-y: scroll;
 }
 .spinner {

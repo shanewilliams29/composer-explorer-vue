@@ -36,23 +36,22 @@ export default {
   created(){
     this.$view.mode = 'radio';
 
-    let vh = window.innerHeight * 0.01;
-    document.documentElement.style.setProperty('--vh', `${vh}px`);
+    // let vh = window.innerHeight * 0.01;
+    // document.documentElement.style.setProperty('--vh', `${vh}px`);
+    // window.addEventListener('resize', () => {
 
-    window.addEventListener('resize', () => {
-
-      let vh = window.innerHeight * 0.01;
-
-      // for mobile keyboard
-      if (window.innerHeight < 550){
-        this.$view.mobileKeyboard = true;
-        vh = vh + (300 * 0.01);
-      } else {
-        this.$view.mobileKeyboard = false;
-      }
+    //   let vh = window.innerHeight * 0.01;
+    //   console.log(window.innerHeight);
+    //   // for mobile keyboard
+    //   if (window.innerHeight < 550){
+    //     this.$view.mobileKeyboard = true;
+    //     vh = vh + (300 * 0.01);
+    //   } else {
+    //     this.$view.mobileKeyboard = false;
+    //   }
       
-      document.documentElement.style.setProperty('--vh', `${vh}px`);
-    });
+    //   document.documentElement.style.setProperty('--vh', `${vh}px`);
+    // });
   }
 }
 </script>
