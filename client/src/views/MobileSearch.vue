@@ -267,7 +267,7 @@ export default {
       // for mobile keyboard
       if (window.innerHeight < this.initialWindowHeight) {
         this.$view.mobileKeyboard = true;
-        vh = vh + 200 * 0.01;
+        vh = vh + 145 * 0.01;
       } else {
         this.$view.mobileKeyboard = false;
       }

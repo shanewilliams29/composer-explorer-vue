@@ -14,7 +14,7 @@
             <ComposerHeading />
           </div>
           <b-card-body>
-            <b-col class="composer-list-mobile disable-scrollbars" ref="scroll-box-comp">
+            <b-col class="composer-list-mobile disable-scrollbars" ref="scroll-box-comp" @scroll="hideKeyboard">
               <ComposerList />
             </b-col>
           </b-card-body>
@@ -33,7 +33,7 @@
             <WorkHeading />
           </div>
           <b-card-body>
-            <b-col class="work-list-mobile disable-scrollbars" ref="scroll-box">
+            <b-col class="work-list-mobile disable-scrollbars" ref="scroll-box" @scroll="hideKeyboard">
               <WorkList />
             </b-col>
           </b-card-body>
@@ -52,7 +52,7 @@
             <AlbumHeading />
           </div>
           <b-card-body>
-            <b-col class="album-list-mobile disable-scrollbars">
+            <b-col class="album-list-mobile disable-scrollbars" @scroll="hideKeyboard">
               <AlbumList />
             </b-col>
           </b-card-body>
@@ -95,6 +95,9 @@ export default {
     };
   },
   methods: {
+    hideKeyboard() {
+      document.activeElement.blur();
+    },
     composerToggle() {
       this.composerDisabled = true;
       this.workDisabled = false;
@@ -117,7 +120,7 @@ export default {
       // for mobile keyboard
       if (window.innerHeight < this.initialWindowHeight) {
         this.$view.mobileKeyboard = true;
-        vh = vh + 300 * 0.01;
+        vh = vh + 250 * 0.01;
       } else {
         this.$view.mobileKeyboard = false;
       }

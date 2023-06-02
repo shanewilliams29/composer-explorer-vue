@@ -1,6 +1,6 @@
 <template>
   <div v-if="$view.mobile">
-    <div v-show="!$view.mobileKeyboard">
+    <div>
       <div class="container-fluid">
         <b-navbar type="dark" variant="dark" class="no-padding">
           <b-container fluid class="d-flex">
