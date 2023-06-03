@@ -90,6 +90,7 @@ export default {
         .get(path)
         .then((res) => {
           this.$lists.artistList = res.data.artists;
+          localStorage.setItem("ArtistList", JSON.stringify(res.data.artists));
         })
         .catch((error) => {
           console.error(error);
@@ -137,7 +138,13 @@ export default {
     document.documentElement.style.setProperty("--panelheight", `0px`);
   },
   mounted(){
-    this.getArtistList();
+    if (localStorage.getItem("ArtistList") !== null) {
+        this.$lists.artistList = JSON.parse(localStorage.getItem("ArtistList"));
+      } else {
+        this.getArtistList();
+      }
+localStorage.setItem("config", JSON.stringify(this.$config));
+    
     this.getComposerList();
     this.getWorksList();
   }
