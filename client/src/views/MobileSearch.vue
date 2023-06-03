@@ -21,35 +21,40 @@
               <h6 v-if="composers.length + works.length + artists.length == 0">No search results.</h6>
             </div>
             <b-card-body v-show="!loading" id="composers" class="card-body">
-              <h6 v-if="composers.length > 0">Composers</h6>
+          
+              <h5 v-if="composers.length > 0">Composers</h5>
               <b-card-text class="info-card-text">
-                <div v-for="composer in composers" :key="composer['id']">
-                  <table>
+                <div v-for="composer in composers" :key="composer['id']" @click="getComposer(composer)">
+                  <table >
                     <tr>
                       <td>
-                        <b-avatar size="40px" :src="composer['img']"></b-avatar>
+                        <b-avatar size="52px" :src="composer['img']"></b-avatar>
                       </td>
                       <td class="info-td">
-                        <a class="artist-name" @click="getComposer(composer)">{{ composer['name_full'] }}</a><br />
-                        <span class="born-died">{{ composer['born']}} - {{ composer['died']}}</span>
+                        <a class="artist-name">{{ composer['name_full'] }}</a><br />
+                        <span class="born-died">{{ composer['nationality'] }} • {{ composer['born']}} - {{ composer['died']}}</span>
                       </td>
                     </tr>
                   </table>
                 </div>
               </b-card-text>
+              <hr>
             </b-card-body>
+
+           
             <b-card-body v-show="!loading" id="works" class="card-body">
-              <h6 v-if="works.length > 0">Works</h6>
+               
+              <h5 v-if="works.length > 0">Works</h5>
               <b-card-text class="info-card-text">
-                <div v-for="work in works" :key="work['id']">
-                  <table>
+                <div v-for="work in works" :key="work['id']" @click="getSearchWork(work)">
+                  <table >
                     <tr>
                       <td>
-                        <b-avatar size="40px" :src="workImgUrl(work['genre'], work['title'])"></b-avatar>
+                        <b-avatar size="52px" :src="workImgUrl(work['genre'], work['title'])"></b-avatar>
                       </td>
                       <td class="info-td">
-                        <a v-if="work['nickname']" @click="getSearchWork(work)" class="artist-name">{{ work['title'] }} • {{ work['nickname']}}</a>
-                        <a v-else @click="getSearchWork(work)" class="artist-name">{{ work['title'] }}</a><br />
+                        <a v-if="work['nickname']"  class="artist-name">{{ work['title'] }} • {{ work['nickname']}}</a>
+                        <a v-else class="artist-name">{{ work['title'] }}</a><br />
                         <span v-if="work['cat']" class="born-died">{{ work['composer']}} • {{ work['cat']}}</span>
                         <span v-else class="born-died">{{ work['composer']}}</span>
                       </td>
@@ -57,18 +62,20 @@
                   </table>
                 </div>
               </b-card-text>
+              <hr>
             </b-card-body>
             <b-card-body v-show="!loading" id="performers" class="card-body">
-              <h6 v-if="artists.length > 0">Performers</h6>
+               
+              <h5 v-if="artists.length > 0">Performers</h5>
               <b-card-text class="info-card-text">
-                <div v-for="artist in artists" :key="artist.id">
-                  <table>
+                <div v-for="artist in artists" :key="artist.id" @click="getArtistComposers(artist)">
+                  <table >
                     <tr>
                       <td>
-                        <b-avatar size="40px" :src="artist.img"></b-avatar>
+                        <b-avatar size="52px" :src="artist.img"></b-avatar>
                       </td>
                       <td class="info-td">
-                        <a class="artist-name" @click="getArtistComposers(artist)">{{ artist.name }}</a><br />
+                        <a class="artist-name" >{{ artist.name }}</a><br />
                         <span class="born-died">{{ artist.description }}</span>
                       </td>
                     </tr>
@@ -298,6 +305,14 @@ export default {
 </script>
 
 <style scoped>
+h5 {
+  padding-top: 3px;
+  padding-bottom: 3px;
+  color: var(--my-white);
+}
+hr {
+  border-top: 1px solid var(--medium-dark-gray);
+}
 .fade-enter-active, .fade-leave-active {
   transition: opacity 0.3s;
 }
@@ -398,7 +413,7 @@ input[type="search"]::-webkit-search-cancel-button {
 }
 
 #dummy-div{
-  background-color: #fff;
+  background-color: var(--dark-gray);
   width: 100%;
   height: calc(var(--vh, 1vh) * 100 - 47px - var(--workingheight));
 }
@@ -407,6 +422,7 @@ input[type="search"]::-webkit-search-cancel-button {
   z-index: 9999;
   max-height: calc(var(--vh, 1vh) * 100 - 47px - var(--workingheight));
   overflow-y: scroll;
+  background: none;
 }
 .spinner {
   text-align: center;
@@ -419,11 +435,11 @@ input[type="search"]::-webkit-search-cancel-button {
   padding-right: 15px;
   padding-top: 8px;
   padding-bottom: 10px;
-  background-color: var(--my-white) !important;
+  background: none;
   border: none !important;
 }
 .card-body {
-  background-color: var(--my-white) !important;
+   background: none;
   --scroll-bar-bg-color: var(--light-gray);
 }
 .info-card-text {
@@ -435,24 +451,19 @@ input[type="search"]::-webkit-search-cancel-button {
   padding-left: 10px;
 }
 .born-died {
-  font-size: 13px !important;
-  color: grey !important;
+  font-size: 14px !important;
+  color: var(--medium-dark-gray) !important;
 }
 .artist-name {
-  color: black !important;
-  font-weight: 600;
-  font-size: 14px;
-}
-.artist-name:hover {
-  color: black !important;
-  text-decoration: underline !important;
-  cursor: pointer;
+  color: var(--my-white) !important;
+  font-weight: 500;
+  font-size: 16px;
 }
 
 /*scrollbars*/
 #search-results {
-  --scroll-bar-color: var(--scroll-color-light);
-  --scroll-bar-bg-color: var(--my-white);
+  --scroll-bar-color: var(--medium-dark-gray);
+  --scroll-bar-bg-color: var(--dark-gray);
 }
 #search-results {
   scrollbar-width: thin;

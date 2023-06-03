@@ -41,6 +41,7 @@ def prepare_composers(composer_list):
             'flag': current_app.config['STATIC'] + 'flags/1x1/' + flag + '.svg',
             'img': current_app.config['STATIC'] + 'img/' + composer.name_short + '.jpg',
             'region': region_name,
+            'nationality': composer.nationality,
             'color': era_color,
             'catalogued': composer.catalogued,
             'tier': composer.tier
