@@ -90,7 +90,8 @@ export default {
         .get(path)
         .then((res) => {
           this.$lists.artistList = res.data.artists;
-          localStorage.setItem("ArtistList", JSON.stringify(res.data.artists));
+          var artistlist = {data: res.data.artists, timestamp: new Date().toISOString()};
+          localStorage.setItem("artistlist", JSON.stringify(artistlist));
         })
         .catch((error) => {
           console.error(error);
@@ -103,7 +104,9 @@ export default {
         .get(path)
         .then((res) => {
           this.$lists.workList = res.data.works;
-          this.$lists.albumViewWorks = this.$lists.workList
+          this.$lists.albumViewWorks = this.$lists.workList;
+          var workslist = {data: res.data.works, timestamp: new Date().toISOString()};
+          localStorage.setItem("workslist", JSON.stringify(workslist));
         })
         .catch((error) => {
           console.error(error);
@@ -138,15 +141,28 @@ export default {
     document.documentElement.style.setProperty("--panelheight", `0px`);
   },
   mounted(){
-    if (localStorage.getItem("ArtistList") !== null) {
-        this.$lists.artistList = JSON.parse(localStorage.getItem("ArtistList"));
+    // Get composer list (albums, radio)
+    this.getComposerList();
+    // Get works list (albums)
+    this.getWorksList();
+    // Get artists list (albums, radio)
+    let artistlist = JSON.parse(localStorage.getItem("artistlist"));
+    
+    if (artistlist !== null) {
+        let storedTimestamp = new Date(artistlist.timestamp);
+        let oneMonthAgo = new Date();
+        oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
+        console.log(storedTimestamp, oneMonthAgo);
+        if (storedTimestamp < oneMonthAgo) {
+          // console.log('The timestamp is more than one month old');
+          this.getArtistList();
+        } else {
+          // console.log('The timestamp is less than one month old');
+          this.$lists.artistList = artistlist.data;
+        }
       } else {
         this.getArtistList();
       }
-localStorage.setItem("config", JSON.stringify(this.$config));
-    
-    this.getComposerList();
-    this.getWorksList();
   }
 };
 
