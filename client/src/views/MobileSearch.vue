@@ -38,7 +38,7 @@
                   </table>
                 </div>
               </b-card-text>
-              <hr>
+              <hr v-if="composers.length > 0">
             </b-card-body>
 
            
@@ -62,7 +62,7 @@
                   </table>
                 </div>
               </b-card-text>
-              <hr>
+              <hr v-if="works.length > 0">
             </b-card-body>
             <b-card-body v-show="!loading" id="performers" class="card-body">
                
@@ -312,7 +312,7 @@ h5 {
   color: var(--my-white);
 }
 hr {
-  border-top: 2px solid var(--medium-gray);
+  border-top: 1px solid var(--medium-gray);
 }
 .fade-enter-active, .fade-leave-active {
   transition: opacity 0.3s;
