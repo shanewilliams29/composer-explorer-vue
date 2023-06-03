@@ -7,7 +7,7 @@
             <div class="search-icon">
               <b-icon-search></b-icon-search>
             </div>
-            <b-form-input id="search-form" class="omnisearch" size="sm" v-model="omniSearchInput" v-debounce:500ms="omniSearch" type="search" placeholder="Search composers, works, performers" autocomplete="off"></b-form-input>
+            <b-form-input id="search-form" class="omnisearch" v-model="omniSearchInput" v-debounce:500ms="omniSearch" type="search" placeholder="Search composers, works, performers" autocomplete="off"></b-form-input>
           </b-navbar-nav>
         </b-navbar>
       </div>
@@ -311,7 +311,7 @@ h5 {
   color: var(--my-white);
 }
 hr {
-  border-top: 1px solid var(--medium-dark-gray);
+  border-top: 2px solid var(--medium-gray);
 }
 .fade-enter-active, .fade-leave-active {
   transition: opacity 0.3s;
@@ -385,7 +385,7 @@ img {
 }
 .search-icon{
   position: absolute;
-  top: 12px;
+  top: 15px;
   left: 24px;
   color: white;
 }
