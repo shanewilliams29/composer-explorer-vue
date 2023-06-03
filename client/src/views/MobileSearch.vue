@@ -21,13 +21,13 @@
               <h6 v-if="composers.length + works.length + artists.length == 0">No search results.</h6>
             </div>
             <b-card-body v-show="!loading" id="composers" class="card-body">
-              <h6 v-if="composers.length > 0">Composers</h6>
+              <h5 v-if="composers.length > 0">Composers</h5>
               <b-card-text class="info-card-text">
                 <div v-for="composer in composers" :key="composer['id']">
                   <table>
                     <tr>
                       <td>
-                        <b-avatar size="40px" :src="composer['img']"></b-avatar>
+                        <b-avatar size="52px" :src="composer['img']"></b-avatar>
                       </td>
                       <td class="info-td">
                         <a class="artist-name" @click="getComposer(composer)">{{ composer['name_full'] }}</a><br />
@@ -39,13 +39,13 @@
               </b-card-text>
             </b-card-body>
             <b-card-body v-show="!loading" id="works" class="card-body">
-              <h6 v-if="works.length > 0">Works</h6>
+              <h5 v-if="works.length > 0">Works</h5>
               <b-card-text class="info-card-text">
                 <div v-for="work in works" :key="work['id']">
                   <table>
                     <tr>
                       <td>
-                        <b-avatar size="40px" :src="workImgUrl(work['genre'], work['title'])"></b-avatar>
+                        <b-avatar size="52px" :src="workImgUrl(work['genre'], work['title'])"></b-avatar>
                       </td>
                       <td class="info-td">
                         <a v-if="work['nickname']" @click="getSearchWork(work)" class="artist-name">{{ work['title'] }} • {{ work['nickname']}}</a>
@@ -59,13 +59,13 @@
               </b-card-text>
             </b-card-body>
             <b-card-body v-show="!loading" id="performers" class="card-body">
-              <h6 v-if="artists.length > 0">Performers</h6>
+              <h5 v-if="artists.length > 0">Performers</h5>
               <b-card-text class="info-card-text">
                 <div v-for="artist in artists" :key="artist.id">
                   <table>
                     <tr>
                       <td>
-                        <b-avatar size="40px" :src="artist.img"></b-avatar>
+                        <b-avatar size="52px" :src="artist.img"></b-avatar>
                       </td>
                       <td class="info-td">
                         <a class="artist-name" @click="getArtistComposers(artist)">{{ artist.name }}</a><br />
@@ -435,13 +435,13 @@ input[type="search"]::-webkit-search-cancel-button {
   padding-left: 10px;
 }
 .born-died {
-  font-size: 13px !important;
+  font-size: 14px !important;
   color: grey !important;
 }
 .artist-name {
   color: black !important;
   font-weight: 600;
-  font-size: 14px;
+  font-size: 16px;
 }
 .artist-name:hover {
   color: black !important;
