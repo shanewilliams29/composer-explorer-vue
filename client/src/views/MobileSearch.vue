@@ -7,7 +7,7 @@
             <div class="search-icon">
               <b-icon-search></b-icon-search>
             </div>
-            <b-form-input id="search-form" class="omnisearch" v-model="omniSearchInput" v-debounce:500ms="omniSearch" type="search" placeholder="Search composers, works, performers" autocomplete="off"></b-form-input>
+            <b-form-input ref="searchBox" id="search-form" class="omnisearch" v-model="omniSearchInput" v-debounce:500ms="omniSearch" type="search" placeholder="Search composers, works, performers" autocomplete="off"></b-form-input>
           </b-navbar-nav>
         </b-navbar>
       </div>
@@ -287,6 +287,7 @@ export default {
     window.addEventListener('resize', this.detectKeyboard);
   },
   mounted() {
+    this.$refs.searchBox.focus();
     const inputForm = document.getElementById("search-form");
     const overlay = document.getElementById("overlay");
 
