@@ -307,7 +307,6 @@ export default {
 
 <style scoped>
 h5 {
-  padding-top: 3px;
   padding-bottom: 3px;
   color: var(--my-white);
 }
