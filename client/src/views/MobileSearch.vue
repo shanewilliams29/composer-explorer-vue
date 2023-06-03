@@ -311,7 +311,7 @@ h5 {
   color: var(--my-white);
 }
 hr {
-  border-top: 1px solid var(--medium-dark-gray);
+  border-top: 2px solid var(--medium-gray);
 }
 .fade-enter-active, .fade-leave-active {
   transition: opacity 0.3s;
