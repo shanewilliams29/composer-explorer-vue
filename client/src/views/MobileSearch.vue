@@ -461,6 +461,10 @@ input[type="search"]::-webkit-search-cancel-button {
   font-size: 16px;
 }
 
+.artist-name:hover {
+  text-decoration: none;
+}
+
 /*scrollbars*/
 #search-results {
   --scroll-bar-color: var(--medium-dark-gray);
