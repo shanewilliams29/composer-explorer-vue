@@ -1,11 +1,14 @@
 import json
-from app import storage_client
+from app import storage_client, db
 import requests
 from PIL import Image
 import io
 from flask import current_app
 from collections import defaultdict
+from app.models import Performers, ComposerList, performer_albums
+from sqlalchemy import func, text, or_
 import random
+
 
 
 def prepare_composers(composer_list):
@@ -170,3 +173,25 @@ def upload_avatar(username, file):
     blob.upload_from_string(img_byte_arr, content_type='image/jpeg')
 
     return current_app.config['STATIC'] + 'avatars/{}.jpg'.format(username), 200
+
+
+def retrieve_artist_list_from_db():
+    artist_list = []
+
+    artists = db.session.query(Performers.id, Performers.name, Performers.img, Performers.description, func.count(Performers.id).label('total'))\
+        .join(performer_albums)\
+        .filter(or_(Performers.hidden == False, Performers.hidden == None))\
+        .group_by(Performers.id).order_by(text('total DESC')).all()
+
+    composers = db.session.query(ComposerList.name_full).all()
+    composer_names = set(composer for (composer,) in composers)
+    
+    # remove composer exceptions who were also conductors and performance artists
+    exceptions_list = ['Leonard Bernstein', 'Pierre Boulez', 'Steve Reich']
+    for exception in exceptions_list:
+        composer_names.remove(exception)
+
+    # remove composers and bad results
+    for _id, artist, img, description, count in artists:
+        if artist not in composer_names and "/" not in artist:
+            artist_list.append({'id': _id, 'name': artist, 'img': img, 'description': description})

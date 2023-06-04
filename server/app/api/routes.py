@@ -3,7 +3,7 @@ from flask import jsonify, request, session, abort, current_app
 from flask_login import current_user
 from config import Config
 from app.functions import prepare_composers, group_composers_by_region, group_composers_by_alphabet
-from app.functions import prepare_works
+from app.functions import prepare_works, retrieve_artist_list_from_db
 from app.models import ComposerList, WorkList, WorkAlbums, AlbumLike, Performers, performer_albums
 from app.models import User
 from sqlalchemy import func, text, or_, and_
@@ -371,29 +371,9 @@ def omnisearch():
     # search for performers
     artist_list = cache.get('artists')
 
+    # cache miss
     if artist_list is None:
-        # cache should be available, populated in artistlist endpoint. Backup if cache is down:
-        artist_list = []
-
-        artists = db.session.query(Performers.id, Performers.name, Performers.img, Performers.description, func.count(Performers.id).label('total'))\
-            .join(performer_albums)\
-            .filter(or_(Performers.hidden == False, Performers.hidden == None))\
-            .group_by(Performers.id).order_by(text('total DESC')).all()
-
-        composers = db.session.query(ComposerList.name_full).all()
-        composer_names = set(composer for (composer,) in composers)
-        
-        # remove composer exceptions who were also conductors and performance artists
-        exceptions_list = ['Leonard Bernstein', 'Pierre Boulez', 'Steve Reich']
-        for exception in exceptions_list:
-            composer_names.remove(exception)
-
-        # remove composers and bad results
-        for _id, artist, img, description, count in artists:
-            if artist not in composer_names and "/" not in artist:
-                artist_list.append({'id': _id, 'name': artist, 'img': img, 'description': description})
-
-        # store in cache
+        artist_list = retrieve_artist_list_from_db()
         cache.set('artists', artist_list)
 
     # match search words with artist names
@@ -438,6 +418,11 @@ def searchperformers():
 
     # search for performers
     artist_list = cache.get('artists')
+
+    # cache miss
+    if artist_list is None:
+        artist_list = retrieve_artist_list_from_db()
+        cache.set('artists', artist_list)
 
     for word in search_words:
         artist_matches = [item for item in artist_list if word.lower() in unidecode(item['name'].lower())]
@@ -1461,27 +1446,7 @@ def get_artistlist():
 
     artist_list = cache.get('artists')
     if artist_list is None:
-
-        artist_list = []
-
-        artists = db.session.query(Performers.id, Performers.name, Performers.img, Performers.description, Performers.wiki_link, func.count(Performers.id).label('total'))\
-            .join(performer_albums)\
-            .filter(or_(Performers.hidden == False, Performers.hidden == None))\
-            .group_by(Performers.id).order_by(text('total DESC')).all()
-
-        composers = db.session.query(ComposerList.name_full).all()
-        composer_names = set(composer for (composer,) in composers)
-        
-        # remove composer exceptions who were also conductors and performance artists
-        exceptions_list = ['Leonard Bernstein', 'Pierre Boulez', 'Steve Reich']
-        for exception in exceptions_list:
-            composer_names.remove(exception)
-
-        # remove composers and bad results
-        for _id, artist, img, description, wiki_link, count in artists:
-            if artist not in composer_names and "/" not in artist:
-                artist_list.append({'id': _id, 'name': artist, 'img': img, 'description': description, 'wiki_link': wiki_link})
-
+        artist_list = retrieve_artist_list_from_db()
         cache.set('artists', artist_list)
 
     return_list = []
