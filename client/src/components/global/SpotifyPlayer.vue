@@ -137,8 +137,7 @@ export default {
                                 this.$auth.avatar = res.data.avatar;
                                 this.$view.showConnecting = false;
 
-                                // Add the event listener on app to activate Spotify Player on first click
-                                // This is for browser autoplay restrictions
+                                // Add the event listener on app to activate Spotify Player on first click. In Safari 16.5, Spotify.Player() constructor must be in a click handler for autoplay restriction reasons.
                                 document.getElementById("app").addEventListener("click", this.activatePlayer);
 
                                 // Non-premium member, no activation of Spotify player

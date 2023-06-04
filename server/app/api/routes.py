@@ -278,7 +278,7 @@ def get_albumsview():
 def get_workslist():
     works_list = []
 
-    works = db.session.query(WorkList.title).order_by(WorkList.title).distinct()
+    works = db.session.query(WorkList.title).order_by(WorkList.album_count.desc()).distinct()
 
     works_list = [work for (work,) in works]
 
@@ -437,7 +437,7 @@ def searchperformers():
 
 
 @bp.route('/api/composers', methods=['GET'])  # main composer list
-# @cache.cached(query_string=True)
+@cache.cached(query_string=True)
 def get_composers():
     # look for search term or filter term
     search_item = request.args.get('search')
@@ -1281,7 +1281,7 @@ def get_composerinfo(composer):
 
 
 @bp.route('/api/workinfo/<work_id>', methods=['GET'])
-# @cache.cached(query_string=True)
+@cache.cached(query_string=True)
 def get_workinfo(work_id):
     work = db.session.query(WorkList)\
         .filter(WorkList.id == work_id).first()
@@ -1310,7 +1310,7 @@ def get_workinfo(work_id):
 
 
 @bp.route('/api/albuminfo/<album_id>', methods=['GET'])
-# @cache.cached(query_string=True)
+@cache.cached(query_string=True)
 def get_albuminfo(album_id):
     result = db.session.query(WorkAlbums, ComposerList.name_full)\
         .join(ComposerList)\
@@ -1441,7 +1441,6 @@ def get_artistworks():
 
 
 @bp.route('/api/artistlist', methods=['GET'])  # artist list for performer view
-# @cache.cached()
 def get_artistlist():
 
     artist_list = cache.get('artists')
