@@ -152,7 +152,6 @@ export default {
         let storedTimestamp = new Date(artistlist.timestamp);
         let oneMonthAgo = new Date();
         oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
-        console.log(storedTimestamp, oneMonthAgo);
         if (storedTimestamp < oneMonthAgo) {
           // console.log('The timestamp is more than one month old');
           this.getArtistList();

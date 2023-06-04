@@ -14,12 +14,7 @@ spotifyPlayerScript.setAttribute("src", "https://sdk.scdn.co/spotify-player.js")
 document.head.appendChild(spotifyPlayerScript);
 
 // To activate the player for Chrome and Safari Autoplay restrictions
-function activatePlayer() {
-    window.player.connect();
-    console.log("Playback activated!");
-    // Remove the event listener after the first click
-    document.getElementById("app").removeEventListener("click", activatePlayer);
-}
+
 
 // Listeners for Spotify playback functionality
 function addPlaybackListeners(vm) {
@@ -28,13 +23,13 @@ function addPlaybackListeners(vm) {
         vm.$auth.deviceID = device_id;
         window.device_id = device_id;
         console.log("Ready with Device ID", device_id);
-        // vm.$view.showConnecting = false;
+        vm.$view.showConnecting = false;
 
         // THE FOLLOWING IS NECESSARY BECAUSE SPOTIFY BREAKS CONNECTION WHEN AN ALBUM IS NOT AVAILABLE. THIS FUNCTIONALITY RECOVERS IT, OR ADVANCES TO NEXT ALBUM.
 
         // On player first time startup, do nothing
         if (vm.firstLoad) {
-            window.player.activateElement();
+            //window.player.activateElement();
             vm.firstLoad = false;
 
             // If player is reloaded, try playing the requested tracks again
@@ -94,6 +89,36 @@ export default {
         };
     },
     methods: {
+        activatePlayer() {
+
+            console.log("Player activated!");
+
+            // eslint-disable-next-line
+            window.player = new Spotify.Player({
+                name: "Composer Explorer",
+                getOAuthToken: (cb) => {
+                    cb(this.$auth.clientToken);
+                },
+                volume: 1,
+            });
+
+            // Add Spotify playback listeners
+            addPlaybackListeners(this);
+
+            // Connect to Spotify player
+            window.player.connect();
+
+            // For initial startup, and use of play button.
+            document.getElementById("play-button").addEventListener("click", function() {
+                // window.player.activateElement();
+                window.player.resume();
+            });
+
+        //window.player.activateElement();
+        //console.log("Playback activated!");
+        // Remove the event listener after the first click
+        document.getElementById("app").removeEventListener("click", this.activatePlayer);
+    },
         initializeSpotify() {
             window.onSpotifyWebPlaybackSDKReady = () => {
                 const path = "api/get_token";
@@ -111,31 +136,10 @@ export default {
                                 this.$auth.knowledgeKey = res.data.knowledge_api;
                                 this.$auth.avatar = res.data.avatar;
                                 this.$view.showConnecting = false;
-                                
-                                // eslint-disable-next-line
-                                window.player = new Spotify.Player({
-                                    name: "Composer Explorer",
-                                    getOAuthToken: (cb) => {
-                                        cb(this.$auth.clientToken);
-                                    },
-                                    volume: 1,
-                                });
-
-                                // Add Spotify playback listeners
-                                addPlaybackListeners(this);
-
-                                // Connect to Spotify player
-                                // window.player.connect();
-
-                                // For initial startup, and use of play button.
-                                document.getElementById("play-button").addEventListener("click", function() {
-                                    window.player.activateElement();
-                                    window.player.resume();
-                                });
 
                                 // Add the event listener on app to activate Spotify Player on first click
                                 // This is for browser autoplay restrictions
-                                document.getElementById("app").addEventListener("click", activatePlayer);
+                                document.getElementById("app").addEventListener("click", this.activatePlayer);
 
                                 // Non-premium member, no activation of Spotify player
                             } else if (res.data.client_token !== null) {
