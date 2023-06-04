@@ -195,3 +195,5 @@ def retrieve_artist_list_from_db():
     for _id, artist, img, description, count in artists:
         if artist not in composer_names and "/" not in artist:
             artist_list.append({'id': _id, 'name': artist, 'img': img, 'description': description})
+
+    return artist_list
