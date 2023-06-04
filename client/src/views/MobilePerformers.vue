@@ -135,7 +135,7 @@ export default {
     }
   },
   beforeCreate() {
-    document.documentElement.style.setProperty("--workingheight", `227.6px`);
+    document.documentElement.style.setProperty("--workingheight", `228.6px`);
     this.$view.mobile = true;
   },
   created() {
@@ -182,7 +182,7 @@ export default {
 #dummy-div {
   background-color: var(--dark-gray);
   width: 100%;
-  height: calc(var(--vh, 1vh) * 100 - 121px + 43px - var(--workingheight));
+  height: calc(var(--vh, 1vh) * 100 - 121px + 44px - var(--workingheight));
 }
 
 .cards-container{

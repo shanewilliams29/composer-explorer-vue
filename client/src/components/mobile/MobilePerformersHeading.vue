@@ -412,7 +412,7 @@ export default {
   font-size: 13px;
   line-height: 130%;
   overflow-y: scroll;
-  max-height: calc(var(--vh, 1vh) * 100 - 121px - 12px - var(--workingheight));
+  height: calc(var(--vh, 1vh) * 100 - 121px + 20px - var(--workingheight));
   padding-left: 2px;
 }
 .info-td {
