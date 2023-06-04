@@ -130,7 +130,7 @@ export default {
     if (this.$route.name == "mobile" || this.$route.name == "mobileradio" || this.$route.name == "mobilesearch" || this.$route.name == "mobileperformers") {
       this.$view.mobile = true;
       document.documentElement.style.setProperty("--playerpadding", `0px`);
-      document.documentElement.style.setProperty("--workingheight", `191.6px`);
+      //document.documentElement.style.setProperty("--workingheight", `191.6px`);
       document.documentElement.style.setProperty("--appbackgroundcolor", `var(--dark-gray)`);
     } else {
       this.$view.mobile = false;

@@ -129,6 +129,7 @@ export default {
     }
   },
   beforeCreate() {
+    document.documentElement.style.setProperty("--workingheight", `191.6px`);
     this.$view.mobile = true;
   },
   created() {

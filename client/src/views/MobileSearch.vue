@@ -272,6 +272,9 @@ export default {
       document.documentElement.style.setProperty("--vh", `${vh}px`);
     }
   },
+  beforeCreate(){
+    document.documentElement.style.setProperty("--workingheight", `191.6px`);
+  },
   created() {
     this.initialWindowHeight = window.innerHeight;
     window.addEventListener('resize', this.detectKeyboard);
