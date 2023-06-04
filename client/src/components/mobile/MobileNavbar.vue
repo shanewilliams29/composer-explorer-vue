@@ -11,7 +11,7 @@
               <b-nav-item class="small-text flex-fill text-center" id="home" :active='$route.path == "/mobile"' @click="$router.push('/mobile')">
                 <b-icon-music-note-list></b-icon-music-note-list><br>Browse
               </b-nav-item>
-              <b-nav-item class="small-text flex-fill text-center" id="performer" :active='$route.name == "performers"' @click="$router.push('/performers')">
+              <b-nav-item class="small-text flex-fill text-center" id="performer" :active='$route.name == "mobileperformers"' @click="$router.push('/mobileperformers')">
                 <b-icon-person-lines-fill></b-icon-person-lines-fill><br>Performers
               </b-nav-item>
               <b-nav-item class="small-text flex-fill text-center" id="albums" :active='$route.name == "albums"' @click="$router.push('/albums')">

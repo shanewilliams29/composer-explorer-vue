@@ -437,13 +437,13 @@ input[type="search"]::-webkit-search-cancel-button {
 #dummy-div {
   background-color: var(--dark-gray);
   width: 100%;
-  height: calc(var(--vh, 1vh) * 100 - 47px - var(--workingheight));
+  height: calc(var(--vh, 1vh) * 100 - 54px - var(--workingheight));
 }
 
 #search-results {
   width: 100%;
   z-index: 9999;
-  max-height: calc(var(--vh, 1vh) * 100 - 47px - var(--workingheight));
+  max-height: calc(var(--vh, 1vh) * 100 - 54px - var(--workingheight));
   overflow-y: scroll;
   background: none;
 }

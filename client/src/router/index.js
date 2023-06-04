@@ -9,6 +9,7 @@ import AlbumView from '../views/AlbumView.vue'
 import RadioView from '../views/RadioView.vue'
 import FavoritesView from '../views/FavoritesView.vue'
 import MobileRadio from '../views/MobileRadio.vue'
+import MobilePerformers from '../views/MobilePerformers.vue'
 
 Vue.use(VueRouter)
 
@@ -47,6 +48,11 @@ const routes = [
     path: '/mobilesearch',
     name: 'mobilesearch',
     component: MobileSearch
+  },
+  {
+    path: '/mobileperformers',
+    name: 'mobileperformers',
+    component: MobilePerformers
   },
     {
     path: '/mobileradio',
