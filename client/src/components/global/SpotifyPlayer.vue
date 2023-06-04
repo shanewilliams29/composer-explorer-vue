@@ -15,7 +15,7 @@ document.head.appendChild(spotifyPlayerScript);
 
 // To activate the player for Chrome and Safari Autoplay restrictions
 function activatePlayer() {
-    window.player.activateElement();
+    window.player.connect();
     console.log("Playback activated!");
     // Remove the event listener after the first click
     document.getElementById("app").removeEventListener("click", activatePlayer);
@@ -28,7 +28,7 @@ function addPlaybackListeners(vm) {
         vm.$auth.deviceID = device_id;
         window.device_id = device_id;
         console.log("Ready with Device ID", device_id);
-        vm.$view.showConnecting = false;
+        // vm.$view.showConnecting = false;
 
         // THE FOLLOWING IS NECESSARY BECAUSE SPOTIFY BREAKS CONNECTION WHEN AN ALBUM IS NOT AVAILABLE. THIS FUNCTIONALITY RECOVERS IT, OR ADVANCES TO NEXT ALBUM.
 
@@ -110,6 +110,7 @@ export default {
                                 this.$auth.patreon = res.data.patreon;
                                 this.$auth.knowledgeKey = res.data.knowledge_api;
                                 this.$auth.avatar = res.data.avatar;
+                                this.$view.showConnecting = false;
                                 
                                 // eslint-disable-next-line
                                 window.player = new Spotify.Player({
@@ -124,7 +125,7 @@ export default {
                                 addPlaybackListeners(this);
 
                                 // Connect to Spotify player
-                                window.player.connect();
+                                // window.player.connect();
 
                                 // For initial startup, and use of play button.
                                 document.getElementById("play-button").addEventListener("click", function() {
