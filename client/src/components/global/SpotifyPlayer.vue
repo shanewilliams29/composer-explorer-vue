@@ -129,7 +129,7 @@ export default {
                                 // For initial startup, and use of play button.
                                 document.getElementById("play-button").addEventListener("click", function() {
                                     window.player.activateElement();
-                                    window.player.togglePlay();
+                                    window.player.resume();
                                 });
 
                                 // Add the event listener on app to activate Spotify Player on first click

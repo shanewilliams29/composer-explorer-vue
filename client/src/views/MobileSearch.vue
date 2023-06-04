@@ -21,11 +21,10 @@
               <h6 v-if="composers.length + works.length + artists.length == 0">No search results.</h6>
             </div>
             <b-card-body v-show="!loading" id="composers" class="card-body">
-          
               <h5 v-if="composers.length > 0">Composers</h5>
               <b-card-text class="info-card-text">
                 <div v-for="composer in composers" :key="composer['id']" @click="getComposer(composer)">
-                  <table >
+                  <table>
                     <tr>
                       <td>
                         <b-avatar size="52px" :src="composer['img']"></b-avatar>
@@ -40,20 +39,17 @@
               </b-card-text>
               <hr v-if="composers.length > 0">
             </b-card-body>
-
-           
             <b-card-body v-show="!loading" id="works" class="card-body">
-               
               <h5 v-if="works.length > 0">Works</h5>
               <b-card-text class="info-card-text">
                 <div v-for="work in works" :key="work['id']" @click="getSearchWork(work)">
-                  <table >
+                  <table>
                     <tr>
                       <td>
                         <b-avatar size="52px" :src="workImgUrl(work['genre'], work['title'])"></b-avatar>
                       </td>
                       <td class="info-td">
-                        <a v-if="work['nickname']"  class="artist-name">{{ work['title'] }} • {{ work['nickname']}}</a>
+                        <a v-if="work['nickname']" class="artist-name">{{ work['title'] }} • {{ work['nickname']}}</a>
                         <a v-else class="artist-name">{{ work['title'] }}</a><br />
                         <span v-if="work['cat']" class="born-died">{{ work['composer']}} • {{ work['cat']}}</span>
                         <span v-else class="born-died">{{ work['composer']}}</span>
@@ -65,17 +61,16 @@
               <hr v-if="works.length > 0">
             </b-card-body>
             <b-card-body v-show="!loading" id="performers" class="card-body">
-               
               <h5 v-if="artists.length > 0">Performers</h5>
               <b-card-text class="info-card-text">
                 <div v-for="artist in artists" :key="artist.id" @click="getArtistComposers(artist)">
-                  <table >
+                  <table>
                     <tr>
                       <td>
                         <b-avatar size="52px" :src="artist.img"></b-avatar>
                       </td>
                       <td class="info-td">
-                        <a class="artist-name" >{{ artist.name }}</a><br />
+                        <a class="artist-name">{{ artist.name }}</a><br />
                         <span class="born-died">{{ artist.description }}</span>
                       </td>
                     </tr>
@@ -85,14 +80,14 @@
             </b-card-body>
           </b-card>
         </div>
-        </div>
+      </div>
     </div>
   </div>
 </template>
 
 
 <script>
-import {baseURL, staticURL} from "@/main.js";
+import { baseURL, staticURL } from "@/main.js";
 import axios from "axios";
 import { eventBus } from "@/main.js";
 
@@ -125,7 +120,7 @@ export default {
   },
   watch: {
     searchInput(searchInput) {
-      if (searchInput == ""){
+      if (searchInput == "") {
         this.viewSearchResults = false;
         this.firstLoad = true;
       }
@@ -137,15 +132,16 @@ export default {
     },
     iOS() {
       return [
-        'iPad Simulator',
-        'iPhone Simulator',
-        'iPod Simulator',
-        'iPad',
-        'iPhone',
-        'iPod'
-      ].includes(navigator.platform)
-      // iPad on iOS 13 detection
-      || (navigator.userAgent.includes("Mac") && "ontouchend" in document)
+          'iPad Simulator',
+          'iPhone Simulator',
+          'iPod Simulator',
+          'iPad',
+          'iPhone',
+          'iPod'
+        ].includes(navigator.platform)
+        // iPad on iOS 13 detection
+        ||
+        (navigator.userAgent.includes("Mac") && "ontouchend" in document)
     },
     // makeToast() {
     //   this.$bvToast.toast(`Get the App on Play Store`, {
@@ -159,7 +155,7 @@ export default {
     // },
     workImgUrl(genre, title) {
       let url = "";
-      if(genre == 'Opera' || genre == 'Stage Work' || genre == 'Ballet'){
+      if (genre == 'Opera' || genre == 'Stage Work' || genre == 'Ballet') {
         url = 'https://storage.googleapis.com/composer-explorer.appspot.com/headers/' + title + '.jpg';
       } else {
         url = 'https://storage.googleapis.com/composer-explorer.appspot.com/headers/' + genre + '.jpg';
@@ -167,7 +163,7 @@ export default {
       return url;
     },
     getUnreadPosts() {
-      if(this.$auth.clientToken){
+      if (this.$auth.clientToken) {
         const path = "api/userdata";
         axios
           .get(path)
@@ -177,10 +173,10 @@ export default {
           .catch((error) => {
             console.error(error);
           });
-        }
+      }
     },
     omniSearch() {
-      if (this.omniSearchInput !== ""){
+      if (this.omniSearchInput !== "") {
         this.getOmniSearch(this.omniSearchInput);
       } else {
         //this.viewSearchResults = false;
@@ -195,10 +191,10 @@ export default {
       this.artists = [];
 
       const path = "api/omnisearch?search=" + item;
-      
+
       let wordsArray = item.split(" ");
       let worksFirst = false;
-      if(wordsArray.length > 1){
+      if (wordsArray.length > 1) {
         worksFirst = true;
       }
 
@@ -213,7 +209,7 @@ export default {
           var content = "";
           var parent = "";
 
-          if (worksFirst){
+          if (worksFirst) {
             content = document.getElementById('works');
             parent = content.parentNode;
             parent.insertBefore(content, parent.firstChild);
@@ -232,30 +228,30 @@ export default {
         });
     },
     getComposer(composer) {
-        this.viewSearchResults = false;
-        let delay = 0;
-        if (this.$route.name != "home") {
-          delay = 200;
-          this.$router.push("/mobile?search=" + composer.name_short);
-        }
-        setTimeout(function(){
-          eventBus.$emit("fireComposerOmniSearch", composer);
-          eventBus.$emit("requestWorksList", composer.name_short);
-        }, delay);
+      this.viewSearchResults = false;
+      let delay = 0;
+      if (this.$route.name != "home") {
+        delay = 200;
+        this.$router.push("/mobile?search=" + composer.name_short);
+      }
+      setTimeout(function() {
+        eventBus.$emit("fireComposerOmniSearch", composer);
+        eventBus.$emit("requestWorksList", composer.name_short);
+      }, delay);
     },
     getSearchWork(work) {
-        this.viewSearchResults = false;
+      this.viewSearchResults = false;
 
-        let delay = 0;
-        if (this.$route.name != "home") {
-          delay = 200;
-          this.$router.push("/mobile?search=" + work.id);
-        }
-        setTimeout(function(){
-          eventBus.$emit("fireWorkOmniSearch", work);
-          eventBus.$emit("requestWorksList", work.composer);
-          eventBus.$emit("requestAlbums");
-        }, delay);
+      let delay = 0;
+      if (this.$route.name != "home") {
+        delay = 200;
+        this.$router.push("/mobile?search=" + work.id);
+      }
+      setTimeout(function() {
+        eventBus.$emit("fireWorkOmniSearch", work);
+        eventBus.$emit("requestWorksList", work.composer);
+        eventBus.$emit("requestAlbums");
+      }, delay);
     },
     getArtistComposers(artist) {
       this.viewSearchResults = false;
@@ -268,7 +264,7 @@ export default {
         }
       }
     },
-    detectKeyboard(){
+    detectKeyboard() {
       let vh = window.innerHeight * 0.01;
       console.log(window.innerHeight);
       // for mobile keyboard
@@ -282,7 +278,7 @@ export default {
       document.documentElement.style.setProperty("--vh", `${vh}px`);
     }
   },
-  created(){
+  created() {
     this.initialWindowHeight = window.innerHeight;
     window.addEventListener('resize', this.detectKeyboard);
   },
@@ -299,7 +295,7 @@ export default {
       this.viewSearchResults = false;
     });
   },
-  beforeDestroy(){
+  beforeDestroy() {
     window.removeEventListener('resize', this.detectKeyboard);
   }
 }
@@ -310,126 +306,156 @@ h5 {
   padding-bottom: 3px;
   color: var(--my-white);
 }
+
 hr {
   border-top: 1px solid var(--medium-gray);
 }
-.fade-enter-active, .fade-leave-active {
+
+.fade-enter-active,
+.fade-leave-active {
   transition: opacity 0.3s;
 }
-.fade-enter, .fade-leave-to {
+
+.fade-enter,
+.fade-leave-to {
   opacity: 0;
 }
-     .overlay {
-            display: block;
-            position: absolute;
-            top: 66;
-            left: 0;
-            width: 100%;
-            height: calc(100% - 66px);
-            background: rgba(52, 58, 64, 0.5);
-            z-index: 10;
-        }
-#home .active{
+
+.overlay {
+  display: block;
+  position: absolute;
+  top: 66;
+  left: 0;
+  width: 100%;
+  height: calc(100% - 66px);
+  background: rgba(52, 58, 64, 0.5);
+  z-index: 10;
+}
+
+#home .active {
   background-color: var(--blue);
 }
-#performer .active{
+
+#performer .active {
   background-color: var(--purple);
 }
-#albums .active{
+
+#albums .active {
   background-color: var(--orange);
 }
-#radio .active{
+
+#radio .active {
   background-color: var(--green);
 }
-#favorites .active{
+
+#favorites .active {
   background-color: var(--red);
 }
 
-.radio-img{
+.radio-img {
   padding-bottom: 0px;
 }
 
 .container-fluid {
   padding: 0px;
 }
+
 .log-in-with .disabled {
   color: lightgrey !important;
 }
+
 .spotify-button {
   background-color: #1db954;
   border: none;
 }
+
 img {
   margin-left: 0px;
 }
+
 .navbar.navbar-dark.bg-dark {
   background-color: var(--dark-gray) !important;
 }
-.buttons-nav{
+
+.buttons-nav {
   min-width: 620px !important;
 }
+
 .navbar-items a {
   color: var(--my-white) !important;
 }
+
 .menu-button a {
   padding-right: 0px !important;
 }
-.sidebar-text{
+
+.sidebar-text {
   font-size: 14px;
 }
-.avatar-button >>> .btn{
+
+.avatar-button>>>.btn {
   border: none !important;
   padding: 0px !important;
   background: transparent !important;
   margin-left: 5px;
 }
-.search-icon{
+
+.search-icon {
   position: absolute;
   top: 15px;
   left: 24px;
   color: white;
 }
-.search-nav{
+
+.search-nav {
   width: 100% !important;
 }
-.omnisearch{
+
+.omnisearch {
   background-color: var(--medium-gray) !important;
   width: 100% !important;
   margin-right: 0px;
   margin-left: 0px;
 }
-.form-control:focus{
-  box-shadow: none; 
+
+.form-control:focus {
+  box-shadow: none;
   -webkit-box-shadow: none;
 }
-input[type="search"]{
+
+input[type="search"] {
   padding-left: 31px !important;
 }
+
 input[type="search"]::-webkit-search-cancel-button {
   -webkit-appearance: none;
-   height: 13px;
-   width: 13px;
-   background: url("data:image/svg+xml;charset=UTF-8,%3csvg viewPort='0 0 12 12' version='1.1' xmlns='http://www.w3.org/2000/svg'%3e%3cline x1='1' y1='11' x2='11' y2='1' stroke='white' stroke-width='2'/%3e%3cline x1='1' y1='1' x2='11' y2='11' stroke='white' stroke-width='2'/%3e%3c/svg%3e");
+  height: 13px;
+  width: 13px;
+  background: url("data:image/svg+xml;charset=UTF-8,%3csvg viewPort='0 0 12 12' version='1.1' xmlns='http://www.w3.org/2000/svg'%3e%3cline x1='1' y1='11' x2='11' y2='1' stroke='white' stroke-width='2'/%3e%3cline x1='1' y1='1' x2='11' y2='11' stroke='white' stroke-width='2'/%3e%3c/svg%3e");
 }
 
-#dummy-div{
+#dummy-div {
   background-color: var(--dark-gray);
   width: 100%;
   height: calc(var(--vh, 1vh) * 100 - 47px - var(--workingheight));
 }
-#search-results{
+
+#search-results {
   width: 100%;
   z-index: 9999;
   max-height: calc(var(--vh, 1vh) * 100 - 47px - var(--workingheight));
   overflow-y: scroll;
   background: none;
 }
+
 .spinner {
   text-align: center;
 }
+
 .m-5 {
-    color: #9da6af;
+  color: #9da6af;
 }
+
 .album-info-card {
   padding-left: 15px;
   padding-right: 15px;
@@ -438,22 +464,27 @@ input[type="search"]::-webkit-search-cancel-button {
   background: none;
   border: none !important;
 }
+
 .card-body {
-   background: none;
+  background: none;
   --scroll-bar-bg-color: var(--light-gray);
 }
+
 .info-card-text {
   font-size: 13px;
   line-height: 130%;
   padding-left: 2px;
 }
+
 .info-td {
   padding-left: 10px;
 }
+
 .born-died {
   font-size: 14px !important;
   color: var(--medium-dark-gray) !important;
 }
+
 .artist-name {
   color: var(--my-white) !important;
   font-weight: 500;
@@ -469,6 +500,7 @@ input[type="search"]::-webkit-search-cancel-button {
   --scroll-bar-color: var(--medium-dark-gray);
   --scroll-bar-bg-color: var(--dark-gray);
 }
+
 #search-results {
   scrollbar-width: thin;
   scrollbar-color: var(--scroll-bar-color) var(--scroll-bar-bg-color) !important;
@@ -479,9 +511,11 @@ input[type="search"]::-webkit-search-cancel-button {
   width: 12px;
   height: 12px;
 }
+
 #search-results::-webkit-scrollbar-track {
   background: var(--scroll-bar-bg-color) !important;
 }
+
 #search-results::-webkit-scrollbar-thumb {
   background-color: var(--scroll-bar-color);
   border-radius: 20px;
@@ -491,7 +525,8 @@ input[type="search"]::-webkit-search-cancel-button {
 table {
   margin-bottom: 6px;
 }
-h6{
+
+h6 {
   padding-top: 5px;
 }
 </style>
