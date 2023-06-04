@@ -255,14 +255,8 @@ export default {
     },
     getArtistComposers(artist) {
       this.viewSearchResults = false;
-      if (!this.$view.mobile) {
-        this.$config.artist = artist;
-        if (this.$route.name != "performers") {
-          this.$router.push("/performers?artist=" + artist.id);
-        } else {
-          eventBus.$emit("requestPerformer", artist);
-        }
-      }
+      this.$config.artist = artist;
+      this.$router.push("/mobileperformers?artist=" + artist.id);
     },
     detectKeyboard() {
       let vh = window.innerHeight * 0.01;
