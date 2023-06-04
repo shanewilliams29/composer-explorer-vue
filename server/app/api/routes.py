@@ -1445,6 +1445,8 @@ def get_artistworks():
 def get_artistlist():
 
     artist_list = cache.get('artists')
+
+    # cache miss
     if artist_list is None:
         artist_list = retrieve_artist_list_from_db()
         cache.set('artists', artist_list)
