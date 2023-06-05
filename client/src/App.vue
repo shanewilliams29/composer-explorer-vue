@@ -127,7 +127,7 @@ export default {
     },
   },
   beforeCreate() {
-    if (this.$route.name == "mobile" || this.$route.name == "mobileradio" || this.$route.name == "mobilesearch" || this.$route.name == "mobileperformers") {
+    if (this.$route.name == "mobile" || this.$route.name == "mobileradio" || this.$route.name == "mobilesearch" || this.$route.name == "mobileperformers" || this.$route.name == "mobilealbums") {
       this.$view.mobile = true;
       document.documentElement.style.setProperty("--playerpadding", `0px`);
       //document.documentElement.style.setProperty("--workingheight", `191.6px`);
