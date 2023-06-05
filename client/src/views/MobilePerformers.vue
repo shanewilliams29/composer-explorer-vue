@@ -3,9 +3,9 @@
     <MobilePerformersHeading/>
     <div class="container-fluid">
       <b-row v-if="showCloud">
-      <div id="dummy-div" @scroll="hideKeyboard">
+      <div id="dummy-div">
         <b-col class="cards-col">
-          <div class="grid-container disable-scrollbars">
+          <div class="grid-container disable-scrollbars" @scroll="hideKeyboard">
             <div class="grid-item" v-for="artist in performers" :key="artist.id" @click="selectArtist(artist)">
               <b-card class="album-info-card shadow-sm">
                 <b-card-body class="card-body centered-content">
