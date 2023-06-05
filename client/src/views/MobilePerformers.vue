@@ -363,7 +363,8 @@ export default {
   grid-gap: 0px;
   grid-auto-flow: dense;
   height: calc(var(--vh, 1vh) * 100 - 121px + 44px - var(--workingheight));
-  overflow: auto;
+  overflow-x: hide;
+  overflow-y: auto;
   padding-bottom: 15px;
   padding-top: 5px;
 }
