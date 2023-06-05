@@ -388,7 +388,7 @@ def omnisearch():
 
     return_artists = []
 
-    for artist in artist_list:
+    for artist in artist_matches:
         matches = []
         search_string = unidecode(artist['name'].lower())
         for word in search_words:
@@ -427,7 +427,23 @@ def searchperformers():
     for word in search_words:
         artist_matches = [item for item in artist_list if word.lower() in unidecode(item['name'].lower())]
 
-    first_10_artists = list(itertools.islice(artist_matches, 10))
+    # further refine list of artists to return, match on beginning of word and number of words
+    def match_beginning_of_words(string, word_beginning):
+        pattern = r'\b' + word_beginning  # '\b' matches at the boundary (beginning) of a word
+        matches = re.findall(pattern, string, re.IGNORECASE)
+        return matches
+
+    return_artists = []
+
+    for artist in artist_matches:
+        matches = []
+        search_string = unidecode(artist['name'].lower())
+        for word in search_words:
+            matches.extend(match_beginning_of_words(search_string, unidecode(word)))
+        if len(matches) == len(search_terms):
+            return_artists.append(artist)
+
+    first_10_artists = return_artists[:20]
     
     # return response
     response_object = {'status': 'success'}

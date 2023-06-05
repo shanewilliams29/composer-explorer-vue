@@ -53,7 +53,7 @@
                       </td>
                       <td class="info-td">
                         <a class="artist-link">{{ artist.name }}</a><br />
-                        <span class="born-died">{{ artist.description }}</span>
+                        <span v-if="artist.description !== 'NA'" class="born-died">{{ artist.description }}</span>
                       </td>
                     </tr>
                   </table>
