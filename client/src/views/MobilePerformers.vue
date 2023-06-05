@@ -227,11 +227,7 @@ export default {
 
 <style scoped>
 
-#dummy-div {
-  background-color: var(--dark-gray);
-  width: 100%;
-  height: calc(var(--vh, 1vh) * 100 - 121px + 44px - var(--workingheight));
-}
+
 
 .cards-container{
   width: 100%;
@@ -240,8 +236,8 @@ export default {
 /* Overrides */
 >>> .card .shadow-sm{
   color: var(--dark-gray);
-  margin-top: 0px;
-  margin-bottom: 5px !important;
+  margin-top: 5px;
+  margin-bottom: 0px !important;
 
 }
 >>> .composer-card{
@@ -279,9 +275,6 @@ export default {
   margin-right: -15px;
   border-radius: 0px;
   padding-bottom: 5px;
-}
-.card-deck{
-  padding-top: 0px !important;
 }
 .card-body{
   background: var(--medium-gray) !important;
@@ -336,7 +329,13 @@ export default {
 
 
 
+/* Performers startup grid */
 
+#dummy-div {
+  background-color: var(--dark-gray);
+  width: 100%;
+  height: calc(var(--vh, 1vh) * 100 - 121px + 44px - var(--workingheight));
+}
 
 .album-info-card .card-body{
   background: none !important;
