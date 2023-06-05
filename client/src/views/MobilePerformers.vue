@@ -52,7 +52,9 @@
           <b-card no-body class="mb-1 mobile-card">
             <b-card-header header-tag="header" class="p-1" role="tab" v-show="!$view.mobileKeyboard">
               <b-button class="header-button" :disabled="workDisabled" block @click="workToggle" variant="secondary">
-                <span class="heading-text">Works by {{ composer }}</span><span class="mb-0 float-right">
+                <span v-if="composer" class="heading-text">Works by {{ composer }}</span>
+                <span v-else class="heading-text">Select a composer</span>
+                <span class="mb-0 float-right">
                   <b-icon-chevron-down></b-icon-chevron-down>
                 </span>
               </b-button>
@@ -122,6 +124,8 @@ export default {
   },
   methods: {
     hideCloud () {
+      this.composerToggle();
+      this.composer = null;
       this.showCloud = false;
     },
     unhideCloud () {
@@ -187,6 +191,7 @@ export default {
     performersArray.push(...vocalists);
     this.performers = this.shuffleArray(performersArray);
 
+    this.composerToggle();
     window.firstLoad = false; // allow playback on first load for performer view
     eventBus.$on('requestComposersForArtist', this.hideCloud);
     eventBus.$on('clearPerformers', this.unhideCloud);

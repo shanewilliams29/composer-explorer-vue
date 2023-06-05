@@ -179,6 +179,7 @@ export default {
       this.albumSortField = { value: "recommended", text: "Recommended sorting" };
     },
     setArtist(artist) {
+      this.$config.composer = null;
       this.$config.artist = artist;
       this.omniSearchInput = artist.name;
       this.$router.push("/mobileperformers?artist=" + artist.id);
