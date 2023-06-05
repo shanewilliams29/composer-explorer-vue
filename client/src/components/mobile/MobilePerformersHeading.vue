@@ -461,6 +461,7 @@ export default {
   margin-bottom: 6px;
 }
 h6{
+  color: white;
   padding-top: 5px;
 }
 /* clears the ‘X’ from Internet Explorer */

@@ -4,20 +4,20 @@
     <div class="container-fluid">
       <b-row v-if="showCloud">
       <div id="dummy-div" @scroll="hideKeyboard">
-        <b-col>
-          <div class="grid-container">
-            <div class="grid-item" v-for="artist in performers" :key="artist.id">
+        <b-col class="cards-col">
+          <div class="grid-container disable-scrollbars">
+            <div class="grid-item" v-for="artist in performers" :key="artist.id" @click="selectArtist(artist)">
               <b-card class="album-info-card shadow-sm">
                 <b-card-body class="card-body centered-content">
                   <b-card-text class="info-card-text ">
                     <div>
-                      <table>
+                      <table class="margin-bottom">
                         <tr>
                           <td class="vertical-align-middle">
-                            <b-avatar size="56px" :src="artist.img"></b-avatar>
+                            <b-avatar size="36px" :src="artist.img"></b-avatar>
                           </td>
                           <td class="info-td vertical-align-middle">
-                            <a class="artist-name" @click="wordClick(artist)">{{ artist.name }}</a><br />
+                            <a class="artist-name" >{{ artist.name }}</a><br />
                             <span v-if="artist.description !== 'NA'" class="born-died">{{artist.description}}<br></span>
                           </td>
                         </tr>
@@ -159,6 +159,9 @@ export default {
 
       document.documentElement.style.setProperty("--vh", `${vh}px`);
     },
+    selectArtist(artist) {
+      eventBus.$emit("requestPerformer", artist);
+    },
     shuffleArray(array) {
       for (let i = array.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
@@ -281,7 +284,7 @@ export default {
   padding-top: 0px !important;
 }
 .card-body{
-  background: none !important;
+  background: var(--medium-gray) !important;
   padding: 0px !important;
 }
 .btn-secondary{
@@ -332,6 +335,13 @@ export default {
 
 
 
+
+
+
+.album-info-card .card-body{
+  background: none !important;
+  padding: 0px !important;
+}
 .centered-content {
     display: flex;
     align-items: center;
@@ -346,7 +356,7 @@ export default {
 .grid-container {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-  grid-gap: 5px;
+  grid-gap: 0px;
   grid-auto-flow: dense;
   height: calc(var(--vh, 1vh) * 100 - 121px + 44px - var(--workingheight));
   overflow: auto;
@@ -356,6 +366,7 @@ export default {
 .grid-item {
   display: flex;
   padding-right: 5px;
+  padding-bottom: 5px;
 }
 .album-info-card {
   margin-top: 0px;
@@ -388,11 +399,35 @@ a:hover {
   text-decoration: underline !important;
   cursor: pointer;
 }
-table {
+.margin-bottom {
   margin-bottom: 6px;
 }
-.col{
+.cards-col{
   padding: 0px;
   padding-left: 5px;
+}
+
+/*scrollbars*/
+.info-card-text {
+  --scroll-bar-color: var(--medium-dark-gray);
+  --scroll-bar-bg-color: none;
+}
+.info-card-text {
+  scrollbar-width: thin;
+  scrollbar-color: var(--scroll-bar-color) var(--scroll-bar-bg-color) !important;
+}
+
+/* Works on Chrome, Edge, and Safari */
+.info-card-text::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+.info-card-text::-webkit-scrollbar-track {
+  background: var(--scroll-bar-bg-color) !important;
+}
+.info-card-text::-webkit-scrollbar-thumb {
+  background-color: var(--scroll-bar-color);
+  border-radius: 20px;
+  border: 3px solid var(--scroll-bar-bg-color) !important;
 }
 </style>
