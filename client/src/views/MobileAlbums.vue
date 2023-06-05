@@ -5,7 +5,7 @@
     <div class="container-fluid">
       <Transition name="fade">
       <b-row v-if="showCloud">
-        <b-col class="display-list disable-scrollbars"><MobileAlbumsBody/></b-col>
+        <b-col class="display-list disable-scrollbars" @scroll="hideKeyboard"><MobileAlbumsBody/></b-col>
       </b-row>
       </Transition>
     </div>
@@ -38,6 +38,9 @@ export default {
     },
     unhideCloud () {
       this.showCloud = true;
+    },
+    hideKeyboard() {
+      document.activeElement.blur();
     },
     detectKeyboard() {
       let vh = window.innerHeight * 0.01;
