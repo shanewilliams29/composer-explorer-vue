@@ -25,7 +25,7 @@
       </b-row>
       <b-row>
         <div class="container-fluid">
-          <b-form-input id="performer-search-form" class="omnisearch" v-model="omniSearchInput" v-debounce:500ms="omniSearch" @focus="onInputFocus()" type="search" placeholder="Search for a performer" autocomplete="off">
+          <b-form-input id="performer-search-form" class="omnisearch" v-model="omniSearchInput" v-debounce:1000ms="omniSearch" @focus="onInputFocus()" type="search" placeholder="Search for a performer" autocomplete="off">
           </b-form-input>
         </div>
       </b-row>
