@@ -5,7 +5,7 @@
     <div class="container-fluid">
       <Transition name="fade">
       <b-row v-if="showCloud">
-        <!-- <b-col class="display-list"><AlbumsOverview/></b-col> -->
+        <b-col class="display-list disable-scrollbars"><MobileAlbumsBody/></b-col>
       </b-row>
       </Transition>
     </div>
@@ -17,7 +17,7 @@
 
 <script>
 import MobileAlbumsHeading from '@/components/mobile/MobileAlbumsHeading.vue'
-// import AlbumsOverview from '@/components/albumsview/AlbumsOverview.vue';
+import MobileAlbumsBody from '@/components/mobile/MobileAlbumsBody.vue';
 
 import {eventBus} from "../main.js";
 
@@ -25,7 +25,7 @@ export default {
   name: 'MobileAlbums',
   components: {
     MobileAlbumsHeading,
-    // AlbumsOverview
+    MobileAlbumsBody
   },
   data() {
     return {
@@ -97,7 +97,15 @@ export default {
   height: calc(var(--vh, 1vh) * 100 - 78px - var(--workingheight));
 }
 .display-list{
-  
+  height: calc(var(--vh, 1vh) * 100 - 78px - var(--workingheight));
   padding: 0px !important;
+}
+.disable-scrollbars::-webkit-scrollbar {
+  background: transparent; /* Chrome/Safari/Webkit */
+  width: 0px;
+}
+.disable-scrollbars {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none;  /* IE 10+ */
 }
 </style>
