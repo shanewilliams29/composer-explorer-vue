@@ -10,78 +10,87 @@
           <table class="popup" v-show="showAlbum == album.album_id">
             <tr>
               <td>
-                <img class="album-popup-cover" :ref="album.album_id" :src="album.img_big" />
-              </td>
-              <td>
-                <button type="button" @click="hidePopup()" aria-label="Close" id="close-popup-button" class="close-button close text-dark"><svg viewBox="0 0 16 16" width="1em" height="1em" focusable="false" role="img" aria-label="x" xmlns="http://www.w3.org/2000/svg" fill="white" class="bi-x b-icon bi">
+                  <button type="button" @click="hidePopup()" aria-label="Close" id="close-popup-button" class="close-button close text-dark">
+                  <svg viewBox="0 0 16 16" width="1em" height="1em" focusable="false" role="img" aria-label="x" xmlns="http://www.w3.org/2000/svg" fill="white" class="bi-x b-icon bi">
                     <g>
                       <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"></path>
                     </g>
-                  </svg></button>
+                  </svg>
+                </button>
                 <div class="image-caption">
-            <tr>
-              <span class="album-title">{{ album.album_name }} </span><br>
-              <span class="album-details">℗ {{ album.release_date }}</span>
-              <span class="album-details"> {{ album.label }} </span><br><br>
-            </tr>
-            <table class="no-wrap">
-              <div class="spinner-left" v-show="albumDataLoading" role="status">
-                <b-spinner class="m-5"></b-spinner>
-              </div>
-            </table>
-            <div v-show="!albumDataLoading && albumWorks.length > 0" v-for="[work, data] in albumWorks" :key="work.id">
-              <table class="no-wrap">
-                <tr>
-                  <Transition name="fade">
-                    <td :class="{'highlight': ((work.id + data.album_id) == $config.album)}" class="work-td" v-if="showAlbum == album.album_id" @click="getAlbumData(work, data);">
-                      <span class="album-work-composer">{{ work.composer }} </span><br>
-                      <span class="album-work-title">{{ work.title }} &nbsp;</span>
-                      <span v-if="work.cat" class="album-work-cat">{{ work.cat }}</span><br>
-                      <span v-if="params.artist" class="album-highlight-artist">{{ highlightArtist(data.all_artists) }}</span>
-                      <span v-if="highlightArtist(data.all_artists)" class="album-work-artists">, </span>
-                      <span class="album-work-artists">{{ printArtists(data.artists) }}</span><br>
-                      <span class="album-work-artists"><span style='font-size: 10px;'>
-                          <b-icon-clock></b-icon-clock>
-                        </span>&nbsp;{{ printDuration(data.tracks) }}</span>&nbsp;<b-badge class="duration-badge">{{printFull(work.duration, data.tracks)}}</b-badge> <AlbumLikes :likedAlbums="likedAlbums" :album="data" :selectedAlbum="$config.album" />
-                      <br><span v-if="showTracks(work.duration, data.tracks)"><br></span>
-                <tr v-if="showTracks(work.duration, data.tracks)">
-                  <td v-html="printTracks(work, data.tracks)" class="work-td-minor">
-                  </td>
+                  <tr>
+                  <img class="album-popup-cover" :ref="album.album_id" :src="album.img_big" />
                 </tr>
-                </td>
+                  <tr>
+                    <br />
+                    <span class="album-title">{{ album.album_name }} </span>
+                    <br />
+                    <span class="album-details">℗ {{ album.release_date }}</span>
+                    <span class="album-details"> {{ album.label }} </span>
+                    <br />
+                    <br />
+                  </tr>
+                  <table class="no-wrap">
+                    <div class="spinner-left" v-show="albumDataLoading" role="status">
+                      <b-spinner class="m-5"></b-spinner>
+                    </div>
+                  </table>
+                  <div v-show="!albumDataLoading && albumWorks.length > 0" v-for="[work, data] in albumWorks" :key="work.id">
+                    <table class="no-wrap">
+                      <tr>
+                        <Transition name="fade">
+                          <td :class="{'highlight': ((work.id + data.album_id) == $config.album)}" class="work-td" v-if="showAlbum == album.album_id" @click="getAlbumData(work, data);">
+                            <span class="album-work-composer">{{ work.composer }} </span><br />
+                            <span class="album-work-title">{{ work.title }} &nbsp;</span>
+                            <span v-if="work.cat" class="album-work-cat">{{ work.cat }}</span><br />
+                            <span v-if="params.artist" class="album-highlight-artist">{{ highlightArtist(data.all_artists) }}</span>
+                            <span v-if="highlightArtist(data.all_artists)" class="album-work-artists">, </span>
+                            <span class="album-work-artists">{{ printArtists(data.artists) }}</span><br />
+                            <span class="album-work-artists">
+                              <span style="font-size: 10px;">
+                                <b-icon-clock></b-icon-clock>
+                              </span>
+                              &nbsp;{{ printDuration(data.tracks) }}
+                            </span>
+                            &nbsp;<b-badge class="duration-badge">{{printFull(work.duration, data.tracks)}}</b-badge> <AlbumLikes :likedAlbums="likedAlbums" :album="data" :selectedAlbum="$config.album" /> <br />
+                            <span v-if="showTracks(work.duration, data.tracks)"><br /></span>
+                            <tr v-if="showTracks(work.duration, data.tracks)">
+                              <td v-html="printTracks(work, data.tracks)" class="work-td-minor"></td>
+                            </tr>
+                          </td>
+                        </Transition>
+                      </tr>
+                      <tr>
+                        <td><br /></td>
+                      </tr>
+                    </table>
+                  </div>
+                  <a target="_blank" :href="`https://open.spotify.com/album/${album.album_id}`"><img class="spotify-logo" width="70px" :src="spotifyLogoURLWhite" /></a><br />
+                </div>
+              </td>
+            </tr>
+          </table>
         </Transition>
-        </tr>
-        <tr>
-          <td><br></td>
-        </tr>
-        </table>
       </div>
-      <a target="_blank" :href="`https://open.spotify.com/album/${album.album_id}`"><img class="spotify-logo" width="70px" :src="spotifyLogoURLWhite" /></a><br>
     </div>
-    </td>
-    </tr>
-    </table>
-    </Transition>
-  </div>
-  </div>
-  <!-- ALBUM GRID -->
-  <div class="container-fluid">
-    <h6 class="message narrow">
-      <div v-html="message" />
-    </h6>
-    <div class="spinner" v-show="loading" role="status">
-      <b-spinner class="m-5"></b-spinner>
-    </div>
-    <div v-show="!loading" class="grid-container">
-      <div class="grid-item" v-for="album in albums" :key="album.album_id">
-        <img @click="showCover = album.album_id" class="album-cover" height="auto" v-lazy="album.img_big" />
+    <!-- ALBUM GRID -->
+    <div class="container-fluid">
+      <h6 class="message narrow">
+        <div v-html="message" />
+      </h6>
+      <div class="spinner" v-show="loading" role="status">
+        <b-spinner class="m-5"></b-spinner>
       </div>
-      <infinite-loading spinner="spiral" :identifier="infiniteId" @infinite="infiniteHandler">
-        <div slot="no-more"></div>
-        <div slot="no-results"></div>
-      </infinite-loading>
+      <div v-show="!loading" class="grid-container">
+        <div class="grid-item" v-for="album in albums" :key="album.album_id">
+          <img @click="showCover = album.album_id" class="album-cover" height="auto" v-lazy="album.img_big" />
+        </div>
+        <infinite-loading spinner="spiral" :identifier="infiniteId" @infinite="infiniteHandler">
+          <div slot="no-more"></div>
+          <div slot="no-results"></div>
+        </infinite-loading>
+      </div>
     </div>
-  </div>
   </div>
 </template>
 
@@ -501,10 +510,10 @@ export default {
 #albums-overlay {
   display: block;
   position: fixed;
-  top: 66px;
+  top: 54.67px;
   left: 0;
   width: 100%;
-  height: calc(100vh - 66px - 100px);
+  height: calc(100vh - 66px);
   background: rgba(52, 58, 64, 0.75);
 }
 
@@ -516,9 +525,7 @@ export default {
   line-height: 16px;
   padding: 0px;
   position: fixed !important;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, calc(-50% - 33px + 16px - var(--panelheight)/2));
+  top: calc(54.67px + 78px);
   background-color: var(--dark-gray);
   box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
   z-index: 100;
@@ -635,10 +642,9 @@ td.work-td:hover {
 }
 
 .image-caption {
-  max-height: min(var(--imageheight), calc(100vh - 66px - var(--panelheight) - 100px - 40px));
+  height: calc(var(--vh, 1vh) * 100 - 78px - var(--workingheight));
   visibility: inherit;
-  width: 100%;
-  min-width: calc(var(--imagewidth) / 1.75);
+  width: 100vw;
   padding-top: 25px;
   padding-bottom: 15px;
   padding-left: 15px;
@@ -649,8 +655,7 @@ td.work-td:hover {
 
 .album-popup-cover {
   box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
-  max-height: calc(100vh - 66px - var(--panelheight) - 100px - 40px);
-  max-width: 50vw;
+  max-width: 50%;
 }
 
 .orange {
@@ -674,12 +679,6 @@ td.work-td:hover {
   width: 100%;
   height: auto;
   box-shadow: rgba(0, 0, 0, 0.2) 0px 1px 4px;
-}
-
-.album-cover:hover {
-  cursor: pointer;
-  box-shadow: rgba(0, 0, 0, 0.6) 0px 2px 4px !important;
-  outline: solid 5px var(--orange);
 }
 
 .spinner {
@@ -739,6 +738,32 @@ td.work-td:hover {
 
 .highlight>>>span {
   color: white !important;
+}
+/*scrollbars*/
+.image-caption {
+  --scroll-bar-color: var(--medium-dark-gray);
+  --scroll-bar-bg-color: var(--dark-gray);
+}
+
+.image-caption {
+  scrollbar-width: thin;
+  scrollbar-color: var(--scroll-bar-color) var(--scroll-bar-bg-color) !important;
+}
+
+/* Works on Chrome, Edge, and Safari */
+.image-caption::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+
+.image-caption::-webkit-scrollbar-track {
+  background: var(--scroll-bar-bg-color) !important;
+}
+
+.image-caption::-webkit-scrollbar-thumb {
+  background-color: var(--scroll-bar-color);
+  border-radius: 20px;
+  border: 3px solid var(--scroll-bar-bg-color) !important;
 }
 </style>
 
