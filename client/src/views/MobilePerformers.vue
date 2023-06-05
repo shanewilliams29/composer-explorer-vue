@@ -16,7 +16,7 @@
                           <td class="vertical-align-middle">
                             <b-avatar size="36px" :src="artist.img"></b-avatar>
                           </td>
-                          <td class="info-td vertical-align-middle">
+                          <td class="info-td vertical-align-middle wrap-text">
                             <a class="artist-name" >{{ artist.name }}</a><br />
                             <span v-if="artist.description !== 'NA'" class="born-died">{{artist.description}}<br></span>
                           </td>
@@ -363,7 +363,7 @@ export default {
   grid-gap: 0px;
   grid-auto-flow: dense;
   height: calc(var(--vh, 1vh) * 100 - 121px + 44px - var(--workingheight));
-  overflow-x: hide;
+  overflow-x: hidden;
   overflow-y: auto;
   padding-bottom: 15px;
   padding-top: 5px;
@@ -389,6 +389,15 @@ export default {
 }
 .info-td {
   padding-left: 10px;
+  text-overflow: ellipsis;
+}
+.wrap-text {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: normal;
 }
 .born-died {
   font-size: 13px !important;
@@ -400,9 +409,7 @@ a {
   font-size: 14px;
 }
 a:hover {
-  color: black !important;
-  text-decoration: underline !important;
-  cursor: pointer;
+  text-decoration: none !important;
 }
 .margin-bottom {
   margin-bottom: 6px;
