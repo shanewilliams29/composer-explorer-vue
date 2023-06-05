@@ -3,7 +3,32 @@
     <MobilePerformersHeading/>
     <div class="container-fluid">
       <b-row v-if="showCloud">
-      <div id="dummy-div">
+      <div id="dummy-div" @scroll="hideKeyboard">
+        <b-col>
+          <div class="grid-container">
+            <div class="grid-item" v-for="artist in performers" :key="artist.id">
+              <b-card class="album-info-card shadow-sm">
+                <b-card-body class="card-body centered-content">
+                  <b-card-text class="info-card-text ">
+                    <div>
+                      <table>
+                        <tr>
+                          <td class="vertical-align-middle">
+                            <b-avatar size="56px" :src="artist.img"></b-avatar>
+                          </td>
+                          <td class="info-td vertical-align-middle">
+                            <a class="artist-name" @click="wordClick(artist)">{{ artist.name }}</a><br />
+                            <span v-if="artist.description !== 'NA'" class="born-died">{{artist.description}}<br></span>
+                          </td>
+                        </tr>
+                      </table>
+                    </div>
+                  </b-card-text>
+                </b-card-body>
+              </b-card>
+            </div>
+          </div>
+        </b-col>
       </div>
       </b-row>
       <b-row v-if="!showCloud">
@@ -83,6 +108,7 @@ export default {
   data() {
     return {
       showCloud: true,
+      performers: [],
       composer: this.$config.composer,
       title: this.$config.workTitle,
       composerDisabled: true,
@@ -132,13 +158,32 @@ export default {
       }
 
       document.documentElement.style.setProperty("--vh", `${vh}px`);
-    }
+    },
+    shuffleArray(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+      return array.slice(0,100);
+    },
   },
   beforeCreate() {
     document.documentElement.style.setProperty("--workingheight", `228.6px`);
     this.$view.mobile = true;
   },
   created() {
+    const conductors = require('@/assets/topconductors.json');
+    const groups = require('@/assets/topgroups.json');
+    const soloists = require('@/assets/topsoloists.json');
+    const vocalists = require('@/assets/topvocalists.json');
+    let performersArray = []
+
+    performersArray.push(...conductors);
+    performersArray.push(...groups);
+    performersArray.push(...soloists);
+    performersArray.push(...vocalists);
+    this.performers = this.shuffleArray(performersArray);
+
     window.firstLoad = false; // allow playback on first load for performer view
     eventBus.$on('requestComposersForArtist', this.hideCloud);
     eventBus.$on('clearPerformers', this.unhideCloud);
@@ -236,7 +281,7 @@ export default {
   padding-top: 0px !important;
 }
 .card-body{
-  background: var(--medium-gray) !important;
+  background: none !important;
   padding: 0px !important;
 }
 .btn-secondary{
@@ -283,5 +328,71 @@ export default {
 .disable-scrollbars {
   scrollbar-width: none; /* Firefox */
   -ms-overflow-style: none;  /* IE 10+ */
+}
+
+
+
+.centered-content {
+    display: flex;
+    align-items: center;
+    height: 100%; /* You might need to adjust this */
+  }
+.vertical-align-middle {
+    vertical-align: middle;
+}
+.narrow{
+  font-family: Roboto Condensed !important;
+ }
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  grid-gap: 5px;
+  grid-auto-flow: dense;
+  height: calc(var(--vh, 1vh) * 100 - 121px + 44px - var(--workingheight));
+  overflow: auto;
+  padding-bottom: 15px;
+  padding-top: 5px;
+}
+.grid-item {
+  display: flex;
+  padding-right: 5px;
+}
+.album-info-card {
+  margin-top: 0px;
+  padding: 10px;
+  padding-bottom: 5px;
+  background-color: var(--my-white) !important;
+  border: none !important;
+  width: 100%;
+}
+.info-card-text {
+  vertical-align: middle !important;
+  font-size: 13px;
+  line-height: 130%;
+  padding-left: 2px;
+}
+.info-td {
+  padding-left: 10px;
+}
+.born-died {
+  font-size: 13px !important;
+  color: grey !important;
+}
+a {
+  color: black !important;
+  font-weight: 600;
+  font-size: 14px;
+}
+a:hover {
+  color: black !important;
+  text-decoration: underline !important;
+  cursor: pointer;
+}
+table {
+  margin-bottom: 6px;
+}
+.col{
+  padding: 0px;
+  padding-left: 5px;
 }
 </style>

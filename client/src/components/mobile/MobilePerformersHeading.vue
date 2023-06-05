@@ -23,13 +23,12 @@
           </div>
         </b-col>
       </b-row>
-              <b-row>
-                <div class="container-fluid">
-              <b-form-input id="performer-search-form" class="omnisearch" v-model="omniSearchInput" v-debounce:500ms="omniSearch" @focus="onInputFocus()" type="search" placeholder="Search for a performer" autocomplete="off">
-              </b-form-input>
-            </div>
-              </b-row>
-
+      <b-row>
+        <div class="container-fluid">
+          <b-form-input id="performer-search-form" class="omnisearch" v-model="omniSearchInput" v-debounce:500ms="omniSearch" @focus="onInputFocus()" type="search" placeholder="Search for a performer" autocomplete="off">
+          </b-form-input>
+        </div>
+      </b-row>
     </div>
     <div>
       <Transition name="fade">
@@ -45,7 +44,7 @@
               <h6 v-if="artists.length == 0">No search results.</h6>
             </div>
             <b-card-body v-show="!loading" id="performers" class="card-body">
-              <b-card-text class="info-card-text">
+              <b-card-text class="info-card-text" @scroll="hideKeyboard">
                 <div v-for="artist in artists" :key="artist.id" @click="artistSearch(artist)">
                   <table class="search-table">
                     <tr>
@@ -105,11 +104,14 @@ export default {
     };
   },
   methods: {
+    hideKeyboard() {
+      document.activeElement.blur();
+    },
     omniSearch() {
       if (this.omniSearchInput !== "") {
         this.getOmniSearch(this.omniSearchInput);
       } else {
-        //this.viewSearchResults = false;
+        this.resetField()
       }
     },
     getOmniSearch(item) {
@@ -258,7 +260,7 @@ export default {
   left: 0;
   width: 100%;
   height: calc(100% - 66px);
-  background: rgba(52, 58, 64, 0.5);
+  background: rgba(52, 58, 64, 1);
   z-index: 10;
 }
 .spinner {
