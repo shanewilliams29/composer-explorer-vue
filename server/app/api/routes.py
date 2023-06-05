@@ -340,6 +340,12 @@ def omnisearch():
 
     # search for works
     # filter by composers if relevant
+
+    def match_beginning_of_words(string, word_beginning):
+        pattern = r'\b' + word_beginning  # '\b' matches at the boundary (beginning) of a word
+        matches = re.findall(pattern, string, re.IGNORECASE)
+        return matches
+
     conditions = []
     composer_array = []
     if composers:
@@ -352,10 +358,10 @@ def omnisearch():
     return_works = []
     i = 0
     for work in works_list:
-        search_string = str(work.composer) + str(work.genre) + str(work.cat) + str(work.suite) + str(work.title) + str(work.nickname) + str(work.search)
+        search_string = str(work.composer) + " " + str(work.genre) + " " + str(work.cat) + " " + str(work.suite) + " " + str(work.title) + " " + str(work.nickname) + " " + str(work.search)
         j = 0
         for word in search_words:
-            if unidecode(word.lower()) in unidecode(search_string.lower()):
+            if match_beginning_of_words(search_string, unidecode(word)):
                 j += 1
         for num in search_nums:
             pattern = r'(?<!\d)' + str(num) + r'(?!\d)'
@@ -381,10 +387,6 @@ def omnisearch():
         artist_matches = [item for item in artist_list if unidecode(word.lower()) in unidecode(item['name'].lower())]
 
     # further refine list of artists to return, match on beginning of word and number of words
-    def match_beginning_of_words(string, word_beginning):
-        pattern = r'\b' + word_beginning  # '\b' matches at the boundary (beginning) of a word
-        matches = re.findall(pattern, string, re.IGNORECASE)
-        return matches
 
     return_artists = []
 

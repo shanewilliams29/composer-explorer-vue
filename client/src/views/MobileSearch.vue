@@ -524,6 +524,7 @@ table {
 }
 
 h6 {
+  color: white;
   padding-top: 5px;
 }
 </style>
