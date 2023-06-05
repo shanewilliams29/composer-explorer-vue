@@ -439,24 +439,6 @@ export default {
   --scroll-bar-color: var(--medium-dark-gray);
   --scroll-bar-bg-color: none;
 }
-.info-card-text {
-  scrollbar-width: thin;
-  scrollbar-color: var(--scroll-bar-color) var(--scroll-bar-bg-color) !important;
-}
-
-/* Works on Chrome, Edge, and Safari */
-.info-card-text::-webkit-scrollbar {
-  width: 12px;
-  height: 12px;
-}
-.info-card-text::-webkit-scrollbar-track {
-  background: var(--scroll-bar-bg-color) !important;
-}
-.info-card-text::-webkit-scrollbar-thumb {
-  background-color: var(--scroll-bar-color);
-  border-radius: 20px;
-  border: 3px solid var(--scroll-bar-bg-color) !important;
-}
 
 .search-table {
   margin-bottom: 6px;
