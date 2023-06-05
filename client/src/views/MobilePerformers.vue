@@ -175,7 +175,6 @@ export default {
     },
     // eslint-disable-next-line
     setWork(artist, composer){
-      console.log("Request works for " + composer);
       this.composer = composer;
       this.workToggle();
     },

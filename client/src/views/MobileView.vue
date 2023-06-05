@@ -126,7 +126,15 @@ export default {
       }
 
       document.documentElement.style.setProperty("--vh", `${vh}px`);
-    }
+    },
+    setWork(composer){
+      this.composer = composer;
+      this.workToggle();
+    },
+    setAlbums(){
+      this.title = this.$config.workTitle;
+      this.albumToggle();
+    },
   },
   beforeCreate() {
     document.documentElement.style.setProperty("--workingheight", `191.6px`);
@@ -149,17 +157,10 @@ export default {
     }
     this.$view.mode = null;
 
-    eventBus.$on("requestWorksList", (composer) => {
-      this.composer = composer;
-      this.workToggle();
-    });
-    eventBus.$on("requestAlbums", () => {
-      this.title = this.$config.workTitle;
-      this.albumToggle();
-    });
-    eventBus.$on("requestAlbumsAndPlay", () => {
-      this.title = this.$config.workTitle;
-    });
+    eventBus.$on("requestWorksList", this.setWork);
+    eventBus.$on("requestAlbums", this.setAlbums);
+    eventBus.$on("requestAlbumsAndPlay", this.setAlbums);
+
     let vh = window.innerHeight * 0.01;
     document.documentElement.style.setProperty("--vh", `${vh}px`);
 
@@ -167,6 +168,9 @@ export default {
   },
   beforeDestroy() {
     window.removeEventListener('resize', this.detectKeyboard);
+    eventBus.$off("requestWorksList", this.setWork);
+    eventBus.$off("requestAlbums", this.setAlbums);
+    eventBus.$off("requestAlbumsAndPlay", this.setAlbums);
   },
 };
 
