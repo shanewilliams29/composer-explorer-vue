@@ -1,29 +1,31 @@
 <template>
   <div id="performer">
-    <AlbumsViewHeading/>
+    <MobileAlbumsHeading/>
+    <div class="albums-container">
     <div class="container-fluid">
       <Transition name="fade">
       <b-row v-if="showCloud">
-        <b-col class="display-list"><AlbumsOverview/></b-col>
+        <!-- <b-col class="display-list"><AlbumsOverview/></b-col> -->
       </b-row>
       </Transition>
     </div>
+  </div>
   </div>
 </template>
 
 
 
 <script>
-import AlbumsViewHeading from '@/components/albumsview/AlbumsViewHeading.vue'
-import AlbumsOverview from '@/components/albumsview/AlbumsOverview.vue';
+import MobileAlbumsHeading from '@/components/mobile/MobileAlbumsHeading.vue'
+// import AlbumsOverview from '@/components/albumsview/AlbumsOverview.vue';
 
 import {eventBus} from "../main.js";
 
 export default {
-  name: 'PerformerView',
+  name: 'MobileAlbums',
   components: {
-    AlbumsViewHeading,
-    AlbumsOverview
+    MobileAlbumsHeading,
+    // AlbumsOverview
   },
   data() {
     return {
@@ -37,11 +39,28 @@ export default {
     unhideCloud () {
       this.showCloud = true;
     },
+    detectKeyboard() {
+      let vh = window.innerHeight * 0.01;
+      console.log(window.innerHeight);
+      // for mobile keyboard
+      if (window.innerHeight < this.initialWindowHeight) {
+        this.$view.mobileKeyboard = true;
+        vh = vh + 145 * 0.01;
+      } else {
+        this.$view.mobileKeyboard = false;
+      }
+
+      document.documentElement.style.setProperty("--vh", `${vh}px`);
+    }
   },
   beforeCreate() {
     document.documentElement.style.setProperty("--flex", "1");
+    document.documentElement.style.setProperty("--workingheight", `191.6px`);
   },
   created() {
+    this.initialWindowHeight = window.innerHeight;
+    window.addEventListener('resize', this.detectKeyboard);
+
     window.firstLoad = false; // allow playback on first load for performer view
     eventBus.$on('requestComposersForArtist', this.hideCloud);
     eventBus.$on('clearPerformers', this.unhideCloud);
@@ -53,6 +72,9 @@ export default {
     }
     document.documentElement.style.setProperty("--playback-color", "var(--yellow)"); //#fd7e14
   },
+  beforeDestroy() {
+    window.removeEventListener('resize', this.detectKeyboard);
+  }
 }
 </script>
 <style scoped>
@@ -71,7 +93,11 @@ export default {
 >>> .music-note{
   color: var(--orange);
 }
+.albums-container{
+  height: calc(var(--vh, 1vh) * 100 - 78px - var(--workingheight));
+}
 .display-list{
+  
   padding: 0px !important;
 }
 </style>

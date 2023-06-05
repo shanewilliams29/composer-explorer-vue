@@ -5,16 +5,6 @@
         <div>
           <b-form-group>
             <v-select
-              v-model="filterField" 
-              label="text" 
-              :options="filterFieldOptions" 
-              @input="filterFieldSelect()" 
-              :clearable="false" 
-              class="mt-3 selector" 
-              :searchable="false">
-            </v-select>
-            <v-select
-              v-if="filterField.value == 'composer'"
               v-model="composerSelectField"
               label="text"
               :options="composerOptions"
@@ -24,21 +14,19 @@
               class="mt-3 selector"
               :searchable="true"
             ></v-select>
-            <v-select
-              v-if="filterField.value == 'period'"
-              v-model="periodSelectField"
-              label="text"
-              :options="periodOptions"
-              @input="periodSelect()"
-              placeholder="Select period/era"
-              :clearable="true"
-              class="mt-3 selector"
-              :searchable="false"
-            ></v-select>
+            <v-select 
+              v-model="albumSortField" 
+              label="text" 
+              :options="albumSortOptions" 
+              @input="albumSortSelect()" 
+              :clearable="false" 
+              class="mt-3 selector" 
+              :searchable="false">
+          </v-select>
           </b-form-group>
         </div>
       </b-col>
-      <b-col>
+      <b-col class="last-col">
         <b-form-group>
             <vue-typeahead-bootstrap 
               v-model="artistSelectField" 
@@ -60,34 +48,15 @@
               :data="$lists.albumViewWorks" />
         </b-form-group>
       </b-col>
-      <b-col class="last-col">
-        <b-form-group>
-          <v-select 
-            v-model="albumSortField" 
-            label="text" 
-            :options="albumSortOptions" 
-            @input="albumSortSelect()" 
-            :clearable="false" 
-            class="mt-3 selector" 
-            :searchable="false">
-          </v-select>
-          <b-button class="radio-button-off" size="sm" 
-            v-if="clearInputActive" 
-            @click="clearInputs()" block>Clear Inputs</b-button>
-          <b-button class="radio-button-off-disabled" size="sm" 
-            v-if="!clearInputActive" 
-            @click="clearInputs()" disabled block>Clear Inputs</b-button>
-        </b-form-group>
-      </b-col>
     </b-row>
   </div>
 </template>
 
 <script>
-import { albumsMixin } from "./AlbumsViewHeading.js"
+import { albumsMixin } from "@/components/albumsview/AlbumsViewHeading.js"
 export default {
   mixins: [albumsMixin],
 }
 </script>
 
-<style scoped src="./AlbumsViewHeading.css"></style>
+<style scoped src="@/components/albumsview/AlbumsViewHeading.css"></style>

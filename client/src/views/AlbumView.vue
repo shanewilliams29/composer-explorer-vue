@@ -20,7 +20,7 @@ import AlbumsOverview from '@/components/albumsview/AlbumsOverview.vue';
 import {eventBus} from "../main.js";
 
 export default {
-  name: 'PerformerView',
+  name: 'AlbumView',
   components: {
     AlbumsViewHeading,
     AlbumsOverview
