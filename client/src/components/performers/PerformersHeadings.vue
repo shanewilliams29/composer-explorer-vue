@@ -324,7 +324,7 @@ export default {
   font-size: 16px;
 }
 .wiki-link a{
-  color: var(--medium-dark-gray);
+  color: var(--medium-dark-gray) !important;
   font-size: 12px;
   text-decoration: none;
 }

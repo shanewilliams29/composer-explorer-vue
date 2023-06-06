@@ -412,34 +412,20 @@ def omnisearch():
     query = db.session.query(WorkAlbums).join(performer_albums).join(Performers)
 
     # filter by composer if relevant
-    conditions1 = []
-    conditions2 = []
-    if composers and first_10_artists:
-        first_composer = composers[0]
-        first_artist = first_10_artists[0]
-        conditions1.append(WorkAlbums.composer == first_composer['name_short'])
-        conditions1.append(Performers.id == first_artist['id'])
-
+    conditions = []
     if composers:
         first_composer = composers[0]
-        conditions2.append(WorkAlbums.composer == first_composer['name_short'])
+        conditions.append(WorkAlbums.composer == first_composer['name_short'])
     elif first_10_artists:
         first_artist = first_10_artists[0]
-        conditions2.append(Performers.id == first_artist['id'])
-
-    print(" ")
-    print(len(conditions1))
-    print(len(conditions2))
+        conditions.append(Performers.id == first_artist['id'])
     
     # filter by works if relevant
     if return_works:
         first_work = return_works[0]
-        if conditions1:
-            conditions1.append(WorkAlbums.workid == first_work.id)
-        if conditions2:
-            conditions2.append(WorkAlbums.workid == first_work.id)
+        conditions.append(WorkAlbums.workid == first_work.id)
 
-    if not conditions1 and not conditions2:
+    if not conditions:
         # return response
         print("return")
         response_object = {'status': 'success'}
@@ -451,7 +437,7 @@ def omnisearch():
         return response
 
     albums_query = query.filter(
-        or_(and_(*conditions1), and_(*conditions2)),
+        and_(*conditions), 
         WorkAlbums.track_count < 100, 
         WorkAlbums.hidden != True, 
         WorkAlbums.album_type != "compilation"
