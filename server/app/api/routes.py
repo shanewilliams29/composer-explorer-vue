@@ -9,7 +9,6 @@ from app.models import User
 from sqlalchemy import func, text, or_, and_
 from app.api import bp
 from unidecode import unidecode
-import itertools
 import json
 import re
 
@@ -319,7 +318,7 @@ def omnisearch():
     search_words = [term for term in search_terms if not term.isdigit()]
     search_nums = [int(term) for term in search_terms if term.isdigit()]
 
-    # first search for composers if word search term is present
+    # COMPOSER SEARCH
     if search_words:
         query = db.session.query(ComposerList)
 
@@ -338,22 +337,19 @@ def omnisearch():
     else:
         composers = prepare_composers(composer_list)
 
-    # search for works
-    # filter by composers if relevant
-
+    # WORK SEARCH
     def match_beginning_of_words(string, word_beginning):
         pattern = r'\b' + word_beginning  # '\b' matches at the boundary (beginning) of a word
         matches = re.findall(pattern, string, re.IGNORECASE)
         return matches
 
+    # filter by composers if relevant
     conditions = []
-    composer_array = []
     if composers:
         for composer in composers:
-            composer_array.append(composer['name_full'])
             conditions.append(WorkList.composer == composer['name_short'])
 
-    works_list = WorkList.query.filter(or_(*conditions), WorkList.album_count > 0).order_by(WorkList.album_count.desc()).all()
+    works_list = WorkList.query.filter(or_(*conditions), WorkList.album_count > 0).order_by(WorkList.album_count.desc())
  
     return_works = []
     i = 0
@@ -368,13 +364,18 @@ def omnisearch():
             match = re.search(pattern, search_string)
             if match:
                 j += 1
-        if j == len(search_terms):
-            return_works.append(work)
-            i += 1
+        if len(search_nums) > 0:
+            if j > 1:
+                return_works.append(work)
+                i += 1
+        else:
+            if j > 0:
+                return_works.append(work)
+                i += 1
         if i > 10:
             break
 
-    # search for performers
+    # PERFORMER SEARCH
     artist_list = cache.get('artists')
 
     # cache miss
@@ -383,28 +384,82 @@ def omnisearch():
         cache.set('artists', artist_list)
 
     # match search words with artist names
+    all_artist_matches = []
     for word in search_words:
         artist_matches = [item for item in artist_list if unidecode(word.lower()) in unidecode(item['name'].lower())]
-
-    # further refine list of artists to return, match on beginning of word and number of words
-
+        all_artist_matches.extend(artist_matches)
+    
+    # further refine list of artists to return, match on beginning of word
     return_artists = []
-
-    for artist in artist_matches:
-        matches = []
-        search_string = unidecode(artist['name'].lower())
-        for word in search_words:
-            matches.extend(match_beginning_of_words(search_string, unidecode(word)))
-        if len(matches) == len(search_terms):
-            return_artists.append(artist)
+    artist_duplicate_ids = set()
+    for artist in all_artist_matches:
+        if artist['id'] not in artist_duplicate_ids:
+            artist_duplicate_ids.add(artist['id'])
+            print(artist['name'])
+            matches = []
+            search_string = unidecode(artist['name'].lower())
+            for word in search_words:
+                matches.extend(match_beginning_of_words(search_string, unidecode(word)))
+            if len(matches) > 0:
+                return_artists.append(artist)
 
     first_10_artists = return_artists[:10]
+
+    # ALBUM SEARCH
+    query = db.session.query(WorkAlbums).join(performer_albums).join(Performers)
+
+    # filter by composer if relevant
+    conditions = []
+    if composers:
+        first_composer = composers[0]
+        conditions.append(WorkAlbums.composer == first_composer['name_short'])
+    elif first_10_artists:
+        first_artist = first_10_artists[0]
+        conditions.append(Performers.id == first_artist['id'])
     
+    # filter by works if relevant
+    if return_works:
+        first_work = return_works[0]
+        conditions.append(WorkAlbums.workid == first_work.id)
+
+    if not conditions:
+        # return response
+        print("return")
+        response_object = {'status': 'success'}
+        response_object['composers'] = composers
+        response_object['works'] = return_works
+        response_object['artists'] = first_10_artists
+        response_object['albums'] = []
+        response = jsonify(response_object)
+        return response
+
+    albums_query = query.filter(
+        and_(*conditions), 
+        WorkAlbums.track_count < 100, 
+        WorkAlbums.hidden != True, 
+        WorkAlbums.album_type != "compilation"
+    ).order_by(WorkAlbums.score.desc())
+
+    albums_no_duplicates = []
+    duplicates_set = set()
+
+    # Iterate over query directly
+    for album in albums_query:
+        if len(albums_no_duplicates) >= 10:
+            break
+
+        if album.album_id not in duplicates_set:
+            albums_no_duplicates.append(album)
+            duplicates_set.add(album.album_id)
+
+    first_10_albums = albums_no_duplicates
+
     # return response
     response_object = {'status': 'success'}
     response_object['composers'] = composers
     response_object['works'] = return_works
     response_object['artists'] = first_10_artists
+    response_object['albums'] = first_10_albums
     response = jsonify(response_object)
     return response
 

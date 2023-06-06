@@ -132,6 +132,24 @@
                 </div>
               </b-card-text>
             </b-card-body>
+            <b-card-body v-show="!loading" id="albums" class="card-body">
+              <h6 v-if="albums.length > 0">Albums</h6>
+              <b-card-text class="info-card-text">
+                <div v-for="album in albums" :key="album.id">
+                  <table>
+                    <tr>
+                      <td>
+                        <b-avatar square size="40px" :src="album.img"></b-avatar>
+                      </td>
+                      <td class="info-td wrap-text">
+                        <a class="artist-name" @click="getArtistComposers(album)">{{ album.title }}</a><br />
+                        <span class="born-died">{{ album.artists }}</span>
+                      </td>
+                    </tr>
+                  </table>
+                </div>
+              </b-card-text>
+            </b-card-body>
           </b-card>
         </div>
       </Transition>
@@ -201,6 +219,7 @@ export default {
       composers: [],
       works: [],
       artists: [],
+      albums: [],
       loading: false,
       firstLoad: true
     };
@@ -295,6 +314,7 @@ export default {
           this.composers = res.data.composers;
           this.works = res.data.works;
           this.artists = res.data.artists;
+          this.albums = res.data.albums;
           this.loading = false;
 
           var content = "";
@@ -519,6 +539,15 @@ input[type="search"]::-webkit-search-cancel-button {
 }
 .info-td {
   padding-left: 10px;
+}
+.wrap-text {
+  color: gray;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: normal;
 }
 .born-died {
   font-size: 13px !important;

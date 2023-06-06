@@ -218,7 +218,15 @@ class Performers(db.Model):
         self.albums.append(album)
 
 
+@dataclass
 class WorkAlbums(db.Model):
+
+    id: str
+    album_id: str
+    artists: str
+    img: str
+    title: str
+
     id = db.Column(db.String(46), primary_key=True)
     workid = db.Column(db.String(24), db.ForeignKey('work_list.id'))
     album_id = db.Column(db.String(22), index=True)
