@@ -31,7 +31,7 @@
             <div class="search-icon">
               <b-icon-search></b-icon-search>
             </div>
-            <b-form-input id="search-form" class="omnisearch" size="sm" v-model="omniSearchInput" v-debounce:500ms="omniSearch" type="search" placeholder="Search composers, works, performers" autocomplete="off"></b-form-input>
+            <b-form-input id="search-form" class="omnisearch" size="sm" v-model="omniSearchInput" v-debounce:1000ms="omniSearch" type="search" placeholder="Search composers, works, performers, albums" autocomplete="off"></b-form-input>
           </b-navbar-nav>
           <b-navbar-nav class="ml-auto" v-if="!$auth.clientToken">
             <b-button v-if="$view.avatar" right variant="success" class="spotify-button" :href="spotifyURL">
@@ -534,7 +534,7 @@ input[type="search"]::-webkit-search-cancel-button {
   font-size: 13px;
   line-height: 130%;
   overflow-y: scroll;
-  max-height: 190px;
+  max-height: 143px;
   padding-left: 2px;
 }
 .info-td {

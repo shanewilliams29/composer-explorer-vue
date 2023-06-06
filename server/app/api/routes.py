@@ -357,7 +357,7 @@ def omnisearch():
         search_string = str(work.composer) + " " + str(work.genre) + " " + str(work.cat) + " " + str(work.suite) + " " + str(work.title) + " " + str(work.nickname) + " " + str(work.search)
         j = 0
         for word in search_words:
-            if match_beginning_of_words(search_string, unidecode(word)):
+            if match_beginning_of_words(unidecode(search_string), unidecode(word)):
                 j += 1
         for num in search_nums:
             pattern = r'(?<!\d)' + str(num) + r'(?!\d)'
@@ -365,6 +365,10 @@ def omnisearch():
             if match:
                 j += 1
         if len(search_nums) > 0:
+            if j > 1:
+                return_works.append(work)
+                i += 1
+        elif len(composers) > 0 and len(search_words) > 1:
             if j > 1:
                 return_works.append(work)
                 i += 1
@@ -395,7 +399,6 @@ def omnisearch():
     for artist in all_artist_matches:
         if artist['id'] not in artist_duplicate_ids:
             artist_duplicate_ids.add(artist['id'])
-            print(artist['name'])
             matches = []
             search_string = unidecode(artist['name'].lower())
             for word in search_words:
@@ -409,20 +412,34 @@ def omnisearch():
     query = db.session.query(WorkAlbums).join(performer_albums).join(Performers)
 
     # filter by composer if relevant
-    conditions = []
+    conditions1 = []
+    conditions2 = []
+    if composers and first_10_artists:
+        first_composer = composers[0]
+        first_artist = first_10_artists[0]
+        conditions1.append(WorkAlbums.composer == first_composer['name_short'])
+        conditions1.append(Performers.id == first_artist['id'])
+
     if composers:
         first_composer = composers[0]
-        conditions.append(WorkAlbums.composer == first_composer['name_short'])
+        conditions2.append(WorkAlbums.composer == first_composer['name_short'])
     elif first_10_artists:
         first_artist = first_10_artists[0]
-        conditions.append(Performers.id == first_artist['id'])
+        conditions2.append(Performers.id == first_artist['id'])
+
+    print(" ")
+    print(len(conditions1))
+    print(len(conditions2))
     
     # filter by works if relevant
     if return_works:
         first_work = return_works[0]
-        conditions.append(WorkAlbums.workid == first_work.id)
+        if conditions1:
+            conditions1.append(WorkAlbums.workid == first_work.id)
+        if conditions2:
+            conditions2.append(WorkAlbums.workid == first_work.id)
 
-    if not conditions:
+    if not conditions1 and not conditions2:
         # return response
         print("return")
         response_object = {'status': 'success'}
@@ -434,7 +451,7 @@ def omnisearch():
         return response
 
     albums_query = query.filter(
-        and_(*conditions), 
+        or_(and_(*conditions1), and_(*conditions2)),
         WorkAlbums.track_count < 100, 
         WorkAlbums.hidden != True, 
         WorkAlbums.album_type != "compilation"
