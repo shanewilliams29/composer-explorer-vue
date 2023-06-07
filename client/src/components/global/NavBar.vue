@@ -74,7 +74,7 @@
               <b-spinner class="m-5"></b-spinner>
             </div>
             <div v-show="!loading && !firstLoad">
-              <h6 v-if="composers.length + works.length + artists.length == 0">No search results.</h6>
+              <h6 v-if="composers.length + works.length + artists.length + albums.length == 0">No search results.</h6>
             </div>
             <b-card-body v-show="!loading" id="composers" class="card-body">
               <h6 v-if="composers.length > 0">Composers</h6>
@@ -299,6 +299,7 @@ export default {
       this.composers = [];
       this.works = [];
       this.artists = [];
+      this.albums = [];
 
       const path = "api/omnisearch?search=" + item;
       

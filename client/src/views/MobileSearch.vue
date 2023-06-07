@@ -7,7 +7,7 @@
             <div class="search-icon">
               <b-icon-search></b-icon-search>
             </div>
-            <b-form-input ref="searchBox" id="search-form" class="omnisearch" v-model="omniSearchInput" v-debounce:1000ms="omniSearch" type="search" placeholder="Search composers, works, performers" autocomplete="off"></b-form-input>
+            <b-form-input ref="searchBox" id="search-form" class="omnisearch" v-model="omniSearchInput" v-debounce:1000ms="omniSearch" type="search" placeholder="Composers, works, performers, albums" autocomplete="off"></b-form-input>
           </b-navbar-nav>
         </b-navbar>
       </div>
@@ -18,7 +18,7 @@
               <b-spinner class="m-5"></b-spinner>
             </div>
             <div v-show="!loading && !firstLoad">
-              <h6 v-if="composers.length + works.length + artists.length == 0">No search results.</h6>
+              <h6 v-if="composers.length + works.length + artists.length + albums.length == 0">No search results.</h6>
             </div>
             <b-card-body v-show="!loading" id="composers" class="card-body">
               <h5 v-if="composers.length > 0">Composers</h5>
@@ -77,6 +77,25 @@
                   </table>
                 </div>
               </b-card-text>
+              <hr v-if="artists.length > 0">
+            </b-card-body>
+            <b-card-body v-show="!loading" id="albums" class="card-body">
+              <h5 v-if="albums.length > 0">Albums</h5>
+              <b-card-text class="info-card-text">
+                <div v-for="album in albums" :key="album.id" @click="goToAlbum(album.album_id)">
+                  <table>
+                    <tr>
+                      <td>
+                        <b-avatar square size="40px" :src="album.img"></b-avatar>
+                      </td>
+                      <td class="info-td wrap-text">
+                        <a class="artist-name" @click="goToAlbum(album.album_id)">{{ album.title }}</a><br />
+                        <span class="born-died">{{ album.artists }}</span>
+                      </td>
+                    </tr>
+                  </table>
+                </div>
+              </b-card-text>
             </b-card-body>
           </b-card>
         </div>
@@ -105,6 +124,7 @@ export default {
       composers: [],
       works: [],
       artists: [],
+      albums: [],
       loading: false,
       firstLoad: true,
       initialWindowHeight: 0,
@@ -189,6 +209,7 @@ export default {
       this.composers = [];
       this.works = [];
       this.artists = [];
+      this.albums = [];
 
       const path = "api/omnisearch?search=" + item;
 
@@ -204,6 +225,7 @@ export default {
           this.composers = res.data.composers;
           this.works = res.data.works;
           this.artists = res.data.artists;
+          this.albums = res.data.albums;
           this.loading = false;
 
           var content = "";
@@ -260,7 +282,6 @@ export default {
     },
     detectKeyboard() {
       let vh = window.innerHeight * 0.01;
-      console.log(window.innerHeight);
       // for mobile keyboard
       if (window.innerHeight < this.initialWindowHeight) {
         this.$view.mobileKeyboard = true;
@@ -270,7 +291,10 @@ export default {
       }
 
       document.documentElement.style.setProperty("--vh", `${vh}px`);
-    }
+    },
+    goToAlbum(album_id) {
+      this.$router.push("/mobilealbums?id=" + album_id);
+    },
   },
   beforeCreate(){
     document.documentElement.style.setProperty("--workingheight", `191.6px`);
@@ -413,6 +437,16 @@ img {
   width: 100% !important;
   margin-right: 0px;
   margin-left: 0px;
+}
+
+.wrap-text {
+  color: gray;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: normal;
 }
 
 .form-control:focus {
