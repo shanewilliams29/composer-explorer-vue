@@ -79,24 +79,26 @@
               </b-card-text>
               <hr v-if="artists.length > 0">
             </b-card-body>
-            <b-card-body v-show="!loading" id="albums" class="card-body">
-              <h5 v-if="albums.length > 0">Albums</h5>
-              <b-card-text class="info-card-text">
-                <div v-for="album in albums" :key="album.id" @click="goToAlbum(album.album_id)">
-                  <table>
-                    <tr>
-                      <td>
-                        <b-avatar square size="40px" :src="album.img"></b-avatar>
-                      </td>
-                      <td class="info-td wrap-text">
-                        <a class="artist-name" @click="goToAlbum(album.album_id)">{{ album.title }}</a><br />
-                        <span class="born-died">{{ album.artists }}</span>
-                      </td>
-                    </tr>
-                  </table>
-                </div>
-              </b-card-text>
-            </b-card-body>
+  <b-card-body v-show="!loading" id="albums" class="card-body">
+    <h5 v-if="albums.length > 0">Albums</h5>
+    <b-card-text class="info-card-text">
+      <div v-for="album in albums" :key="album.id" @click="goToAlbum(album.album_id)">
+        <table>
+          <tr>
+            <td>
+              <b-avatar square size="52px" :src="album.img"></b-avatar>
+            </td>
+            <td class="info-td">
+              <div class="wrap-text align-middle">
+                <a class="artist-name" @click="goToAlbum(album.album_id)">{{ album.title }}</a><br />
+                <span class="born-died">{{ album.artists }}</span>
+              </div>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </b-card-text>
+  </b-card-body>
           </b-card>
         </div>
       </div>
@@ -223,8 +225,8 @@ export default {
         .get(path)
         .then((res) => {
           this.composers = res.data.composers;
-          this.works = res.data.works;
-          this.artists = res.data.artists;
+          this.works = res.data.works.slice(0, 5);
+          this.artists = res.data.artists.slice(0, 3);
           this.albums = res.data.albums;
           this.loading = false;
 
@@ -442,11 +444,15 @@ img {
 .wrap-text {
   color: gray;
   display: -webkit-box;
-  -webkit-line-clamp: 2;
+  -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: normal;
+}
+
+.align-middle {
+vertical-align: middle;
 }
 
 .form-control:focus {
