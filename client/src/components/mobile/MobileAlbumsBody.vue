@@ -47,7 +47,7 @@
                             <span v-if="highlightArtist(data.all_artists)" class="album-work-artists">, </span>
                             <span class="album-work-artists">{{ printArtists(data.artists) }}</span><br />
                             <span class="album-work-artists">
-                              <span style="font-size: 10px;">
+                              <span style="font-size: 12px;">
                                 <b-icon-clock></b-icon-clock>
                               </span>
                               &nbsp;{{ printDuration(data.tracks) }}
@@ -65,7 +65,7 @@
                       </tr>
                     </table>
                   </div>
-                  <img class="spotify-logo" width="70px" :src="spotifyLogoURLWhite" /><br />
+                  <img class="spotify-logo" width="80px" :src="spotifyLogoURLWhite" /><br />
                 </div>
               </td>
             </tr>
@@ -534,41 +534,41 @@ export default {
 .album-title {
   color: var(--my-white) !important;
   font-weight: 600;
-  font-size: 16px;
+  font-size: 18px;
 }
 
 .album-details {
   color: var(--medium-light-gray) !important;
-  font-size: 14px;
+  font-size: 16px;
   font-family: Roboto Condensed !important;
 }
 
 .album-work-composer {
   color: var(--orange);
-  font-size: 14px;
+  font-size: 16px;
 }
 
 .album-work-title {
   color: var(--my-white);
   font-weight: 600;
-  font-size: 14px;
+  font-size: 16px;
 }
 
 .album-work-cat {
   color: var(--medium-light-gray);
-  font-size: 12px;
+  font-size: 14px;
 }
 
 .album-highlight-artist {
   color: turquoise;
   font-weight: 600;
-  font-size: 12px;
+  font-size: 14px;
   font-family: Roboto Condensed !important;
 }
 
 .album-work-artists {
   color: var(--medium-dark-gray);
-  font-size: 12px;
+  font-size: 14px;
   font-family: Roboto Condensed !important;
 }
 
@@ -631,7 +631,7 @@ td.work-td-minor {
   max-width: calc(var(--imagewidth) - 100px);
   padding-top: 0px !important;
   padding-bottom: 0px !important;
-  font-size: 12px;
+  font-size: 14px;
   color: var(--light-gray);
   font-family: Roboto Condensed !important;
 }
@@ -705,7 +705,7 @@ td.work-td:hover {
 }
 
 .duration-badge {
-  font-size: 10px;
+  font-size: 12px;
   font-family: Roboto Condensed !important;
   color: var(--medium-light-gray);
   background-color: var(--medium-gray);
@@ -713,7 +713,7 @@ td.work-td:hover {
 }
 
 .highlight .duration-badge {
-  font-size: 10px;
+  font-size: 12px;
   font-family: Roboto Condensed !important;
   color: var(--dark-gray);
   background-color: var(--my-white);
@@ -721,7 +721,7 @@ td.work-td:hover {
 }
 
 >>>.badge {
-  font-size: 10px;
+  font-size: 12px;
   font-family: Roboto Condensed !important;
   vertical-align: 0.5px;
   border-radius: 3px;
@@ -733,7 +733,7 @@ td.work-td:hover {
 }
 
 >>>.user-liked {
-  font-size: 13px !important;
+  font-size: 15px !important;
 }
 
 .highlight>>>span {
