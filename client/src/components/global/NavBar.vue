@@ -142,7 +142,7 @@
                         <b-avatar square size="40px" :src="album.img"></b-avatar>
                       </td>
                       <td class="info-td wrap-text">
-                        <a class="artist-name" @click="getArtistComposers(album)">{{ album.title }}</a><br />
+                        <a class="artist-name" @click="goToAlbum(album.album_id)">{{ album.title }}</a><br />
                         <span class="born-died">{{ album.artists }}</span>
                       </td>
                     </tr>
@@ -373,6 +373,12 @@ export default {
         } else {
           eventBus.$emit("requestPerformer", artist);
         }
+      }
+    },
+    goToAlbum(album_id) {
+      this.viewSearchResults = false;
+      if (!this.$view.mobile) {
+          this.$router.push("/albums?id=" + album_id);
       }
     },
   },
