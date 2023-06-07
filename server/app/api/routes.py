@@ -14,7 +14,7 @@ import re
 
 
 @bp.route('/api/getperformer', methods=['GET'])  # get performer details from id
-def get_performer():
+def get_performer(): 
     performer_id = request.args.get('id')
 
     performer = Performers.query.get(performer_id)
