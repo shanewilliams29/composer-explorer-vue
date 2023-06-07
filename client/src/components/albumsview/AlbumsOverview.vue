@@ -659,7 +659,7 @@ td.work-td:hover {
 
 .grid-container {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(275px, 1fr));
   grid-gap: 10px;
   grid-auto-flow: dense;
   padding-top: 10px;
