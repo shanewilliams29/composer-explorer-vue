@@ -152,6 +152,7 @@ def get_onealbum():
 
 
 @bp.route('/api/albumsview', methods=['GET'])  # populates AlbumsView with albums
+#@cache.cached(query_string=True)
 def get_albumsview():
     page = request.args.get('page', 1, type=int)
     composer_name = request.args.get('composer')
@@ -163,7 +164,10 @@ def get_albumsview():
 
     # base query
     query = db.session.query(WorkAlbums)
-    query = query.filter(WorkAlbums.hidden != True, WorkAlbums.img != None, WorkAlbums.album_type != "compilation")
+    query = query.filter(WorkAlbums.hidden != True, 
+                         WorkAlbums.img != None, 
+                         WorkAlbums.track_count <100,
+                         WorkAlbums.album_type != "compilation")
     
     # filter on composer if present
     if composer_name and composer_name != "all":
@@ -205,12 +209,13 @@ def get_albumsview():
         query = query.join(WorkList)\
             .filter(WorkList.title == work_title)
 
-    # sort the results. Slow for artist_name and work_title, so exclude.
-    if not artist_name and not work_title:
+    # sort and get the results. limit cases where many albums.
+    if not composer_name and not artist_name and not work_title:
         query = query.order_by(WorkAlbums.score.desc())
-
-    # execute the query
-    albums = query.limit(page * 400).all()
+        albums = query.limit(page * 400).all()
+    else:
+        # will be sorted below
+        albums = query.all()
 
     if not albums:
         response_object = {'status': 'error'}
