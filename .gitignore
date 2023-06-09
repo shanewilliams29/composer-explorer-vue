@@ -48,6 +48,7 @@ database_urls.txt
 import_composers.py
 test_secrets.py
 import_wizard.py
+import_wizard2.py
 info.sh
 tasks.todo
 misc_code.py
