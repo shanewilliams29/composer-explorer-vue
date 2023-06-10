@@ -11,6 +11,7 @@ import FavoritesView from '../views/FavoritesView.vue'
 import MobileRadio from '../views/MobileRadio.vue'
 import MobilePerformers from '../views/MobilePerformers.vue'
 import MobileAlbums from '../views/MobileAlbums.vue'
+import MobileFavorites from '../views/MobileFavorites.vue'
 
 Vue.use(VueRouter)
 
@@ -59,6 +60,11 @@ const routes = [
     path: '/mobilealbums',
     name: 'mobilealbums',
     component: MobileAlbums,
+  },
+  {
+    path: '/mobilefavorites',
+    name: 'mobilefavorites',
+    component: MobileFavorites,
   },
     {
     path: '/mobileradio',

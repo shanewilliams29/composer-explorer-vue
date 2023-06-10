@@ -1,42 +1,13 @@
 <template>
   <div id="performer">
-    <MobilePerformersHeading/>
+    <FavoritesHeading/>
     <div class="container-fluid">
-      <b-row v-if="showCloud">
-      <div id="dummy-div">
-        <b-col class="cards-col">
-          <div class="grid-container disable-scrollbars" @scroll="hideKeyboard">
-            <div class="grid-item" v-for="artist in performers" :key="artist.id" @click="selectArtist(artist)">
-              <b-card class="album-info-card shadow-sm">
-                <b-card-body class="card-body centered-content">
-                  <b-card-text class="info-card-text ">
-                    <div>
-                      <table class="margin-bottom">
-                        <tr>
-                          <td class="vertical-align-middle">
-                            <b-avatar size="36px" :src="artist.img"></b-avatar>
-                          </td>
-                          <td class="info-td vertical-align-middle wrap-text">
-                            <a class="artist-name" >{{ artist.name }}</a><br />
-                            <span v-if="artist.description !== 'NA'" class="born-died">{{artist.description}}<br></span>
-                          </td>
-                        </tr>
-                      </table>
-                    </div>
-                  </b-card-text>
-                </b-card-body>
-              </b-card>
-            </div>
-          </div>
-        </b-col>
-      </div>
-      </b-row>
-      <b-row v-if="!showCloud">
+      <b-row>
         <div class="cards-container" role="tablist">
           <b-card no-body class="mb-1 mobile-card">
             <b-card-header header-tag="header" class="p-1" role="tab" v-show="!$view.mobileKeyboard">
               <b-button class="header-button" :disabled="composerDisabled" @click="composerToggle" block variant="secondary">
-                <span class="heading-text">Composers</span><span class="mb-0 float-right">
+                <span class="heading-text">Favorite Composers</span><span class="mb-0 float-right">
                   <b-icon-chevron-down></b-icon-chevron-down>
                 </span>
               </b-button>
@@ -52,7 +23,7 @@
           <b-card no-body class="mb-1 mobile-card">
             <b-card-header header-tag="header" class="p-1" role="tab" v-show="!$view.mobileKeyboard">
               <b-button class="header-button" :disabled="workDisabled" block @click="workToggle" variant="secondary">
-                <span v-if="composer" class="heading-text">Works by {{ composer }}</span>
+                <span v-if="composer" class="heading-text">Favorite Works by {{ composer }}</span>
                 <span v-else class="heading-text">Select a composer</span>
                 <span class="mb-0 float-right">
                   <b-icon-chevron-down></b-icon-chevron-down>
@@ -92,7 +63,7 @@
 
 
 <script>
-import MobilePerformersHeading from '@/components/mobile/MobilePerformersHeading.vue'
+import FavoritesHeading from '@/components/favorites/FavoritesHeading.vue'
 import ComposerList from "@/components/composers/ComposerList.vue";
 import WorkList from "@/components/works/WorkList.vue";
 import AlbumList from "@/components/albums/AlbumList.vue";
@@ -102,7 +73,7 @@ import {eventBus} from "../main.js";
 export default {
   name: 'PerformerView',
   components: {
-    MobilePerformersHeading,
+    FavoritesHeading,
     ComposerList,
     WorkList,
     AlbumList,
@@ -126,7 +97,6 @@ export default {
     hideCloud () {
       this.composerToggle();
       this.composer = null;
-      this.title = "Select a work";
       this.showCloud = false;
     },
     unhideCloud () {
@@ -174,8 +144,7 @@ export default {
       }
       return array.slice(0,100);
     },
-    // eslint-disable-next-line
-    setWork(artist, composer){
+    setWork(composer){
       this.composer = composer;
       this.workToggle();
     },
@@ -185,39 +154,20 @@ export default {
     },
   },
   beforeCreate() {
-    document.documentElement.style.setProperty("--workingheight", `228.6px`);
+    document.documentElement.style.setProperty("--workingheight", `193.2px`);
     this.$view.mobile = true;
   },
   created() {
-    const conductors = require('@/assets/topconductors.json');
-    const groups = require('@/assets/topgroups.json');
-    const soloists = require('@/assets/topsoloists.json');
-    const vocalists = require('@/assets/topvocalists.json');
-    let performersArray = []
-
-    performersArray.push(...conductors);
-    performersArray.push(...groups);
-    performersArray.push(...soloists);
-    performersArray.push(...vocalists);
-    this.performers = this.shuffleArray(performersArray);
-
     this.composerToggle();
-    window.firstLoad = false; // allow playback on first load for performer view
-    eventBus.$on('requestComposersForArtist', this.hideCloud);
-    eventBus.$on('clearPerformers', this.unhideCloud);
-    this.$view.mode = 'performer';
-    if (this.$route.query.artist){
-        this.showCloud = false;
-    } else{
-      this.showCloud = true;
-    }
+    this.$view.mode = "favorites";
     this.$view.shuffle = false;
+    this.composer = null;
+
     this.initialWindowHeight = window.innerHeight;
     document.documentElement.style.setProperty("--playback-color", "var(--yellow)");
 
-    eventBus.$on("requestWorksListForArtist", this.setWork);
-    eventBus.$on("requestAlbums", this.setAlbums);
-    eventBus.$on("requestAlbumsAndPlay", this.setAlbums);
+    eventBus.$on("requestWorksListForFavorites", this.setWork);
+    eventBus.$on("requestFavoritesAlbums", this.setAlbums);
 
     let vh = window.innerHeight * 0.01;
     document.documentElement.style.setProperty("--vh", `${vh}px`);
@@ -226,9 +176,8 @@ export default {
   },
   beforeDestroy() {
     window.removeEventListener('resize', this.detectKeyboard);
-    eventBus.$off("requestWorksListForArtist", this.setWork);
-    eventBus.$off("requestAlbums", this.setAlbums);
-    eventBus.$off("requestAlbumsAndPlay", this.setAlbums);
+    eventBus.$off("requestWorksListForFavorites", this.setWork);
+    eventBus.$off("requestFavoritesAlbums", this.setAlbums);
   },
 }
 </script>
@@ -320,13 +269,13 @@ export default {
   width: 100%;
 }
 >>> .highlight{
-  background-color: var(--purple);
+  background-color: var(--red);
 }
 >>> .highlight td{
-  background-color: var(--purple);
+  background-color: var(--red);
 }
 >>> .music-note{
-  color: var(--purple);
+  color: var(--red);
 }
 .disable-scrollbars::-webkit-scrollbar {
   background: transparent; /* Chrome/Safari/Webkit */
@@ -337,93 +286,6 @@ export default {
   -ms-overflow-style: none;  /* IE 10+ */
 }
 
-
-
-
-/* Performers startup grid */
-
-#dummy-div {
-  background-color: var(--dark-gray);
-  width: 100%;
-  height: calc(var(--vh, 1vh) * 100 - 121px + 44px - var(--workingheight));
-}
-
-.album-info-card .card-body{
-  background: none !important;
-  padding: 0px !important;
-}
-.centered-content {
-    display: flex;
-    align-items: center;
-    height: 100%; /* You might need to adjust this */
-  }
-.vertical-align-middle {
-    vertical-align: middle;
-}
-.narrow{
-  font-family: Roboto Condensed !important;
- }
-.grid-container {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-  grid-gap: 0px;
-  grid-auto-flow: dense;
-  height: calc(var(--vh, 1vh) * 100 - 121px + 44px - var(--workingheight));
-  overflow-x: hidden;
-  overflow-y: auto;
-  padding-bottom: 15px;
-  padding-top: 5px;
-}
-.grid-item {
-  display: flex;
-  padding-right: 5px;
-  padding-bottom: 5px;
-}
-.album-info-card {
-  margin-top: 0px;
-  padding: 10px;
-  padding-bottom: 5px;
-  background-color: var(--my-white) !important;
-  border: none !important;
-  width: 100%;
-}
-.info-card-text {
-  vertical-align: middle !important;
-  font-size: 13px;
-  line-height: 130%;
-  padding-left: 2px;
-}
-.info-td {
-  padding-left: 10px;
-  text-overflow: ellipsis;
-}
-.wrap-text {
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: normal;
-}
-.born-died {
-  font-size: 13px !important;
-  color: grey !important;
-}
-a {
-  color: black !important;
-  font-weight: 600;
-  font-size: 14px;
-}
-a:hover {
-  text-decoration: none !important;
-}
-.margin-bottom {
-  margin-bottom: 6px;
-}
-.cards-col{
-  padding: 0px;
-  padding-left: 5px;
-}
 
 /*scrollbars*/
 .info-card-text {
