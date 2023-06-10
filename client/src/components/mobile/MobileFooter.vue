@@ -7,8 +7,8 @@
         </b-col>
         <b-col>
           <b-button class="info-panel-button" @click="togglePanel();">
-            <span class="icon-inactive" v-if="!buttonActive"><b-icon-info-circle></b-icon-info-circle></span>
-            <span class="icon-active" v-if="buttonActive"><b-icon-info-circle></b-icon-info-circle></span>
+            <span class="icon-inactive" v-if="!showPanel"><b-icon-info-circle></b-icon-info-circle></span>
+            <span class="icon-active" v-if="showPanel"><b-icon-info-circle></b-icon-info-circle></span>
           </b-button>
           <PlayerControls />
         </b-col>
@@ -37,9 +37,11 @@ export default {
     AlbumInfo,
     PlayerControls,
   },
+  props: {
+    showPanel: Boolean
+  },
   data() {
     return {
-      buttonActive: false,
       genreTitle: this.$config.genre,
       defaultImage: "https://storage.googleapis.com/composer-explorer.appspot.com/headers/Orchestral.jpg",
       imgLink: "https://storage.googleapis.com/composer-explorer.appspot.com/headers/" + encodeURIComponent(this.$config.genre) + ".jpg",
@@ -70,7 +72,6 @@ export default {
   methods:{
     togglePanel(){
       this.$emit('togglePanel'); 
-      this.buttonActive = !this.buttonActive;
     },
     updatePic(){
       this.reveal = !this.reveal;

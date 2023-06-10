@@ -2,7 +2,7 @@
   <b-card class="composer-info-card shadow-sm">
     <b-card-body class="card-body">
       <b-card-title class="card-title">
-        <table>
+        <table @click="goToWork(work)">
           <tr>
             <td>
               <b-avatar size="60px" :src="composerImg" v-if="$view.mobile"></b-avatar>
@@ -42,6 +42,7 @@
 <script>
 import axios from "axios";
 import { addLineBreaksToParagraph } from "@/HelperFunctions.js"
+import { eventBus } from "@/main.js";
 
 export default {
   data() {
@@ -56,7 +57,8 @@ export default {
       catNo: "",
       date: "",
       composer: "",
-      workMatch: true
+      workMatch: true,
+      work: {},
     };
   },
   computed: {
@@ -70,6 +72,21 @@ export default {
     },
   },
   methods: {
+    goToWork(work) {
+      if(this.$view.mobile){
+        this.$emit('togglePanel');
+        let delay = 0;
+        if (this.$route.name != "home") {
+          delay = 200;
+          this.$router.push("/mobile?search=" + work.id);
+        }
+        setTimeout(function() {
+          eventBus.$emit("fireWorkOmniSearch", work);
+          eventBus.$emit("requestWorksList", work.composer);
+          eventBus.$emit("requestAlbums");
+        }, delay);
+      }
+    },
     checkIfWorkMatches(opus, title, text) {
       if (opus) {
         const num = opus.match(/\d+/)[0];
@@ -89,6 +106,7 @@ export default {
       axios
         .get(path)
         .then((res) => {
+          this.work = res.data.info;
           this.composer = res.data.info.composer;
           this.workTitle = res.data.info.title;
           this.workImg = res.data.info.search;

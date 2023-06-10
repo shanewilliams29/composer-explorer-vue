@@ -2,10 +2,10 @@
   <div v-if="$view.mobile" class="container-fluid">
     <div class="footer-row disable-scrollbars">
       <b-row v-if="showPanel" class="info-row work-info">
-        <WorkInfo />
+        <WorkInfo @togglePanel="togglePanel"/>
       </b-row>
       <b-row v-if="showPanel" class="info-row">
-        <AlbumInfoPanel />
+        <AlbumInfoPanel @togglePanel="togglePanel"/>
       </b-row>
       <b-row class="info-row">
         <TrackListingMobile :showPanel = "showPanel"/>
@@ -27,6 +27,11 @@ export default {
   },
   props: {
     showPanel: Boolean
+  },
+  methods: {
+    togglePanel(){
+      this.$emit('togglePanel');
+    }
   }
 };
 </script>
@@ -40,13 +45,15 @@ export default {
   padding-bottom: 0px;
   border-radius: 0px;
   background-color: rgb(52, 58, 64, 0.9);
-  z-index: 1;
+  z-index: 2;
 }
 .footer-row {
-  height: calc(var(--vh, 1vh) * 100 - var(--workingheight) + 114px);
+  height: calc(var(--vh, 1vh) * 100 - 137px - 54.67px);
   color: black;
   overflow-y: scroll;
   padding-bottom: 10px;
+  margin-bottom: 7px;
+  z-index: 3;
 }
 .col {
   padding: 5px;

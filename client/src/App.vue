@@ -22,11 +22,11 @@
     <div id="footer" v-if="$view.mobile" v-show="!$view.mobileKeyboard">
       <Transition name="fadeHeight2">
         <div class="info-panel-mobile" v-show="showPanel">
-          <MobileInfoPanel :showPanel="childShowPanel"/>
+          <MobileInfoPanel @togglePanel="togglePanel" :showPanel="childShowPanel"/>
         </div>
       </Transition>
       <MobileTracks />
-      <MobileFooter @togglePanel="togglePanel"/>
+      <MobileFooter :showPanel="showPanel" @togglePanel="togglePanel"/>
       
     </div>
   </div>

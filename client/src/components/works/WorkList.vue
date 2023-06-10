@@ -649,7 +649,7 @@ export default {
       this.selectRow(work.id);
       this.setRecommended(work.recommend);
       this.setGenre(work.genre);
-      this.getAlbumsAndPlay(work.id, work.title);
+      this.getAlbums(work.id, work.title);
     },
   },
   created() {

@@ -54,6 +54,9 @@ export default {
     goToAlbum(album) {
       if (!this.$view.mobile) {
           this.$router.push("/albums?id=" + album.id);
+      } else {
+        this.$router.push("/mobilealbums?id=" + album.id);
+        this.$emit('togglePanel');
       }
     },
     getArtistComposers(artist) {
@@ -64,6 +67,14 @@ export default {
         } else {
           eventBus.$emit("requestPerformer", artist);
         }
+      } else {
+        this.$config.artist = artist;
+        if (this.$route.name != "mobileperformers") {
+          this.$router.push("/mobileperformers?artist=" + artist.id);
+        } else {
+          eventBus.$emit("requestPerformer", artist);
+        }
+        this.$emit('togglePanel');
       }
     },
     setSpotifyAlbum(album) {
