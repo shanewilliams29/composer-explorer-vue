@@ -5,7 +5,7 @@
     <div class="container-fluid">
       <b-row>
         <b-col v-show="false" class="display-list first-col" ref="scroll-box-comp"><ComposerList /></b-col>
-        <b-col class="display-list disable-scrollbars work-list-radio-mobile" ref="scroll-box">
+        <b-col class="display-list disable-scrollbars work-list-radio-mobile" ref="scroll-box" @scroll="hideKeyboard">
           <WorkList />
         </b-col>
         <b-col v-show="false" class="display-list last-col extra-margin"><AlbumList /></b-col>
@@ -29,12 +29,18 @@ export default {
     WorkList,
     AlbumList,
   },
+  methods: {
+    hideKeyboard() {
+      document.activeElement.blur();
+    },
+  },
   beforeCreate() {
     this.$view.mobile = true;
     document.documentElement.style.setProperty('--flex', '0 0 400px');
   },
   created(){
     this.$view.mode = 'radio';
+
 
     // let vh = window.innerHeight * 0.01;
     // document.documentElement.style.setProperty('--vh', `${vh}px`);
@@ -79,7 +85,7 @@ export default {
 }
 .work-list-radio-mobile{
   background-color: var(--medium-gray);
-  height: calc(var(--vh, 1vh) * 100 - 405px);
+  height: calc(var(--vh, 1vh) * 100 - 394.5px);
   overflow-y: scroll;
 }
 </style>

@@ -64,7 +64,8 @@ export default {
     this.initialWindowHeight = window.innerHeight;
     window.addEventListener('resize', this.detectKeyboard);
 
-    window.firstLoad = false; // allow playback on first load for performer view
+    window.firstLoad = false; // allow playback on first load
+    this.$view.shuffle = false;
     eventBus.$on('requestComposersForArtist', this.hideCloud);
     eventBus.$on('clearPerformers', this.unhideCloud);
     this.$view.mode = 'performer';

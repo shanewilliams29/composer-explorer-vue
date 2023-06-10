@@ -203,6 +203,7 @@ export default {
 
     this.composerToggle();
     window.firstLoad = false; // allow playback on first load for performer view
+    this.$view.shuffle = false;
     eventBus.$on('requestComposersForArtist', this.hideCloud);
     eventBus.$on('clearPerformers', this.unhideCloud);
     this.$view.mode = 'performer';
