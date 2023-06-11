@@ -44,15 +44,13 @@ export default {
     },
     detectKeyboard() {
       let vh = window.innerHeight * 0.01;
-      console.log(window.innerHeight);
       // for mobile keyboard
-      if (window.innerHeight < this.initialWindowHeight) {
+      if (window.innerHeight < this.$view.initialWindowHeight) {
         this.$view.mobileKeyboard = true;
         vh = vh + 145 * 0.01;
       } else {
         this.$view.mobileKeyboard = false;
       }
-
       document.documentElement.style.setProperty("--vh", `${vh}px`);
     }
   },

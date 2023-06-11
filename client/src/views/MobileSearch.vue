@@ -129,7 +129,6 @@ export default {
       albums: [],
       loading: false,
       firstLoad: true,
-      initialWindowHeight: 0,
     };
   },
   computed: {
@@ -285,13 +284,12 @@ export default {
     detectKeyboard() {
       let vh = window.innerHeight * 0.01;
       // for mobile keyboard
-      if (window.innerHeight < this.initialWindowHeight) {
+      if (window.innerHeight < this.$view.initialWindowHeight) {
         this.$view.mobileKeyboard = true;
         vh = vh + 145 * 0.01;
       } else {
         this.$view.mobileKeyboard = false;
       }
-
       document.documentElement.style.setProperty("--vh", `${vh}px`);
     },
     goToAlbum(album_id) {

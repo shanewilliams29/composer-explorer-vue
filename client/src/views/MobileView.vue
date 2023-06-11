@@ -116,15 +116,12 @@ export default {
     },
     detectKeyboard(){
       let vh = window.innerHeight * 0.01;
-      console.log(window.innerHeight);
-      // for mobile keyboard
-      if (window.innerHeight < this.initialWindowHeight) {
+      if (window.innerHeight < this.$view.initialWindowHeight) {
         this.$view.mobileKeyboard = true;
         vh = vh + 250 * 0.01;
       } else {
         this.$view.mobileKeyboard = false;
       }
-
       document.documentElement.style.setProperty("--vh", `${vh}px`);
     },
     setWork(composer){
@@ -143,7 +140,6 @@ export default {
   created() {
     this.$view.mode = null;
     this.$view.shuffle = false;
-    this.initialWindowHeight = window.innerHeight;
     document.documentElement.style.setProperty("--playback-color", "var(--yellow)");
 
     // remove query parameters for landing from search on another page

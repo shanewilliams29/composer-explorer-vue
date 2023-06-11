@@ -90,7 +90,6 @@ export default {
       initialWorksLoad: true,
       initialAlbumsLoad: true,
       composerListKey: 0,
-      initialWindowHeight: 0,
     };
   },
   methods: {
@@ -123,9 +122,8 @@ export default {
     },
     detectKeyboard(){
       let vh = window.innerHeight * 0.01;
-      console.log(window.innerHeight);
       // for mobile keyboard
-      if (window.innerHeight < this.initialWindowHeight) {
+      if (window.innerHeight < this.$view.initialWindowHeight) {
         this.$view.mobileKeyboard = true;
         vh = vh + 250 * 0.01;
       } else {
@@ -163,7 +161,6 @@ export default {
     this.$view.shuffle = false;
     this.composer = null;
 
-    this.initialWindowHeight = window.innerHeight;
     document.documentElement.style.setProperty("--playback-color", "var(--yellow)");
 
     eventBus.$on("requestWorksListForFavorites", this.setWork);

@@ -141,6 +141,9 @@ export default {
     document.documentElement.style.setProperty("--panelheight", `0px`);
   },
   mounted(){
+    // For mobile keyboard detection
+    this.$view.initialWindowHeight = window.innerHeight;
+    console.log("INITIAL HEIGHT: " + this.$view.initialWindowHeight);
     // Get composer list (albums, radio)
     this.getComposerList();
     // Get works list (albums)

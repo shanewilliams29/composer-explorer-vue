@@ -93,6 +93,7 @@ Vue.prototype.$lists = Vue.observable({
 
 // view stores view configuration, not saved betwen sessions
 Vue.prototype.$view = Vue.observable({
+    initialWindowHeight: null,
     banner: false, // welcome banner
     mode: null, // null (browse) / performer / favorites / radio
     shuffle: false,
