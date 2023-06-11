@@ -1402,7 +1402,7 @@ def get_albuminfo(album_id):
         album_details = json.loads(album.data)
         composer_name = composer_name
 
-    # query new artist table first
+    # get artists
     artists = Performers.query.join(performer_albums).join(WorkAlbums)\
         .filter(WorkAlbums.id == album_id).all()
 
@@ -1415,6 +1415,7 @@ def get_albuminfo(album_id):
     ALBUM = {
         'composer': album.composer,
         'id': album.id,
+        'album_id': album.album_id,
         'work_id': album.workid,
         'spotify_id': album.album_id,
         'album_img': album_details['album_img'],
@@ -1427,6 +1428,7 @@ def get_albuminfo(album_id):
         'release_date': album_details['release_date'],
         'tracks': album_details['tracks'],
         'track_count': album_details['track_count'],
+        'label': album.label,
         'artist_details': artists,
     }
 

@@ -5,10 +5,10 @@
         <table v-if="album.release_date">
           <tr class="heading-tr" @click="goToAlbum(album)">
             <td>
-              <b-avatar square size="60px" :src="album.images[0].url"></b-avatar>
+              <b-avatar square size="60px" :src="album.album_img"></b-avatar>
             </td>
             <td class="heading-td">
-              {{ album.name }}<br />
+              {{ album.album_name }}<br />
               <span class="born-died">
                 ℗ {{album.release_date.slice(0,4)}} · {{ album.label }}
               </span>
@@ -40,7 +40,6 @@
 
 <script>
 import { eventBus } from "@/main.js";
-import spotify from "@/SpotifyFunctions.js";
 
 export default {
   data() {
@@ -53,9 +52,9 @@ export default {
   methods: {
     goToAlbum(album) {
       if (!this.$view.mobile) {
-          this.$router.push("/albums?id=" + album.id);
+          this.$router.push("/albums?id=" + album.album_id);
       } else {
-        this.$router.push("/mobilealbums?id=" + album.id);
+        this.$router.push("/mobilealbums?id=" + album.album_id);
         this.$emit('togglePanel');
       }
     },
@@ -77,27 +76,20 @@ export default {
         this.$emit('togglePanel');
       }
     },
-    setSpotifyAlbum(album) {
+    setAlbumInfo(album) {
       this.album = album;
-    },
-    getSpotifyAlbumData(album) {
-      // retrieves data from Spotify. 'album' is database album object
-      this.results = [];
       this.artists = album.artist_details;
-      let album_id = album.album_uri.substring(album.album_uri.lastIndexOf(":") + 1);
-      spotify.getSpotifyAlbum(this.$auth.appToken, album_id);
     }
   },
   created() {
-    this.getSpotifyAlbumData(this.$config.albumData);
-    eventBus.$on("fireSetAlbum", this.getSpotifyAlbumData); 
-    eventBus.$on("fireSetAlbumHopper", this.getSpotifyAlbumData);
-    eventBus.$on("fireSpotifyAlbumData", this.setSpotifyAlbum);
+    this.setAlbumInfo(this.$config.albumData);
+    console.log(this.album);
+    eventBus.$on("fireSetAlbum", this.setAlbumInfo); 
+    eventBus.$on("fireSetAlbumHopper", this.setAlbumInfo);
   },
   beforeDestroy() {
-    eventBus.$off("fireSetAlbum", this.getSpotifyAlbumData);
-    eventBus.$off("fireSetAlbumHopper", this.getSpotifyAlbumData);
-    eventBus.$off("fireSpotifyAlbumData", this.setSpotifyAlbum);
+    eventBus.$off("fireSetAlbum", this.setAlbumInfo);
+    eventBus.$off("fireSetAlbumHopper", this.setAlbumInfo);
   },
 };
 </script>
