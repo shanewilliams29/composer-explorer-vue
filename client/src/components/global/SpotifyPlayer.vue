@@ -13,9 +13,6 @@ let spotifyPlayerScript = document.createElement("script");
 spotifyPlayerScript.setAttribute("src", "https://sdk.scdn.co/spotify-player.js");
 document.head.appendChild(spotifyPlayerScript);
 
-// To activate the player for Chrome and Safari Autoplay restrictions
-
-
 // Listeners for Spotify playback functionality
 function addPlaybackListeners(vm) {
     // Player ready

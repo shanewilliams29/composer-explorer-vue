@@ -83,7 +83,6 @@ export default {
   },
   created() {
     this.setAlbumInfo(this.$config.albumData);
-    console.log(this.album);
     eventBus.$on("fireSetAlbum", this.setAlbumInfo); 
     eventBus.$on("fireSetAlbumHopper", this.setAlbumInfo);
   },
