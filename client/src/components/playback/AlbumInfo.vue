@@ -8,9 +8,13 @@
         <b-card-body class="info-card-body">
           <b-card-text>
             <div class="centered album-data">
-              <span class="composer">{{composer}}</span>
-              <span class="title" style="font-weight: bold;">{{title}}</span>
-              <span class="narrow" style="color: var(--medium-dark-gray); font-size: 13px;">{{album.artists}}</span>
+              <a class="composer" @click="getSearchWork(work)">{{work.composer}}</a>
+              <a class="title" style="font-weight: bold;" @click="getSearchWork(work)">{{work.title}}</a>
+              <div class="artists-row">
+              <span class="artist narrow" v-for="(artist, index) in artists" :key="index">
+                <a class="artist narrow" @click="getArtistComposers(artist)">{{ artist.name }}</a><span v-if="index !== artists.length - 1">,&nbsp;</span>
+              </span>
+              </div>
             </div>
           </b-card-text>
         </b-card-body>
@@ -28,8 +32,10 @@ export default {
     return {
       album: [],
       title: "",
+      work: {},
       hold_title: this.$config.workTitle,
-      composer: this.$config.composer,
+      composer: '',
+      artists:[]
     };
   },
   methods: {
@@ -38,8 +44,27 @@ export default {
           this.$router.push("/albums?id=" + album_id);
       }
     },
+    getSearchWork(work) {
+        let delay = 0;
+        if (this.$route.name != "home") {
+          delay = 200;
+          this.$router.push("/?search=" + work.id);
+        }
+        setTimeout(function(){
+          eventBus.$emit("fireWorkOmniSearch", work);
+        }, delay);
+    },
+    getArtistComposers(artist) {
+      if (!this.$view.mobile) {
+        this.$config.artist = artist;
+        if (this.$route.name != "performers") {
+          this.$router.push("/performers?artist=" + artist.id);
+        } else {
+          eventBus.$emit("requestPerformer", artist);
+        }
+      }
+    },
     getAlbumInfo(album_id) {
-      this.title = this.$config.workTitle;
       this.loading = true;
       const path = "api/albuminfo/" + album_id;
       axios
@@ -49,7 +74,9 @@ export default {
           localStorage.setItem("config", JSON.stringify(this.$config));
           eventBus.$emit("fireSetAlbum", res.data.album);
           this.album = res.data.album;
-          this.composer = res.data.album.composer;
+          this.work = res.data.work;
+          this.title = this.work.title;
+          this.artists = res.data.print_artists;
           this.loading = false;
         })
         .catch((error) => {
@@ -58,7 +85,6 @@ export default {
         });
     },
     getAlbumInfoHopper(album_id, track_no, percent_progress) {
-      this.title = this.$config.workTitle;
       this.loading = true;
       const path = "api/albuminfo/" + album_id;
       axios
@@ -68,7 +94,10 @@ export default {
           localStorage.setItem("config", JSON.stringify(this.$config));
           eventBus.$emit("fireSetAlbumHopper", res.data.album, track_no, percent_progress);
           this.album = res.data.album;
-          this.composer = res.data.album.composer;
+          this.composer = res.data.composer;
+          this.work = res.data.work;
+          this.title = this.work.title;
+          this.artists = res.data.print_artists;
           this.loading = false;
         })
         .catch((error) => {
@@ -147,5 +176,22 @@ cursor: pointer;
 }
 .composer{
   color: var(--my-white);
+  cursor: pointer;
+}
+.title{
+  color: var(--my-white);
+  cursor: pointer;
+}
+.artist{
+  cursor: pointer;
+  color: var(--medium-dark-gray);
+  font-size: 13px;
+  white-space: nowrap;
+  display: inline;
+}
+.artists-row {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
 }
 </style>

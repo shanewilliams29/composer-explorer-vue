@@ -1391,7 +1391,7 @@ def get_workinfo(work_id):
 
 
 @bp.route('/api/albuminfo/<album_id>', methods=['GET'])
-@cache.cached(query_string=True)
+# @cache.cached(query_string=True)
 def get_albuminfo(album_id):
     result = db.session.query(WorkAlbums, ComposerList.name_full)\
         .join(ComposerList)\
@@ -1415,6 +1415,7 @@ def get_albuminfo(album_id):
     ALBUM = {
         'composer': album.composer,
         'id': album.id,
+        'work_id': album.workid,
         'spotify_id': album.album_id,
         'album_img': album_details['album_img'],
         'img_big': album.img,
@@ -1429,6 +1430,8 @@ def get_albuminfo(album_id):
         'artist_details': artists,
     }
 
+    work = WorkList.query.get(ALBUM['work_id'])
+
     # order so that conductor before orchestra
     orchestra_list = ['baroque', 'augsburger', 'antiqua', 'milano', 'quartet', 'orchest', 'philharm', 'symphony', 'concert', 'chamber', 'academy', 'staats', 'consort', 'symphoniker', 'covent garden', 'choir', 'akademie', 'stuttgart', 'llscher']
     two_artists = ALBUM['artists'].split(', ')
@@ -1436,11 +1439,19 @@ def get_albuminfo(album_id):
     for term in orchestra_list:
         if term.lower() in two_artists[0].lower():
             two_artists.reverse()
-            ALBUM['artists'] = ", ".join(two_artists)
+            # ALBUM['artists'] = ", ".join(two_artists)
             break
+
+    print_artists = []
+    for artist_name in two_artists:
+        for artist in artists:
+            if artist.name == artist_name:
+                print_artists.append({'id': artist.id, 'name': artist.name})
 
     response_object = {'status': 'success'}
     response_object['album'] = ALBUM
+    response_object['work'] = work
+    response_object['print_artists'] = print_artists
     response = jsonify(response_object)
     return response
 
