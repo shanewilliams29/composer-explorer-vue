@@ -84,7 +84,7 @@ export default {
       }
     },
     getArtistList() {
-      // Gets list of all artists for performer and omni search, radio mode
+      // Gets list of all artists for album view and radio mode
       const path = "api/artistlist";
       axios
         .get(path)
@@ -143,7 +143,6 @@ export default {
   mounted(){
     // For mobile keyboard detection
     this.$view.initialWindowHeight = window.innerHeight;
-    console.log("INITIAL HEIGHT: " + this.$view.initialWindowHeight);
     // Get composer list (albums, radio)
     this.getComposerList();
     // Get works list (albums)
