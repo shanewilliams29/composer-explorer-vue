@@ -151,7 +151,6 @@ def get_token():
     response_object = {'status': 'success'}
     response_object['app_token'] = session['app_token']
     response_object['client_token'] = session['spotify_token']
-    response_object['knowledge_api'] = Config.GOOGLE_KNOWLEDGE_GRAPH_API_KEY
 
     if current_user.is_authenticated:
         if current_user.product =="premium":

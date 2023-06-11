@@ -133,7 +133,6 @@ export default {
                                 this.$auth.userid = res.data.user_id;
                                 this.$auth.displayName = res.data.display_name;
                                 this.$auth.patreon = res.data.patreon;
-                                this.$auth.knowledgeKey = res.data.knowledge_api;
                                 this.$auth.avatar = res.data.avatar;
                                 this.$view.showConnecting = false;
 
@@ -146,7 +145,6 @@ export default {
                                 this.$auth.userid = res.data.user_id;
                                 this.$auth.appToken = res.data.app_token;
                                 this.$auth.displayName = res.data.display_name;
-                                this.$auth.knowledgeKey = res.data.knowledge_api;
                                 this.$auth.avatar = res.data.avatar;
                                 this.$auth.patreon = res.data.patreon;
                                 this.$view.showConnecting = false;
@@ -155,7 +153,6 @@ export default {
                                 // User not logged in. Show welcome banner.
                             } else {
                                 this.$auth.appToken = res.data.app_token;
-                                this.$auth.knowledgeKey = res.data.knowledge_api;
                                 this.$view.banner = true;
                                 this.$view.showConnecting = false;
                                 this.$auth.patreon = true;
@@ -192,10 +189,8 @@ export default {
                         if (res.data.client_token !== null) {
                             this.$auth.clientToken = res.data.client_token;
                             this.$auth.appToken = res.data.app_token;
-                            this.$auth.knowledgeKey = res.data.knowledge_api;
                         } else {
                             this.$auth.appToken = res.data.app_token;
-                            this.$auth.knowledgeKey = res.data.knowledge_api;
                         }
                     }
                 })
