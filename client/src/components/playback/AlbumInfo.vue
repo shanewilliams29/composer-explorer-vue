@@ -148,6 +148,7 @@ cursor: pointer;
 }
 .card {
   border: none !important;
+  background: var(--dark-gray) !important;
 }
 .card-img {
   height: 100%;
