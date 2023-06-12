@@ -1,16 +1,16 @@
 <template>
   <b-card no-body class="track-info-card shadow-sm">
-    <b-card-text class="info-card-text-tracks" ref="scroll-box">
+    <b-card-text class="info-card-text-tracks disable-scrollbars" ref="scroll-box">
       <table>
         <tr v-for="(track, index) in album.tracks" 
           @click="selectTrack(track); playTracks(track[2]);" 
           :class="{'highlight-track': trackMatch(track)}" 
           :id="track[1]" 
           :key="track[1]">
-          <td>
-            <b-avatar v-if="trackMatch(track)" variant="warning" size="40px" :text="(index + 1).toString()">
+          <td class="left-padding">
+            <b-avatar v-if="trackMatch(track)" variant="warning" size="36px" icon="soundwave">
             </b-avatar>
-            <b-avatar v-if="!trackMatch(track)" size="40px" :text="(index + 1).toString()">
+            <b-avatar v-if="!trackMatch(track)" size="36px" :text="(index + 1).toString()">
             </b-avatar>
           </td>
           <td class="info-td">
@@ -69,8 +69,16 @@ export default {
 </script>
 
 <style scoped>
+table {
+  width: 100%;
+  margin-bottom: 6px;
+}
+table tr:not(:last-child) td {
+    border-bottom: 1px solid var(--light-gray);
+}
 td {
-  padding-bottom: 5px;
+  padding-top: 10px;
+  padding-bottom: 10px;
 }
 a {
   color: black;
@@ -79,6 +87,10 @@ a {
 }
 a:hover {
   cursor: pointer;
+}
+.left-padding{
+  padding-left: 5px;
+  width: 1%;
 }
 .heading-tr {
   vertical-align: middle;
@@ -109,7 +121,8 @@ a:hover {
   padding-left: 10px;
 }
 .highlight-track {
-  color: var(--yellow) !important;
+  background-color: var(--light-gray);
+  color: var(--black) !important;
 }
 .disclaimer {
   margin-bottom: 11px;
@@ -125,14 +138,12 @@ a:hover {
 
 .info-card-text-tracks {
   font-size: 13px;
-  line-height: 130%;
+  line-height: 120%;
   overflow-y: scroll;
   height: auto;
   padding-left: 2px;
 }
-table {
-  margin-bottom: 6px;
-}
+
 .wiki-link {
   font-style: italic;
   color: grey;
@@ -145,31 +156,14 @@ table {
   height: 20px;
 }
 
-/*scrollbars*/
-.info-card-text-tracks {
-  --scroll-bar-color: var(--scroll-color-light);
-  --scroll-bar-bg-color: var(--my-white);
+.disable-scrollbars::-webkit-scrollbar {
+  background: transparent; /* Chrome/Safari/Webkit */
+  width: 0px;
 }
-
-.info-card-text-tracks {
-  scrollbar-width: thin;
-  scrollbar-color: var(--scroll-bar-color) var(--scroll-bar-bg-color) !important;
-}
-
-/* Works on Chrome, Edge, and Safari */
-.info-card-text-tracks::-webkit-scrollbar {
-  width: 12px;
-  height: 12px;
-}
-
-.info-card-text-tracks::-webkit-scrollbar-track {
-  background: var(--scroll-bar-bg-color) !important;
-}
-
-.info-card-text-tracks::-webkit-scrollbar-thumb {
-  background-color: var(--scroll-bar-color);
-  border-radius: 20px;
-  border: 3px solid var(--scroll-bar-bg-color) !important;
+    
+.disable-scrollbars {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none;  /* IE 10+ */
 }
 
 

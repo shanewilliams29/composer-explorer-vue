@@ -9,7 +9,7 @@
             </td>
             <td class="heading-td">
               {{ album.album_name }}<br />
-              <span class="born-died">
+              <span class="album-details">
                 ℗ {{album.release_date.slice(0,4)}} · {{ album.label }}
               </span>
             </td>
@@ -120,6 +120,12 @@ export default {
   font-size: 16px;
   height: 62px;
 }
+
+.album-details {
+  font-size: 14px !important;
+  color: grey !important;
+  font-family: Roboto Condensed !important;
+}
 .card-body {
   background-color: var(--my-white) !important;
   --scroll-bar-bg-color: var(--light-gray);
@@ -213,7 +219,7 @@ export default {
 a {
   color: black !important;
   font-weight: 600;
-  font-size: 13px;
+  font-size: 14px;
 }
 a:hover {
   text-decoration: none !important;

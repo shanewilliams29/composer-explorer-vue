@@ -1,10 +1,10 @@
 <template>
   <div v-if="$view.mobile" class="container-fluid">
     <div class="footer-row disable-scrollbars">
-      <b-row v-if="showPanel" class="info-row work-info">
-        <WorkInfo @togglePanel="togglePanel"/>
+      <b-row class="info-row work-info">
+        <WorkInfo v-if="showPanel" @togglePanel="togglePanel"/>
       </b-row>
-      <b-row v-if="showPanel" class="info-row">
+      <b-row class="info-row">
         <MobileAlbumInfoPanel @togglePanel="togglePanel"/>
       </b-row>
       <b-row class="info-row">
@@ -39,6 +39,10 @@ export default {
 <style scoped>
 >>> a:hover{
   text-decoration: none !important;
+}
+
+.work-info{
+  min-height: 89px;
 }
 
 .container-fluid {
