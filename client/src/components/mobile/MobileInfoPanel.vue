@@ -5,7 +5,7 @@
         <WorkInfo @togglePanel="togglePanel"/>
       </b-row>
       <b-row v-if="showPanel" class="info-row">
-        <AlbumInfoPanel @togglePanel="togglePanel"/>
+        <MobileAlbumInfoPanel @togglePanel="togglePanel"/>
       </b-row>
       <b-row class="info-row">
         <TrackListingMobile :showPanel = "showPanel"/>
@@ -16,13 +16,13 @@
 
 <script>
 import WorkInfo from '@/components/works/WorkInfo.vue';
-import AlbumInfoPanel from '@/components/albums/AlbumInfoPanel.vue';
+import MobileAlbumInfoPanel from '@/components/mobile/MobileAlbumInfoPanel.vue';
 import TrackListingMobile from './TrackListingMobile.vue'
 
 export default {
   components: {
     WorkInfo,
-    AlbumInfoPanel,
+    MobileAlbumInfoPanel,
     TrackListingMobile
   },
   props: {

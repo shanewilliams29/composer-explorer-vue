@@ -30,9 +30,11 @@
                             <td class="vertical-align-middle">
                               <b-avatar size="36px" :src="artist.img"></b-avatar>
                             </td>
-                            <td class="info-td vertical-align-middle wrap-text">
+                            <td class="info-td vertical-align-middle">
+                              <div class="wrap-text">
                               <a class="artist-name" >{{ artist.name }}</a><br />
                               <span v-if="artist.description !== 'NA'" class="born-died">{{artist.description}}<br></span>
+                              </div>
                             </td>
                           </tr>
                         </table>
@@ -105,16 +107,6 @@ export default {
 </script>
 
 <style scoped>
-a {
-  color: black !important;
-  font-weight: 600;
-  font-size: 14px;
-}
-a:hover {
-  color: black !important;
-  text-decoration: underline !important;
-  cursor: pointer;
-}
 .heading-tr {
   vertical-align: middle;
   height: 62px !important;
@@ -124,22 +116,6 @@ a:hover {
   padding-left: 10px;
   font-size: 16px;
 }
-.spinner {
-  text-align: center;
-}
-.m-5 {
-  color: var(--dark-gray);
-}
-.born-died {
-  font-size: 13px !important;
-  color: grey !important;
-}
-.info-td {
-  padding-left: 10px;
-}
-.disclaimer {
-  margin-bottom: 11px;
-}
 .card-title {
   font-size: 16px;
   height: 62px;
@@ -147,28 +123,6 @@ a:hover {
 .card-body {
   background-color: var(--my-white) !important;
   --scroll-bar-bg-color: var(--light-gray);
-}
-.info-card-text {
-  font-size: 13px;
-  line-height: 130%;
-  overflow-y: scroll;
-  height: 190px;
-  padding-left: 0px;
-  padding-right: 0px;
-}
-table {
-  margin-bottom: 6px;
-}
-.wiki-link {
-  font-style: italic;
-  color: grey;
-}
-.open-in-spotify {
-  font-size: 12px;
-}
-.spotify-logo {
-  width: auto;
-  height: 20px;
 }
 
 .disable-scrollbars::-webkit-scrollbar {
@@ -201,6 +155,7 @@ table {
   }
 .vertical-align-middle {
     vertical-align: middle;
+    line-height: 100%;
 }
 .narrow{
   font-family: Roboto Condensed !important;
@@ -213,7 +168,8 @@ table {
   height: auto;
   overflow-x: hidden;
   overflow-y: auto;
-  padding-left: 0px;
+  padding-right: 15px;
+  padding-left: 15px;
   padding-bottom: 0px;
   padding-top: 0px;
 }
@@ -222,6 +178,7 @@ table {
   padding-left: 0px;
   padding-right: 0px;
   padding-bottom: 0px;
+  vertical-align: middle;
 }
 .album-info-card {
   margin-top: 0px;
@@ -232,7 +189,7 @@ table {
 .info-card-text {
   vertical-align: middle !important;
   font-size: 13px;
-  line-height: 130%;
+  line-height: 100% !important;
   padding-left: 2px;
 }
 .info-td {
@@ -250,11 +207,13 @@ table {
 .born-died {
   font-size: 13px !important;
   color: grey !important;
+  font-family: Roboto Condensed !important;
+  line-height: 80% !important;
 }
 a {
   color: black !important;
   font-weight: 600;
-  font-size: 14px;
+  font-size: 13px;
 }
 a:hover {
   text-decoration: none !important;
@@ -267,9 +226,9 @@ a:hover {
   padding-left: 0px;
 }
 .card .album-info-card{
-  padding-left: 5px !important;
+  padding-left: 0px !important;
   padding-right: 5px !important;
   padding-top: 0px !important;
-  padding-bottom: 0px !important;
+  padding-bottom: 5px !important;
 }
 </style>
