@@ -134,7 +134,7 @@ export default {
     },
   },
   beforeCreate() {
-    document.documentElement.style.setProperty("--workingheight", `191.6px`);
+    document.documentElement.style.setProperty("--workingheight", `190.6px`);
     this.$view.mobile = true;
   },
   created() {
@@ -206,7 +206,7 @@ export default {
 
 /* Page styling */
 .header-height{
-  height: 76px !important;
+  height: 75px !important;
 }
 .heading-text{
   padding-left: 20px;
