@@ -70,6 +70,27 @@ export default {
     }
   },
   methods:{
+    iOS() {
+      return [
+        'iPad Simulator',
+        'iPhone Simulator',
+        'iPod Simulator',
+        'iPad',
+        'iPhone',
+        'iPod'
+      ].includes(navigator.platform)
+      // iPad on iOS 13 detection
+      || (navigator.userAgent.includes("Mac") && "ontouchend" in document)
+    },
+    makeToast() {
+      this.$bvToast.toast(`Get the App on Google Play Store`, {
+        href: 'https://play.google.com/store/apps/details?id=com.app.composerexplorer',
+        title: 'App available for Android',
+        toaster: 'b-toaster-bottom-full',
+        solid: true,
+        autoHideDelay: 3600000,
+      })
+    },
     togglePanel(){
       this.$emit('togglePanel'); 
     },
@@ -98,7 +119,20 @@ export default {
   created(){
     eventBus.$on('fireSetAlbum', this.updatePic);
     eventBus.$on('fireSetAlbumHopper', this.updatePic);
-  }
+  },
+  mounted(){
+    var apple = this.iOS();
+    var userAgent = window.navigator.userAgent.toLowerCase();
+    console.log(apple);
+    console.log(userAgent);
+
+    if (!userAgent.includes('wv')) { // Webview (App)
+      if (this.$view.mobile && !apple) {
+        console.log('toast');
+        this.makeToast();
+      }
+    }
+  },
 };
 </script>
 
