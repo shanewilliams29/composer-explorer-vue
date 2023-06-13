@@ -123,12 +123,9 @@ export default {
   mounted(){
     var apple = this.iOS();
     var userAgent = window.navigator.userAgent.toLowerCase();
-    console.log(apple);
-    console.log(userAgent);
 
     if (!userAgent.includes('wv')) { // Webview (App)
       if (this.$view.mobile && !apple) {
-        console.log('toast');
         this.makeToast();
       }
     }
