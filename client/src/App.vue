@@ -6,6 +6,7 @@
     <MobileNavbar />
     <ConnectingOverlay />
     <WelcomeOverlay />
+    <MobileWelcomeOverlay />
     <ModalContainer />
 
     <SpotifyPlayer />
@@ -46,6 +47,7 @@ import ModalContainer from "@/components/modals/ModalContainer.vue";
 import MobileInfoPanel from "@/components/mobile/MobileInfoPanel.vue";
 import MobileTracks from "@/components/mobile/MobileTracks.vue";
 import MobileFooter from "@/components/mobile/MobileFooter.vue";
+import MobileWelcomeOverlay from "@/components/mobile/MobileWelcomeOverlay.vue";
 
 export default {
   components: {
@@ -61,6 +63,7 @@ export default {
     MobileInfoPanel,
     InfoPanel,
     PageFooter,
+    MobileWelcomeOverlay
   },
   data() {
     return {
