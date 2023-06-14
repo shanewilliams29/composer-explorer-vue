@@ -78,13 +78,11 @@ export default {
 box-shadow: rgba(0, 0, 0, 0.07) 0px 1px 2px, rgba(0, 0, 0, 0.07) 0px 2px 4px, rgba(0, 0, 0, 0.07) 0px 4px 8px, rgba(0, 0, 0, 0.07) 0px 8px 16px, rgba(0, 0, 0, 0.07) 0px 16px 32px, rgba(0, 0, 0, 0.07) 0px 32px 64px;
   border-radius: 0px;
   background-color: rgb(52, 58, 64, 0.95);
-/*  -webkit-backdrop-filter: blur(10px);
-  backdrop-filter: blur(10px);*/
   z-index: 1;
 }
 @supports (-moz-appearance:none) {
   .overlay {
-    background-color: rgb(52, 58, 64, 0);
+    background-color: rgb(52, 58, 64, 0.95);
   }
 }
 img{
