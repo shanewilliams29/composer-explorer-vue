@@ -315,161 +315,178 @@ def get_userdata():
 
 @bp.route('/api/omnisearch', methods=['GET'])
 def omnisearch():
+    def match_beginning_of_words(string, word_beginning):
+        pattern = r'\b' + word_beginning  # '\b' matches at the boundary (beginning) of a word
+        matches = re.findall(pattern, string, re.IGNORECASE)
+        return matches
 
-    # look for search term or filter term
+    def search_composers(search_words):
+        if not search_words:
+            return []
+
+        conditions = []
+        for word in search_words:
+            conditions.append(ComposerList.name_norm.ilike('{}%'.format(word)))
+            conditions.append(ComposerList.name_short.ilike('{}%'.format(word)))    
+        
+        composer_list = db.session.query(ComposerList).filter(or_(*conditions), ComposerList.catalogued == True).limit(10).all()
+
+        return prepare_composers(composer_list) if composer_list else []
+
+    def search_works(search_words, search_nums, composers, artists):
+        conditions = [WorkList.composer == composer['name_short'] for composer in composers] if composers else []
+
+        works_list = WorkList.query.filter(or_(*conditions), WorkList.album_count > 0).order_by(WorkList.album_count.desc())
+
+        return filter_works(search_words, search_nums, works_list)
+
+    def filter_works(search_words, search_nums, works_list):
+        return_works = []
+
+        # remove artists from search words
+        composer_list = [unidecode(composer['name_short'].lower()) for composer in composers]
+        exclusion_list = ['symphony', 'quartet', 'concerto']
+        artist_match = set()
+
+        for word in search_words:
+            if unidecode(word.lower()) not in exclusion_list and unidecode(word.lower()) not in composer_list:
+                for artist in artists:
+                    if unidecode(word.lower()) in unidecode(artist['name'].lower()):
+                        artist_match.add(word)
+        
+        print("matched with artists: " + str(artist_match))
+
+        keep_items = set()
+        if artist_match:
+            for work in works_list:
+                for item in artist_match:
+                    if item in unidecode(work.title.lower()):
+                        keep_items.add(item)
+                        print("matched work: " + work.title)
+
+        print("keep items: " + str(keep_items))
+        remove_items = artist_match - keep_items
+        print("remove items: " + str(remove_items))
+
+        if remove_items:
+            for item in remove_items:
+                try:
+                    search_words.remove(item)
+                except ValueError:
+                    pass
+        
+        print("search words to use: " + str(search_words))
+
+        for work in works_list:
+            if len(return_works) > 10:
+                break
+
+            search_string = " ".join(map(str, [work.composer, work.genre, work.cat, work.suite, work.title, work.nickname, work.search]))
+
+            i = 0
+            j = 0
+            for word in search_words:
+                if match_beginning_of_words(unidecode(search_string), unidecode(word)):
+                    i += 1
+
+            for num in search_nums:
+                pattern = r'(?<!\d)' + str(num) + r'(?!\d)'
+                match = re.search(pattern, search_string)
+                if match:
+                    j += 1
+
+            if len(search_nums) > 0:
+                if j >= 1 and i > len(search_words) - 1:
+                    return_works.append(work)
+            elif len(composers) > 0 and len(search_words) > 1:
+                if i > 1:
+                    return_works.append(work)
+            else:
+                if i > 0:
+                    return_works.append(work)
+        
+        return return_works, remove_items
+
+    def search_artists(search_words):
+        artist_list = cache.get('artists') or retrieve_artist_list_from_db()
+        cache.set('artists', artist_list)
+
+        exclusion_list = ['symphony', 'quartet', 'concerto']
+
+        all_artist_matches = [item for item in artist_list for word in search_words if unidecode(word.lower()) in unidecode(item['name'].lower()) and unidecode(word.lower()) not in exclusion_list]
+
+        return refine_artists(all_artist_matches, search_words)
+
+    def refine_artists(all_artist_matches, search_words):
+        artist_duplicate_ids = set()
+        return_artists = []
+        for artist in all_artist_matches:
+            if artist['id'] in artist_duplicate_ids:
+                continue
+
+            artist_duplicate_ids.add(artist['id'])
+            if any(match_beginning_of_words(unidecode(artist['name'].lower()), unidecode(word)) for word in search_words):
+                return_artists.append(artist)
+
+        return return_artists[:10]
+
+    def search_albums(search_words, composers, artists, works, artist_match):
+        if not composers and not artists and not works:
+            return []
+
+        conditions = []
+        conditions2 = []
+        if composers:
+            conditions.append(WorkAlbums.composer == composers[0]['name_short'])
+        if artist_match:
+            print(artist_match)
+            conditions.append(Performers.id == artists[0]['id'])
+        if works:
+            for work in works:
+                conditions2.append(WorkAlbums.workid == work.id)
+
+        albums_query = db.session.query(WorkAlbums).join(performer_albums).join(Performers).filter(
+            and_(*conditions), 
+            or_(*conditions2), 
+            WorkAlbums.track_count < 100, 
+            WorkAlbums.hidden != True, 
+            WorkAlbums.album_type != "compilation"
+        ).order_by(WorkAlbums.score.desc())
+
+        return refine_albums(albums_query)
+
+    def refine_albums(albums_query):
+        albums_no_duplicates = []
+        duplicates_set = set()
+
+        for album in albums_query:
+            if len(albums_no_duplicates) >= 10:
+                break
+
+            if album.album_id not in duplicates_set:
+                albums_no_duplicates.append(album)
+                duplicates_set.add(album.album_id)
+
+        return albums_no_duplicates
+
     search_item = request.args.get('search')
     search_terms = search_item.split()
 
     search_words = [term for term in search_terms if not term.isdigit()]
     search_nums = [int(term) for term in search_terms if term.isdigit()]
 
-    # COMPOSER SEARCH
-    if search_words:
-        query = db.session.query(ComposerList)
+    composers = search_composers(search_words)
+    artists = search_artists(search_words)
+    works, artist_match = search_works(search_words, search_nums, composers, artists)
+    albums = search_albums(search_words, composers, artists, works, artist_match)
 
-        conditions = []
-        for word in search_words:
-            conditions.append(ComposerList.name_norm.ilike('{}%'.format(word)))
-        for word in search_words:
-            conditions.append(ComposerList.name_short.ilike('{}%'.format(word)))
-        
-        composer_list = query.filter(or_(*conditions), ComposerList.catalogued == True).limit(10).all()  
-    else:
-        composer_list = [] 
-    
-    if len(composer_list) < 1:
-        composers = []
-    else:
-        composers = prepare_composers(composer_list)
+    response_object = {'status': 'success', 
+                       'composers': composers, 
+                       'works': works, 
+                       'artists': artists, 
+                       'albums': albums}
 
-    # WORK SEARCH
-    def match_beginning_of_words(string, word_beginning):
-        pattern = r'\b' + word_beginning  # '\b' matches at the boundary (beginning) of a word
-        matches = re.findall(pattern, string, re.IGNORECASE)
-        return matches
-
-    # filter by composers if relevant
-    conditions = []
-    if composers:
-        for composer in composers:
-            conditions.append(WorkList.composer == composer['name_short'])
-
-    works_list = WorkList.query.filter(or_(*conditions), WorkList.album_count > 0).order_by(WorkList.album_count.desc())
- 
-    return_works = []
-    i = 0
-    for work in works_list:
-        search_string = str(work.composer) + " " + str(work.genre) + " " + str(work.cat) + " " + str(work.suite) + " " + str(work.title) + " " + str(work.nickname) + " " + str(work.search)
-        j = 0
-        for word in search_words:
-            if match_beginning_of_words(unidecode(search_string), unidecode(word)):
-                j += 1
-        for num in search_nums:
-            pattern = r'(?<!\d)' + str(num) + r'(?!\d)'
-            match = re.search(pattern, search_string)
-            if match:
-                j += 1
-        if len(search_nums) > 0:
-            if j > 1:
-                return_works.append(work)
-                i += 1
-        elif len(composers) > 0 and len(search_words) > 1:
-            if j > 1:
-                return_works.append(work)
-                i += 1
-        else:
-            if j > 0:
-                return_works.append(work)
-                i += 1
-        if i > 10:
-            break
-
-    # PERFORMER SEARCH
-    artist_list = cache.get('artists')
-
-    # cache miss
-    if artist_list is None:
-        artist_list = retrieve_artist_list_from_db()
-        cache.set('artists', artist_list)
-
-    # match search words with artist names
-    all_artist_matches = []
-    for word in search_words:
-        artist_matches = [item for item in artist_list if unidecode(word.lower()) in unidecode(item['name'].lower())]
-        all_artist_matches.extend(artist_matches)
-    
-    # further refine list of artists to return, match on beginning of word
-    return_artists = []
-    artist_duplicate_ids = set()
-    for artist in all_artist_matches:
-        if artist['id'] not in artist_duplicate_ids:
-            artist_duplicate_ids.add(artist['id'])
-            matches = []
-            search_string = unidecode(artist['name'].lower())
-            for word in search_words:
-                matches.extend(match_beginning_of_words(search_string, unidecode(word)))
-            if len(matches) > 0:
-                return_artists.append(artist)
-
-    first_10_artists = return_artists[:10]
-
-    # ALBUM SEARCH
-    query = db.session.query(WorkAlbums).join(performer_albums).join(Performers)
-
-    # filter by composer if relevant
-    conditions = []
-    if composers:
-        first_composer = composers[0]
-        conditions.append(WorkAlbums.composer == first_composer['name_short'])
-    elif first_10_artists:
-        first_artist = first_10_artists[0]
-        conditions.append(Performers.id == first_artist['id'])
-    
-    # filter by works if relevant
-    if return_works:
-        first_work = return_works[0]
-        conditions.append(WorkAlbums.workid == first_work.id)
-
-    if not conditions:
-        # return response
-        print("return")
-        response_object = {'status': 'success'}
-        response_object['composers'] = composers
-        response_object['works'] = return_works
-        response_object['artists'] = first_10_artists
-        response_object['albums'] = []
-        response = jsonify(response_object)
-        return response
-
-    albums_query = query.filter(
-        and_(*conditions), 
-        WorkAlbums.track_count < 100, 
-        WorkAlbums.hidden != True, 
-        WorkAlbums.album_type != "compilation"
-    ).order_by(WorkAlbums.score.desc())
-
-    albums_no_duplicates = []
-    duplicates_set = set()
-
-    # Iterate over query directly
-    for album in albums_query:
-        if len(albums_no_duplicates) >= 10:
-            break
-
-        if album.album_id not in duplicates_set:
-            albums_no_duplicates.append(album)
-            duplicates_set.add(album.album_id)
-
-    first_10_albums = albums_no_duplicates
-
-    # return response
-    response_object = {'status': 'success'}
-    response_object['composers'] = composers
-    response_object['works'] = return_works
-    response_object['artists'] = first_10_artists
-    response_object['albums'] = first_10_albums
-    response = jsonify(response_object)
-    return response
+    return jsonify(response_object)
 
 
 @bp.route('/api/searchperformers', methods=['GET'])
