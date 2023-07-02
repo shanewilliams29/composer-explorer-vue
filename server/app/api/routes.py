@@ -354,7 +354,7 @@ def omnisearch():
                     if unidecode(word.lower()) in unidecode(artist['name'].lower()):
                         artist_match.add(word)
         
-        print("matched with artists: " + str(artist_match))
+        # print("matched with artists: " + str(artist_match))
 
         keep_items = set()
         if artist_match:
@@ -364,9 +364,9 @@ def omnisearch():
                         keep_items.add(item)
                         print("matched work: " + work.title)
 
-        print("keep items: " + str(keep_items))
+        # print("keep items: " + str(keep_items))
         remove_items = artist_match - keep_items
-        print("remove items: " + str(remove_items))
+        # print("remove items: " + str(remove_items))
 
         if remove_items:
             for item in remove_items:
@@ -375,7 +375,8 @@ def omnisearch():
                 except ValueError:
                     pass
         
-        print("search words to use: " + str(search_words))
+        # perform search
+        # print("search words to use: " + str(search_words))
 
         for work in works_list:
             if len(return_works) > 10:
@@ -439,7 +440,6 @@ def omnisearch():
         if composers:
             conditions.append(WorkAlbums.composer == composers[0]['name_short'])
         if artist_match:
-            print(artist_match)
             conditions.append(Performers.id == artists[0]['id'])
         if works:
             for work in works:
