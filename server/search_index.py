@@ -1,6 +1,5 @@
-from test_secrets import os
 from app import create_app
-from app.models import ComposerList, WorkList, WorkAlbums, Performers
+from app.models import ComposerList, WorkList, WorkAlbums
 
 app = create_app()
 app.app_context().push()
