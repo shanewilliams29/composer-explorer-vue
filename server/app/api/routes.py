@@ -362,7 +362,7 @@ def omnisearch():
                 for item in artist_match:
                     if item in unidecode(work.title.lower()):
                         keep_items.add(item)
-                        print("matched work: " + work.title)
+                        # print("matched work: " + work.title)
 
         # print("keep items: " + str(keep_items))
         remove_items = artist_match - keep_items

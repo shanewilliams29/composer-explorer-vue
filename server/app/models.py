@@ -5,6 +5,7 @@ from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
 from dataclasses import dataclass
 from sqlalchemy.dialects.mysql import MEDIUMTEXT
+from app.search import add_to_index, remove_from_index, query_index
 
 performer_albums = db.Table('performer_albums',
                             db.Column('performer_id', db.String(48), db.ForeignKey('performers.id')),
@@ -96,8 +97,52 @@ def load_user(id):
     return User.query.get(int(id))
 
 
+class SearchableMixin(object):
+    @classmethod
+    def elasticsearch(cls, expression, page, per_page):
+        ids, total = query_index(cls.__tablename__, expression, page, per_page)
+        if total == 0:
+            return cls.query.filter_by(id=0), 0
+        when = []
+        for i in range(len(ids)):
+            when.append((ids[i], i))
+        return cls.query.filter(cls.id.in_(ids)).order_by(
+            db.case(when, value=cls.id)), total
+
+    @classmethod
+    def before_commit(cls, session):
+        session._changes = {
+            'add': list(session.new),
+            'update': list(session.dirty),
+            'delete': list(session.deleted)
+        }
+
+    @classmethod
+    def after_commit(cls, session):
+        for obj in session._changes['add']:
+            if isinstance(obj, SearchableMixin):
+                add_to_index(obj.__tablename__, obj)
+        for obj in session._changes['update']:
+            if isinstance(obj, SearchableMixin):
+                add_to_index(obj.__tablename__, obj)
+        for obj in session._changes['delete']:
+            if isinstance(obj, SearchableMixin):
+                remove_from_index(obj.__tablename__, obj)
+        session._changes = None
+
+    @classmethod
+    def reindex(cls):
+        for obj in cls.query:
+            add_to_index(cls.__tablename__, obj)
+
+
+db.event.listen(db.session, 'before_commit', SearchableMixin.before_commit)
+db.event.listen(db.session, 'after_commit', SearchableMixin.after_commit)
+
+
 @dataclass
-class ComposerList(db.Model):
+class ComposerList(SearchableMixin, db.Model):
+    __searchable__ = ['name_norm', 'name_full', 'name_short']
     id: int
     source: str
     name_short: str
@@ -156,7 +201,8 @@ class ComposerList(db.Model):
 
 
 @dataclass
-class WorkList(db.Model):
+class WorkList(SearchableMixin, db.Model):
+    __searchable__ = ['composer', 'genre', 'cat', 'title', 'nickname', 'search']
     id: int
     composer: str
     genre: str
@@ -189,11 +235,12 @@ class WorkList(db.Model):
     albums = db.relationship("WorkAlbums", back_populates="work", lazy='dynamic')
 
     def __repr__(self):
-        return '<{}>'.format(self.title)
+        return '<{}|{}>'.format(self.composer, self.title)
 
 
 @dataclass
-class Performers(db.Model):
+class Performers(SearchableMixin, db.Model):
+    __searchable__ = ['name']
     id: str
     name: str
     img: str
@@ -219,8 +266,8 @@ class Performers(db.Model):
 
 
 @dataclass
-class WorkAlbums(db.Model):
-
+class WorkAlbums(SearchableMixin, db.Model):
+    __searchable__ = ['composer', 'title', 'artists', 'label']
     id: str
     album_id: str
     artists: str
