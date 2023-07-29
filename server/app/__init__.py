@@ -11,6 +11,7 @@ from flask_bootstrap import Bootstrap4
 from flask_migrate import Migrate
 from google.cloud import logging, storage
 from twilio.rest import Client
+from elasticsearch import Elasticsearch
 
 
 db = SQLAlchemy()
@@ -29,6 +30,10 @@ twilio = Client(Config.TWILIO_SID, Config.TWILIO_AUTH_TOKEN)
 def create_app(config_class=Config):
     app = Flask(__name__, static_folder='../dist', static_url_path='/', template_folder='templates')
     app.config.from_object(config_class)
+
+    # elasticsearchg
+    app.elasticsearch = Elasticsearch(app.config['ELASTICSEARCH_URL'], http_auth=(app.config['ELASTICSEARCH_NAME'], app.config['ELASTICSEARCH_PASS'])) \
+        if app.config['ELASTICSEARCH_URL'] else None
 
     app.jinja_env.add_extension('jinja2.ext.do')
 
