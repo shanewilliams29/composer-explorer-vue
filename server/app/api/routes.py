@@ -313,6 +313,84 @@ def get_userdata():
     return response
 
 
+@bp.route('/api/elasticsearch', methods=['GET'])
+def elasticsearch():
+
+    def match_beginning_of_words(string, word_beginning):
+        pattern = r'\b' + word_beginning  # '\b' matches at the boundary (beginning) of a word
+        matches = re.findall(pattern, string, re.IGNORECASE)
+        return matches
+
+    def search_artists(search_words):
+        artist_list = cache.get('artists') or retrieve_artist_list_from_db()
+        cache.set('artists', artist_list)
+
+        exclusion_list = ['symphony', 'quartet', 'concerto']
+
+        all_artist_matches = [item for item in artist_list for word in search_words if unidecode(word.lower()) in unidecode(item['name'].lower()) and unidecode(word.lower()) not in exclusion_list]
+
+        print(all_artist_matches)
+        return refine_artists(all_artist_matches, search_words)
+
+    def refine_artists(all_artist_matches, search_words):
+        artist_duplicate_ids = set()
+        return_artists = []
+        for artist in all_artist_matches:
+            if artist['id'] in artist_duplicate_ids:
+                continue
+
+            artist_duplicate_ids.add(artist['id'])
+            if any(match_beginning_of_words(unidecode(artist['name'].lower()), unidecode(word)) for word in search_words):
+                return_artists.append(artist)
+
+        return return_artists[:10]
+
+    def refine_albums(albums):
+        albums_no_duplicates = []
+        duplicates_set = set()
+
+        print(len(albums))
+        for album in albums:
+            print(album.id)
+            if len(albums_no_duplicates) >= 10:
+                break
+
+            if album.album_id not in duplicates_set:
+                albums_no_duplicates.append(album)
+                duplicates_set.add(album.album_id)
+
+        return albums_no_duplicates
+    
+    # search terms
+    q = unidecode(request.args.get('search')).lower()
+    search_terms = q.split()
+
+    # composers
+    query, total = ComposerList.elasticsearch(q, 1, 10)
+    composer_list = query.all()
+    composers = prepare_composers(composer_list) if composer_list else []
+
+    # works
+    query, total = WorkList.elasticsearch(q, 1, 10)
+    works = query.all()
+
+    # artists
+    artists = search_artists(search_terms)
+
+    # albums
+    query, total = WorkAlbums.elasticsearch(q, 1, 1000)
+    albums = refine_albums(query.all())
+
+    # response
+    response_object = {'status': 'success', 
+                       'composers': composers, 
+                       'works': works, 
+                       'artists': artists, 
+                       'albums': albums}
+
+    return jsonify(response_object)
+
+
 @bp.route('/api/omnisearch', methods=['GET'])
 def omnisearch():
     def match_beginning_of_words(string, word_beginning):

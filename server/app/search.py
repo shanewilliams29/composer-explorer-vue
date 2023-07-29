@@ -1,12 +1,24 @@
 from flask import current_app
+from unidecode import unidecode
 
+# def add_to_index(index, model):
+#     if not current_app.elasticsearch:
+#         return
+#     payload = {}
+#     for field in model.__searchable__:
+#         payload[field] = getattr(model, field)
+#     current_app.elasticsearch.index(index=index, id=model.id, body=payload)
 
 def add_to_index(index, model):
     if not current_app.elasticsearch:
         return
     payload = {}
     for field in model.__searchable__:
-        payload[field] = getattr(model, field)
+        value = getattr(model, field)
+        # Convert the value to lowercase and remove accents
+        if value:
+            value = unidecode(value.lower())
+        payload[field] = value
     current_app.elasticsearch.index(index=index, id=model.id, body=payload)
 
 
@@ -17,7 +29,7 @@ def remove_from_index(index, model):
 
 
 def query_index(index, query, page, per_page):
-    if not current_app.elasticsearch:
+    if not current_app.elasticsearch or not query.strip():
         return [], 0
     search = current_app.elasticsearch.search(index=index,
                                               body={
@@ -28,8 +40,7 @@ def query_index(index, query, page, per_page):
                                                           'type': 'cross_fields'
                                                       }
                                                   },
-                                                  'from':
-                                                  (page - 1) * per_page,
+                                                  'from': (page - 1) * per_page,
                                                   'size': per_page
                                               })
     ids = [hit['_id'] for hit in search['hits']['hits']]

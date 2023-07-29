@@ -6,6 +6,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from dataclasses import dataclass
 from sqlalchemy.dialects.mysql import MEDIUMTEXT
 from app.search import add_to_index, remove_from_index, query_index
+from sqlalchemy import desc
 
 performer_albums = db.Table('performer_albums',
                             db.Column('performer_id', db.String(48), db.ForeignKey('performers.id')),
@@ -99,15 +100,25 @@ def load_user(id):
 
 class SearchableMixin(object):
     @classmethod
-    def elasticsearch(cls, expression, page, per_page):
+    def elasticsearch(cls, expression, page, per_page, sort_column=None):
         ids, total = query_index(cls.__tablename__, expression, page, per_page)
         if total == 0:
-            return cls.query.filter_by(id=0), 0
+            return cls.query.filter_by(id=None), 0
         when = []
         for i in range(len(ids)):
             when.append((ids[i], i))
-        return cls.query.filter(cls.id.in_(ids)).order_by(
-            db.case(when, value=cls.id)), total
+        # return cls.query.filter(cls.id.in_(ids)).order_by(
+        #     db.case(when, value=cls.id)), total
+        query = cls.query.filter(cls.id.in_(ids))
+        
+        # If a sort_column is provided, apply the sorting
+        if sort_column:
+            sort_column_attr = getattr(cls, sort_column)
+            query = query.order_by(desc(sort_column_attr))
+        else:
+            query = query.order_by(db.case(when, value=cls.id))
+
+        return query, total
 
     @classmethod
     def before_commit(cls, session):
@@ -197,7 +208,7 @@ class ComposerList(SearchableMixin, db.Model):
     works = db.relationship("WorkList", lazy='dynamic')
 
     def __repr__(self):
-        return '<Composer {}>'.format(self.name_full)
+        return '<{}>'.format(self.name_full)
 
 
 @dataclass
@@ -294,7 +305,7 @@ class WorkAlbums(SearchableMixin, db.Model):
     performers = db.relationship("Performers", secondary=performer_albums, back_populates="albums", lazy='dynamic', passive_deletes=True)
 
     def __repr__(self):
-        return '<{}>'.format(self.id)
+        return '<{}>'.format(self.title)
 
 
 class AlbumLike(db.Model):
