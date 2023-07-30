@@ -329,7 +329,6 @@ def elasticsearch():
 
         all_artist_matches = [item for item in artist_list for word in search_words if unidecode(word.lower()) in unidecode(item['name'].lower()) and unidecode(word.lower()) not in exclusion_list]
 
-        print(all_artist_matches)
         return refine_artists(all_artist_matches, search_words)
 
     def refine_artists(all_artist_matches, search_words):
@@ -349,9 +348,7 @@ def elasticsearch():
         albums_no_duplicates = []
         duplicates_set = set()
 
-        print(len(albums))
         for album in albums:
-            print(album.id)
             if len(albums_no_duplicates) >= 10:
                 break
 
@@ -391,7 +388,7 @@ def elasticsearch():
     return jsonify(response_object)
 
 
-@bp.route('/api/omnisearch', methods=['GET'])
+@bp.route('/api/omnisearch', methods=['GET'])  # old omnisearch, not used
 def omnisearch():
     def match_beginning_of_words(string, word_beginning):
         pattern = r'\b' + word_beginning  # '\b' matches at the boundary (beginning) of a word

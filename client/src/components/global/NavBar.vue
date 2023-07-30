@@ -78,7 +78,7 @@
             </div>
             <b-card-body v-show="!loading" id="composers" class="card-body">
               <h6 v-if="composers.length > 0">Composers</h6>
-              <b-card-text class="info-card-text">
+              <b-card-text ref="composersPanel" class="info-card-text">
                 <div v-for="composer in composers" :key="composer['id']">
                   <table>
                     <tr>
@@ -96,7 +96,7 @@
             </b-card-body>
             <b-card-body v-show="!loading" id="works" class="card-body">
               <h6 v-if="works.length > 0">Works</h6>
-              <b-card-text class="info-card-text">
+              <b-card-text ref="worksPanel" class="info-card-text">
                 <div v-for="work in works" :key="work['id']">
                   <table>
                     <tr>
@@ -116,7 +116,7 @@
             </b-card-body>
             <b-card-body v-show="!loading" id="performers" class="card-body">
               <h6 v-if="artists.length > 0">Performers</h6>
-              <b-card-text class="info-card-text">
+              <b-card-text ref="artistsPanel" class="info-card-text">
                 <div v-for="artist in artists" :key="artist.id">
                   <table>
                     <tr>
@@ -134,7 +134,7 @@
             </b-card-body>
             <b-card-body v-show="!loading" id="albums" class="card-body">
               <h6 v-if="albums.length > 0">Albums</h6>
-              <b-card-text class="info-card-text">
+              <b-card-text ref="albumsPanel" class="info-card-text">
                 <div v-for="album in albums" :key="album.id">
                   <table>
                     <tr>
@@ -235,6 +235,7 @@ export default {
   watch: {
     searchInput(searchInput) {
       if (searchInput == ""){
+        this.resetScroll();
         this.viewSearchResults = false;
         this.firstLoad = true;
       }
@@ -270,7 +271,14 @@ export default {
         //this.viewSearchResults = false;
       }
     },
+    resetScroll() {
+      this.$refs.composersPanel.scrollTop = 0;
+      this.$refs.worksPanel.scrollTop = 0;
+      this.$refs.artistsPanel.scrollTop = 0;
+      this.$refs.albumsPanel.scrollTop = 0;
+    },    
     getOmniSearch(item) {
+      this.resetScroll();
       this.loading = true;
       this.viewSearchResults = true;
       this.firstLoad = false;
