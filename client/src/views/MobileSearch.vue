@@ -212,12 +212,12 @@ export default {
       this.artists = [];
       this.albums = [];
 
-      const path = "api/omnisearch?search=" + item;
+      const path = "api/elasticsearch?search=" + item;
 
       let wordsArray = item.split(" ");
       let worksFirst = false;
       if (wordsArray.length > 1) {
-        worksFirst = true;
+        worksFirst = false;
       }
 
       axios
