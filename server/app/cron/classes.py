@@ -25,7 +25,10 @@ class Timer(object):
         remaining = self.loop_length - completed
 
         item_per_second = (completed / elapsed_time.total_seconds())
-        remaining_time = remaining * (1 / item_per_second)
+        try:
+            remaining_time = remaining * (1 / item_per_second)
+        except ZeroDivisionError:
+            remaining_time = 0
         remaining = str(timedelta(seconds=round(remaining_time)))
         
         print(GREEN + f"    Completed [ {count} ] of [ {self.loop_length} ]." + RESET + f" Time elapsed: [ {self.elapsed} ]. Remaining time: [ {remaining} ]. 429 errors: [ {errors.rate_error.count} ].\n")
@@ -39,7 +42,10 @@ class Timer(object):
         remaining = self.loop_length - completed
 
         item_per_second = (completed / elapsed_time.total_seconds())
-        remaining_time = remaining * (1 / item_per_second)
+        try:
+            remaining_time = remaining * (1 / item_per_second)
+        except ZeroDivisionError:
+            remaining_time = 0
         remaining = str(timedelta(seconds=round(remaining_time)))
         
         print(f"    Completed [ {count} ] of [ {self.loop_length} ]. Time elapsed: [ {self.elapsed} ]. Remaining time: [ {remaining} ]", end='\r')
