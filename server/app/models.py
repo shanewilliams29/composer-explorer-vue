@@ -6,7 +6,6 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from dataclasses import dataclass
 from sqlalchemy.dialects.mysql import MEDIUMTEXT
 from app.search import add_to_index, remove_from_index, query_index
-from sqlalchemy import desc
 
 performer_albums = db.Table('performer_albums',
                             db.Column('performer_id', db.String(48), db.ForeignKey('performers.id')),
@@ -98,27 +97,49 @@ def load_user(id):
     return User.query.get(int(id))
 
 
+# class SearchableMixin(object):
+#     @classmethod
+#     def elasticsearch(cls, expression, page, per_page, sort_column=None):
+#         ids, scores, total = query_index(cls.__tablename__, expression, page, per_page)
+#         if total == 0:
+#             return cls.query.filter_by(id=None), 0
+#         when = []
+#         for i, _id in enumerate(ids):
+#             when.append((cls.id == _id, scores[i]))
+#             print(_id, scores[i])
+#         # return cls.query.filter(cls.id.in_(ids)).order_by(
+#         #     db.case(when, value=cls.id)), total
+#         query = cls.query.filter(cls.id.in_(ids))
+        
+#         # If a sort_column is provided, apply the sorting
+#         if sort_column:
+#             sort_column_attr = getattr(cls, sort_column)
+#             query = query.order_by(db.case(when, value=cls.id), desc(sort_column_attr))
+#         else:
+#             query = query.order_by(db.case(when, value=cls.id))
+
+#         return query, total
+
 class SearchableMixin(object):
     @classmethod
     def elasticsearch(cls, expression, page, per_page, sort_column=None):
         ids, scores, total = query_index(cls.__tablename__, expression, page, per_page)
         if total == 0:
-            return cls.query.filter_by(id=None), 0
-        when = []
-        for i, _id in enumerate(ids):
-            when.append((cls.id == _id, scores[i]))
-        # return cls.query.filter(cls.id.in_(ids)).order_by(
-        #     db.case(when, value=cls.id)), total
-        query = cls.query.filter(cls.id.in_(ids))
-        
-        # If a sort_column is provided, apply the sorting
-        if sort_column:
-            sort_column_attr = getattr(cls, sort_column)
-            query = query.order_by(db.case(when, value=cls.id), desc(sort_column_attr))
-        else:
-            query = query.order_by(db.case(when, value=cls.id))
+            return [], 0
 
-        return query, total
+        # Retrieve the results without any specific ordering
+        query = cls.query.filter(cls.id.in_(ids)).all()
+
+        # Create a dictionary to map ids to their corresponding scores
+        score_mapping = {id: score for id, score in zip(ids, scores)}
+
+        # Sort the results by the scores and the sort_column if provided
+        if sort_column:
+            sorted_results = sorted(query, key=lambda x: (score_mapping.get(x.id, 0), getattr(x, sort_column)), reverse=True)
+        else:
+            sorted_results = sorted(query, key=lambda x: score_mapping.get(x.id, 0), reverse=True)  # Added default value 0
+
+        return sorted_results, total
 
     @classmethod
     def before_commit(cls, session):

@@ -363,25 +363,23 @@ def elasticsearch():
     search_terms = q.split()
 
     # composers
-    query, total = ComposerList.elasticsearch(q, 1, 10)
-    composer_list = query.all()
+    composer_list, total = ComposerList.elasticsearch(q, 1, 10)
     composers = prepare_composers(composer_list) if composer_list else []
 
     # works
-    query, total = WorkList.elasticsearch(q, 1, 1000, 'album_count')
-    works = query.limit(10).all()
+    works, total = WorkList.elasticsearch(q, 1, 1000, 'album_count')
 
     # artists
     artists = search_artists(search_terms)
 
     # albums
-    query, total = WorkAlbums.elasticsearch(q, 1, 1000)
-    albums = refine_albums(query.all())
+    albums, total = WorkAlbums.elasticsearch(q, 1, 1000, 'score')
+    albums = refine_albums(albums)
 
     # response
     response_object = {'status': 'success', 
                        'composers': composers, 
-                       'works': works, 
+                       'works': works[:10], 
                        'artists': artists, 
                        'albums': albums}
 
