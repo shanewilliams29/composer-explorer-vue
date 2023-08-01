@@ -130,6 +130,8 @@ class SearchableMixin(object):
         # Retrieve the results without any specific ordering
         if sort_column == 'score':  # for albums table, do not include compilation albums
             query = cls.query.filter(cls.id.in_(ids), cls.album_type != 'compilation').all()
+        elif sort_column == 'album_count':  # for works table, do not include works without albums
+            query = cls.query.filter(cls.id.in_(ids), cls.album_count > 0).all()
         else:
             query = cls.query.filter(cls.id.in_(ids)).all()
 
