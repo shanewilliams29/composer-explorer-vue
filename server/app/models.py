@@ -128,7 +128,10 @@ class SearchableMixin(object):
             return [], 0
 
         # Retrieve the results without any specific ordering
-        query = cls.query.filter(cls.id.in_(ids)).all()
+        if sort_column == 'score':  # for albums table, do not include compilation albums
+            query = cls.query.filter(cls.id.in_(ids), cls.album_type != 'compilation').all()
+        else:
+            query = cls.query.filter(cls.id.in_(ids)).all()
 
         # Create a dictionary to map ids to their corresponding scores
         score_mapping = {id: score for id, score in zip(ids, scores)}
