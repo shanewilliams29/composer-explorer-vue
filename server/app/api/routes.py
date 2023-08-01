@@ -368,8 +368,8 @@ def elasticsearch():
     composers = prepare_composers(composer_list) if composer_list else []
 
     # works
-    query, total = WorkList.elasticsearch(q, 1, 10)
-    works = query.all()
+    query, total = WorkList.elasticsearch(q, 1, 1000, 'album_count')
+    works = query.limit(10).all()
 
     # artists
     artists = search_artists(search_terms)

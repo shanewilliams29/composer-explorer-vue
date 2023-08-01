@@ -44,7 +44,9 @@ def query_index(index, query, page, per_page):
                                                   'size': per_page
                                               })
     ids = [hit['_id'] for hit in search['hits']['hits']]
-    return ids, search['hits']['total']['value']
+    scores = [hit['_score'] for hit in search['hits']['hits']]
+
+    return ids, scores, search['hits']['total']['value']
 
 
 # def query_index(index, query, page, per_page):
