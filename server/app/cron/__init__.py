@@ -583,7 +583,7 @@ def fill_person_info():
                     loop_error_count += 1
                     errors.register_rate_error()
                 else:
-                    print(f'ERROR {info}. Exiting...')
+                    print(RED + f'    ERROR {info}. Exiting...\n' + RESET)
                     exit()
 
             db.session.commit()
