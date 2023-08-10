@@ -513,6 +513,9 @@ async def get_person_details_httpx(person_name, auth_key):
     except httpx.HTTPError as e:
         return e.response.status_code
 
+    except Exception as e:
+        raise e
+
 
 # GETS PERSON INFO FROM GOOGLE AND FILLS IN DATABASE
 def fill_person_info():
