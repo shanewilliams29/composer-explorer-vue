@@ -511,7 +511,6 @@ async def get_person_details_httpx(person_name, auth_key):
         return info
     
     except httpx.HTTPError as e:
-        print(e)
         return e.response.status_code
 
 
@@ -583,6 +582,9 @@ def fill_person_info():
                 elif info == 429:
                     loop_error_count += 1
                     errors.register_rate_error()
+                else:
+                    print(f'ERROR {info}. Exiting...')
+                    exit()
 
             db.session.commit()
 
