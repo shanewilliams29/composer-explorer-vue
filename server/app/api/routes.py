@@ -1146,14 +1146,18 @@ def exportplaylist():
         else:
             query = query.order_by(WorkList.genre, WorkList.id, func.count(AlbumLike.id).desc(), WorkAlbums.album_type, WorkAlbums.score.desc())
 
-        # make subquery and get first album of each work from sorted subquery
-        # Note: This only works in MySQL 5.7 and not in later versions and MariaDB where subquery sorting is ignored
-        # See: https://mariadb.com/kb/en/why-is-order-by-in-a-from-subquery-ignored/
-        t = query.subquery('t')
-        query = db.session.query(t).group_by(t.c.workid)
+        # Execute the query
+        sorted_albums = query.all()
 
-        # execute the query
-        album_list = query.all()
+        # Process the sorted albums in Python
+        top_albums_per_work = {}
+        for album in sorted_albums:
+            workid = album.workid
+            if workid not in top_albums_per_work:
+                top_albums_per_work[workid] = album
+
+        # Convert the dictionary values to a list
+        album_list = list(top_albums_per_work.values())
 
         if not album_list:
             abort(404)
