@@ -2,7 +2,8 @@ from flask import current_app, Blueprint
 from datetime import datetime, timedelta
 import os
 
-from app import db, log, sp, twilio
+from app import db, sp
+# from app import log
 from app.cron.classes import Timer, SpotifyToken, Errors
 from app.cron.functions import retrieve_spotify_tracks_for_work_async, retrieve_album_tracks_and_drop
 from app.cron.functions import get_albums_from_ids_async, drop_unmatched_tracks, get_album_list_from_tracks
@@ -21,8 +22,8 @@ import asyncio
 
 bp = Blueprint('cron', __name__)
 
-log_name = "cron-log"
-logger = log.logger(log_name)
+# log_name = "cron-log"
+# logger = log.logger(log_name)
 
 # console text colors
 RED = "\033[31m"
@@ -291,12 +292,12 @@ def get_and_store_new_albums(composer_name):
         print("-" * console_width)
         print(RED + logtext + RESET)
         print("-" * console_width)
-        logger.log_text(logtext, severity="ERROR")
-        twilio.messages.create(
-            body=logtext,
-            from_=Config.SOURCE_PHONE,
-            to=Config.TARGET_PHONE
-        )
+        # logger.log_text(logtext, severity="ERROR")
+        # twilio.messages.create(
+        #     body=logtext,
+        #     from_=Config.SOURCE_PHONE,
+        #     to=Config.TARGET_PHONE
+        # )
         return
 
     logtext = f"""
@@ -309,12 +310,12 @@ def get_and_store_new_albums(composer_name):
     print("-" * console_width)
     print(GREEN + logtext + RESET)
     print("-" * console_width)
-    logger.log_text(logtext, severity="NOTICE")
-    twilio.messages.create(
-        body=logtext,
-        from_=Config.SOURCE_PHONE,
-        to=Config.TARGET_PHONE
-    )
+    # logger.log_text(logtext, severity="NOTICE")
+    # twilio.messages.create(
+    #     body=logtext,
+    #     from_=Config.SOURCE_PHONE,
+    #     to=Config.TARGET_PHONE
+    # )
 
 
 #  FILL WORK DURATIONS WITH ALBUM DATA
