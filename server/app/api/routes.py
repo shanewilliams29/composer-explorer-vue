@@ -1,4 +1,5 @@
-from app import db, sp, cache, storage_client
+from app import db, sp, cache
+# from app import storage_client
 from flask import jsonify, request, session, abort, current_app
 from flask_login import current_user
 from config import Config
@@ -608,7 +609,7 @@ def searchperformers():
 
 
 @bp.route('/api/composers', methods=['GET'])  # main composer list
-@cache.cached(query_string=True)
+# @cache.cached(query_string=True)
 def get_composers():
     # look for search term or filter term
     search_item = request.args.get('search')
@@ -1469,9 +1470,10 @@ def get_workinfo(work_id):
         file_name = 'headers/' + work.genre.split()[0] + '.jpg'  # use for image
 
     def file_exists():
-        bucket = storage_client.get_bucket('composer-explorer.appspot.com')
-        blob = bucket.blob(file_name)
-        return blob.exists()
+        # bucket = storage_client.get_bucket('composer-explorer.appspot.com')
+        # blob = bucket.blob(file_name)
+        # return blob.exists()
+        return False
 
     if file_exists():
         work.search = current_app.config['STATIC'] + file_name

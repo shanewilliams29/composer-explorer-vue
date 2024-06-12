@@ -9,8 +9,8 @@ from flask_moment import Moment
 from app.spotify import SpotifyAPI
 from flask_bootstrap import Bootstrap4
 from flask_migrate import Migrate
-from google.cloud import logging, storage
-from twilio.rest import Client
+# from google.cloud import logging, storage
+# from twilio.rest import Client
 from elasticsearch import Elasticsearch
 
 
@@ -21,10 +21,10 @@ cache = Cache()
 moment = Moment()
 bootstrap = Bootstrap4()
 migrate = Migrate()
-log = logging.Client()
-storage_client = storage.Client(project='composer-explorer')
+# log = logging.Client(project='composer-explorer')
+# storage_client = storage.Client(project='composer-explorer')
 sp = SpotifyAPI(Config.SPOTIFY_CLIENT_ID, Config.SPOTIFY_CLIENT_SECRET, Config.SPOTIFY_REDIRECT_URL)
-twilio = Client(Config.TWILIO_SID, Config.TWILIO_AUTH_TOKEN)
+# twilio = Client(Config.TWILIO_SID, Config.TWILIO_AUTH_TOKEN)
 
 
 def create_app(config_class=Config):
@@ -32,8 +32,12 @@ def create_app(config_class=Config):
     app.config.from_object(config_class)
 
     # elasticsearchg
-    app.elasticsearch = Elasticsearch(app.config['ELASTICSEARCH_URL'], http_auth=(app.config['ELASTICSEARCH_NAME'], app.config['ELASTICSEARCH_PASS'])) \
-        if app.config['ELASTICSEARCH_URL'] else None
+    app.elasticsearch = Elasticsearch(
+        app.config['ELASTICSEARCH_URL'], 
+        http_auth=(app.config['ELASTICSEARCH_NAME'], app.config['ELASTICSEARCH_PASS']),
+        ca_certs='/home/shane/Documents/composer-explorer-vue/http_ca.crt')  # Path to the CA cert \
+    
+    #if app.config['ELASTICSEARCH_URL'] else None
 
     app.jinja_env.add_extension('jinja2.ext.do')
 
