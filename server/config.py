@@ -36,3 +36,4 @@ class Config(object):
     ELASTICSEARCH_URL = os.environ.get('ELASTICSEARCH_URL')
     ELASTICSEARCH_NAME = os.environ.get('ELASTICSEARCH_NAME')
     ELASTICSEARCH_PASS = os.environ.get('ELASTICSEARCH_PASS')
+    ELASTICSEARCH_CERTS = '/home/shane/Documents/composer-explorer-vue/http_ca.crt'

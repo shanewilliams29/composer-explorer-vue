@@ -35,9 +35,7 @@ def create_app(config_class=Config):
     app.elasticsearch = Elasticsearch(
         app.config['ELASTICSEARCH_URL'], 
         http_auth=(app.config['ELASTICSEARCH_NAME'], app.config['ELASTICSEARCH_PASS']),
-        ca_certs='/home/shane/Documents/composer-explorer-vue/http_ca.crt')  # Path to the CA cert \
-    
-    #if app.config['ELASTICSEARCH_URL'] else None
+        ca_certs=app.config['ELASTICSEARCH_CERTS'])
 
     app.jinja_env.add_extension('jinja2.ext.do')
 
