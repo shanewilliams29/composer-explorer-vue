@@ -62,8 +62,6 @@ function addPlaybackListeners(vm) {
         console.error(message);
     });
     window.player.addListener("playback_error", ({ message }) => {
-        console.log("PLAYBACK ERROR: " + message)
-        
         // Error due to no list loaded (happens if player clicks play button on the first startup). Send list of tracks to player.
         if (message == "Cannot perform operation; no list was loaded.") {
             let jsonTracks = prepareTracksForSpotify(startTracks)
