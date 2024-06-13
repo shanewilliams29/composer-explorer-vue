@@ -43,6 +43,9 @@ def create_app(config_class=Config):
     if Config.MODE == "DEVELOPMENT":
         CORS(app, automatic_options=True, support_credentials=True)
 
+    if Config.MODE == "PRODUCTION":
+        CORS(app, resources={r"/api/*": {"origins": "http://127.0.0.1:8000"}})
+
     db.init_app(app)
     login.init_app(app)
     mobility.init_app(app)
