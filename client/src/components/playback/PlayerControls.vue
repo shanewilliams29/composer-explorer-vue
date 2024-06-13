@@ -118,8 +118,9 @@ export default {
     };
   },
   methods: {
+    // play, pause, back, and next not used here. Button function is handled in the SpotifyPlayer.vue listeners
+    // this works more reliably using the Spotify Playback SDK not the API endpoints.
     play() {
-      // Not used. Play button function is handled in the SpotifyPlayer.vue listener
       spotify.pressPlay(this.$auth.clientToken, this.$auth.deviceID);
     },
     pause() {

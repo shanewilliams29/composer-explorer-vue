@@ -12,20 +12,17 @@
       @click="$parent.previousWork()">
       <b-icon-arrow-left-circle></b-icon-arrow-left-circle>
     </b-button>
-    <b-button class="playback-button" id="back-button" 
-      @click="$parent.back()">
+    <b-button class="playback-button" id="back-button">
       <b-icon-skip-start-fill></b-icon-skip-start-fill>
     </b-button>
     <b-button class="playback-button" id="play-button" v-show="!$parent.playing">
       <!-- Play button function is handled in the SpotifyPlayer.vue listener -->
       <b-icon-play-fill></b-icon-play-fill>
     </b-button>
-    <b-button class="playback-button" id="pause-button" v-show="$parent.playing" 
-      @click="$parent.pause()">
+    <b-button class="playback-button" id="pause-button" v-show="$parent.playing" >
       <b-icon-pause-fill></b-icon-pause-fill>
     </b-button>
-    <b-button class="playback-button" id="forward-button" 
-      @click="$parent.next()">
+    <b-button class="playback-button" id="forward-button">
       <b-icon-skip-end-fill></b-icon-skip-end-fill>
     </b-button>
     <b-button class="playback-button" id="next-work-button" 

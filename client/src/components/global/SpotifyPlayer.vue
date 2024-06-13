@@ -25,22 +25,22 @@ function addPlaybackListeners(vm) {
         // THE FOLLOWING IS NECESSARY BECAUSE SPOTIFY BREAKS CONNECTION WHEN AN ALBUM IS NOT AVAILABLE. THIS FUNCTIONALITY RECOVERS IT, OR ADVANCES TO NEXT ALBUM.
 
         // On player first time startup, do nothing
-        if (vm.firstLoad) {
-            //window.player.activateElement();
-            vm.firstLoad = false;
+        // if (vm.firstLoad) {
+        //     //window.player.activateElement();
+        //     vm.firstLoad = false;
 
-            // If player is reloaded, try playing the requested tracks again
-        } else if (vm.reload) {
-            let jsonTracks = prepareTracksForSpotify(vm.$config.playTracks)
-            spotify.playTracks(vm.$auth.clientToken, vm.$auth.deviceID, jsonTracks);
-            vm.reload = false;
+        //     // If player is reloaded, try playing the requested tracks again
+        // } else if (vm.reload) {
+        //     let jsonTracks = prepareTracksForSpotify(vm.$config.playTracks)
+        //     spotify.playTracks(vm.$auth.clientToken, vm.$auth.deviceID, jsonTracks);
+        //     vm.reload = false;
 
-            // If error persists after reload, then go to next album
-        } else {
-            eventBus.$emit("advanceToNextAlbum");
-            eventBus.$emit("fireNotFoundModal");
-            vm.reload = true;
-        }
+        //     // If error persists after reload, then go to next album
+        // } else {
+        //     eventBus.$emit("advanceToNextAlbum");
+        //     eventBus.$emit("fireNotFoundModal");
+        //     vm.reload = true;
+        // }
     });
 
     // Spotify error listeners.
@@ -62,6 +62,8 @@ function addPlaybackListeners(vm) {
         console.error(message);
     });
     window.player.addListener("playback_error", ({ message }) => {
+        console.log("PLAYBACK ERROR: " + message)
+        
         // Error due to no list loaded (happens if player clicks play button on the first startup). Send list of tracks to player.
         if (message == "Cannot perform operation; no list was loaded.") {
             let jsonTracks = prepareTracksForSpotify(startTracks)
@@ -74,8 +76,31 @@ function addPlaybackListeners(vm) {
         console.log("Autoplay is not allowed by the browser autoplay rules");
     });
     window.player.addListener("player_state_changed", ({ position, duration, paused, track_window: { current_track } }) => {
+        // console.log(current_track, position, duration, paused)
         eventBus.$emit("firePlayerStateChanged", current_track, position, duration, paused);
     });
+
+    // Function to handle connection loss
+    function handleConnectionLoss() {
+        console.log("Internet connection lost. Trying to reconnect...");
+        // window.player.disconnect();
+        vm.$view.showConnecting = true;
+    }
+
+    // Function to reconnect the player when the internet connection is restored
+    function reconnectPlayer() {
+        console.log("Found the internet!");
+        window.player.connect().then((success) => {
+            if (success) {
+            console.log("Reconnected to Spotify!");
+            } 
+        });
+    }
+
+    // Add event listeners for connection status
+    window.addEventListener('offline', handleConnectionLoss);
+    window.addEventListener('online', reconnectPlayer);
+
 }
 
 export default {
@@ -105,10 +130,24 @@ export default {
             // Connect to Spotify player
             window.player.connect();
 
-            // For initial startup, and use of play button.
+            // Listeners for playback buttons.
             document.getElementById("play-button").addEventListener("click", function() {
-                // window.player.activateElement();
                 window.player.resume();
+            });
+            document.getElementById("pause-button").addEventListener("click", function() {
+                window.player.pause();
+            });
+            document.getElementById("back-button").addEventListener("click", function() {
+                window.player.getCurrentState().then(state => {
+                  if (state.position < 3000) {
+                    window.player.previousTrack();
+                  } else {
+                    window.player.seek(0);
+                  }
+                });
+            });
+            document.getElementById("forward-button").addEventListener("click", function() {
+                window.player.nextTrack();
             });
 
         //window.player.activateElement();
@@ -168,14 +207,16 @@ export default {
         },
         reInitializeSpotify() {
             // When spotify doesnt find album or track, it breaks device connection. Re-establish here.
-            window.player.disconnect();
-            setTimeout(() => {
-                window.player.connect().then((success) => {
-                    if (success) {
-                        console.log("The Web Playback SDK successfully re-connected to Spotify!");
-                    }
-                });
-            }, 1000);
+            // console.log('RE-INITIALIZE');
+            // window.player.disconnect();
+            // setTimeout(() => {
+            //     window.player.connect().then((success) => {
+            //         if (success) {
+            //             console.log("The Web Playback SDK successfully re-connected to Spotify!");
+            //             window.player.resume();
+            //         }
+            //     });
+            // }, 1000);
         },
         refreshToken() {
             const path = "api/get_token";

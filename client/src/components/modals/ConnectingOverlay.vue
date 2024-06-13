@@ -5,7 +5,7 @@
         <div class="spinner" v-show="true" role="status">
           <b-spinner class="m-5"></b-spinner>
         </div>
-        <p class="lead">Connecting to Spotify</p>
+        <p class="lead">Lost internet connection...</p>
       </div>
     </div>
   </div>
