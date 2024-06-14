@@ -386,8 +386,8 @@ def elasticsearch():
 
     return jsonify(response_object)
 
-
-@bp.route('/api/omnisearch', methods=['GET'])  # old omnisearch, not used
+# old omnisearch, not used. use api/elasticsearch instead
+@bp.route('/api/omnisearch', methods=['GET'])  
 def omnisearch():
     def match_beginning_of_words(string, word_beginning):
         pattern = r'\b' + word_beginning  # '\b' matches at the boundary (beginning) of a word

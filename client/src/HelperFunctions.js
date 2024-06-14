@@ -75,7 +75,7 @@ function matchOrchestra(name, description) {
       return 5;
     }
     if (regex.test(description.toLowerCase())) {
-      return 5
+      return 5;
     }
   }
   return 0;
