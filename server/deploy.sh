@@ -1,64 +1,77 @@
 #!/bin/bash
 
-# Activate virtual environment
-echo -e "\nActivating virtual environment in source directory..."
-source venv/bin/activate || { echo -e "\033[31mFailed to activate virtual environment. Exiting.\033[0m"; exit 1; }
+# Set safe environment
+set -euo pipefail
 
-# Save the current directory
-initial_dir=$(pwd)
+# Constants for paths and colors
+PROJECT_DIR="/home/shane/Documents"
+PRODUCTION_DIR="$PROJECT_DIR/production/composer-explorer-vue/server"
+DEVELOPMENT_DIR="$PROJECT_DIR/composer-explorer-vue"
+VENV_PATH="venv"
+RED='\033[31m'
+GREEN='\033[32m'
+NC='\033[0m' # No Color
+
+# Logging function
+log() {
+  local message=$1
+  local color=${2-""}  # Default to empty string if not provided
+  echo -e "${color}${message}${NC}"
+}
+
+# Activate virtual environment
+activate_env() {
+  source "$VENV_PATH/bin/activate"
+}
 
 # Run unit tests
-echo -e "\nRunning unit tests..."
-python3 -m unittest tests.py
-if [ $? -eq 0 ]; then
-  echo -e "\033[32m\nUnit tests passed. Proceeding to deployment...\033[0m"
-else
-  echo -e "\033[31m\nUnit tests failed. Deployment canceled.\033[0m"
-  exit 1
-fi
+run_tests() {
+  activate_env
+  log "\nRunning unit tests..."  "${GREEN}"
+  if python3 -m unittest tests.py; then
+    log "\nUnit tests passed. Proceeding to deployment..." "${GREEN}"
+    deactivate
+  else
+    log "\nUnit tests failed. Deployment canceled." "${RED}"
+    deactivate
+    exit 1
+  fi
+}
 
-# Deactivate the virtual environment in the source directory
-deactivate
+# Build client
+build_client() {
+  cd "$DEVELOPMENT_DIR/client" || exit 1
+  log "\nRunning 'npm run build' in client directory..." "${GREEN}"
+  npm run build
+}
 
-# Change directory to ../client and run npm run serve
-cd ../client || { echo -e "\033[31mFailed to change directory to ../client. Exiting.\033[0m"; exit 1; }
-echo -e "\nRunning 'npm run build' in ../client directory..."
-npm run build
-if [ $? -eq 0 ]; then
-  echo -e "\033[32m'npm run build' successful. Project ready for deployment!\033[0m"
-else
-  echo -e "\033[31m'npm run build' failed. Exiting.\033[0m"
-  exit 1
-fi
+# Deploy to production
+deploy_production() {
+  cd "$PRODUCTION_DIR" || exit 1
+  
+  log "\nPulling from git for production server..." "${GREEN}"
+  git pull origin main || exit 1
+  
+  activate_env
+  log "\nInstalling updated Python dependencies from requirements.txt..." "${GREEN}"
+  pip install -r requirements.txt
+  deactivate
+  
+  log "\nCopying static dist files to production server..." "${GREEN}"
+  rm -rf dist
+  cp -r "$DEVELOPMENT_DIR/server/dist" "$PRODUCTION_DIR/dist"
+  
+  log "\nRestarting gunicorn..." "${GREEN}"
+  sudo supervisorctl reload
+}
 
-# Change directory to server folder in production
-cd /home/shane/Documents/production/composer-explorer-vue/server/ || { echo -e "\033[31mFailed to navigate to production server directory. Exiting.\033[0m"; exit 1; }
+# Main script execution
+main() {
+  run_tests
+  build_client
+  deploy_production
+  log "\nDEPLOYMENT COMPLETE!\n" "${GREEN}"
+}
 
-echo -e "\nActivating virtual environment in production server..."
-source venv/bin/activate || { echo -e "\033[31mFailed to activate virtual environment in production server. Exiting.\033[0m"; exit 1; }
-
-# Pull latest updates from git
-echo -e "\nPulling from git for production server..."
-git pull origin main || { echo -e "\033[31mFailed to pull from Git. Exiting.\033[0m"; exit 1; }
-
-# Install updated Python dependencies
-echo -e "\nInstalling updated Python dependencies from requirements.txt..."
-pip install -r requirements.txt || { echo -e "\033[31mFailed to install dependencies. Exiting.\033[0m"; exit 1; }
-
-# Copy static dist files to production server
-echo -e "\nCopying static dist files to production server..."
-rm -r /home/shane/Documents/production/composer-explorer-vue/server/dist || { echo -e "\033[31mFailed to remove old dist folder. Exiting.\033[0m"; exit 1; }
-cp -r /home/shane/Documents/composer-explorer-vue/server/dist /home/shane/Documents/production/composer-explorer-vue/server/dist || { echo -e "\033[31mFailed to copy dist files. Exiting.\033[0m"; exit 1; }
-
-# Restart gunicorn using supervisor
-echo -e "\nRestarting gunicorn..."
-sudo supervisorctl reload || { echo -e "\033[31mFailed to restart gunicorn. Exiting.\033[0m"; exit 1; }
-
-# Print completion message
-echo -e "\033[32m\nDEPLOYMENT COMPLETE!\033[0m"
-
-# Deactivate the virtual environment in the production directory
-deactivate
-
-# Return to the initial directory
-cd "$initial_dir"
+# Run the script
+main
