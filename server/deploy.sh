@@ -31,6 +31,19 @@ else
   exit 1
 fi
 
+cd /home/shane/Documents/production/composer-explorer-vue/server/
+
+echo -e "Pulling from git for production server..."
+
+git pull origin main
+
+echo -e "Restarting gunicon..."
+
+sudo supervisorctl reload
+
+echo -e "\033[32m'\nDeployment complete!\n\033[0m"
+
+
 
 # For Google App Engine Deployment
 #   # Change back to the initial directory (../server)

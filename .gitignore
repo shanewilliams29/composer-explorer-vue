@@ -55,4 +55,4 @@ tasks.todo
 misc_code.py
 *crt
 nginx.config
-
+cron.log

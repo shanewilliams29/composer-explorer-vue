@@ -13,12 +13,15 @@ import json
 
 @bp.route('/testlogin', methods=['GET'])
 def test_login():
-    user = User.query.filter_by(username='B4CD39FYCDLXW').first()
-    if user and user.id == 2:
-        login_user(user)
-        return jsonify({'status': 'success', 'message': 'Logged in successfully'})
+    if Config.MODE == "TESTING":
+        user = User.query.filter_by(username='12173954849').first()
+        if user and user.id == 85:
+            login_user(user)
+            return jsonify({'status': 'success', 'message': 'Logged in successfully'})
+        else:
+            return jsonify({'status': 'error', 'message': 'Log in unsuccessful'}), 401
     else:
-        return jsonify({'status': 'error', 'message': 'Log in unsuccessful'}), 401
+        return redirect(url_for('main.index'))
 
 
 @bp.route('/connect_spotify')
