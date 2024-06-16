@@ -88,7 +88,7 @@ check_server_response() {
 
   # Compare the response status code with the expected status
   if [ "$status" -eq "$expected_status" ]; then
-    log "Server responded with $status, as expected.\n" "${GREEN}"
+    log "Server responded with $status, as expected.\n"
   else
     log "Server response check failed. Expected $expected_status but got $status.\n" "${RED}"
     return 1  # Return failure
