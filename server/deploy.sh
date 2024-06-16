@@ -79,7 +79,6 @@ deploy_production() {
 
   log "\nReloading nginx..." "${GREEN}"
   sudo systemctl reload nginx
-
 }
 
 # Function to check if the server is up and responding correctly
@@ -102,7 +101,7 @@ check_server_response() {
 # Function to perform post-deployment checks
 post_deployment_verification() {
   log "\nWaiting for the application to stabilize..." "${GREEN}"
-  sleep 5  # Wait for 10 seconds
+  sleep 5  # Wait for 5 seconds
   
   log "\nPerforming post-deployment verification..." "${GREEN}"
   # Assuming your Flask app has an endpoint that returns a 200 OK for root
