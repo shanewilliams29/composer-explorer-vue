@@ -76,6 +76,10 @@ deploy_production() {
   
   log "\nRestarting gunicorn..." "${GREEN}"
   sudo supervisorctl reload
+
+  log "\nReloading nginx..." "${GREEN}"
+  sudo systemctl reload nginx
+
 }
 
 # Function to check if the server is up and responding correctly
