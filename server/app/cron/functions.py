@@ -37,7 +37,7 @@ async def main(urls):
 
 
 def search_spotify_for_tracks(track_list, search_string):
-    print(f"    Searching Spotify... \"{search_string}\"")
+    # print(f"    Searching Spotify... \"{search_string}\"")
 
     search_urls = []
     for i in range(0, 1000, 50): 
@@ -84,7 +84,7 @@ def retrieve_spotify_tracks_for_work_async(composer, work):
     
         track_list = search_spotify_for_tracks(track_list, search_string)
 
-    print(f"    [ {len(track_list)} ] tracks retrieved!")
+    # print(f"    [ {len(track_list)} ] tracks retrieved!")
     
     return track_list
 
@@ -245,7 +245,7 @@ def get_album_list_from_tracks(tracks):
     for track in tracks:
         album_ids.add(track['album']['id'])
 
-    print(f"    [ {len(album_ids)} ] unique albums!")
+    # print(f"    [ {len(album_ids)} ] unique albums!")
     return list(album_ids)
 
 
@@ -263,7 +263,7 @@ def check_if_albums_in_database(album_ids, work):
     for album in new_albums_set:
         new_albums_list.append(album.replace(work.id, ""))
 
-    print(f"    [ {len(new_albums_list)} ] albums not already in database!\n")
+    # print(f"    [ {len(new_albums_list)} ] albums not already in database!\n")
 
     return new_albums_list
 
@@ -273,7 +273,7 @@ def get_albums_from_ids_async(id_list):
     api_endpoint = 'https://api.spotify.com/v1/albums?ids='
     url_fetch_list = []
 
-    print("    Fetching albums...")
+    # print("    Fetching albums...")
 
     for i in range(0, len(id_list), 20):
         id_fetch_list = id_list[i:i + 20]
@@ -287,14 +287,14 @@ def get_albums_from_ids_async(id_list):
     for album_group in album_results:
         album_list.extend(album_group['albums'])
 
-    print(f"    [ {len(album_list)} ] albums retrieved!\n")
+    # print(f"    [ {len(album_list)} ] albums retrieved!\n")
 
     return album_list
 
 
 def retrieve_album_tracks_and_drop(composer, work, albums):
 
-    print("    Processing albums...")
+    # print("    Processing albums...")
 
     album_url_dict = {}
     for album in albums:
@@ -315,7 +315,7 @@ def retrieve_album_tracks_and_drop(composer, work, albums):
 
     for album_id, urls in album_url_dict.items():
         album_results = asyncio.run(main(urls))
-        print(f"    Fetched {len(urls)} pages for {album_id}", end='\r')
+        # print(f"    Fetched {len(urls)} pages for {album_id}", end='\r')
         album_results_dict[album_id] = album_results
 
     for album in albums:
@@ -328,7 +328,7 @@ def retrieve_album_tracks_and_drop(composer, work, albums):
         work_tracks = drop_unmatched_tracks(composer, work, tracks)
         album['work_tracks'] = work_tracks
 
-    print(f"    [ {len(albums)} ] albums prepared for processing!                  ")
+    # print(f"    [ {len(albums)} ] albums prepared for processing!                  ")
 
     return albums
 
@@ -529,5 +529,5 @@ def prepare_work_albums_and_performers(composer, work, albums, existing_artists)
         if id not in work_artist_ids:
             del existing_artists[id]
 
-    print(f"    [ {len(work_albums_list)} ] albums processed! [ {dropped_albums_count} ] compilation albums dropped.\n")
+    # print(f"    [ {len(work_albums_list)} ] albums processed! [ {dropped_albums_count} ] compilation albums dropped.\n")
     return work_albums_list, existing_artists

@@ -43,7 +43,7 @@ def auto_load():
     count_albums(composer_to_fill.id)
     get_spotify_performers_img()
     fill_person_info()
-    print(GREEN + f"    Load for {composer_to_fill.id} complete!\n" + RESET)
+    print(f"    Load for {composer_to_fill.id} complete!\n")
 
     indexed_composers = []
     for value in db.session.query(WorkList.composer).distinct():
@@ -73,7 +73,7 @@ def load(composer_name):
     count_albums(composer_name)
     get_spotify_performers_img()
     fill_person_info()
-    print(GREEN + f"    Load for {composer_name} complete!\n" + RESET)
+    print(f"    Load for {composer_name} complete!\n")
 
 
 # Necessary for cron-tab to execute properly
@@ -98,7 +98,7 @@ def get_and_store_new_albums(composer_name):
     # get composer
     composer = ComposerList.query.filter_by(name_short=composer_name).first()
     if not composer:
-        print(RED + f"\n    ERROR: Composer {composer_name} not found!\n" + RESET)
+        print(f"\n    ERROR: Composer {composer_name} not found!\n")
         exit()
 
     # prompt for composer type if new composer
@@ -110,7 +110,7 @@ def get_and_store_new_albums(composer_name):
         elif is_not_general.lower() == "n":
             composer.general = True
         else:
-            print(RED + "\n    ERROR: Invalid input entered!\n" + RESET)
+            print("\n    ERROR: Invalid input entered!\n")
             exit()
 
         composer.catalogued = True
@@ -124,7 +124,7 @@ def get_and_store_new_albums(composer_name):
         print(f"\n    No works for {composer_name} found! Skipping.\n")
         return
 
-    print(f"\n    {len(works)} works found for {composer_name}. Beginning Spotify data pull...\n")
+    print(f"\n    {len(works)} works found for {composer_name}. Running Spotify data pull...")
 
     works_processed = set()
     max_number_of_loops = 5
@@ -140,17 +140,17 @@ def get_and_store_new_albums(composer_name):
             if work.id not in works_processed:
                 i += 1
 
-                console_width = get_console_width()
+                # console_width = get_console_width()
                 spotify_token.refresh_token()
                 
-                print("-" * console_width)
-                print(BOLD + f"\n    {work.id}\n" + RESET)
+                # print("-" * console_width)
+                # print(BOLD + f"\n    {work.id}\n" + RESET)
 
                 # CHECK IF WORK NOT ALREADY PROCESSED (Less than 24 hours ago)
                 if work.last_refresh:
                     current_time = datetime.now()
                     if (current_time - work.last_refresh) <= timedelta(hours=24):
-                        print("    Skipping... work recently processed...\n")
+                        # print("    Skipping... work recently processed...\n")
                         works_processed.add(work.id)
                         continue
 
@@ -159,21 +159,21 @@ def get_and_store_new_albums(composer_name):
                     tracks = retrieve_spotify_tracks_for_work_async(composer, work)
                 except httpx.HTTPStatusError as e:
                     if e.response.status_code == 429:
-                        print(RED + "\n    429 TRACK FETCH ERROR: Rate limit exceeded. Will try again next loop...\n" + RESET)
+                        # print(RED + "\n    429 TRACK FETCH ERROR: Rate limit exceeded. Will try again next loop...\n" + RESET)
                         errors.register_rate_error()
                         time.sleep(4)
                         continue
                     else:
-                        print(RED + f"\n   TRACK FETCH ERROR: {e}. An unexpected error occurred. Will try again next loop...\n" + RESET)
+                        # print(RED + f"\n   TRACK FETCH ERROR: {e}. An unexpected error occurred. Will try again next loop...\n" + RESET)
                         errors.register_misc_error()
                         continue
                 except Exception as e:
-                    print(RED + f"\n    TRACK FETCH ERROR: {e}. An unexpected error occurred. Will try again next loop...\n" + RESET)
+                    # print(RED + f"\n    TRACK FETCH ERROR: {e}. An unexpected error occurred. Will try again next loop...\n" + RESET)
                     errors.register_misc_error()
                     continue
 
                 if len(tracks) == 0:
-                    print("\n    No tracks found for work. Skipping...\n")
+                    # print("\n    No tracks found for work. Skipping...\n")
                     work.last_refresh = datetime.now()
                     db.session.commit()
                     works_processed.add(work.id)
@@ -183,14 +183,14 @@ def get_and_store_new_albums(composer_name):
                 # STEP 2: PURGE TRACKS THAT DON'T MATCH WORK TITLE
                 try:
                     matched_tracks = drop_unmatched_tracks(composer, work, tracks)
-                    print(f"    [ {len(matched_tracks)} ] matched with work!")
+                    # print(f"    [ {len(matched_tracks)} ] matched with work!")
                 except Exception as e:
-                    print(RED + f"\n    TRACK MATCH ERROR: {e}. Will try again next loop...\n" + RESET)
+                    # print(RED + f"\n    TRACK MATCH ERROR: {e}. Will try again next loop...\n" + RESET)
                     errors.register_misc_error()
                     continue
 
                 if len(matched_tracks) == 0:
-                    print("\n    No matching tracks found for work. Skipping...\n")
+                    # print("\n    No matching tracks found for work. Skipping...\n")
                     work.last_refresh = datetime.now()
                     db.session.commit()
                     works_processed.add(work.id)
@@ -202,7 +202,7 @@ def get_and_store_new_albums(composer_name):
                 new_ids_list = check_if_albums_in_database(album_id_list, work)
 
                 if len(new_ids_list) == 0:
-                    print("    No new albums found for work. Skipping...\n")
+                    # print("    No new albums found for work. Skipping...\n")
                     works_processed.add(work.id)
                     work.last_refresh = datetime.now()
                     db.session.commit()
@@ -214,16 +214,16 @@ def get_and_store_new_albums(composer_name):
                     albums = get_albums_from_ids_async(new_ids_list)
                 except httpx.HTTPStatusError as e:
                     if e.response.status_code == 429:
-                        print(RED + "\n    429 ALBUM FETCH ERROR: Rate limit exceeded. Will try again next loop...\n" + RESET)
+                        # print(RED + "\n    429 ALBUM FETCH ERROR: Rate limit exceeded. Will try again next loop...\n" + RESET)
                         errors.register_rate_error()
                         time.sleep(4)
                         continue
                     else:
-                        print(RED + f"\n    {e.response.status_code} ALBUM FETCH ERROR: An unexpected error occurred. Will try again next loop...\n" + RESET)
+                        # print(RED + f"\n    {e.response.status_code} ALBUM FETCH ERROR: An unexpected error occurred. Will try again next loop...\n" + RESET)
                         errors.register_misc_error()
                         continue
                 except Exception as e:
-                    print(RED + f"\n    ALBUM FETCH ERROR: {e}. An unexpected error occurred. Will try again next loop...\n" + RESET)
+                    # print(RED + f"\n    ALBUM FETCH ERROR: {e}. An unexpected error occurred. Will try again next loop...\n" + RESET)
                     errors.register_misc_error()
                     continue
 
@@ -232,11 +232,11 @@ def get_and_store_new_albums(composer_name):
                     processed_albums = retrieve_album_tracks_and_drop(composer, work, albums)
                 except Exception as e:
                     if "429" in str(e):
-                        print(RED + "\n\n    429 ALBUMS TRACK FETCH ERROR: Rate limit exceeded. Will try again next loop...\n" + RESET)
+                        # print(RED + "\n\n    429 ALBUMS TRACK FETCH ERROR: Rate limit exceeded. Will try again next loop...\n" + RESET)
                         errors.register_rate_error()
                         time.sleep(4)
                     else:
-                        print(RED + f"\n    ALBUMS TRACK FETCH ERROR: {e}. Will try again next loop...\n" + RESET)
+                        # print(RED + f"\n    ALBUMS TRACK FETCH ERROR: {e}. Will try again next loop...\n" + RESET)
                         errors.register_misc_error()
                     continue
 
@@ -245,12 +245,12 @@ def get_and_store_new_albums(composer_name):
                 try:
                     work_albums, performers = prepare_work_albums_and_performers(composer, work, processed_albums, existing_artists)
                 except Exception as e:
-                    print(RED + f"\n    ALBUMS INFO PREP ERROR: {e}. Will try again next loop...\n" + RESET)
+                    # print(RED + f"\n    ALBUMS INFO PREP ERROR: {e}. Will try again next loop...\n" + RESET)
                     errors.register_misc_error()
                     continue
 
                 if len(work_albums) == 0:
-                    print("    No new albums found for work. Skipping...\n")
+                    # print("    No new albums found for work. Skipping...\n")
                     works_processed.add(work.id)
                     work.last_refresh = datetime.now()
                     db.session.commit()
@@ -259,7 +259,7 @@ def get_and_store_new_albums(composer_name):
                     continue
 
                 # STEP 6: STORE ALBUM AND PERFORMERS IN DATABASE
-                print("    Storing albums and performers in database...")
+                # print("    Storing albums and performers in database...")
 
                 db.session.add_all(work_albums)
                 for performer in performers.values():
@@ -267,8 +267,8 @@ def get_and_store_new_albums(composer_name):
                 work.last_refresh = datetime.now()
                 db.session.commit()         
                 
-                print(f"    [ {len(work_albums)} ] albums stored in database!")
-                print(f"    [ {len(performers)} ] performers updated in database!\n")
+                # print(f"    [ {len(work_albums)} ] albums stored in database!")
+                # print(f"    [ {len(performers)} ] performers updated in database!\n")
                 
                 works_processed.add(work.id)
                 new_albums_count += 1
@@ -289,9 +289,9 @@ def get_and_store_new_albums(composer_name):
     [ {errors.misc_error.count} ] misc errors.
     [ {time_taken} ] total time taken.\n"""
 
-        print("-" * console_width)
-        print(RED + logtext + RESET)
-        print("-" * console_width)
+        # print("-" * console_width)
+        print(logtext)
+        # print("-" * console_width)
         # logger.log_text(logtext, severity="ERROR")
         # twilio.messages.create(
         #     body=logtext,
@@ -307,9 +307,9 @@ def get_and_store_new_albums(composer_name):
     [ {errors.rate_error.count} ] resolved rate limit 429 errors,
     [ {errors.misc_error.count} ] resolved misc errors.
     [ {time_taken} ] total time taken.\n"""
-    print("-" * console_width)
-    print(GREEN + logtext + RESET)
-    print("-" * console_width)
+    # print("-" * console_width)
+    print(logtext)
+    # print("-" * console_width)
     # logger.log_text(logtext, severity="NOTICE")
     # twilio.messages.create(
     #     body=logtext,
@@ -374,7 +374,7 @@ def fill_work_durations(composer_name):
         work.duration = durations_dict.get(work.id)
 
     db.session.commit()
-    print(f"\n    Work durations added to WorkList table for {composer_name}!\n")
+    print(f"    Work durations added to WorkList table for {composer_name}!\n")
 
 
 # COUNT ALBUMS AND ADD TO WORK LIST
@@ -441,7 +441,7 @@ def get_spotify_performers_img():
         results = response.json()
 
         if results.get('error'):
-            print(results.get('error'))
+            # print(results.get('error'))
             errors.register_misc_error()
             continue
 
@@ -584,7 +584,7 @@ def fill_person_info():
                     loop_error_count += 1
                     errors.register_rate_error()
                 else:
-                    print(RED + f'    ERROR {info}. Exiting...\n' + RESET)
+                    print(f'    ERROR {info}. Exiting...\n')
                     exit()
 
             db.session.commit()
@@ -600,8 +600,8 @@ def fill_person_info():
             else:
                 sleep_time = 5
 
-            if loop_error_count:
-                print(RED + f"    [ {loop_error_count} ] 429 Errors! Sleeping for {sleep_time} seconds...\n" + RESET)
+            # if loop_error_count:
+                # print(RED + f"    [ {loop_error_count} ] 429 Errors! Sleeping for {sleep_time} seconds...\n" + RESET)
             
             time.sleep(sleep_time)
 
