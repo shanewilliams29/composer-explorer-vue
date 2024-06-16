@@ -12,6 +12,13 @@ RED='\033[31m'
 GREEN='\033[32m'
 NC='\033[0m' # No Color
 
+# Check for necessary program availability
+check_requirements() {
+    for program in git python3 npm; do
+        command -v $program >/dev/null 2>&1 || { echo >&2 "I require $program but it's not installed. Aborting."; exit 1; }
+    done
+}
+
 # Logging function
 log() {
   local message=$1
@@ -40,9 +47,12 @@ run_tests() {
 
 # Build client
 build_client() {
-  cd "$DEVELOPMENT_DIR/client" || exit 1
-  log "\nRunning 'npm run build' in client directory..." "${GREEN}"
-  npm run build
+    cd "$DEVELOPMENT_DIR/client" || exit 1
+    log "\nRunning 'npm run build' in client directory..." "${GREEN}"
+    if ! npm run build; then
+        log "Client build failed, aborting deployment." "${RED}"
+        exit 1
+    fi
 }
 
 # Deploy to production
@@ -50,11 +60,14 @@ deploy_production() {
   cd "$PRODUCTION_DIR" || exit 1
   
   log "\nPulling from git for production server..." "${GREEN}"
-  git pull origin main || exit 1
+  if ! git pull origin main; then
+      log "Failed to pull latest changes from git." "${RED}"
+      exit 1
+  fi
   
   activate_env
   log "\nInstalling updated Python dependencies from requirements.txt..." "${GREEN}"
-  pip install -r requirements.txt
+  pip install --quiet -r requirements.txt
   deactivate
   
   log "\nCopying static dist files to production server..." "${GREEN}"
@@ -67,6 +80,7 @@ deploy_production() {
 
 # Main script execution
 main() {
+  check_requirements
   run_tests
   build_client
   deploy_production
