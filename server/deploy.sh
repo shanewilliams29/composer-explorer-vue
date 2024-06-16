@@ -49,7 +49,7 @@ run_tests() {
 build_client() {
     cd "$DEVELOPMENT_DIR/client" || exit 1
     log "\nRunning 'npm run build' in client directory..." "${GREEN}"
-    if ! npm run build; then
+    if ! npm run build >/dev/null 2>&1; then
         log "Client build failed, aborting deployment." "${RED}"
         exit 1
     fi
