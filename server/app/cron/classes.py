@@ -1,6 +1,7 @@
 from datetime import datetime, timedelta
 from flask import session
 from app import sp
+from app.cron.logging_config import logger
 
 RED = "\033[31m"
 GREEN = "\033[32m"
@@ -31,7 +32,7 @@ class Timer(object):
             remaining_time = 0
         remaining = str(timedelta(seconds=round(remaining_time)))
         
-        # print(GREEN + f"    Completed [ {count} ] of [ {self.loop_length} ]." + RESET + f" Time elapsed: [ {self.elapsed} ]. Remaining time: [ {remaining} ]. 429 errors: [ {errors.rate_error.count} ].\n")
+        logger.debug(GREEN + f"Completed [ {count} ] of [ {self.loop_length} ]." + RESET + f" Time elapsed: [ {self.elapsed} ]. Remaining time: [ {remaining} ]. 429 errors: [ {errors.rate_error.count} ].\n")
 
     def print_status_update_one_line(self, count):
         current_time = datetime.utcnow()
@@ -48,7 +49,7 @@ class Timer(object):
             remaining_time = 0
         remaining = str(timedelta(seconds=round(remaining_time)))
         
-        # print(f"    Completed [ {count} ] of [ {self.loop_length} ]. Time elapsed: [ {self.elapsed} ]. Remaining time: [ {remaining} ]", end='\r')
+        logger.debug(GREEN + f"Completed [ {count} ] of [ {self.loop_length} ]." + RESET + f" Time elapsed: [ {self.elapsed} ]. Remaining time: [ {remaining} ]")
 
     def get_elapsed_time(self):
         return self.elapsed
