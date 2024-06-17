@@ -7,7 +7,7 @@ logger = logging.getLogger('CronLogger')
 console_handler = logging.StreamHandler()
 
 # Create formatters and add it to handlers
-formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
+formatter = logging.Formatter('%(message)s')
 console_handler.setFormatter(formatter)
 
 # Add handlers to the logger
