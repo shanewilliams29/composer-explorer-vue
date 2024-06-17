@@ -49,7 +49,7 @@ class Timer(object):
             remaining_time = 0
         remaining = str(timedelta(seconds=round(remaining_time)))
         
-        logger.debug(GREEN + f"Completed [ {count} ] of [ {self.loop_length} ]." + RESET + f" Time elapsed: [ {self.elapsed} ]. Remaining time: [ {remaining} ]")
+        logger.debug(GREEN + f"Completed [ {count} ] of [ {self.loop_length} ]." + RESET + f" Time elapsed: [ {self.elapsed} ]. Remaining time: [ {remaining} ]\n")
 
     def get_elapsed_time(self):
         return self.elapsed
