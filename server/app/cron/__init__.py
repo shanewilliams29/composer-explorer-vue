@@ -59,7 +59,7 @@ def auto_load(verbose):
     count_albums(composer_to_fill.id)
     get_spotify_performers_img()
     fill_person_info()
-    logger.info(GREEN + f"Load for {composer_to_fill.id} complete!\n" + RESET)
+    logger.info(f"\nLoad for {composer_to_fill.id} complete!\n")
 
     indexed_composers = []
     for value in db.session.query(WorkList.composer).distinct():
@@ -94,7 +94,7 @@ def load(composer_name, verbose=False):
     count_albums(composer_name)
     get_spotify_performers_img()
     fill_person_info()
-    logger.info(GREEN + f"Load for {composer_name} complete!\n" + RESET)
+    logger.info(f"\nLoad for {composer_name} complete!\n")
 
 
 # Necessary for cron-tab to execute properly
@@ -300,7 +300,7 @@ def get_and_store_new_albums(composer_name):
     ctx.pop()
 
     if loop_counter == max_number_of_loops:
-        logger.info(RED + f"FINISHED WITH UNRESOLVED ERRORS! Spotify data pull for {composer_name} partially complete!" + RESET)
+        logger.info(f"FINISHED WITH UNRESOLVED ERRORS! Spotify data pull for {composer_name} partially complete!")
         logger.info(f"[ {len(works)} ] works processed")
         logger.info(f"[ {new_albums_count} ] works with new albums")
         logger.info(f"[ {len(works) - len(works_processed)} ] works not completed properly")
@@ -309,7 +309,7 @@ def get_and_store_new_albums(composer_name):
         logger.info(f"[ {time_taken} ] total time taken\n")
 
     else:
-        logger.info(GREEN + f"FINISHED. Spotify data pull for {composer_name} complete!" + RESET)
+        logger.info(f"FINISHED. Spotify data pull for {composer_name} complete!")
         logger.info(f"[ {len(works)} ] works processed")
         logger.info(f"[ {new_albums_count} ] works with new albums")
         logger.info(f"[ {errors.rate_error.count} ] rate limit 429 errors")
