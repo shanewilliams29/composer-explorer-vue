@@ -126,7 +126,7 @@ export default {
 
     if (!userAgent.includes('wv')) { // Webview (App)
       if (this.$view.mobile && !apple) {
-        this.makeToast();
+        // this.makeToast();
       }
     }
   },
