@@ -9,7 +9,7 @@ from flask_moment import Moment
 from app.spotify import SpotifyAPI
 from flask_bootstrap import Bootstrap4
 from flask_migrate import Migrate
-# from google.cloud import logging, storage
+from google.cloud import storage
 # from twilio.rest import Client
 from elasticsearch import Elasticsearch
 
@@ -22,7 +22,7 @@ moment = Moment()
 bootstrap = Bootstrap4()
 migrate = Migrate()
 # log = logging.Client(project='composer-explorer')
-# storage_client = storage.Client(project='composer-explorer')
+storage_client = storage.Client(project='composer-explorer')
 sp = SpotifyAPI(Config.SPOTIFY_CLIENT_ID, Config.SPOTIFY_CLIENT_SECRET, Config.SPOTIFY_REDIRECT_URL)
 # twilio = Client(Config.TWILIO_SID, Config.TWILIO_AUTH_TOKEN)
 
