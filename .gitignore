@@ -1,7 +1,6 @@
 .DS_Store
 node_modules
 venv
-migrations
 cache
 scripts
 misc
@@ -57,3 +56,5 @@ misc_code.py
 nginx.config
 cron.log
 dist
+*.sql
+
