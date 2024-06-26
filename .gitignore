@@ -41,6 +41,7 @@ pnpm-debug.log*
 # Misc
 commands
 Todo
+todo
 snippets
 *.ipynb
 .ipynb_checkpoints
