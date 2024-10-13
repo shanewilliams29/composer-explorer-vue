@@ -250,14 +250,14 @@ export default {
           this.end = true;
           this.start = false;
         } else {
-          console.log("NEW TRACK", track_data.id)
+          //console.log("NEW TRACK", track_data.id)
           this.end = false;
           this.start = true;
         }
 
       if (position == 0 && !paused && this.start) {
         // can delay timer here if glitchy
-        console.log (">> TRACK START <<", track_data.id)
+        //console.log (">> TRACK START <<", track_data.id)
         this.playing = true;
         this.startTimer();
         this.setPlayback(0, duration);
@@ -268,9 +268,8 @@ export default {
       } else if (position == 0 && paused && this.end) {
         // Advance to next work when play stops after current work complete
         // Spotify API spams function with requests when changing track, therefore function is debounced
-        console.log ("<< TRACK END >>", track_data.id)
-        //this.suspend = true;
-        //this.playing = false;
+        //console.log ("<< TRACK END >>", track_data.id)
+
         this.end = false;
         this.start = true;
         this.track_id = track_data.id;
@@ -281,7 +280,6 @@ export default {
 
         this.playing = !paused;
         this.suspend = true;
-
 
       // } else if (position > 0 && position < 3000 && !paused) {
       //   // used to need this, Spotify changed behavior to not need it though?
