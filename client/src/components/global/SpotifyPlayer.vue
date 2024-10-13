@@ -21,26 +21,6 @@ function addPlaybackListeners(vm) {
         window.device_id = device_id;
         console.log("Ready with Device ID", device_id);
         vm.$view.showConnecting = false;
-
-        // THE FOLLOWING IS NECESSARY BECAUSE SPOTIFY BREAKS CONNECTION WHEN AN ALBUM IS NOT AVAILABLE. THIS FUNCTIONALITY RECOVERS IT, OR ADVANCES TO NEXT ALBUM.
-
-        // On player first time startup, do nothing
-        // if (vm.firstLoad) {
-        //     //window.player.activateElement();
-        //     vm.firstLoad = false;
-
-        //     // If player is reloaded, try playing the requested tracks again
-        // } else if (vm.reload) {
-        //     let jsonTracks = prepareTracksForSpotify(vm.$config.playTracks)
-        //     spotify.playTracks(vm.$auth.clientToken, vm.$auth.deviceID, jsonTracks);
-        //     vm.reload = false;
-
-        //     // If error persists after reload, then go to next album
-        // } else {
-        //     eventBus.$emit("advanceToNextAlbum");
-        //     eventBus.$emit("fireNotFoundModal");
-        //     vm.reload = true;
-        // }
     });
 
     // Spotify error listeners.
@@ -48,7 +28,6 @@ function addPlaybackListeners(vm) {
         console.log("Device ID has gone offline", device_id);
         vm.$view.showConnecting = false;
     });
-
     window.player.addListener("initialization_error", ({ message }) => {
         vm.$view.showConnecting = false;
         console.error(message);
@@ -74,7 +53,7 @@ function addPlaybackListeners(vm) {
         console.log("Autoplay is not allowed by the browser autoplay rules");
     });
     window.player.addListener("player_state_changed", ({ position, duration, paused, track_window: { current_track } }) => {
-        // console.log(current_track, position, duration, paused)
+        console.log("STATE CHANGE:", position, duration, paused)
         eventBus.$emit("firePlayerStateChanged", current_track, position, duration, paused);
     });
 
@@ -204,6 +183,7 @@ export default {
             };
         },
         reInitializeSpotify() {
+            console.log("reInitializeSpotify?");
             // When spotify doesnt find album or track, it breaks device connection. Re-establish here.
             // console.log('RE-INITIALIZE');
             // window.player.disconnect();

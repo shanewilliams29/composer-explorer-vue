@@ -251,7 +251,9 @@ export default {
       } else if (position == 0 && paused && allowNext) {
         // Advance to next work when play stops after current work complete
         // Spotify API spams function with requests when changing track, therefore function is debounced
-        this.nextWork();
+        this.suspend = true;
+        this.playing = false;
+        //this.nextWork();
 
       } else if (position > 0 && position < 3000 && !paused) {
         // used to need this, Spotify changed behavior to not need it though?
