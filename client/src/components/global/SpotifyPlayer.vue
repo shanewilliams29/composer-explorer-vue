@@ -53,7 +53,7 @@ function addPlaybackListeners(vm) {
         console.log("Autoplay is not allowed by the browser autoplay rules");
     });
     window.player.addListener("player_state_changed", ({ position, duration, paused, track_window: { current_track } }) => {
-        console.log("STATE CHANGE:", position, duration, paused)
+        // console.log("STATE CHANGE:", position, duration, paused)
         eventBus.$emit("firePlayerStateChanged", current_track, position, duration, paused);
     });
 

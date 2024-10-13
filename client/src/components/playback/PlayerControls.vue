@@ -115,6 +115,9 @@ export default {
       display_progress: "00:00",
       suspend: true,
       delay: 1000,
+      start: true,
+      end: false,
+      track_id: ""
     };
   },
   methods: {
@@ -242,24 +245,49 @@ export default {
     eventBus.$on("firePlayerStateChanged", (track_data, position, duration, paused) => {
         // debouncedSetDuration(duration, this);
       
-      if (position == 0 && !paused) {
+        if (track_data.id == this.track_id){
+          // console.log("SAME TRACK", track_data.id)
+          this.end = true;
+          this.start = false;
+        } else {
+          console.log("NEW TRACK", track_data.id)
+          this.end = false;
+          this.start = true;
+        }
+
+      if (position == 0 && !paused && this.start) {
         // can delay timer here if glitchy
+        console.log (">> TRACK START <<", track_data.id)
         this.playing = true;
         this.startTimer();
         this.setPlayback(0, duration);
+        this.start = false;
+        this.end = true;
+        this.track_id = track_data.id;
 
-      } else if (position == 0 && paused && allowNext) {
+      } else if (position == 0 && paused && this.end) {
         // Advance to next work when play stops after current work complete
         // Spotify API spams function with requests when changing track, therefore function is debounced
-        this.suspend = true;
-        this.playing = false;
-        //this.nextWork();
+        console.log ("<< TRACK END >>", track_data.id)
+        //this.suspend = true;
+        //this.playing = false;
+        this.end = false;
+        this.start = true;
+        this.track_id = track_data.id;
+        this.nextWork();
+        
 
-      } else if (position > 0 && position < 3000 && !paused) {
-        // used to need this, Spotify changed behavior to not need it though?
-        allowNext = true;
-        this.playing = true;
-        this.startTimer();
+      } else if (paused){
+
+        this.playing = !paused;
+        this.suspend = true;
+
+
+      // } else if (position > 0 && position < 3000 && !paused) {
+      //   // used to need this, Spotify changed behavior to not need it though?
+      //   allowNext = true;
+      //   this.playing = true;
+      //   this.startTimer();
 
       } else {
         this.playing = !paused;
