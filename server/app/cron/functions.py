@@ -448,7 +448,7 @@ def prepare_work_albums_and_performers(composer, work, albums, existing_artists)
                 'disc_no': track['disc_number'],
                 'track_no': track['track_number'],
                 'duration': track['duration_ms'],
-                'preview_url': track['preview_url'],
+                # 'preview_url': track['preview_url'], creating bugs with Spotify
                 'artists': track['artists'],
             }
             track_list.append(work_track)
