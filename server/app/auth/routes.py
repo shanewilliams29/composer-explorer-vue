@@ -2,7 +2,7 @@ from app import db, sp, cache
 from flask import jsonify, request, redirect, session, render_template, abort, flash, url_for, Response
 from flask_login import login_user, logout_user, current_user, login_required
 from config import Config
-from app.functions import get_avatar, upload_avatar
+from app.functions import get_avatar, upload_avatar, is_mobile
 from app.auth import bp
 from app.models import User
 from app.classes import ChangeAvatar, EditProfileForm
@@ -125,7 +125,7 @@ def log_out():
     logout_user()
     if Config.MODE == "DEVELOPMENT":
         return redirect("http://localhost:8080/")
-    if request.MOBILE:
+    if is_mobile() and not session.get('mobile', False):
         return redirect("/mobile")
     else:
         return redirect("/")

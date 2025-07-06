@@ -6,7 +6,7 @@ set -euo pipefail
 # Constants for paths and colors
 PRODUCTION_DIR="/home/shane/Production/composer-explorer-vue"
 DEVELOPMENT_DIR="/home/shane/Documents/composer-explorer-vue"
-VENV_PATH="/server/venv"
+VENV_PATH="venv"
 RED='\033[31m'
 GREEN='\033[32m'
 NC='\033[0m' # No Color

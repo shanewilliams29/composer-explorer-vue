@@ -9,6 +9,12 @@ from collections import defaultdict
 from app.models import Performers, ComposerList, performer_albums
 from sqlalchemy import func, text, or_
 import random
+from flask import request
+
+
+def is_mobile():
+    user_agent = request.headers.get('User-Agent', '').lower()
+    return 'mobile' in user_agent or 'android' in user_agent or 'iphone' in user_agent
 
 
 def prepare_composers(composer_list):

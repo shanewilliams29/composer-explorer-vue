@@ -5,6 +5,7 @@ from config import Config
 from app.models import User
 from datetime import datetime, timedelta, timezone
 from app.main import bp
+from app.functions import is_mobile
 
 
 @bp.before_app_request
@@ -27,7 +28,7 @@ def before_app_request():
 @bp.route('/', defaults={'path': ''})
 @bp.route("/<string:path>")
 def index(path):
-    if request.MOBILE and not session['mobile']:
+    if is_mobile() and not session.get('mobile', False):
         session['mobile'] = 'true'
         if Config.MODE == "DEVELOPMENT":
             return redirect('http://localhost:8080/mobile')
