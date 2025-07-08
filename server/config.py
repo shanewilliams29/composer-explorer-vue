@@ -33,7 +33,7 @@ class Config(object):
     CACHE_DEFAULT_TIMEOUT = 86400
     CACHE_DIR = '/tmp/flaskcache'
 
-    ELASTICSEARCH_URL = os.environ.get('ELASTICSEARCH_URL')
-    ELASTICSEARCH_NAME = os.environ.get('ELASTICSEARCH_NAME')
-    ELASTICSEARCH_PASS = os.environ.get('ELASTICSEARCH_PASS')
-    ELASTICSEARCH_CERTS = os.environ.get('ELASTICSEARCH_CERTS')
+    ELASTICSEARCH_URL = os.environ.get("ELASTICSEARCH_URL")
+    ELASTICSEARCH_USER = os.environ.get("ELASTICSEARCH_USER")
+    ELASTICSEARCH_PASS = os.environ.get("ELASTICSEARCH_PASS")
+    ELASTICSEARCH_CA   = os.environ.get("ELASTICSEARCH_CA")
