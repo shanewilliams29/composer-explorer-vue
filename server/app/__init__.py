@@ -39,13 +39,9 @@ def create_app(config_class=Config):
                     app.config["ELASTICSEARCH_PASS"]),
         verify_certs=True,
     )
-    
-    # app.elasticsearch = Elasticsearch(
-    #     app.config['ELASTICSEARCH_URL'], 
-    #     http_auth=(app.config['ELASTICSEARCH_NAME'], app.config['ELASTICSEARCH_PASS']),
-    #     ca_certs=app.config['ELASTICSEARCH_CERTS'])
 
     app.jinja_env.add_extension('jinja2.ext.do')
+    app.json.sort_keys = False
 
     # enable CORS in development mode
     if Config.MODE == "DEVELOPMENT":
