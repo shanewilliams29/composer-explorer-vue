@@ -184,8 +184,8 @@
             <h6 v-if="!$view.mobile">GitHub</h6>
             <p v-if="!$view.mobile">For feature requests and bug reports: <a href="https://github.com/shanewilliams29/composer-explorer-vue/issues" target="_blank">GitHub</a>.</p>
             <h6>Contact</h6>
-            <p v-if="!$view.mobile">For all inquiries, please contact: <a href="mailto:admin@composerexplorer.com">admin@composerexplorer.com</a></p>
-            <p v-if="$view.mobile">For all inquiries, please contact: admin@composerexplorer.com</p>
+            <p v-if="!$view.mobile">For all inquiries, please contact: <a href="mailto:composerexplorer@gmail.com">composerexplorer@gmail.com</a></p>
+            <p v-if="$view.mobile">For all inquiries, please contact: composerexplorer@gmail.com</p>
             <h6>Copyright</h6>
             <p>
               © 2022 ComposerExplorer.com. All rights reserved.
