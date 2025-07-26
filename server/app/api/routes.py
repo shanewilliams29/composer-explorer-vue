@@ -18,7 +18,7 @@ import re
 def get_performer(): 
     performer_id = request.args.get('id')
 
-    performer = Performers.query.get(performer_id)
+    performer = db.session.get(Performers, performer_id)
 
     if not performer:
         response_object = {'status': 'error'}
@@ -1528,7 +1528,7 @@ def get_albuminfo(album_id):
         'artist_details': artists,
     }
 
-    work = WorkList.query.get(ALBUM['work_id'])
+    work = db.session.get(WorkList, ALBUM['work_id'])
 
     # order so that conductor before orchestra
     orchestra_list = ['baroque', 'augsburger', 'antiqua', 'milano', 'quartet', 'orchest', 'philharm', 'symphony', 'concert', 'chamber', 'academy', 'staats', 'consort', 'symphoniker', 'covent garden', 'choir', 'akademie', 'stuttgart', 'llscher']

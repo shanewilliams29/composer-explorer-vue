@@ -1,7 +1,7 @@
 from test_secrets import os
 import unittest
 import json
-from app import create_app
+from app import create_app, db
 from app.models import User, WorkAlbums
 
 app = create_app()
@@ -380,8 +380,9 @@ class TestAPI(unittest.TestCase):
         data = json.loads(response.data)
         self.assertEqual(data['status'], 'success')  
 
-        album = WorkAlbums.query.get('WAGNER000096BIzBPVDbAw4DdyMOENCFe')
-        self.assertTrue(User.query.get(85).has_liked_album(album))
+        album = db.session.get(WorkAlbums, 'WAGNER000096BIzBPVDbAw4DdyMOENCFe')
+        user = db.session.get(User, 85)
+        self.assertTrue(user.has_liked_album(album))
 
         # Test unliking an album
         response = self.client.get('/api/like/WAGNER000096BIzBPVDbAw4DdyMOENCFe/unlike')
@@ -390,8 +391,9 @@ class TestAPI(unittest.TestCase):
         data = json.loads(response.data)
         self.assertEqual(data['status'], 'success')  
 
-        album = WorkAlbums.query.get('WAGNER000096BIzBPVDbAw4DdyMOENCFe')
-        self.assertFalse(User.query.get(85).has_liked_album(album))
+        album = db.session.get(WorkAlbums, 'WAGNER000096BIzBPVDbAw4DdyMOENCFe')
+        user = db.session.get(User, 85)
+        self.assertFalse(user.has_liked_album(album))
 
     def test_get_composerinfo(self):
 
