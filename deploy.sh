@@ -1,122 +1,187 @@
-#!/bin/bash
-
-# Set safe environment
+#!/usr/bin/env bash
+# Exit on errors, undefined variables, or failed pipelines
 set -euo pipefail
 
-# Constants for paths and colors
-PRODUCTION_DIR="/home/shane/Production/composer-explorer-vue"
-DEVELOPMENT_DIR="/home/shane/Documents/composer-explorer-vue"
-VENV_PATH="venv"
-RED='\033[31m'
-GREEN='\033[32m'
-NC='\033[0m' # No Color
+### ─── GLOBAL CONSTANTS ─────────────────────────────────────────────────────────
+readonly PROD_DIR="/home/shane/Production/composer-explorer-vue"
+readonly DEV_DIR="/home/shane/Documents/composer-explorer-vue"
+readonly VENV_DIR="$PROD_DIR/server/venv"
+readonly GIT_REPO_URL="https://github.com/shanewilliams29/composer-explorer-vue.git"
+readonly SERVICES_URL="http://localhost:8000"
 
-# Check for necessary program availability
+# Colors for logging
+readonly RED=$'\e[31m'
+readonly GREEN=$'\e[32m'
+readonly NC=$'\e[0m'  # No Color
+
+### ─── ERROR HANDLING ──────────────────────────────────────────────────────────
+error_handler() {
+  echo -e "${RED}[ERROR] on line $1${NC}" >&2
+  exit 1
+}
+trap 'error_handler $LINENO' ERR
+
+### ─── LOGGING HELPERS ─────────────────────────────────────────────────────────
+info()  { echo -e "${GREEN}[INFO] $*${NC}"; }
+error() { echo -e "${RED}[ERROR] $*${NC}" >&2; }
+
+### ─── REQUIREMENTS CHECK ──────────────────────────────────────────────────────
 check_requirements() {
-    for program in git python3 npm; do
-        command -v $program >/dev/null 2>&1 || { echo >&2 "I require $program but it's not installed. Aborting."; exit 1; }
-    done
-}
-
-# Logging function
-log() {
-  local message=$1
-  local color=${2-""}  # Default to empty string if not provided
-  echo -e "${color}${message}${NC}"
-}
-
-# Activate virtual environment
-activate_env() {
-  source "$VENV_PATH/bin/activate"
-}
-
-# Run unit tests
-run_tests() {
-  cd "$DEVELOPMENT_DIR/server" || exit 1
-  activate_env
-  log "\nRunning unit tests..."  "${GREEN}"
-  if python3 -m unittest tests.py; then
-    log "\nUnit tests passed. Proceeding to deployment..." "${GREEN}"
-    deactivate
-  else
-    log "\nUnit tests failed. Deployment canceled." "${RED}"
-    deactivate
-    exit 1
-  fi
-}
-
-# Build client
-build_client() {
-    cd "$DEVELOPMENT_DIR/client" || exit 1
-    log "\nRunning 'npm run build' in client directory..." "${GREEN}"
-    if ! npm run build >/dev/null 2>&1; then
-        log "\nClient build failed, aborting deployment." "${RED}"
-        exit 1
-    fi
-}
-
-# Deploy to production
-deploy_production() {
-  cd "$PRODUCTION_DIR/server" || exit 1
-  
-  log "\nPulling from git for production server..." "${GREEN}"
-  if ! git pull origin main; then
-      log "\nFailed to pull latest changes from git." "${RED}"
+  info "Checking for required programs: git, python3, npm"
+  for prog in git python3 npm; do
+    if ! command -v "$prog" &>/dev/null; then
+      error "Missing dependency: $prog"
       exit 1
-  fi
-  
-  activate_env
-  log "\nInstalling updated Python dependencies from requirements.txt..." "${GREEN}"
-  pip install --quiet -r requirements.txt
-  deactivate
-  
-  log "\nCopying static dist files to production server..." "${GREEN}"
-  rm -rf dist
-  cp -r "$DEVELOPMENT_DIR/server/dist" "$PRODUCTION_DIR/server/dist"
-  
-  log "\nRestarting gunicorn..." "${GREEN}"
-  sudo supervisorctl reload
-
-  log "\nReloading nginx..." "${GREEN}"
-  sudo systemctl reload nginx
+    fi
+  done
 }
 
-# Function to check if the server is up and responding correctly
-check_server_response() {
-  local url=$1  # URL to check
-  local expected_status=$2  # Expected HTTP status code
-
-  # Using curl to make a request and check the response
-  local status=$(curl -o /dev/null -s -w "%{http_code}\n" "$url")
-
-  # Compare the response status code with the expected status
-  if [ "$status" -eq "$expected_status" ]; then
-    log "Server responded with $status, as expected.\n"
+### ─── GIT CLONE ────────────────────────────────────────────────────────────────
+clone_repo() {
+  if [[ ! -d "$PROD_DIR" ]]; then
+    info "Cloning production repo into $(dirname "$PROD_DIR")"
+    pushd "$(dirname "$PROD_DIR")" >/dev/null
+      git clone "$GIT_REPO_URL"
+      chown -R shane:shane "$PROD_DIR"
+    popd >/dev/null
   else
-    log "Server response check failed. Expected $expected_status but got $status.\n" "${RED}"
-    return 1  # Return failure
+    info "Production directory exists; skipping clone"
   fi
 }
 
-# Function to perform post-deployment checks
-post_deployment_verification() {
-  log "\nWaiting for the application to stabilize..." "${GREEN}"
-  sleep 5  # Wait for 5 seconds
-  
-  log "\nPerforming post-deployment verification..." "${GREEN}"
-  # Assuming your Flask app has an endpoint that returns a 200 OK for root
-  check_server_response "http://localhost:8000" 200 || exit 1
+### ─── VIRTUAL ENVIRONMENT ─────────────────────────────────────────────────────
+create_venv() {
+  if [[ ! -d "$VENV_DIR" ]]; then
+    info "Creating Python virtualenv at $VENV_DIR"
+    python3 -m venv "$VENV_DIR"
+  else
+    info "Virtualenv already exists"
+  fi
 }
 
-# Main script execution
+install_python_deps() {
+  info "Installing Python dependencies"
+  pushd "$PROD_DIR/server" >/dev/null
+    source "$VENV_DIR/bin/activate"
+      pip install --upgrade pip
+      pip install -r requirements.txt
+    deactivate
+  popd >/dev/null
+}
+
+### ─── COPY ENV & CERTIFICATES ─────────────────────────────────────────────────
+copy_env_and_certs() {
+  info "Copying .env and JSON credentials"
+  rsync -a \
+    "$DEV_DIR/server/production_env/.env" \
+    "$DEV_DIR/server/composer-explorer-4ab69db6d8b0.json" \
+    "$PROD_DIR/server/"
+
+  info "Copying CA certificates"
+  mkdir -p "$PROD_DIR/server/certs"
+  cp "$DEV_DIR/server/certs/ca.crt" "$PROD_DIR/server/certs/"
+}
+
+### ─── LOGS DIRECTORY ──────────────────────────────────────────────────────────
+create_logs_dir() {
+  info "Ensuring logs directory exists"
+  mkdir -p "$PROD_DIR/server/logs"
+  chown -R shane:shane "$PROD_DIR/server/logs"
+}
+
+### ─── RUN UNIT TESTS ──────────────────────────────────────────────────────────
+run_tests() {
+  info "Running server-side unit tests"
+  pushd "$DEV_DIR/server" >/dev/null
+    source "$VENV_DIR/bin/activate"
+      if python3 -m unittest tests.py; then
+        info "Tests passed"
+      else
+        error "Tests failed—aborting deployment"
+        deactivate
+        exit 1
+      fi
+    deactivate
+  popd >/dev/null
+}
+
+### ─── BUILD FRONTEND ──────────────────────────────────────────────────────────
+build_client() {
+  info "Building frontend client"
+  pushd "$DEV_DIR/client" >/dev/null
+    if npm run build; then
+      info "Client build succeeded"
+    else
+      error "Client build failed—aborting"
+      exit 1
+    fi
+  popd >/dev/null
+}
+
+### ─── DEPLOY TO PRODUCTION ────────────────────────────────────────────────────
+deploy() {
+  info "Deploying to production server"
+  pushd "$PROD_DIR/server" >/dev/null
+
+    info "Pulling latest changes"
+    git pull origin main
+
+    info "Synchronizing built assets"
+    rsync -a --delete "$DEV_DIR/server/dist/" dist/
+
+    info "Reloading services"
+    sudo supervisorctl reload
+    sudo systemctl reload nginx
+
+  popd >/dev/null
+}
+
+### ─── HEALTH CHECK WITH FIXED RETRIES & EXPLICIT OUTPUT ────────────────────
+health_check() {
+  local url=${1:-$SERVICES_URL}
+  local expected=${2:-200}
+  local retries=6                   # total attempts
+  local delay=5                     # seconds between tries
+  local attempt=1
+  local status
+
+  info "Waiting for ${url} to return HTTP ${expected} (up to $((retries*delay))s)..."
+
+  while (( attempt <= retries )); do
+    # run curl, force a 000 on error so we always get something
+    status=$(curl -s -o /dev/null \
+      --connect-timeout "$delay" \
+      --max-time "$delay" \
+      -w "%{http_code}" \
+      "$url" || echo "000")
+
+    if [[ "$status" -eq "$expected" ]]; then
+      info "✅ Healthy on attempt $attempt (HTTP $status)."
+      return 0
+    fi
+
+    error "Attempt $attempt/$retries: got HTTP $status — retrying in ${delay}s…"
+    (( attempt++ ))
+    sleep "$delay"
+  done
+
+  error "❌ Health check failed after $retries attempts (last status: $status)."
+  exit 1
+}
+
+### ─── MAIN ────────────────────────────────────────────────────────────────────
 main() {
   check_requirements
+  clone_repo
+  create_venv
+  install_python_deps
+  copy_env_and_certs
+  create_logs_dir
   run_tests
   build_client
-  deploy_production
-  post_deployment_verification
-  log "DEPLOYMENT COMPLETE!\n" "${GREEN}"
+  deploy
+  health_check
+  info "🎉 DEPLOYMENT COMPLETE!"
 }
 
-# Run the script
-main
+main "$@"
