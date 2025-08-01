@@ -110,7 +110,7 @@ export default {
           this.composer = res.data.info.composer;
           this.workTitle = res.data.info.title;
           this.workImg = res.data.info.search;
-          this.composerImg = `https://storage.googleapis.com/composer-explorer.appspot.com/img/${this.composer}.jpg`;
+          this.composerImg = `https://usc1.contabostorage.com/a36ba68caf9842799883275ab3ad3a88:composer-explorer.bucket/static/img/${this.composer}.jpg`;
           this.catNo = res.data.info.cat;
           this.date = res.data.info.date;
 

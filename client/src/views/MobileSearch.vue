@@ -177,9 +177,9 @@ export default {
     workImgUrl(genre, title) {
       let url = "";
       if (genre == 'Opera' || genre == 'Stage Work' || genre == 'Ballet') {
-        url = 'https://storage.googleapis.com/composer-explorer.appspot.com/headers/' + title + '.jpg';
+        url = 'https://usc1.contabostorage.com/a36ba68caf9842799883275ab3ad3a88:composer-explorer.bucket/static/headers/' + title + '.jpg';
       } else {
-        url = 'https://storage.googleapis.com/composer-explorer.appspot.com/headers/' + genre + '.jpg';
+        url = 'https://usc1.contabostorage.com/a36ba68caf9842799883275ab3ad3a88:composer-explorer.bucket/static/headers/' + genre + '.jpg';
       }
       return url;
     },

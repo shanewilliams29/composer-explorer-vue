@@ -43,10 +43,10 @@ export default {
   data() {
     return {
       genreTitle: this.$config.genre,
-      defaultImage: "https://storage.googleapis.com/composer-explorer.appspot.com/headers/Orchestral.jpg",
-      imgLink: "https://storage.googleapis.com/composer-explorer.appspot.com/headers/" + encodeURIComponent(this.$config.genre) + ".jpg",
-      image1: "https://storage.googleapis.com/composer-explorer.appspot.com/headers/Orchestral.jpg",
-      image2: "https://storage.googleapis.com/composer-explorer.appspot.com/headers/Orchestral.jpg",
+      defaultImage: "https://usc1.contabostorage.com/a36ba68caf9842799883275ab3ad3a88:composer-explorer.bucket/static/headers/Orchestral.jpg",
+      imgLink: "https://usc1.contabostorage.com/a36ba68caf9842799883275ab3ad3a88:composer-explorer.bucket/static/headers/" + encodeURIComponent(this.$config.genre) + ".jpg",
+      image1: "https://usc1.contabostorage.com/a36ba68caf9842799883275ab3ad3a88:composer-explorer.bucket/static/headers/Orchestral.jpg",
+      image2: "https://usc1.contabostorage.com/a36ba68caf9842799883275ab3ad3a88:composer-explorer.bucket/static/headers/Orchestral.jpg",
       reveal: false
     };
   },
@@ -61,11 +61,11 @@ export default {
   watch: {
     genreChanged(newGenre) {
       this.genreTitle = newGenre;
-      this.imgLink = "https://storage.googleapis.com/composer-explorer.appspot.com/headers/" + encodeURIComponent(this.genreTitle) + ".jpg"
+      this.imgLink = "https://usc1.contabostorage.com/a36ba68caf9842799883275ab3ad3a88:composer-explorer.bucket/static/headers/" + encodeURIComponent(this.genreTitle) + ".jpg"
     },
     titleChanged(newTitle){
       if(this.genreTitle == 'Opera' || this.genreTitle == 'Stage Work' || this.genreTitle == 'Ballet'){
-        this.imgLink = "https://storage.googleapis.com/composer-explorer.appspot.com/headers/" + encodeURIComponent(newTitle) + ".jpg"
+        this.imgLink = "https://usc1.contabostorage.com/a36ba68caf9842799883275ab3ad3a88:composer-explorer.bucket/static/headers/" + encodeURIComponent(newTitle) + ".jpg"
       }
     }
   },

@@ -27,7 +27,7 @@ Vue.use(InfiniteLoading, {
         distance: 500,
     },
 });
-const loadimage = "https://storage.googleapis.com/composer-explorer.appspot.com/assets/album_placeholder.png";
+const loadimage = "https://usc1.contabostorage.com/a36ba68caf9842799883275ab3ad3a88:composer-explorer.bucket/static/assets/album_placeholder.png";
 Vue.use(VueLazyload, {
     preLoad: 2,
     error: loadimage,
