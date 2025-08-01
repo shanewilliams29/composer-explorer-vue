@@ -34,10 +34,9 @@ def create_app(config_class=Config):
     # elasticsearchg
     app.elasticsearch = Elasticsearch(
         app.config["ELASTICSEARCH_URL"],
-        ca_certs=app.config["ELASTICSEARCH_CA"],   # not ELASTICSEARCH_CERTS
         basic_auth=(app.config["ELASTICSEARCH_USER"],
                     app.config["ELASTICSEARCH_PASS"]),
-        verify_certs=True,
+        verify_certs=False,
     )
 
     app.jinja_env.add_extension('jinja2.ext.do')
