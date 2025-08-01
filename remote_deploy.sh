@@ -17,7 +17,7 @@ readonly PROD_DIR="/root/composer-explorer-vue"
 readonly VENV_DIR="$PROD_DIR/server/venv"
 
 readonly GIT_REPO_URL="https://github.com/shanewilliams29/composer-explorer-vue.git"
-readonly SERVICES_URL="http://localhost:8000"
+# readonly SERVICES_URL="http://localhost:8000"
 
 # Colors for output
 readonly RED=$'\e[31m'
@@ -174,7 +174,7 @@ deploy() {
 }
 
 health_check_remote() {
-  local url="http://${REMOTE_HOST}"
+  local url="https://${REMOTE_HOST}"
   local expected=200
   local retries=6
   local delay=5
