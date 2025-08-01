@@ -40,7 +40,7 @@ def spotify():
     if Config.MODE == "DEVELOPMENT":
         url = '/login?code=' + code
     else:
-        url = 'http://94.72.125.158/login?code=' + code
+        url = 'https://94.72.125.158/login?code=' + code
     
     return redirect(url)
 
@@ -111,7 +111,7 @@ def login():
         if Config.MODE == "DEVELOPMENT":
             return redirect('http://localhost:8080/mobile')
         else:
-            return redirect('http://94.72.125.158/mobile')
+            return redirect('https://94.72.125.158/mobile')
     else:
         if Config.MODE == "DEVELOPMENT":
             return redirect("http://localhost:8080/")
@@ -184,8 +184,8 @@ def get_token():
     return response
 
 
-@ bp.route('/disable_patreon_link')
-@ login_required
+@bp.route('/disable_patreon_link')
+@login_required
 def disable_patreon_link():
     if current_user.is_authenticated:
         user = User.query.filter(User.id == current_user.id).first_or_404()
