@@ -126,7 +126,7 @@ export default {
   },
   data() {
     return {
-      spotifyLogoURLWhite: staticURL + 'Spotify_Logo_RGB_White.png',
+      spotifyLogoURLWhite: staticURL + '/assets/Spotify_Logo_RGB_White.png',
       albums: [],
       albumWorks: [],
       showCover: false,

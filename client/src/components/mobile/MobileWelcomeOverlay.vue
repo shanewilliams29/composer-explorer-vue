@@ -56,7 +56,7 @@ export default {
   data() {
     return {
       spotifyURL: baseURL + "connect_spotify",
-      logoURL: staticURL + 'logo.png'
+      logoURL: staticURL + '/assets/logo.png'
     };
   },
   methods: {

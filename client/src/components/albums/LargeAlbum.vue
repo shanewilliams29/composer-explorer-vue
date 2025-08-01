@@ -55,8 +55,8 @@ export default {
   },
   data() {
     return {
-      spotifyLogoURLWhite: staticURL + 'Spotify_Logo_RGB_White.png',
-      spotifyLogoURLBlack: staticURL + 'Spotify_Logo_RGB_Black.png',
+      spotifyLogoURLWhite: staticURL + '/assets/Spotify_Logo_RGB_White.png',
+      spotifyLogoURLBlack: staticURL + '/assets/Spotify_Logo_RGB_Black.png',
     }
   },
   methods: {

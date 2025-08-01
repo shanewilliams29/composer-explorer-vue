@@ -209,9 +209,9 @@ export default {
   name: 'NavBar',
   data() {
     return {
-      radioImgURL: staticURL + 'radio.svg',
-      spotifyLogoURL: staticURL + 'Spotify_Logo_RGB_White.png',
-      logoURL: staticURL + 'logo.png',
+      radioImgURL: staticURL + '/assets/radio.svg',
+      spotifyLogoURL: staticURL + '/assets/Spotify_Logo_RGB_White.png',
+      logoURL: staticURL + '/assets/logo.png',
       spotifyURL: baseURL + "connect_spotify",
       unreadPosts: null,
       omniSearchInput: null,

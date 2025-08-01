@@ -22,7 +22,7 @@ import { staticURL } from "@/main.js";
 export default {
   data() {
     return {
-      spotifyLogoURL: staticURL + "Spotify_Logo_RGB_Black.png",
+      spotifyLogoURL: staticURL + "/assets/Spotify_Logo_RGB_Black.png",
     };
   },
   methods: {

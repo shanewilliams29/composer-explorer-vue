@@ -102,10 +102,10 @@ import axios from "axios";
 export default {
   data() {
     return {
-      radioGrayURL: staticURL + "radio_gray.svg",
-      radioWhiteUrl: staticURL + "radio.svg",
-      spotifyGrayURL: staticURL + "Spotify_Icon_RGB_Gray.png",
-      spotifyWhiteUrl: staticURL + "Spotify_Icon_RGB_White.png",
+      radioGrayURL: staticURL + "/assets/radio_gray.svg",
+      radioWhiteUrl: staticURL + "/assets/radio.svg",
+      spotifyGrayURL: staticURL + "/assets/Spotify_Icon_RGB_Gray.png",
+      spotifyWhiteUrl: staticURL + "/assets/Spotify_Icon_RGB_White.png",
       hover: false,
       hover2: false,
       loading: false,
