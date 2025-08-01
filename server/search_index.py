@@ -2,38 +2,54 @@ from app import create_app
 from app.models import ComposerList, WorkList, WorkAlbums
 import logging
 from tqdm import tqdm
+from elasticsearch import helpers
 
-# Suppress verbose transport logs
+# Suppress verbose ES HTTP logs
 logging.getLogger("elastic_transport.transport").setLevel(logging.WARNING)
 
 app = create_app()
 app.app_context().push()
 
+es = app.elasticsearch
+
 # Check ES connection
-if not app.elasticsearch or not app.elasticsearch.ping():
+if not es or not es.ping():
     logging.error("Elasticsearch is not available. Exiting.")
     exit(1)
 
 
-# Helper: wrap reindexing with a progress bar
-def reindex_with_progress(model):
+# Helper: bulk reindex with progress
+def bulk_reindex(model):
     objects = model.query.all()
     total = len(objects)
-    for obj in tqdm(objects, desc=f"Indexing {model.__name__}", total=total):
-        model.add_to_index(model.__tablename__, obj)
+
+    actions = []
+    for obj in tqdm(objects, desc=f"Preparing {model.__name__} for indexing", total=total):
+        payload = {field: getattr(obj, field) for field in getattr(model, '__searchable__', [])}
+        actions.append({
+            "_op_type": "index",
+            "_index": model.__tablename__,
+            "_id": obj.id,
+            "_source": payload
+        })
+
+    logging.info(f"Indexing {total} {model.__name__} documents...")
+    helpers.bulk(es, actions)
+    logging.info(f"{model.__name__} indexed successfully.")
 
 
-logging.info("Indexing composers...")
-reindex_with_progress(ComposerList)
+logging.info("Bulk indexing composers...")
+bulk_reindex(ComposerList)
 
-logging.info("Indexing works...")
-reindex_with_progress(WorkList)
+logging.info("Bulk indexing works...")
+bulk_reindex(WorkList)
 
-logging.info("Indexing albums...")
-reindex_with_progress(WorkAlbums)
+logging.info("Bulk indexing albums...")
+bulk_reindex(WorkAlbums)
 
 logging.info("Reindexing complete.")
 
+# Interactive search
 while True:
     q = input("Enter search term (or 'q' to quit): ")
     if q.lower() in ('q', 'quit', 'exit'):
@@ -45,6 +61,6 @@ while True:
         ("Works", WorkList, 'album_count'),
         ("Albums", WorkAlbums, 'score')
     ]:
-        query, total = model.elasticsearch(q, 1, 10 if label == "Composers" else 1000, sort)
-        print(f"{label} ({total} results): {query.limit(10).all()}")
+        results, total = model.elasticsearch(q, 1, 10 if label == "Composers" else 1000, sort)
+        print(f"{label} ({total} results): {results[:10]}")
         print()
