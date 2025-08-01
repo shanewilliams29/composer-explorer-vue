@@ -40,4 +40,4 @@ class Config(object):
     CONTABO_ACCESS_KEY = os.environ.get("CONTABO_ACCESS_KEY")
     CONTABO_SECRET_KEY = os.environ.get("CONTABO_SECRET_KEY")
     CONTABO_BUCKET = os.environ.get("CONTABO_BUCKET")
-    CONTABO_PUBLIC_BASE = 'https://usc1.contabostorage.com/a36ba68caf9842799883275ab3ad3a88:composer-explorer.bucket'
+    CONTABO_PUBLIC_BASE = os.environ.get("CONTABO_PUBLIC_BASE")
