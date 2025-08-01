@@ -4,7 +4,6 @@ import logging
 from tqdm import tqdm
 from elasticsearch import helpers
 
-# Suppress verbose ES HTTP logs
 logging.getLogger("elastic_transport.transport").setLevel(logging.WARNING)
 
 app = create_app()
@@ -18,38 +17,58 @@ if not es or not es.ping():
     exit(1)
 
 
-# Helper: bulk reindex with progress
-def bulk_reindex(model):
-    objects = model.query.all()
-    total = len(objects)
+# --- Helper: recreate index (delete & create fresh)
+def recreate_index(index_name, searchable_fields):
+    if es.indices.exists(index=index_name):
+        logging.info(f"Deleting old index: {index_name}")
+        es.indices.delete(index=index_name)
+    # Simple mapping: all searchable fields as text
+    mapping = {
+        "mappings": {
+            "properties": {field: {"type": "text"} for field in searchable_fields}
+        }
+    }
+    logging.info(f"Creating new index: {index_name}")
+    es.indices.create(index=index_name, body=mapping)
 
-    actions = []
-    for obj in tqdm(objects, desc=f"Preparing {model.__name__} for indexing", total=total):
-        payload = {field: getattr(obj, field) for field in getattr(model, '__searchable__', [])}
-        actions.append({
-            "_op_type": "index",
-            "_index": model.__tablename__,
-            "_id": obj.id,
-            "_source": payload
-        })
 
-    logging.info(f"Indexing {total} {model.__name__} documents...")
-    helpers.bulk(es, actions)
+# --- Helper: bulk reindex with chunking
+def bulk_reindex(model, chunk_size=1000):
+    index_name = model.__tablename__
+    searchable_fields = getattr(model, '__searchable__', [])
+    recreate_index(index_name, searchable_fields)
+
+    query = model.query.yield_per(chunk_size)  # stream in chunks
+    total = model.query.count()
+
+    def gen_actions():
+        for obj in query:
+            payload = {field: getattr(obj, field) for field in searchable_fields}
+            yield {
+                "_op_type": "index",
+                "_index": index_name,
+                "_id": obj.id,
+                "_source": payload
+            }
+
+    logging.info(f"Indexing {total} {model.__name__} documents in chunks of {chunk_size}...")
+    helpers.bulk(es, tqdm(gen_actions(), total=total, desc=f"Indexing {model.__name__}"), chunk_size=chunk_size)
     logging.info(f"{model.__name__} indexed successfully.")
 
 
-logging.info("Bulk indexing composers...")
+# --- Run bulk indexing
+logging.info("Rebuilding and indexing composers...")
 bulk_reindex(ComposerList)
 
-logging.info("Bulk indexing works...")
+logging.info("Rebuilding and indexing works...")
 bulk_reindex(WorkList)
 
-logging.info("Bulk indexing albums...")
+logging.info("Rebuilding and indexing albums...")
 bulk_reindex(WorkAlbums)
 
 logging.info("Reindexing complete.")
 
-# Interactive search
+# --- Interactive search
 while True:
     q = input("Enter search term (or 'q' to quit): ")
     if q.lower() in ('q', 'quit', 'exit'):
