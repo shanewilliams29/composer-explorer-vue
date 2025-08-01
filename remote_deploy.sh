@@ -66,10 +66,16 @@ remote_ssh() {
 }
 
 clone_repo_remote() {
-  remote_ssh "if [[ ! -d '$PROD_DIR' ]]; then \
-                git clone '$GIT_REPO_URL' '$PROD_DIR' && \
-                chown -R root:root '$PROD_DIR'; \
-              fi"
+  remote_ssh "
+    if [[ ! -d '$PROD_DIR/.git' ]]; then
+      git clone '$GIT_REPO_URL' '$PROD_DIR' && \
+      chown -R root:root '$PROD_DIR'
+    else
+      cd '$PROD_DIR' && \
+      git reset --hard && \
+      git pull --rebase
+    fi
+  "
 }
 
 create_venv_remote() {
