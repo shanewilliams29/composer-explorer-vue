@@ -1,8 +1,10 @@
 from app import create_app
 from app.models import ComposerList, WorkList, WorkAlbums
 import logging
+from tqdm import tqdm
 
-logging.basicConfig(level=logging.INFO)
+# Suppress verbose transport logs
+logging.getLogger("elastic_transport.transport").setLevel(logging.WARNING)
 
 app = create_app()
 app.app_context().push()
@@ -12,12 +14,24 @@ if not app.elasticsearch or not app.elasticsearch.ping():
     logging.error("Elasticsearch is not available. Exiting.")
     exit(1)
 
+
+# Helper: wrap reindexing with a progress bar
+def reindex_with_progress(model):
+    objects = model.query.all()
+    total = len(objects)
+    for obj in tqdm(objects, desc=f"Indexing {model.__name__}", total=total):
+        model.add_to_index(model.__tablename__, obj)
+
+
 logging.info("Indexing composers...")
-ComposerList.reindex()
+reindex_with_progress(ComposerList)
+
 logging.info("Indexing works...")
-WorkList.reindex()
+reindex_with_progress(WorkList)
+
 logging.info("Indexing albums...")
-WorkAlbums.reindex()
+reindex_with_progress(WorkAlbums)
+
 logging.info("Reindexing complete.")
 
 while True:
