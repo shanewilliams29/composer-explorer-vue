@@ -1,36 +1,36 @@
 from app import create_app
 from app.models import ComposerList, WorkList, WorkAlbums
+import logging
+
+logging.basicConfig(level=logging.INFO)
 
 app = create_app()
 app.app_context().push()
 
-print(app.elasticsearch)
+# Check ES connection
+if not app.elasticsearch or not app.elasticsearch.ping():
+    logging.error("Elasticsearch is not available. Exiting.")
+    exit(1)
 
-print("Indexing composers...")
+logging.info("Indexing composers...")
 ComposerList.reindex()
-print("Done!")
-print("Indexing works...")
+logging.info("Indexing works...")
 WorkList.reindex()
-print("Done!")
-print("Indexing albums...")
+logging.info("Indexing albums...")
 WorkAlbums.reindex()
-print("Done!")
+logging.info("Reindexing complete.")
 
 while True:
-    q = input("Enter search term: ")
+    q = input("Enter search term (or 'q' to quit): ")
+    if q.lower() in ('q', 'quit', 'exit'):
+        break
 
-    print("Composers:")
-    query, total = ComposerList.elasticsearch(q, 1, 10)
-    print(total)
-    print(query.limit(10).all())
-    print(" ")
-    print("Works:")
-    query, total = WorkList.elasticsearch(q, 1, 1000, 'album_count')
-    print(total)
-    print(query.limit(10).all())
-    print(" ")
-    print("Albums:")
-    query, total = WorkAlbums.elasticsearch(q, 1, 1000, 'score')
-    print(total)
-    print(query.limit(10).all())
-    print(" ")
+    logging.info("Searching...")
+    for label, model, sort in [
+        ("Composers", ComposerList, None),
+        ("Works", WorkList, 'album_count'),
+        ("Albums", WorkAlbums, 'score')
+    ]:
+        query, total = model.elasticsearch(q, 1, 10 if label == "Composers" else 1000, sort)
+        print(f"{label} ({total} results): {query.limit(10).all()}")
+        print()
