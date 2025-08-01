@@ -90,17 +90,12 @@ install_python_deps_remote() {
               deactivate"
 }
 
-copy_env_and_certs_remote() {
+copy_env_remote() {
   # sync .env and service account JSON
   rsync -az -e "sshpass -p '$SSH_PASS' ssh $SSH_OPTS" \
     "$DEV_DIR/server/production_env/.env" \
     "$DEV_DIR/server/composer-explorer-4ab69db6d8b0.json" \
     "$REMOTE:$PROD_DIR/server/"
-
-  # sync CA cert
-  rsync -az -e "sshpass -p '$SSH_PASS' ssh $SSH_OPTS" \
-    "$DEV_DIR/server/certs/ca.crt" \
-    "$REMOTE:$PROD_DIR/server/certs/"
 }
 
 create_logs_dir_remote() {
@@ -216,8 +211,8 @@ main() {
   step "Installing Python dependencies on remote"
   install_python_deps_remote && info "Remote Python deps installed"
 
-  step "Copying environment & cert files"
-  copy_env_and_certs_remote && info "Env and certs synced"
+  step "Copying environment file"
+  copy_env_remote && info "Env synced"
 
   step "Creating logs directory on remote"
   create_logs_dir_remote && info "Logs directory ready"
