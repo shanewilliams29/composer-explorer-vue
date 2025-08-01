@@ -9,9 +9,9 @@ from flask_moment import Moment
 from app.spotify import SpotifyAPI
 from flask_bootstrap import Bootstrap4
 from flask_migrate import Migrate
-from google.cloud import storage
 # from twilio.rest import Client
 from elasticsearch import Elasticsearch
+import boto3
 
 
 db = SQLAlchemy()
@@ -22,7 +22,7 @@ moment = Moment()
 bootstrap = Bootstrap4()
 migrate = Migrate()
 # log = logging.Client(project='composer-explorer')
-storage_client = storage.Client(project='composer-explorer')
+
 sp = SpotifyAPI(Config.SPOTIFY_CLIENT_ID, Config.SPOTIFY_CLIENT_SECRET, Config.SPOTIFY_REDIRECT_URL)
 # twilio = Client(Config.TWILIO_SID, Config.TWILIO_AUTH_TOKEN)
 
@@ -39,6 +39,15 @@ def create_app(config_class=Config):
                     app.config["ELASTICSEARCH_PASS"]),
         verify_certs=True,
     )
+
+    # bucket storage
+    app.s3_client = boto3.client(
+        's3',
+        endpoint_url=app.config['CONTABO_ENDPOINT'],
+        aws_access_key_id=app.config['CONTABO_ACCESS_KEY'],
+        aws_secret_access_key=app.config['CONTABO_SECRET_KEY']
+    )
+    app.bucket_name = app.config['CONTABO_BUCKET']
 
     app.jinja_env.add_extension('jinja2.ext.do')
     app.json.sort_keys = False

@@ -35,3 +35,9 @@ class Config(object):
     ELASTICSEARCH_USER = os.environ.get("ELASTICSEARCH_USER")
     ELASTICSEARCH_PASS = os.environ.get("ELASTICSEARCH_PASS")
     ELASTICSEARCH_CA = os.environ.get("ELASTICSEARCH_CA")
+
+    CONTABO_ENDPOINT = os.environ.get("CONTABO_ENDPOINT")
+    CONTABO_ACCESS_KEY = os.environ.get("CONTABO_ACCESS_KEY")
+    CONTABO_SECRET_KEY = os.environ.get("CONTABO_SECRET_KEY")
+    CONTABO_BUCKET = os.environ.get("CONTABO_BUCKET")
+    CONTABO_PUBLIC_BASE = 'https://usc1.contabostorage.com/a36ba68caf9842799883275ab3ad3a88:composer-explorer.bucket'

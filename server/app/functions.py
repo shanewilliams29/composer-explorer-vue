@@ -1,6 +1,5 @@
 import json
 from app import db
-from app import storage_client
 import requests
 from PIL import Image
 import io
@@ -10,6 +9,7 @@ from app.models import Performers, ComposerList, performer_albums
 from sqlalchemy import func, text, or_
 import random
 from flask import request
+import time
 
 
 def is_mobile():
@@ -122,7 +122,6 @@ def prepare_works(works_list, liked_list):
     
 
 def get_avatar(username, imgurl):
-
     try:
         response = requests.head(imgurl)
     except:
@@ -135,13 +134,8 @@ def get_avatar(username, imgurl):
 
     if "image/jpeg" not in filetype and "image/png" not in filetype:
         return "Error: Link is not to a .jpg or .png file", 403
-
     if filesize > 5:
         return "Error: Image file size is too large. Max size is 5 MB.", 403
-
-    client = storage_client
-    bucket = client.get_bucket('composer-explorer.appspot.com')
-    blob = bucket.blob('avatars/{}.jpg'.format(username))
 
     image = Image.open(requests.get(imgurl, stream=True).raw)
     image.thumbnail((200, 200))
@@ -149,36 +143,60 @@ def get_avatar(username, imgurl):
 
     img_byte_arr = io.BytesIO()
     image.save(img_byte_arr, format='JPEG')
-    img_byte_arr = img_byte_arr.getvalue()
+    img_byte_arr.seek(0)
 
-    blob.cache_control = 'public, max-age=0'
-    blob.upload_from_string(img_byte_arr, content_type='image/jpeg')
+    filename = f"static/avatars/{username}.jpg"
 
-    return current_app.config['STATIC'] + 'avatars/{}.jpg'.format(username), 200
+    # Overwrite existing object (same key)
+    current_app.s3_client.upload_fileobj(
+        img_byte_arr,
+        current_app.config['CONTABO_BUCKET'],
+        filename,
+        ExtraArgs={
+            'ContentType': 'image/jpeg',
+            'CacheControl': 'no-cache, no-store, must-revalidate',
+            'ACL': 'public-read'
+        }
+    )
+
+    # Add version param to bypass cache
+    file_url = f"{current_app.config['CONTABO_PUBLIC_BASE']}/{filename}?v={int(time.time())}"
+    return file_url, 200
 
 
 def upload_avatar(username, file):
-
-    client = storage_client
-    bucket = client.get_bucket('composer-explorer.appspot.com')
-    blob = bucket.blob('avatars/{}.jpg'.format(username))
-    
+    # Validate that a file was provided and is an image
     try:
         image = Image.open(file)
     except:
         return "Error: Invalid or no image file specified.", 403
 
+    # Resize & convert to JPEG
     image.thumbnail((200, 200))
     image = image.convert('RGB')
 
     img_byte_arr = io.BytesIO()
     image.save(img_byte_arr, format='JPEG')
-    img_byte_arr = img_byte_arr.getvalue()
+    img_byte_arr.seek(0)
 
-    blob.cache_control = 'public, max-age=0'
-    blob.upload_from_string(img_byte_arr, content_type='image/jpeg')
+    # Build the filename
+    filename = f"static/avatars/{username}.jpg"
 
-    return current_app.config['STATIC'] + 'avatars/{}.jpg'.format(username), 200
+    # Upload to Contabo (overwrite existing)
+    current_app.s3_client.upload_fileobj(
+        img_byte_arr,
+        current_app.config['CONTABO_BUCKET'],
+        filename,
+        ExtraArgs={
+            'ContentType': 'image/jpeg',
+            'CacheControl': 'no-cache, no-store, must-revalidate',
+            'ACL': 'public-read'
+        }
+    )
+
+    # Construct the PUBLIC URL (with cache-busting)
+    file_url = f"{current_app.config['CONTABO_PUBLIC_BASE']}/{filename}?v={int(time.time())}"
+    return file_url, 200
 
 
 def retrieve_artist_list_from_db():
