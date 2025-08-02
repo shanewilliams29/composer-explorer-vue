@@ -3,7 +3,6 @@ from datetime import datetime, timedelta
 import os
 
 from app import db, sp
-# from app import log
 from app.cron.classes import Timer, SpotifyToken, Errors
 from app.cron.functions import retrieve_spotify_tracks_for_work_async, retrieve_album_tracks_and_drop
 from app.cron.functions import get_albums_from_ids_async, drop_unmatched_tracks, get_album_list_from_tracks
@@ -21,9 +20,6 @@ import re
 import asyncio
 
 bp = Blueprint('cron', __name__)
-
-# log_name = "cron-log"
-# logger = log.logger(log_name)
 
 # console text colors
 RED = "\033[31m"
