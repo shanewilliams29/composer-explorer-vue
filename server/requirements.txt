@@ -33,18 +33,8 @@ Flask-WTF==1.2.2
 frozenlist==1.7.0
 google-api-core==2.25.1
 google-auth==2.40.3
-google-cloud-appengine-logging==1.6.2
-google-cloud-audit-log==0.3.2
-google-cloud-core==2.4.3
-google-cloud-logging==3.12.1
-google-cloud-storage==3.1.1
-google-crc32c==1.7.1
-google-resumable-media==2.7.2
 googleapis-common-protos==1.70.0
 greenlet==3.2.3
-grpc-google-iam-v1==0.14.2
-grpcio==1.73.1
-grpcio-status==1.73.1
 gunicorn==23.0.0
 h11==0.16.0
 httpcore==1.0.9
@@ -66,10 +56,7 @@ pillow==11.3.0
 pip-review==1.3.0
 pip-tools==7.4.1
 propcache==0.3.2
-proto-plus==1.26.1
 protobuf==6.31.1
-pyasn1==0.6.1
-pyasn1_modules==0.4.2
 pycodestyle==2.14.0
 pycparser==2.22
 pyflakes==3.4.0
@@ -82,7 +69,6 @@ python-dateutil==2.9.0.post0
 python-dotenv==1.1.1
 pytz==2025.2
 requests==2.32.4
-rsa==4.9.1
 s3transfer==0.13.1
 setuptools==80.9.0
 six==1.17.0
