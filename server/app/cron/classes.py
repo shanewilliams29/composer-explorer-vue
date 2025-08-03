@@ -1,11 +1,14 @@
 from datetime import datetime, timedelta
 from flask import session
-from app import sp
 from app.cron.logging_config import logger
+from app.spotify import SpotifyAPI
+from config import Config
 
 RED = "\033[31m"
 GREEN = "\033[32m"
 RESET = "\033[0m"
+
+sp = SpotifyAPI(Config.SPOTIFY_BACKGROUND_ID, Config.SPOTIFY_BACKGROUND_SECRET, Config.SPOTIFY_BACKGROUND_URL)
 
 
 class Timer(object):
