@@ -9,7 +9,7 @@ readonly LOCAL_VENV="$DEV_DIR/server/venv"
 
 # Remote (prod) paths & SSH
 readonly REMOTE_USER="root"
-readonly REMOTE_HOST="94.72.125.158"   # ← change this!
+readonly REMOTE_HOST="94.72.125.158"
 readonly REMOTE="$REMOTE_USER@$REMOTE_HOST"
 
 # Paths on remote
