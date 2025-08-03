@@ -8,7 +8,7 @@ import os
 class Config(object):
     MAX_CONTENT_LENGTH = 1024 * 1024 * 5
     SECRET_KEY = os.environ.get('SECRET_KEY')
-    MODE = os.environ.get('MODE')
+    MODE = os.environ.get('MODE')  # Either DEVELOPMENT or PRODUCTION
 
     SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL')
     SQLALCHEMY_TRACK_MODIFICATIONS = False
@@ -17,7 +17,7 @@ class Config(object):
     SPOTIFY_CLIENT_SECRET = os.environ.get('SPOTIFY_CLIENT_SECRET')
     SPOTIFY_REDIRECT_URL = os.environ.get('SPOTIFY_REDIRECT_URL')
 
-    GOOGLE_KNOWLEDGE_GRAPH_API_KEY = os.environ.get('GOOGLE_KNOWLEDGE_GRAPH_API_KEY')
+    GOOGLE_KNOWLEDGE_GRAPH_API_KEY = os.environ.get('GOOGLE_KNOWLEDGE_GRAPH_API_KEY')  # Not needed for website
 
     STATIC = 'https://usc1.contabostorage.com/a36ba68caf9842799883275ab3ad3a88:composer-explorer.bucket/static/'
 
