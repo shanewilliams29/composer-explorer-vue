@@ -11,6 +11,7 @@ __pycache__
 app.yaml
 .env
 .flaskenv
+remote_deploy.sh
 backups
 matrix
 network
@@ -64,4 +65,5 @@ cron.log
 dist
 *.sql
 *.mailrc
+
 
