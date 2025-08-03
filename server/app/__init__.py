@@ -9,7 +9,6 @@ from flask_moment import Moment
 from app.spotify import SpotifyAPI
 from flask_bootstrap import Bootstrap4
 from flask_migrate import Migrate
-# from twilio.rest import Client
 from elasticsearch import Elasticsearch
 import boto3
 
@@ -49,6 +48,7 @@ def create_app(config_class=Config):
     )
     app.bucket_name = app.config['CONTABO_BUCKET']
 
+    # misc
     app.jinja_env.add_extension('jinja2.ext.do')
     app.json.sort_keys = False
 
