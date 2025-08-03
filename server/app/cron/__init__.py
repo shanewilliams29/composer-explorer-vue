@@ -2,7 +2,7 @@ from flask import current_app, Blueprint
 from datetime import datetime, timedelta
 import os
 
-from app import db, sp
+from app import db
 # from app import log
 from app.cron.classes import Timer, SpotifyToken, Errors
 from app.cron.functions import retrieve_spotify_tracks_for_work_async, retrieve_album_tracks_and_drop
@@ -14,13 +14,16 @@ from sqlalchemy import func, or_, text
 from collections import defaultdict
 from config import Config
 from urllib.parse import quote
+from app.spotify import SpotifyAPI
 import click
 import time
 import httpx
 import re
 import asyncio
 
+
 bp = Blueprint('cron', __name__)
+sp = SpotifyAPI(Config.SPOTIFY_BACKGROUND_ID, Config.SPOTIFY_BACKGROUND_SECRET, Config.SPOTIFY_BACKGROUND_URL)
 
 # log_name = "cron-log"
 # logger = log.logger(log_name)
@@ -32,8 +35,8 @@ RESET = "\033[0m"
 BOLD = '\033[1m'
 
 
-@ bp.cli.command()
-@ click.option('--verbose', is_flag=True, help="Increase output verbosity.")
+@bp.cli.command()
+@click.option('--verbose', is_flag=True, help="Increase output verbosity.")
 def main(verbose):
     """
     Run the command-line application with optional verbose output.
@@ -45,8 +48,8 @@ def main(verbose):
 
 
 # FILLS ALBUMS AND PERFORMER DATA FOR ALL COMPOSERS
-@ bp.cli.command()
-@ click.option('--verbose', is_flag=True, help="Increase output verbosity.")
+@bp.cli.command()
+@click.option('--verbose', is_flag=True, help="Increase output verbosity.")
 def auto_load(verbose):
     """
     Automatically refresh composer data from Spotify
@@ -83,7 +86,7 @@ def auto_load(verbose):
 # FIND AND ADD NEW ALBUMS FOR A COMPOSER
 @bp.cli.command()
 @click.argument("composer_name")
-@ click.option('--verbose', is_flag=True, help="Increase output verbosity.")
+@click.option('--verbose', is_flag=True, help="Increase output verbosity.")
 def load(composer_name, verbose=False):
     """
     Load or refresh composer data for specified composer

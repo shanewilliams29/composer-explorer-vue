@@ -17,6 +17,10 @@ class Config(object):
     SPOTIFY_CLIENT_SECRET = os.environ.get('SPOTIFY_CLIENT_SECRET')
     SPOTIFY_REDIRECT_URL = os.environ.get('SPOTIFY_REDIRECT_URL')
 
+    SPOTIFY_BACKGROUND_ID = os.environ.get('SPOTIFY_BACKGROUND_ID')
+    SPOTIFY_BACKGROUND_SECRET = os.environ.get('SPOTIFY_BACKGROUND_SECRET')
+    SPOTIFY_BACKGROUND_URL = os.environ.get('SPOTIFY_BACKGROUND_URL')
+
     GOOGLE_KNOWLEDGE_GRAPH_API_KEY = os.environ.get('GOOGLE_KNOWLEDGE_GRAPH_API_KEY')  # Not needed for website
 
     STATIC = 'https://usc1.contabostorage.com/a36ba68caf9842799883275ab3ad3a88:composer-explorer.bucket/static/'
