@@ -22,6 +22,7 @@ old_code.py
 GPT Improvements.txt
 logs
 certs
+images
 
 # local env files
 .env.local
