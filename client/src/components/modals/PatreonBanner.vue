@@ -1,7 +1,7 @@
 <template>
-	<div v-show="false && !$view.mobile" class="patreon-banner">
+	<div v-show="showBanner && !$view.mobile" class="patreon-banner">
 		<div class="container">
-			<p class="patreon">Help keep Composer Explorer online and ad-free. <a href="https://www.patreon.com/composerexplorer" target="_blank" class="patreon-link">Support us on Patreon! </a><a class="patreonclosebtn" @click="toggleBanner()">&times;</a></p>
+			<p class="patreon">Help with Composer Explorer's development and hosting costs. <a href="https://www.patreon.com/composerexplorer" target="_blank" class="patreon-link">Support us on Patreon! </a><a class="patreonclosebtn" @click="toggleBanner()">&times;</a></p>
 		</div>
 	</div>
 </template>
@@ -17,27 +17,32 @@ export default {
   },
   computed: {
     patreonChanged() {
+      alert(this.$auth.patreon);
       return this.$auth.patreon;
     },
   },
   watch: {
     patreonChanged(patreonStatus) {
       this.showBanner = !patreonStatus;
-      // if(this.showBanner){
-      //   document.documentElement.style.setProperty("--workingheight", `279px`);
-      // } else {
-      //   document.documentElement.style.setProperty("--workingheight", `244px`);
-      // }
+      if(this.showBanner){
+        alert("show");
+        document.documentElement.style.setProperty("--workingheight", `279px`);
+      } else {
+        alert("hide");
+        document.documentElement.style.setProperty("--workingheight", `244px`);
+      }
     },
   },
   methods: {
     toggleBanner() {
       this.showBanner = !this.showBanner;
-      // if(this.showBanner){
-      //   document.documentElement.style.setProperty("--workingheight", `279px`);
-      // } else {
-      //   document.documentElement.style.setProperty("--workingheight", `244px`);
-      // }
+      if(this.showBanner){
+        alert("show");
+        document.documentElement.style.setProperty("--workingheight", `279px`);
+      } else {
+        alert("dont show");
+        document.documentElement.style.setProperty("--workingheight", `244px`);
+      }
     },
   },
 };
