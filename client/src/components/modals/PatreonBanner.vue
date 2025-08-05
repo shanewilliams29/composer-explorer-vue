@@ -17,7 +17,6 @@ export default {
   },
   computed: {
     patreonChanged() {
-      alert(this.$auth.patreon);
       return this.$auth.patreon;
     },
   },
@@ -25,10 +24,8 @@ export default {
     patreonChanged(patreonStatus) {
       this.showBanner = !patreonStatus;
       if(this.showBanner){
-        alert("show");
         document.documentElement.style.setProperty("--workingheight", `279px`);
       } else {
-        alert("hide");
         document.documentElement.style.setProperty("--workingheight", `244px`);
       }
     },
@@ -37,10 +34,8 @@ export default {
     toggleBanner() {
       this.showBanner = !this.showBanner;
       if(this.showBanner){
-        alert("show");
         document.documentElement.style.setProperty("--workingheight", `279px`);
       } else {
-        alert("dont show");
         document.documentElement.style.setProperty("--workingheight", `244px`);
       }
     },
