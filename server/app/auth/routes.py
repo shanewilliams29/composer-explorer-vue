@@ -40,7 +40,7 @@ def spotify():
     if Config.MODE == "DEVELOPMENT":
         url = '/login?code=' + code
     else:
-        url = 'https://94.72.125.158/login?code=' + code
+        url = 'https://composerexplorer.com/login?code=' + code
     
     return redirect(url)
 
@@ -111,7 +111,7 @@ def login():
         if Config.MODE == "DEVELOPMENT":
             return redirect('http://localhost:8080/mobile')
         else:
-            return redirect('https://94.72.125.158/mobile')
+            return redirect('https://composerexplorer.com/mobile')
     else:
         if Config.MODE == "DEVELOPMENT":
             return redirect("http://localhost:8080/")

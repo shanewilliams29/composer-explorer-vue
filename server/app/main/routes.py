@@ -33,7 +33,7 @@ def index(path):
         if Config.MODE == "DEVELOPMENT":
             return redirect('http://localhost:8080/mobile')
         else:
-            return redirect('https://94.72.125.158/mobile')
+            return redirect('https://composerexplorer.com/mobile')
 
     # user last seen
     if current_user.is_authenticated:
