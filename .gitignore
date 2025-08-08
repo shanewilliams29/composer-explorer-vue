@@ -65,6 +65,5 @@ cron.log
 dist
 *.sql
 *.mailrc
-robots.txt
 
 
