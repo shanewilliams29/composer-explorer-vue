@@ -4,6 +4,8 @@ Allow: /
 
 # ---- Keep API & private areas out of the index ----
 Disallow: /api/
+Disallow: /like/
+Disallow: /unlike/
 Disallow: /connect_spotify
 Disallow: /login
 Disallow: /log_out
