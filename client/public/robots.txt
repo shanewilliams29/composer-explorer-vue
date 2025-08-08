@@ -1,4 +1,3 @@
-# robots.txt – Composer Explorer
 User-agent: *
 # ---- Public SPA front-end ----
 Allow: /
