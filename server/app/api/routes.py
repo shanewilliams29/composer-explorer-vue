@@ -1,5 +1,4 @@
 from app import db, sp, cache
-# from app import storage_client
 from flask import jsonify, request, session, abort, current_app
 from flask_login import current_user
 from config import Config
