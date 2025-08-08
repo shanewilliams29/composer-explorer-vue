@@ -3,7 +3,7 @@ from app import db, sp, cache
 from flask import jsonify, request, session, abort, current_app
 from flask_login import current_user
 from config import Config
-from app.functions import prepare_composers, group_composers_by_region, group_composers_by_alphabet
+from app.functions import prepare_composers, group_composers_by_region, group_composers_by_alphabet, is_image_url_alive
 from app.functions import prepare_works, retrieve_artist_list_from_db
 from app.models import ComposerList, WorkList, WorkAlbums, AlbumLike, Performers, performer_albums
 from app.models import User
@@ -1460,25 +1460,26 @@ def get_composerinfo(composer):
 @cache.cached(query_string=True)
 def get_workinfo(work_id):
     work = db.session.query(WorkList)\
-        .filter(WorkList.id == work_id).first()
+        .filter(WorkList.id == work_id).first_or_404()
 
-    if work.genre == "Opera" or work.genre == "Stage Work" or work.genre == "Ballet":
-        file_name = 'headers/' + work.title + '.jpg'  # use for image
-    elif "piano concerto" in work.title.lower():
-        file_name = 'headers/' + 'pianoconcerto' + '.jpg'
+    # determine the desired header image filename
+    title_lower = work.title.lower()
+    if work.genre in ("Opera", "Stage Work", "Ballet"):
+        file_name = f"headers/{work.title}.jpg"
+    elif "piano concerto" in title_lower:
+        file_name = "headers/pianoconcerto.jpg"
     else:
-        file_name = 'headers/' + work.genre.split()[0] + '.jpg'  # use for image
+        file_name = f"headers/{work.genre.split()[0]}.jpg"
 
-    def file_exists():
-        # bucket = storage_client.get_bucket('composer-explorer.appspot.com')
-        # blob = bucket.blob(file_name)
-        # return blob.exists()
-        return False
+    base_url = current_app.config['STATIC']
+    candidate_url = base_url + file_name
+    fallback_url = base_url + "headers/Orchestral.jpg"
 
-    if file_exists():
-        work.search = current_app.config['STATIC'] + file_name
+    # check remote existence
+    if is_image_url_alive(candidate_url):
+        work.search = candidate_url
     else:
-        work.search = current_app.config['STATIC'] + 'headers/' + 'Orchestral' + '.jpg'
+        work.search = fallback_url
 
     response_object = {'status': 'success'}
     response_object['info'] = work

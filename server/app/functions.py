@@ -221,3 +221,15 @@ def retrieve_artist_list_from_db():
             artist_list.append({'id': _id, 'name': artist, 'img': img, 'description': description})
 
     return artist_list
+
+
+def is_image_url_alive(url, timeout=5):
+    """Return True if URL exists, returns 200 and is an image content."""
+    try:
+        resp = requests.head(url, allow_redirects=True, timeout=timeout)
+        if resp.status_code == 405:  # some servers disallow HEAD
+            resp = requests.get(url, stream=True, timeout=timeout)
+        content_type = resp.headers.get("Content-Type", "")
+        return resp.status_code == 200 and content_type.startswith("image/")
+    except requests.RequestException:
+        return False
