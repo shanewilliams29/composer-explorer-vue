@@ -44,31 +44,6 @@ def index(path):
     return current_app.send_static_file('index.html')
 
 
-@bp.route("/privacy")
-def privacy():
-    return render_template('privacy.html')
-
-
-@bp.route("/.well-known/assetlinks.json")
-def assetlinks():
-    return send_from_directory('static', 'assetlinks.json')
-
-
-@bp.route("/custom.css")
-def custom_css():
-    return send_from_directory('static', 'custom.css')
-
-
-@bp.route("/forum.css")
-def forum_css():
-    return send_from_directory('static', 'forum.css')
-
-
-@bp.route("/favicon.ico")
-def favico():
-    return send_from_directory('static', 'favicon.ico')
-
-
 @bp.route('/user_list')
 def user_list():
 
@@ -77,3 +52,28 @@ def user_list():
     onlinecheck = datetime.utcnow() - timedelta(minutes=5)
 
     return render_template("userlist.html", title='User List', onlinecheck=onlinecheck, users=users, usercount=usercount)
+
+
+# @bp.route("/privacy")
+# def privacy():
+#     return render_template('privacy.html')
+
+
+# @bp.route("/.well-known/assetlinks.json")
+# def assetlinks():
+#     return send_from_directory('static', 'assetlinks.json')
+
+
+# @bp.route("/custom.css")
+# def custom_css():
+#     return send_from_directory('static', 'custom.css')
+
+
+# @bp.route("/forum.css")
+# def forum_css():
+#     return send_from_directory('static', 'forum.css')
+
+
+# @bp.route("/favicon.ico")
+# def favico():
+#     return send_from_directory('static', 'favicon.ico')
