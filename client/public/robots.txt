@@ -1,0 +1,22 @@
+# robots.txt – Composer Explorer
+User-agent: *
+# ---- Public SPA front-end ----
+Allow: /
+
+# ---- Keep API & private areas out of the index ----
+Disallow: /api/
+Disallow: /testlogin
+Disallow: /connect_spotify
+Disallow: /login
+Disallow: /log_out
+Disallow: /change_avatar
+Disallow: /change_display_name
+Disallow: /spotify
+Disallow: /user_list
+
+# ---- Optional crawl pacing (uncomment if the server is small) ----
+# Crawl-delay: 5
+
+# ---- Sitemap ----
+# Generate one (e.g., with your Flask server or a GitHub-Action)
+# Sitemap: https://composerexplorer.com/sitemap.xml
