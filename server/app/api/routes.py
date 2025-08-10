@@ -1464,15 +1464,15 @@ def get_workinfo(work_id):
     # determine the desired header image filename
     title_lower = work.title.lower()
     if work.genre in ("Opera", "Stage Work", "Ballet"):
-        file_name = f"headers/{work.title}.jpg"
+        file_name = f"headers_small/{work.title}.jpg"
     elif "piano concerto" in title_lower:
-        file_name = "headers/pianoconcerto.jpg"
+        file_name = "headers_small/pianoconcerto.jpg"
     else:
-        file_name = f"headers/{work.genre.split()[0]}.jpg"
+        file_name = f"headers_small/{work.genre.split()[0]}.jpg"
 
     base_url = current_app.config['STATIC']
     candidate_url = base_url + file_name
-    fallback_url = base_url + "headers/Orchestral.jpg"
+    fallback_url = base_url + "headers_small/Orchestral.jpg"
 
     # check remote existence
     if is_image_url_alive(candidate_url):
