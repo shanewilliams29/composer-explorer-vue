@@ -12,6 +12,7 @@ app.yaml
 .env
 .flaskenv
 remote_deploy.sh
+vivacio_deploy.sh
 backups
 matrix
 network
